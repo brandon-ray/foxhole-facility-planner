@@ -6,8 +6,6 @@ const inject = require('gulp-inject');
 const clean = require('gulp-clean');
 const babel = require('gulp-babel');
 const minify = require('gulp-minify');
-const imagemin = require('gulp-imagemin');
-const imageminMozjpeg = require('imagemin-mozjpeg');
 const htmlmin = require('gulp-htmlmin');
 const rename = require('gulp-rename');
 const exec = require('child_process').exec;
@@ -41,7 +39,7 @@ gulp.task('css', function(){
 });
 
 gulp.task('vendor', function(){
-    return gulp.src(['public/vendor/jquery-1.11.1.js', 'public/vendor/vue.min.js', 'public/vendor/*.js'])
+    return gulp.src(['public/vendor/vue.min.js', 'public/vendor/*.js'])
         .pipe(concat('vendor.js'))
         .pipe(gulp.dest('distNew/js'))
         .pipe(minify({
@@ -79,7 +77,7 @@ gulp.task('js', function(){
 });
 
 gulp.task('copy', function () {
-    return gulp.src(['public/index.html', 'public/favicon.ico', 'public/ads.txt', 'public/robots.txt'])
+    return gulp.src(['public/index.html', 'public/favicon.ico', 'public/robots.txt'])
         .pipe(gulp.dest('distNew/'));
 });
 
@@ -112,13 +110,3 @@ gulp.task('assets', function() {
 gulp.task('build', gulp.series('clean', 'css', 'vendor', 'js', 'assets', 'copy', 'index', 'html', 'cleanDist', 'copyDistNew', 'clean'));
 
 gulp.task('default', gulp.series('build'));
-
-gulp.task('optimize-images', function() {
-    return gulp.src(['public/assets/**/*'])
-        .pipe(imagemin([
-            imagemin.gifsicle({interlaced: true}),
-            imageminMozjpeg({quality: 75, progressive: true}),
-            imagemin.optipng({optimizationLevel: 5})
-        ]))
-        .pipe(gulp.dest('public/assets'));
-});
