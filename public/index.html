@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Foxhole Facility Planner</title>
+
+    <meta charset="utf-8">
+    <base href="/">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <!-- inject:css -->
+    <link href="vendor/bootstrap.min.css" rel="stylesheet">
+    <link href="vendor/animate.min.css" rel="stylesheet">
+    <link href="vendor/font-awesome.min.css" rel="stylesheet">
+
+    <link href="styles.css" rel="stylesheet">
+    <!-- endinject -->
+
+    <script>
+        var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        var isPhoneApp = false;
+        var isDesktopApp = false;
+        if (window.location.host === 'appassets.androidplatform.net') {
+            isMobile = true;
+            isPhoneApp = true;
+        }
+        try {
+            if (navigator.userAgent.toLowerCase().indexOf(' electron/') > -1) {
+                isDesktopApp = true;
+            }
+        } catch (e) {}
+    </script>
+
+    <script>
+        window.addEventListener('resize', onResize);
+        function onResize() {
+            var container = document.getElementById('ui');
+            if (container) {
+                var width = window.innerWidth;
+                var height = window.innerHeight;
+                var maxWidth = 1700;
+                var maxHeight = 1000;
+                var widthScale = width / maxWidth;
+                var heightScale = height / maxHeight;
+                if (heightScale < widthScale) {
+                    container.style.transform = 'scale(' + heightScale.toFixed(3) + ')';
+                    container.style.width = ((width / heightScale) + 2).toFixed(3) + 'px';
+                    container.style.height = (maxHeight + 2) + 'px';
+                } else {
+                    container.style.transform = 'scale(' + widthScale.toFixed(3) + ')';
+                    container.style.width = (maxWidth + 2) + 'px';
+                    container.style.height = ((height / widthScale) + 2).toFixed(3) + 'px';
+                }
+            }
+        }
+        setTimeout(function() {
+            onResize();
+        }, 1);
+
+        if (typeof window.onerror == 'object') {
+            window.onerror = function (err, url, line, col) {
+                try {
+                    if (window.ga) {
+                        ga('send', 'exception', {
+                            'exDescription': line + ':' + col + ' ' + err
+                        });
+                    }
+                } catch (e) {
+                    console.error('Failed to send error:', e);
+                }
+            };
+        }
+    </script>
+</head>
+<body>
+<div class="text-center" id="ui" style="position:absolute; overflow:hidden; transform-origin:0 0; top:0; left:0; color:white; z-index:90;">
+    <div style="pointer-events:auto!important;">
+        <div id="app"></div>
+
+        <div id="loading" class="text-center" style="margin:1px; position:relative; top:15vh; background:url('/assets/background.jpg'); background-color: #3d1714; background-position: center; background-size:cover;">
+            <i class="fa fa-refresh fa-spin fa-4x"></i><br>
+            <h3>LOADING</h3><br>
+            <br><br><br>
+        </div>
+    </div>
+</div>
+
+
+<div class="loading-overlay" id="loading-overlay">
+    <div class="loading-overlay-text">
+        <i class="fa fa-refresh fa-spin fa-4x"></i><br><br>
+        <h4>LOADING</h4>
+    </div>
+</div>
+
+<div id="webgl-disabled-message" style="display:none;">
+    <div class="loading-overlay-text">
+        <br><br>
+        <h3 style="color:#de0000;">ERROR: WebGL is Disabled</h3>
+        <br>
+        <p>
+            It looks like you have <b>WebGL</b> and/or <b>Hardware Acceleration</b> disabled in your browser, try to enable it in your <b>browser settings</b>.<br>
+            This requires WebGL and Hardware Acceleration to be enabled to function.<br>
+            <br>
+            We officially support these browsers, try one of these if the problem persists:<br>
+            Chrome, Firefox, Edge, and OperaGX
+            <br><br>
+        </p>
+        <br>
+    </div>
+</div>
+
+<div id="mobile-disabled-message" style="display:none;">
+    <div class="loading-overlay-text">
+        <br><br>
+        <h4>Mobile support is not available yet!</h4>
+        <br>
+    </div>
+</div>
+
+<div class="game-menu-button" style="display:none;">
+    <a href="#" onclick="event.preventDefault(); game.gameMenuComponent.showModal(true)" tabindex="-1">
+        <i class="fa fa-bars fa-4x" style="color:white;"></i>
+    </a>
+</div>
+
+<div class="modal modal-fullscreen selectable" id="changeLogModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fa fa-list"></i> Change Log</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="text-left" id="change-log-text" data-update-count="1">
+                    <b>9/15/2022</b>
+                    <p>+ Initial release</p>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- inject:js -->
+<script src="vendor/vue.min.js"></script>
+<script src="vendor/js.cookie.min.js"></script>
+<script src="vendor/polyfill.js"></script>
+<script src="vendor/1pixi.min.js"></script>
+<script src="vendor/howler.min.js"></script>
+<script src="vendor/pixi-filters.js"></script>
+<script src="vendor/axios.min.js"></script>
+<script src="vendor/pixi-multistyle-text.min.js"></script>
+<script src="vendor/vue-dragscroll.min.js"></script>
+<script src="vendor/pixi-layers.js"></script>
+<script src="vendor/pixi-lights.js"></script>
+
+<script src="filters.js"></script>
+<script src="data.js"></script>
+<script src="game.js"></script>
+<script src="menu/services/api.js"></script>
+<script src="menu/components/resourceIcon.js"></script>
+<script src="menu/components/gameMenu.js"></script>
+<script src="menu/components/buildMenu.js"></script>
+<script src="menu/states/play.js"></script>
+<script src="menu/app.js"></script>
+<!-- endinject -->
+</body>
+</html>

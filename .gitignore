@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.idea/
+public/cg.html
+config.js
+public/serverBuilt.js
