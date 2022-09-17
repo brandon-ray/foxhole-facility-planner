@@ -51,4 +51,4 @@ Vue.component('app-game-game-menu', {
         </div>
     </div>
     `
-})
+});

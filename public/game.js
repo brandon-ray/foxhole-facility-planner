@@ -60,16 +60,13 @@ const snapshotRate = 1000/10;
     let HEIGHT = window.innerHeight;
     let MAP_WIDTH = 4000;
     let MAP_HEIGHT = 4000;
-    let AFK_TIME_TILL_KICK = 3;
-    let AFK_TIME_TILL_KICK_WARNING = 2;
-    let DISABLE_AFK = false;
     let idleTime = 0;
-    let serverTimeDiff = 0;
-    let spectating = false;
     let latency = 0;
-    let capturer = null;
-    let currentlyBuilding = null;
-    let pauseEffects = false;
+    let currentBuilding = null;
+    let currentBuildingOffset = {
+        x: 0,
+        y: 0
+    };
 
     if (isMobile && !isPhoneApp) {
         console.info('Mobile is disabled for now.');
@@ -111,11 +108,14 @@ const snapshotRate = 1000/10;
     let entities = [];
     let effects = [];
 
+    game.getEntities = () => {
+        return entities;
+    };
+
     let timeScale = 1;
 
     let dropShadowFilter = new PIXI.Filter(shadowFilter.vert, shadowFilter.frag);
 
-    const visibilityRange = 1920;
     let camera = {
         x: MAP_WIDTH/2,
         y: MAP_HEIGHT/2,
@@ -142,6 +142,7 @@ const snapshotRate = 1000/10;
         white: 'white.png',
         background: 'grass.jpg',
         wall: 'wall.png',
+        concrete: 'concrete.png'
     };
     for (let i=0; i<window.objectData.buildings_list.length; i++) {
         let building = window.objectData.buildings_list[i];
@@ -216,7 +217,6 @@ const snapshotRate = 1000/10;
         game.reloadSettings();
     };
 
-    let startedMusic;
     game.reloadSettings = () => {
         let volume = parseFloat(game.settings.volume ? game.settings.volume : 1);
         if (volume < 0) {
@@ -246,6 +246,7 @@ const snapshotRate = 1000/10;
 
     let keyboardEventListenerObject = game.app.view;
     app.view.tabIndex = 0;
+    let keys = {};
     keyboardEventListenerObject.addEventListener('keydown', function (event) {
         event = event || window.event;
         let key = event.keyCode;
@@ -254,6 +255,18 @@ const snapshotRate = 1000/10;
             if (debugText) {
                 debugText.visible = ENABLE_DEBUG;
             }
+        }
+
+        if (!keys[key]) {
+            keys[key] = true;
+        }
+    });
+    keyboardEventListenerObject.addEventListener('keyup', function (event) {
+        event = event || window.event;
+        let key = event.keyCode;
+
+        if (keys[key]) {
+            keys[key] = false;
         }
     });
 
@@ -270,16 +283,7 @@ const snapshotRate = 1000/10;
     let background = null;
 
     function onWindowResize() {
-        if (capturer) {
-            if (capturer.downloadType === 'mobile') {
-                WIDTH = Math.round(1080 / 2);
-                HEIGHT = Math.round(1920 / 2);
-            } else {
-                WIDTH = Math.round(1920 / 2);
-                HEIGHT = Math.round(1080 / 2);
-            }
-            app.renderer.resize(WIDTH, HEIGHT);
-        } else if (isMobile) {
+        if (isMobile) {
             app.renderer.view.style.width = window.innerWidth + 'px';
             app.renderer.view.style.height = window.innerHeight + 'px';
             WIDTH = Math.round(window.innerWidth * 1.2);
@@ -403,10 +407,6 @@ const snapshotRate = 1000/10;
     };
 
     function soundPlay(sound, entity, volume, fadein) {
-        if (beforeRecordingStart || game.isInMenu || DISABLE_SOUNDS || game.roundEnded || capturer) {
-            return;
-        }
-
         let tso = {
             id: -1,
             entity: entity,
@@ -516,13 +516,34 @@ const snapshotRate = 1000/10;
     let mouseEventListenerObject = game.app.view;
     let dragCamera = false;
     mouseEventListenerObject.addEventListener('wheel', (e) => {
-        camera.zoom -= e.deltaY * 0.00005;
+        let lastZoom = camera.zoom;
+        camera.zoom -= (e.deltaY * 0.0005);
         if (camera.zoom > 1.6) {
             camera.zoom = 1.6;
         }
         if (camera.zoom < 0.3) {
             camera.zoom = 0.3;
         }
+
+        let zoomAmount = camera.zoom - lastZoom;
+
+        let zoomRatio1 = WIDTH/(WIDTH*lastZoom);
+        let pos1 = {
+            x: (camera.x + WIDTH/2) * zoomRatio1,
+            y: (camera.y + HEIGHT/2) * zoomRatio1,
+        };
+        camera.x = (pos1.x * camera.zoom) - WIDTH / 2;
+        camera.y = (pos1.y * camera.zoom) - HEIGHT / 2;
+
+        let zoomRatio2 = WIDTH/(WIDTH*camera.zoom);
+        let pos2 = {
+            x: (camera.x + WIDTH/2) * zoomRatio2,
+            y: (camera.y + HEIGHT/2) * zoomRatio2,
+        };
+        let dist = Math.distanceBetween(pos2, {x: gmx, y: gmy}) * zoomAmount;
+        let angle = Math.angleBetween(pos2, {x: gmx, y: gmy});
+        camera.x += Math.cos(angle) * dist;
+        camera.y += Math.sin(angle) * dist;
     });
     mouseEventListenerObject.addEventListener('contextmenu', (e) => {
         e.preventDefault();
@@ -534,16 +555,28 @@ const snapshotRate = 1000/10;
 
         let mouseButton = e.button;
         if (mouseButton === 0) {
-            if (currentlyBuilding) {
-                currentlyBuilding = null;
-                game.playSound('button_click');
+            if (!currentBuilding) {
+                for (let i=0; i<entities.length; i++) {
+                    let entity = entities[i];
+                    let entityCenter = {
+                        x: entity.x + entity.width/2,
+                        y: entity.y + entity.height/2
+                    }
+                    if (entity.type === 'building' && Math.distanceBetween(entityCenter, {x: gmx, y: gmy}) < 50) {
+                        currentBuildingOffset = {
+                            x: gmx - entity.x,
+                            y: gmy - entity.y
+                        };
+                        currentBuilding = entity;
+                    }
+                }
             }
         } else if (mouseButton === 1 || mouseButton === 4) {
             dragCamera = true;
         } else if (mouseButton === 2) {
-            if (currentlyBuilding) {
-                currentlyBuilding.remove();
-                currentlyBuilding = null;
+            if (currentBuilding) {
+                currentBuilding.remove();
+                currentBuilding = null;
             }
         }
     });
@@ -571,7 +604,12 @@ const snapshotRate = 1000/10;
         my = e.clientY;
 
         let mouseButton = e.button;
-        if (mouseButton === 1 || mouseButton === 4) {
+        if (mouseButton === 0) {
+            if (currentBuilding) {
+                currentBuilding = null;
+                game.playSound('button_click');
+            }
+        } else if (mouseButton === 1 || mouseButton === 4) {
             dragCamera = false;
         }
     });
@@ -945,24 +983,36 @@ const snapshotRate = 1000/10;
     function createBuilding(type, x, y, z, netData) {
         let entity = createEntity('building', type, x, y, z, netData);
 
-        let sprite = new PIXI.Sprite(resources['wall'].texture);
+        let building = window.objectData.buildings[type];
+        let sprite = new PIXI.TilingSprite(resources['wall'].texture);
+        sprite.width = building.width * 32;
+        sprite.height = building.length * 32;
         entity.addChild(sprite);
 
-        let building = window.objectData.buildings[type];
-        let icon = new PIXI.Sprite(resources[building.icon].texture);
-        icon.anchor.set(0.5);
-        icon.width = 64;
-        icon.height = 64;
-        icon.position.x = sprite.width/2;
-        icon.position.y = sprite.height/2;
-        entity.addChild(icon);
+        if (building.texture && resources[building.texture]) {
+            sprite.texture = resources[building.texture].texture;
+            sprite.tileScale.set(0.5);
+        }
+
+        if (!building.texture) {
+            let icon = new PIXI.Sprite(resources[building.icon].texture);
+            icon.anchor.set(0.5);
+            icon.width = 64;
+            icon.height = 64;
+            icon.position.x = sprite.width / 2;
+            icon.position.y = sprite.height / 2;
+            entity.addChild(icon);
+        }
 
         return entity;
     }
 
     game.startBuild = function(building) {
-        console.log('build!', building);
-        currentlyBuilding = createBuilding(building.key, 0, 0, 0, {});
+        currentBuilding = createBuilding(building.key, 0, 0, 0, {});
+        currentBuildingOffset = {
+            x: currentBuilding.width/2,
+            y: currentBuilding.height/2
+        };
     };
 
     const FPSMIN = 30;
@@ -975,23 +1025,27 @@ const snapshotRate = 1000/10;
         requestAnimationFrame(update);
 
         let timeDiff = 1;
-        if (!capturer) {
-            let timeNow = Date.now();
-            timeDiff = timeNow - g_Time;
-            if (timeDiff < g_TICK) {
-                return;
-            }
-            g_Time = timeNow;
+        let timeNow = Date.now();
+        timeDiff = timeNow - g_Time;
+        if (timeDiff < g_TICK) {
+            return;
         }
+        g_Time = timeNow;
 
         let delta = Date.now() - lastTick;
         lastTick = Date.now();
 
         game.tryGameFocus();
 
-        if (currentlyBuilding) {
-            currentlyBuilding.x = gmx - currentlyBuilding.width/2;
-            currentlyBuilding.y = gmy - currentlyBuilding.height/2;
+        let gridSize = 32;
+        if (currentBuilding) {
+            currentBuilding.x = gmx - currentBuildingOffset.x;
+            currentBuilding.y = gmy - currentBuildingOffset.y;
+
+            if (keys[17]) {
+                currentBuilding.x = Math.floor(currentBuilding.x/gridSize) * gridSize;
+                currentBuilding.y = Math.floor(currentBuilding.y/gridSize) * gridSize;
+            }
         }
 
         if (game.settings.quality === 'auto') {

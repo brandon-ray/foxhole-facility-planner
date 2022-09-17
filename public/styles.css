@@ -80,6 +80,45 @@ p {
     display: none;
 }
 
+.app-btn {
+    width: 100%;
+    font-size: 32px;
+    color: #faf1eb;
+    background-color: black;
+    display: inline-block;
+    border: none;
+    margin: 6px auto;
+    box-shadow: 3px 3px 3px #000000;
+    text-decoration: none !important;
+}
+
+.app-btn:disabled {
+    color: #bdbbbb !important;
+}
+
+.app-btn:hover {
+    color: white;
+    text-decoration: none !important;
+}
+
+.app-btn-primary {
+    background: rgb(107, 107, 107);
+    background: linear-gradient(0deg, rgb(75, 75, 75) 0%, rgb(107, 107, 107) 40%, rgb(162, 162, 162) 100%);
+    padding: 16px;
+}
+.app-btn-primary:hover {
+    background: #c73421;
+}
+
+.app-btn-secondary {
+    background: rgb(107, 107, 107);
+    background: linear-gradient(0deg, rgb(75, 75, 75) 0%, rgb(107, 107, 107) 40%, rgb(162, 162, 162) 100%);
+    padding: 2px;
+}
+.app-btn-secondary:hover {
+    background: #c73421;
+}
+
 .selectable {
     -webkit-user-select: text !important;
     -khtml-user-select: text !important;
@@ -185,21 +224,29 @@ p {
     top: 0;
     left: 0;
     width: 400px;
+    padding: 12px;
     height: 100%;
     background-color: #343333;
 }
 
 .build-icon {
-    width: 250px;
+    text-align: left;
+    width: 100%;
+    padding: 8px;
     margin-left: auto;
     margin-right: auto;
     border: 2px solid black;
+    margin-bottom: 6px;
 }
 
 .resource-icon {
     width: 80px;
     height: 80px;
     border: 2px solid black;
-    background-size: cover;
-    text-shadow: 0px 2px #000;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    font-size: 22px;
+    text-shadow: 2px 2px #000;
+    margin: auto;
 }
