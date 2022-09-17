@@ -6,7 +6,7 @@ Vue.component('app-game-build-menu', {
                 {
                     name: 'Construction',
                     key: 'construction-list',
-                    icon: 'fa-building'
+                    icon: 'fa-wrench'
                 },
                 {
                     name: 'Statistics',
