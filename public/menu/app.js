@@ -14,7 +14,8 @@ if (isMobile && !isPhoneApp) {
             data: function () {
                 return {
                     isPlayScreen: game.isPlayScreen,
-                    isInMenu: game.isInMenu
+                    isInMenu: game.isInMenu,
+                    settings: game.settings
                 };
             },
             methods: {
@@ -22,6 +23,9 @@ if (isMobile && !isPhoneApp) {
                     this.isPlayScreen = game.isPlayScreen;
                     this.isInMenu = game.isInMenu;
                     this.$forceUpdate();
+                },
+                updateSettings: function() {
+                    game.updateSettings();
                 },
                 reloadMenu: function () {
                     if (game.isPlayScreen) {
@@ -42,8 +46,19 @@ if (isMobile && !isPhoneApp) {
         <app-game-game-menu></app-game-game-menu>
         <app-game-build-menu></app-game-build-menu>
         
+        <button class="fullscreen-button">
+            <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+        </button>
+
         <div class="footer">
-            <br>
+            <label class="checkbox-button align-middle">
+                <input type="checkbox" name="snap-to-grid-toggle" v-model="settings.enableGrid" @change="updateSettings" />
+                Snap to Grid
+            </label>
+            <label class="checkbox-button align-middle">
+                <input type="checkbox" name="stats-info-toggle" checked />
+                Show Stats
+            </label>
         </div>
     </div>
     `

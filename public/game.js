@@ -4,6 +4,7 @@ const game = {
         quality: 'auto',
         disableSound: false,
         disableHUD: false,
+        enableGrid: true,
         volume: 1
     },
     isPlayScreen: false
@@ -1123,7 +1124,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             currentBuilding.x = gmx - currentBuildingOffset.x;
             currentBuilding.y = gmy - currentBuildingOffset.y;
 
-            if (keys[17]) {
+            if (game.settings.enableGrid || keys[17]) {
                 currentBuilding.x = Math.floor(currentBuilding.x/gridSize) * gridSize;
                 currentBuilding.y = Math.floor(currentBuilding.y/gridSize) * gridSize;
             }

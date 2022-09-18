@@ -80,12 +80,12 @@ Vue.component('app-game-build-menu', {
             <a href="https://github.com/brandon-ray/foxhole-facility-planner" target="_blank">
                 <i class="fa fa-github" aria-hidden="true"></i>
             </a>
-            <a href="https://www.reddit.com/r/foxholegame/comments/xgx0bf/i_started_making_a_facility_planner_webtool_what/" target="_blank">
-                <i class="fa fa-reddit" aria-hidden="true"></i>
-            </a>
-            <a href="#" v-on:click="event.preventDefault(); changeMenu('settings')">
+            <button v-on:click="event.preventDefault(); changeMenu('settings')" class="float-right">
                 <i class="fa fa-gear" aria-hidden="true"></i>
-            </a>
+            </button>
+            <button v-on:click="event.preventDefault(); changeMenu('about')" class="float-right">
+                <i class="fa fa-question-circle" aria-hidden="true"></i>
+            </button>
         </div>
     </div>
     `
@@ -300,8 +300,14 @@ Vue.component('app-menu-statistics', {
 Vue.component('app-menu-about', {
     props: ['menuData'],
     template: html`
-    <div>
-        TODO
+    <div id="about-page">
+        <p>
+            TODO
+        </p>
+        <br>
+        <a href="https://github.com/brandon-ray/foxhole-facility-planner" target="_blank" class="text-right">
+            <i class="fa fa-github" aria-hidden="true"></i> GitHub Repo
+        </a>
     </div>
     `
 });

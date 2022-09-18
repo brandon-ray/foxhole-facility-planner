@@ -221,6 +221,7 @@ p {
     padding: 12px;
     height: 100%;
     background: linear-gradient(rgb(42, 42, 42), rgb(32, 32, 32));
+    border-right: 2px solid black;
 }
 
 .build-menu-header {
@@ -274,36 +275,101 @@ p {
 }
 
 .build-menu-footer {
-    background: #101010;
-    line-height: 2.5em;
-    padding: 4px;
+    background: linear-gradient(#101010, black);
+    padding: 8px;
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
+    text-align: left;
 }
 
-.build-menu-footer a {
+.build-menu-footer a, .build-menu-footer button {
     color: #4a4a4a;
     font-size: 2.25em;
     margin: 0 2px;
 }
 
-.build-menu-footer a:hover {
+.build-menu-footer a:hover, .build-menu-footer button:hover {
     color: white;
 }
 
+.build-menu-footer button {
+    border: none;
+    cursor: pointer;
+}
+
+.build-menu-footer a, .build-menu-footer button {
+    display: inline-block;
+    background: transparent;
+    border: 2px solid #202020;
+    cursor: pointer;
+    border-radius: 8px;
+    color: #777;
+    width: 48px;
+    line-height: 42px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.build-menu-footer a:hover, .build-menu-footer button:hover {
+    border: 2px solid white;
+}
+
+.fullscreen-button {
+    font-size: 3em;
+    line-height: 1em;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+}
+
 .footer {
+    background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 1));
     color: white;
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 10px;
+    height: 44px;
+    padding: 8px;
     position: fixed;
     right: 0;
     bottom: 0;
     left: 350px;
-    padding: 0.5rem;
-    text-align: center;
-    z-index: 10;
-    background: black;
+    text-align: left;
+}
+
+.footer .checkbox-button {
+    display: inline-block;
+    cursor: pointer;
+    margin: 0 55px 0 0;
+}
+
+.footer .checkbox-button input[type="checkbox"] {
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+    width: 25px;
+    height: 25px;
+    border: 2px solid white;
+    padding: 3px;
+    vertical-align: middle;
+}
+
+.footer .checkbox-button input[type="checkbox"]::before {
+    content: "";
+    display: block;
+    height: 100%;
+}
+
+.footer .checkbox-button input[type="checkbox"]:checked::before {
+    background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
+}
+
+#about-page a {
+    color: #dfdfdf;
+    margin: 0 2px;
+}
+
+#about-page a:hover {
+    color: white;
+    text-decoration: none;
 }
