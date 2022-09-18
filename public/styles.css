@@ -230,6 +230,12 @@ p {
     padding: 7px;
 }
 
+.build-menu-page {
+    height: 733px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
 .build-menu-logo {
     max-width: 100%;
     max-height: 100%;
@@ -253,12 +259,15 @@ p {
 
 .build-icon {
     text-align: left;
-    width: 100%;
+    display: inline-block;
+    width: 78px;
+    height: 78px;
     padding: 8px;
-    margin-left: auto;
-    margin-right: auto;
     border: 2px solid black;
-    margin-bottom: 6px;
+    margin: 1px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .resource-icon {
@@ -306,4 +315,21 @@ p {
     text-align: center;
     z-index: 10;
     background: black;
+}
+
+.statistics-panel {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 250px;
+    padding: 12px;
+    background-color: #4a4a4a;
+}
+
+.hover-menu {
+    position: fixed;
+    top: 0;
+    left: 350px;
+    background-color: #4a4a4a;
+    padding: 6px;
 }

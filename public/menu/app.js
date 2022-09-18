@@ -42,6 +42,12 @@ if (isMobile && !isPhoneApp) {
         <app-game-game-menu></app-game-game-menu>
         <app-game-build-menu></app-game-build-menu>
         
+        <div class="statistics-panel">
+            <div style="max-height:700px; overflow-x:hidden; overflow-y:auto;">
+                <app-menu-statistics></app-menu-statistics>
+            </div>
+        </div>
+        
         <div class="footer">
             <br>
         </div>

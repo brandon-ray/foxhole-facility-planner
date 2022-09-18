@@ -1,17 +1,10 @@
 Vue.component('app-game-build-menu', {
-    mounted: function () {
-        game.buildMenuComponent = this;
-    },
     data: function() {
         return {
             currentMenu: null,
             currentMenuData: null,
+            hoverData: null,
             menuList: [
-                {
-                    key: 'construction-list',
-                    name: 'Construction',
-                    icon: 'fa-wrench'
-                },
                 {
                     key: 'statistics',
                     name: 'Statistics',
@@ -35,6 +28,10 @@ Vue.component('app-game-build-menu', {
             ]
         };
     },
+    mounted: function () {
+        game.buildMenuComponent = this;
+        this.changeMenu(null);
+    },
     methods: {
         changeMenu: function(newMenu, menuData) {
             if (typeof newMenu === 'string' || newMenu instanceof String) {
@@ -54,6 +51,9 @@ Vue.component('app-game-build-menu', {
                 this.currentMenu = null;
             }
             this.currentMenuData = menuData;
+        },
+        showHoverMenu: function(data) {
+            this.hoverData = data;
         }
     },
     template: html`
@@ -62,13 +62,19 @@ Vue.component('app-game-build-menu', {
             <img class="build-menu-logo" src="/assets/logo_transparent.webp">
         </div>
         <div v-if="!currentMenu">
+            <!--
             <button type="button" class="app-btn app-btn-primary" v-for="item in menuList" v-on:click="changeMenu(item)" @mouseenter="bme">
                 <i :class="'fa ' + item.icon"></i> {{item.name}}
+            </button>
+            -->
+            <app-menu-construction-list></app-menu-construction-list>
+            <button type="button" class="app-btn app-btn-primary" v-on:click="changeMenu('save-load')" @mouseenter="bme">
+                <i class="fa fa-save"></i> Save/Load
             </button>
         </div>
         <div v-if="currentMenu">
             <h2><i :class="'fa ' + currentMenu.icon"></i> {{currentMenu.name}}</h2>
-            <div style="height:695px; overflow-x:hidden; overflow-y:auto;">
+            <div class="build-menu-page">
                 <component v-bind:is="'app-menu-' + currentMenu.key" :menuData="currentMenuData"></component>
             </div>
             <br>
@@ -87,6 +93,35 @@ Vue.component('app-game-build-menu', {
                 <i class="fa fa-gear" aria-hidden="true"></i>
             </a>
         </div>
+        <div class="hover-menu" v-if="hoverData">
+            <h3>{{hoverData.name}}</h3>
+            <div style="text-align:center;" v-if="!hoverData.production">
+                <div class="resource-icon" :title="hoverData.name" :style="{backgroundImage: 'url(/assets/' + hoverData.icon + ')'}"></div>
+            </div>
+            <div class="row" style="padding-bottom:5px; text-align:center;" v-if="hoverData.production">
+                <div class="col" style="color:#d50101;" v-if="hoverData.production.input">
+                    <app-game-resource-icon v-for="(value, key) in hoverData.production.input" :resource="key" :amount="value"/>
+                </div>
+                <div class="col-2">
+                    <br>
+                    <i class="fa fa-play fa-2x"></i>
+                </div>
+                <div class="col" style="color:#03b003;" v-if="hoverData.production.output">
+                    <app-game-resource-icon v-for="(value, key) in hoverData.production.output" :resource="key" :amount="value"/>
+                </div>
+                <div class="col" v-if="hoverData.power > 0">
+                    <i class="fa fa-bolt fa-4x"></i>
+                    <div style="color:#03b003;">
+                        {{hoverData.power}} MW
+                    </div>
+                </div>
+            </div>
+            <h4 style="color:#d0d004; padding-left:10px;" v-if="hoverData.production">
+                <span v-if="hoverData.power"><i class="fa fa-bolt"></i> {{hoverData.power}} MW</span>
+                &nbsp;&nbsp;&nbsp;
+                <i class="fa fa-clock-o"></i> {{hoverData.production.time}}s
+            </h4>
+        </div>
     </div>
     `
 });
@@ -98,7 +133,13 @@ Vue.component('app-menu-building-selected', {
             selectedEntity: game.selectedEntity
         };
     },
+    mounted: function() {
+        game.buildingSelectedMenuComponent = this;
+    },
     methods: {
+        refresh: function() {
+            this.selectedEntity = game.selectedEntity;
+        },
         destroyBuilding: function() {
             this.bmc();
             if (game.selectedEntity) {
@@ -132,48 +173,65 @@ Vue.component('app-menu-construction-list', {
     props: ['menuData'],
     data: function() {
         return {
+            category: 'buildings',
             buildings: window.objectData.buildings_list
         };
     },
     methods: {
+        refresh: function() {
+
+        },
         buildBuilding: function(building) {
             this.bmc();
             game.startBuild(building);
+        },
+        buildingHover: function(building) {
+            game.buildMenuComponent.showHoverMenu(building);
         }
     },
     template: html`
     <div>
-        <div v-for="building in buildings" class="build-icon">
-            <h3>{{building.name}}</h3>
-            <h4 style="color:#d0d004; padding-left:10px;" v-if="building.production">
-                <span v-if="building.power"><i class="fa fa-bolt"></i> {{building.power}} MW<br></span>
-                <i class="fa fa-clock-o"></i> {{building.production.time}}s
-            </h4>
-            <div style="text-align:center;" v-if="!building.production">
-                <div class="resource-icon" :title="building.name" :style="{backgroundImage: 'url(/assets/' + building.icon + ')'}"></div>
+        <select class="app-input" v-model="category" @change="refresh">
+            <option value="buildings">Buildings</option>
+        </select>
+        <div class="build-menu-page" style="text-align:left; margin-bottom:4px; height:732px;">
+            <div v-for="building in buildings" class="build-icon" :style="{backgroundImage:'url(/assets/' + building.icon + ')'}"
+                 @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" v-on:click="buildBuilding(building)">
             </div>
-            <div class="row" style="text-align:center;" v-if="building.production">
-                <div class="col" style="color:#d50101;" v-if="building.production.input">
-                    <app-game-resource-icon v-for="(value, key) in building.production.input" :resource="key" :amount="value"/>
+            <!--
+            <div v-for="building in buildings" class="build-icon">
+                <h3>{{building.name}}</h3>
+                <h4 style="color:#d0d004; padding-left:10px;" v-if="building.production">
+                    <span v-if="building.power"><i class="fa fa-bolt"></i> {{building.power}} MW<br></span>
+                    <i class="fa fa-clock-o"></i> {{building.production.time}}s
+                </h4>
+                <div style="text-align:center;" v-if="!building.production">
+                    <div class="resource-icon" :title="building.name" :style="{backgroundImage: 'url(/assets/' + building.icon + ')'}"></div>
                 </div>
-                <div class="col-2">
-                    <br>
-                    <i class="fa fa-play fa-2x"></i>
-                </div>
-                <div class="col" style="color:#03b003;" v-if="building.production.output">
-                    <app-game-resource-icon v-for="(value, key) in building.production.output" :resource="key" :amount="value"/>
-                </div>
-                <div class="col" v-if="building.power > 0">
-                    <i class="fa fa-bolt fa-4x"></i>
-                    <div style="color:#03b003;">
-                        {{building.power}} MW
+                <div class="row" style="text-align:center;" v-if="building.production">
+                    <div class="col" style="color:#d50101;" v-if="building.production.input">
+                        <app-game-resource-icon v-for="(value, key) in building.production.input" :resource="key" :amount="value"/>
+                    </div>
+                    <div class="col-2">
+                        <br>
+                        <i class="fa fa-play fa-2x"></i>
+                    </div>
+                    <div class="col" style="color:#03b003;" v-if="building.production.output">
+                        <app-game-resource-icon v-for="(value, key) in building.production.output" :resource="key" :amount="value"/>
+                    </div>
+                    <div class="col" v-if="building.power > 0">
+                        <i class="fa fa-bolt fa-4x"></i>
+                        <div style="color:#03b003;">
+                            {{building.power}} MW
+                        </div>
                     </div>
                 </div>
+                <br>
+                <button type="button" class="app-btn app-btn-secondary" v-on:click="buildBuilding(building)" @mouseenter="bme">
+                    <i class="fa fa-plus"></i> Build
+                </button>
             </div>
-            <br>
-            <button type="button" class="app-btn app-btn-secondary" v-on:click="buildBuilding(building)" @mouseenter="bme">
-                <i class="fa fa-plus"></i> Build
-            </button>
+            -->
         </div>
     </div>
     `
@@ -193,6 +251,7 @@ Vue.component('app-menu-statistics', {
     },
     mounted() {
         this.refresh();
+        game.statisticsMenuComponent = this;
     },
     methods: {
         refresh: function() {
@@ -245,6 +304,9 @@ Vue.component('app-menu-statistics', {
                                 let outputAmount = output[key];
                                 output[key] -= input[key];
                                 input[key] -= outputAmount;
+                                if (output[key] <= 0) {
+                                    delete output[key];
+                                }
                                 if (input[key] <= 0) {
                                     delete input[key];
                                 }
@@ -259,6 +321,8 @@ Vue.component('app-menu-statistics', {
             this.powerTotal = powerTotal;
             this.powerProduced = powerProduced;
             this.powerConsumed = powerConsumed;
+
+            this.$forceUpdate();
         },
     },
     template: html`

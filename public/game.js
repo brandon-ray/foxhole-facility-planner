@@ -135,13 +135,19 @@ const fontFamily = ['Recursive', 'sans-serif'];
     let asset_list = {
         white: 'white.png',
         background: 'grid.webp',
-        wall: 'wall.png',
-        'concrete.png': 'concrete.png',
-        'sus.png': 'sus.png',
+        wall: 'wall.png'
     };
     for (let i=0; i<window.objectData.buildings_list.length; i++) {
         let building = window.objectData.buildings_list[i];
         asset_list[building.icon] = building.icon;
+
+        if (building.texture) {
+            if (typeof building.texture === 'object' && !Array.isArray(building.texture)) {
+                asset_list[building.texture.sheet] = building.texture.sheet;
+            } else {
+                asset_list[building.texture] = building.texture;
+            }
+        }
     }
 
     let soundsLoaded = false;
@@ -542,6 +548,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
             game.buildMenuComponent.changeMenu(null);
             game.selectedEntity = null;
         }
+
+        if (game.buildingSelectedMenuComponent) {
+            game.buildingSelectedMenuComponent.refresh();
+        }
     }
 
     let mouseEventListenerObject = game.app.view;
@@ -586,11 +596,13 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
         let mouseButton = e.button;
         if (mouseButton === 0) {
+            if (game.selectedEntity) {
+                game.selectEntity(null);
+            }
             if (!currentBuilding) {
-                if (game.selectedEntity) {
-                    game.selectEntity(null);
-                }
-
+                entities.sort(function (a, b) {
+                    return b.getZIndex() - a.getZIndex()
+                });
                 for (let i=0; i<entities.length; i++) {
                     let entity = entities[i];
                     let entityCenter = {
@@ -804,6 +816,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         };
 
         entity.onRemove = function () {};
+        entity.afterRemove = function() {};
 
         entity.createLight = function(color, minBrightness, maxBrightness, duration) {
             return createLight(entity, color, minBrightness, maxBrightness, duration);
@@ -1009,11 +1022,13 @@ const fontFamily = ['Recursive', 'sans-serif'];
         return pos.x * camera.zoom >= camera.x - buffer && pos.y * camera.zoom >= camera.y - buffer && pos.x * camera.zoom <= camera.x + WIDTH + buffer && pos.y * camera.zoom <= camera.y + HEIGHT + buffer;
     }
 
+    /*
     window.onbeforeunload = function() {
-        if (!game.disconnected && !game.isInMenu && socket && socket.connected) {
+        if (!game.isInMenu) {
             return 'Are you sure you want to leave?';
         }
     };
+    */
 
     function createBuilding(type, x, y, z, netData) {
         let entity = createEntity('building', type, x, y, z, netData);
@@ -1047,14 +1062,29 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
 
         if (!building.texture) {
+            let iconBackground = new PIXI.Sprite(resources['white'].texture);
+            iconBackground.tint = 0x3d3d3d;
+            iconBackground.anchor.set(0.5);
+            iconBackground.width = 64;
+            iconBackground.height = 64;
+            iconBackground.position.x = sprite.width / 2;
+            iconBackground.position.y = sprite.height / 2;
+            entity.addChild(iconBackground);
+
             let icon = new PIXI.Sprite(resources[building.icon].texture);
             icon.anchor.set(0.5);
-            icon.width = 64;
-            icon.height = 64;
+            icon.width = iconBackground.width;
+            icon.height = iconBackground.height;
             icon.position.x = sprite.width / 2;
             icon.position.y = sprite.height / 2;
             entity.addChild(icon);
         }
+
+        setTimeout(() => {
+            if (game.statisticsMenuComponent) {
+                game.statisticsMenuComponent.refresh();
+            }
+        }, 1);
 
         let sound = null;
         entity.tick = function() {
@@ -1062,6 +1092,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 frameX += building.texture.speed ? building.texture.speed : 0.1;
                 if (frameX >= frameWidth) {
                     frameX -= frameWidth;
+                }
+                if (frameY >= frameHeight) {
+                    frameY -= frameHeight;
                 }
                 sprite.texture = sheet[Math.floor(frameX)][Math.floor(frameY)];
             }
@@ -1078,11 +1111,23 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
         };
 
+        entity.getZIndex = function () {
+            return -entity.y - (building.sortOffset ? building.sortOffset : 0);
+        };
+
         entity.onRemove = function() {
             if (sound) {
                 soundStop(sound);
                 sound = null;
             }
+        };
+
+        entity.afterRemove = function() {
+            setTimeout(() => {
+                if (game.statisticsMenuComponent) {
+                    game.statisticsMenuComponent.refresh();
+                }
+            }, 1);
         };
 
         return entity;
@@ -1123,7 +1168,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             currentBuilding.x = gmx - currentBuildingOffset.x;
             currentBuilding.y = gmy - currentBuildingOffset.y;
 
-            if (keys[17]) {
+            if (keys[16]) {
                 currentBuilding.x = Math.floor(currentBuilding.x/gridSize) * gridSize;
                 currentBuilding.y = Math.floor(currentBuilding.y/gridSize) * gridSize;
             }
@@ -1164,6 +1209,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             } else {
                 entities.splice(i, 1);
                 i--;
+                entity.afterRemove();
             }
         }
 
@@ -1206,7 +1252,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
     }
 
     setInterval(function() {
-        if (window.ga && socket && socket.connected && !game.isInMenu) {
+        if (window.ga) {
             ga('send', 'event', 'heartbeat', '60s');
         }
     }, 60000);

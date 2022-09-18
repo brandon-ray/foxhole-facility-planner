@@ -80,7 +80,8 @@
                 width: 2,
                 length: 2,
                 icon: 'buildings/FoundationIcon.webp',
-                texture: 'concrete.png'
+                texture: 'concrete.png',
+                sortOffset: -1000
             },
             foundation_2x2: {
                 name: 'Foundation 2x2',
@@ -88,7 +89,8 @@
                 width: 4,
                 length: 4,
                 icon: 'buildings/FoundationIcon.webp',
-                texture: 'concrete.png'
+                texture: 'concrete.png',
+                sortOffset: -1000
             },
             materials_factory: {
                 name: 'Materials Factory',
