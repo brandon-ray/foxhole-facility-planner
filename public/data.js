@@ -36,6 +36,41 @@
                 name: 'Petrol',
                 icon: 'resources/PetrolIcon.webp',
                 type: 'liquid'
+            },
+            assembly_materials1: {
+                name: 'Assembly Materials 1',
+                icon: 'resources/AssemblyMaterialsIcon.webp',
+                type: 'solid'
+            },
+            assembly_materials2: {
+                name: 'Assembly Materials 2',
+                icon: 'resources/AssemblyMaterialsIcon.webp',
+                type: 'solid'
+            },
+            sandbag: {
+                name: 'Sandbag',
+                icon: 'resources/SandbagMaterialIcon.webp',
+                type: 'solid'
+            },
+            barbed_wire: {
+                name: 'Barbed Wire',
+                icon: 'resources/BarbedWireMaterialIcon.webp',
+                type: 'solid'
+            },
+            component: {
+                name: 'Component',
+                icon: 'resources/ComponentIcon.webp',
+                type: 'solid'
+            },
+            processed_construction_material: {
+                name: 'Processed Construction Material',
+                icon: 'resources/ProcessedConstructionMaterialsIcon.webp',
+                type: 'solid'
+            },
+            pipe: {
+                name: 'Pipe',
+                icon: 'resources/PipeIcon.webp',
+                type: 'solid'
             }
         },
         buildings: {
@@ -69,6 +104,99 @@
                     output: {
                         construction_material: 1
                     }
+                },
+                upgrades: {
+                    forge_mat1: {
+                        name: 'Forge',
+                        power: -2,
+                        icon: 'buildings/MaterialsFactoryForgeIcon.webp',
+                        production: {
+                            time: 60,
+                            input: {
+                                salvage: 20,
+                                coke: 180
+                            },
+                            output: {
+                                assembly_materials1: 1
+                            }
+                        }
+                    },
+                    forge_mat2: {
+                        name: 'Forge',
+                        power: -2,
+                        icon: 'buildings/MaterialsFactoryForgeIcon.webp',
+                        production: {
+                            time: 60,
+                            input: {
+                                salvage: 20,
+                                petrol: 150
+                            },
+                            output: {
+                                assembly_materials2: 1
+                            }
+                        }
+                    },
+                    metal_press: {
+                        name: 'Metal Press',
+                        power: -4,
+                        icon: 'buildings/MaterialsFactoryMetalPressIcon.webp',
+                        production: {
+                            time: 25,
+                            input: {
+                                salvage: 20,
+                                petrol: 25
+                            },
+                            output: {
+                                construction_material: 3
+                            }
+                        }
+                    },
+                    smelter: {
+                        name: 'Smelter',
+                        power: -4,
+                        icon: 'buildings/MaterialsFactorySmelterIcon.webp',
+                        production: {
+                            time: 25,
+                            input: {
+                                salvage: 20,
+                                coke: 25
+                            },
+                            output: {
+                                construction_material: 3
+                            }
+                        }
+                    },
+                    recycler_sandbags: {
+                        name: 'Recycler',
+                        power: -2,
+                        icon: 'buildings/MaterialsFactoryRecyclerIcon.webp',
+                        production: {
+                            time: 25,
+                            input: {
+                                salvage: 20,
+                                petrol: 25
+                            },
+                            output: {
+                                construction_material: 1,
+                                sandbag: 5
+                            }
+                        }
+                    },
+                    recycler_barbed_wire: {
+                        name: 'Recycler',
+                        power: -2,
+                        icon: 'buildings/MaterialsFactoryRecyclerIcon.webp',
+                        production: {
+                            time: 25,
+                            input: {
+                                salvage: 25,
+                            },
+                            output: {
+                                construction_material: 1,
+                                barbed_wire: 5
+                            }
+                        }
+                    },
                 }
             },
             coal_refinery: {
@@ -116,6 +244,19 @@
                     }
                 }
             },
+            petrol_power_plant: {
+                name: 'Petrol Power Plant',
+                power: 12,
+                width: 3,
+                length: 3,
+                icon: 'buildings/PetrolPowerPlantIcon.webp',
+                production: {
+                    time: 90,
+                    input: {
+                        petrol: 50
+                    }
+                }
+            },
             stationary_harvester_scrap: {
                 name: 'Stationary Harvester (Scrap)',
                 power: 0,
@@ -131,9 +272,58 @@
                         salvage: 50
                     }
                 }
+            },
+            metalworks_factory_processed_construction_materials: {
+                name: 'Metalworks Factory (Procesed Construction Materials)',
+                power: -5,
+                width: 5,
+                length: 5,
+                icon: 'buildings/MetalworksFactoryIcon.webp',
+                production: {
+                    time: 60,
+                    input: {
+                        construction_material: 3,
+                        component: 20
+                    },
+                    output: {
+                        processed_construction_material: 1
+                    }
+                }
+            },
+            metalworks_factory_pipes: {
+                name: 'Metalworks Factory (Pipes)',
+                power: -5,
+                width: 5,
+                length: 5,
+                icon: 'buildings/MetalworksFactoryIcon.webp',
+                production: {
+                    time: 120,
+                    input: {
+                        processed_construction_material: 3
+                    },
+                    output: {
+                        pipe: 1
+                    }
+                }
             }
         }
     };
+
+    let buildingKeys = Object.keys(window.objectData.buildings);
+    for (let i=0; i<buildingKeys.length; i++) {
+        let buildingKey = buildingKeys[i];
+        let building = window.objectData.buildings[buildingKey];
+        if (building.upgrades) {
+            let upgradeKeys = Object.keys(building.upgrades);
+            for (let j=0; j<upgradeKeys.length; j++) {
+                let upgradeKey = upgradeKeys[j];
+                let upgrade = building.upgrades[upgradeKey];
+                let upgradeBuilding = Object.assign({}, building, upgrade);
+                upgradeBuilding.name = building.name + ' (' + upgrade.name + ')';
+                window.objectData.buildings[buildingKey + '_' + upgradeKey] = upgradeBuilding;
+            }
+        }
+    }
 
     let objectDataKeys = Object.keys(window.objectData);
     for (let i = 0; i < objectDataKeys.length; i++) {

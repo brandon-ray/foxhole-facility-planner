@@ -140,7 +140,7 @@ const snapshotRate = 1000/10;
     let sounds = null;
     let asset_list = {
         white: 'white.png',
-        background: 'grass.jpg',
+        background: 'grid.webp',
         wall: 'wall.png',
         concrete: 'concrete.png'
     };
@@ -368,7 +368,7 @@ const snapshotRate = 1000/10;
         };
         background.width = 10000;
         background.height = 10000;
-        background.tileScale.set(0.1);
+        background.tileScale.set(0.5);
         background.anchor.x = 0;
         background.anchor.y = 0;
         background.position.x = 0;

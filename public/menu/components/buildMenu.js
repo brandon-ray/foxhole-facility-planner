@@ -1,31 +1,34 @@
 Vue.component('app-game-build-menu', {
+    mounted: function () {
+        game.buildMenuComponent = this;
+    },
     data: function() {
         return {
             currentMenu: null,
             menuList: [
                 {
-                    name: 'Construction',
                     key: 'construction-list',
+                    name: 'Construction',
                     icon: 'fa-wrench'
                 },
                 {
-                    name: 'Statistics',
                     key: 'statistics',
+                    name: 'Statistics',
                     icon: 'fa-bar-chart'
                 },
                 {
-                    name: 'Save/Load',
                     key: 'save-load',
+                    name: 'Save/Load',
                     icon: 'fa-save'
                 },
                 {
-                    name: 'Settings',
                     key: 'settings',
+                    name: 'Settings',
                     icon: 'fa-gear'
                 },
                 {
-                    name: 'About',
                     key: 'about',
+                    name: 'About',
                     icon: 'fa-info-circle'
                 }
             ]
@@ -33,6 +36,16 @@ Vue.component('app-game-build-menu', {
     },
     methods: {
         changeMenu: function(newMenu) {
+            if (typeof newMenu === 'string' || newMenu instanceof String) {
+                for (let i=0; i<this.menuList.length; i++) {
+                    let menu = this.menuList[i];
+                    if (menu.key === newMenu) {
+                        newMenu = menu;
+                        break;
+                    }
+                }
+            }
+
             this.bmc();
             if (newMenu) {
                 this.currentMenu = newMenu;
@@ -73,6 +86,9 @@ Vue.component('app-game-build-menu', {
             </a>
             <a href="https://www.reddit.com/r/foxholegame/comments/xgx0bf/i_started_making_a_facility_planner_webtool_what/" target="_blank">
                 <i class="fa fa-reddit" aria-hidden="true"></i>
+            </a>
+            <a href="#" v-on:click="event.preventDefault(); changeMenu('settings')">
+                <i class="fa fa-gear" aria-hidden="true"></i>
             </a>
         </div>
     </div>
