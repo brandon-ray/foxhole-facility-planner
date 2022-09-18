@@ -7,7 +7,7 @@ Vue.component('state-play', {
     methods: {
 
     },
-    template: `
+    template: html`
     <div>
         test test
     </div>

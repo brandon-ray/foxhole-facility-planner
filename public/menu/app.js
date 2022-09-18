@@ -76,7 +76,7 @@ if (isMobile && !isPhoneApp) {
                     game.playSound('button_click');
                 }
             },
-            template: `
+            template: html`
     <div ref="app">
         <app-game-game-menu></app-game-game-menu>
         <app-game-build-menu></app-game-build-menu>

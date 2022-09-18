@@ -26,7 +26,7 @@ Vue.component('app-game-build-menu', {
                 {
                     name: 'About',
                     key: 'about',
-                    icon: 'fa-question-circle'
+                    icon: 'fa-info-circle'
                 }
             ]
         };
@@ -47,9 +47,11 @@ Vue.component('app-game-build-menu', {
             game.playSound('button_click');
         }
     },
-    template: `
+    template: html`
     <div class="build-menu">
-        <img src="/assets/logo.webp" width="380"><br>
+        <div class="build-menu-header">
+            <img class="build-menu-logo" src="/assets/logo_transparent.webp">
+        </div>
         <div v-if="!currentMenu">
             <button type="button" class="app-btn app-btn-primary" v-for="item in menuList" v-on:click="changeMenu(item)" @mouseenter="bme">
                 <i :class="'fa ' + item.icon"></i> {{item.name}}
@@ -64,6 +66,14 @@ Vue.component('app-game-build-menu', {
             <button type="button" class="app-btn app-btn-primary" v-on:click="changeMenu(null)" @mouseenter="bme">
                 <i class="fa fa-arrow-left"></i> Return
             </button>
+        </div>
+        <div class="build-menu-footer">
+            <a href="https://github.com/brandon-ray/foxhole-facility-planner" target="_blank">
+                <i class="fa fa-github" aria-hidden="true"></i>
+            </a>
+            <a href="https://www.reddit.com/r/foxholegame/comments/xgx0bf/i_started_making_a_facility_planner_webtool_what/" target="_blank">
+                <i class="fa fa-reddit" aria-hidden="true"></i>
+            </a>
         </div>
     </div>
     `
@@ -87,7 +97,7 @@ Vue.component('app-menu-construction-list', {
             game.playSound('button_click');
         }
     },
-    template: `
+    template: html`
     <div>
         <div v-for="building in buildings" class="build-icon">
             <h3>{{building.name}}</h3>
@@ -206,7 +216,7 @@ Vue.component('app-menu-statistics', {
             this.powerConsumed = powerConsumed;
         },
     },
-    template: `
+    template: html`
     <div style="text-align:left;">
         <br>
         <h4><i class="fa fa-wrench"></i> Construction Cost</h4>
@@ -243,7 +253,7 @@ Vue.component('app-menu-statistics', {
 });
 
 Vue.component('app-menu-about', {
-    template: `
+    template: html`
     <div>
         TODO
     </div>

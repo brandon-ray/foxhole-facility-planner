@@ -27,7 +27,7 @@ Vue.component('app-game-game-menu', {
             game.playSound('button_click');
         }
     },
-    template: `
+    template: html`
     <div class="game-modal" v-if="shouldShowModal">
         <div class="game-modal-content game-modal-content-sm">
             <div v-if="!state">
