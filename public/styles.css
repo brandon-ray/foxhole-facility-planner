@@ -201,13 +201,16 @@ p {
     background-color: rgba(0,0,0, 0.75);
     box-shadow: 3px 3px 3px #000000;
 }
-
 .app-input:focus {
     border: 2px solid white;
 }
-
 .app-input:disabled {
     color: #777777;
+}
+
+.app-input-label {
+    text-align: left;
+    width: 80%;
 }
 
 .build-menu {

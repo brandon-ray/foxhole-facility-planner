@@ -80,7 +80,7 @@
                 width: 2,
                 length: 2,
                 icon: 'buildings/FoundationIcon.webp',
-                texture: 'concrete'
+                texture: 'concrete.png'
             },
             foundation_2x2: {
                 name: 'Foundation 2x2',
@@ -88,7 +88,7 @@
                 width: 4,
                 length: 4,
                 icon: 'buildings/FoundationIcon.webp',
-                texture: 'concrete'
+                texture: 'concrete.png'
             },
             materials_factory: {
                 name: 'Materials Factory',
@@ -305,7 +305,21 @@
                         pipe: 1
                     }
                 }
-            }
+            },
+            sound_test: {
+                name: 'Sound Test',
+                power: 0,
+                width: 2,
+                length: 2,
+                icon: 'buildings/FirePitIcon.webp',
+                texture: {
+                    sheet: 'sus.png',
+                    speed: 0.132,
+                    width: 220,
+                    height: 184
+                },
+                sound: 'speaker'
+            },
         }
     };
 

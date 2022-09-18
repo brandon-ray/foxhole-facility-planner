@@ -43,15 +43,7 @@ try {
     console.error('Failed to parse settings.');
 }
 
-const DISABLE_SOUNDS = false;
 const fontFamily = ['Recursive', 'sans-serif'];
-
-const COLOR_FRIENDLY = 0x276884;
-const COLOR_ENEMY = 0xf22306;
-const COLOR_FRIENDLY_BRIGHT = 0x43add9;
-const COLOR_ENEMY_BRIGHT = 0xef3f25;
-
-const snapshotRate = 1000/10;
 
 (function() {
     let ENABLE_DEBUG = false;
@@ -67,6 +59,8 @@ const snapshotRate = 1000/10;
         x: 0,
         y: 0
     };
+
+    game.selectedEntity = null;
 
     if (isMobile && !isPhoneApp) {
         console.info('Mobile is disabled for now.');
@@ -142,7 +136,8 @@ const snapshotRate = 1000/10;
         white: 'white.png',
         background: 'grid.webp',
         wall: 'wall.png',
-        concrete: 'concrete.png'
+        'concrete.png': 'concrete.png',
+        'sus.png': 'sus.png',
     };
     for (let i=0; i<window.objectData.buildings_list.length; i++) {
         let building = window.objectData.buildings_list[i];
@@ -166,6 +161,11 @@ const snapshotRate = 1000/10;
                 src: ['assets/button_click.mp3'],
                 loop: false,
                 volume: 0.25
+            }),
+            speaker: new Howl({
+                src: ['assets/speaker.ogg'],
+                loop: true,
+                volume: 0.4
             }),
         };
 
@@ -310,6 +310,10 @@ const snapshotRate = 1000/10;
             MAP_WIDTH = WIDTH;
             MAP_HEIGHT = HEIGHT;
         }
+
+        if (debugText) {
+            debugText.x = WIDTH*0.22;
+        }
     }
     window.addEventListener('resize', onWindowResize);
 
@@ -386,8 +390,8 @@ const snapshotRate = 1000/10;
         debugText.style.fill = 0xFFFFFF;
         debugText.style.fontFamily = fontFamily;
         debugText.anchor.x = 0;
-        debugText.x = 10;
-        debugText.y = 500;
+        debugText.x = WIDTH*0.22;
+        debugText.y = 12;
         debugText.getZIndex = function () {
             return -100000;
         };
@@ -435,9 +439,10 @@ const snapshotRate = 1000/10;
     }
 
     function getListenerPos() {
+        let zoomRatio = WIDTH/(WIDTH*camera.zoom);
         return {
-            x: camera.x + WIDTH / 2,
-            y: camera.y + HEIGHT / 2,
+            x: (camera.x + WIDTH/2) * zoomRatio,
+            y: (camera.y + HEIGHT/2) * zoomRatio,
             z: camera.z
         };
     }
@@ -452,10 +457,21 @@ const snapshotRate = 1000/10;
             x: so.entity.x,
             y: so.entity.y
         }, listener_pos);
+        let zoomDiff = (1-camera.zoom) * 1000;
+        if (zoomDiff < 0) {
+            zoomDiff = 0;
+        }
+        dist += zoomDiff;
+        if (so.entity.z !== listener_pos.z) {
+            soundStop(so);
+            return null;
+        }
+        /*
         if (dist >= 1200 || so.entity.z !== listener_pos.z) {
             soundStop(so);
             return null;
         }
+        */
 
         let final_vol = 0;
         let ignorePos = false;
@@ -466,9 +482,10 @@ const snapshotRate = 1000/10;
             let percent = (1 - (dist / 1200));
             let vol = so.volume * percent;
 
-            if (percent <= 0.05) {
-                soundStop(so);
-                return null;
+            if (percent <= 0.0001) {
+                vol = 0;
+                //soundStop(so);
+                //return null;
             }
             final_vol = vol;
         }
@@ -487,7 +504,7 @@ const snapshotRate = 1000/10;
             so.sound.volume(final_vol, so.id);
             if (!ignorePos && so.entity && so.entity.x && so.entity.y) {
                 try {
-                    so.sound.pos((so.entity.x * camera.zoom) / 100000, 0, (so.entity.y * camera.zoom) / 100000, so.id);
+                    so.sound.pos(so.entity.x / 100000, 0, so.entity.y / 100000, so.id);
                 } catch (e) {
                     console.error('Sound error 1:', e);
                 }
@@ -511,6 +528,20 @@ const snapshotRate = 1000/10;
     let eventPrefix = 'mouse';
     if (isMobile) {
         eventPrefix = 'pointer';
+    }
+
+    game.selectEntity = function(entity) {
+        if (entity) {
+            game.selectedEntity = entity;
+            game.buildMenuComponent.changeMenu({
+                key: 'building-selected',
+                name: 'Building',
+                icon: 'fa-wrench'
+            });
+        } else {
+            game.buildMenuComponent.changeMenu(null);
+            game.selectedEntity = null;
+        }
     }
 
     let mouseEventListenerObject = game.app.view;
@@ -556,6 +587,10 @@ const snapshotRate = 1000/10;
         let mouseButton = e.button;
         if (mouseButton === 0) {
             if (!currentBuilding) {
+                if (game.selectedEntity) {
+                    game.selectEntity(null);
+                }
+
                 for (let i=0; i<entities.length; i++) {
                     let entity = entities[i];
                     let entityCenter = {
@@ -568,6 +603,7 @@ const snapshotRate = 1000/10;
                             y: gmy - entity.y
                         };
                         currentBuilding = entity;
+                        game.selectEntity(entity);
                     }
                 }
             }
@@ -607,7 +643,6 @@ const snapshotRate = 1000/10;
         if (mouseButton === 0) {
             if (currentBuilding) {
                 currentBuilding = null;
-                game.playSound('button_click');
             }
         } else if (mouseButton === 1 || mouseButton === 4) {
             dragCamera = false;
@@ -984,14 +1019,31 @@ const snapshotRate = 1000/10;
         let entity = createEntity('building', type, x, y, z, netData);
 
         let building = window.objectData.buildings[type];
+        entity.building = building;
         let sprite = new PIXI.TilingSprite(resources['wall'].texture);
         sprite.width = building.width * 32;
         sprite.height = building.length * 32;
         entity.addChild(sprite);
 
-        if (building.texture && resources[building.texture]) {
-            sprite.texture = resources[building.texture].texture;
-            sprite.tileScale.set(0.5);
+        let frameX = 0;
+        let frameY = 0;
+        let frameWidth = 0;
+        let frameHeight = 0;
+        let sheet = null;
+        if (building.texture) {
+            if (typeof building.texture === 'object' && !Array.isArray(building.texture)) {
+                sheet = loadSpritesheet(resources[building.texture.sheet].texture, building.texture.width, building.texture.height);
+                frameWidth = Math.floor(resources[building.texture.sheet].texture.width/building.texture.width);
+                frameHeight = Math.floor(resources[building.texture.sheet].texture.height/building.texture.height);
+                entity.removeChild(sprite);
+                sprite = new PIXI.Sprite(sheet[0][0]);
+                sprite.width = building.width * 32;
+                sprite.height = building.length * 32;
+                entity.addChild(sprite);
+            } else if (resources[building.texture]) {
+                sprite.texture = resources[building.texture].texture;
+                sprite.tileScale.set(0.5);
+            }
         }
 
         if (!building.texture) {
@@ -1003,6 +1055,35 @@ const snapshotRate = 1000/10;
             icon.position.y = sprite.height / 2;
             entity.addChild(icon);
         }
+
+        let sound = null;
+        entity.tick = function() {
+            if (sheet) {
+                frameX += building.texture.speed ? building.texture.speed : 0.1;
+                if (frameX >= frameWidth) {
+                    frameX -= frameWidth;
+                }
+                sprite.texture = sheet[Math.floor(frameX)][Math.floor(frameY)];
+            }
+
+            if (!sound && building.sound && sounds[building.sound]) {
+                sound = soundPlay(sounds[building.sound], entity, 0.4);
+            }
+
+            if (sound) {
+                soundUpdate(sound);
+                if (sound.stopped) {
+                    sound = null;
+                }
+            }
+        };
+
+        entity.onRemove = function() {
+            if (sound) {
+                soundStop(sound);
+                sound = null;
+            }
+        };
 
         return entity;
     }
@@ -1073,6 +1154,26 @@ const snapshotRate = 1000/10;
                 menuInit = true;
 
                 game.appComponent.gameLoaded();
+            }
+        }
+
+        for (let i=0; i<entities.length; i++) {
+            let entity = entities[i];
+            if (entity.valid) {
+                entity.tick(delta);
+            } else {
+                entities.splice(i, 1);
+                i--;
+            }
+        }
+
+        for (let i = 0; i < effects.length; i++) {
+            let effect = effects[i];
+            if (effect.valid) {
+                effect.tick(delta);
+            } else {
+                effects.splice(i, 1);
+                i--;
             }
         }
 

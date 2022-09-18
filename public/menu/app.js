@@ -35,12 +35,6 @@ if (isMobile && !isPhoneApp) {
                         game.isGameLoaded = true;
                         this.reloadMenu();
                     }
-                },
-                bme: function () {
-                    game.playSound('button_hover');
-                },
-                bmc: function() {
-                    game.playSound('button_click');
                 }
             },
             template: html`

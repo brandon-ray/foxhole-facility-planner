@@ -10,12 +10,7 @@ Vue.component('app-game-resource-icon', {
         };
     },
     methods: {
-        bme: function() {
-            game.playSound('button_hover');
-        },
-        bmc: function() {
-            game.playSound('button_click');
-        }
+
     },
     template: html`
     <div class="resource-icon" :title="resourceData.name" :style="style">

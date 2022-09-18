@@ -19,12 +19,6 @@ Vue.component('app-game-game-menu', {
         fullscreen: function() {
             this.bmc();
             game.tryFullscreen();
-        },
-        bme: function() {
-            game.playSound('button_hover');
-        },
-        bmc: function() {
-            game.playSound('button_click');
         }
     },
     template: html`

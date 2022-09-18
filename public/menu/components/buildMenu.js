@@ -5,6 +5,7 @@ Vue.component('app-game-build-menu', {
     data: function() {
         return {
             currentMenu: null,
+            currentMenuData: null,
             menuList: [
                 {
                     key: 'construction-list',
@@ -35,7 +36,7 @@ Vue.component('app-game-build-menu', {
         };
     },
     methods: {
-        changeMenu: function(newMenu) {
+        changeMenu: function(newMenu, menuData) {
             if (typeof newMenu === 'string' || newMenu instanceof String) {
                 for (let i=0; i<this.menuList.length; i++) {
                     let menu = this.menuList[i];
@@ -52,12 +53,7 @@ Vue.component('app-game-build-menu', {
             } else {
                 this.currentMenu = null;
             }
-        },
-        bme: function() {
-            game.playSound('button_hover');
-        },
-        bmc: function() {
-            game.playSound('button_click');
+            this.currentMenuData = menuData;
         }
     },
     template: html`
@@ -73,7 +69,7 @@ Vue.component('app-game-build-menu', {
         <div v-if="currentMenu">
             <h2><i :class="'fa ' + currentMenu.icon"></i> {{currentMenu.name}}</h2>
             <div style="height:695px; overflow-x:hidden; overflow-y:auto;">
-                <component v-bind:is="'app-menu-' + currentMenu.key"></component>
+                <component v-bind:is="'app-menu-' + currentMenu.key" :menuData="currentMenuData"></component>
             </div>
             <br>
             <button type="button" class="app-btn app-btn-primary" v-on:click="changeMenu(null)" @mouseenter="bme">
@@ -95,7 +91,45 @@ Vue.component('app-game-build-menu', {
     `
 });
 
+Vue.component('app-menu-building-selected', {
+    props: ['menuData'],
+    data: function() {
+        return {
+            selectedEntity: game.selectedEntity
+        };
+    },
+    methods: {
+        destroyBuilding: function() {
+            this.bmc();
+            if (game.selectedEntity) {
+                game.selectedEntity.remove();
+                game.selectEntity(null);
+            }
+        }
+    },
+    template: html`
+    <div style="text-align:left;">
+        <div v-if="selectedEntity.type === 'building'">
+            <h4>{{selectedEntity.building.name}}</h4>
+            <br>
+        </div>
+        <label class="app-input-label">
+            Position X:
+            <input class="app-input" type="number" v-model="selectedEntity.position.x">
+        </label>
+        <label class="app-input-label">
+            Position Y:
+            <input class="app-input" type="number" v-model="selectedEntity.position.y">
+        </label>
+        <button type="button" class="app-btn app-btn-secondary" v-on:click="destroyBuilding" @mouseenter="bme">
+            <i class="fa fa-trash"></i> Destroy
+        </button>
+    </div>
+    `
+});
+
 Vue.component('app-menu-construction-list', {
+    props: ['menuData'],
     data: function() {
         return {
             buildings: window.objectData.buildings_list
@@ -105,12 +139,6 @@ Vue.component('app-menu-construction-list', {
         buildBuilding: function(building) {
             this.bmc();
             game.startBuild(building);
-        },
-        bme: function() {
-            game.playSound('button_hover');
-        },
-        bmc: function() {
-            game.playSound('button_click');
         }
     },
     template: html`
@@ -152,6 +180,7 @@ Vue.component('app-menu-construction-list', {
 });
 
 Vue.component('app-menu-statistics', {
+    props: ['menuData'],
     data() {
         return {
             input: {},
@@ -269,6 +298,7 @@ Vue.component('app-menu-statistics', {
 });
 
 Vue.component('app-menu-about', {
+    props: ['menuData'],
     template: html`
     <div>
         TODO
