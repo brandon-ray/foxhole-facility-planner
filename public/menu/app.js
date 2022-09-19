@@ -24,9 +24,6 @@ if (isMobile && !isPhoneApp) {
                     this.isInMenu = game.isInMenu;
                     this.$forceUpdate();
                 },
-                updateSettings: function() {
-                    game.updateSettings();
-                },
                 reloadMenu: function () {
                     if (game.isPlayScreen) {
                         return;
@@ -46,29 +43,28 @@ if (isMobile && !isPhoneApp) {
         <app-game-game-menu></app-game-game-menu>
         <app-game-build-menu></app-game-build-menu>
         
-        <div class="statistics-panel">
+        <div v-if="game.settings.enableStats" class="statistics-panel">
             <div style="max-height:700px; overflow-x:hidden; overflow-y:auto;">
                 <app-menu-statistics></app-menu-statistics>
             </div>
         </div>
         
-        <button class="fullscreen-button">
-            <i class="fa fa-arrows-alt" aria-hidden="true"></i>
-        </button>
-        
         <div class="footer">
             <label class="checkbox-button align-middle">
-                <input type="checkbox" name="snap-to-grid-toggle" v-model="settings.enableGrid" @change="updateSettings" />
+                <input type="checkbox" name="snap-to-grid-toggle" v-model="settings.enableGrid" @change="game.updateSettings" />
                 Snap to Grid
             </label>
             <label class="checkbox-button align-middle">
-                <input type="checkbox" name="snap-rotation-toggle" v-model="settings.enableSnapRotation" @change="updateSettings" />
+                <input type="checkbox" name="snap-rotation-toggle" v-model="settings.enableSnapRotation" @change="game.updateSettings" />
                 Snap Rotation
             </label>
             <label class="checkbox-button align-middle">
-                <input type="checkbox" name="stats-info-toggle" checked />
+                <input type="checkbox" name="stats-info-toggle" v-model="game.settings.enableStats" @change="game.updateSettings" />
                 Show Stats
             </label>
+            <button class="fullscreen-button" v-on:click="game.tryFullscreen">
+                <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+            </button>
         </div>
     </div>
     `

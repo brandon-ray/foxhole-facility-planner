@@ -84,13 +84,13 @@ Vue.component('app-game-build-menu', {
         </div>
         <div class="build-menu-footer">
             <a href="https://github.com/brandon-ray/foxhole-facility-planner" target="_blank">
-                <i class="fa fa-github" aria-hidden="true"></i>
+                <i class="fa fa-github"></i>
             </a>
             <button v-on:click="event.preventDefault(); changeMenu('settings')" class="float-right">
-                <i class="fa fa-gear" aria-hidden="true"></i>
+                <i class="fa fa-gear"></i>
             </button>
             <button v-on:click="event.preventDefault(); changeMenu('about')" class="float-right">
-                <i class="fa fa-question-circle" aria-hidden="true"></i>
+                <i class="fa fa-question-circle"></i>
             </button>
         </div>
         <div class="hover-menu" v-if="hoverData">
@@ -220,44 +220,10 @@ Vue.component('app-menu-construction-list', {
         <select class="app-input" v-model="category" @change="refresh">
             <option value="buildings">Buildings</option>
         </select>
-        <div class="build-menu-page" style="text-align:left; margin-bottom:4px; height:732px;">
+        <div id="construction-items" class="build-menu-page" style="text-align:left; margin-bottom:4px; height:732px;">
             <div v-for="building in buildings" class="build-icon" :style="{backgroundImage:'url(/assets/' + building.icon + ')'}"
-                 @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" v-on:click="buildBuilding(building)">
+                @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" v-on:click="buildBuilding(building)">
             </div>
-            <!--
-            <div v-for="building in buildings" class="build-icon">
-                <h3>{{building.name}}</h3>
-                <h4 style="color:#d0d004; padding-left:10px;" v-if="building.production">
-                    <span v-if="building.power"><i class="fa fa-bolt"></i> {{building.power}} MW<br></span>
-                    <i class="fa fa-clock-o"></i> {{building.production.time}}s
-                </h4>
-                <div style="text-align:center;" v-if="!building.production">
-                    <div class="resource-icon" :title="building.name" :style="{backgroundImage: 'url(/assets/' + building.icon + ')'}"></div>
-                </div>
-                <div class="row" style="text-align:center;" v-if="building.production">
-                    <div class="col" style="color:#d50101;" v-if="building.production.input">
-                        <app-game-resource-icon v-for="(value, key) in building.production.input" :resource="key" :amount="value"/>
-                    </div>
-                    <div class="col-2">
-                        <br>
-                        <i class="fa fa-play fa-2x"></i>
-                    </div>
-                    <div class="col" style="color:#03b003;" v-if="building.production.output">
-                        <app-game-resource-icon v-for="(value, key) in building.production.output" :resource="key" :amount="value"/>
-                    </div>
-                    <div class="col" v-if="building.power > 0">
-                        <i class="fa fa-bolt fa-4x"></i>
-                        <div style="color:#03b003;">
-                            {{building.power}} MW
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <button type="button" class="app-btn app-btn-secondary" v-on:click="buildBuilding(building)" @mouseenter="bme">
-                    <i class="fa fa-plus"></i> Build
-                </button>
-            </div>
-            -->
         </div>
     </div>
     `
@@ -368,38 +334,42 @@ Vue.component('app-menu-statistics', {
     },
     template: html`
     <div style="text-align:left;">
-        <br>
-        <h4><i class="fa fa-wrench"></i> Construction Cost</h4>
-        <div>
-            <app-game-resource-icon style="color:#d50101; display:inline-block; margin:3px;" v-for="(value, key) in cost" :resource="key" :amount="value"/>
+        <div class="statistics-panel-header">
+            <h3><i class="fa fa-bar-chart"></i> Statistics</h3><button class="close-statistics-button" @click="game.settings.enableStats = false; game.updateSettings()"><i class="fa fa-times"></i></button>
         </div>
-        <br>
-        <h4><i class="fa fa-bolt"></i> Power</h4>
-        <div style="color:#d0d004; width:250px; margin:auto;">
-            <span style="color:#03b003;">Produced: {{powerProduced}} MW</span><br>
-            <span style="color:#d50101;">Consumed: {{powerConsumed}} MW</span><br>
-            Total: {{powerTotal}} MW
+        <div class="statistics-panel-body">
+            <h4><i class="fa fa-wrench"></i> Construction Cost</h4>
+            <div>
+                <app-game-resource-icon style="color:#d50101; display:inline-block; margin:3px;" v-for="(value, key) in cost" :resource="key" :amount="value"/>
+            </div>
+            <br>
+            <h4><i class="fa fa-bolt"></i> Power</h4>
+            <div style="color:#d0d004; width:250px; margin:auto;">
+                <span style="color:#03b003;">Produced: {{powerProduced}} MW</span><br>
+                <span style="color:#d50101;">Consumed: {{powerConsumed}} MW</span><br>
+                Total: {{powerTotal}} MW
+            </div>
+            <br><br>
+            <select class="app-input" v-model="time" @change="refresh">
+                <option value="86400">Per 24 Hours</option>
+                <option value="10800">Per 3 Hours</option>
+                <option value="3600">Per 1 Hour</option>
+                <option value="1800">Per 30 Minutes</option>
+                <option value="900">Per 15 Minutes</option>
+                <option value="60">Per 1 Minute</option>
+            </select>
+            <br>
+            <h4><i class="fa fa-sign-in"></i> Facility Input</h4>
+            <div>
+                <app-game-resource-icon style="color:#d50101; display:inline-block; margin:3px;" v-for="(value, key) in input" :resource="key" :amount="value"/>
+            </div>
+            <br>
+            <h4><i class="fa fa-sign-out"></i> Facility Output</h4>
+            <div>
+                <app-game-resource-icon style="color:#03b003; display:inline-block; margin:3px;" v-for="(value, key) in output" :resource="key" :amount="value"/>
+            </div>
+            <br><br>
         </div>
-        <br><br>
-        <select class="app-input" v-model="time" @change="refresh">
-            <option value="86400">Per 24 Hours</option>
-            <option value="10800">Per 3 Hours</option>
-            <option value="3600">Per 1 Hour</option>
-            <option value="1800">Per 30 Minutes</option>
-            <option value="900">Per 15 Minutes</option>
-            <option value="60">Per 1 Minute</option>
-        </select>
-        <br>
-        <h4><i class="fa fa-sign-in"></i> Facility Input</h4>
-        <div>
-            <app-game-resource-icon style="color:#d50101; display:inline-block; margin:3px;" v-for="(value, key) in input" :resource="key" :amount="value"/>
-        </div>
-        <br>
-        <h4><i class="fa fa-sign-out"></i> Facility Output</h4>
-        <div>
-            <app-game-resource-icon style="color:#03b003; display:inline-block; margin:3px;" v-for="(value, key) in output" :resource="key" :amount="value"/>
-        </div>
-        <br><br>
     </div>
     `
 });
