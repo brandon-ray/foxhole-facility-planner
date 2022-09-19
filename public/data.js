@@ -47,6 +47,21 @@
                 icon: 'resources/AssemblyMaterialsIcon.webp',
                 type: 'solid'
             },
+            assembly_materials3: {
+                name: 'Assembly Materials 3',
+                icon: 'resources/AssemblyMaterialsIcon.webp',
+                type: 'solid'
+            },
+            assembly_materials4: {
+                name: 'Assembly Materials 4',
+                icon: 'resources/AssemblyMaterialsIcon.webp',
+                type: 'solid'
+            },
+            assembly_materials5: {
+                name: 'Assembly Materials 5',
+                icon: 'resources/AssemblyMaterialsIcon.webp',
+                type: 'solid'
+            },
             sandbag: {
                 name: 'Sandbag',
                 icon: 'resources/SandbagMaterialIcon.webp',
@@ -77,27 +92,48 @@
             foundation_1x1: {
                 name: 'Foundation 1x1',
                 power: 0,
-                width: 2,
-                length: 2,
+                width: 5,
+                length: 5,
                 icon: 'buildings/FoundationIcon.webp',
                 texture: 'concrete.png',
-                sortOffset: -1000
+                sortOffset: -1000,
+                cost: {
+                    gravel: 75
+                }
+            },
+            foundation_1x2: {
+                name: 'Foundation 1x2',
+                power: 0,
+                width: 5,
+                length: 10,
+                icon: 'buildings/FoundationIcon.webp',
+                texture: 'concrete.png',
+                sortOffset: -1000,
+                cost: {
+                    gravel: 115
+                }
             },
             foundation_2x2: {
                 name: 'Foundation 2x2',
                 power: 0,
-                width: 4,
-                length: 4,
+                width: 10,
+                length: 10,
                 icon: 'buildings/FoundationIcon.webp',
                 texture: 'concrete.png',
-                sortOffset: -1000
+                sortOffset: -1000,
+                cost: {
+                    gravel: 150
+                }
             },
             materials_factory: {
                 name: 'Materials Factory',
                 power: -2,
                 width: 6,
-                length: 3,
+                length: 12,
                 icon: 'buildings/MaterialsFactoryIcon.webp',
+                cost: {
+                    basic_material: 200
+                },
                 production: {
                     time: 25,
                     input: {
@@ -204,9 +240,12 @@
             coal_refinery: {
                 name: 'Coal Refinery',
                 power: -3,
-                width: 5,
-                length: 2,
+                width: 6,
+                length: 10,
                 icon: 'buildings/CoalRefineryIcon.webp',
+                cost: {
+                    construction_material: 50
+                },
                 production: {
                     time: 120,
                     input: {
@@ -221,8 +260,11 @@
                 name: 'Oil Refinery',
                 power: -1,
                 width: 4,
-                length: 2,
+                length: 11,
                 icon: 'buildings/OilRefineryIcon.webp',
+                cost: {
+                    construction_material: 50
+                },
                 production: {
                     time: 150,
                     input: {
@@ -233,12 +275,38 @@
                     }
                 }
             },
+            bms_foreman_stacker: {
+                name: 'BMS Foreman Stacker',
+                power: -0.5,
+                width: 3,
+                length: 3,
+                icon: 'buildings/FortStructureIcon.webp',
+                cost: {
+                    processed_construction_material: 200
+                }
+            },
+            /*
+            power_pole: {
+                name: 'Power Pole',
+                power: 0,
+                width: 1,
+                length: 1,
+                icon: 'buildings/PowerPoleIcon.webp',
+                texture: 'concrete.png',
+                cost: {
+                    basic_material: 20
+                }
+            },
+            */
             diesel_power_plant: {
                 name: 'Diesel Power Plant',
                 power: 5,
-                width: 3,
-                length: 3,
+                width: 7,
+                length: 7,
                 icon: 'buildings/DieselPowerPlantIcon.webp',
+                cost: {
+                    basic_material: 150
+                },
                 production: {
                     time: 45,
                     input: {
@@ -249,9 +317,13 @@
             petrol_power_plant: {
                 name: 'Petrol Power Plant',
                 power: 12,
-                width: 3,
-                length: 3,
+                width: 7,
+                length: 7,
                 icon: 'buildings/PetrolPowerPlantIcon.webp',
+                cost: {
+                    basic_material: 150,
+                    processed_construction_material: 50
+                },
                 production: {
                     time: 90,
                     input: {
@@ -262,9 +334,12 @@
             stationary_harvester_scrap: {
                 name: 'Stationary Harvester (Scrap)',
                 power: 0,
-                width: 3,
-                length: 3,
+                width: 5,
+                length: 7,
                 icon: 'buildings/ScrapStationaryHarvesterIcon.webp',
+                cost: {
+                    processed_construction_material: 150
+                },
                 production: {
                     time: 12,
                     input: {
@@ -275,12 +350,15 @@
                     }
                 }
             },
-            metalworks_factory_processed_construction_materials: {
+            metalworks_factory: {
                 name: 'Metalworks Factory (Procesed Construction Materials)',
                 power: -5,
-                width: 5,
-                length: 5,
+                width: 9,
+                length: 12,
                 icon: 'buildings/MetalworksFactoryIcon.webp',
+                cost: {
+                    processed_construction_material: 125
+                },
                 production: {
                     time: 60,
                     input: {
@@ -295,8 +373,8 @@
             metalworks_factory_pipes: {
                 name: 'Metalworks Factory (Pipes)',
                 power: -5,
-                width: 5,
-                length: 5,
+                width: 9,
+                length: 12,
                 icon: 'buildings/MetalworksFactoryIcon.webp',
                 production: {
                     time: 120,

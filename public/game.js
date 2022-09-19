@@ -5,6 +5,7 @@ const game = {
         disableSound: false,
         disableHUD: false,
         enableGrid: true,
+        gridSize: 16,
         volume: 1
     },
     isPlayScreen: false
@@ -606,11 +607,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 });
                 for (let i=0; i<entities.length; i++) {
                     let entity = entities[i];
-                    let entityCenter = {
-                        x: entity.x + entity.width/2,
-                        y: entity.y + entity.height/2
-                    }
-                    if (entity.type === 'building' && Math.distanceBetween(entityCenter, {x: gmx, y: gmy}) < 50) {
+                    if (entity.type === 'building' && Math.distanceBetween(entity, {x: gmx, y: gmy}) < 50) {
                         currentBuildingOffset = {
                             x: gmx - entity.x,
                             y: gmy - entity.y
@@ -1039,6 +1036,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         let sprite = new PIXI.TilingSprite(resources['wall'].texture);
         sprite.width = building.width * 32;
         sprite.height = building.length * 32;
+        sprite.anchor.set(0.5);
         entity.addChild(sprite);
 
         let frameX = 0;
@@ -1055,6 +1053,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 sprite = new PIXI.Sprite(sheet[0][0]);
                 sprite.width = building.width * 32;
                 sprite.height = building.length * 32;
+                sprite.anchor.set(0.5);
                 entity.addChild(sprite);
             } else if (resources[building.texture]) {
                 sprite.texture = resources[building.texture].texture;
@@ -1068,16 +1067,14 @@ const fontFamily = ['Recursive', 'sans-serif'];
             iconBackground.anchor.set(0.5);
             iconBackground.width = 64;
             iconBackground.height = 64;
-            iconBackground.position.x = sprite.width / 2;
-            iconBackground.position.y = sprite.height / 2;
+            iconBackground.anchor.set(0.5);
             entity.addChild(iconBackground);
 
             let icon = new PIXI.Sprite(resources[building.icon].texture);
             icon.anchor.set(0.5);
             icon.width = iconBackground.width;
             icon.height = iconBackground.height;
-            icon.position.x = sprite.width / 2;
-            icon.position.y = sprite.height / 2;
+            icon.anchor.set(0.5);
             entity.addChild(icon);
         }
 
@@ -1137,8 +1134,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
     game.startBuild = function(building) {
         currentBuilding = createBuilding(building.key, 0, 0, 0, {});
         currentBuildingOffset = {
-            x: currentBuilding.width/2,
-            y: currentBuilding.height/2
+            x: 0,
+            y: 0
         };
     };
 
@@ -1164,7 +1161,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
         game.tryGameFocus();
 
-        let gridSize = 32;
+        let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
         if (currentBuilding) {
             currentBuilding.x = gmx - currentBuildingOffset.x;
             currentBuilding.y = gmy - currentBuildingOffset.y;

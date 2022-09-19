@@ -130,15 +130,25 @@ Vue.component('app-menu-building-selected', {
     props: ['menuData'],
     data: function() {
         return {
-            selectedEntity: game.selectedEntity
+            selectedEntity: null,
+            entityRotation: 0,
         };
     },
     mounted: function() {
         game.buildingSelectedMenuComponent = this;
+        this.refresh();
     },
     methods: {
         refresh: function() {
             this.selectedEntity = game.selectedEntity;
+            if (this.selectedEntity) {
+                this.entityRotation = Math.rad2deg(this.selectedEntity.rotation);
+            }
+        },
+        updateRotation: function() {
+            if (this.selectedEntity) {
+                this.selectedEntity.rotation = Math.deg2rad(parseInt(this.entityRotation));
+            }
         },
         destroyBuilding: function() {
             this.bmc();
@@ -149,7 +159,7 @@ Vue.component('app-menu-building-selected', {
         }
     },
     template: html`
-    <div style="text-align:left;">
+    <div style="text-align:left;" v-if="selectedEntity">
         <div v-if="selectedEntity.type === 'building'">
             <h4>{{selectedEntity.building.name}}</h4>
             <br>
@@ -161,6 +171,10 @@ Vue.component('app-menu-building-selected', {
         <label class="app-input-label">
             Position Y:
             <input class="app-input" type="number" v-model="selectedEntity.position.y">
+        </label>
+        <label class="app-input-label">
+            Rotation:
+            <input class="app-input" type="number" v-model="entityRotation" @change="updateRotation">
         </label>
         <button type="button" class="app-btn app-btn-secondary" v-on:click="destroyBuilding" @mouseenter="bme">
             <i class="fa fa-trash"></i> Destroy
