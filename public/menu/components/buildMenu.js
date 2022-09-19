@@ -393,11 +393,11 @@ Vue.component('app-menu-settings', {
         </label>
         <label class="app-input-label">
             Snap Grid Size:
-            <input class="app-input" type="number" v-model="game.settings.gridSize">
+            <input class="app-input" type="number" v-model="game.settings.gridSize" @input="game.updateSettings">
         </label>
         <label class="app-input-label">
             Snap Rotation Degrees:
-            <input class="app-input" type="number" v-model="game.settings.snapRotationDegrees">
+            <input class="app-input" type="number" v-model="game.settings.snapRotationDegrees" @input="game.updateSettings">
         </label>
     </div>
     `
