@@ -242,6 +242,12 @@ p {
     max-height: 100%;
 }
 
+#construction-items {
+    background: black;
+    height: 100%;
+    padding: 2px;
+}
+
 .build-menu .app-btn-primary, .build-menu .app-btn-secondary {
     background: linear-gradient(rgb(130, 130, 130), rgb(64, 64, 64));
     box-shadow: 0 0 3px #000;
@@ -259,16 +265,19 @@ p {
 }
 
 .build-icon {
-    text-align: left;
-    display: inline-block;
-    width: 78px;
-    height: 78px;
-    padding: 8px;
-    border: 2px solid black;
-    margin: 1px;
+    cursor: pointer;
+    width: 25%;
+    padding-top: 25%;
+    border: 1px solid black;
+    background-color: #282828;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    float: left;
+}
+
+.build-icon:hover {
+    background-color: #3b3b3b;
 }
 
 .resource-icon {
@@ -293,71 +302,66 @@ p {
     text-align: left;
 }
 
-.build-menu-footer a, .build-menu-footer button {
-    color: #4a4a4a;
-    font-size: 2.25em;
-    margin: 0 2px;
-}
-
-.build-menu-footer a:hover, .build-menu-footer button:hover {
-    color: white;
-}
-
-.build-menu-footer button {
-    border: none;
-    cursor: pointer;
-}
-
-.build-menu-footer a, .build-menu-footer button {
+.build-menu-footer a, .build-menu-footer button, .close-statistics-button, .fullscreen-button {
     display: inline-block;
     background: transparent;
     border: 2px solid #202020;
     cursor: pointer;
     border-radius: 8px;
+    font-size: 2.25em;
     color: #777;
     width: 48px;
+    margin: 0 2px;
     line-height: 42px;
     vertical-align: middle;
     text-align: center;
 }
 
-.build-menu-footer a:hover, .build-menu-footer button:hover {
+.build-menu-footer a:hover, .build-menu-footer button:hover, .close-statistics-button:hover, .fullscreen-button:hover {
     border: 2px solid white;
-}
-
-.fullscreen-button {
-    font-size: 3em;
-    line-height: 1em;
-    position: fixed;
-    top: 10px;
-    right: 10px;
-}
-
-.footer {
-    background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 1));
     color: white;
-    height: 44px;
-    padding: 8px;
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    left: 350px;
-    text-align: left;
 }
 
-.footer .checkbox-button {
-    display: inline-block;
-    cursor: pointer;
-    margin: 0 55px 0 0;
+.close-statistics-button, .fullscreen-button {
+    width: 30px;
+    height: 30px;
+    border-radius: 3px;
+    line-height: 25px;
+    margin: 6px;
+    font-size: 1.15em;
+    float: right;
+}
+
+.close-statistics-button {
+    margin: 3px;
 }
 
 .statistics-panel {
     position: fixed;
-    top: 20px;
-    right: 20px;
-    width: 250px;
+    top: 15px;
+    right: 15px;
+    width: 300px;
+    padding: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.statistics-panel-header {
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 4px 9px;
+    position: relative;
+}
+
+.statistics-panel-header h3 {
+    display: inline-block;
+}
+
+.statistics-panel-header button {
+    float: right;
+}
+
+.statistics-panel-body {
     padding: 12px;
-    background-color: #4a4a4a;
+    overflow: auto;
 }
 
 .hover-menu {
@@ -368,6 +372,23 @@ p {
     padding: 6px;
 }
 
+.footer {
+    background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 1));
+    color: white;
+    height: 44px;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 350px;
+    text-align: left;
+}
+
+.footer .checkbox-button {
+    display: inline-block;
+    cursor: pointer;
+    margin: 8px 55px 0 8px;
+}
+
 .footer .checkbox-button input[type="checkbox"] {
     cursor: pointer;
     -webkit-appearance: none;
@@ -376,6 +397,7 @@ p {
     width: 25px;
     height: 25px;
     border: 2px solid white;
+    border-radius: 3px;
     padding: 3px;
     vertical-align: middle;
 }

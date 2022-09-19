@@ -5,6 +5,7 @@ const game = {
         disableSound: false,
         disableHUD: false,
         enableGrid: true,
+        enableStats: true,
         gridSize: 16,
         enableSnapRotation: true,
         snapRotationDegrees: 15,
@@ -225,6 +226,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
 
         game.reloadSettings();
+
+        if (game.appComponent) {
+            game.appComponent.$forceUpdate();
+        }
     };
 
     game.reloadSettings = () => {
@@ -669,6 +674,12 @@ const fontFamily = ['Recursive', 'sans-serif'];
             let fullscreenElement = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
             if (!fullscreenElement) {
                 requestFullscreen(document.body);
+            } else if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) { /* Safari */
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) { /* IE11 */
+                document.msExitFullscreen();
             }
         } catch (e) {}
     };

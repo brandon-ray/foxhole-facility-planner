@@ -361,7 +361,7 @@
                 }
             },
             metalworks_factory: {
-                name: 'Metalworks Factory (Procesed Construction Materials)',
+                name: 'Metalworks Factory (Processed Construction Materials)',
                 power: -5,
                 width: 9,
                 length: 12,
