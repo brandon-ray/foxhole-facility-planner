@@ -375,6 +375,35 @@ Vue.component('app-menu-statistics', {
     `
 });
 
+Vue.component('app-menu-settings', {
+    props: ['menuData'],
+    template: html`
+    <div id="settings" class="text-left">
+        <label>
+            Graphics Quality
+            <select class="app-input" v-model="game.settings.quality" v-on:change="game.updateQuality">
+                <option value="auto">Auto</option>
+                <option value="high">High Quality</option>
+                <option value="low">Low Quality</option>
+            </select>
+        </label>
+        <br>
+        <label>
+            Sound Volume<br>
+            <input type="range" v-model="game.settings.volume" min="0" max="1" step="0.1" style="width:320px;" class="slider" @input="game.updateSettings">
+        </label>
+        <label class="app-input-label">
+            Snap Grid Size:
+            <input class="app-input" type="number" v-model="game.settings.gridSize">
+        </label>
+        <label class="app-input-label">
+            Snap Rotation Degrees:
+            <input class="app-input" type="number" v-model="game.settings.snapRotationDegrees">
+        </label>
+    </div>
+    `
+});
+
 Vue.component('app-menu-about', {
     props: ['menuData'],
     template: html`

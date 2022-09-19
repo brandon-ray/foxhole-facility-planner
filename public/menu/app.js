@@ -62,6 +62,10 @@ if (isMobile && !isPhoneApp) {
                 Snap to Grid
             </label>
             <label class="checkbox-button align-middle">
+                <input type="checkbox" name="snap-rotation-toggle" v-model="settings.enableSnapRotation" @change="updateSettings" />
+                Snap Rotation
+            </label>
+            <label class="checkbox-button align-middle">
                 <input type="checkbox" name="stats-info-toggle" checked />
                 Show Stats
             </label>

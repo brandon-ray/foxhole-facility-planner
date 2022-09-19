@@ -6,6 +6,8 @@ const game = {
         disableHUD: false,
         enableGrid: true,
         gridSize: 16,
+        enableSnapRotation: true,
+        snapRotationDegrees: 15,
         volume: 1
     },
     isPlayScreen: false
@@ -262,6 +264,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
             ENABLE_DEBUG = !ENABLE_DEBUG;
             if (debugText) {
                 debugText.visible = ENABLE_DEBUG;
+            }
+        } else if (key === 27) {
+            if (currentBuilding) {
+                currentBuilding.remove();
+                currentBuilding = null;
             }
         }
 
@@ -558,6 +565,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
     let mouseEventListenerObject = game.app.view;
     let dragCamera = false;
+    let mouseDown = {};
     mouseEventListenerObject.addEventListener('wheel', (e) => {
         let lastZoom = camera.zoom;
         camera.zoom -= (e.deltaY * 0.0005);
@@ -597,6 +605,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         my = e.clientY;
 
         let mouseButton = e.button;
+        mouseDown[mouseButton] = true;
         if (mouseButton === 0) {
             if (game.selectedEntity) {
                 game.selectEntity(null);
@@ -619,11 +628,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
         } else if (mouseButton === 1 || mouseButton === 4) {
             dragCamera = true;
-        } else if (mouseButton === 2) {
-            if (currentBuilding) {
-                currentBuilding.remove();
-                currentBuilding = null;
-            }
         }
     });
     mouseEventListenerObject.addEventListener(eventPrefix + 'move', (e) => {
@@ -650,6 +654,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         my = e.clientY;
 
         let mouseButton = e.button;
+        mouseDown[mouseButton] = false;
         if (mouseButton === 0) {
             if (currentBuilding) {
                 currentBuilding = null;
@@ -1161,14 +1166,23 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
         game.tryGameFocus();
 
-        let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
         if (currentBuilding) {
-            currentBuilding.x = gmx - currentBuildingOffset.x;
-            currentBuilding.y = gmy - currentBuildingOffset.y;
+            if (mouseDown[2]) {
+                let angle = Math.angleBetween(currentBuilding, {x: gmx, y: gmy});
+                if (game.settings.enableSnapRotation) {
+                    let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ? game.settings.snapRotationDegrees : 15);
+                    angle = Math.floor(angle / snapRotationDegrees) * snapRotationDegrees;
+                }
+                currentBuilding.rotation = angle;
+            } else {
+                currentBuilding.x = gmx - currentBuildingOffset.x;
+                currentBuilding.y = gmy - currentBuildingOffset.y;
 
-            if (game.settings.enableGrid || keys[16]) {
-                currentBuilding.x = Math.floor(currentBuilding.x/gridSize) * gridSize;
-                currentBuilding.y = Math.floor(currentBuilding.y/gridSize) * gridSize;
+                if (game.settings.enableGrid || keys[16]) {
+                    let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
+                    currentBuilding.x = Math.floor(currentBuilding.x / gridSize) * gridSize;
+                    currentBuilding.y = Math.floor(currentBuilding.y / gridSize) * gridSize;
+                }
             }
         }
 
