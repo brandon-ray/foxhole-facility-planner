@@ -135,6 +135,17 @@
                     gravel: 150
                 }
             },
+            rail_small_gauge: {
+                name: 'Small Gauge Rail',
+                power: 0,
+                width: 2,
+                length: 2,
+                icon: 'buildings/SmallGaugeRailwayTrackIcon.webp',
+                sortOffset: 100000,
+                cost: {
+                    construction_material: 50
+                }
+            },
             materials_factory: {
                 name: 'Materials Factory',
                 power: -2,

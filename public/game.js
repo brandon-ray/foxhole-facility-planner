@@ -139,7 +139,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
     let asset_list = {
         white: 'white.png',
         background: 'grid.webp',
-        wall: 'wall.png'
+        wall: 'wall.png',
+        track_small_gauge: 'track_small_gauge.png',
+        track_large_gauge: 'track_large_gauge.png',
     };
     for (let i=0; i<window.objectData.buildings_list.length; i++) {
         let building = window.objectData.buildings_list[i];
@@ -1033,6 +1035,35 @@ const fontFamily = ['Recursive', 'sans-serif'];
     };
     */
 
+    function getQuadraticBezierXYatPercent(startPt, controlPt, endPt, percent) {
+        return {
+            x: Math.pow(1-percent, 2) * startPt.x + 2 * (1-percent) * percent * controlPt.x + Math.pow(percent, 2) * endPt.x,
+            y: Math.pow(1-percent, 2) * startPt.y + 2 * (1-percent) * percent * controlPt.y + Math.pow(percent, 2) * endPt.y
+        };
+    }
+
+    function quadraticBezierLength(p0, p1, p2) {
+        let a = {
+            x: p0.x - 2 * p1.x + p2.x,
+            y: p0.y - 2 * p1.y + p2.y
+        };
+        let b = {
+            x: 2 * p1.x - 2 * p0.x,
+            y: 2 * p1.y - 2 * p0.y
+        };
+        let A = 4 * (a.x * a.x + a.y * a.y);
+        let B = 4 * (a.x * b.x + a.y * b.y);
+        let C = b.x * b.x + b.y * b.y;
+
+        let Sabc = 2 * Math.sqrt(A+B+C);
+        let A_2 = Math.sqrt(A);
+        let A_32 = 2 * A * A_2;
+        let C_2 = 2 * Math.sqrt(C);
+        let BA = B / A_2;
+
+        return (A_32 * Sabc + A_2 * B * (Sabc - C_2) + (4 * C * A - B * B) * Math.log((2 * A_2 + BA + Sabc) / (BA + C_2))) / (4 * A_32);
+    }
+
     function createBuilding(type, x, y, z, netData) {
         let entity = createEntity('building', type, x, y, z, netData);
 
@@ -1043,6 +1074,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
         sprite.height = building.length * 32;
         sprite.anchor.set(0.5);
         entity.addChild(sprite);
+
+        entity.isRail = false;
+        if (entity.subtype === 'rail_small_gauge') {
+            entity.isRail = true;
+        }
 
         let frameX = 0;
         let frameY = 0;
@@ -1089,6 +1125,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
         }, 1);
 
+        let selectedPoint = null;
         let sound = null;
         entity.tick = function() {
             if (sheet) {
@@ -1112,6 +1149,41 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     sound = null;
                 }
             }
+
+            if (entity.isRail) {
+                if (selectedPoint && !mouseDown[0]) {
+                    selectedPoint = null;
+                }
+
+                if (!currentBuilding && mouseDown[0]) {
+                    let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
+                    let mousePos = entity.toLocal({x: mx, y: my}, undefined, undefined, true);
+                    if (selectedPoint) {
+                        selectedPoint.x = mousePos.x;
+                        selectedPoint.y = mousePos.y;
+
+                        if (game.settings.enableGrid || keys[16]) {
+                            selectedPoint.x = Math.floor(selectedPoint.x / gridSize) * gridSize;
+                            selectedPoint.y = Math.floor(selectedPoint.y / gridSize) * gridSize;
+                        }
+                        selectedPoint.handle.position.x = selectedPoint.x;
+                        selectedPoint.handle.position.y = selectedPoint.y;
+                        entity.regenerate();
+                    } else {
+                        for (let i = 0; i < points.length; i++) {
+                            let point = points[i];
+                            if (point.handle) {
+                                let dist = Math.distanceBetween(mousePos, point.handle);
+                                if (dist < 15) {
+                                    selectedPoint = point;
+                                    game.selectEntity(entity);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         };
 
         entity.getZIndex = function () {
@@ -1132,6 +1204,82 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 }
             }, 1);
         };
+
+        let points = [];
+        entity.addPoint = function(x, y, index) {
+            if (index == null) {
+                index = points.length;
+            }
+
+            let newPoint = {
+                index: index,
+                points: 0,
+                x: x,
+                y: y
+            };
+            points.splice(index, 0, newPoint);
+
+            let handle = new PIXI.Sprite(resources.white.texture);
+            handle.anchor.set(0.5);
+            handle.width = 16;
+            handle.height = 16;
+            handle.position.x = newPoint.x;
+            handle.position.y = newPoint.y;
+            entity.addChild(handle);
+            newPoint.handle = handle;
+
+            entity.regenerate();
+            return newPoint;
+        };
+
+        const TRACK_SEGMENT_LENGTH = 16;
+        entity.regenerate = function() {
+            if (entity.sprite) {
+                entity.removeChild(entity.sprite);
+            }
+
+            if (points.length >= 2) {
+                let renderPoints = [];
+
+                for (let i=0; i<points.length; i++) {
+                    let point = points[i];
+                    let point2 = points[i+1];
+                    point.index = i;
+                    if (point2) {
+                        let dist = Math.distanceBetween(point, point2);
+                        let controlAngle = Math.PI/2;
+                        let pointn1 = points[i-1];
+                        if (pointn1) {
+                            controlAngle = -Math.angleBetween(pointn1.control, point) + (Math.PI/2);
+                        }
+                        point.control = {
+                            x: point.x + (Math.sin(controlAngle) * dist/2),
+                            y: point.y + (Math.cos(controlAngle) * dist/2)
+                        };
+
+                        let length = quadraticBezierLength(point, point.control, point2);
+                        if (!length || isNaN(length)) {
+                            length = Math.distanceBetween(point, point2);
+                        }
+
+                        point.points = Math.ceil(length/TRACK_SEGMENT_LENGTH);
+                        for (let j=0; j<point.points; j++) {
+                            let bezierPos = getQuadraticBezierXYatPercent(point, point.control, point2, j/point.points);
+                            renderPoints.push(new PIXI.Point(bezierPos.x, bezierPos.y));
+                        }
+                    }
+                }
+
+                resources['track_small_gauge'].texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
+                entity.sprite = new PIXI.SimpleRope(resources['track_small_gauge'].texture, renderPoints, 1);
+                entity.addChild(entity.sprite);
+            }
+        };
+
+        if (entity.isRail) {
+            entity.addPoint(0, 0);
+            entity.addPoint(200, 0);
+        }
 
         return entity;
     }
