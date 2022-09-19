@@ -7,6 +7,16 @@
                 icon: 'resources/SalvageIcon.webp',
                 type: 'solid',
             },
+            gravel: {
+                name: 'Gravel',
+                icon: 'resources/GravelIcon.webp',
+                type: 'solid'
+            },
+            basic_material: {
+                name: 'Basic Material',
+                icon: 'resources/BasicMaterialsIcon.webp',
+                type: 'solid'
+            },
             construction_material: {
                 name: 'Construction Material',
                 icon: 'resources/ConstructionMaterialsIcon.webp',

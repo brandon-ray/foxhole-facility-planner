@@ -17,6 +17,10 @@ Vue.component('app-game-resource-icon', {
     methods: {
         refresh: function() {
             let resourceData = window.objectData.resources[this.resource];
+            if (!resourceData) {
+                console.error('Undefined resource:', this.resource);
+                return;
+            }
             this.resourceData = resourceData;
             this.style = {
                 backgroundImage: 'url(/assets/' + resourceData.icon + ')'

@@ -255,6 +255,7 @@ Vue.component('app-menu-statistics', {
     props: ['menuData'],
     data() {
         return {
+            cost: {},
             input: {},
             output: {},
             time: 3600,
@@ -269,6 +270,7 @@ Vue.component('app-menu-statistics', {
     },
     methods: {
         refresh: function() {
+            let cost = {};
             let input = {};
             let output = {};
             let powerTotal = 0;
@@ -283,6 +285,18 @@ Vue.component('app-menu-statistics', {
                         powerProduced += buildingData.power;
                     } else {
                         powerConsumed += buildingData.power;
+                    }
+
+                    if (buildingData.cost) {
+                        let costKeys = Object.keys(buildingData.cost);
+                        for (let j = 0; j < costKeys.length; j++) {
+                            let key = costKeys[j];
+                            let value = buildingData.cost[key];
+                            if (!cost[key]) {
+                                cost[key] = 0;
+                            }
+                            cost[key] += value;
+                        }
                     }
 
                     if (buildingData.production) {
@@ -330,6 +344,7 @@ Vue.component('app-menu-statistics', {
                 }
             }
 
+            this.cost = cost;
             this.input = input;
             this.output = output;
             this.powerTotal = powerTotal;
@@ -343,8 +358,10 @@ Vue.component('app-menu-statistics', {
     <div style="text-align:left;">
         <br>
         <h4><i class="fa fa-wrench"></i> Construction Cost</h4>
-        TODO
-        <br><br>
+        <div>
+            <app-game-resource-icon style="color:#d50101; display:inline-block; margin:3px;" v-for="(value, key) in cost" :resource="key" :amount="value"/>
+        </div>
+        <br>
         <h4><i class="fa fa-bolt"></i> Power</h4>
         <div style="color:#d0d004; width:250px; margin:auto;">
             <span style="color:#03b003;">Produced: {{powerProduced}} MW</span><br>
