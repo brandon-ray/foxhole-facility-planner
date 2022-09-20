@@ -220,7 +220,7 @@ Vue.component('app-menu-construction-list', {
         <select class="app-input" v-model="category" @change="refresh">
             <option value="buildings">Buildings</option>
         </select>
-        <div id="construction-items" class="build-menu-page" style="text-align:left; margin-bottom:4px; height:732px;">
+        <div id="construction-items" class="build-menu-page" style="text-align:left; height:732px;">
             <div v-for="building in buildings" class="build-icon" :style="{backgroundImage:'url(/assets/' + building.icon + ')'}"
                 @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" v-on:click="buildBuilding(building)">
             </div>
@@ -399,6 +399,52 @@ Vue.component('app-menu-settings', {
             Snap Rotation Degrees:
             <input class="app-input" type="number" v-model="game.settings.snapRotationDegrees" @input="game.updateSettings">
         </label>
+    </div>
+    `
+});
+
+Vue.component('app-menu-save-load', {
+    props: ['menuData'],
+    methods: {
+        openFileBrowser: function() {
+            document.getElementById('fileUpload').click()
+        },
+        loadSave: function() {
+            let file = this.$refs.file.files[0];
+            let reader = new FileReader();
+            let component = this;
+            reader.onload = function() {
+                let decoder = new TextDecoder("utf-8");
+                let jsonString = decoder.decode(new Uint8Array(this.result));
+                try {
+                    let saveObject = JSON.parse(jsonString);
+                    if (saveObject.name) {
+                        game.facilityName = saveObject.name;
+                    }
+                    game.loadSave(saveObject);
+                    component.$forceUpdate();
+                } catch (e) {
+                    console.error('Failed to load save:', e);
+                    game.showGrowl('Failed to load save.');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+    },
+    template: html`
+    <div id="save-load-page">
+        <label class="app-input-label" style="width:100%;">
+            Facility Name:
+            <input class="app-input" type="text" v-model="game.facilityName">
+        </label>
+        <button type="button" class="app-btn app-btn-primary" v-on:click="game.downloadSave()" @mouseenter="bme">
+            <i class="fa fa-save"></i> Save
+        </button>
+        <br><br>
+        <input id="fileUpload" @change="loadSave" type="file" ref="file" hidden>
+        <button type="button" class="app-btn app-btn-primary" v-on:click="openFileBrowser()" @mouseenter="bme">
+            <i class="fa fa-upload"></i> Load
+        </button>
     </div>
     `
 });

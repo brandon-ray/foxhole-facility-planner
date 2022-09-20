@@ -107,6 +107,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
     let entities = [];
     let effects = [];
 
+    game.facilityName = 'Unnamed Facility';
+
     game.getEntities = () => {
         return entities;
     };
@@ -543,6 +545,80 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
     }
 
+    function download(data, filename, type) {
+        let file = new Blob([data], {type: type});
+        if (window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(file, filename);
+        } else {
+            let a = document.createElement('a'),
+                url = URL.createObjectURL(file);
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(function() {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 0);
+        }
+    }
+
+    game.downloadSave = function() {
+        let saveObject = {
+            name: game.facilityName,
+            entities: []
+        };
+        for (let i=0; i<entities.length; i++) {
+            let entity = entities[i];
+            let entityData = {
+                x: entity.x,
+                y: entity.y,
+                z: entity.z,
+                rotation: entity.rotation,
+                type: entity.type,
+                subtype: entity.subtype
+            };
+            entity.onSave(entityData);
+            saveObject.entities.push(entityData);
+        }
+
+        let fileName = game.facilityName.toLowerCase().trim()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/[\s_-]+/g, '_')
+            .replace(/^-+|-+$/g, '');
+        download(JSON.stringify(saveObject), fileName, 'application/json')
+    };
+
+    game.loadSave = function(saveObject) {
+        for (let i=0; i<entities.length; i++) {
+            let entity = entities[i];
+            entity.remove();
+        }
+        setTimeout(() => {
+            let xTotal = 0;
+            let yTotal = 0;
+            for (let i=0; i<saveObject.entities.length; i++) {
+                let entityData = saveObject.entities[i];
+                let entity;
+                switch (entityData.type) {
+                    case 'building':
+                        entity = createBuilding(entityData.subtype, entityData.x, entityData.y, entityData.z);
+                        break;
+                    default:
+                        console.error('Attempted to load invalid entity:', entityData);
+                        continue;
+                }
+                xTotal += entityData.x;
+                yTotal += entityData.y;
+                entity.rotation = entityData.rotation;
+                entity.onLoad(entityData);
+            }
+            camera.x = Math.round(xTotal/saveObject.entities.length) - WIDTH/2;
+            camera.y = Math.round(yTotal/saveObject.entities.length) - HEIGHT/2;
+            game.resetZoom();
+        }, 1);
+    };
+
     let lastmx = 0;
     let lastmy = 0;
     let mdx = 0;
@@ -830,6 +906,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
         entity.isVisible = function () {
             return entity.z === camera.z && isOnScreen(entity);
         };
+
+        entity.onSave = function(entityData) {};
+        entity.onLoad = function() {};
 
         entity.onRemove = function () {};
         entity.afterRemove = function() {};
@@ -1217,6 +1296,33 @@ const fontFamily = ['Recursive', 'sans-serif'];
         };
 
         let points = [];
+        entity.onSave = function(entityData) {
+            if (entity.isRail) {
+                entityData.railPoints = [];
+                for (let i=0; i<points.length; i++) {
+                    let point = points[i];
+                    entityData.railPoints.push({
+                        x: point.x,
+                        y: point.y
+                    });
+                }
+            }
+        };
+        entity.onLoad = function(entityData) {
+            if (entity.isRail && entityData.railPoints) {
+                for (let i=0; i<points.length; i++) {
+                    let point = points[i];
+                    entity.removeChild(point.handle);
+                }
+                points = [];
+                for (let i=0; i<entityData.railPoints.length; i++) {
+                    let point = entityData.railPoints[i];
+                    entity.addPoint(point.x, point.y);
+                }
+                entity.regenerate();
+            }
+        };
+
         entity.addPoint = function(x, y, index) {
             if (index == null) {
                 index = points.length;
@@ -1275,7 +1381,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
                         point.points = Math.ceil(length/TRACK_SEGMENT_LENGTH);
                         for (let j=0; j<point.points; j++) {
-                            let bezierPos = getQuadraticBezierXYatPercent(point, point.control, point2, j/point.points);
+                            let bezierPos = getQuadraticBezierXYatPercent(point, point.control, point2, j/(point.points-1));
                             renderPoints.push(new PIXI.Point(bezierPos.x, bezierPos.y));
                         }
                     }
