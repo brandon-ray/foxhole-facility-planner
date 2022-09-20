@@ -16,7 +16,7 @@ body {
     overflow-x: hidden;
     overflow-y: hidden;
     background-color: #3d1714;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif !important;
+    font-family: 'FontAwesome', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif !important;
 
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -189,28 +189,16 @@ p {
 }
 
 .app-input {
-    width: 100%;
-    font-size: 22px;
-    height: 2.5em;
-    padding: 12px 20px;
-    outline: none;
-    margin: 6px auto;
+    padding: 5px;
     box-sizing: border-box;
-    border: 2px solid black !important;
+    border: 1px solid #101010;
     color: white;
-    background-color: rgba(0,0,0, 0.75);
-    box-shadow: 3px 3px 3px #000000;
-}
-.app-input:focus {
-    border: 2px solid white;
-}
-.app-input:disabled {
-    color: #777777;
+    background-color: rgba(13, 13, 13, 0.75);
+    border-radius: 5px;
 }
 
-.app-input-label {
-    text-align: left;
-    width: 80%;
+.app-input:disabled {
+    color: #777777;
 }
 
 .build-menu {
@@ -218,7 +206,6 @@ p {
     top: 0;
     left: 0;
     width: 350px;
-    padding: 12px;
     height: 100%;
     background: linear-gradient(rgb(42, 42, 42), rgb(32, 32, 32));
     border-right: 2px solid black;
@@ -227,12 +214,38 @@ p {
 .build-menu-header {
     height: 70px;
     background: linear-gradient(rgb(24, 24, 24), rgb(12, 12, 12));
-    margin: -12px -12px 6px -12px;
     padding: 7px;
 }
 
+.build-menu-body {
+    position: absolute;
+    top: 70px;
+    bottom: 64px;
+    left: 0;
+    right: 0;
+    padding: 12px;
+}
+
+.build-menu-footer-buttons {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+}
+
+.build-menu-footer-buttons > .app-btn.app-btn-primary {
+    margin: 0;
+}
+
+.build-menu-page-title {
+    background: #121212;
+    border: 1px solid black;
+    margin-bottom: 12px;
+    padding: 5px;
+    border-radius: 5px;
+}
+
 .build-menu-page {
-    height: 729px;
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -242,7 +255,38 @@ p {
     max-height: 100%;
 }
 
-#construction-items {
+#construction-page {
+    position: absolute;
+    top: 12px;
+    bottom: 70px;
+    left: 12px;
+    right: 12px;
+}
+
+#construction-page > .build-menu-page {
+    background: black;
+    position: absolute;
+    top: 52px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1px;
+}
+
+#construction-page .construction-category {
+    background: #141414;
+    width: 100%;
+    line-height: 30px;
+    border-radius: 0;
+    font-size: 1.3em;
+    padding: 10px;
+}
+
+#construction-page .construction-category:focus {
+    border: 1px solid white;
+}
+
+#construction-page .construction-items {
     background: black;
     height: 100%;
     padding: 2px;
@@ -293,6 +337,7 @@ p {
 }
 
 .build-menu-footer {
+    height: 64px;
     background: linear-gradient(#101010, black);
     padding: 8px;
     position: absolute;
@@ -304,10 +349,9 @@ p {
 
 .build-menu-footer a, .build-menu-footer button, .close-statistics-button, .fullscreen-button {
     display: inline-block;
-    background: transparent;
+    background: #050505;
     border: 2px solid #202020;
     cursor: pointer;
-    border-radius: 8px;
     font-size: 2.25em;
     color: #777;
     width: 48px;
@@ -325,7 +369,6 @@ p {
 .close-statistics-button, .fullscreen-button {
     width: 30px;
     height: 30px;
-    border-radius: 3px;
     line-height: 25px;
     margin: 6px;
     font-size: 1.15em;
@@ -346,22 +389,57 @@ p {
 }
 
 .statistics-panel-header {
-    background-color: rgba(0, 0, 0, 0.8);
-    padding: 4px 9px;
+    background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
+    padding: 4px 4px 4px 9px;
     position: relative;
 }
 
 .statistics-panel-header h3 {
     display: inline-block;
+    margin: 0;
 }
 
 .statistics-panel-header button {
+    background: #1a1a1a;
     float: right;
+    margin: 2px;
 }
 
 .statistics-panel-body {
+    min-height: 400px;
+    max-height: 890px;
     padding: 12px;
     overflow: auto;
+}
+
+.statistics-panel-body .resource-row {
+    background: linear-gradient(to right, #242424, #0000);
+    overflow: auto;
+    margin-bottom: 4px;
+}
+
+.statistics-panel-body .resource-icon {
+    width: 48px;
+    height: 48px;
+    background-color: #0B0B0B;
+    float: left;
+    margin-right: 8px;
+}
+
+.statistics-panel-body .resource-name {
+    line-height: 20px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.statistics-panel-body .resource-amount {
+    color: #d50101;
+    line-height: 25px;
+}
+
+.statistics-panel-fac-output .resource-amount {
+    color: #03b003;
 }
 
 .hover-menu {
@@ -397,7 +475,6 @@ p {
     width: 25px;
     height: 25px;
     border: 2px solid white;
-    border-radius: 3px;
     padding: 3px;
     vertical-align: middle;
 }
@@ -412,12 +489,68 @@ p {
     background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
 }
 
+#about-page {
+    text-align: left;
+}
+
+#about-page h4 {
+    background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
+    border-bottom: 1px solid black;
+    margin: 0;
+    padding: 8px 14px;
+}
+
+#about-page p {
+    background: #1c1c1c;
+    padding: 8px 14px;
+}
+
 #about-page a {
-    color: #dfdfdf;
+    color: #ff864e;
     margin: 0 2px;
 }
 
 #about-page a:hover {
     color: white;
-    text-decoration: none;
+}
+
+#settings label {
+    display: block;
+    overflow: auto;
+}
+
+#settings .settings-option-wrapper {
+    background: #222;
+    border: 1px solid #131313;
+    border-radius: 5px;
+    line-height: 30px;
+    margin-bottom: 12px;
+}
+
+#settings label.settings-option-wrapper, #settings .settings-option-wrapper label {
+    padding: 6px 6px 6px 12px;
+}
+
+#settings .settings-option-wrapper label {
+    border-bottom: 1px solid #131313;
+    margin: 0;
+}
+
+#settings .settings-option-wrapper label:last-child {
+    border-bottom: none;
+}
+
+#settings label select, #settings label input {
+    background: #131313;
+    height: 30px;
+    border-radius: 5px;
+    float: right;
+}
+
+#settings label input:not(.slider) {
+    width: 100px;
+}
+
+#settings label select:focus, #settings label input:focus {
+    outline: 2px solid white;
 }

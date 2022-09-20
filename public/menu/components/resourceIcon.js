@@ -28,9 +28,11 @@ Vue.component('app-game-resource-icon', {
         }
     },
     template: html`
-    <div class="resource-icon" v-if="resourceData" :title="resourceData.name" :style="style">
-        <div style="position:relative; top:55%; left:2px; float:right; margin:5px;">
-            {{amount.toLocaleString('en-US')}}<span v-if="resourceData.type === 'liquid'">L</span>
+    <div class="resource-row">
+        <div class="resource-icon" v-if="resourceData" :title="resourceData.name" :style="style"></div>
+        <div class="resource-name">{{resourceData.name}}</div>
+        <div class="resource-amount">
+            x{{amount.toLocaleString('en-US')}}<span v-if="resourceData.type === 'liquid'">L</span>
         </div>
     </div>
     `

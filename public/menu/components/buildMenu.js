@@ -61,26 +61,29 @@ Vue.component('app-game-build-menu', {
         <div class="build-menu-header">
             <img class="build-menu-logo" src="/assets/logo_transparent.webp">
         </div>
-        <div v-if="!currentMenu">
+        <div v-if="!currentMenu" class="build-menu-body">
             <!--
             <button type="button" class="app-btn app-btn-primary" v-for="item in menuList" v-on:click="changeMenu(item)" @mouseenter="bme">
                 <i :class="'fa ' + item.icon"></i> {{item.name}}
             </button>
             -->
             <app-menu-construction-list></app-menu-construction-list>
-            <button type="button" class="app-btn app-btn-primary" v-on:click="changeMenu('save-load')" @mouseenter="bme">
-                <i class="fa fa-save"></i> Save/Load
-            </button>
+            <div class="build-menu-footer-buttons">
+                <button type="button" class="app-btn app-btn-primary" v-on:click="changeMenu('save-load')" @mouseenter="bme">
+                    <i class="fa fa-save"></i> Save/Load
+                </button>
+            </div>
         </div>
-        <div v-if="currentMenu">
-            <h2><i :class="'fa ' + currentMenu.icon"></i> {{currentMenu.name}}</h2>
+        <div v-if="currentMenu" class="build-menu-body">
+            <h3 class="build-menu-page-title"><i :class="'fa ' + currentMenu.icon"></i> {{currentMenu.name}}</h3>
             <div class="build-menu-page">
                 <component v-bind:is="'app-menu-' + currentMenu.key" :menuData="currentMenuData"></component>
             </div>
-            <br>
-            <button type="button" class="app-btn app-btn-primary" v-on:click="changeMenu(null)" @mouseenter="bme">
-                <i class="fa fa-arrow-left"></i> Return
-            </button>
+            <div class="build-menu-footer-buttons">
+                <button type="button" class="app-btn app-btn-primary" v-on:click="changeMenu(null)" @mouseenter="bme">
+                    <i class="fa fa-arrow-left"></i> Return
+                </button>
+            </div>
         </div>
         <div class="build-menu-footer">
             <a href="https://github.com/brandon-ray/foxhole-facility-planner" target="_blank">
@@ -199,7 +202,7 @@ Vue.component('app-menu-construction-list', {
     props: ['menuData'],
     data: function() {
         return {
-            category: 'buildings',
+            category: 'foundations',
             buildings: window.objectData.buildings_list
         };
     },
@@ -216,11 +219,14 @@ Vue.component('app-menu-construction-list', {
         }
     },
     template: html`
-    <div>
-        <select class="app-input" v-model="category" @change="refresh">
-            <option value="buildings">Buildings</option>
+    <div id="construction-page">
+        <select class="app-input construction-category" v-model="category" @change="refresh">
+            <option value="foundations">&#xf0f7; Foundations</option>
+            <option value="factories">&#xf275; Factories</option>
+            <option value="harvesters">&#xf0ad; Harvesters</option>
+            <option value="power">&#xf0e7; Power</option>
         </select>
-        <div id="construction-items" class="build-menu-page" style="text-align:left; height:732px;">
+        <div class="construction-items" class="build-menu-page">
             <div v-for="building in buildings" class="build-icon" :style="{backgroundImage:'url(/assets/' + building.icon + ')'}"
                 @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" v-on:click="buildBuilding(building)">
             </div>
@@ -340,7 +346,7 @@ Vue.component('app-menu-statistics', {
         <div class="statistics-panel-body">
             <h4><i class="fa fa-wrench"></i> Construction Cost</h4>
             <div>
-                <app-game-resource-icon style="color:#d50101; display:inline-block; margin:3px;" v-for="(value, key) in cost" :resource="key" :amount="value"/>
+                <app-game-resource-icon v-for="(value, key) in cost" :resource="key" :amount="value"/>
             </div>
             <br>
             <h4><i class="fa fa-bolt"></i> Power</h4>
@@ -349,7 +355,7 @@ Vue.component('app-menu-statistics', {
                 <span style="color:#d50101;">Consumed: {{powerConsumed}} MW</span><br>
                 Total: {{powerTotal}} MW
             </div>
-            <br><br>
+            <br>
             <select class="app-input" v-model="time" @change="refresh">
                 <option value="86400">Per 24 Hours</option>
                 <option value="10800">Per 3 Hours</option>
@@ -358,17 +364,16 @@ Vue.component('app-menu-statistics', {
                 <option value="900">Per 15 Minutes</option>
                 <option value="60">Per 1 Minute</option>
             </select>
-            <br>
+            <br><br>
             <h4><i class="fa fa-sign-in"></i> Facility Input</h4>
-            <div>
-                <app-game-resource-icon style="color:#d50101; display:inline-block; margin:3px;" v-for="(value, key) in input" :resource="key" :amount="value"/>
+            <div class="statistics-panel-fac-input">
+                <app-game-resource-icon v-for="(value, key) in input" :resource="key" :amount="value"/>
             </div>
             <br>
             <h4><i class="fa fa-sign-out"></i> Facility Output</h4>
-            <div>
-                <app-game-resource-icon style="color:#03b003; display:inline-block; margin:3px;" v-for="(value, key) in output" :resource="key" :amount="value"/>
+            <div class="statistics-panel-fac-output">
+                <app-game-resource-icon v-for="(value, key) in output" :resource="key" :amount="value"/>
             </div>
-            <br><br>
         </div>
     </div>
     `
@@ -378,27 +383,28 @@ Vue.component('app-menu-settings', {
     props: ['menuData'],
     template: html`
     <div id="settings" class="text-left">
-        <label>
-            Graphics Quality
+        <label class="settings-option-wrapper">
+            <i class="fa fa-picture-o" aria-hidden="true"></i> Graphics
             <select class="app-input" v-model="game.settings.quality" v-on:change="game.updateQuality">
                 <option value="auto">Auto</option>
                 <option value="high">High Quality</option>
                 <option value="low">Low Quality</option>
             </select>
         </label>
-        <br>
-        <label>
-            Sound Volume<br>
-            <input type="range" v-model="game.settings.volume" min="0" max="1" step="0.1" style="width:320px;" class="slider" @input="game.updateSettings">
+        <label class="settings-option-wrapper">
+            <i class="fa fa-volume-up" aria-hidden="true"></i> Volume
+            <input type="range" v-model="game.settings.volume" min="0" max="1" step="0.1" class="slider" @input="game.updateSettings">
         </label>
-        <label class="app-input-label">
-            Snap Grid Size:
-            <input class="app-input" type="number" v-model="game.settings.gridSize" @input="game.updateSettings">
-        </label>
-        <label class="app-input-label">
-            Snap Rotation Degrees:
-            <input class="app-input" type="number" v-model="game.settings.snapRotationDegrees" @input="game.updateSettings">
-        </label>
+        <div class="settings-option-wrapper">
+            <label class="app-input-label">
+                <i class="fa fa-th-large" aria-hidden="true"></i> Snap Grid Size
+                <input class="app-input" type="number" v-model="game.settings.gridSize" @input="game.updateSettings">
+            </label>
+            <label class="app-input-label">
+                <i class="fa fa-repeat" aria-hidden="true"></i> Snap Rotation Degrees
+                <input class="app-input" type="number" v-model="game.settings.snapRotationDegrees" @input="game.updateSettings">
+            </label>
+        </div>
     </div>
     `
 });
@@ -453,13 +459,23 @@ Vue.component('app-menu-about', {
     props: ['menuData'],
     template: html`
     <div id="about-page">
+        <h4><i class="fa fa-question-circle"></i> What is this?</h4>
         <p>
-            TODO
+            Foxhole Facility Planner is a tool that allows you to draw up plans for facilities from Foxhole's new Inferno update.
         </p>
         <br>
-        <a href="https://github.com/brandon-ray/foxhole-facility-planner" target="_blank" class="text-right">
-            <i class="fa fa-github" aria-hidden="true"></i> GitHub Repo
-        </a>
+        <h4><i class="fa fa-github" aria-hidden="true"></i> Can I contribute?</h4>
+        <p>
+            You sure can! This project is open-source and can be viewed on 
+            <a href="https://github.com/brandon-ray/foxhole-facility-planner" target="_blank" class="text-right">
+                <i class="fa fa-github" aria-hidden="true"></i> GitHub.
+            </a>
+        </p>
+        <br>
+        <p class="text-center">
+            Made with ❤️ by the PEG Regiment.
+        </p>
+        <span style="font-size: 7px">worden smely 🤮</span>
     </div>
     `
 });

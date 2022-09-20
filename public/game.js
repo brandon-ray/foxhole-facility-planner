@@ -699,7 +699,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 });
                 for (let i=0; i<entities.length; i++) {
                     let entity = entities[i];
-                    if (entity.type === 'building' && Math.distanceBetween(entity, {x: gmx, y: gmy}) < 50) {
+                    if (entity.type === 'building' && entity.canGrab()) {
                         currentBuildingOffset = {
                             x: gmx - entity.x,
                             y: gmy - entity.y
@@ -1125,49 +1125,24 @@ const fontFamily = ['Recursive', 'sans-serif'];
     };
     */
 
-    function getQuadraticBezierXYatPercent(startPt, controlPt, endPt, percent) {
-        return {
-            x: Math.pow(1-percent, 2) * startPt.x + 2 * (1-percent) * percent * controlPt.x + Math.pow(percent, 2) * endPt.x,
-            y: Math.pow(1-percent, 2) * startPt.y + 2 * (1-percent) * percent * controlPt.y + Math.pow(percent, 2) * endPt.y
-        };
-    }
-
-    function quadraticBezierLength(p0, p1, p2) {
-        let a = {
-            x: p0.x - 2 * p1.x + p2.x,
-            y: p0.y - 2 * p1.y + p2.y
-        };
-        let b = {
-            x: 2 * p1.x - 2 * p0.x,
-            y: 2 * p1.y - 2 * p0.y
-        };
-        let A = 4 * (a.x * a.x + a.y * a.y);
-        let B = 4 * (a.x * b.x + a.y * b.y);
-        let C = b.x * b.x + b.y * b.y;
-
-        let Sabc = 2 * Math.sqrt(A+B+C);
-        let A_2 = Math.sqrt(A);
-        let A_32 = 2 * A * A_2;
-        let C_2 = 2 * Math.sqrt(C);
-        let BA = B / A_2;
-
-        return (A_32 * Sabc + A_2 * B * (Sabc - C_2) + (4 * C * A - B * B) * Math.log((2 * A_2 + BA + Sabc) / (BA + C_2))) / (4 * A_32);
-    }
-
     function createBuilding(type, x, y, z, netData) {
         let entity = createEntity('building', type, x, y, z, netData);
 
         let building = window.objectData.buildings[type];
         entity.building = building;
-        let sprite = new PIXI.TilingSprite(resources['wall'].texture);
-        sprite.width = building.width * 32;
-        sprite.height = building.length * 32;
-        sprite.anchor.set(0.5);
-        entity.addChild(sprite);
+        let sprite;
 
         entity.isRail = false;
         if (entity.subtype === 'rail_small_gauge') {
             entity.isRail = true;
+        }
+
+        if (!entity.isRail) {
+            sprite = new PIXI.TilingSprite(resources['wall'].texture);
+            sprite.width = building.width * 32;
+            sprite.height = building.length * 32;
+            sprite.anchor.set(0.5);
+            entity.addChild(sprite);
         }
 
         let frameX = 0;
@@ -1175,7 +1150,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         let frameWidth = 0;
         let frameHeight = 0;
         let sheet = null;
-        if (building.texture) {
+        if (building.texture && !entity.isRail) {
             if (typeof building.texture === 'object' && !Array.isArray(building.texture)) {
                 sheet = loadSpritesheet(resources[building.texture.sheet].texture, building.texture.width, building.texture.height);
                 frameWidth = Math.floor(resources[building.texture.sheet].texture.width/building.texture.width);
@@ -1192,7 +1167,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
         }
 
-        if (!building.texture) {
+        if (!building.texture && !entity.isRail) {
             let iconBackground = new PIXI.Sprite(resources['white'].texture);
             iconBackground.tint = 0x3d3d3d;
             iconBackground.anchor.set(0.5);
@@ -1245,10 +1220,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     selectedPoint = null;
                 }
 
-                if (!currentBuilding && mouseDown[0]) {
+                if (game.selectedEntity === entity && mouseDown[0]) {
                     let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
                     let mousePos = entity.toLocal({x: mx, y: my}, undefined, undefined, true);
                     if (selectedPoint) {
+                        currentBuilding = null;
                         selectedPoint.x = mousePos.x;
                         selectedPoint.y = mousePos.y;
 
@@ -1276,7 +1252,22 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
         };
 
-        entity.getZIndex = function () {
+        entity.canGrab = function() {
+            if (entity.isRail && entity.bezier) {
+                let bounds = entity.getBounds(true);
+                if (mx >= bounds.x && mx <= bounds.x+bounds.width && my >= bounds.y && my <= bounds.y+bounds.height) {
+                    let mousePos = entity.toLocal({x: mx, y: my}, undefined, undefined, true);
+                    let projection = entity.bezier.project(mousePos);
+                    if (projection.d <= 20) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return Math.distanceBetween(entity, {x: gmx, y: gmy}) < 50;
+        };
+
+        entity.getZIndex = function() {
             return -entity.y - (building.sortOffset ? building.sortOffset : 0);
         };
 
@@ -1356,39 +1347,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
 
             if (points.length >= 2) {
-                let renderPoints = [];
-
-                for (let i=0; i<points.length; i++) {
-                    let point = points[i];
-                    let point2 = points[i+1];
-                    point.index = i;
-                    if (point2) {
-                        let dist = Math.distanceBetween(point, point2);
-                        let controlAngle = Math.PI/2;
-                        let pointn1 = points[i-1];
-                        if (pointn1) {
-                            controlAngle = -Math.angleBetween(pointn1.control, point) + (Math.PI/2);
-                        }
-                        point.control = {
-                            x: point.x + (Math.sin(controlAngle) * dist/2),
-                            y: point.y + (Math.cos(controlAngle) * dist/2)
-                        };
-
-                        let length = quadraticBezierLength(point, point.control, point2);
-                        if (!length || isNaN(length)) {
-                            length = Math.distanceBetween(point, point2);
-                        }
-
-                        point.points = Math.ceil(length/TRACK_SEGMENT_LENGTH);
-                        for (let j=0; j<point.points; j++) {
-                            let bezierPos = getQuadraticBezierXYatPercent(point, point.control, point2, j/(point.points-1));
-                            renderPoints.push(new PIXI.Point(bezierPos.x, bezierPos.y));
-                        }
-                    }
-                }
-
+                entity.bezier = new Bezier(points);
+                let segments = Math.round(entity.bezier.length()/TRACK_SEGMENT_LENGTH);
                 resources['track_small_gauge'].texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
-                entity.sprite = new PIXI.SimpleRope(resources['track_small_gauge'].texture, renderPoints, 1);
+                entity.sprite = new PIXI.SimpleRope(resources['track_small_gauge'].texture, entity.bezier.getLUT(segments), 1);
                 entity.addChild(entity.sprite);
             }
         };
