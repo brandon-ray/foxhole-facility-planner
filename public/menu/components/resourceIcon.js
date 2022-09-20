@@ -28,8 +28,8 @@ Vue.component('app-game-resource-icon', {
         }
     },
     template: html`
-    <div class="resource-row">
-        <div class="resource-icon" v-if="resourceData" :title="resourceData.name" :style="style"></div>
+    <div class="resource-row" v-if="resourceData">
+        <div class="resource-icon" :title="resourceData.name" :style="style"></div>
         <div class="resource-name">{{resourceData.name}}</div>
         <div class="resource-amount">
             x{{amount.toLocaleString('en-US')}}<span v-if="resourceData.type === 'liquid'">L</span>

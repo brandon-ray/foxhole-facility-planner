@@ -142,9 +142,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
     let asset_list = {
         white: 'white.png',
         background: 'grid.webp',
-        wall: 'wall.png',
-        track_small_gauge: 'track_small_gauge.png',
-        track_large_gauge: 'track_large_gauge.png',
+        wall: 'wall.png'
     };
     for (let i=0; i<window.objectData.buildings_list.length; i++) {
         let building = window.objectData.buildings_list[i];
@@ -1125,6 +1123,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
     };
     */
 
+    game.createBuildingAtCenter = function(key) {
+        let zoomRatio = WIDTH/(WIDTH*camera.zoom);
+        createBuilding(key, (camera.x + WIDTH/2) * zoomRatio, (camera.y + HEIGHT/2) * zoomRatio, 0);
+    };
+
     function createBuilding(type, x, y, z, netData) {
         let entity = createEntity('building', type, x, y, z, netData);
 
@@ -1349,8 +1352,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
             if (points.length >= 2) {
                 entity.bezier = new Bezier(points);
                 let segments = Math.round(entity.bezier.length()/TRACK_SEGMENT_LENGTH);
-                resources['track_small_gauge'].texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
-                entity.sprite = new PIXI.SimpleRope(resources['track_small_gauge'].texture, entity.bezier.getLUT(segments), 1);
+                resources[entity.building.texture].texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
+                entity.sprite = new PIXI.SimpleRope(resources[entity.building.texture].texture, entity.bezier.getLUT(segments), 1);
                 entity.addChild(entity.sprite);
             }
         };
@@ -1369,6 +1372,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             x: 0,
             y: 0
         };
+        return currentBuilding;
     };
 
     const FPSMIN = 30;

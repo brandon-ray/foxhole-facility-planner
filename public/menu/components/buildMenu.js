@@ -227,7 +227,7 @@ Vue.component('app-menu-construction-list', {
             <option value="power">&#xf0e7; Power</option>
         </select>
         <div class="construction-items" class="build-menu-page">
-            <div v-for="building in buildings" class="build-icon" :style="{backgroundImage:'url(/assets/' + building.icon + ')'}"
+            <div v-for="building in buildings" v-if="!building.hideInList" class="build-icon" :style="{backgroundImage:'url(/assets/' + building.icon + ')'}"
                 @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" v-on:click="buildBuilding(building)">
             </div>
         </div>
@@ -457,11 +457,22 @@ Vue.component('app-menu-save-load', {
 
 Vue.component('app-menu-about', {
     props: ['menuData'],
+    methods: {
+        buildBuilding: function(buildingKey) {
+            this.bmc();
+            game.createBuildingAtCenter(buildingKey);
+        }
+    },
     template: html`
     <div id="about-page">
         <h4><i class="fa fa-question-circle"></i> What is this?</h4>
         <p>
             Foxhole Facility Planner is a tool that allows you to draw up plans for facilities from Foxhole's new Inferno update.
+        </p>
+        <br>
+        <h4><i class="fa fa-wrench" aria-hidden="true"></i> Measurements</h4>
+        <p>
+            Measurements for everything in the planner are not exact. We had to do some creative things to figure out ranges and the sizes of buildings, but the planner should work well enough as a guideline for building placement.
         </p>
         <br>
         <h4><i class="fa fa-github" aria-hidden="true"></i> Can I contribute?</h4>
@@ -470,12 +481,20 @@ Vue.component('app-menu-about', {
             <a href="https://github.com/brandon-ray/foxhole-facility-planner" target="_blank" class="text-right">
                 <i class="fa fa-github" aria-hidden="true"></i> GitHub.
             </a>
+            <br>
+            Contributors<br>
+            <a href="https://bombsightgames.com/" target="_blank">[PEG] Rayboy</a><br>
+            <a href="https://github.com/jimdcunningham" target="_blank">[PEG] Jimbo</a><br>
         </p>
         <br>
         <p class="text-center">
-            Made with ❤️ by the PEG Regiment.
+            Made with ❤️ by the PEG Regiment.<br>
+            <span style="font-size:10px;">
+                <a href="https://www.foxholegame.com/" target="_blank">Foxhole</a> is a registered trademark of <a href="https://www.siegecamp.com/" target="_blank">Siege Camp</a>.<br>
+                We are not affiliated with Siege Camp, this is a fan project.
+            </span>
         </p>
-        <span style="font-size: 7px">worden smely 🤮</span>
+        <span style="font-size:7px; cursor:pointer;" @click="buildBuilding('sound_test')">worden smely 🤮</span>
     </div>
     `
 });

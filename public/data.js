@@ -142,6 +142,7 @@
                 length: 2,
                 icon: 'buildings/SmallGaugeRailwayTrackIcon.webp',
                 sortOffset: 100000,
+                texture: 'track_small_gauge.png',
                 cost: {
                     construction_material: 50
                 }
@@ -408,7 +409,8 @@
                 }
             },
             sound_test: {
-                name: 'Sound Test',
+                name: 'Sus',
+                hideInList: true,
                 power: 0,
                 width: 2,
                 length: 2,
