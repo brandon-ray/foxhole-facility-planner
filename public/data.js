@@ -48,28 +48,28 @@
                 type: 'liquid'
             },
             assembly_materials1: {
-                name: 'Assembly Materials 1',
-                icon: 'resources/AssemblyMaterialsIcon.webp',
+                name: 'Assembly Materials I',
+                icon: 'resources/AssemblyMaterials1Icon.webp',
                 type: 'solid'
             },
             assembly_materials2: {
-                name: 'Assembly Materials 2',
-                icon: 'resources/AssemblyMaterialsIcon.webp',
+                name: 'Assembly Materials II',
+                icon: 'resources/AssemblyMaterials2Icon.webp',
                 type: 'solid'
             },
             assembly_materials3: {
-                name: 'Assembly Materials 3',
-                icon: 'resources/AssemblyMaterialsIcon.webp',
+                name: 'Assembly Materials III',
+                icon: 'resources/AssemblyMaterials3Icon.webp',
                 type: 'solid'
             },
             assembly_materials4: {
-                name: 'Assembly Materials 4',
-                icon: 'resources/AssemblyMaterialsIcon.webp',
+                name: 'Assembly Materials IV',
+                icon: 'resources/AssemblyMaterials4Icon.webp',
                 type: 'solid'
             },
             assembly_materials5: {
-                name: 'Assembly Materials 5',
-                icon: 'resources/AssemblyMaterialsIcon.webp',
+                name: 'Assembly Materials V',
+                icon: 'resources/AssemblyMaterials5Icon.webp',
                 type: 'solid'
             },
             sandbag: {
