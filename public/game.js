@@ -60,6 +60,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
     let idleTime = 0;
     let latency = 0;
     let currentBuilding = null;
+    let selectedPoint = null;
     let currentBuildingOffset = {
         x: 0,
         y: 0
@@ -627,8 +628,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
     }
 
     game.selectEntity = function(entity) {
+        let lastSelectedEntity = game.selectedEntity;
+
         if (entity) {
             game.selectedEntity = entity;
+            game.selectedEntity.onSelect();
             game.buildMenuComponent.changeMenu({
                 key: 'building-selected',
                 name: 'Building',
@@ -637,6 +641,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
         } else {
             game.buildMenuComponent.changeMenu(null);
             game.selectedEntity = null;
+        }
+
+        if (lastSelectedEntity) {
+            lastSelectedEntity.onDeselect();
         }
 
         if (game.buildingSelectedMenuComponent) {
@@ -691,7 +699,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             if (game.selectedEntity) {
                 game.selectEntity(null);
             }
-            if (!currentBuilding) {
+            if (!currentBuilding && !selectedPoint) {
                 entities.sort(function (a, b) {
                     return b.getZIndex() - a.getZIndex()
                 });
@@ -904,6 +912,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
         entity.isVisible = function () {
             return entity.z === camera.z && isOnScreen(entity);
         };
+
+        entity.onSelect = function() {};
+        entity.onDeselect = function() {};
 
         entity.onSave = function(entityData) {};
         entity.onLoad = function() {};
@@ -1194,7 +1205,22 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
         }, 1);
 
-        let selectedPoint = null;
+        entity.updateHandles = function() {
+            for (let i = 0; i < points.length; i++) {
+                let point = points[i];
+                if (point.handle) {
+                    point.handle.visible = game.selectedEntity === entity;
+                }
+            }
+        };
+
+        entity.onSelect = function() {
+            entity.updateHandles();
+        };
+        entity.onDeselect = function() {
+            entity.updateHandles();
+        };
+
         let sound = null;
         entity.tick = function() {
             if (sheet) {
@@ -1242,6 +1268,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         } else {
                             selectedPoint.x = mousePos.x;
                             selectedPoint.y = mousePos.y;
+
+                            if (Math.abs(selectedPoint.y) < 25) {
+                                selectedPoint.y = 0;
+                            }
                         }
 
                         if (game.settings.enableGrid || keys[16]) {
@@ -1269,18 +1299,18 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             entity.regenerate();
                         }
 
-                        selectedPoint.handle.position.x = selectedPoint.x;
-                        selectedPoint.handle.position.y = selectedPoint.y;
+                        if (selectedPoint.handle) {
+                            selectedPoint.handle.position.x = selectedPoint.x;
+                            selectedPoint.handle.position.y = selectedPoint.y;
+                        }
                     } else {
-                        for (let i = 0; i < points.length; i++) {
+                        for (let i = 1; i < points.length; i++) {
                             let point = points[i];
-                            if (point.handle) {
-                                let dist = Math.distanceBetween(mousePos, point.handle);
-                                if (dist < 15) {
-                                    selectedPoint = point;
-                                    game.selectEntity(entity);
-                                    break;
-                                }
+                            let dist = Math.distanceBetween(mousePos, point);
+                            if (dist < 20) {
+                                selectedPoint = point;
+                                game.selectEntity(entity);
+                                break;
                             }
                         }
                     }
@@ -1363,14 +1393,17 @@ const fontFamily = ['Recursive', 'sans-serif'];
             };
             points.splice(index, 0, newPoint);
 
-            let handle = new PIXI.Sprite(resources.white.texture);
-            handle.anchor.set(0.5);
-            handle.width = 16;
-            handle.height = 16;
-            handle.position.x = newPoint.x;
-            handle.position.y = newPoint.y;
-            entity.addChild(handle);
-            newPoint.handle = handle;
+            if (index !== 0) {
+                let handle = new PIXI.Sprite(resources.white.texture);
+                handle.anchor.set(0.5);
+                handle.visible = game.selectedEntity === entity;
+                handle.width = 16;
+                handle.height = 16;
+                handle.position.x = newPoint.x;
+                handle.position.y = newPoint.y;
+                entity.addChild(handle);
+                newPoint.handle = handle;
+            }
 
             entity.regenerate();
             return newPoint;
@@ -1448,26 +1481,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
         game.tryGameFocus();
 
-        if (currentBuilding) {
-            if (mouseDown[2]) {
-                let angle = Math.angleBetween(currentBuilding, {x: gmx, y: gmy});
-                if (game.settings.enableSnapRotation) {
-                    let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ? game.settings.snapRotationDegrees : 15);
-                    angle = Math.floor(angle / snapRotationDegrees) * snapRotationDegrees;
-                }
-                currentBuilding.rotation = angle;
-            } else {
-                currentBuilding.x = gmx - currentBuildingOffset.x;
-                currentBuilding.y = gmy - currentBuildingOffset.y;
-
-                if (game.settings.enableGrid || keys[16]) {
-                    let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
-                    currentBuilding.x = Math.floor(currentBuilding.x / gridSize) * gridSize;
-                    currentBuilding.y = Math.floor(currentBuilding.y / gridSize) * gridSize;
-                }
-            }
-        }
-
         if (game.settings.quality === 'auto') {
             let fps = Math.round(1000/delta);
             if (fps < FPSMIN) {
@@ -1514,6 +1527,45 @@ const fontFamily = ['Recursive', 'sans-serif'];
             } else {
                 effects.splice(i, 1);
                 i--;
+            }
+        }
+
+        if (currentBuilding) {
+            if (mouseDown[2]) {
+                let angle = Math.angleBetween(currentBuilding, {x: gmx, y: gmy});
+                if (game.settings.enableSnapRotation) {
+                    let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ? game.settings.snapRotationDegrees : 15);
+                    angle = Math.floor(angle / snapRotationDegrees) * snapRotationDegrees;
+                }
+                currentBuilding.rotation = angle;
+            } else {
+                if (!selectedPoint) {
+                    currentBuilding.x = gmx - currentBuildingOffset.x;
+                    currentBuilding.y = gmy - currentBuildingOffset.y;
+
+                    if (game.settings.enableGrid || keys[16]) {
+                        let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
+                        currentBuilding.x = Math.floor(currentBuilding.x / gridSize) * gridSize;
+                        currentBuilding.y = Math.floor(currentBuilding.y / gridSize) * gridSize;
+                    }
+                }
+
+                if (currentBuilding.isRail) {
+                    for (let i=0; i<entities.length; i++) {
+                        let entity = entities[i];
+                        if (entity !== currentBuilding && entity.type === 'building' && entity.isRail && entity.bezier && entity.canGrab()) {
+                            let mousePos = entity.toLocal({x: mx, y: my}, undefined, undefined, true);
+                            let projection = entity.bezier.project(mousePos);
+                            let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity, undefined, true);
+                            let normal = entity.bezier.normal(projection.t);
+                            let angle = Math.angleBetween({x: 0, y: 0}, normal);
+                            currentBuilding.x = global.x;
+                            currentBuilding.y = global.y;
+                            currentBuilding.rotation = entity.rotation + (angle - Math.PI/2);
+                            break;
+                        }
+                    }
+                }
             }
         }
 
