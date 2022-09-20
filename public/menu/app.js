@@ -41,7 +41,7 @@ if (isMobile && !isPhoneApp) {
             template: html`
     <div ref="app">
         <app-game-game-menu></app-game-game-menu>
-        <app-game-build-menu></app-game-build-menu>
+        <app-game-sidebar></app-game-sidebar>
         
         <div v-if="game.settings.enableStats" class="statistics-panel">
             <app-menu-statistics></app-menu-statistics>

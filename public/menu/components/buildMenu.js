@@ -1,4 +1,4 @@
-Vue.component('app-game-build-menu', {
+Vue.component('app-game-sidebar', {
     data: function() {
         return {
             currentMenu: null,
@@ -57,35 +57,30 @@ Vue.component('app-game-build-menu', {
         }
     },
     template: html`
-    <div class="build-menu">
-        <div class="build-menu-header">
-            <img class="build-menu-logo" src="/assets/logo_transparent.webp">
+    <div id="sidebar">
+        <div id="sidebar-header">
+            <img class="sidebar-logo" src="/assets/logo_transparent.webp">
         </div>
-        <div v-if="!currentMenu" class="build-menu-body">
-            <!--
-            <button type="button" class="app-btn app-btn-primary" v-for="item in menuList" v-on:click="changeMenu(item)" @mouseenter="bme">
-                <i :class="'fa ' + item.icon"></i> {{item.name}}
-            </button>
-            -->
-            <app-menu-construction-list></app-menu-construction-list>
-            <div class="build-menu-footer-buttons">
-                <button type="button" class="app-btn app-btn-primary" v-on:click="changeMenu('save-load')" @mouseenter="bme">
+        <div id="sidebar-body">
+            <div v-if="!currentMenu" class="menu-body">
+                <app-menu-construction-list></app-menu-construction-list>
+            </div>
+            <div v-if="currentMenu" class="menu-body">
+                <h3 class="menu-page-title"><i :class="'fa ' + currentMenu.icon"></i> {{currentMenu.name}}</h3>
+                <div class="menu-page">
+                    <component v-bind:is="'app-menu-' + currentMenu.key" :menuData="currentMenuData"></component>
+                </div>
+            </div>
+            <div class="menu-footer-buttons">
+                <button v-if="!currentMenu" type="button" class="app-btn app-btn-primary" v-on:click="changeMenu('save-load')" @mouseenter="bme">
                     <i class="fa fa-save"></i> Save/Load
                 </button>
-            </div>
-        </div>
-        <div v-if="currentMenu" class="build-menu-body">
-            <h3 class="build-menu-page-title"><i :class="'fa ' + currentMenu.icon"></i> {{currentMenu.name}}</h3>
-            <div class="build-menu-page">
-                <component v-bind:is="'app-menu-' + currentMenu.key" :menuData="currentMenuData"></component>
-            </div>
-            <div class="build-menu-footer-buttons">
-                <button type="button" class="app-btn app-btn-primary" v-on:click="changeMenu(null)" @mouseenter="bme">
+                <button v-if="currentMenu"  type="button" class="app-btn app-btn-primary" v-on:click="changeMenu(null)" @mouseenter="bme">
                     <i class="fa fa-arrow-left"></i> Return
                 </button>
             </div>
         </div>
-        <div class="build-menu-footer">
+        <div id="sidebar-footer">
             <a href="https://github.com/brandon-ray/foxhole-facility-planner" target="_blank">
                 <i class="fa fa-github"></i>
             </a>
@@ -170,27 +165,27 @@ Vue.component('app-menu-building-selected', {
     template: html`
     <div style="text-align:left;" v-if="selectedEntity">
         <div v-if="selectedEntity.type === 'building'">
-            <h4>{{selectedEntity.building.name}}</h4>
-            <br>
+            <h5>{{selectedEntity.building.name}}</h5>
         </div>
-        <label class="app-input-label">
-            Position X:
-            <input class="app-input" type="number" v-model="selectedEntity.position.x">
-        </label>
-        <label class="app-input-label">
-            Position Y:
-            <input class="app-input" type="number" v-model="selectedEntity.position.y">
-        </label>
-        <label class="app-input-label">
-            Rotation:
-            <input class="app-input" type="number" v-model="entityRotation" @change="updateRotation">
-        </label>
+        <div class="settings-option-wrapper">
+            <label class="app-input-label">
+                <i class="fa fa-arrows" aria-hidden="true"></i> Position X:
+                <input class="app-input" type="number" v-model="selectedEntity.position.x">
+            </label>
+            <label class="app-input-label">
+                <i class="fa fa-arrows" aria-hidden="true"></i> Position Y:
+                <input class="app-input" type="number" v-model="selectedEntity.position.y">
+            </label>
+            <label class="app-input-label">
+                <i class="fa fa-repeat" aria-hidden="true"></i> Rotation:
+                <input class="app-input" type="number" v-model="entityRotation" @change="updateRotation">
+            </label>
+        </div>
         <div v-if="selectedEntity.isRail">
             <button type="button" class="app-btn app-btn-secondary" v-on:click="addRail" @mouseenter="bme">
                 <i class="fa fa-plus"></i> Add Segment
             </button>
         </div>
-        <br><br><br><br>
         <button type="button" class="app-btn app-btn-secondary" v-on:click="destroyBuilding" @mouseenter="bme">
             <i class="fa fa-trash"></i> Destroy
         </button>
@@ -226,7 +221,7 @@ Vue.component('app-menu-construction-list', {
             <option value="harvesters">&#xf0ad; Harvesters</option>
             <option value="power">&#xf0e7; Power</option>
         </select>
-        <div class="construction-items" class="build-menu-page">
+        <div class="construction-items" class="menu-page">
             <div v-for="building in buildings" v-if="!building.hideInList" class="build-icon" :style="{backgroundImage:'url(/assets/' + building.icon + ')'}"
                 @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" v-on:click="buildBuilding(building)">
             </div>
@@ -465,36 +460,34 @@ Vue.component('app-menu-about', {
     },
     template: html`
     <div id="about-page">
-        <h4><i class="fa fa-question-circle"></i> What is this?</h4>
-        <p>
-            Foxhole Facility Planner is a tool that allows you to draw up plans for facilities from Foxhole's new Inferno update.
-        </p>
-        <br>
-        <h4><i class="fa fa-wrench" aria-hidden="true"></i> Measurements</h4>
-        <p>
-            Measurements for everything in the planner are not exact. We had to do some creative things to figure out ranges and the sizes of buildings, but the planner should work well enough as a guideline for building placement.
-        </p>
-        <br>
-        <h4><i class="fa fa-github" aria-hidden="true"></i> Can I contribute?</h4>
-        <p>
-            You sure can! This project is open-source and can be viewed on 
-            <a href="https://github.com/brandon-ray/foxhole-facility-planner" target="_blank" class="text-right">
-                <i class="fa fa-github" aria-hidden="true"></i> GitHub.
-            </a>
-            <br>
-            Contributors<br>
-            <a href="https://bombsightgames.com/" target="_blank">[PEG] Rayboy</a><br>
-            <a href="https://github.com/jimdcunningham" target="_blank">[PEG] Jimbo</a><br>
-        </p>
-        <br>
-        <p class="text-center">
-            Made with ❤️ by the PEG Regiment.<br>
-            <span style="font-size:10px;">
-                <a href="https://www.foxholegame.com/" target="_blank">Foxhole</a> is a registered trademark of <a href="https://www.siegecamp.com/" target="_blank">Siege Camp</a>.<br>
-                We are not affiliated with Siege Camp, this is a fan project.
-            </span>
-        </p>
-        <span style="font-size:7px; cursor:pointer;" @click="buildBuilding('sound_test')">worden smely 🤮</span>
+        <div class="about-section">
+            <div class="about-section-header"><i class="fa fa-question-circle"></i> What is this?</div>
+            <p>
+                Foxhole Facility Planner is a tool that allows you to draw up plans for facilities from Foxhole's new Inferno update.
+            </p>
+        </div>
+        <div class="about-section">
+            <div class="about-section-header"><i class="fa fa-wrench" aria-hidden="true"></i> Measurements</div>
+            <p>
+                Measurements for everything in the planner are not exact. We had to do some creative things to figure out ranges and the sizes of buildings, but the planner should work well enough as a guideline for building placement.
+            </p>
+        </div>
+        <div class="about-section">
+            <div class="about-section-header"><i class="fa fa-github" aria-hidden="true"></i> Contributors</div>
+            <p class="contributors-list">
+                <a href="https://bombsightgames.com/" target="_blank">[PEG] Rayboy</a>, <a href="https://github.com/jimdcunningham" target="_blank">[PEG] Jimbo</a>
+            </p>
+        </div>
+        <div class="about-section">
+            <p class="text-center">
+                Made with ❤️ by the PEG Regiment.<br>
+                <span style="font-size:10px;">
+                    <a href="https://www.foxholegame.com/" target="_blank">Foxhole</a> is a registered trademark of <a href="https://www.siegecamp.com/" target="_blank">Siege Camp</a>.<br>
+                    We are not affiliated with Siege Camp, this is a fan project.
+                </span>
+            </p>
+        </div>
+        <span style="font-size:7px; cursor:pointer; " @click="buildBuilding('sound_test')">worden smely 🤮</span>
     </div>
     `
 });

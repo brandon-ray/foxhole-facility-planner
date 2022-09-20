@@ -201,7 +201,9 @@ p {
     color: #777777;
 }
 
-.build-menu {
+/* Sidebar */
+
+#sidebar {
     position: absolute;
     top: 0;
     left: 0;
@@ -211,33 +213,95 @@ p {
     border-right: 2px solid black;
 }
 
-.build-menu-header {
+#sidebar-header {
     height: 70px;
     background: linear-gradient(rgb(24, 24, 24), rgb(12, 12, 12));
     padding: 7px;
 }
 
-.build-menu-body {
+#sidebar-header > .sidebar-logo {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#sidebar .app-btn-primary, #sidebar .app-btn-secondary {
+    background: linear-gradient(rgb(130, 130, 130), rgb(64, 64, 64));
+    box-shadow: 0 0 3px #000;
+    font-size: 1.5em;
+    height: 50px;
+    padding: 0px;
+    transition-duration: 0.125s;
+}
+
+#sidebar .app-btn-primary:hover, #sidebar .app-btn-secondary:hover {
+    background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
+    box-shadow: 0 0 5px #000;
+    cursor: pointer;
+    font-size: 1.6em;
+}
+
+#sidebar-footer {
+    height: 64px;
+    background: linear-gradient(#101010, black);
+    padding: 8px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: left;
+}
+
+#sidebar-footer a, #sidebar-footer button, .close-statistics-button, .fullscreen-button {
+    display: inline-block;
+    background: #050505;
+    border: 2px solid #202020;
+    cursor: pointer;
+    font-size: 2.25em;
+    color: #777;
+    width: 48px;
+    margin: 0 2px;
+    line-height: 42px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+#sidebar-footer a:hover, #sidebar-footer button:hover, .close-statistics-button:hover, .fullscreen-button:hover {
+    border: 2px solid white;
+    color: white;
+}
+
+/* Inner Contents of Sidebar */
+
+#sidebar-body {
     position: absolute;
     top: 70px;
     bottom: 64px;
     left: 0;
     right: 0;
-    padding: 12px;
 }
 
-.build-menu-footer-buttons {
+#sidebar-body .menu-body {
+    position: absolute;
+    top: 0px;
+    bottom: 70px;
+    left: 0;
+    right: 0;
+    padding: 12px;
+    overflow: auto;
+}
+
+#sidebar-body .menu-footer-buttons {
     position: absolute;
     bottom: 12px;
     left: 12px;
     right: 12px;
 }
 
-.build-menu-footer-buttons > .app-btn.app-btn-primary {
+#sidebar-body .menu-footer-buttons > .app-btn.app-btn-primary {
     margin: 0;
 }
 
-.build-menu-page-title {
+#sidebar-body .menu-page-title {
     background: #121212;
     border: 1px solid black;
     margin-bottom: 12px;
@@ -245,25 +309,22 @@ p {
     border-radius: 5px;
 }
 
-.build-menu-page {
+#sidebar-body .menu-page {
     overflow-x: hidden;
     overflow-y: auto;
 }
 
-.build-menu-logo {
-    max-width: 100%;
-    max-height: 100%;
-}
+/* Page-specific Stylings */
 
 #construction-page {
     position: absolute;
     top: 12px;
-    bottom: 70px;
+    bottom: 0;
     left: 12px;
     right: 12px;
 }
 
-#construction-page > .build-menu-page {
+#construction-page > .menu-page {
     background: black;
     position: absolute;
     top: 52px;
@@ -292,20 +353,38 @@ p {
     padding: 2px;
 }
 
-.build-menu .app-btn-primary, .build-menu .app-btn-secondary {
-    background: linear-gradient(rgb(130, 130, 130), rgb(64, 64, 64));
-    box-shadow: 0 0 3px #000;
-    font-size: 1.5em;
-    height: 50px;
-    padding: 0px;
-    transition-duration: 0.125s;
+#about-page {
+    text-align: left;
 }
 
-.build-menu .app-btn-primary:hover, .build-menu .app-btn-secondary:hover {
+#about-page > .about-section {
+    margin-bottom: 20px;
+}
+
+#about-page > .about-section > div.about-section-header {
     background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
-    box-shadow: 0 0 5px #000;
-    cursor: pointer;
-    font-size: 1.6em;
+    border-bottom: 1px solid black;
+    font-size: 1.3em;
+    margin: 0;
+    padding: 6px 12px;
+}
+
+#about-page > .about-section > p {
+    background: #1c1c1c;
+    padding: 8px 14px;
+}
+
+#about-page > .about-section a {
+    color: #ff864e;
+    margin: 0 2px;
+}
+
+#about-page > .about-section a:hover {
+    color: white;
+}
+
+#about-page > .about-section > .contributors-list a {
+    white-space: nowrap;
 }
 
 .build-icon {
@@ -334,36 +413,6 @@ p {
     font-size: 22px;
     text-shadow: 2px 2px #000;
     margin: auto;
-}
-
-.build-menu-footer {
-    height: 64px;
-    background: linear-gradient(#101010, black);
-    padding: 8px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    text-align: left;
-}
-
-.build-menu-footer a, .build-menu-footer button, .close-statistics-button, .fullscreen-button {
-    display: inline-block;
-    background: #050505;
-    border: 2px solid #202020;
-    cursor: pointer;
-    font-size: 2.25em;
-    color: #777;
-    width: 48px;
-    margin: 0 2px;
-    line-height: 42px;
-    vertical-align: middle;
-    text-align: center;
-}
-
-.build-menu-footer a:hover, .build-menu-footer button:hover, .close-statistics-button:hover, .fullscreen-button:hover {
-    border: 2px solid white;
-    color: white;
 }
 
 .close-statistics-button, .fullscreen-button {
@@ -489,37 +538,7 @@ p {
     background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
 }
 
-#about-page {
-    text-align: left;
-}
-
-#about-page h4 {
-    background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
-    border-bottom: 1px solid black;
-    margin: 0;
-    padding: 8px 14px;
-}
-
-#about-page p {
-    background: #1c1c1c;
-    padding: 8px 14px;
-}
-
-#about-page a {
-    color: #ff864e;
-    margin: 0 2px;
-}
-
-#about-page a:hover {
-    color: white;
-}
-
-#settings label {
-    display: block;
-    overflow: auto;
-}
-
-#settings .settings-option-wrapper {
+.settings-option-wrapper {
     background: #222;
     border: 1px solid #131313;
     border-radius: 5px;
@@ -527,30 +546,34 @@ p {
     margin-bottom: 12px;
 }
 
-#settings label.settings-option-wrapper, #settings .settings-option-wrapper label {
+label.settings-option-wrapper, .settings-option-wrapper label {
+    display: block;
     padding: 6px 6px 6px 12px;
+    overflow: auto;
 }
 
-#settings .settings-option-wrapper label {
+.settings-option-wrapper label {
     border-bottom: 1px solid #131313;
     margin: 0;
 }
 
-#settings .settings-option-wrapper label:last-child {
+.settings-option-wrapper label:last-child {
     border-bottom: none;
 }
 
-#settings label select, #settings label input {
+label.settings-option-wrapper select, .settings-option-wrapper label select,
+label.settings-option-wrapper input, .settings-option-wrapper label input {
     background: #131313;
     height: 30px;
     border-radius: 5px;
     float: right;
 }
 
-#settings label input:not(.slider) {
+label.settings-option-wrapper input:not(.slider), .settings-option-wrapper label input:not(.slider) {
     width: 100px;
 }
 
-#settings label select:focus, #settings label input:focus {
+label.settings-option-wrapper select:focus, .settings-option-wrapper label select:focus,
+label.settings-option-wrapper input:focus, .settings-option-wrapper label input:focus {
     outline: 2px solid white;
 }
