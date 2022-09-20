@@ -181,27 +181,11 @@ Vue.component('app-menu-building-selected', {
                 <input class="app-input" type="number" v-model="entityRotation" @change="updateRotation">
             </label>
         </div>
-<<<<<<< HEAD
         <div v-if="selectedEntity.isRail">
             <button type="button" class="app-btn app-btn-secondary" v-on:click="addRail" @mouseenter="bme">
                 <i class="fa fa-plus"></i> Add Segment
             </button>
         </div>
-=======
-        <label class="app-input-label">
-            Position X:
-            <input class="app-input" type="number" v-model="selectedEntity.position.x">
-        </label>
-        <label class="app-input-label">
-            Position Y:
-            <input class="app-input" type="number" v-model="selectedEntity.position.y">
-        </label>
-        <label class="app-input-label">
-            Rotation:
-            <input class="app-input" type="number" v-model="entityRotation" @change="updateRotation">
-        </label>
-        <br><br><br><br>
->>>>>>> a427bc8103f70b5e65446eadb488c958e1f34e7d
         <button type="button" class="app-btn app-btn-secondary" v-on:click="destroyBuilding" @mouseenter="bme">
             <i class="fa fa-trash"></i> Destroy
         </button>
