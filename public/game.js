@@ -1128,6 +1128,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         createBuilding(key, (camera.x + WIDTH/2) * zoomRatio, (camera.y + HEIGHT/2) * zoomRatio, 0);
     };
 
+    const METER_PIXEL_SIZE = 32;
     function createBuilding(type, x, y, z, netData) {
         let entity = createEntity('building', type, x, y, z, netData);
 
@@ -1142,8 +1143,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
         if (!entity.isRail) {
             sprite = new PIXI.TilingSprite(resources['wall'].texture);
-            sprite.width = building.width * 32;
-            sprite.height = building.length * 32;
+            sprite.width = building.width * METER_PIXEL_SIZE;
+            sprite.height = building.length * METER_PIXEL_SIZE;
             sprite.anchor.set(0.5);
             entity.addChild(sprite);
         }
@@ -1228,16 +1229,48 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     let mousePos = entity.toLocal({x: mx, y: my}, undefined, undefined, true);
                     if (selectedPoint) {
                         currentBuilding = null;
-                        selectedPoint.x = mousePos.x;
-                        selectedPoint.y = mousePos.y;
+                        let lastX = selectedPoint.x;
+                        let lastY = selectedPoint.y;
+                        if (selectedPoint.index === 0) {
+                            entity.x = gmx;
+                            entity.y = gmy;
+
+                            if (game.settings.enableGrid || keys[16]) {
+                                entity.x = Math.floor(entity.x / gridSize) * gridSize;
+                                entity.y = Math.floor(entity.y / gridSize) * gridSize;
+                            }
+                        } else {
+                            selectedPoint.x = mousePos.x;
+                            selectedPoint.y = mousePos.y;
+                        }
 
                         if (game.settings.enableGrid || keys[16]) {
                             selectedPoint.x = Math.floor(selectedPoint.x / gridSize) * gridSize;
                             selectedPoint.y = Math.floor(selectedPoint.y / gridSize) * gridSize;
                         }
+
+                        const MAX_SEGMENT_DISTANCE = 35 * METER_PIXEL_SIZE;
+                        if (selectedPoint.index === 1) {
+                            let dist = Math.distanceBetween({x: 0, y: 0}, selectedPoint);
+                            let angle = Math.angleBetween({x: 0, y: 0}, selectedPoint);
+                            if (dist > MAX_SEGMENT_DISTANCE) {
+                                dist = MAX_SEGMENT_DISTANCE;
+                            }
+                            selectedPoint.x = Math.cos(angle) * dist;
+                            selectedPoint.y = Math.sin(angle) * dist;
+                        }
+
+                        entity.regenerate();
+                        let curve1 = entity.bezier.curvature(0.25);
+                        let curve2 = entity.bezier.curvature(0.5);
+                        if ((curve1.r !== 0 && (Math.abs(curve1.r) < 100 || Math.abs(curve2.r) < 200)) || selectedPoint.x < 0) {
+                            selectedPoint.x = lastX;
+                            selectedPoint.y = lastY;
+                            entity.regenerate();
+                        }
+
                         selectedPoint.handle.position.x = selectedPoint.x;
                         selectedPoint.handle.position.y = selectedPoint.y;
-                        entity.regenerate();
                     } else {
                         for (let i = 0; i < points.length; i++) {
                             let point = points[i];
@@ -1350,9 +1383,27 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
 
             if (points.length >= 2) {
-                entity.bezier = new Bezier(points);
-                let segments = Math.round(entity.bezier.length()/TRACK_SEGMENT_LENGTH);
+                let bezierPoints = [];
+                for (let i=0; i<points.length; i++) {
+                    let point = points[i];
+                    bezierPoints.push({
+                        x: point.x,
+                        y: point.y
+                    });
+                    if (i < points.length-1) {
+                        let point2 = points[i+1];
+                        if (point2) {
+                            let dist = Math.distanceBetween(point, point2);
+                            bezierPoints.push({
+                                x: point.x + dist*0.7,
+                                y: point.y
+                            });
+                        }
+                    }
+                }
+                entity.bezier = new Bezier(bezierPoints);
                 resources[entity.building.texture].texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
+                let segments = Math.round(entity.bezier.length()/TRACK_SEGMENT_LENGTH);
                 entity.sprite = new PIXI.SimpleRope(resources[entity.building.texture].texture, entity.bezier.getLUT(segments), 1);
                 entity.addChild(entity.sprite);
             }
