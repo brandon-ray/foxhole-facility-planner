@@ -44,9 +44,7 @@ if (isMobile && !isPhoneApp) {
         <app-game-build-menu></app-game-build-menu>
         
         <div v-if="game.settings.enableStats" class="statistics-panel">
-            <div style="max-height:700px; overflow-x:hidden; overflow-y:auto;">
-                <app-menu-statistics></app-menu-statistics>
-            </div>
+            <app-menu-statistics></app-menu-statistics>
         </div>
         
         <div class="footer">
