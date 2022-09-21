@@ -1266,8 +1266,17 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 entity.y = Math.floor(entity.y / gridSize) * gridSize;
                             }
                         } else {
-                            selectedPoint.x = mousePos.x;
-                            selectedPoint.y = mousePos.y;
+                            if (mouseDown[2]) {
+                                let angle = Math.angleBetween(selectedPoint, mousePos);
+                                if (game.settings.enableSnapRotation) {
+                                    let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ? game.settings.snapRotationDegrees : 15);
+                                    angle = Math.floor(angle / snapRotationDegrees) * snapRotationDegrees;
+                                }
+                                selectedPoint.rotation = angle + Math.PI;
+                            } else {
+                                selectedPoint.x = mousePos.x;
+                                selectedPoint.y = mousePos.y;
+                            }
 
                             if (Math.abs(selectedPoint.y) < 25) {
                                 selectedPoint.y = 0;
@@ -1293,10 +1302,13 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         entity.regenerate();
                         let curve1 = entity.bezier.curvature(0.25);
                         let curve2 = entity.bezier.curvature(0.5);
-                        if ((curve1.r !== 0 && (Math.abs(curve1.r) < 100 || Math.abs(curve2.r) < 200)) || selectedPoint.x < 0) {
-                            selectedPoint.x = lastX;
-                            selectedPoint.y = lastY;
-                            entity.regenerate();
+                        let curve3 = entity.bezier.curvature(0.75);
+                        if ((curve1.r !== 0 && (Math.abs(curve1.r) < 100 || Math.abs(curve2.r) < 200 || Math.abs(curve3.r) < 100)) || selectedPoint.x < 0) {
+                            //selectedPoint.x = lastX;
+                            //selectedPoint.y = lastY;
+                            entity.sprite.tint = 0xFF0000;
+                        } else {
+                            entity.sprite.tint = 0xFFFFFF;
                         }
 
                         if (selectedPoint.handle) {
@@ -1318,9 +1330,14 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
         };
 
+        let boundsBuffer = 15;
         entity.canGrab = function() {
             if (entity.isRail && entity.bezier) {
                 let bounds = entity.getBounds(true);
+                bounds.x -= boundsBuffer;
+                bounds.y -= boundsBuffer;
+                bounds.width += boundsBuffer*2;
+                bounds.height += boundsBuffer*2;
                 if (mx >= bounds.x && mx <= bounds.x+bounds.width && my >= bounds.y && my <= bounds.y+bounds.height) {
                     let mousePos = entity.toLocal({x: mx, y: my}, undefined, undefined, true);
                     let projection = entity.bezier.project(mousePos);
@@ -1360,7 +1377,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     let point = points[i];
                     entityData.railPoints.push({
                         x: point.x,
-                        y: point.y
+                        y: point.y,
+                        rotation: point.rotation
                     });
                 }
             }
@@ -1374,13 +1392,13 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 points = [];
                 for (let i=0; i<entityData.railPoints.length; i++) {
                     let point = entityData.railPoints[i];
-                    entity.addPoint(point.x, point.y);
+                    entity.addPoint(point.x, point.y, null, point.rotation);
                 }
                 entity.regenerate();
             }
         };
 
-        entity.addPoint = function(x, y, index) {
+        entity.addPoint = function(x, y, index, rotation) {
             if (index == null) {
                 index = points.length;
             }
@@ -1389,7 +1407,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 index: index,
                 points: 0,
                 x: x,
-                y: y
+                y: y,
+                rotation: rotation ? rotation : Math.PI
             };
             points.splice(index, 0, newPoint);
 
@@ -1419,19 +1438,34 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 let bezierPoints = [];
                 for (let i=0; i<points.length; i++) {
                     let point = points[i];
-                    bezierPoints.push({
-                        x: point.x,
-                        y: point.y
-                    });
                     if (i < points.length-1) {
+                        bezierPoints.push({
+                            x: point.x,
+                            y: point.y
+                        });
+
                         let point2 = points[i+1];
                         if (point2) {
-                            let dist = Math.distanceBetween(point, point2);
+                            let dist = Math.distanceBetween(point, point2)*0.4;
                             bezierPoints.push({
-                                x: point.x + dist*0.7,
+                                x: point.x + dist,
                                 y: point.y
                             });
                         }
+                    } else {
+                        let point1 = points[i-1];
+                        if (point1) {
+                            let dist = Math.distanceBetween(point, point1)*0.4;
+                            bezierPoints.push({
+                                x: point.x + (Math.cos(point.rotation) * dist),
+                                y: point.y + (Math.sin(point.rotation) * dist)
+                            });
+                        }
+
+                        bezierPoints.push({
+                            x: point.x,
+                            y: point.y
+                        });
                     }
                 }
                 entity.bezier = new Bezier(bezierPoints);
@@ -1550,18 +1584,37 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     }
                 }
 
-                if (currentBuilding.isRail) {
+                if (currentBuilding.isRail && !selectedPoint) {
                     for (let i=0; i<entities.length; i++) {
                         let entity = entities[i];
-                        if (entity !== currentBuilding && entity.type === 'building' && entity.isRail && entity.bezier && entity.canGrab()) {
-                            let mousePos = entity.toLocal({x: mx, y: my}, undefined, undefined, true);
-                            let projection = entity.bezier.project(mousePos);
+                        let mousePos = entity.toLocal({x: mx, y: my}, undefined, undefined, true);
+                        let projection = entity.bezier.project(mousePos);
+                        if (entity !== currentBuilding && entity.type === 'building' && entity.isRail && entity.bezier && projection.d <= 25) {
+                            if (projection.t >= 0.95) {
+                                projection = entity.bezier.get(1);
+                            } else if (projection.t <= 0.05) {
+                                projection = entity.bezier.get(0);
+                            }
                             let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity, undefined, true);
                             let normal = entity.bezier.normal(projection.t);
                             let angle = Math.angleBetween({x: 0, y: 0}, normal);
                             currentBuilding.x = global.x;
                             currentBuilding.y = global.y;
-                            currentBuilding.rotation = entity.rotation + (angle - Math.PI/2);
+
+                            let angleRight = entity.rotation + (angle - Math.PI/2) - Math.PI/2;
+                            let angleLeft = entity.rotation + (angle + Math.PI/2) - Math.PI/2;
+
+                            //let rightDiff = ((angleRight - currentBuilding.rotation) + Math.PI) % Math.PI2;
+                            //let leftDiff = ((angleLeft - currentBuilding.rotation) + Math.PI) % Math.PI2;
+                            let rightDiff = Math.atan2(Math.sin(angleRight-currentBuilding.rotation), Math.cos(angleRight-currentBuilding.rotation));
+                            let leftDiff = Math.atan2(Math.sin(angleLeft-currentBuilding.rotation), Math.cos(angleLeft-currentBuilding.rotation));
+
+                            console.log('test', rightDiff, leftDiff, rightDiff < leftDiff);
+                            if (rightDiff < leftDiff) {
+                                currentBuilding.rotation = angleRight + Math.PI/2;
+                            } else {
+                                currentBuilding.rotation = angleLeft + Math.PI/2;
+                            }
                             break;
                         }
                     }
