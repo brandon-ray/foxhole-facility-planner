@@ -96,15 +96,21 @@
                 name: 'Pipe',
                 icon: 'resources/PipeIcon.webp',
                 type: 'solid'
+            },
+            garrison_supplies: {
+                name: 'Garrison Supplies',
+                icon: 'resources/GarrisonSupplyIcon.webp',
+                type: 'solid'
             }
         },
         buildings: {
             foundation_1x1: {
                 name: 'Foundation 1x1',
+                category: 'foundations',
                 power: 0,
                 width: 5,
                 length: 5,
-                icon: 'buildings/FoundationIcon.webp',
+                icon: 'buildings/ConcreteFoundation01Icon.png',
                 texture: 'concrete.png',
                 sortOffset: -1000,
                 cost: {
@@ -113,10 +119,11 @@
             },
             foundation_1x2: {
                 name: 'Foundation 1x2',
+                category: 'foundations',
                 power: 0,
                 width: 5,
                 length: 10,
-                icon: 'buildings/FoundationIcon.webp',
+                icon: 'buildings/ConcreteFoundation03Icon.png',
                 texture: 'concrete.png',
                 sortOffset: -1000,
                 cost: {
@@ -125,10 +132,11 @@
             },
             foundation_2x2: {
                 name: 'Foundation 2x2',
+                category: 'foundations',
                 power: 0,
                 width: 10,
                 length: 10,
-                icon: 'buildings/FoundationIcon.webp',
+                icon: 'buildings/ConcreteFoundation04Icon.png',
                 texture: 'concrete.png',
                 sortOffset: -1000,
                 cost: {
@@ -137,18 +145,35 @@
             },
             rail_small_gauge: {
                 name: 'Small Gauge Rail',
+                category: 'foundations',
                 power: 0,
                 width: 2,
                 length: 2,
-                icon: 'buildings/SmallGaugeRailwayTrackIcon.webp',
+                maxLength: 30,
+                icon: 'buildings/RailSmallIcon.png',
                 sortOffset: 100000,
                 texture: 'track_small_gauge.png',
                 cost: {
                     construction_material: 50
                 }
             },
+            rail_large_gauge: {
+                name: 'Large Gauge Rail',
+                category: 'foundations',
+                power: 0,
+                width: 2,
+                length: 2,
+                maxLength: 30,
+                icon: 'buildings/RailLargeIcon.png',
+                sortOffset: 100000,
+                texture: 'track_large_gauge.png',
+                cost: {
+                    construction_material: 50
+                }
+            },
             materials_factory: {
                 name: 'Materials Factory',
+                category: 'factories',
                 power: -2,
                 width: 6,
                 length: 12,
@@ -261,6 +286,7 @@
             },
             coal_refinery: {
                 name: 'Coal Refinery',
+                category: 'factories',
                 power: -3,
                 width: 6,
                 length: 10,
@@ -280,6 +306,7 @@
             },
             oil_refinery: {
                 name: 'Oil Refinery',
+                category: 'factories',
                 power: -1,
                 width: 4,
                 length: 11,
@@ -297,15 +324,37 @@
                     }
                 }
             },
+            maintenance_tunnel: {
+                name: 'Maintenance Tunnel',
+                category: 'misc',
+                power: -2,
+                width: 3,
+                length: 3,
+                range: 40,
+                icon: 'buildings/SupplyStationIcon.webp',
+                cost: {
+                    construction_material: 200
+                },
+                production: {
+                    time: 450,
+                    input: {
+                        construction_material: 1
+                    },
+                    output: {
+                        garrison_supplies: 20
+                    }
+                }
+            },
             bms_foreman_stacker: {
                 name: 'BMS Foreman Stacker',
+                category: 'misc',
                 power: -0.5,
                 width: 3,
                 length: 3,
-                range: 20,
-                icon: 'buildings/FortStructureIcon.webp',
+                range: 24,
+                icon: 'buildings/CraneIcon.png',
                 cost: {
-                    processed_construction_material: 200
+                    processed_construction_material: 10
                 }
             },
             /*
@@ -323,6 +372,7 @@
             */
             diesel_power_plant: {
                 name: 'Diesel Power Plant',
+                category: 'power',
                 power: 5,
                 width: 7,
                 length: 7,
@@ -339,6 +389,7 @@
             },
             petrol_power_plant: {
                 name: 'Petrol Power Plant',
+                category: 'power',
                 power: 12,
                 width: 7,
                 length: 7,
@@ -356,6 +407,7 @@
             },
             stationary_harvester_scrap: {
                 name: 'Stationary Harvester (Scrap)',
+                category: 'harvesters',
                 power: 0,
                 width: 5,
                 length: 7,
@@ -375,6 +427,7 @@
             },
             metalworks_factory: {
                 name: 'Metalworks Factory (Processed Construction Materials)',
+                category: 'factories',
                 power: -5,
                 width: 9,
                 length: 12,
@@ -395,6 +448,7 @@
             },
             metalworks_factory_pipes: {
                 name: 'Metalworks Factory (Pipes)',
+                category: 'factories',
                 power: -5,
                 width: 9,
                 length: 12,

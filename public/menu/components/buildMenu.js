@@ -212,13 +212,14 @@ Vue.component('app-menu-construction-list', {
     template: html`
     <div id="construction-page">
         <select class="app-input construction-category" v-model="category" @change="refresh">
-            <option value="foundations">&#xf0f7; Foundations</option>
-            <option value="factories">&#xf275; Factories</option>
-            <option value="harvesters">&#xf0ad; Harvesters</option>
-            <option value="power">&#xf0e7; Power</option>
+            <option value="foundations">Foundations</option>
+            <option value="factories">Factories</option>
+            <option value="harvesters">Harvesters</option>
+            <option value="power">Power</option>
+            <option value="misc">Miscellaneous</option>
         </select>
         <div class="construction-items" class="menu-page">
-            <div v-for="building in buildings" v-if="!building.hideInList" class="build-icon" :style="{backgroundImage:'url(/assets/' + building.icon + ')'}"
+            <div v-for="building in buildings" v-if="!building.hideInList && building.category === category" class="build-icon" :style="{backgroundImage:'url(/assets/' + building.icon + ')'}"
                 @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" v-on:click="buildBuilding(building)">
             </div>
         </div>
@@ -251,6 +252,16 @@ Vue.component('app-menu-statistics', {
             let powerTotal = 0;
             let powerProduced = 0;
             let powerConsumed = 0;
+            let garrisonSupplies = 0;
+
+            let garrisonConsumptionRate = Math.floor(this.time / 3600);
+            for (let i=0; i<game.getEntities().length; i++) {
+                let entity = game.getEntities()[i];
+                if (entity.type === 'building') {
+                    garrisonSupplies += 2 * garrisonConsumptionRate;
+                }
+            }
+
             for (let i=0; i<game.getEntities().length; i++) {
                 let entity = game.getEntities()[i];
                 if (entity.type === 'building') {
@@ -325,6 +336,7 @@ Vue.component('app-menu-statistics', {
             this.powerTotal = powerTotal;
             this.powerProduced = powerProduced;
             this.powerConsumed = powerConsumed;
+            this.garrisonSupplies = garrisonSupplies;
 
             this.$forceUpdate();
         },
@@ -356,6 +368,8 @@ Vue.component('app-menu-statistics', {
                 <option value="60">Per 1 Minute</option>
             </select>
             <br><br>
+            <app-game-resource-icon :resource="'garrison_supplies'" :amount="garrisonSupplies"/>
+            <br>
             <h4><i class="fa fa-sign-in"></i> Facility Input</h4>
             <div class="statistics-panel-fac-input">
                 <app-game-resource-icon v-for="(value, key) in input" :resource="key" :amount="value"/>

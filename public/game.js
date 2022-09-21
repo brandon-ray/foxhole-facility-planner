@@ -1149,7 +1149,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         let sprite;
 
         entity.isRail = false;
-        if (entity.subtype === 'rail_small_gauge') {
+        if (entity.subtype === 'rail_small_gauge' || entity.subtype === 'rail_large_gauge') {
             entity.isRail = true;
         }
 
@@ -1301,7 +1301,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
                         for (let i=0; i<entities.length; i++) {
                             let entity2 = entities[i];
-                            if (entity2 === entity || entity2.type !== 'building' || !entity2.isRail || !entity2.bezier) {
+                            if (entity2 === entity || entity2.type !== 'building' || entity2.subtype !== entity.subtype || !entity2.isRail || !entity2.bezier) {
                                 continue;
                             }
                             let selectedPointToEntity2Local = entity2.toLocal(selectedPoint, entity, undefined, true);
@@ -1333,7 +1333,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             }
                         }
 
-                        const MAX_SEGMENT_DISTANCE = 35 * METER_PIXEL_SIZE;
+                        const MAX_SEGMENT_DISTANCE = entity.building.maxLength * METER_PIXEL_SIZE;
                         if (selectedPoint.index === 1) {
                             let dist = Math.distanceBetween({x: 0, y: 0}, selectedPoint);
                             let angle = Math.angleBetween({x: 0, y: 0}, selectedPoint);
@@ -1572,6 +1572,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
         game.tryGameFocus();
 
+        /*
         if (game.settings.quality === 'auto') {
             let fps = Math.round(1000/delta);
             if (fps < FPSMIN) {
@@ -1588,7 +1589,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         } else {
             fpsCheck = null;
         }
-
+        */
 
         if (!game.isPlayScreen) {
             if (!menuInit) {
@@ -1653,7 +1654,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         }
                         let mousePos = entity.toLocal({x: mx, y: my}, undefined, undefined, true);
                         let projection = entity.bezier.project(mousePos);
-                        if (entity !== currentBuilding && entity.type === 'building' && projection.d <= 25) {
+                        if (entity !== currentBuilding && entity.type === 'building' && currentBuilding.subtype === entity.subtype && projection.d <= 25) {
                             if (projection.t >= 0.95) {
                                 projection = entity.bezier.get(1);
                             } else if (projection.t <= 0.05) {
