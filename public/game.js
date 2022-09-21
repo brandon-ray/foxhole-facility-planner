@@ -1255,8 +1255,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     let mousePos = entity.toLocal({x: mx, y: my}, undefined, undefined, true);
                     if (selectedPoint) {
                         currentBuilding = null;
-                        let lastX = selectedPoint.x;
-                        let lastY = selectedPoint.y;
                         if (selectedPoint.index === 0) {
                             entity.x = gmx;
                             entity.y = gmy;
@@ -1288,6 +1286,41 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             selectedPoint.y = Math.floor(selectedPoint.y / gridSize) * gridSize;
                         }
 
+                        for (let i=0; i<entities.length; i++) {
+                            let entity2 = entities[i];
+                            if (entity2 === entity || entity2.type !== 'building' || !entity2.isRail || !entity2.bezier) {
+                                continue;
+                            }
+                            let test = entity2.toLocal(selectedPoint, entity, undefined, true);
+                            let projection = entity2.bezier.project(test);
+                            if (projection.d <= 25) {
+                                if (projection.t >= 0.95) {
+                                    projection = entity2.bezier.get(1);
+                                } else if (projection.t <= 0.05) {
+                                    projection = entity2.bezier.get(0);
+                                }
+                                //let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity, undefined, true);
+                                let local = entity.toLocal({x: projection.x, y: projection.y}, entity2, undefined, true);
+                                let normal = entity2.bezier.normal(projection.t);
+                                let angle = Math.angleBetween({x: 0, y: 0}, normal);
+                                selectedPoint.x = local.x;
+                                selectedPoint.y = local.y;
+
+                                let currentRot = entity.rotation + selectedPoint.rotation;
+                                let angleRight = entity2.rotation + (angle - Math.PI/2) - Math.PI/2;
+                                let angleLeft = entity2.rotation + (angle + Math.PI/2) - Math.PI/2;
+                                let rightDiff = Math.atan2(Math.sin(angleRight-currentRot), Math.cos(angleRight-currentRot));
+                                let leftDiff = Math.atan2(Math.sin(angleLeft-currentRot), Math.cos(angleLeft-currentRot));
+
+                                if (rightDiff < leftDiff) {
+                                    selectedPoint.rotation = (angleRight + Math.PI/2) - entity.rotation;
+                                } else {
+                                    selectedPoint.rotation = (angleLeft + Math.PI/2) - entity.rotation;
+                                }
+                                break;
+                            }
+                        }
+
                         const MAX_SEGMENT_DISTANCE = 35 * METER_PIXEL_SIZE;
                         if (selectedPoint.index === 1) {
                             let dist = Math.distanceBetween({x: 0, y: 0}, selectedPoint);
@@ -1304,8 +1337,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         let curve2 = entity.bezier.curvature(0.5);
                         let curve3 = entity.bezier.curvature(0.75);
                         if ((curve1.r !== 0 && (Math.abs(curve1.r) < 100 || Math.abs(curve2.r) < 200 || Math.abs(curve3.r) < 100)) || selectedPoint.x < 0) {
-                            //selectedPoint.x = lastX;
-                            //selectedPoint.y = lastY;
                             entity.sprite.tint = 0xFF0000;
                         } else {
                             entity.sprite.tint = 0xFFFFFF;
@@ -1587,9 +1618,12 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 if (currentBuilding.isRail && !selectedPoint) {
                     for (let i=0; i<entities.length; i++) {
                         let entity = entities[i];
+                        if (!entity.isRail || !entity.bezier) {
+                            continue;
+                        }
                         let mousePos = entity.toLocal({x: mx, y: my}, undefined, undefined, true);
                         let projection = entity.bezier.project(mousePos);
-                        if (entity !== currentBuilding && entity.type === 'building' && entity.isRail && entity.bezier && projection.d <= 25) {
+                        if (entity !== currentBuilding && entity.type === 'building' && projection.d <= 25) {
                             if (projection.t >= 0.95) {
                                 projection = entity.bezier.get(1);
                             } else if (projection.t <= 0.05) {
@@ -1603,13 +1637,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
                             let angleRight = entity.rotation + (angle - Math.PI/2) - Math.PI/2;
                             let angleLeft = entity.rotation + (angle + Math.PI/2) - Math.PI/2;
-
-                            //let rightDiff = ((angleRight - currentBuilding.rotation) + Math.PI) % Math.PI2;
-                            //let leftDiff = ((angleLeft - currentBuilding.rotation) + Math.PI) % Math.PI2;
                             let rightDiff = Math.atan2(Math.sin(angleRight-currentBuilding.rotation), Math.cos(angleRight-currentBuilding.rotation));
                             let leftDiff = Math.atan2(Math.sin(angleLeft-currentBuilding.rotation), Math.cos(angleLeft-currentBuilding.rotation));
 
-                            console.log('test', rightDiff, leftDiff, rightDiff < leftDiff);
                             if (rightDiff < leftDiff) {
                                 currentBuilding.rotation = angleRight + Math.PI/2;
                             } else {
