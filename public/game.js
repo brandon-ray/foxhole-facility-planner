@@ -175,12 +175,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 src: ['assets/button_click.mp3'],
                 loop: false,
                 volume: 0.25
-            }),
-            speaker: new Howl({
-                src: ['assets/speaker.ogg'],
-                loop: true,
-                volume: 0.4
-            }),
+            })
         };
 
         game.sounds = sounds;

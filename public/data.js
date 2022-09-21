@@ -302,6 +302,7 @@
                 power: -0.5,
                 width: 3,
                 length: 3,
+                range: 20,
                 icon: 'buildings/FortStructureIcon.webp',
                 cost: {
                     processed_construction_material: 200
@@ -420,8 +421,7 @@
                     speed: 0.132,
                     width: 220,
                     height: 184
-                },
-                sound: 'speaker'
+                }
             },
         }
     };

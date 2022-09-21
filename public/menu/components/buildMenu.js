@@ -203,6 +203,7 @@ Vue.component('app-menu-construction-list', {
         buildBuilding: function(building) {
             this.bmc();
             game.startBuild(building);
+            game.buildMenuComponent.showHoverMenu(null);
         },
         buildingHover: function(building) {
             game.buildMenuComponent.showHoverMenu(building);
