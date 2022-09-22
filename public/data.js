@@ -63,27 +63,27 @@
                 type: 'liquid'
             },
             assembly_materials1: {
-                name: 'Assembly Materials I',
+                name: 'Assembly Materials I (Cams)',
                 icon: 'resources/AssemblyMaterials1Icon.webp',
                 type: 'solid'
             },
             assembly_materials2: {
-                name: 'Assembly Materials II',
+                name: 'Assembly Materials II (Pams)',
                 icon: 'resources/AssemblyMaterials2Icon.webp',
                 type: 'solid'
             },
             assembly_materials3: {
-                name: 'Assembly Materials III',
+                name: 'Assembly Materials III (Sams)',
                 icon: 'resources/AssemblyMaterials3Icon.webp',
                 type: 'solid'
             },
             assembly_materials4: {
-                name: 'Assembly Materials IV',
+                name: 'Assembly Materials IV (Hams)',
                 icon: 'resources/AssemblyMaterials4Icon.webp',
                 type: 'solid'
             },
             assembly_materials5: {
-                name: 'Assembly Materials V',
+                name: 'Assembly Materials V (Nams)',
                 icon: 'resources/AssemblyMaterials5Icon.webp',
                 type: 'solid'
             },
@@ -839,7 +839,55 @@
                     output: {
                         processed_construction_material: 1
                     }
-                }
+                },
+				upgrades: {
+					blast_furnace_hams: {
+                        name: 'Blast Furnace (Hams)',
+                        power: -5,
+                        icon: 'buildings/MetalworksFactoryIcon.webp',
+                        production: {
+                            time: 120,
+                            input: {
+                                processed_construction_material: 1,
+                                heavy_oil: 66
+                            },
+                            output: {
+                                assembly_materials4: 1
+                            }
+                        }
+                    },
+					blast_furnace_sams: {
+                        name: 'Blast Furnace (Sams)',
+                        power: -5,
+                        icon: 'buildings/MetalworksFactoryIcon.webp',
+                        production: {
+                            time: 120,
+                            input: {
+                                construction_material: 3,
+                                sulfur: 3
+                            },
+                            output: {
+                                assembly_materials3: 1
+                            }
+                        }
+                    },
+					blast_furnace_pcons: {
+                        name: 'Blast Furnace (pCons)',
+                        power: -5,
+                        icon: 'buildings/MetalworksFactoryIcon.webp',
+                        production: {
+                            time: 120,
+                            input: {
+                                construction_material: 3,
+                                component: 55,
+								heavy_oil: 6
+                            },
+                            output: {
+                                processed_construction_material: 3
+                            }
+                        }
+                    },
+				}
             },
             metalworks_factory_pipes: {
                 name: 'Metalworks Factory (Pipes)',
