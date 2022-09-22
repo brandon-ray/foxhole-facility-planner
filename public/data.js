@@ -556,12 +556,15 @@
                     }
                 }
             },
-            /*
+            
             power_station: {
-                name: 'Power Station',
+                name: 'Power Station (Oil)',
                 description: 'This Facility generates a large amount of power using Oil or Coal as inputs.', // Requires Construction Vehicle + Requires Tech
                 category: 'power',
-                power: 10,
+				power: 10,
+				width: 14,
+                length: 14,
+				icon: 'buildings/FacilityPowerOilIcon.webp',
                 cost: {
                     processed_construction_material: 25
                 },
@@ -570,25 +573,59 @@
                     input: {
                         oil: 50
                     }
-                }
+                },
+				upgrades: {
+                    reactor_heavy_oil: {
+                        name: 'Sulfuric Reactor (Heavy Oil)',
+                        power: 16,
+                        icon: 'buildings/SulfuricReactorIcon.webp',
+                        production: {
+                            time: 120,
+                            input: {
+                                heavy_oil: 50
+                            },
+                            output: {
+                                sulfur: 5
+                            }
+                        }
+                    },
+                    reactor_coke: {
+                        name: 'Sulfuric Reactor (Coke)',
+                        power: 16,
+                        icon: 'buildings/SulfuricReactorIcon.webp',
+                        production: {
+                            time: 120,
+                            input: {
+                                coke: 60,
+								water: 25
+                            },
+                            output: {
+                                sulfur: 5
+                            }
+                        }
+                    },
+				}
             },
             power_station_coal: {
                 name: 'Power Station (Coal)',
                 description: 'This Facility generates a large amount of power using Coal.', // Requires Tech
                 category: 'power',
-                power: 10,
+				power: 10,
+				width: 14,
+                length: 14,
+				icon: 'buildings/FacilityPowerOilIcon.webp',
                 cost: {
                     processed_construction_material: 25
                 },
                 production: {
                     time: 90,
                     input: {
-                        coal: 50,
+                        coal: 60,
                         water: 25
                     }
                 }
             },
-            */
+            
             stationary_harvester_scrap: {
                 name: 'Stationary Harvester (Scrap)',
                 description: 'A stationary harvester that automatically gathers Salvage using Petrol as fuel.', // Requires Construction Vehicle
