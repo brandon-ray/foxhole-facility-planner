@@ -139,20 +139,20 @@
             }
         },
         buildings: {
-            /*
             foundation_corner: {
                 name: 'Foundation Corner',
                 description: 'A foundation for building out areas suitable for Facilities construction.', // Requires Construction Vehicle + Consumes 2x more Garrison Supplies
                 category: 'foundations',
                 power: 0,
+                width: 5,
+                length: 5,
                 icon: 'buildings/ConcreteFoundation02Icon.png',
-                texture: 'concrete.png',
+                texture: 'concrete_corner.png',
                 sortOffset: -1000,
                 cost: {
                     gravel: 75
                 }
             },
-            */
             foundation_1x1: {
                 name: 'Foundation 1x1',
                 description: 'A foundation for building out areas suitable for Facilities construction.', // Requires Construction Vehicle + Consumes 2x more Garrison Supplies
