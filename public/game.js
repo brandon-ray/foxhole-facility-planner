@@ -584,10 +584,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
     };
 
     game.loadSave = function(saveObject) {
-        for (let i=0; i<entities.length; i++) {
-            let entity = entities[i];
-            entity.remove();
-        }
+        game.removeEntities();
         setTimeout(() => {
             let xTotal = 0;
             let yTotal = 0;
@@ -1566,6 +1563,13 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
         return currentBuilding;
     };
+
+    game.removeEntities = function() {
+        for (let i=0; i<entities.length; i++) {
+            let entity = entities[i];
+            entity.remove();
+        }
+    }
 
     const FPSMIN = 30;
     let fpsCheck = null;
