@@ -348,7 +348,56 @@
                     output: {
                         coke: 180
                     }
-                }
+                },
+				upgrades: {
+                    coke_furnace: {
+                        name: 'Coke Furnace',
+                        power: -3,
+                        icon: 'buildings/CoalRefineryIcon.webp',
+                        production: {
+                            time: 120,
+                            input: {
+                                coal: 200
+                            },
+                            output: {
+                                coke: 165,
+								sulfur: 15
+                            }
+                        }
+                    },
+                    liquifier: {
+                        name: 'Coal Liquifier',
+                        power: -4,
+                        icon: 'buildings/CoalRefineryIcon.webp',
+                        production: {
+                            time: 120,
+                            input: {
+                                coal: 300,
+								water: 50
+                            },
+                            output: {
+                                oil: 50,
+								concrete: 1
+                            }
+                        }
+                    },
+                    adv_liquifier: {
+                        name: 'Advanced Coal Liquifier',
+                        power: -4,
+                        icon: 'buildings/CoalRefineryIcon.webp',
+                        production: {
+                            time: 180,
+                            input: {
+                                coal: 300,
+								water: 100
+                            },
+                            output: {
+                                heavy_oil: 60,
+								coke: 260
+                            }
+                        }
+                    },
+				}
             },
             oil_refinery: {
                 name: 'Oil Refinery',
