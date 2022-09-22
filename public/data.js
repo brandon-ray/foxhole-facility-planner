@@ -127,6 +127,11 @@
                 icon: 'resources/WaterIcon.webp',
                 type: 'liquid'
             },
+            concrete_materials: {
+                name: 'Concrete Materials',
+                icon: 'resources/ConcreteMaterialsIcon.webp',
+                type: 'solid'
+            },
             heavy_explosive_material: {
                 name: 'Heavy Explosive Material',
                 icon: 'resources/HeavyExplosiveMaterialIcon.webp',
@@ -141,7 +146,7 @@
                 name: '250mm',
                 icon: 'resources/250mm.webp',
                 type: 'solid'
-            }
+            },
         },
         buildings: {
             foundation_corner: {
@@ -262,7 +267,7 @@
                 cost: {
                     basic_material: 200
                 },
-                production: {
+                production: [{
                     time: 25,
                     input: {
                         salvage: 10
@@ -270,13 +275,13 @@
                     output: {
                         construction_material: 1
                     }
-                },
+                }],
                 upgrades: {
                     forge_mat1: {
                         name: 'Forge',
                         power: -2,
                         icon: 'buildings/MaterialsFactoryForgeIcon.webp',
-                        production: {
+                        production: [{
                             time: 60,
                             input: {
                                 salvage: 20,
@@ -285,13 +290,13 @@
                             output: {
                                 assembly_materials1: 1
                             }
-                        }
+                        }]
                     },
                     forge_mat2: {
                         name: 'Forge',
                         power: -2,
                         icon: 'buildings/MaterialsFactoryForgeIcon.webp',
-                        production: {
+                        production: [{
                             time: 60,
                             input: {
                                 salvage: 20,
@@ -300,13 +305,13 @@
                             output: {
                                 assembly_materials2: 1
                             }
-                        }
+                        }]
                     },
                     metal_press: {
                         name: 'Metal Press',
                         power: -4,
                         icon: 'buildings/MaterialsFactoryMetalPressIcon.webp',
-                        production: {
+                        production: [{
                             time: 25,
                             input: {
                                 salvage: 20,
@@ -315,13 +320,13 @@
                             output: {
                                 construction_material: 3
                             }
-                        }
+                        }]
                     },
                     smelter: {
                         name: 'Smelter',
                         power: -4,
                         icon: 'buildings/MaterialsFactorySmelterIcon.webp',
-                        production: {
+                        production: [{
                             time: 25,
                             input: {
                                 salvage: 20,
@@ -330,38 +335,35 @@
                             output: {
                                 construction_material: 3
                             }
-                        }
+                        }]
                     },
-                    recycler_sandbags: {
+                    recycler: {
                         name: 'Recycler',
                         power: -2,
                         icon: 'buildings/MaterialsFactoryRecyclerIcon.webp',
-                        production: {
-                            time: 25,
-                            input: {
-                                salvage: 20,
-                                petrol: 25
+                        production: [
+                            {
+                                time: 25,
+                                input: {
+                                    salvage: 20,
+                                    petrol: 25
+                                },
+                                output: {
+                                    construction_material: 1,
+                                    sandbag: 5
+                                }
                             },
-                            output: {
-                                construction_material: 1,
-                                sandbag: 5
+                            {
+                                time: 25,
+                                input: {
+                                    salvage: 25,
+                                },
+                                output: {
+                                    construction_material: 1,
+                                    barbed_wire: 5
+                                }
                             }
-                        }
-                    },
-                    recycler_barbed_wire: {
-                        name: 'Recycler',
-                        power: -2,
-                        icon: 'buildings/MaterialsFactoryRecyclerIcon.webp',
-                        production: {
-                            time: 25,
-                            input: {
-                                salvage: 25,
-                            },
-                            output: {
-                                construction_material: 1,
-                                barbed_wire: 5
-                            }
-                        }
+                        ]
                     },
                 }
             },
@@ -376,7 +378,7 @@
                 cost: {
                     construction_material: 50
                 },
-                production: {
+                production: [{
                     time: 120,
                     input: {
                         coal: 200
@@ -384,13 +386,13 @@
                     output: {
                         coke: 180
                     }
-                },
+                }],
 				upgrades: {
                     coke_furnace: {
                         name: 'Coke Furnace',
                         power: -3,
                         icon: 'buildings/CoalRefineryIcon.webp',
-                        production: {
+                        production: [{
                             time: 120,
                             input: {
                                 coal: 200
@@ -399,13 +401,13 @@
                                 coke: 165,
 								sulfur: 15
                             }
-                        }
+                        }]
                     },
                     liquifier: {
                         name: 'Coal Liquifier',
                         power: -4,
                         icon: 'buildings/CoalRefineryIcon.webp',
-                        production: {
+                        production: [{
                             time: 120,
                             input: {
                                 coal: 300,
@@ -413,15 +415,15 @@
                             },
                             output: {
                                 oil: 50,
-								concrete: 1
+								concrete_materials: 1
                             }
-                        }
+                        }]
                     },
                     adv_liquifier: {
                         name: 'Advanced Coal Liquifier',
                         power: -4,
                         icon: 'buildings/CoalRefineryIcon.webp',
-                        production: {
+                        production: [{
                             time: 180,
                             input: {
                                 coal: 300,
@@ -431,7 +433,7 @@
                                 heavy_oil: 60,
 								coke: 260
                             }
-                        }
+                        }]
                     },
 				}
             },
@@ -446,7 +448,7 @@
                 cost: {
                     construction_material: 50
                 },
-                production: {
+                production: [{
                     time: 150,
                     input: {
                         oil: 150
@@ -454,13 +456,13 @@
                     output: {
                         petrol: 150
                     }
-                },
+                }],
 				upgrades: {
                     reformer: {
                         name: 'Reformer',
                         power: -1,
                         icon: 'buildings/OilRefineryIcon.webp',
-                        production: {
+                        production: [{
                             time: 120,
                             input: {
                                 oil: 120,
@@ -469,13 +471,13 @@
                             output: {
                                 petrol: 150
                             }
-                        }
+                        }]
                     },
                     cracking_unit: {
                         name: 'Cracking Unit',
                         power: -1.5,
                         icon: 'buildings/OilRefineryIcon.webp',
-                        production: {
+                        production: [{
                             time: 160,
                             input: {
                                 oil: 150
@@ -483,13 +485,13 @@
                             output: {
                                 heavy_oil: 90
                             }
-                        }
+                        }]
                     },
                     petro_plant: {
                         name: 'Petrochemical Plant',
                         power: -6,
                         icon: 'buildings/OilRefineryIcon.webp',
-                        production: {
+                        production: [{
                             time: 200,
                             input: {
                                 sulfur: 60,
@@ -498,7 +500,7 @@
                             output: {
                                 enriched_oil: 90
                             }
-                        }
+                        }]
                     },
 				}
             },
@@ -514,7 +516,7 @@
                 cost: {
                     construction_material: 200
                 },
-                production: {
+                production: [{
                     time: 450,
                     input: {
                         construction_material: 1
@@ -522,7 +524,7 @@
                     output: {
                         garrison_supplies: 20
                     }
-                }
+                }]
             },
             bms_foreman_stacker: {
                 name: 'BMS Foreman Stacker',
@@ -572,12 +574,12 @@
                 cost: {
                     basic_material: 150
                 },
-                production: {
+                production: [{
                     time: 45,
                     input: {
                         diesel: 25
                     }
-                }
+                }]
             },
             petrol_power_plant: {
                 name: 'Petrol Power Plant',
@@ -590,12 +592,12 @@
                     basic_material: 150,
                     processed_construction_material: 50
                 },
-                production: {
+                production: [{
                     time: 90,
                     input: {
                         petrol: 50
                     }
-                }
+                }]
             },
             /*
             power_station: {
@@ -608,12 +610,12 @@
                 cost: {
                     processed_construction_material: 25
                 },
-                production: {
+                production: [{
                     time: 90,
                     input: {
                         oil: 50
                     }
-                }
+                }]
             },
             power_station_coal: {
                 name: 'Power Station (Coal)',
@@ -625,13 +627,13 @@
                 cost: {
                     processed_construction_material: 25
                 },
-                production: {
+                production: [{
                     time: 90,
                     input: {
                         coal: 50,
                         water: 25
                     }
-                }
+                }]
             },
             */
             stationary_harvester_scrap: {
@@ -645,7 +647,7 @@
                 cost: {
                     construction_material: 150
                 },
-                production: {
+                production: [{
                     time: 12,
                     input: {
                         petrol: 4
@@ -653,7 +655,7 @@
                     output: {
                         salvage: 50
                     }
-                }
+                }]
             },
             stationary_harvester_components: {
                 name: 'Stationary Harvester (Components)',
@@ -666,7 +668,7 @@
                 cost: {
                     steel: 20
                 },
-                production: {
+                production: [{
                     time: 12,
                     input: {
                         petrol: 4 // (The icon shown is clearly Petrol but the description states Heavy Oil in-game...)
@@ -674,7 +676,7 @@
                     output: {
                         component: 6
                     }
-                }
+                }]
             },
             stationary_harvester_coal: {
                 name: 'Stationary Harvester (Coal)',
@@ -687,7 +689,7 @@
                 cost: {
                     processed_construction_material: 25
                 },
-                production: {
+                production: [{
                     time: 12,
                     input: {
                         petrol: 4
@@ -695,7 +697,7 @@
                     output: {
                         coal: 50
                     }
-                }
+                }]
             },
             stationary_harvester_sulfur: {
                 name: 'Stationary Harvester (Sulfur)',
@@ -708,7 +710,7 @@
                 cost: {
                     steel: 20
                 },
-                production: {
+                production: [{
                     time: 12,
                     input: {
                         heavy_oil: 4
@@ -716,7 +718,7 @@
                     output: {
                         sulfur: 6
                     }
-                }
+                }]
             },
             water_pump: {
                 name: 'Water Pump',
@@ -728,12 +730,12 @@
                 cost: {
                     construction_material: 35
                 },
-                production: {
+                production: [{
                     time: 50,
                     output: {
                         water: 1
                     }
-                }
+                }]
             },
             oil_well: {
                 name: 'Oil Well',
@@ -745,12 +747,12 @@
                 cost: {
                     construction_material: 35
                 },
-                production: {
+                production: [{
                     time: 50,
                     output: {
                         oil: 1
                     }
-                }
+                }]
             },
             fuel_silo: {
                 name: 'Fuel Silo',
@@ -856,7 +858,7 @@
                 cost: {
                     processed_construction_material: 25
                 },
-                production: {
+                production: [{
                     time: 25,
                     input: {
                         heavy_explosive_material: 1,
@@ -865,7 +867,7 @@
                     output: {
                         ammo_flame: 1
                     }
-                }
+                }]
             },
             ammunition_factory: {
                 name: 'Ammunition Factory',
@@ -876,7 +878,7 @@
                 cost: {
                     processed_construction_material: 25
                 },
-                production: {
+                production: [{
                     time: 30,
                     input: {
                         heavy_explosive_material: 6,
@@ -885,11 +887,11 @@
                     output: {
                         ammo_250mm: 1
                     }
-                }
+                }]
             },
             */
             metalworks_factory: {
-                name: 'Metalworks Factory (Processed Construction Materials)',
+                name: 'Metalworks Factory',
                 description: 'It takes an input of Construction Materials and outputs small amount of a Processed Construction Materials used in Tier 2 Facilities construction.', // Requires Construction Vehicle + Requires Tech
                 category: 'factories',
                 power: -5,
@@ -899,33 +901,27 @@
                 cost: {
                     construction_material: 125
                 },
-                production: {
-                    time: 60,
-                    input: {
-                        construction_material: 3,
-                        component: 20
+                production: [
+                    {
+                        time: 60,
+                        input: {
+                            construction_material: 3,
+                            component: 20
+                        },
+                        output: {
+                            processed_construction_material: 1
+                        }
                     },
-                    output: {
-                        processed_construction_material: 1
+                    {
+                        time: 120,
+                        input: {
+                            processed_construction_material: 3,
+                        },
+                        output: {
+                            pipe: 1
+                        }
                     }
-                }
-            },
-            metalworks_factory_pipes: {
-                name: 'Metalworks Factory (Pipes)',
-                category: 'factories',
-                power: -5,
-                width: 9,
-                length: 12,
-                icon: 'buildings/MetalworksFactoryIcon.webp',
-                production: {
-                    time: 120,
-                    input: {
-                        processed_construction_material: 3
-                    },
-                    output: {
-                        pipe: 1
-                    }
-                }
+                ]
             },
             field_modification_center: {
                 name: 'Field Modification Center',
@@ -942,8 +938,6 @@
                 name: 'Resource Transfer Station',
                 description: 'Used for storing raw resources for transfer into and out of Facilities. The stockpile for this structure can be reserved.', // Requires Construction Vehicle
                 category: 'factories',
-                width: 10,
-                length: 16,
                 icon: 'buildings/ResourceTransferStationIcon.webp',
                 texture: 'buildings/resource_transfer_station.png',
                 width: 6,
@@ -1033,5 +1027,9 @@
             objectList.push(data);
         }
         window.objectData[objectDataKey + '_list'] = objectList;
+
+        objectList.sort((a, b) => {
+            return a.name.localeCompare(b.name);
+        });
     }
 })();

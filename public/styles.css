@@ -415,6 +415,11 @@ p {
     margin: auto;
 }
 
+.selected-production {
+    border: 2px solid white;
+    margin: 0;
+}
+
 .close-statistics-button, .fullscreen-button {
     width: 30px;
     height: 30px;

@@ -96,29 +96,33 @@ Vue.component('app-game-sidebar', {
             <div style="text-align:center;" v-if="!hoverData.production">
                 <div class="resource-icon" :title="hoverData.name" :style="{backgroundImage: 'url(/assets/' + hoverData.icon + ')'}"></div>
             </div>
-            <div class="row" style="padding-bottom:5px; text-align:center;" v-if="hoverData.production">
-                <div class="col" style="color:#d50101;" v-if="hoverData.production.input">
-                    <app-game-resource-icon v-for="(value, key) in hoverData.production.input" :resource="key" :amount="value"/>
-                </div>
-                <div class="col-2">
-                    <br>
-                    <i class="fa fa-play fa-2x"></i>
-                </div>
-                <div class="col" style="color:#03b003;" v-if="hoverData.production.output">
-                    <app-game-resource-icon v-for="(value, key) in hoverData.production.output" :resource="key" :amount="value"/>
-                </div>
-                <div class="col" v-if="hoverData.power > 0">
-                    <i class="fa fa-bolt fa-4x"></i>
-                    <div style="color:#03b003;">
-                        {{hoverData.power}} MW
+            <div v-if="hoverData.production && hoverData.production.length">
+                <div style="margin-bottom:20px; text-align:center;" v-for="production in hoverData.production">
+                    <div class="row">
+                        <div class="col" style="color:#d50101;" v-if="production.input">
+                            <app-game-resource-icon v-for="(value, key) in production.input" :resource="key" :amount="value"/>
+                        </div>
+                        <div class="col-2">
+                            <br>
+                            <i class="fa fa-play fa-2x"></i>
+                        </div>
+                        <div class="col" style="color:#03b003;" v-if="production.output">
+                            <app-game-resource-icon v-for="(value, key) in production.output" :resource="key" :amount="value"/>
+                        </div>
+                        <div class="col" v-if="hoverData.power > 0">
+                            <i class="fa fa-bolt fa-4x"></i>
+                            <div style="color:#03b003;">
+                                {{hoverData.power}} MW
+                            </div>
+                        </div>
                     </div>
+                    <h4 style="color:#d0d004; padding-left:10px;">
+                        <span v-if="hoverData.power"><i class="fa fa-bolt"></i> {{production.power ? production.power : hoverData.power}} MW</span>
+                        &nbsp;&nbsp;&nbsp;
+                        <i class="fa fa-clock-o"></i> {{production.time}}s
+                    </h4>
                 </div>
             </div>
-            <h4 style="color:#d0d004; padding-left:10px;" v-if="hoverData.production">
-                <span v-if="hoverData.power"><i class="fa fa-bolt"></i> {{hoverData.power}} MW</span>
-                &nbsp;&nbsp;&nbsp;
-                <i class="fa fa-clock-o"></i> {{hoverData.production.time}}s
-            </h4>
         </div>
     </div>
     `
@@ -154,6 +158,13 @@ Vue.component('app-menu-building-selected', {
                 game.selectedEntity.addPoint(100, 0);
             }
         },
+        changeProduction: function(index) {
+            this.selectedEntity.selectedProduction = index;
+            if (game.statisticsMenuComponent) {
+                game.statisticsMenuComponent.refresh();
+            }
+            this.$forceUpdate();
+        },
         destroyBuilding: function() {
             this.bmc();
             if (game.selectedEntity) {
@@ -180,6 +191,35 @@ Vue.component('app-menu-building-selected', {
                 <i class="fa fa-repeat" aria-hidden="true"></i> Rotation:
                 <input class="app-input" type="number" v-model="entityRotation" @change="updateRotation">
             </label>
+        </div>
+        <div v-if="selectedEntity.type === 'building' && selectedEntity.building && selectedEntity.building.production && selectedEntity.building.production.length">
+            <h5>Select Production</h5>
+            <div style="margin-bottom:12px; text-align:center;" v-for="(production, index) in selectedEntity.building.production"
+                 :class="{'selected-production': selectedEntity.selectedProduction === index}" @click="changeProduction(index)">
+                <div class="row">
+                    <div class="col" style="color:#d50101;" v-if="production.input">
+                        <app-game-resource-icon v-for="(value, key) in production.input" :resource="key" :amount="value"/>
+                    </div>
+                    <div class="col-2">
+                        <br>
+                        <i class="fa fa-play fa-2x"></i>
+                    </div>
+                    <div class="col" style="color:#03b003;" v-if="production.output">
+                        <app-game-resource-icon v-for="(value, key) in production.output" :resource="key" :amount="value"/>
+                    </div>
+                    <div class="col" v-if="selectedEntity.building.power > 0">
+                        <i class="fa fa-bolt fa-4x"></i>
+                        <div style="color:#03b003;">
+                            {{selectedEntity.building.power}} MW
+                        </div>
+                    </div>
+                </div>
+                <h4 style="color:#d0d004; padding-left:10px;">
+                    <span v-if="selectedEntity.building.power"><i class="fa fa-bolt"></i> {{production.power ? production.power : selectedEntity.building.power}} MW</span>
+                    &nbsp;&nbsp;&nbsp;
+                    <i class="fa fa-clock-o"></i> {{production.time}}s
+                </h4>
+            </div>
         </div>
         <button type="button" class="app-btn app-btn-secondary" v-on:click="destroyBuilding" @mouseenter="bme">
             <i class="fa fa-trash"></i> Destroy
@@ -267,14 +307,11 @@ Vue.component('app-menu-statistics', {
                 let entity = game.getEntities()[i];
                 if (entity.type === 'building') {
                     let buildingData = window.objectData.buildings[entity.subtype];
-                    let power = buildingData.power ? buildingData.power : 0;
-                    powerTotal += power;
-                    if (power > 0) {
-                        powerProduced += power;
-                    } else {
-                        powerConsumed += power;
+                    if (!buildingData) {
+                        continue;
                     }
 
+                    let power = buildingData.power ? buildingData.power : 0;
                     if (buildingData.cost) {
                         let costKeys = Object.keys(buildingData.cost);
                         for (let j = 0; j < costKeys.length; j++) {
@@ -287,13 +324,19 @@ Vue.component('app-menu-statistics', {
                         }
                     }
 
-                    if (buildingData.production) {
-                        let productionTime = Math.floor(this.time / buildingData.production.time);
-                        if (buildingData.production.input) {
-                            let inputKeys = Object.keys(buildingData.production.input);
+                    if (buildingData.production && buildingData.production.length) {
+                        let productionList = buildingData.production;
+                        let production = productionList[entity.selectedProduction];
+                        if (production.power) {
+                            power = production.power;
+                        }
+
+                        let productionTime = Math.floor(this.time / production.time);
+                        if (production.input) {
+                            let inputKeys = Object.keys(production.input);
                             for (let j = 0; j < inputKeys.length; j++) {
                                 let key = inputKeys[j];
-                                let value = buildingData.production.input[key];
+                                let value = production.input[key];
                                 if (!input[key]) {
                                     input[key] = 0;
                                 }
@@ -301,11 +344,11 @@ Vue.component('app-menu-statistics', {
                             }
                         }
 
-                        if (buildingData.production.output) {
-                            let outputKeys = Object.keys(buildingData.production.output);
+                        if (production.output) {
+                            let outputKeys = Object.keys(production.output);
                             for (let j = 0; j < outputKeys.length; j++) {
                                 let key = outputKeys[j];
-                                let value = buildingData.production.output[key];
+                                let value = production.output[key];
                                 if (!output[key]) {
                                     output[key] = 0;
                                 }
@@ -328,6 +371,13 @@ Vue.component('app-menu-statistics', {
                                 }
                             }
                         }
+                    }
+
+                    powerTotal += power;
+                    if (power > 0) {
+                        powerProduced += power;
+                    } else {
+                        powerConsumed += power;
                     }
                 }
             }
