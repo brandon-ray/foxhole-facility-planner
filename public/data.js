@@ -873,10 +873,10 @@
                     },
 					blast_furnace_pcons: {
                         name: 'Blast Furnace (pCons)',
-                        power: -5,
+                        power: -8,
                         icon: 'buildings/MetalworksFactoryIcon.webp',
                         production: {
-                            time: 120,
+                            time: 60,
                             input: {
                                 construction_material: 3,
                                 component: 55,
