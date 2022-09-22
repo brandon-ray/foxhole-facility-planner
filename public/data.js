@@ -82,6 +82,11 @@
                 icon: 'resources/AssemblyMaterials5Icon.webp',
                 type: 'solid'
             },
+            steel: {
+                name: 'Steel',
+                icon: 'resources/SteelIcon.webp',
+                type: 'solid'
+            },
             sandbag: {
                 name: 'Sandbag',
                 icon: 'resources/SandbagMaterialIcon.webp',
@@ -116,6 +121,21 @@
                 name: 'Water',
                 icon: 'resources/WaterIcon.webp',
                 type: 'liquid'
+            },
+            heavy_explosive_material: {
+                name: 'Heavy Explosive Material',
+                icon: 'resources/HeavyExplosiveMaterialIcon.webp',
+                type: 'solid'
+            },
+            ammo_flame: {
+                name: 'Flame Ammo',
+                icon: 'resources/FlameAmmoIcon.png',
+                type: 'solid'
+            },
+            ammo_250mm: {
+                name: '250mm',
+                icon: 'resources/250mm.webp',
+                type: 'solid'
             }
         },
         buildings: {
@@ -731,7 +751,7 @@
                         construction_material: 1
                     },
                     output: {
-                        flame_fuel: 1
+                        ammo_flame: 1
                     }
                 }
             },
