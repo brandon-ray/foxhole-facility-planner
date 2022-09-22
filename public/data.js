@@ -175,6 +175,17 @@
                     gravel: 150
                 }
             },
+            /*
+            provisional_road: {
+                name: 'Provisional Road',
+                description: 'A temporary road used to enable vehicle access between main roads and remote bases.', // Requires Construction Vehicle + Consumes 3x more Garrison Supplies
+                category: 'foundations',
+                icon: 'buildings/ProvisionalRoadIcon.webp',
+                cost: {
+                    gravel: 150
+                }
+            },
+            */
             rail_small_gauge: {
                 name: 'Small Gauge Railway Track',
                 description: 'A segment of railway for small gauge train cars. Tracks can attach to or fork from existing railways to form complex networks.',
@@ -410,6 +421,7 @@
             power_pole: {
                 name: 'Power Pole',
                 description: 'Used to connect Power Lines together. Up to 4 Power Lines can be attached to a single pole.',
+                category: 'power',
                 power: 0,
                 width: 1,
                 length: 1,
@@ -417,6 +429,15 @@
                 texture: 'concrete.png',
                 cost: {
                     basic_material: 20
+                }
+            },
+            power_line: {
+                name: 'Power Line',
+                description: 'Conducts power between two Power Poles.',
+                category: 'power',
+                icon: 'buildings/PowerLineIcon.webp',
+                cost: {
+                    basic_material: 1
                 }
             },
             */
@@ -582,7 +603,6 @@
                 cost: {
                     construction_material: 35
                 },
-                category: 'harvesters',
                 production: {
                     time: 50,
                     output: {
@@ -610,23 +630,58 @@
                 name: 'Fuel Silo',
                 description: 'Stores various types of fuel, including Heavy Oil, Petrol, and Crude Oil.', // Requires Construction Vehicle + Requires Tech
                 category: 'factories',
+                icon: 'buildings/FuelSiloIcon.webp',
                 cost: {
                     construction_material: 30
                 },
                 capacity: 500
             },
+            /*
+            pipeline: {
+                name: 'Pipeline',
+                description: 'Transports various types of liquid automatically. Can connect to other types of pipes to form networks.', // Requires Tech
+                category: 'factories',
+                icon: 'buildings/PipelineIcon.webp',
+                cost: {
+                    pipe: 1
+                },
+                capacity: 100
+            },
+            pipeline_overhead: {
+                name: 'Pipeline (Overhead)',
+                description: 'Transports various types of liquid automatically. Can connect to other types of pipes to form networks. This variant of pipe can be raised high above the ground but must be built on Foundations.', // Requires Tech
+                category: 'factories',
+                icon: 'buildings/PipelineOverheadIcon.webp',
+                cost: {
+                    pipe: 2
+                },
+                capacity: 100
+            },
+            pipeline_underground: {
+                name: 'Pipeline (Underground)',
+                description: 'Transports various types of liquid automatically. Can connect to other types of pipes to form networks. This variant of pipe can be built underground.', // Requires Tech + Consumes 4x more Garrison Supplies
+                category: 'factories',
+                icon: 'buildings/PipelineUndergroundIcon.webp',
+                cost: {
+                    pipe: 6
+                },
+                capacity: 100
+            },
             pipeline_valve: {
                 name: 'Pipeline Valve',
                 description: 'Controls the rate of flow through a pipeline. Requires a Wrench for adjustment.', // Requires Tech
                 category: 'factories',
+                icon: 'buildings/PipelineValveIcon.webp',
                 cost: {
                     pipe: 2
                 }
             },
+            */
             light_vehicle_assembly_station: {
                 name: 'Light Vehicle Assembly Station',
                 description: 'Allows production of a wide variety of vehicles and equipment. Production takes time and can be halted if resources are depleted. Some variants require a base vehicle to be present on the Assembly Station before production can begin. Essential vehicles and equipment are produced here.', // Requires Construction Vehicle
                 category: 'factories',
+                icon: 'buildings/LightVehicleAssemblyStationIcon.webp',
                 cost: {
                     construction_material: 75
                 }
@@ -642,12 +697,30 @@
                 BMS Linerunner (Small Flatbed Car)
                 */
             },
+            large_assembly_factory: {
+                name: 'Large Assembly Factory',
+                description: 'Allows production of a wide variety of vehicles and equipment. Production takes time and can be halted if resources are depleted. Some variants require a base vehicle to be present on the Assembly Station before production can begin. Advanced vehicles like heavy tank classes and trains are produced here.', // Requires Tech
+                category: 'factories',
+                icon: 'buildings/LargeAssemblyFactoryIcon.webp',
+                cost: {
+                    processed_construction_material: 250
+                }
+                /*
+                Colonial-Vehicles
+
+                BMS Black Bolt (Locomotive)
+                BMS Rockhold (Container Car)
+                BMS Holdout (Infantry Car)
+                BMS Longrider (Flatbed Car)
+                */
+            },
             /*
             ammunition_factory: {
                 name: 'Ammunition Factory',
                 description: 'A factory that produces various types of heavy and advanced ammunition.', // Requires Construction Vehicle + Requires Tech
                 category: 'factories',
                 power: -4,
+                icon: 'buildings/AmmunitionFactoryIcon.webp',
                 cost: {
                     processed_construction_material: 25
                 },
@@ -667,6 +740,7 @@
                 description: 'A factory that produces various types of heavy and advanced ammunition.', // Requires Construction Vehicle + Requires Tech
                 category: 'factories',
                 power: -4,
+                icon: 'buildings/AmmunitionFactoryIcon.webp',
                 cost: {
                     processed_construction_material: 25
                 },
@@ -724,17 +798,49 @@
             field_modification_center: {
                 name: 'Field Modification Center',
                 description: 'Vehicles can be further upgraded into higher tiers using this Facility. Higher tier vehicles have improved durability.', // Requires Construction Vehicle + Requires Tech
+                category: 'factories',
+                icon: 'buildings/FieldModificationCenterIcon.webp',
                 cost: {
                     processed_construction_material: 250
+                }
+            },
+            resource_transfer_station: {
+                name: 'Resource Transfer Station',
+                description: 'Used for storing raw resources for transfer into and out of Facilities. The stockpile for this structure can be reserved.', // Requires Construction Vehicle
+                category: 'factories',
+                icon: 'buildings/ResourceTransferStationIcon.webp',
+                cost: {
+                    construction_material: 35
+                }
+            },
+            material_transfer_station: {
+                name: 'Material Transfer Station',
+                description: 'Used for storing materials for transfer into and out of Facilities. The stockpile for this structure can be reserved.', // Requires Construction Vehicle
+                category: 'factories',
+                icon: 'buildings/MaterialTransferStationIcon.webp',
+                cost: {
+                    construction_material: 35
                 }
             },
             liquid_transfer_station: {
                 name: 'Liquid Transfer Station',
                 description: 'Used for storing materials for transfer into and out of Facilities. The stockpile for this structure can be reserved.', // Requires Construction Vehicle
+                category: 'factories',
+                icon: 'buildings/LiquidTransferStationIcon.webp',
                 cost: {
                     construction_material: 35
                 }
             },
+            /*
+            large_crane: {
+                name: 'Large Crane',
+                description: 'TBD', // Requires Tech
+                category: 'factories',
+                cost: {
+                    steel: 35
+                }
+            },
+            */
             sound_test: {
                 name: 'Sus',
                 hideInList: true,
