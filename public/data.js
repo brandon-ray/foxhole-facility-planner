@@ -756,6 +756,8 @@
                 name: 'Fuel Silo',
                 description: 'Stores various types of fuel, including Heavy Oil, Petrol, and Crude Oil.', // Requires Construction Vehicle + Requires Tech
                 category: 'factories',
+                width: 2,
+                length: 3,
                 icon: 'buildings/FuelSiloIcon.webp',
                 cost: {
                     construction_material: 30
@@ -807,6 +809,8 @@
                 name: 'Light Vehicle Assembly Station',
                 description: 'Allows production of a wide variety of vehicles and equipment. Production takes time and can be halted if resources are depleted. Some variants require a base vehicle to be present on the Assembly Station before production can begin. Essential vehicles and equipment are produced here.', // Requires Construction Vehicle
                 category: 'factories',
+                width: 8,
+                length: 14,
                 icon: 'buildings/LightVehicleAssemblyStationIcon.webp',
                 cost: {
                     construction_material: 75
@@ -827,6 +831,8 @@
                 name: 'Large Assembly Factory',
                 description: 'Allows production of a wide variety of vehicles and equipment. Production takes time and can be halted if resources are depleted. Some variants require a base vehicle to be present on the Assembly Station before production can begin. Advanced vehicles like heavy tank classes and trains are produced here.', // Requires Tech
                 category: 'factories',
+                width: 9,
+                length: 20,
                 icon: 'buildings/LargeAssemblyFactoryIcon.webp',
                 cost: {
                     processed_construction_material: 250
@@ -925,6 +931,8 @@
                 name: 'Field Modification Center',
                 description: 'Vehicles can be further upgraded into higher tiers using this Facility. Higher tier vehicles have improved durability.', // Requires Construction Vehicle + Requires Tech
                 category: 'factories',
+                width: 10,
+                length: 16,
                 icon: 'buildings/FieldModificationCenterIcon.webp',
                 cost: {
                     processed_construction_material: 250
@@ -934,6 +942,8 @@
                 name: 'Resource Transfer Station',
                 description: 'Used for storing raw resources for transfer into and out of Facilities. The stockpile for this structure can be reserved.', // Requires Construction Vehicle
                 category: 'factories',
+                width: 10,
+                length: 16,
                 icon: 'buildings/ResourceTransferStationIcon.webp',
                 cost: {
                     construction_material: 35
