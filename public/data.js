@@ -52,6 +52,11 @@
                 icon: 'resources/HeavyOilIcon.webp',
                 type: 'liquid'
             },
+            enriched_oil: {
+                name: 'Enriched Oil',
+                icon: 'resources/EnrichedOilIcon.webp',
+                type: 'liquid'
+            },
             petrol: {
                 name: 'Petrol',
                 icon: 'resources/PetrolIcon.webp',
@@ -418,7 +423,53 @@
                     output: {
                         petrol: 150
                     }
-                }
+                },
+				upgrades: {
+                    reformer: {
+                        name: 'Reformer',
+                        power: -1,
+                        icon: 'buildings/OilRefineryIcon.webp',
+                        production: {
+                            time: 120,
+                            input: {
+                                oil: 120,
+								water: 30,
+                            },
+                            output: {
+                                petrol: 150
+                            }
+                        }
+                    },
+                    cracking_unit: {
+                        name: 'Cracking Unit',
+                        power: -1.5,
+                        icon: 'buildings/OilRefineryIcon.webp',
+                        production: {
+                            time: 160,
+                            input: {
+                                oil: 150
+                            },
+                            output: {
+                                heavy_oil: 90
+                            }
+                        }
+                    },
+                    petro_plant: {
+                        name: 'Petrochemical Plant',
+                        power: -6,
+                        icon: 'buildings/OilRefineryIcon.webp',
+                        production: {
+                            time: 200,
+                            input: {
+                                sulfur: 60,
+								heavy_oil: 30
+                            },
+                            output: {
+                                enriched_oil: 90
+                            }
+                        }
+                    },
+				}
             },
             maintenance_tunnel: {
                 name: 'Maintenance Tunnel',
