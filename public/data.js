@@ -32,6 +32,11 @@
                 icon: 'resources/CokeIcon.webp',
                 type: 'solid'
             },
+            sulfur: {
+                name: 'Sulfur',
+                icon: 'resources/SulfurIcon.webp',
+                type: 'solid'
+            },
             diesel: {
                 name: 'Diesel',
                 icon: 'resources/DieselIcon.webp',
@@ -40,6 +45,11 @@
             oil: {
                 name: 'Oil',
                 icon: 'resources/OilIcon.webp',
+                type: 'liquid'
+            },
+            heavy_oil: {
+                name: 'Heavy Oil',
+                icon: 'resources/HeavyOilIcon.webp',
                 type: 'liquid'
             },
             petrol: {
@@ -101,11 +111,17 @@
                 name: 'Garrison Supplies',
                 icon: 'resources/GarrisonSupplyIcon.webp',
                 type: 'solid'
+            },
+            water: {
+                name: 'Water',
+                icon: 'resources/WaterIcon.webp',
+                type: 'liquid'
             }
         },
         buildings: {
             foundation_1x1: {
                 name: 'Foundation 1x1',
+                description: 'A foundation for building out areas suitable for Facilities construction.', // Requires Construction Vehicle + Consumes 2x more Garrison Supplies
                 category: 'foundations',
                 power: 0,
                 width: 5,
@@ -119,6 +135,7 @@
             },
             foundation_1x2: {
                 name: 'Foundation 1x2',
+                description: 'A foundation for building out areas suitable for Facilities construction.', // Requires Construction Vehicle + Consumes 2x more Garrison Supplies
                 category: 'foundations',
                 power: 0,
                 width: 5,
@@ -132,6 +149,7 @@
             },
             foundation_2x2: {
                 name: 'Foundation 2x2',
+                description: 'A foundation for building out areas suitable for Facilities construction.', // Requires Construction Vehicle + Consumes 2x more Garrison Supplies
                 category: 'foundations',
                 power: 0,
                 width: 10,
@@ -144,7 +162,8 @@
                 }
             },
             rail_small_gauge: {
-                name: 'Small Gauge Rail',
+                name: 'Small Gauge Railway Track',
+                description: 'A segment of railway for small gauge train cars. Tracks can attach to or fork from existing railways to form complex networks.',
                 category: 'foundations',
                 power: 0,
                 width: 2,
@@ -154,11 +173,12 @@
                 sortOffset: 100000,
                 texture: 'track_small_gauge.png',
                 cost: {
-                    construction_material: 50
+                    construction_material: 25
                 }
             },
             rail_large_gauge: {
-                name: 'Large Gauge Rail',
+                name: 'Railway Track',
+                description: 'A segment of railway for train cars. Tracks can attach to or fork from existing railways to form complex networks.', // Requires Tech
                 category: 'foundations',
                 power: 0,
                 width: 2,
@@ -168,7 +188,7 @@
                 sortOffset: 100000,
                 texture: 'track_large_gauge.png',
                 cost: {
-                    construction_material: 50
+                    processed_construction_material: 5
                 }
             },
             materials_factory: {
@@ -360,6 +380,7 @@
             /*
             power_pole: {
                 name: 'Power Pole',
+                description: 'Used to connect Power Lines together. Up to 4 Power Lines can be attached to a single pole.',
                 power: 0,
                 width: 1,
                 length: 1,
@@ -372,6 +393,7 @@
             */
             diesel_power_plant: {
                 name: 'Diesel Power Plant',
+                description: 'Generates a small amount of power using Diesel as input.', // Requires Construction Vehicle
                 category: 'power',
                 power: 5,
                 width: 7,
@@ -407,13 +429,14 @@
             },
             stationary_harvester_scrap: {
                 name: 'Stationary Harvester (Scrap)',
+                description: 'A stationary harvester that automatically gathers Salvage using Petrol as fuel.', // Requires Construction Vehicle
                 category: 'harvesters',
                 power: 0,
                 width: 5,
                 length: 7,
                 icon: 'buildings/ScrapStationaryHarvesterIcon.webp',
                 cost: {
-                    processed_construction_material: 150
+                    construction_material: 150
                 },
                 production: {
                     time: 12,
@@ -422,6 +445,48 @@
                     },
                     output: {
                         salvage: 50
+                    }
+                }
+            },
+            stationary_harvester_coal: {
+                name: 'Stationary Harvester (Coal)',
+                description: 'A stationary harvester that automatically gathers Coal using Petrol as fuel.', // Requires Construction Vehicle + Requires Tech
+                category: 'harvesters',
+                power: 0,
+                width: 5,
+                length: 7,
+                icon: 'buildings/CoalStationaryHarvesterIcon.webp',
+                cost: {
+                    processed_construction_material: 25
+                },
+                production: {
+                    time: 12,
+                    input: {
+                        petrol: 4
+                    },
+                    output: {
+                        coal: 50
+                    }
+                }
+            },
+            stationary_harvester_sulfur: {
+                name: 'Stationary Harvester (Sulfur)',
+                description: 'A stationary harvester that automatically gathers Sulfur using Heavy Oil as fuel.', // Requires Construction Vehicle + Requires Tech
+                category: 'harvesters',
+                power: 0,
+                width: 5,
+                length: 7,
+                icon: 'buildings/SulfurStationaryHarvesterIcon.webp',
+                cost: {
+                    steel: 20
+                },
+                production: {
+                    time: 12,
+                    input: {
+                        heavy_oil: 4
+                    },
+                    output: {
+                        sulfur: 6
                     }
                 }
             },
