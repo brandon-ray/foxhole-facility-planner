@@ -251,7 +251,7 @@ p {
     text-align: left;
 }
 
-#sidebar-footer a, #sidebar-footer button, .close-statistics-button, .fullscreen-button {
+#sidebar-footer a, #sidebar-footer button, .close-statistics-button, .footer-button {
     display: inline-block;
     background: #050505;
     border: 2px solid #202020;
@@ -265,7 +265,7 @@ p {
     text-align: center;
 }
 
-#sidebar-footer a:hover, #sidebar-footer button:hover, .close-statistics-button:hover, .fullscreen-button:hover {
+#sidebar-footer a:hover, #sidebar-footer button:hover, .close-statistics-button:hover, .footer-button:hover {
     border: 2px solid white;
     color: white;
 }
@@ -420,17 +420,65 @@ p {
     margin: 0;
 }
 
-.close-statistics-button, .fullscreen-button {
+.close-statistics-button, .footer-button {
     width: 30px;
     height: 30px;
     line-height: 25px;
-    margin: 6px;
+    margin: 6px 6px 6px 0;
     font-size: 1.15em;
     float: right;
 }
 
 .close-statistics-button {
     margin: 3px;
+}
+
+#delete-confirmation-dialog {
+    width: 400px;
+    height: 200px;
+    background-color: rgba(0, 0, 0, 0.8);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -100px;
+    margin-left: -200px;
+}
+
+#delete-confirmation-dialog .confirmation-header {
+    background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
+    padding: 4px 4px 4px 9px;
+    position: relative;
+    text-align: left;
+}
+
+#delete-confirmation-dialog .confirmation-header > h3 {
+    display: inline-block;
+    margin: 0;
+}
+
+#delete-confirmation-dialog .confirmation-header > button {
+    margin: 2px;
+}
+
+#delete-confirmation-dialog .confirmation-body {
+    padding: 20px;
+}
+
+#delete-confirmation-dialog .confirmation-body > button {
+    width: 100%;
+    background: linear-gradient(rgb(255, 0, 0), rgb(168, 0, 0));
+    margin-top: 14px;
+    padding: 4px 4px 4px 9px;
+    position: relative;
+    font-size: 2em;
+    color: white;
+    border: 2px solid black;
+    box-shadow: 0 0 3px #000;
+    cursor: pointer;
+}
+
+#delete-confirmation-dialog .confirmation-body > button:hover {
+    border: 2px solid white;
 }
 
 .statistics-panel {
