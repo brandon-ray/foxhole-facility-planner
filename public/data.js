@@ -935,6 +935,9 @@
                 description: 'Used for storing raw resources for transfer into and out of Facilities. The stockpile for this structure can be reserved.', // Requires Construction Vehicle
                 category: 'factories',
                 icon: 'buildings/ResourceTransferStationIcon.webp',
+                texture: 'buildings/resource_transfer_station.png',
+                width: 6,
+                length: 9,
                 cost: {
                     construction_material: 35
                 }
@@ -944,6 +947,9 @@
                 description: 'Used for storing materials for transfer into and out of Facilities. The stockpile for this structure can be reserved.', // Requires Construction Vehicle
                 category: 'factories',
                 icon: 'buildings/MaterialTransferStationIcon.webp',
+                texture: 'buildings/material_transfer_station.png',
+                width: 6,
+                length: 12,
                 cost: {
                     construction_material: 35
                 }
@@ -953,6 +959,9 @@
                 description: 'Used for storing materials for transfer into and out of Facilities. The stockpile for this structure can be reserved.', // Requires Construction Vehicle
                 category: 'factories',
                 icon: 'buildings/LiquidTransferStationIcon.webp',
+                texture: 'buildings/liquid_transfer_station.png',
+                width: 6,
+                length: 8,
                 cost: {
                     construction_material: 35
                 }

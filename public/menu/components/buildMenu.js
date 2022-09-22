@@ -267,11 +267,12 @@ Vue.component('app-menu-statistics', {
                 let entity = game.getEntities()[i];
                 if (entity.type === 'building') {
                     let buildingData = window.objectData.buildings[entity.subtype];
-                    powerTotal += buildingData.power;
-                    if (buildingData.power > 0) {
-                        powerProduced += buildingData.power;
+                    let power = buildingData.power ? buildingData.power : 0;
+                    powerTotal += power;
+                    if (power > 0) {
+                        powerProduced += power;
                     } else {
-                        powerConsumed += buildingData.power;
+                        powerConsumed += power;
                     }
 
                     if (buildingData.cost) {
