@@ -1,7 +1,7 @@
 if (isMobile && !isPhoneApp) {
     console.info('Mobile is disabled for now.');
     document.getElementById('loading').remove();
-    document.getElementById('mobile-disabled-message').display = 'inline-block';
+    document.getElementById('mobile-disabled-message').style.display = 'inline-block';
 } else {
     game.loadVueApp = function() {
         let vueApp = new Vue({

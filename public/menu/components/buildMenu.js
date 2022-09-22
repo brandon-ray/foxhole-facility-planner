@@ -237,7 +237,8 @@ Vue.component('app-menu-statistics', {
             time: 3600,
             powerTotal: 0,
             powerProduced: 0,
-            powerConsumed: 0
+            powerConsumed: 0,
+            garrisonSupplies: 0,
         };
     },
     mounted() {

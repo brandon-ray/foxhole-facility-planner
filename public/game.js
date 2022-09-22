@@ -1148,6 +1148,16 @@ const fontFamily = ['Recursive', 'sans-serif'];
         entity.building = building;
         let sprite;
 
+        if (building.range) {
+            entity.rangeSprite = new PIXI.Graphics();
+            entity.rangeSprite.beginFill(0x72ff5a);
+            entity.rangeSprite.alpha = 0.25;
+            entity.rangeSprite.visible = false;
+            entity.rangeSprite.drawCircle(0, 0, building.range * METER_PIXEL_SIZE);
+            entity.rangeSprite.endFill();
+            entity.addChild(entity.rangeSprite);
+        }
+
         entity.isRail = false;
         if (entity.subtype === 'rail_small_gauge' || entity.subtype === 'rail_large_gauge') {
             entity.isRail = true;
@@ -1217,9 +1227,16 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
         const TRACK_SEGMENT_LENGTH = 16;
         entity.onSelect = function() {
+            if (entity.rangeSprite) {
+                entity.rangeSprite.visible = true;
+            }
             entity.updateHandles();
         };
         entity.onDeselect = function() {
+            if (entity.rangeSprite) {
+                entity.rangeSprite.visible = false;
+            }
+
             if (entity.isRail && entity.shouldSelectLastRailPoint && !selectedPoint) {
                 entity.shouldSelectLastRailPoint = false;
                 forceMouseDown[0] = true;
