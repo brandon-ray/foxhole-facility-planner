@@ -106,14 +106,14 @@ Vue.component('app-game-sidebar', {
                             <br>
                             <i class="fa fa-play fa-2x"></i>
                         </div>
-                        <div class="col" style="color:#03b003;" v-if="production.output">
-                            <app-game-resource-icon v-for="(value, key) in production.output" :resource="key" :amount="value"/>
-                        </div>
-                        <div class="col" v-if="hoverData.power > 0">
-                            <i class="fa fa-bolt fa-4x"></i>
-                            <div style="color:#03b003;">
-                                {{hoverData.power}} MW
+                        <div class="col" style="color:#03b003;">
+                            <div v-if="hoverData.power > 0">
+                                <i class="fa fa-bolt fa-4x"></i>
+                                <div style="color:#03b003;">
+                                    {{hoverData.power}} MW
+                                </div>
                             </div>
+                            <app-game-resource-icon v-if="production.output" v-for="(value, key) in production.output" :resource="key" :amount="value"/>
                         </div>
                     </div>
                     <h4 style="color:#d0d004; padding-left:10px;">
@@ -204,14 +204,14 @@ Vue.component('app-menu-building-selected', {
                         <br>
                         <i class="fa fa-play fa-2x"></i>
                     </div>
-                    <div class="col" style="color:#03b003;" v-if="production.output">
-                        <app-game-resource-icon v-for="(value, key) in production.output" :resource="key" :amount="value"/>
-                    </div>
-                    <div class="col" v-if="selectedEntity.building.power > 0">
-                        <i class="fa fa-bolt fa-4x"></i>
-                        <div style="color:#03b003;">
-                            {{selectedEntity.building.power}} MW
+                    <div class="col" style="color:#03b003;">
+                        <div v-if="selectedEntity.building.power > 0">
+                            <i class="fa fa-bolt fa-4x"></i>
+                            <div style="color:#03b003;">
+                                {{selectedEntity.building.power}} MW
+                            </div>
                         </div>
+                        <app-game-resource-icon v-if="production.output" v-for="(value, key) in production.output" :resource="key" :amount="value"/>
                     </div>
                 </div>
                 <h4 style="color:#d0d004; padding-left:10px;">

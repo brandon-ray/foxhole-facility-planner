@@ -112,6 +112,11 @@
                 icon: 'resources/ProcessedConstructionMaterialsIcon.webp',
                 type: 'solid'
             },
+            steel_construction_material: {
+                name: 'Steel Construction Material',
+                icon: 'resources/SteelIcon.webp',
+                type: 'solid'
+            },
             pipe: {
                 name: 'Pipe',
                 icon: 'resources/PipeIcon.webp',
@@ -147,6 +152,16 @@
                 icon: 'resources/250mm.webp',
                 type: 'solid'
             },
+            damaged_component: {
+                name: 'Damaged Component',
+                icon: 'resources/DamagedComponentIcon.png',
+                type: 'solid'
+            },
+            metal_beam: {
+                name: 'Metal Beam',
+                icon: 'resources/MetalBeamIcon.webp',
+                type: 'solid'
+            }
         },
         buildings: {
             foundation_corner: {
@@ -277,44 +292,47 @@
                     }
                 }],
                 upgrades: {
-                    forge_mat1: {
+                    forge: {
                         name: 'Forge',
                         power: -2,
                         icon: 'buildings/MaterialsFactoryForgeIcon.webp',
-                        production: [{
-                            time: 60,
-                            input: {
-                                salvage: 20,
-                                coke: 180
+                        cost: {
+                            construction_material: 200
+                        },
+                        production: [
+                            {
+                                time: 60,
+                                input: {
+                                    salvage: 15,
+                                    coke: 75
+                                },
+                                output: {
+                                    assembly_materials1: 1
+                                }
                             },
-                            output: {
-                                assembly_materials1: 1
+                            {
+                                time: 60,
+                                input: {
+                                    salvage: 15,
+                                    petrol: 50
+                                },
+                                output: {
+                                    assembly_materials2: 1
+                                }
                             }
-                        }]
-                    },
-                    forge_mat2: {
-                        name: 'Forge',
-                        power: -2,
-                        icon: 'buildings/MaterialsFactoryForgeIcon.webp',
-                        production: [{
-                            time: 60,
-                            input: {
-                                salvage: 20,
-                                petrol: 150
-                            },
-                            output: {
-                                assembly_materials2: 1
-                            }
-                        }]
+                        ]
                     },
                     metal_press: {
                         name: 'Metal Press',
                         power: -4,
                         icon: 'buildings/MaterialsFactoryMetalPressIcon.webp',
+                        cost: {
+                            construction_material: 25
+                        },
                         production: [{
                             time: 25,
                             input: {
-                                salvage: 20,
+                                salvage: 15,
                                 petrol: 25
                             },
                             output: {
@@ -326,10 +344,13 @@
                         name: 'Smelter',
                         power: -4,
                         icon: 'buildings/MaterialsFactorySmelterIcon.webp',
+                        cost: {
+                            construction_material: 25
+                        },
                         production: [{
                             time: 25,
                             input: {
-                                salvage: 20,
+                                salvage: 15,
                                 coke: 25
                             },
                             output: {
@@ -341,12 +362,14 @@
                         name: 'Recycler',
                         power: -2,
                         icon: 'buildings/MaterialsFactoryRecyclerIcon.webp',
+                        cost: {
+                            basic_material: 50
+                        },
                         production: [
                             {
                                 time: 25,
                                 input: {
-                                    salvage: 20,
-                                    petrol: 25
+                                    salvage: 25
                                 },
                                 output: {
                                     construction_material: 1,
@@ -356,7 +379,7 @@
                             {
                                 time: 25,
                                 input: {
-                                    salvage: 25,
+                                    salvage: 25
                                 },
                                 output: {
                                     construction_material: 1,
@@ -462,8 +485,11 @@
                         name: 'Reformer',
                         power: -1,
                         icon: 'buildings/OilRefineryIcon.webp',
+                        cost: {
+                            construction_material: 200
+                        },
                         production: [{
-                            time: 120,
+                            time: 150,
                             input: {
                                 oil: 120,
 								water: 30,
@@ -477,6 +503,9 @@
                         name: 'Cracking Unit',
                         power: -1.5,
                         icon: 'buildings/OilRefineryIcon.webp',
+                        cost: {
+                            processed_construction_material: 20
+                        },
                         production: [{
                             time: 160,
                             input: {
@@ -491,6 +520,9 @@
                         name: 'Petrochemical Plant',
                         power: -6,
                         icon: 'buildings/OilRefineryIcon.webp',
+                        cost: {
+                            steel_construction_material: 25
+                        },
                         production: [{
                             time: 200,
                             input: {
@@ -587,7 +619,7 @@
                 power: 12,
                 width: 7,
                 length: 7,
-                icon: 'buildings/PetrolPowerPlantIcon.webp',
+                icon: 'buildings/DieselPowerPlantIcon.webp',
                 cost: {
                     basic_material: 150,
                     processed_construction_material: 50
@@ -599,43 +631,63 @@
                     }
                 }]
             },
-            /*
             power_station: {
                 name: 'Power Station',
                 description: 'This Facility generates a large amount of power using Oil or Coal as inputs.', // Requires Construction Vehicle + Requires Tech
                 category: 'power',
+                icon: 'buildings/PowerStation.png',
                 power: 10,
                 width: 14,
                 length: 13,
                 cost: {
                     processed_construction_material: 25
                 },
-                production: [{
-                    time: 90,
-                    input: {
-                        oil: 50
+                production: [
+                    {
+                        time: 20,
+                        input: {
+                            oil: 50
+                        }
+                    },
+                    {
+                        time: 90,
+                        input: {
+                            coal: 60,
+                            water: 25
+                        }
                     }
-                }]
-            },
-            power_station_coal: {
-                name: 'Power Station (Coal)',
-                description: 'This Facility generates a large amount of power using Coal.', // Requires Tech
-                category: 'power',
-                power: 10,
-                width: 14,
-                length: 13,
-                cost: {
-                    processed_construction_material: 25
-                },
-                production: [{
-                    time: 90,
-                    input: {
-                        coal: 50,
-                        water: 25
+                ],
+                upgrades: {
+                    sulfuric_reactor: {
+                        name: 'Sulfuric Reactor',
+                        power: 16,
+                        cost: {
+                            steel_construction_material: 25
+                        },
+                        production: [
+                            {
+                                time: 120,
+                                input: {
+                                    heavy_oil: 50
+                                },
+                                output: {
+                                    sulfur: 5
+                                }
+                            },
+                            {
+                                time: 120,
+                                input: {
+                                    coal: 60,
+                                    water: 25
+                                },
+                                output: {
+                                    sulfur: 5
+                                }
+                            }
+                        ],
                     }
-                }]
+                }
             },
-            */
             stationary_harvester_scrap: {
                 name: 'Stationary Harvester (Scrap)',
                 description: 'A stationary harvester that automatically gathers Salvage using Petrol as fuel.', // Requires Construction Vehicle
@@ -921,7 +973,127 @@
                             pipe: 1
                         }
                     }
-                ]
+                ],
+                upgrades: {
+                    blast_furnace: {
+                        name: 'Blast Furnace',
+                        power: -5,
+                        cost: {
+                            processed_construction_material: 200
+                        },
+                        production: [
+                            {
+                                time: 120,
+                                input: {
+                                    processed_construction_material: 1,
+                                    heavy_oil: 66
+                                },
+                                output: {
+                                    assembly_materials4: 1
+                                }
+                            },
+                            {
+                                time: 120,
+                                input: {
+                                    construction_material: 3,
+                                    sulfur: 20
+                                },
+                                output: {
+                                    assembly_materials3: 1
+                                }
+                            },
+                            {
+                                time: 60,
+                                power: -8,
+                                input: {
+                                    construction_material: 3,
+                                    component: 55,
+                                    heavy_oil: 6
+                                },
+                                output: {
+                                    processed_construction_material: 3
+                                }
+                            }
+                        ]
+                    },
+                    recycler: {
+                        name: 'Recycler',
+                        power: -5,
+                        cost: {
+                            construction_material: 25
+                        },
+                        production: [
+                            {
+                                time: 60,
+                                input: {
+                                    construction_material: 3,
+                                    component: 20
+                                },
+                                output: {
+                                    processed_construction_material: 1,
+                                    metal_beam: 1
+                                }
+                            },
+                            {
+                                power: -4,
+                                time: 90,
+                                input: {
+                                    damaged_component: 30,
+                                },
+                                output: {
+                                    component: 20
+                                }
+                            }
+                        ]
+                    },
+                    engineering_station: {
+                        name: 'Engineering Station',
+                        power: -9,
+                        cost: {
+                            processed_construction_material: 150
+                        },
+                        production: [
+                            {
+                                time: 90,
+                                input: {
+                                    processed_construction_material: 3,
+                                    coke: 200,
+                                    sulfur: 65,
+                                    heavy_oil: 35
+                                },
+                                output: {
+                                    steel_construction_material: 1
+                                }
+                            },
+                            {
+                                power: -12,
+                                time: 90,
+                                input: {
+                                    processed_construction_material: 9,
+                                    coke: 375,
+                                    enriched_oil: 90,
+                                    water: 100
+                                },
+                                output: {
+                                    steel_construction_material: 3
+                                }
+                            },
+                            {
+                                power: -8,
+                                time: 120,
+                                input: {
+                                    steel_construction_material: 3,
+                                    coke: 245,
+                                    assembly_materials1: 15,
+                                    assembly_materials2: 15
+                                },
+                                output: {
+                                    assembly_materials5: 1
+                                }
+                            }
+                        ]
+                    }
+                }
             },
             field_modification_center: {
                 name: 'Field Modification Center',
@@ -1009,6 +1181,7 @@
                 let upgradeBuilding = Object.assign({}, building, upgrade);
                 upgradeBuilding.name = building.name + ' (' + upgrade.name + ')';
                 window.objectData.buildings[buildingKey + '_' + upgradeKey] = upgradeBuilding;
+                //TODO: Combine costs for upgrades with the base cost.
             }
         }
     }
