@@ -601,8 +601,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 }
                 xTotal += entityData.x;
                 yTotal += entityData.y;
-                entity.rotation = entityData.rotation;
-                entity.onLoad(entityData);
+
+                if (entity) {
+                    entity.rotation = entityData.rotation;
+                    entity.onLoad(entityData);
+                }
             }
             camera.x = Math.round(xTotal/saveObject.entities.length) - WIDTH/2;
             camera.y = Math.round(yTotal/saveObject.entities.length) - HEIGHT/2;
@@ -1140,8 +1143,15 @@ const fontFamily = ['Recursive', 'sans-serif'];
     const METER_PIXEL_SIZE = 32;
     function createBuilding(type, x, y, z, netData) {
         let entity = createEntity('building', type, x, y, z, netData);
+        entity.selectedProduction = 0;
 
         let building = window.objectData.buildings[type];
+        if (!building) {
+            console.error('Invalid building type:', type);
+            entity.remove();
+            return;
+        }
+
         entity.building = building;
         let sprite;
 
@@ -1438,9 +1448,15 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         rotation: point.rotation
                     });
                 }
+            } else {
+                entityData.selectedProduction = entity.selectedProduction;
             }
         };
         entity.onLoad = function(entityData) {
+            if (entityData.selectedProduction) {
+                entity.selectedProduction = entityData.selectedProduction;
+            }
+
             if (entity.isRail && entityData.railPoints) {
                 for (let i=0; i<points.length; i++) {
                     let point = points[i];
