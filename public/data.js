@@ -197,6 +197,196 @@
                 icon: 'ammo/4C-Fire_Rocket_Icon.webp',
                 type: 'solid'
             },
+            vehicle_obrien_v113: {
+                name: 'O\'Brien V.113 Gravekeeper',
+                icon: 'vehicles/O%3FBrien_v.113_Gravekeeper_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_obrien_v121: {
+                name: 'O\'Brien V.121 Highlander',
+                icon: 'vehicles/O%27Brien_v.121_Highlander_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_obrien_v130_wild_jack: {
+                name: 'O\'Brien V.130 Wild Jack',
+                icon: 'vehicles/O%27Brien_v130_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_obrien_v101_freeman: {
+                name: 'O\'Brien V.101 Freeman',
+                icon: 'vehicles/O%27Brien_v.101_Freeman_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_obrien_v110: {
+                name: 'O\'Brien V.110',
+                icon: 'vehicles/O%27Brien_v110_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_drummond_spitfire_100d: {
+                name: 'Drummond Spitfire 100d',
+                icon: 'vehicles/Drummond_Spitfire_100d_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_drummond_loscann_55c: {
+                name: 'Drummond Loscann 55c',
+                icon: 'vehicles/Drummond_Loscann_55c_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_noble_firebrand_mk_xvii: {
+                name: 'Noble Firebrand Mk. XVII',
+                icon: 'vehicles/Noble_Firebrand_Mk._XVII_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_noble_widow_mk_xiv: {
+                name: 'Noble Widow Mk. XIV',
+                icon: 'vehicles/Noble_Widow_MK._XIV_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_devitt_ironhide_mk_iv: {
+                name: 'Devitt Ironhide Mk. IV',
+                icon: 'vehicles/Devitt_Ironhide_Mk._IV_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_devitt_caine_mk_iv_mmr: {
+                name: 'Devitt-Caine Mk. IV MMR',
+                icon: 'vehicles/Devitte-Caine_Mk-IV_MMR_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_silverhand_chieftain_mk_vi: {
+                name: 'Silverhand Chieftain - Mk. VI',
+                icon: 'vehicles/Silverhand_Chieftan_-_Mk._VI_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_gallagher_highwayman_mk_iii: {
+                name: 'Gallagher Highwayman Mk. III',
+                icon: 'vehicles/Gallagher_Highwayman_Mk._III_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_balfour_rampart_68mm: {
+                name: 'Balfour Rampart 68mm',
+                icon: 'vehicles/Balfour_Rampart_68mm_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_collins_cannon_68mm: {
+                name: 'Collins Cannon 68mm',
+                icon: 'vehicles/Collins_Cannon_68mm_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_balfour_wolfhound_40mm: {
+                name: 'Balfour Wolfhound 40mm',
+                icon: 'vehicles/Balfour_Wolfhound_40mm_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_balfour_falconer_250mm: {
+                name: 'Balfour Falconer 250mm',
+                icon: 'vehicles/Balfour_Falconer_250mm_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_niska_mk_ii_blinder: {
+                name: 'Niska Mk. II Blinder',
+                icon: 'vehicles/Niska_Mk._2_Blinder_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_niska_mk_i_gun_motor_carraige: {
+                name: 'Niska Mk. I Gun Motor Carraige',
+                icon: 'vehicles/Niska_Mk._1_Gun_Motor_Carriage_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_mulloy_lpc: {
+                name: 'Mulloy LPC',
+                icon: 'vehicles/Mulloy_LPC_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_devitt_mk_iii: {
+                name: 'Devitt Mk. III',
+                icon: 'vehicles/Devitt_Mark_III_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_gallagher_outlaw_mk_ii: {
+                name: 'Gallagher Outlaw Mk. II',
+                icon: 'vehicles/Gallagher_Outlaw_Mk._II_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_silverhand_mk_iv: {
+                name: 'Silverhand - Mk. IV',
+                icon: 'vehicles/Silverhand_-_Mk._IV_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_kivela_power_wheel_80_1: {
+                name: 'Kivela Power Wheel 80-1',
+                icon: 'vehicles/Kivela_Power_Wheel_80-1_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_dunne_fuelrunner_2d: {
+                name: 'Dunne Fuelrunner 2d',
+                icon: 'vehicles/Dunne_Fuelrunner_2d_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_king_gallant_mk_ii: {
+                name: 'King Gallant Mk. II',
+                icon: 'vehicles/King_Gallant_MK-II_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_king_spire_mk_i: {
+                name: 'King Spire Mk. I',
+                icon: 'vehicles/King_Spire_MK-I_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_drummond_100a: {
+                name: 'Drummond 100a',
+                icon: 'vehicles/Drummond_100a_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_dunne_leatherback_2a: {
+                name: 'Dunne Leatherback 2a',
+                icon: 'vehicles/Dunne_Leatherback_2a_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_dunne_loadlugger_3c: {
+                name: 'Dunne Loadlugger 3c',
+                icon: 'vehicles/Dunne_Loadlugger_3c_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_dunne_landrunner_12c: {
+                name: 'Dunne Landrunner 12c',
+                icon: 'vehicles/Dunne_Landrunner_12c_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_dunne_transport: {
+                name: 'Dunne Transport',
+                icon: 'vehicles/Dunne_Transport_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_huber_starbreaker_94_5m: {
+                name: 'Huber Starbreaker 94.5mm',
+                icon: 'vehicles/Huber_Starbreaker_945mm_Structure_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_balfour_stockade_75mm: {
+                name: 'Balfour Stockade 75mm',
+                icon: 'vehicles/FieldCannonHeavyWIcon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_swallowtail_988_127_2: {
+                name: 'Swallowtail 988/127-2',
+                icon: 'vehicles/Swallowtail_988-145-2_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_rycker_4_3_f_wasp_nest: {
+                name: 'Rycker 4/3-F Wasp Nest',
+                icon: 'vehicles/FieldMultiWItemIcon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_niska_rycker_mk_ix_skycaller: {
+                name: 'Niska-Rycker Mk. IX Skycaller',
+                icon: 'vehicles/Niska-Rycker_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_gallagher_thornfall_mk_vi: {
+                name: 'Gallagher Thornfall Mk. VI',
+                icon: 'vehicles/MediumTank2IndirectWIcon.webp',
+                type: 'vehicle' // Warden
+            }
         },
         buildings: {
             foundation_corner: {
