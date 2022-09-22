@@ -87,11 +87,6 @@
                 icon: 'resources/AssemblyMaterials5Icon.webp',
                 type: 'solid'
             },
-            steel: {
-                name: 'Steel',
-                icon: 'resources/SteelIcon.webp',
-                type: 'solid'
-            },
             sandbag: {
                 name: 'Sandbag',
                 icon: 'resources/SandbagMaterialIcon.webp',
@@ -137,19 +132,14 @@
                 icon: 'resources/ConcreteMaterialsIcon.webp',
                 type: 'solid'
             },
+            explosive_material: {
+                name: 'Explosive Material',
+                icon: 'resources/ExplosiveMaterialIcon.webp',
+                type: 'solid'
+            },
             heavy_explosive_material: {
                 name: 'Heavy Explosive Material',
                 icon: 'resources/HeavyExplosiveMaterialIcon.webp',
-                type: 'solid'
-            },
-            ammo_flame: {
-                name: 'Flame Ammo',
-                icon: 'resources/FlameAmmoIcon.png',
-                type: 'solid'
-            },
-            ammo_250mm: {
-                name: '250mm',
-                icon: 'resources/250mm.webp',
                 type: 'solid'
             },
             damaged_component: {
@@ -161,7 +151,52 @@
                 name: 'Metal Beam',
                 icon: 'resources/MetalBeamIcon.webp',
                 type: 'solid'
-            }
+            },
+            ammo_flame: {
+                name: 'Flame Ammo',
+                icon: 'ammo/FlameAmmoIcon.png',
+                type: 'solid'
+            },
+            ammo_250mm: {
+                name: '250mm',
+                icon: 'ammo/250mm.webp',
+                type: 'solid'
+            },
+            ammo_75mm: {
+                name: '75mm',
+                icon: 'ammo/75mm.webp',
+                type: 'solid'
+            },
+            ammo_94_5mm: {
+                name: '94.5mm',
+                icon: 'ammo/94_5mm.webp',
+                type: 'solid'
+            },
+            ammo_300mm: {
+                name: '300mm',
+                icon: 'ammo/300mm.webp',
+                type: 'solid'
+            },
+            ammo_120mm: {
+                name: '120mm',
+                icon: 'ammo/120mm.webp',
+                type: 'solid'
+            },
+            ammo_150mm: {
+                name: '150mm',
+                icon: 'ammo/150mm.webp',
+                type: 'solid'
+            },
+            ammo_3c_high_explosive_rocket: {
+                name: '3C High Explosive Rocket',
+                icon: 'ammo/3C-High_Explosive_Rocket_Icon.webp',
+                type: 'solid'
+            },
+            ammo_4c_fire_rocket: {
+                name: '4C Fire Rocket',
+                icon: 'ammo/4C-Fire_Rocket_Icon.webp',
+                type: 'solid'
+            },
         },
         buildings: {
             foundation_corner: {
@@ -267,7 +302,7 @@
                 description: 'A segment of railway for heavy cranes. This type of railway can only be built on Foundations.', // Requires Tech
                 category: 'foundations',
                 cost: {
-                    steel: 3
+                    steel_construction_material: 3
                 }
             },
             */
@@ -718,7 +753,7 @@
                 length: 7,
                 icon: 'buildings/ComponentsStationaryHarvesterIcon.webp',
                 cost: {
-                    steel: 20
+                    construction_material: 175
                 },
                 production: [{
                     time: 12,
@@ -760,7 +795,7 @@
                 length: 7,
                 icon: 'buildings/SulfurStationaryHarvesterIcon.webp',
                 cost: {
-                    steel: 20
+                    steel_construction_material: 20
                 },
                 production: [{
                     time: 12,
@@ -900,48 +935,130 @@
                 BMS Longrider (Flatbed Car)
                 */
             },
-            /*
             ammunition_factory: {
                 name: 'Ammunition Factory',
                 description: 'A factory that produces various types of heavy and advanced ammunition.', // Requires Construction Vehicle + Requires Tech
                 category: 'factories',
+                width: 7,
+                length: 14,
                 power: -4,
                 icon: 'buildings/AmmunitionFactoryIcon.webp',
                 cost: {
                     processed_construction_material: 25
                 },
-                production: [{
-                    time: 25,
-                    input: {
-                        heavy_explosive_material: 1,
-                        construction_material: 1
+                production: [
+                    {
+                        time: 25,
+                        input: {
+                            heavy_explosive_material: 1,
+                            construction_material: 1
+                        },
+                        output: {
+                            ammo_flame: 1
+                        }
                     },
-                    output: {
-                        ammo_flame: 1
+                    {
+                        time: 30,
+                        input: {
+                            heavy_explosive_material: 6,
+                            construction_material: 1
+                        },
+                        output: {
+                            ammo_250mm: 1
+                        }
                     }
-                }]
-            },
-            ammunition_factory: {
-                name: 'Ammunition Factory',
-                description: 'A factory that produces various types of heavy and advanced ammunition.', // Requires Construction Vehicle + Requires Tech
-                category: 'factories',
-                power: -4,
-                icon: 'buildings/AmmunitionFactoryIcon.webp',
-                cost: {
-                    processed_construction_material: 25
-                },
-                production: [{
-                    time: 30,
-                    input: {
-                        heavy_explosive_material: 6,
-                        construction_material: 1
+                ],
+                upgrades: {
+                    rocket_factory: {
+                        name: 'Rocket Factory',
+                        power: -4,
+                        cost: {
+                            processed_construction_material: 35
+                        },
+                        production: [
+                            {
+                                time: 25,
+                                input: {
+                                    heavy_explosive_material: 1,
+                                    construction_material: 2
+                                },
+                                output: {
+                                    ammo_3c_high_explosive_rocket: 1
+                                }
+                            },
+                            {
+                                time: 25,
+                                input: {
+                                    heavy_explosive_material: 1,
+                                    construction_material: 2
+                                },
+                                output: {
+                                    ammo_4c_fire_rocket: 1
+                                }
+                            }
+                        ]
                     },
-                    output: {
-                        ammo_250mm: 1
+                    large_shell_factory: {
+                        name: 'Large Shell Factory',
+                        power: -4,
+                        cost: {
+                            processed_construction_material: 175
+                        },
+                        production: [
+                            {
+                                time: 25,
+                                input: {
+                                    heavy_explosive_material: 2,
+                                    construction_material: 2
+                                },
+                                output: {
+                                    ammo_75mm: 1
+                                }
+                            },
+                            {
+                                time: 25,
+                                input: {
+                                    heavy_explosive_material: 2,
+                                    construction_material: 2
+                                },
+                                output: {
+                                    ammo_94_5mm: 1
+                                }
+                            },
+                            {
+                                time: 25,
+                                input: {
+                                    heavy_explosive_material: 6,
+                                    construction_material: 4
+                                },
+                                output: {
+                                    ammo_300mm: 1
+                                }
+                            },
+                            {
+                                time: 15,
+                                input: {
+                                    explosive_material: 3,
+                                    construction_material: 2
+                                },
+                                output: {
+                                    ammo_120mm: 1
+                                }
+                            },
+                            {
+                                time: 20,
+                                input: {
+                                    heavy_explosive_material: 2,
+                                    construction_material: 3
+                                },
+                                output: {
+                                    ammo_150mm: 1
+                                }
+                            }
+                        ]
                     }
-                }]
+                }
             },
-            */
             metalworks_factory: {
                 name: 'Metalworks Factory',
                 description: 'It takes an input of Construction Materials and outputs small amount of a Processed Construction Materials used in Tier 2 Facilities construction.', // Requires Construction Vehicle + Requires Tech
@@ -1148,7 +1265,7 @@
                 description: 'TBD', // Requires Tech
                 category: 'factories',
                 cost: {
-                    steel: 35
+                    steel_construction_material: 35
                 }
             },
             */
