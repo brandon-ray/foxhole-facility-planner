@@ -503,6 +503,8 @@
                 description: 'This Facility generates a large amount of power using Oil or Coal as inputs.', // Requires Construction Vehicle + Requires Tech
                 category: 'power',
                 power: 10,
+                width: 14,
+                length: 13,
                 cost: {
                     processed_construction_material: 25
                 },
@@ -518,6 +520,8 @@
                 description: 'This Facility generates a large amount of power using Coal.', // Requires Tech
                 category: 'power',
                 power: 10,
+                width: 14,
+                length: 13,
                 cost: {
                     processed_construction_material: 25
                 },
@@ -614,11 +618,12 @@
                     }
                 }
             },
-            /*
             water_pump: {
                 name: 'Water Pump',
                 description: 'Pumps Water to the surface. Must be built over bodies of water.',
                 category: 'harvesters',
+                width: 5,
+                length: 6,
                 icon: 'buildings/WaterPumpIcon.webp',
                 cost: {
                     construction_material: 35
@@ -634,6 +639,8 @@
                 name: 'Oil Well',
                 description: 'Extracts Oil from an underground source. Must be built near a Crude Oil field.', // Requires Construction Vehicle
                 category: 'harvesters',
+                width: 4,
+                length: 7,
                 icon: 'buildings/OilWellFrackerIcon.webp',
                 cost: {
                     construction_material: 35
@@ -645,7 +652,6 @@
                     }
                 }
             },
-            */
             fuel_silo: {
                 name: 'Fuel Silo',
                 description: 'Stores various types of fuel, including Heavy Oil, Petrol, and Crude Oil.', // Requires Construction Vehicle + Requires Tech
