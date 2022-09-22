@@ -119,6 +119,20 @@
             }
         },
         buildings: {
+            /*
+            foundation_corner: {
+                name: 'Foundation Corner',
+                description: 'A foundation for building out areas suitable for Facilities construction.', // Requires Construction Vehicle + Consumes 2x more Garrison Supplies
+                category: 'foundations',
+                power: 0,
+                icon: 'buildings/ConcreteFoundation02Icon.png',
+                texture: 'concrete.png',
+                sortOffset: -1000,
+                cost: {
+                    gravel: 75
+                }
+            },
+            */
             foundation_1x1: {
                 name: 'Foundation 1x1',
                 description: 'A foundation for building out areas suitable for Facilities construction.', // Requires Construction Vehicle + Consumes 2x more Garrison Supplies
@@ -191,6 +205,16 @@
                     processed_construction_material: 5
                 }
             },
+            /*
+            crane_railway_track: {
+                name: 'Crane Railway Track',
+                description: 'A segment of railway for heavy cranes. This type of railway can only be built on Foundations.', // Requires Tech
+                category: 'foundations',
+                cost: {
+                    steel: 3
+                }
+            },
+            */
             materials_factory: {
                 name: 'Materials Factory',
                 category: 'factories',
@@ -427,6 +451,35 @@
                     }
                 }
             },
+            /*
+            power_station: {
+                name: 'Power Station',
+                description: 'This Facility generates a large amount of power using Oil or Coal as inputs.', // Requires Construction Vehicle + Requires Tech
+                category: 'power',
+                power: 10,
+                cost: {
+                    processed_construction_material: 25
+                },
+                production: {
+                    time: 90,
+                    input: {
+                        oil: 50
+                    }
+                },
+                upgrades: {
+                    variant: {
+                        power: 10,
+                        production: {
+                            time: 90,
+                            input: {
+                                coal: 60,
+                                water: 25
+                            }
+                        }
+                    },
+                }
+            },
+            */
             stationary_harvester_scrap: {
                 name: 'Stationary Harvester (Scrap)',
                 description: 'A stationary harvester that automatically gathers Salvage using Petrol as fuel.', // Requires Construction Vehicle
@@ -445,6 +498,27 @@
                     },
                     output: {
                         salvage: 50
+                    }
+                }
+            },
+            stationary_harvester_components: {
+                name: 'Stationary Harvester (Components)',
+                description: 'A stationary harvester that automatically gathers Components using Heavy Oil as fuel.', // Requires Construction Vehicle
+                category: 'harvesters',
+                power: 0,
+                width: 5,
+                length: 7,
+                icon: 'buildings/ComponentsStationaryHarvesterIcon.webp',
+                cost: {
+                    steel: 20
+                },
+                production: {
+                    time: 12,
+                    input: {
+                        petrol: 4 // (The icon shown is clearly Petrol but the description states Heavy Oil in-game...)
+                    },
+                    output: {
+                        component: 6
                     }
                 }
             },
@@ -490,6 +564,38 @@
                     }
                 }
             },
+            /*
+            water_pump: {
+                name: 'Water Pump',
+                description: 'Pumps Water to the surface. Must be built over bodies of water.',
+                icon: 'buildings/WaterPumpIcon.webp',
+                cost: {
+                    construction_material: 35
+                },
+                category: 'harvesters',
+                production: {
+                    time: 50,
+                    output: {
+                        water: 1
+                    }
+                }
+            },
+            oil_well: {
+                name: 'Oil Well',
+                description: 'Extracts Oil from an underground source. Must be built near a Crude Oil field.', // Requires Construction Vehicle
+                icon: 'buildings/OilWellFrackerIcon.webp',
+                cost: {
+                    construction_material: 35
+                },
+                category: 'harvesters',
+                production: {
+                    time: 50,
+                    output: {
+                        oil: 1
+                    }
+                }
+            },
+            */
             metalworks_factory: {
                 name: 'Metalworks Factory (Processed Construction Materials)',
                 category: 'factories',
