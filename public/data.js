@@ -217,6 +217,7 @@
             */
             materials_factory: {
                 name: 'Materials Factory',
+                description: 'Used to create Construction Materials. Can be modified to produce additional materials.', // Requires Construction Vehicle
                 category: 'factories',
                 power: -2,
                 width: 6,
@@ -228,7 +229,7 @@
                 production: {
                     time: 25,
                     input: {
-                        salvage: 20
+                        salvage: 10
                     },
                     output: {
                         construction_material: 1
@@ -330,6 +331,7 @@
             },
             coal_refinery: {
                 name: 'Coal Refinery',
+                description: 'This Facility refines Coal into other useful materials for the purposes of production and power generation.', // Requires Construction Vehicle
                 category: 'factories',
                 power: -3,
                 width: 6,
@@ -350,6 +352,7 @@
             },
             oil_refinery: {
                 name: 'Oil Refinery',
+                description: 'This Facility refines Oil into other useful materials for the purposes of production and power generation.', // Requires Construction Vehicle
                 category: 'factories',
                 power: -1,
                 width: 4,
@@ -370,6 +373,7 @@
             },
             maintenance_tunnel: {
                 name: 'Maintenance Tunnel',
+                description: 'Prevents decay for Facilities and Railway Tracks by providing Garrison Supplies to nearby structures. Garrison Supplies can also be produced on site using Construction Materials. The rate of Garrison Supplies consumption is 2 per hour per structure once decay has begun. Some structures have additional consumption requirements.', // Requires Construction Vehicle + Cannot be close to other Maintenance Tunnels
                 category: 'misc',
                 power: -2,
                 width: 3,
@@ -391,6 +395,7 @@
             },
             bms_foreman_stacker: {
                 name: 'BMS Foreman Stacker',
+                description: 'The Foreman is an all-purpose, no-frills, easy to assemble crane. Perfect for hauling heavy loads in facilities where loading and offloading is commonplace.', // Requires Construction Vehicle + Requires Tech
                 category: 'misc',
                 power: -0.5,
                 width: 3,
@@ -465,18 +470,22 @@
                     input: {
                         oil: 50
                     }
+                }
+            },
+            power_station_coal: {
+                name: 'Power Station (Coal)',
+                description: 'This Facility generates a large amount of power using Coal.', // Requires Tech
+                category: 'power',
+                power: 10,
+                cost: {
+                    processed_construction_material: 25
                 },
-                upgrades: {
-                    variant: {
-                        power: 10,
-                        production: {
-                            time: 90,
-                            input: {
-                                coal: 60,
-                                water: 25
-                            }
-                        }
-                    },
+                production: {
+                    time: 90,
+                    input: {
+                        coal: 50,
+                        water: 25
+                    }
                 }
             },
             */
@@ -568,6 +577,7 @@
             water_pump: {
                 name: 'Water Pump',
                 description: 'Pumps Water to the surface. Must be built over bodies of water.',
+                category: 'harvesters',
                 icon: 'buildings/WaterPumpIcon.webp',
                 cost: {
                     construction_material: 35
@@ -583,11 +593,11 @@
             oil_well: {
                 name: 'Oil Well',
                 description: 'Extracts Oil from an underground source. Must be built near a Crude Oil field.', // Requires Construction Vehicle
+                category: 'harvesters',
                 icon: 'buildings/OilWellFrackerIcon.webp',
                 cost: {
                     construction_material: 35
                 },
-                category: 'harvesters',
                 production: {
                     time: 50,
                     output: {
@@ -596,15 +606,92 @@
                 }
             },
             */
+            fuel_silo: {
+                name: 'Fuel Silo',
+                description: 'Stores various types of fuel, including Heavy Oil, Petrol, and Crude Oil.', // Requires Construction Vehicle + Requires Tech
+                category: 'factories',
+                cost: {
+                    construction_material: 30
+                },
+                capacity: 500
+            },
+            pipeline_valve: {
+                name: 'Pipeline Valve',
+                description: 'Controls the rate of flow through a pipeline. Requires a Wrench for adjustment.', // Requires Tech
+                category: 'factories',
+                cost: {
+                    pipe: 2
+                }
+            },
+            light_vehicle_assembly_station: {
+                name: 'Light Vehicle Assembly Station',
+                description: 'Allows production of a wide variety of vehicles and equipment. Production takes time and can be halted if resources are depleted. Some variants require a base vehicle to be present on the Assembly Station before production can begin. Essential vehicles and equipment are produced here.', // Requires Construction Vehicle
+                category: 'factories',
+                cost: {
+                    construction_material: 75
+                }
+                /*
+                Colonial-Vehicles
+
+                Material Pallet
+                00MS "Stinger" (Motorcycle)
+                R-5b "Sisyphus" Hauler (Truck)
+                R-9 "Speartip" Escort (Truck)
+                BMS Mineseeker (Small Train Locomotive)
+                BMS Railtruck (Small Container Car)
+                BMS Linerunner (Small Flatbed Car)
+                */
+            },
+            /*
+            ammunition_factory: {
+                name: 'Ammunition Factory',
+                description: 'A factory that produces various types of heavy and advanced ammunition.', // Requires Construction Vehicle + Requires Tech
+                category: 'factories',
+                power: -4,
+                cost: {
+                    processed_construction_material: 25
+                },
+                production: {
+                    time: 25,
+                    input: {
+                        heavy_explosive_material: 1,
+                        construction_material: 1
+                    },
+                    output: {
+                        flame_fuel: 1
+                    }
+                }
+            },
+            ammunition_factory: {
+                name: 'Ammunition Factory',
+                description: 'A factory that produces various types of heavy and advanced ammunition.', // Requires Construction Vehicle + Requires Tech
+                category: 'factories',
+                power: -4,
+                cost: {
+                    processed_construction_material: 25
+                },
+                production: {
+                    time: 30,
+                    input: {
+                        heavy_explosive_material: 6,
+                        construction_material: 1
+                    },
+                    output: {
+                        ammo_250mm: 1
+                    }
+                }
+            },
+            */
             metalworks_factory: {
                 name: 'Metalworks Factory (Processed Construction Materials)',
+                description: 'It takes an input of Construction Materials and outputs small amount of a Processed Construction Materials used in Tier 2 Facilities construction.', // Requires Construction Vehicle + Requires Tech
                 category: 'factories',
                 power: -5,
                 width: 9,
                 length: 12,
                 icon: 'buildings/MetalworksFactoryIcon.webp',
                 cost: {
-                    processed_construction_material: 125
+                    construction_material: 125
                 },
                 production: {
                     time: 60,
@@ -632,6 +719,20 @@
                     output: {
                         pipe: 1
                     }
+                }
+            },
+            field_modification_center: {
+                name: 'Field Modification Center',
+                description: 'Vehicles can be further upgraded into higher tiers using this Facility. Higher tier vehicles have improved durability.', // Requires Construction Vehicle + Requires Tech
+                cost: {
+                    processed_construction_material: 250
+                }
+            },
+            liquid_transfer_station: {
+                name: 'Liquid Transfer Station',
+                description: 'Used for storing materials for transfer into and out of Facilities. The stockpile for this structure can be reserved.', // Requires Construction Vehicle
+                cost: {
+                    construction_material: 35
                 }
             },
             sound_test: {
