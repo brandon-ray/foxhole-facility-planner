@@ -637,7 +637,7 @@
                 category: 'foundations',
                 icon: 'buildings/ProvisionalRoadIcon.webp',
                 power: 0,
-                width: 4,
+                width: 5,
                 length: 2,
                 maxLength: 26,
                 texture: 'provisional_road.jpg',
