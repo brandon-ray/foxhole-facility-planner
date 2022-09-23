@@ -1581,6 +1581,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
     };
 
     game.removeEntities = function() {
+        if (game.selectedEntity) {
+            game.buildMenuComponent.changeMenu(null);
+            game.selectedEntity = null;
+        }
         for (let i=0; i<entities.length; i++) {
             let entity = entities[i];
             entity.remove();
