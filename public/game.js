@@ -1559,6 +1559,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
     game.setCurrentBuilding = function(building) {
         currentBuilding = building;
         if (currentBuilding) {
+            currentBuilding.selectTime = Date.now();
             currentBuilding.selectPosition = {x: gmx, y: gmy};
         }
     };
@@ -1676,7 +1677,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 };
                 currentBuilding.rotation = angle;
             } else {
-                if (!selectedPoint && (!currentBuilding.selectPosition || Math.distanceBetween(currentBuilding.selectPosition, {x: gmx, y: gmy}) > 20)) {
+                if (!selectedPoint && (!currentBuilding.selectPosition || (Date.now()-currentBuilding.selectTime > 250 || Math.distanceBetween(currentBuilding.selectPosition, {x: gmx, y: gmy}) > 20))) {
                     currentBuilding.selectPosition = null;
 
                     currentBuilding.x = gmx - currentBuildingOffset.x;

@@ -502,8 +502,8 @@
                 icon: 'vehicles/H-19_Vulcan_Vehicle_Icon.webp',
                 type: 'vehicle' // Colonial
             },
-            vehicle_h_10_peleskys: {
-                name: 'H-10 "Peleskys"',
+            vehicle_h_10_pelekys: {
+                name: 'H-10 "Pelekys"',
                 icon: 'vehicles/H-10_Pelekys_Vehicle_Icon.webp',
                 type: 'vehicle' // Colonial
             },
@@ -1278,11 +1278,609 @@
                 name: 'Light Vehicle Assembly Station',
                 description: 'Allows production of a wide variety of vehicles and equipment. Production takes time and can be halted if resources are depleted. Some variants require a base vehicle to be present on the Assembly Station before production can begin. Essential vehicles and equipment are produced here.', // Requires Construction Vehicle
                 category: 'factories',
+                power: -2,
                 width: 8,
                 length: 14,
                 icon: 'buildings/LightVehicleAssemblyStationIcon.webp',
                 cost: {
                     construction_material: 75
+                },
+                production: [
+                    {
+                        time: 5,
+                        input: {
+                            basic_material: 25
+                        },
+                        output: {
+                            vehicle_material_pallet: 1
+                        }
+                    },
+                    {
+                        team: 'c',
+                        time: 180,
+                        input: {
+                            construction_material: 5
+                        },
+                        output: {
+                            vehicle_00ms_stinger: 1
+                        }
+                    },
+                    {
+                        team: 'c',
+                        time: 300,
+                        input: {
+                            construction_material: 10
+                        },
+                        output: {
+                            vehicle_r_5_atlas_hauler: 1
+                        }
+                    },
+                    {
+                        team: 'c',
+                        time: 300,
+                        input: {
+                            construction_material: 10
+                        },
+                        output: {
+                            vehicle_r_5b_sisyphus_hauler: 1
+                        }
+                    },
+                    {
+                        team: 'c',
+                        time: 300,
+                        input: {
+                            construction_material: 10
+                        },
+                        output: {
+                            vehicle__r_9_speartip_escort: 1
+                        }
+                    },
+                    {
+                        team: 'w',
+                        time: 300,
+                        input: {
+                            construction_material: 10
+                        },
+                        output: {
+                            vehicle_dunne_leatherback_2a: 1
+                        }
+                    },
+                    {
+                        team: 'w',
+                        time: 300,
+                        input: {
+                            construction_material: 10
+                        },
+                        output: {
+                            vehicle_dunne_landrunner_12c: 1
+                        }
+                    },
+                    {
+                        time: 900,
+                        input: {
+                            construction_material: 125,
+                            assembly_materials1: 10,
+                            assembly_materials2: 20
+                        },
+                        output: {
+                            vehicle_bms_mineseeker: 1
+                        }
+                    },
+                    {
+                        time: 300,
+                        input: {
+                            construction_material: 35,
+                            assembly_materials1: 15,
+                            assembly_materials2: 5
+                        },
+                        output: {
+                            vehicle_bms_railtruck: 1
+                        }
+                    },
+                    {
+                        time: 300,
+                        input: {
+                            construction_material: 35,
+                            assembly_materials1: 15,
+                            assembly_materials2: 5
+                        },
+                        output: {
+                            vehicle_bms_linerunner: 1
+                        }
+                    }
+                ],
+				upgrades: {
+                    motor_pool: {
+                        name: 'Motor Pool',
+                        power: -2,
+                        icon: 'buildings/LightVehicleAssemblyStationIcon.webp', // REPLACEME
+                        cost: {
+                            construction_material: 200
+                        },
+                        production: [
+                            {
+                                team: 'c',
+                                time: 300,
+                                input: {
+                                    processed_construction_material: 10,
+                                    assembly_materials1: 10
+                                },
+                                output: {
+                                    vehicle_t5_percutio: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 300,
+                                input: {
+                                    construction_material: 20,
+                                    assembly_materials1: 10
+                                },
+                                output: {
+                                    vehicle_t8_gemini: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 300,
+                                input: {
+                                    construction_material: 20,
+                                    assembly_materials1: 15
+                                },
+                                output: {
+                                    vehicle_t20_ixion_tankette: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 600,
+                                input: {
+                                    processed_construction_material: 10,
+                                    assembly_materials1: 15
+                                },
+                                output: {
+                                    vehicle_t14_vesta_tankette: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 180,
+                                input: {
+                                    construction_material: 5
+                                },
+                                output: {
+                                    vehicle_uv_5c_odyssey: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 180,
+                                input: {
+                                    construction_material: 5,
+                                    assembly_materials2: 10
+                                },
+                                output: {
+                                    vehicle_uv_24_icarus: 1
+                                }
+                            },
+                            {
+                                team: 'w',
+                                time: 300,
+                                input: {
+                                    processed_construction_material: 10,
+                                    assembly_materials1: 10
+                                },
+                                output: {
+                                    vehicle_obrien_v110: 1
+                                }
+                            },
+                            {
+                                team: 'w',
+                                time: 300,
+                                input: {
+                                    construction_material: 5,
+                                    assembly_materials1: 5
+                                },
+                                output: {
+                                    vehicle_obrien_v121: 1
+                                }
+                            },
+                            {
+                                team: 'w',
+                                time: 300,
+                                input: {
+                                    processed_construction_material: 10,
+                                    assembly_materials1: 10
+                                },
+                                output: {
+                                    vehicle_obrien_v130_wild_jack: 1
+                                }
+                            },
+                            {
+                                team: 'w',
+                                time: 300,
+                                input: {
+                                    construction_material: 15,
+                                    assembly_materials1: 15
+                                },
+                                output: {
+                                    vehicle_obrien_v101_freeman: 1
+                                }
+                            },
+                            {
+                                team: 'w',
+                                time: 180,
+                                input: {
+                                    construction_material: 3,
+                                    assembly_materials2: 10
+                                },
+                                output: {
+                                    vehicle_drummond_spitfire_100d: 1
+                                }
+                            },
+                            {
+                                team: 'w',
+                                time: 180,
+                                input: {
+                                    construction_material: 3,
+                                    assembly_materials2: 5,
+                                },
+                                output: {
+                                    vehicle_drummond_loscann_55c: 1
+                                }
+                            }
+                        ]
+                    },
+                    rocket_factory: {
+                        name: 'Rocket Factory',
+                        power: -2,
+                        icon: 'buildings/LightVehicleAssemblyStationIcon.webp', // REPLACEME
+                        cost: {
+                            processed_construction_material: 65
+                        },
+                        production: [
+                            /*
+                            We have no data for these yet. Need a colonial to go in-game and get screenshots of these and input their recipes.
+                            {
+                                team: 'c',
+                                output: {
+                                    vehicle_r_17_retiarius_skirmisher: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                output: {
+                                    vehicle_dae_3b_2_hades_net: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                output: {
+                                    vehicle_hh_b_hoplite: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                output: {
+                                    vehicle_hh_d_peltast: 1
+                                }
+                            },
+                            */
+                            {
+                                team: 'w',
+                                time: 300,
+                                input: {
+                                    processed_construction_material: 10,
+                                    assembly_materials1: 10,
+                                    assembly_materials3: 8
+                                },
+                                output: {
+                                    vehicle_niska_rycker_mk_ix_skycaller: 1
+                                }
+                            },
+                            {
+                                team: 'w',
+                                time: 600,
+                                input: {
+                                    processed_construction_material: 20,
+                                    assembly_materials2: 15,
+                                    assembly_materials4: 3
+                                },
+                                output: {
+                                    vehicle_rycker_4_3_f_wasp_nest: 1
+                                }
+                            },
+                            {
+                                team: 'w',
+                                time: 300,
+                                input: {
+                                    processed_construction_material: 5,
+                                    assembly_materials2: 10,
+                                    assembly_materials4: 3
+                                },
+                                output: {
+                                    vehicle_rycker_4_3_f_wasp_nest: 1
+                                }
+                            }
+                        ]
+                    },
+                    field_station: {
+                        name: 'Field Station',
+                        power: -2,
+                        icon: 'buildings/LightVehicleAssemblyStationIcon.webp', // REPLACEME
+                        cost: {
+                            processed_construction_material: 25
+                        },
+                        production: [
+                            {
+                                time: 900,
+                                input: {
+                                    processed_construction_material: 90,
+                                    assembly_materials4: 25,
+                                },
+                                output: {
+                                    vehicle_bms_scrap_hauler: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 180,
+                                input: {
+                                    construction_material: 15
+                                },
+                                output: {
+                                    vehicle_hs_2_scorpion: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 300,
+                                input: {
+                                    processed_construction_material: 10,
+                                    assembly_materials3: 5
+                                },
+                                output: {
+                                    vehicle_ab_11_doru: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 300,
+                                input: {
+                                    processed_construction_material: 10,
+                                    assembly_materials4: 10
+                                },
+                                output: {
+                                    vehicle_40_45_smelter: 1
+                                }
+                            },
+                            {
+                                team: 'w',
+                                time: 300,
+                                input: {
+                                    processed_construction_material: 5,
+                                    assembly_materials3: 5,
+                                },
+                                output: {
+                                    vehicle_king_gallant_mk_ii: 1
+                                }
+                            },
+                            {
+                                team: 'w',
+                                time: 300,
+                                input: {
+                                    processed_construction_material: 5,
+                                    assembly_materials4: 5,
+                                },
+                                output: {
+                                    vehicle_balfour_rampart_68mm: 1
+                                }
+                            }
+                        ]
+                    },
+                    tank_factory: {
+                        name: 'Tank Factory',
+                        power: -2,
+                        icon: 'buildings/LightVehicleAssemblyStationIcon.webp', // REPLACEME
+                        cost: {
+                            processed_construction_material: 200
+                        },
+                        production: [
+                            {
+                                team: 'c',
+                                time: 300,
+                                input: {
+                                    processed_construction_material: 35,
+                                    assembly_materials2: 20,
+                                    assembly_materials3: 10
+                                },
+                                output: {
+                                    vehicle_h_19_vulcan: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 300,
+                                input: {
+                                    processed_construction_material: 15,
+                                    assembly_materials2: 20,
+                                    assembly_materials3: 10
+                                },
+                                output: {
+                                    vehicle_h_10_pelekys: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 300,
+                                input: {
+                                    processed_construction_material: 10,
+                                    assembly_materials1: 20,
+                                    assembly_materials4: 10
+                                },
+                                output: {
+                                    vehicle_h_8_kranesca: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 420,
+                                input: {
+                                    processed_construction_material: 15,
+                                    assembly_materials1: 10,
+                                    assembly_materials4: 15
+                                },
+                                output: {
+                                    vehicle_85k_a_spatha: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 420,
+                                input: {
+                                    processed_construction_material: 20,
+                                    assembly_materials2: 10,
+                                    assembly_materials3: 20
+                                },
+                                output: {
+                                    vehicle_86k_c_ranseur: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 600,
+                                input: {
+                                    processed_construction_material: 155,
+                                    assembly_materials3: 10,
+                                    assembly_materials4: 25
+                                },
+                                output: {
+                                    vehicle_dae_2a_1_ruptura: 1
+                                }
+                            },
+                            {
+                                team: 'w',
+                                time: 420,
+                                input: {
+                                    processed_construction_material: 10,
+                                    assembly_materials1: 10,
+                                    assembly_materials3: 15
+                                },
+                                output: {
+                                    vehicle_noble_firebrand_mk_xvii: 1
+                                }
+                            },
+                            {
+                                team: 'w',
+                                time: 300,
+                                input: {
+                                    processed_construction_material: 8,
+                                    assembly_materials2: 20,
+                                    assembly_materials3: 5
+                                },
+                                output: {
+                                    vehicle_devitt_ironhide_mk_iv: 1
+                                }
+                            },
+                            {
+                                team: 'w',
+                                time: 300,
+                                input: {
+                                    processed_construction_material: 3,
+                                    assembly_materials1: 20,
+                                    assembly_materials4: 3
+                                },
+                                output: {
+                                    vehicle_devitt_caine_mk_iv_mmr: 1
+                                }
+                            },
+                            {
+                                team: 'w',
+                                time: 420,
+                                input: {
+                                    processed_construction_material: 5,
+                                    assembly_materials1: 10,
+                                    assembly_materials4: 8
+                                },
+                                output: {
+                                    vehicle_silverhand_chieftain_mk_vi: 1
+                                }
+                            },
+                            {
+                                team: 'w',
+                                time: 420,
+                                input: {
+                                    processed_construction_material: 5,
+                                    assembly_materials2: 10,
+                                    assembly_materials3: 5
+                                },
+                                output: {
+                                    vehicle_gallagher_highwayman_mk_iii: 1
+                                }
+                            },
+                            {
+                                team: 'w',
+                                time: 600,
+                                input: {
+                                    processed_construction_material: 135,
+                                    assembly_materials1: 10,
+                                    assembly_materials4: 15
+                                },
+                                output: {
+                                    vehicle_huber_starbreaker_94_5m: 1
+                                }
+                            }
+                        ]
+                    },
+                    weapons_platform: {
+                        name: 'Weapons Platform',
+                        power: -2,
+                        icon: 'buildings/LightVehicleAssemblyStationIcon.webp', // REPLACEME
+                        cost: {
+                            steel_construction_material: 20
+                        },
+                        production: [
+                            /*
+                            We have no data for these yet. Need a colonial to go in-game and get screenshots of these and input their recipes.
+                            {
+                                team: 'c',
+                                output: {
+                                    vehicle_945g_stygian_bolt: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                output: {
+                                    vehicle_85v_g_talos: 1
+                                }
+                            },
+                            */
+                            {
+                                team: 'w',
+                                time: 420,
+                                input: {
+                                    steel_construction_material: 15,
+                                    assembly_materials2: 20,
+                                    assembly_materials3: 15
+                                },
+                                output: {
+                                    vehicle_balfour_stockade_75mm: 1
+                                }
+                            },
+                            {
+                                team: 'w',
+                                time: 600,
+                                input: {
+                                    steel_construction_material: 10,
+                                    assembly_materials1: 10,
+                                    assembly_materials4: 15
+                                },
+                                output: {
+                                    vehicle_gallagher_thornfall_mk_vi: 1
+                                }
+                            }
+                        ]
+                    }
                 }
             },
             large_assembly_factory: {
@@ -1577,6 +2175,7 @@
                 name: 'Field Modification Center',
                 description: 'Vehicles can be further upgraded into higher tiers using this Facility. Higher tier vehicles have improved durability.', // Requires Construction Vehicle + Requires Tech
                 category: 'factories',
+                power: -8,
                 width: 10,
                 length: 16,
                 icon: 'buildings/FieldModificationCenterIcon.webp',
