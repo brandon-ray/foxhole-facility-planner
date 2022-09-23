@@ -227,12 +227,12 @@ Vue.component('app-menu-building-selected', {
     </div>
     `
 });
-
+selectedCategory = 'foundations'
 Vue.component('app-menu-construction-list', {
     props: ['menuData'],
     data: function() {
         return {
-            category: 'foundations',
+            category: selectedCategory,
             buildings: window.objectData.buildings_list
         };
     },
@@ -247,6 +247,9 @@ Vue.component('app-menu-construction-list', {
         },
         buildingHover: function(building) {
             game.buildMenuComponent.showHoverMenu(building);
+        },
+        updateSelection: function(selection) {
+            selectedCategory = selection
         }
     },
     template: html`
@@ -260,7 +263,7 @@ Vue.component('app-menu-construction-list', {
         </select>
         <div class="construction-items" class="menu-page">
             <div v-for="building in buildings" v-if="!building.hideInList && building.category === category" class="build-icon" :style="{backgroundImage:'url(/assets/' + building.icon + ')'}"
-                @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" v-on:click="buildBuilding(building)">
+                @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" v-on:click="buildBuilding(building) ; updateSelection(building.category)">
             </div>
         </div>
     </div>
