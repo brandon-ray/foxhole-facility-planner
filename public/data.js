@@ -199,27 +199,27 @@
             },
             vehicle_obrien_v113: {
                 name: 'O\'Brien V.113 Gravekeeper',
-                icon: 'vehicles/O%3FBrien_v.113_Gravekeeper_Vehicle_Icon.webp',
+                icon: 'vehicles/OBrien_v.113_Gravekeeper_Vehicle_Icon.webp',
                 type: 'vehicle' // Warden
             },
             vehicle_obrien_v121: {
                 name: 'O\'Brien V.121 Highlander',
-                icon: 'vehicles/O%27Brien_v.121_Highlander_Vehicle_Icon.webp',
+                icon: 'vehicles/OBrien_v.121_Highlander_Vehicle_Icon.webp',
                 type: 'vehicle' // Warden
             },
             vehicle_obrien_v130_wild_jack: {
                 name: 'O\'Brien V.130 Wild Jack',
-                icon: 'vehicles/O%27Brien_v130_Vehicle_Icon.webp',
+                icon: 'vehicles/OBrien_v130_Vehicle_Icon.webp',
                 type: 'vehicle' // Warden
             },
             vehicle_obrien_v101_freeman: {
                 name: 'O\'Brien V.101 Freeman',
-                icon: 'vehicles/O%27Brien_v.101_Freeman_Vehicle_Icon.webp',
+                icon: 'vehicles/OBrien_v.101_Freeman_Vehicle_Icon.webp',
                 type: 'vehicle' // Warden
             },
             vehicle_obrien_v110: {
                 name: 'O\'Brien V.110',
-                icon: 'vehicles/O%27Brien_v110_Vehicle_Icon.webp',
+                icon: 'vehicles/OBrien_v110_Vehicle_Icon.webp',
                 type: 'vehicle' // Warden
             },
             vehicle_drummond_spitfire_100d: {
@@ -449,7 +449,7 @@
             },
             vehicle_r_5_atlas_hauler: {
                 name: 'R-5 "Atlas" Hauler',
-                icon: 'vehicles/R-5_%22Atlas%22_Hauler_Vehicle_Icon.webp',
+                icon: 'vehicles/R-5_Atlas_Hauler_Vehicle_Icon.webp',
                 type: 'vehicle' // Colonial
             },
             vehicle_r_5b_sisyphus_hauler: {
@@ -630,7 +630,6 @@
                     gravel: 150
                 }
             },
-
             provisional_road: {
                 name: 'Provisional Road',
                 description: 'A temporary road used to enable vehicle access between main roads and remote bases.', // Requires Construction Vehicle + Consumes 3x more Garrison Supplies
@@ -645,7 +644,6 @@
                     gravel: 150
                 }
             },
-
             rail_small_gauge: {
                 name: 'Small Gauge Railway Track',
                 description: 'A segment of railway for small gauge train cars. Tracks can attach to or fork from existing railways to form complex networks.',
