@@ -640,7 +640,7 @@
                 width: 5,
                 length: 2,
                 maxLength: 26,
-                texture: 'provisional_road.jpg',
+                texture: 'provisional_road.png',
                 cost: {
                     gravel: 150
                 }
