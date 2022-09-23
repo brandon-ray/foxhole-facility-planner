@@ -413,6 +413,8 @@ Vue.component('app-menu-statistics', {
             <br>
             <select class="app-input" v-model="time" @change="refresh">
                 <option value="86400">Per 24 Hours</option>
+                <option value="43200">Per 12 Hours</option>
+                <option value="21600">Per 6 Hours</option>
                 <option value="10800">Per 3 Hours</option>
                 <option value="3600">Per 1 Hour</option>
                 <option value="1800">Per 30 Minutes</option>

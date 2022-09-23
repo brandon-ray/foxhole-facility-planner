@@ -2020,7 +2020,53 @@
                 icon: 'buildings/LargeAssemblyFactoryIcon.webp',
                 cost: {
                     processed_construction_material: 250
-                }
+                },
+                production: [
+                    {
+                        time: 21600,
+                        input: {
+                            processed_construction_material: 200,
+                            assembly_materials1: 60,
+                            assembly_materials4: 50
+                        },
+                        output: {
+                            vehicle_bms_black_bolt: 1
+                        }
+                    },
+                    {
+                        time: 1800,
+                        input: {
+                            processed_construction_material: 20,
+                            assembly_materials2: 15,
+                            assembly_materials3: 5
+                        },
+                        output: {
+                            vehicle_bms_rockhold: 1
+                        }
+                    },
+                    {
+                        time: 1800,
+                        input: {
+                            processed_construction_material: 20,
+                            assembly_materials2: 15,
+                            assembly_materials3: 5
+                        },
+                        output: {
+                            vehicle_bms_holdout: 1
+                        }
+                    },
+                    {
+                        time: 1800,
+                        input: {
+                            processed_construction_material: 20,
+                            assembly_materials2: 15,
+                            assembly_materials3: 10
+                        },
+                        output: {
+                            vehicle_bms_longrider: 1
+                        }
+                    }
+                ]
             },
             ammunition_factory: {
                 name: 'Ammunition Factory',
