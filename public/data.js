@@ -442,9 +442,19 @@
                 icon: 'vehicles/TrainLRArtilleryVehicleIcon.webp',
                 type: 'vehicle'
             },
+            vehicle_03mm_caster: {
+                name: '03MM "Caster"',
+                icon: 'vehicles/03MM_Caster_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
             vehicle_00ms_stinger: {
                 name: '00MS "Stinger"',
                 icon: 'vehicles/00MS_Stinger_Motorcycle_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_r_1_hauler: {
+                name: 'R-1 Hauler',
+                icon: 'vehicles/R-1_Hauler_Vehicle_Icon.webp',
                 type: 'vehicle' // Colonial
             },
             vehicle_r_5_atlas_hauler: {
@@ -457,9 +467,14 @@
                 icon: 'vehicles/R-5b_Sisyphus_Hauler_Vehicle_Icon.webp',
                 type: 'vehicle' // Colonial
             },
-            vehicle__r_9_speartip_escort: {
+            vehicle_r_9_speartip_escort: {
                 name: 'R-9 "Speartip" Escort',
                 icon: 'vehicles/R-9_Speartip_Escort_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_t3_xiphos: {
+                name: 'T3 "Xiphos"',
+                icon: 'vehicles/T3_Xiphos_Vehicle_Icon.webp',
                 type: 'vehicle' // Colonial
             },
             vehicle_t5_percutio: {
@@ -472,9 +487,19 @@
                 icon: 'vehicles/T8_Gemini_Vehicle_Icon.webp',
                 type: 'vehicle' // Colonial
             },
+            vehicle_t12_actaeon_tankette: {
+                name: 'T12 "Actaeon" Tankette',
+                icon: 'vehicles/T12_Actaeon_Tankette_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
             vehicle_t20_ixion_tankette: {
                 name: 'T20 "Ixion" Tankette',
                 icon: 'vehicles/T20_Ixion_Tankette_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_uv_05a_argonaut: {
+                name: 'UV-05a "Argonaut"',
+                icon: 'vehicles/UV-05a_Argonaut_Vehicle_Icon.webp',
                 type: 'vehicle' // Colonial
             },
             vehicle_uv_5c_odyssey: {
@@ -487,14 +512,29 @@
                 icon: 'vehicles/UV-24_Icarus_Vehicle_Icon.webp',
                 type: 'vehicle' // Colonial
             },
+            vehicle_hc_7_ballista: {
+                name: 'HC-7 "Ballista"',
+                icon: 'vehicles/HC-7_Ballista_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
             vehicle_hs_2_scorpion: {
                 name: 'HC-2 "Scorpion"',
                 icon: 'vehicles/HC-2_Scorpion_Vehicle_Icon.webp',
                 type: 'vehicle' // Colonial
             },
+            vehicle_aa_2_battering_ram: {
+                name: 'AA-2 "Battering Ram"',
+                icon: 'vehicles/AA-2_Battering_Ram_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
             vehicle_40_45_smelter: {
                 name: '40-45 "Smelter"',
                 icon: 'vehicles/40-45_Smelter_Heavy_Field_Gun_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_h_5_hatchet: {
+                name: 'H-5 "Hatchet"',
+                icon: 'vehicles/H5_Hatchet_Vehicle_Icon.webp',
                 type: 'vehicle' // Colonial
             },
             vehicle_h_19_vulcan: {
@@ -512,9 +552,19 @@
                 icon: 'vehicles/H-8_Kranesca_Vehicle_Icon.webp',
                 type: 'vehicle' // Colonial
             },
+            vehicle_85k_b_falchion: {
+                name: '85K-b "Falchion"',
+                icon: 'vehicles/85K-b_Falchion_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
             vehicle_85k_a_spatha: {
                 name: '85K-a "Spatha"',
                 icon: 'vehicles/85K-a_Spatha_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_86k_a_bardiche: {
+                name: '86K-a "Bardiche"',
+                icon: 'vehicles/86K-a_Bardiche_Vehicle_Icon.webp',
                 type: 'vehicle' // Colonial
             },
             vehicle_86k_c_ranseur: {
@@ -525,6 +575,11 @@
             vehicle_dae_2a_1_ruptura: {
                 name: 'DAE 2a-1 "Ruptura"',
                 icon: 'vehicles/DAE_2a-1_Ruptura_Structure_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_ab_8_acheron: {
+                name: 'AB-8 "Acheron"',
+                icon: 'vehicles/AB-8_Acheron_Vehicle_Icon.webp',
                 type: 'vehicle' // Colonial
             },
             vehicle_ab_11_doru: {
@@ -545,6 +600,11 @@
             vehicle_r_17_retiarius_skirmisher: {
                 name: 'R-17 "Retiarius" Skirmisher', // (Truck)
                 icon: 'vehicles/R-17_Retiarius_Skirmisher_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_hh_a_javelin: {
+                name: 'HH-a "Javelin"', // (Half-Track)
+                icon: 'vehicles/HH-a_Javelin_Vehicle_Icon.webp',
                 type: 'vehicle' // Colonial
             },
             vehicle_hh_b_hoplite: {
@@ -571,7 +631,7 @@
                 name: 'DAE 3b-2 "Hades\' Net"',
                 icon: 'vehicles/EmplacedMultiCStructureIcon.webp',
                 type: 'vehicle' // Colonial
-            },
+            }
         },
         buildings: {
             foundation_corner: {
@@ -1297,6 +1357,7 @@
                         team: 'c',
                         time: 180,
                         input: {
+                            vehicle_03mm_caster: 1,
                             construction_material: 5
                         },
                         output: {
@@ -1307,6 +1368,7 @@
                         team: 'c',
                         time: 300,
                         input: {
+                            vehicle_r_1_hauler: 1,
                             construction_material: 10
                         },
                         output: {
@@ -1317,6 +1379,7 @@
                         team: 'c',
                         time: 300,
                         input: {
+                            vehicle_r_1_hauler: 1,
                             construction_material: 10
                         },
                         output: {
@@ -1327,10 +1390,11 @@
                         team: 'c',
                         time: 300,
                         input: {
+                            vehicle_r_1_hauler: 1,
                             construction_material: 10
                         },
                         output: {
-                            vehicle__r_9_speartip_escort: 1
+                            vehicle_r_9_speartip_escort: 1
                         }
                     },
                     {
@@ -1400,6 +1464,7 @@
                                 team: 'c',
                                 time: 300,
                                 input: {
+                                    vehicle_t3_xiphos: 1,
                                     processed_construction_material: 10,
                                     assembly_materials1: 10
                                 },
@@ -1411,6 +1476,7 @@
                                 team: 'c',
                                 time: 300,
                                 input: {
+                                    vehicle_t3_xiphos: 1,
                                     construction_material: 20,
                                     assembly_materials1: 10
                                 },
@@ -1422,6 +1488,7 @@
                                 team: 'c',
                                 time: 300,
                                 input: {
+                                    vehicle_t12_actaeon_tankette: 1,
                                     construction_material: 20,
                                     assembly_materials1: 15
                                 },
@@ -1433,6 +1500,7 @@
                                 team: 'c',
                                 time: 600,
                                 input: {
+                                    vehicle_t12_actaeon_tankette: 1,
                                     processed_construction_material: 10,
                                     assembly_materials1: 15
                                 },
@@ -1444,6 +1512,7 @@
                                 team: 'c',
                                 time: 180,
                                 input: {
+                                    vehicle_uv_05a_argonaut: 1,
                                     construction_material: 5
                                 },
                                 output: {
@@ -1454,6 +1523,7 @@
                                 team: 'c',
                                 time: 180,
                                 input: {
+                                    vehicle_uv_05a_argonaut: 1,
                                     construction_material: 5,
                                     assembly_materials2: 10
                                 },
@@ -1537,33 +1607,56 @@
                             processed_construction_material: 65
                         },
                         production: [
-                            /*
-                            We have no data for these yet. Need a colonial to go in-game and get screenshots of these and input their recipes.
                             {
                                 team: 'c',
+                                time: 300,
+                                input: {
+                                    vehicle_r_1_hauler: 1,
+                                    processed_construction_material: 70,
+                                    assembly_materials1: 10,
+                                    assembly_materials2: 8
+                                },
                                 output: {
                                     vehicle_r_17_retiarius_skirmisher: 1
                                 }
                             },
                             {
                                 team: 'c',
+                                time: 600,
+                                input: {
+                                    processed_construction_material: 20,
+                                    assembly_materials2: 15,
+                                    assembly_materials4: 3
+                                },
                                 output: {
                                     vehicle_dae_3b_2_hades_net: 1
                                 }
                             },
                             {
                                 team: 'c',
+                                time: 300,
+                                input: {
+                                    vehicle_hh_a_javelin: 1,
+                                    processed_construction_material: 3,
+                                    assembly_materials4: 3
+                                },
                                 output: {
                                     vehicle_hh_b_hoplite: 1
                                 }
                             },
                             {
                                 team: 'c',
+                                time: 300,
+                                input: {
+                                    vehicle_hh_a_javelin: 1,
+                                    processed_construction_material: 5,
+                                    assembly_materials2: 5,
+                                    assembly_materials4: 3
+                                },
                                 output: {
                                     vehicle_hh_d_peltast: 1
                                 }
                             },
-                            */
                             {
                                 team: 'w',
                                 time: 300,
@@ -1624,6 +1717,7 @@
                                 team: 'c',
                                 time: 180,
                                 input: {
+                                    vehicle_hc_7_ballista: 1,
                                     construction_material: 15
                                 },
                                 output: {
@@ -1634,6 +1728,7 @@
                                 team: 'c',
                                 time: 300,
                                 input: {
+                                    vehicle_ab_8_acheron: 1,
                                     processed_construction_material: 10,
                                     assembly_materials3: 5
                                 },
@@ -1645,6 +1740,7 @@
                                 team: 'c',
                                 time: 300,
                                 input: {
+                                    vehicle_aa_2_battering_ram: 1,
                                     processed_construction_material: 10,
                                     assembly_materials4: 10
                                 },
@@ -1688,6 +1784,7 @@
                                 team: 'c',
                                 time: 300,
                                 input: {
+                                    vehicle_h_5_hatchet: 1,
                                     processed_construction_material: 35,
                                     assembly_materials2: 20,
                                     assembly_materials3: 10
@@ -1700,6 +1797,7 @@
                                 team: 'c',
                                 time: 300,
                                 input: {
+                                    vehicle_h_5_hatchet: 1,
                                     processed_construction_material: 15,
                                     assembly_materials2: 20,
                                     assembly_materials3: 10
@@ -1712,6 +1810,7 @@
                                 team: 'c',
                                 time: 300,
                                 input: {
+                                    vehicle_h_5_hatchet: 1,
                                     processed_construction_material: 10,
                                     assembly_materials1: 20,
                                     assembly_materials4: 10
@@ -1724,6 +1823,7 @@
                                 team: 'c',
                                 time: 420,
                                 input: {
+                                    vehicle_85k_b_falchion: 1,
                                     processed_construction_material: 15,
                                     assembly_materials1: 10,
                                     assembly_materials4: 15
@@ -1736,6 +1836,7 @@
                                 team: 'c',
                                 time: 420,
                                 input: {
+                                    vehicle_86k_a_bardiche: 1,
                                     processed_construction_material: 20,
                                     assembly_materials2: 10,
                                     assembly_materials3: 20
@@ -1838,21 +1939,31 @@
                             steel_construction_material: 20
                         },
                         production: [
-                            /*
-                            We have no data for these yet. Need a colonial to go in-game and get screenshots of these and input their recipes.
                             {
                                 team: 'c',
+                                time: 420,
+                                input: {
+                                    vehicle_aa_2_battering_ram: 1,
+                                    steel_construction_material: 15,
+                                    assembly_materials2: 20,
+                                    assembly_materials3: 15
+                                },
                                 output: {
                                     vehicle_945g_stygian_bolt: 1
                                 }
                             },
                             {
                                 team: 'c',
+                                time: 600,
+                                input: {
+                                    vehicle_85k_b_falchion: 1,
+                                    assembly_materials1: 10,
+                                    assembly_materials4: 15
+                                },
                                 output: {
                                     vehicle_85v_g_talos: 1
                                 }
                             },
-                            */
                             {
                                 team: 'w',
                                 time: 420,
