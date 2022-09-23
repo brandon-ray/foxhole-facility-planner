@@ -1401,6 +1401,7 @@
                         team: 'w',
                         time: 300,
                         input: {
+                            vehicle_dunne_transport: 1,
                             construction_material: 10
                         },
                         output: {
@@ -1411,6 +1412,7 @@
                         team: 'w',
                         time: 300,
                         input: {
+                            vehicle_dunne_transport: 1,
                             construction_material: 10
                         },
                         output: {
@@ -1535,17 +1537,19 @@
                                 team: 'w',
                                 time: 300,
                                 input: {
+                                    vehicle_obrien_v110: 1,
                                     processed_construction_material: 10,
                                     assembly_materials1: 10
                                 },
                                 output: {
-                                    vehicle_obrien_v110: 1
+                                    vehicle_obrien_v113: 1
                                 }
                             },
                             {
                                 team: 'w',
                                 time: 300,
                                 input: {
+                                    vehicle_obrien_v110: 1,
                                     construction_material: 5,
                                     assembly_materials1: 5
                                 },
@@ -1557,6 +1561,7 @@
                                 team: 'w',
                                 time: 300,
                                 input: {
+                                    vehicle_obrien_v110: 1,
                                     processed_construction_material: 10,
                                     assembly_materials1: 10
                                 },
@@ -1568,6 +1573,7 @@
                                 team: 'w',
                                 time: 300,
                                 input: {
+                                    vehicle_obrien_v110: 1,
                                     construction_material: 15,
                                     assembly_materials1: 15
                                 },
@@ -1579,6 +1585,7 @@
                                 team: 'w',
                                 time: 180,
                                 input: {
+                                    vehicle_drummond_100a: 1,
                                     construction_material: 3,
                                     assembly_materials2: 10
                                 },
@@ -1590,6 +1597,7 @@
                                 team: 'w',
                                 time: 180,
                                 input: {
+                                    vehicle_drummond_100a: 1,
                                     construction_material: 3,
                                     assembly_materials2: 5,
                                 },
@@ -1661,6 +1669,7 @@
                                 team: 'w',
                                 time: 300,
                                 input: {
+                                    vehicle_niska_mk_i_gun_motor_carraige: 1,
                                     processed_construction_material: 10,
                                     assembly_materials1: 10,
                                     assembly_materials3: 8
@@ -1685,12 +1694,13 @@
                                 team: 'w',
                                 time: 300,
                                 input: {
+                                    vehicle_niska_mk_i_gun_motor_carraige: 1,
                                     processed_construction_material: 5,
                                     assembly_materials2: 10,
                                     assembly_materials4: 3
                                 },
                                 output: {
-                                    vehicle_rycker_4_3_f_wasp_nest: 1
+                                    vehicle_niska_mk_ii_blinder: 1
                                 }
                             }
                         ]
@@ -1752,6 +1762,7 @@
                                 team: 'w',
                                 time: 300,
                                 input: {
+                                    vehicle_king_spire_mk_i: 1,
                                     processed_construction_material: 5,
                                     assembly_materials3: 5,
                                 },
@@ -1763,6 +1774,7 @@
                                 team: 'w',
                                 time: 300,
                                 input: {
+                                    vehicle_collins_cannon_68mm: 1,
                                     processed_construction_material: 5,
                                     assembly_materials4: 5,
                                 },
@@ -1861,6 +1873,7 @@
                                 team: 'w',
                                 time: 420,
                                 input: {
+                                    vehicle_noble_widow_mk_xiv: 1,
                                     processed_construction_material: 10,
                                     assembly_materials1: 10,
                                     assembly_materials3: 15
@@ -1873,6 +1886,7 @@
                                 team: 'w',
                                 time: 300,
                                 input: {
+                                    vehicle_devitt_mk_iii: 1,
                                     processed_construction_material: 8,
                                     assembly_materials2: 20,
                                     assembly_materials3: 5
@@ -1885,6 +1899,7 @@
                                 team: 'w',
                                 time: 300,
                                 input: {
+                                    vehicle_devitt_mk_iii: 1,
                                     processed_construction_material: 3,
                                     assembly_materials1: 20,
                                     assembly_materials4: 3
@@ -1897,6 +1912,7 @@
                                 team: 'w',
                                 time: 420,
                                 input: {
+                                    vehicle_silverhand_mk_iv: 1,
                                     processed_construction_material: 5,
                                     assembly_materials1: 10,
                                     assembly_materials4: 8
@@ -1909,6 +1925,7 @@
                                 team: 'w',
                                 time: 420,
                                 input: {
+                                    vehicle_gallagher_outlaw_mk_ii: 1,
                                     processed_construction_material: 5,
                                     assembly_materials2: 10,
                                     assembly_materials3: 5
@@ -1968,6 +1985,7 @@
                                 team: 'w',
                                 time: 420,
                                 input: {
+                                    vehicle_balfour_wolfhound_40mm: 1,
                                     steel_construction_material: 15,
                                     assembly_materials2: 20,
                                     assembly_materials3: 15
@@ -1980,6 +1998,7 @@
                                 team: 'w',
                                 time: 600,
                                 input: {
+                                    vehicle_gallagher_outlaw_mk_ii: 1,
                                     steel_construction_material: 10,
                                     assembly_materials1: 10,
                                     assembly_materials4: 15
