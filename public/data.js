@@ -386,7 +386,192 @@
                 name: 'Gallagher Thornfall Mk. VI',
                 icon: 'vehicles/MediumTank2IndirectWIcon.webp',
                 type: 'vehicle' // Warden
-            }
+            },
+            vehicle_material_pallet: {
+                name: 'Material Pallet',
+                icon: 'vehicles/Material_Pallet_Structure_Icon.webp',
+                type: 'vehicle'
+            },
+            vehicle_bms_mineseeker: {
+                name: 'BMS Mineseeker',
+                icon: 'vehicles/SmallTrainLocomotiveIcon.webp',
+                type: 'vehicle'
+            },
+            vehicle_bms_railtruck: {
+                name: 'BMS Railtruck',
+                icon: 'vehicles/SmallContainerCarIcon.webp',
+                type: 'vehicle'
+            },
+            vehicle_bms_linerunner: {
+                name: 'BMS Linerunner',
+                icon: 'vehicles/SmallFlatbedCarIcon.webp',
+                type: 'vehicle'
+            },
+            vehicle_bms_black_bolt: {
+                name: 'BMS Black Bolt',
+                icon: 'vehicles/TrainEngineVehicleIcon.webp',
+                type: 'vehicle'
+            },
+            vehicle_bms_rockhold: {
+                name: 'BMS Rockhold',
+                icon: 'vehicles/TrainCoalCarVehicleIcon.webp',
+                type: 'vehicle'
+            },
+            vehicle_bms_holdout: {
+                name: 'BMS Holdout',
+                icon: 'vehicles/InfantryCarVehicleIcon.webp',
+                type: 'vehicle'
+            },
+            vehicle_bms_longrider: {
+                name: 'BMS Longrider',
+                icon: 'vehicles/TrainCarVehicleIcon.webp',
+                type: 'vehicle'
+            },
+            vehicle_aegis_steelbreaker_k5a: {
+                name: 'Aegis Steelbreaker K5a',
+                icon: 'vehicles/CombatCarCVehicleIcon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_obrien_warsmith_v215: {
+                name: 'O\'Brien Warsmith v.215',
+                icon: 'vehicles/CombatCarWVehicleIcon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_tempest_cannon_ra_2: {
+                name: 'Tempest Cannon RA-2',
+                icon: 'vehicles/TrainLRArtilleryVehicleIcon.webp',
+                type: 'vehicle'
+            },
+            vehicle_00ms_stinger: {
+                name: '00MS "Stinger"',
+                icon: 'vehicles/00MS_Stinger_Motorcycle_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_r_5_atlas_hauler: {
+                name: 'R-5 "Atlas" Hauler',
+                icon: 'vehicles/R-5_%22Atlas%22_Hauler_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_r_5b_sisyphus_hauler: {
+                name: 'R-5b "Sisyphus" Hauler',
+                icon: 'vehicles/R-5b_Sisyphus_Hauler_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle__r_9_speartip_escort: {
+                name: 'R-9 "Speartip" Escort',
+                icon: 'vehicles/R-9_Speartip_Escort_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_t5_percutio: {
+                name: 'T5 "Percutio"',
+                icon: 'vehicles/T5_Percutio_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_t8_gemini: {
+                name: 'T8 "Gemini"',
+                icon: 'vehicles/T8_Gemini_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_t20_ixion_tankette: {
+                name: 'T20 "Ixion" Tankette',
+                icon: 'vehicles/T20_Ixion_Tankette_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_uv_5c_odyssey: {
+                name: 'UV-5c "Odyssey"',
+                icon: 'vehicles/UV-5c_Odyssey_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_uv_24_icarus: {
+                name: 'UV-24 "Icarus"',
+                icon: 'vehicles/UV-24_Icarus_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_hs_2_scorpion: {
+                name: 'HC-2 "Scorpion"',
+                icon: 'vehicles/HC-2_Scorpion_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_40_45_smelter: {
+                name: '40-45 "Smelter"',
+                icon: 'vehicles/40-45_Smelter_Heavy_Field_Gun_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_h_19_vulcan: {
+                name: 'H-19 "Vulcan"',
+                icon: 'vehicles/H-19_Vulcan_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_h_10_peleskys: {
+                name: 'H-10 "Peleskys"',
+                icon: 'vehicles/H-10_Pelekys_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_h_8_kranesca: {
+                name: 'H-8 "Kranesca"',
+                icon: 'vehicles/H-8_Kranesca_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_85k_a_spatha: {
+                name: '85K-a "Spatha"',
+                icon: 'vehicles/85K-a_Spatha_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_86k_c_ranseur: {
+                name: '86K-c "Ranseur"',
+                icon: 'vehicles/86K-c_Ranseur_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_dae_2a_1_ruptura: {
+                name: 'DAE 2a-1 "Ruptura"',
+                icon: 'vehicles/DAE_2a-1_Ruptura_Structure_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_ab_11_doru: {
+                name: 'AB-11 "Doru"',
+                icon: 'vehicles/AB-11_Doru_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_bms_scrap_hauler: {
+                name: 'BMS - Scrap Hauler',
+                icon: 'vehicles/Harvester.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_t14_vesta_tankette: {
+                name: 'T14 "Vesta" Tankette',
+                icon: 'vehicles/T14_Vesta_Tankette_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_r_17_retiarius_skirmisher: {
+                name: 'R-17 "Retiarius" Skirmisher', // (Truck)
+                icon: 'vehicles/R-17_Retiarius_Skirmisher_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_hh_b_hoplite: {
+                name: 'HH-b "Hoplite"', // (Half-Track)
+                icon: 'vehicles/HH-b_Hoplite_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_hh_d_peltast: {
+                name: 'HH-d "Peltast"', // (Half-Track)
+                icon: 'vehicles/HH-d_Peltast_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_945g_stygian_bolt: {
+                name: '945g "Stygian" Bolt', // (Field Gun)
+                icon: 'vehicles/FieldATHeavyCIcon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_85v_g_talos: {
+                name: '85V-g "Talos"', // (Assault Tank)
+                icon: 'vehicles/MediumTankLargeCIcon.webp',
+                type: 'vehicle' // Colonial
+            },
+            vehicle_dae_3b_2_hades_net: {
+                name: 'DAE 3b-2 "Hades\' Net"',
+                icon: 'vehicles/EmplacedMultiCStructureIcon.webp',
+                type: 'vehicle' // Colonial
+            },
         },
         buildings: {
             foundation_corner: {
@@ -1094,17 +1279,6 @@
                 cost: {
                     construction_material: 75
                 }
-                /*
-                Colonial-Vehicles
-
-                Material Pallet
-                00MS "Stinger" (Motorcycle)
-                R-5b "Sisyphus" Hauler (Truck)
-                R-9 "Speartip" Escort (Truck)
-                BMS Mineseeker (Small Train Locomotive)
-                BMS Railtruck (Small Container Car)
-                BMS Linerunner (Small Flatbed Car)
-                */
             },
             large_assembly_factory: {
                 name: 'Large Assembly Factory',
@@ -1116,14 +1290,6 @@
                 cost: {
                     processed_construction_material: 250
                 }
-                /*
-                Colonial-Vehicles
-
-                BMS Black Bolt (Locomotive)
-                BMS Rockhold (Container Car)
-                BMS Holdout (Infantry Car)
-                BMS Longrider (Flatbed Car)
-                */
             },
             ammunition_factory: {
                 name: 'Ammunition Factory',
