@@ -1166,7 +1166,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
 
         entity.isRail = false;
-        if (entity.subtype === 'rail_small_gauge' || entity.subtype === 'rail_large_gauge') {
+        if (entity.subtype === 'rail_small_gauge' || entity.subtype === 'rail_large_gauge' || entity.subtype === 'provisional_road') {
             entity.isRail = true;
         }
 

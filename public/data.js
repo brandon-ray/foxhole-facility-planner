@@ -630,17 +630,22 @@
                     gravel: 150
                 }
             },
-            /*
+
             provisional_road: {
                 name: 'Provisional Road',
                 description: 'A temporary road used to enable vehicle access between main roads and remote bases.', // Requires Construction Vehicle + Consumes 3x more Garrison Supplies
                 category: 'foundations',
                 icon: 'buildings/ProvisionalRoadIcon.webp',
+                power: 0,
+                width: 4,
+                length: 2,
+                maxLength: 26,
+                texture: 'provisional_road.jpg',
                 cost: {
                     gravel: 150
                 }
             },
-            */
+
             rail_small_gauge: {
                 name: 'Small Gauge Railway Track',
                 description: 'A segment of railway for small gauge train cars. Tracks can attach to or fork from existing railways to form complex networks.',
