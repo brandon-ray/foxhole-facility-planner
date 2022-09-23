@@ -502,8 +502,8 @@
                 icon: 'vehicles/H-19_Vulcan_Vehicle_Icon.webp',
                 type: 'vehicle' // Colonial
             },
-            vehicle_h_10_peleskys: {
-                name: 'H-10 "Peleskys"',
+            vehicle_h_10_pelekys: {
+                name: 'H-10 "Pelekys"',
                 icon: 'vehicles/H-10_Pelekys_Vehicle_Icon.webp',
                 type: 'vehicle' // Colonial
             },
@@ -1291,6 +1291,46 @@
                         }
                     },
                     {
+                        team: 'c',
+                        time: 180,
+                        input: {
+                            construction_material: 5
+                        },
+                        output: {
+                            vehicle_00ms_stinger: 1
+                        }
+                    },
+                    {
+                        team: 'c',
+                        time: 300,
+                        input: {
+                            construction_material: 10
+                        },
+                        output: {
+                            vehicle_r_5_atlas_hauler: 1
+                        }
+                    },
+                    {
+                        team: 'c',
+                        time: 300,
+                        input: {
+                            construction_material: 10
+                        },
+                        output: {
+                            vehicle_r_5b_sisyphus_hauler: 1
+                        }
+                    },
+                    {
+                        team: 'c',
+                        time: 300,
+                        input: {
+                            construction_material: 10
+                        },
+                        output: {
+                            vehicle__r_9_speartip_escort: 1
+                        }
+                    },
+                    {
                         team: 'w',
                         time: 300,
                         input: {
@@ -1353,6 +1393,71 @@
                             construction_material: 200
                         },
                         production: [
+                            {
+                                team: 'c',
+                                time: 300,
+                                input: {
+                                    processed_construction_material: 10,
+                                    assembly_materials1: 10
+                                },
+                                output: {
+                                    vehicle_t5_percutio: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 300,
+                                input: {
+                                    construction_material: 20,
+                                    assembly_materials1: 10
+                                },
+                                output: {
+                                    vehicle_t8_gemini: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 300,
+                                input: {
+                                    construction_material: 20,
+                                    assembly_materials1: 15
+                                },
+                                output: {
+                                    vehicle_t20_ixion_tankette: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 600,
+                                input: {
+                                    processed_construction_material: 10,
+                                    assembly_materials1: 15
+                                },
+                                output: {
+                                    vehicle_t14_vesta_tankette: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 180,
+                                input: {
+                                    construction_material: 5
+                                },
+                                output: {
+                                    vehicle_uv_5c_odyssey: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 180,
+                                input: {
+                                    construction_material: 5,
+                                    assembly_materials2: 10
+                                },
+                                output: {
+                                    vehicle_uv_24_icarus: 1
+                                }
+                            },
                             {
                                 team: 'w',
                                 time: 300,
@@ -1429,6 +1534,33 @@
                             processed_construction_material: 65
                         },
                         production: [
+                            /*
+                            We have no data for these yet. Need a colonial to go in-game and get screenshots of these and input their recipes.
+                            {
+                                team: 'c',
+                                output: {
+                                    vehicle_r_17_retiarius_skirmisher: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                output: {
+                                    vehicle_dae_3b_2_hades_net: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                output: {
+                                    vehicle_hh_b_hoplite: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                output: {
+                                    vehicle_hh_d_peltast: 1
+                                }
+                            },
+                            */
                             {
                                 team: 'w',
                                 time: 300,
@@ -1486,6 +1618,38 @@
                                 }
                             },
                             {
+                                team: 'c',
+                                time: 180,
+                                input: {
+                                    construction_material: 15
+                                },
+                                output: {
+                                    vehicle_hs_2_scorpion: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 300,
+                                input: {
+                                    processed_construction_material: 10,
+                                    assembly_materials3: 5
+                                },
+                                output: {
+                                    vehicle_ab_11_doru: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 300,
+                                input: {
+                                    processed_construction_material: 10,
+                                    assembly_materials4: 10
+                                },
+                                output: {
+                                    vehicle_40_45_smelter: 1
+                                }
+                            },
+                            {
                                 team: 'w',
                                 time: 300,
                                 input: {
@@ -1517,6 +1681,78 @@
                             processed_construction_material: 200
                         },
                         production: [
+                            {
+                                team: 'c',
+                                time: 300,
+                                input: {
+                                    processed_construction_material: 35,
+                                    assembly_materials2: 20,
+                                    assembly_materials3: 10
+                                },
+                                output: {
+                                    vehicle_h_19_vulcan: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 300,
+                                input: {
+                                    processed_construction_material: 15,
+                                    assembly_materials2: 20,
+                                    assembly_materials3: 10
+                                },
+                                output: {
+                                    vehicle_h_10_pelekys: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 300,
+                                input: {
+                                    processed_construction_material: 10,
+                                    assembly_materials1: 20,
+                                    assembly_materials4: 10
+                                },
+                                output: {
+                                    vehicle_h_8_kranesca: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 420,
+                                input: {
+                                    processed_construction_material: 15,
+                                    assembly_materials1: 10,
+                                    assembly_materials4: 15
+                                },
+                                output: {
+                                    vehicle_85k_a_spatha: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 420,
+                                input: {
+                                    processed_construction_material: 20,
+                                    assembly_materials2: 10,
+                                    assembly_materials3: 20
+                                },
+                                output: {
+                                    vehicle_86k_c_ranseur: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                time: 600,
+                                input: {
+                                    processed_construction_material: 155,
+                                    assembly_materials3: 10,
+                                    assembly_materials4: 25
+                                },
+                                output: {
+                                    vehicle_dae_2a_1_ruptura: 1
+                                }
+                            },
                             {
                                 team: 'w',
                                 time: 420,
@@ -1599,6 +1835,21 @@
                             steel_construction_material: 20
                         },
                         production: [
+                            /*
+                            We have no data for these yet. Need a colonial to go in-game and get screenshots of these and input their recipes.
+                            {
+                                team: 'c',
+                                output: {
+                                    vehicle_945g_stygian_bolt: 1
+                                }
+                            },
+                            {
+                                team: 'c',
+                                output: {
+                                    vehicle_85v_g_talos: 1
+                                }
+                            },
+                            */
                             {
                                 team: 'w',
                                 time: 420,
