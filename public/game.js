@@ -1163,9 +1163,13 @@ const fontFamily = ['Recursive', 'sans-serif'];
             entity.rangeSprite.visible = false;
             entity.rangeSprite.drawCircle(0, 0, building.range * METER_PIXEL_SIZE);
             entity.rangeSprite.endFill();
+            if (building.overlapDist) {
+                entity.rangeSprite.lineStyle(10, 0xed2323, 1);
+                entity.rangeSprite.drawCircle(0, 0, building.overlapDist * METER_PIXEL_SIZE);
+            }
             entity.addChild(entity.rangeSprite);
         }
-
+        
         entity.isRail = false;
         if (entity.subtype === 'rail_small_gauge' || entity.subtype === 'rail_large_gauge' || entity.subtype === 'provisional_road') {
             entity.isRail = true;
