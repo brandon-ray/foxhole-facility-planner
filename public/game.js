@@ -11,7 +11,8 @@ const game = {
         snapRotationDegrees: 15,
         volume: 1
     },
-    isPlayScreen: false
+    isPlayScreen: false,
+    selectedCategory: 'foundations'
 };
 
 function escapeHtml(str) {
