@@ -224,6 +224,28 @@ p {
     max-height: 100%;
 }
 
+#sidebar-header > .colonial-button, #sidebar-header > .warden-button {
+    width: 54px;
+    height: 54px;
+    background-size: 44px 44px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: 2px solid black;
+    box-shadow: inset 0 0 3px black;
+}
+
+#sidebar-header > .colonial-button {
+    background-color: #516c4b;
+    background-image: url('assets/colonial_logo.webp');
+    float: left;
+}
+
+#sidebar-header > .warden-button {
+    background-color: #235683;
+    background-image: url('assets/warden_logo.webp');
+    float: right;
+}
+
 #sidebar .app-btn-primary, #sidebar .app-btn-secondary {
     background: linear-gradient(rgb(130, 130, 130), rgb(64, 64, 64));
     box-shadow: 0 0 3px #000;

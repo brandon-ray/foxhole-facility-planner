@@ -59,7 +59,9 @@ Vue.component('app-game-sidebar', {
     template: html`
     <div id="sidebar">
         <div id="sidebar-header">
+            <button class="colonial-button"></button>
             <img class="sidebar-logo" src="/assets/logo_transparent.webp">
+            <button class="warden-button"></button>
         </div>
         <div id="sidebar-body">
             <div v-if="!currentMenu" class="menu-body">
