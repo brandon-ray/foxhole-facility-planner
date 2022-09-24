@@ -1156,7 +1156,17 @@ const fontFamily = ['Recursive', 'sans-serif'];
         entity.building = building;
         let sprite;
 
-        if (building.range) {
+        if (building.range && building.overlapDist) {
+            entity.rangeSprite = new PIXI.Graphics();
+            entity.rangeSprite.beginFill(0x72ff5a);
+            entity.rangeSprite.alpha = 0.25;
+            entity.rangeSprite.visible = false;
+            entity.rangeSprite.drawCircle(0, 0, building.range * METER_PIXEL_SIZE);
+            entity.rangeSprite.endFill();
+            entity.rangeSprite.lineStyle(10, 0xed2323, 1);
+            entity.rangeSprite.drawCircle(0, 0, building.overlapDist * METER_PIXEL_SIZE);
+            entity.addChild(entity.rangeSprite);
+        } else if (building.range) {
             entity.rangeSprite = new PIXI.Graphics();
             entity.rangeSprite.beginFill(0x72ff5a);
             entity.rangeSprite.alpha = 0.25;
@@ -1164,8 +1174,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
             entity.rangeSprite.drawCircle(0, 0, building.range * METER_PIXEL_SIZE);
             entity.rangeSprite.endFill();
             entity.addChild(entity.rangeSprite);
-        }
-
+            }
+        
         entity.isRail = false;
         if (entity.subtype === 'rail_small_gauge' || entity.subtype === 'rail_large_gauge' || entity.subtype === 'provisional_road') {
             entity.isRail = true;
