@@ -642,7 +642,7 @@
                 width: 5,
                 length: 5,
                 icon: 'buildings/ConcreteFoundation02Icon.png',
-                texture: 'concrete_corner.png',
+                texture: 'concrete_corner_meter.png',
                 sortOffset: -1000,
                 cost: {
                     gravel: 75
@@ -656,7 +656,7 @@
                 width: 5,
                 length: 5,
                 icon: 'buildings/ConcreteFoundation01Icon.png',
-                texture: 'concrete.png',
+                texture: 'concrete_meter.png',
                 sortOffset: -1000,
                 cost: {
                     gravel: 75
@@ -670,7 +670,7 @@
                 width: 5,
                 length: 10,
                 icon: 'buildings/ConcreteFoundation03Icon.png',
-                texture: 'concrete.png',
+                texture: 'concrete_meter.png',
                 sortOffset: -1000,
                 cost: {
                     gravel: 115
@@ -684,7 +684,7 @@
                 width: 10,
                 length: 10,
                 icon: 'buildings/ConcreteFoundation04Icon.png',
-                texture: 'concrete.png',
+                texture: 'concrete_meter.png',
                 sortOffset: -1000,
                 cost: {
                     gravel: 150
@@ -1054,7 +1054,7 @@
                 width: 1,
                 length: 1,
                 icon: 'buildings/PowerPoleIcon.webp',
-                texture: 'concrete.png',
+                texture: 'concrete_meter.png',
                 cost: {
                     basic_material: 20
                 }
@@ -2363,7 +2363,7 @@
                 description: 'Used for storing raw resources for transfer into and out of Facilities. The stockpile for this structure can be reserved.', // Requires Construction Vehicle
                 category: 'factories',
                 icon: 'buildings/ResourceTransferStationIcon.webp',
-                texture: 'buildings/resource_transfer_station.png',
+                texture: 'buildings/resource_transfer_station_meter.png',
                 width: 6,
                 length: 9.5,
                 cost: {
@@ -2375,7 +2375,7 @@
                 description: 'Used for storing materials for transfer into and out of Facilities. The stockpile for this structure can be reserved.', // Requires Construction Vehicle
                 category: 'factories',
                 icon: 'buildings/MaterialTransferStationIcon.webp',
-                texture: 'buildings/material_transfer_station.png',
+                texture: 'buildings/material_transfer_station_meter.png',
                 width: 6,
                 length: 12,
                 cost: {
@@ -2387,7 +2387,7 @@
                 description: 'Used for storing materials for transfer into and out of Facilities. The stockpile for this structure can be reserved.', // Requires Construction Vehicle
                 category: 'factories',
                 icon: 'buildings/LiquidTransferStationIcon.webp',
-                texture: 'buildings/liquid_transfer_station.png',
+                texture: 'buildings/liquid_transfer_station_meter.png',
                 width: 6,
                 length: 8.5,
                 cost: {

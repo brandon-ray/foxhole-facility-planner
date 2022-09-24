@@ -143,7 +143,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
     let sounds = null;
     let asset_list = {
         white: 'white.png',
-        background: 'grid.webp',
+        background: 'grid_32.webp',
         wall: 'wall.png'
     };
     for (let i=0; i<window.objectData.buildings_list.length; i++) {
@@ -391,7 +391,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
         };
         background.width = 10000;
         background.height = 10000;
-        background.tileScale.set(0.5);
         background.anchor.x = 0;
         background.anchor.y = 0;
         background.position.x = 0;
@@ -1201,7 +1200,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 entity.addChild(sprite);
             } else if (resources[building.texture]) {
                 sprite.texture = resources[building.texture].texture;
-                sprite.tileScale.set(0.5);
             }
         }
 
