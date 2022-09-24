@@ -12,7 +12,7 @@ const game = {
         volume: 1
     },
     isPlayScreen: false,
-    selectedCategory: 'foundations'
+    selectedBuildingCategory: 'foundations'
 };
 
 function escapeHtml(str) {

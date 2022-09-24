@@ -227,6 +227,7 @@ Vue.component('app-menu-building-selected', {
     </div>
     `
 });
+
 Vue.component('app-menu-construction-list', {
     props: ['menuData'],
     data: function() {
@@ -249,7 +250,7 @@ Vue.component('app-menu-construction-list', {
     },
     template: html`
     <div id="construction-page">
-        <select class="app-input construction-category" v-model="game.selectedCategory" @change="refresh">
+        <select class="app-input construction-category" v-model="game.selectedBuildingCategory" @change="refresh">
             <option value="foundations">Foundations</option>
             <option value="factories">Factories</option>
             <option value="harvesters">Harvesters</option>
@@ -257,8 +258,8 @@ Vue.component('app-menu-construction-list', {
             <option value="misc">Miscellaneous</option>
         </select>
         <div class="construction-items" class="menu-page">
-            <div v-for="building in buildings" v-if="!building.hideInList && building.category === game.selectedCategory" class="build-icon" :style="{backgroundImage:'url(/assets/' + building.icon + ')'}"
-                @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" v-on:click="buildBuilding(building) ; game.selectedCategory=building.category">
+            <div v-for="building in buildings" v-if="!building.hideInList && building.category === game.selectedBuildingCategory" class="build-icon" :style="{backgroundImage:'url(/assets/' + building.icon + ')'}"
+                @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" v-on:click="buildBuilding(building)">
             </div>
         </div>
     </div>
