@@ -2365,7 +2365,7 @@
                 icon: 'buildings/ResourceTransferStationIcon.webp',
                 texture: 'buildings/resource_transfer_station.png',
                 width: 6,
-                length: 9,
+                length: 9.5,
                 cost: {
                     construction_material: 35
                 }
@@ -2389,7 +2389,7 @@
                 icon: 'buildings/LiquidTransferStationIcon.webp',
                 texture: 'buildings/liquid_transfer_station.png',
                 width: 6,
-                length: 8,
+                length: 8.5,
                 cost: {
                     construction_material: 35
                 }

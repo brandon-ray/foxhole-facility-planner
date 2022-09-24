@@ -1690,8 +1690,15 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
                     if (game.settings.enableGrid || keys[16]) {
                         let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
-                        currentBuilding.x = Math.floor(currentBuilding.x / gridSize) * gridSize;
-                        currentBuilding.y = Math.floor(currentBuilding.y / gridSize) * gridSize;
+                        //Had to do all of this funky math to support half/quarter meters without changing the building center.
+                        let width = currentBuilding.building.width;
+                        let length = currentBuilding.building.length;
+                        let xOffsetWidth = (((width % Math.floor(width))) * METER_PIXEL_SIZE)/2;
+                        let yOffsetHeight = (((length % Math.floor(length))) * METER_PIXEL_SIZE)/2;
+                        let xOffset = (Math.cos(currentBuilding.rotation - Math.PI/2) * xOffsetWidth) + (Math.sin(currentBuilding.rotation) * yOffsetHeight);
+                        let yOffset = (Math.sin(currentBuilding.rotation - Math.PI/2) * yOffsetHeight) + (Math.cos(currentBuilding.rotation) * xOffsetWidth);
+                        currentBuilding.x = Math.round((Math.round(currentBuilding.x / gridSize) * gridSize) - xOffset);
+                        currentBuilding.y = Math.round((Math.round(currentBuilding.y / gridSize) * gridSize) - yOffset);
                     }
                 }
 
