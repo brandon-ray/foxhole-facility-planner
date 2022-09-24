@@ -1017,6 +1017,7 @@
                 width: 3,
                 length: 3,
                 range: 40,
+                overlapDist: 65,
                 icon: 'buildings/SupplyStationIcon.webp',
                 cost: {
                     construction_material: 200
