@@ -236,13 +236,13 @@ p {
 
 #sidebar-header > .colonial-button {
     background-color: #516c4b;
-    background-image: url('assets/colonial_logo.webp');
+    background-image: url('/assets/colonial_logo.webp');
     float: left;
 }
 
 #sidebar-header > .warden-button {
     background-color: #235683;
-    background-image: url('assets/warden_logo.webp');
+    background-image: url('/assets/warden_logo.webp');
     float: right;
 }
 
