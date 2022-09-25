@@ -2435,10 +2435,6 @@
                 upgradeBuilding.parentName = building.name;
                 upgradeBuilding.upgradeName = upgrade.name;
                 upgradeBuilding.name = building.name + ' (' + upgrade.name + ')';
-                
-                if (building.production && upgradeBuilding.production) {
-                    upgradeBuilding.production = building.production.concat(upgradeBuilding.production);
-                }
 
                 let upgradeBuildingCost = Object.assign({}, building.cost);
                 for (const [resource, amount] of Object.entries(upgradeBuilding.cost)) {
