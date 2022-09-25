@@ -565,9 +565,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
         for (let i=0; i<entities.length; i++) {
             let entity = entities[i];
             let entityData = {
-                x: entity.x,
-                y: entity.y,
-                z: entity.z,
+                x: parseFloat(entity.x),
+                y: parseFloat(entity.y),
+                z: parseInt(entity.z),
                 rotation: entity.rotation,
                 type: entity.type,
                 subtype: entity.subtype
@@ -593,14 +593,14 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 let entity;
                 switch (entityData.type) {
                     case 'building':
-                        entity = createBuilding(entityData.subtype, entityData.x, entityData.y, entityData.z);
+                        entity = createBuilding(entityData.subtype, parseFloat(entityData.x), parseFloat(entityData.y), parseInt(entityData.z));
                         break;
                     default:
                         console.error('Attempted to load invalid entity:', entityData);
                         continue;
                 }
-                xTotal += entityData.x;
-                yTotal += entityData.y;
+                xTotal += parseFloat(entityData.x);
+                yTotal += parseFloat(entityData.y);
 
                 if (entity) {
                     entity.rotation = entityData.rotation;
