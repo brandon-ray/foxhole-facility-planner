@@ -9,6 +9,8 @@ const game = {
         gridSize: 16,
         enableSnapRotation: true,
         snapRotationDegrees: 15,
+        selectedTeam: null,
+        showUpgradesAsBuildings: true,
         volume: 1
     },
     isPlayScreen: false,

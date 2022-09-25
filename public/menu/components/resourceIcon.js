@@ -1,5 +1,5 @@
 Vue.component('app-game-resource-icon', {
-    props: ['resource', 'amount'],
+    props: ['resource', 'amount', 'column'],
     data: function() {
         return {
             style: {},
@@ -28,12 +28,20 @@ Vue.component('app-game-resource-icon', {
         }
     },
     template: html`
-    <div class="resource-row" v-if="resourceData">
-        <div class="resource-icon" :title="resourceData.name" :style="style"></div>
-        <div class="resource-name">{{resourceData.name}}</div>
-        <div class="resource-amount">
-            x{{amount.toLocaleString('en-US')}}<span v-if="resourceData.type === 'liquid'">L</span>
+    <template v-if="resourceData">
+        <div class="resource-col" v-if="column">
+            <div class="resource-icon" :title="resourceData.name" :style="style"></div>
+            <div class="resource-amount">
+                x{{amount.toLocaleString('en-US')}}<template v-if="resourceData.type === 'liquid'">L</template>
+            </div>
         </div>
-    </div>
+        <div class="resource-row" v-else>
+            <div class="resource-icon" :title="resourceData.name" :style="style"></div>
+            <div class="resource-name">{{resourceData.name}}</div>
+            <div class="resource-amount">
+                x{{amount.toLocaleString('en-US')}}<template v-if="resourceData.type === 'liquid'">L</template>
+            </div>
+        </div>
+    </template>
     `
 });
