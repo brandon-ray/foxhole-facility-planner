@@ -1085,25 +1085,24 @@
                     input: {
                         diesel: 25
                     }
-                }]
-            },
-            petrol_power_plant: {
-                name: 'Petrol Power Plant',
-                category: 'power',
-                power: 12,
-                width: 7,
-                length: 7,
-                icon: 'buildings/DieselPowerPlantIcon.webp',
-                cost: {
-                    basic_material: 150,
-                    processed_construction_material: 50
-                },
-                production: [{
-                    time: 90,
-                    input: {
-                        petrol: 50
+                }],
+                upgrades: {
+                    petrol_power: {
+                        name: 'Petrol Power Plant',
+                        description: 'Generates a large amount of power using Petrol as input.',
+                        power: 12,
+                        icon: 'buildings/DieselPowerPlantIcon.webp',
+                        cost: {
+                            processed_construction_material: 50
+                        },
+                        production: [{
+                            time: 90,
+                            input: {
+                                petrol: 50
+                            }
+                        }]
                     }
-                }]
+                }
             },
             power_station: {
                 name: 'Power Station',
@@ -2431,9 +2430,28 @@
                 let upgradeKey = upgradeKeys[j];
                 let upgrade = building.upgrades[upgradeKey];
                 let upgradeBuilding = Object.assign({}, building, upgrade);
+
+                upgradeBuilding.parentKey = buildingKey;
+                upgradeBuilding.parentName = building.name;
+                upgradeBuilding.upgradeName = upgrade.name;
                 upgradeBuilding.name = building.name + ' (' + upgrade.name + ')';
+                
+                if (building.production && upgradeBuilding.production) {
+                    upgradeBuilding.production = building.production.concat(upgradeBuilding.production);
+                }
+
+                let upgradeBuildingCost = Object.assign({}, building.cost);
+                for (const [resource, amount] of Object.entries(upgradeBuilding.cost)) {
+                    let resourceAmt = building.cost[resource];
+                    if (resourceAmt) {
+                        upgradeBuildingCost[resource] = resourceAmt + amount;
+                    } else {
+                        upgradeBuildingCost[resource] = amount;
+                    }
+                }
+                upgradeBuilding.cost = upgradeBuildingCost;
+
                 window.objectData.buildings[buildingKey + '_' + upgradeKey] = upgradeBuilding;
-                //TODO: Combine costs for upgrades with the base cost.
             }
         }
     }
@@ -2449,8 +2467,24 @@
             let key = keys[j];
             let data = objectData[key];
             data.key = key;
+
+            if (objectDataKey == 'buildings' && data.production) {
+                if (data.power > 0) {
+                    data.production.hasOutput = true;
+                } else {
+                    for (let i = 0; i < data.production.length; i++) {
+                        let recipe = data.production[i];
+                        if (recipe.output) {
+                            data.production.hasOutput = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
             objectList.push(data);
         }
+
         window.objectData[objectDataKey + '_list'] = objectList;
 
         objectList.sort((a, b) => {

@@ -1201,6 +1201,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             } else if (resources[building.texture]) {
                 sprite.texture = resources[building.texture].texture;
             }
+            entity.sprite = sprite;
         }
 
         if (!building.texture && !entity.isRail) {
