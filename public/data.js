@@ -1259,7 +1259,7 @@
                 production: [{
                     time: 50,
                     output: {
-                        water: 1
+                        water: 50
                     }
                 }]
             },
@@ -1276,7 +1276,7 @@
                 production: [{
                     time: 50,
                     output: {
-                        oil: 1
+                        oil: 50
                     }
                 }]
             },
