@@ -146,7 +146,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
     let asset_list = {
         white: 'white.png',
         background: 'grid_32.webp',
-        wall: 'wall.png'
+        buildingBackground: 'building_background.png'
     };
     for (let i=0; i<window.objectData.buildings_list.length; i++) {
         let building = window.objectData.buildings_list[i];
@@ -1177,7 +1177,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
 
         if (!entity.isRail) {
-            sprite = new PIXI.TilingSprite(resources['wall'].texture);
+            sprite = new PIXI.TilingSprite(resources['buildingBackground'].texture);
             sprite.width = building.width * METER_PIXEL_SIZE;
             sprite.height = building.length * METER_PIXEL_SIZE;
             sprite.anchor.set(0.5);
