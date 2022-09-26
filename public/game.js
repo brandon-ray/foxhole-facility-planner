@@ -1182,6 +1182,16 @@ const fontFamily = ['Recursive', 'sans-serif'];
             sprite.height = building.length * METER_PIXEL_SIZE;
             sprite.anchor.set(0.5);
             entity.addChild(sprite);
+            
+            if (building.category !== 'foundations') {
+                if (!building.texture) {
+                    sprite.tint = (building.color ? building.color : (buildingCategories[building.category] ? buildingCategories[building.category].color : 0x505050)); // Dark Grey
+                }
+                let spriteBorder = new PIXI.Graphics();
+                spriteBorder.lineStyle(3, 0xFFFFFF);
+                spriteBorder.drawRect(-(sprite.width/2), -(sprite.height/2), sprite.width, sprite.height);
+                entity.addChild(spriteBorder);
+            }
         }
 
         let frameX = 0;
@@ -1206,19 +1216,22 @@ const fontFamily = ['Recursive', 'sans-serif'];
             entity.sprite = sprite;
         }
 
-        if (!building.texture && !entity.isRail) {
-            let iconBackground = new PIXI.Sprite(resources['white'].texture);
-            iconBackground.tint = 0x3d3d3d;
-            iconBackground.anchor.set(0.5);
-            iconBackground.width = 64;
-            iconBackground.height = 64;
-            iconBackground.anchor.set(0.5);
+        if (!building.texture && building.category !== 'foundations' && !entity.isRail) {
+            let iconBackground = new PIXI.Graphics();
+            iconBackground.lineStyle(3, 0xFFFFFF);
+            iconBackground.beginFill(0x0B0B0B);
+            if (building.key === 'fuel_silo') {
+                iconBackground.drawRect(-32, -32, 64, 64); // Unfortunately fuel silo is exceptionally small compared to other buildings.
+            } else {
+                iconBackground.drawRect(-40, -40, 80, 80);
+            }
+            iconBackground.endFill();
             entity.addChild(iconBackground);
 
             let icon = new PIXI.Sprite(resources[building.icon].texture);
             icon.anchor.set(0.5);
-            icon.width = iconBackground.width;
-            icon.height = iconBackground.height;
+            icon.width = iconBackground.width - 10;
+            icon.height = iconBackground.height - 10;
             icon.anchor.set(0.5);
             entity.addChild(icon);
         }

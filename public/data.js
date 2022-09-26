@@ -1,4 +1,30 @@
-const buildingCategories = { foundations: 0, factories: 1, harvesters: 2, power: 3, misc: 4 };
+const buildingCategories = {
+    foundations: {
+        name: 'Foundations',
+        order: 0,
+        color: 0x505050 // Dark Grey
+    },
+    factories: {
+        name: 'Factories',
+        order: 1,
+        color: 0x8566bd // Indigo / Purple
+    },
+    harvesters: {
+        name: 'Harvesters',
+        order: 2,
+        color: 0x7cea92 // Green
+    },
+    power: {
+        name: 'Power',
+        order: 3,
+        color: 0xf2ec7a // Yellow
+    },
+    misc: {
+        name: 'Miscellaneous',
+        order: 4,
+        color: 0x7ce1ea // Blue
+    }
+};
 
 //https://foxhole.fandom.com/wiki/Category:Icons
 (function() {
@@ -2491,7 +2517,7 @@ const buildingCategories = { foundations: 0, factories: 1, harvesters: 2, power:
         });
         
         if (objectDataKey === 'buildings') {
-            objectList.sort((a, b) => buildingCategories[a.category] - buildingCategories[b.category]);
+            objectList.sort((a, b) => buildingCategories[a.category].order - buildingCategories[b.category].order);
         }
     }
 })();
