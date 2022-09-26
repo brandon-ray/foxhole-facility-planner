@@ -44,7 +44,7 @@ try {
     if (window.localStorage) {
         let newSettings = window.localStorage.getItem('settings');
         if (newSettings) {
-            game.settings = JSON.parse(newSettings);
+            game.settings = Object.assign({}, game.settings, JSON.parse(newSettings));
         }
     }
 } catch(e) {
