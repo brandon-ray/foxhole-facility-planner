@@ -52,6 +52,10 @@ Vue.component('app-game-sidebar', {
             }
             this.currentMenuData = menuData;
         },
+        selectTeam: function(team) {
+            game.settings.selectedTeam = game.settings.selectedTeam != team ? team : null;
+            game.updateSettings();
+        },
         showHoverMenu: function(data) {
             this.hoverData = data;
         }
@@ -59,9 +63,9 @@ Vue.component('app-game-sidebar', {
     template: html`
     <div id="sidebar">
         <div id="sidebar-header">
-            <button class="colonial-button"></button>
+            <button class="colonial-button" :class="{ selected: game.settings.selectedTeam == 'c' }" @click="selectTeam('c')"></button>
             <img class="sidebar-logo" src="/assets/logo_transparent.webp">
-            <button class="warden-button"></button>
+            <button class="warden-button" :class="{ selected: game.settings.selectedTeam == 'w' }" @click="selectTeam('w')"></button>
         </div>
         <div id="sidebar-body">
             <div v-if="!currentMenu" class="menu-body">
@@ -93,36 +97,43 @@ Vue.component('app-game-sidebar', {
                 <i class="fa fa-question-circle"></i>
             </button>
         </div>
-        <div class="hover-menu" v-if="hoverData">
-            <h3>{{hoverData.name}}</h3>
-            <div style="text-align:center;" v-if="!hoverData.production">
-                <div class="resource-icon" :title="hoverData.name" :style="{backgroundImage: 'url(/assets/' + hoverData.icon + ')'}"></div>
+        <div id="hover-building-info" v-if="hoverData">
+            <div class="building-info-name">
+                <img v-bind:src="'/assets/' + hoverData.icon" />
+                <h4>{{hoverData.parentName ? hoverData.parentName : hoverData.name}}</h4>
             </div>
-            <div v-if="hoverData.production && hoverData.production.length">
-                <div style="margin-bottom:20px; text-align:center;" v-for="production in hoverData.production">
-                    <div class="row">
-                        <div class="col" style="color:#d50101;" v-if="production.input">
-                            <app-game-resource-icon v-for="(value, key) in production.input" :resource="key" :amount="value"/>
+            <div v-if="hoverData.parentName" class="building-info-upgrade">
+                <i class="fa fa-check-circle" aria-hidden="true"></i> {{hoverData.upgradeName}} Upgrade
+            </div>
+            <div class="building-info-body">
+                <p class="building-info-description">{{hoverData.description}}</p>
+                <div class="building-info-production" v-if="hoverData.production && hoverData.production.length && hoverData.production.hasOutput">
+                    <div v-for="(recipe, index) in hoverData.production" v-if="!recipe.team || !game.settings.selectedTeam || recipe.team == game.settings.selectedTeam" class="produced-resource-row">
+                        <div class="produced-resource">
+                            <span v-for="(amount, resourceId) in recipe.output">{{objectData.resources[resourceId].name}}</span><span v-if="hoverData.power > 0">Power</span>
                         </div>
-                        <div class="col-2">
-                            <br>
-                            <i class="fa fa-play fa-2x"></i>
-                        </div>
-                        <div class="col" style="color:#03b003;">
-                            <div v-if="hoverData.power > 0">
-                                <i class="fa fa-bolt fa-4x"></i>
-                                <div style="color:#03b003;">
-                                    {{hoverData.power}} MW
-                                </div>
+                        <div class="production-recipe">
+                            <div v-if="!recipe.input" class="resource-icon building-icon"><img v-bind:src="'/assets/' + hoverData.icon" /></div>
+                            <app-game-resource-icon class="produced-resource-input" v-for="(value, key) in recipe.input" :resource="key" :amount="value" :column="true" />
+                            <div class="select-production-pointer">
+                                <i class="fa fa-play"></i>
                             </div>
-                            <app-game-resource-icon v-if="production.output" v-for="(value, key) in production.output" :resource="key" :amount="value"/>
+                            <app-game-resource-icon class="produced-resource-output" v-for="(value, key) in recipe.output" :resource="key" :amount="value" :column="true" />
+                            <div class="resource-col power-production" v-if="hoverData.power > 0">
+                                <div class="resource-icon"><i class="fa fa-bolt"></i></div>
+                                <div class="resource-amount">x{{hoverData.power}}</div>
+                            </div>
                         </div>
                     </div>
-                    <h4 style="color:#d0d004; padding-left:10px;">
-                        <span v-if="hoverData.power"><i class="fa fa-bolt"></i> {{production.power ? production.power : hoverData.power}} MW</span>
-                        &nbsp;&nbsp;&nbsp;
-                        <i class="fa fa-clock-o"></i> {{production.time}}s
-                    </h4>
+                </div>
+                <div class="building-cost">
+                    <app-game-resource-icon v-for="(value, key) in hoverData.cost" :resource="key" :amount="value"/>
+                </div>
+                <div class="power-cost" v-if="hoverData.power < 0">
+                    <i class="fa fa-bolt"></i> {{hoverData.power}} MW
+                </div>
+                <div class="power-produced" v-else-if="hoverData.power > 0">
+                    <i class="fa fa-bolt"></i> {{hoverData.production && hoverData.production.power ? hoverData.production.power : hoverData.power}} MW
                 </div>
             </div>
         </div>
@@ -196,31 +207,30 @@ Vue.component('app-menu-building-selected', {
         </div>
         <div v-if="selectedEntity.type === 'building' && selectedEntity.building && selectedEntity.building.production && selectedEntity.building.production.length">
             <h5>Select Production</h5>
-            <div style="margin-bottom:12px; text-align:center;" v-for="(production, index) in selectedEntity.building.production"
-                 :class="{'selected-production': selectedEntity.selectedProduction === index}" @click="changeProduction(index)">
-                <div class="row">
-                    <div class="col" style="color:#d50101;" v-if="production.input">
-                        <app-game-resource-icon v-for="(value, key) in production.input" :resource="key" :amount="value"/>
+            <div class="select-production" style="margin-bottom:12px; text-align:center;" v-for="(production, index) in selectedEntity.building.production"
+                 v-if="!production.team || !game.settings.selectedTeam || production.team == game.settings.selectedTeam" :class="{'selected-production': selectedEntity.selectedProduction === index}" @click="changeProduction(index)">
+                <div class="production-row">
+                    <div class="select-production-input" v-if="production.input">
+                        <app-game-resource-icon v-for="(value, key) in production.input" :resource="key" :amount="value" :column="true" />
                     </div>
-                    <div class="col-2">
-                        <br>
-                        <i class="fa fa-play fa-2x"></i>
+                    <div class="select-production-pointer">
+                        <i class="fa fa-play"></i>
                     </div>
-                    <div class="col" style="color:#03b003;">
+                    <div class="select-production-output">
                         <div v-if="selectedEntity.building.power > 0">
                             <i class="fa fa-bolt fa-4x"></i>
-                            <div style="color:#03b003;">
+                            <div style="color: #03b003;">
                                 {{selectedEntity.building.power}} MW
                             </div>
                         </div>
-                        <app-game-resource-icon v-if="production.output" v-for="(value, key) in production.output" :resource="key" :amount="value"/>
+                        <app-game-resource-icon v-if="production.output" v-for="(value, key) in production.output" :resource="key" :amount="value" :column="true" />
                     </div>
                 </div>
-                <h4 style="color:#d0d004; padding-left:10px;">
+                <h6 class="production-requirements" style="color: yellow;">
                     <span v-if="selectedEntity.building.power"><i class="fa fa-bolt"></i> {{production.power ? production.power : selectedEntity.building.power}} MW</span>
                     &nbsp;&nbsp;&nbsp;
                     <i class="fa fa-clock-o"></i> {{production.time}}s
-                </h4>
+                </h6>
             </div>
         </div>
         <button type="button" class="app-btn app-btn-secondary" v-on:click="destroyBuilding" @mouseenter="bme">
@@ -260,7 +270,7 @@ Vue.component('app-menu-construction-list', {
             <option value="misc">Miscellaneous</option>
         </select>
         <div class="construction-items" class="menu-page">
-            <div v-for="building in buildings" v-if="!building.hideInList && building.category === game.selectedBuildingCategory" class="build-icon" :style="{backgroundImage:'url(/assets/' + building.icon + ')'}"
+            <div v-for="building in buildings" v-if="!building.hideInList && !(!game.settings.showUpgradesAsBuildings && building.parentName) && building.category === game.selectedBuildingCategory" class="build-icon" :style="{backgroundImage:'url(/assets/' + building.icon + ')'}"
                 @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" v-on:click="buildBuilding(building)">
             </div>
         </div>
@@ -465,6 +475,13 @@ Vue.component('app-menu-settings', {
                 <input class="app-input" type="number" v-model="game.settings.snapRotationDegrees" @input="game.updateSettings">
             </label>
         </div>
+        <!--
+        Not including this until we get an upgrade selection inside of buildings since you won't be able to choose if we disable them in construction list.
+        <label class="settings-option-wrapper">
+            <i class="fa fa-th-large" aria-hidden="true"></i> Show Upgrades as Buildings
+            <input class="app-input" type="checkbox" v-model="game.settings.showUpgradesAsBuildings" @change="game.updateSettings">
+        </label>
+        -->
     </div>
     `
 });

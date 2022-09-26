@@ -9,6 +9,8 @@ const game = {
         gridSize: 16,
         enableSnapRotation: true,
         snapRotationDegrees: 15,
+        selectedTeam: null,
+        showUpgradesAsBuildings: true,
         volume: 1
     },
     isPlayScreen: false,
@@ -1201,6 +1203,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             } else if (resources[building.texture]) {
                 sprite.texture = resources[building.texture].texture;
             }
+            entity.sprite = sprite;
         }
 
         if (!building.texture && !entity.isRail) {

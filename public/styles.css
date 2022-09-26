@@ -227,23 +227,49 @@ p {
 #sidebar-header > .colonial-button, #sidebar-header > .warden-button {
     width: 54px;
     height: 54px;
+    background-color: gray;
     background-size: 44px 44px;
     background-repeat: no-repeat;
     background-position: center;
     border: 2px solid black;
-    box-shadow: inset 0 0 3px black;
+    cursor: pointer;
+    transition-duration: 0.1s;
+    filter: grayscale(100%);
+}
+
+#sidebar-header > .colonial-button.selected, #sidebar-header > .warden-button.selected,
+#sidebar-header > .colonial-button:hover, #sidebar-header > .warden-button:hover {
+    filter: none;
+}
+
+#sidebar-header > .colonial-button:not(.selected):hover, #sidebar-header > .warden-button:not(.selected):hover {
+    background-size: 48px 48px;
+}
+
+#sidebar-header > .colonial-button:hover, #sidebar-header > .warden-button:hover {
+    border: 2px solid white;
 }
 
 #sidebar-header > .colonial-button {
-    background-color: #516c4b;
     background-image: url('/assets/colonial_logo.webp');
     float: left;
 }
 
 #sidebar-header > .warden-button {
-    background-color: #235683;
     background-image: url('/assets/warden_logo.webp');
     float: right;
+}
+
+#sidebar-header > .colonial-button.selected, #sidebar-header > .warden-button.selected {
+    box-shadow: inset 0 0 3px black;
+}
+
+#sidebar-header > .colonial-button.selected {
+    background-color: #516c4b;
+}
+
+#sidebar-header > .warden-button.selected {
+    background-color: #235683;
 }
 
 #sidebar .app-btn-primary, #sidebar .app-btn-secondary {
@@ -425,20 +451,102 @@ p {
     background-color: #3b3b3b;
 }
 
+.resource-col {
+    display: inline-block;
+    width: 45px;
+    height: 45px;
+    position: relative;
+    margin-right: 5px;
+}
+
+.resource-row {
+    background: linear-gradient(to right, #242424, #0000);
+    overflow: auto;
+    margin-bottom: 4px;
+    text-align: left;
+}
+
 .resource-icon {
-    width: 80px;
-    height: 80px;
-    border: 2px solid black;
+    width: 48px;
+    height: 48px;
+    background-color: #0B0B0B;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    border: 2px solid black;
+    /*
     font-size: 22px;
     text-shadow: 2px 2px #000;
-    margin: auto;
+    */
+    float: left;
+    margin: 0;
+}
+
+.resource-col > .resource-icon {
+    width: 100%;
+    height: 100%;
+}
+
+.resource-col > .resource-amount {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.resource-row > .resource-icon {
+    margin-right: 8px;
+}
+
+.resource-row > .resource-name {
+    line-height: 26px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.resource-row > .resource-amount, .resource-col > .resource-amount {
+    color: #d50101;
+    line-height: 16px;
+}
+
+.resource-col.power-production .resource-icon {
+    font-size: 1.7em;
+    text-align: center;
+    line-height: 30px;
+}
+
+.select-production {
+    background: #0d0d0d;
+    border: 2px solid black;
+    padding: 6px;
+    cursor: pointer;
+    overflow: auto;
+}
+
+.select-production:hover {
+    background: #131313;
+}
+
+.select-production-input, .select-production-pointer, .select-production-output {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.select-production-pointer {
+    font-size: 22px;
+    margin-right: 5px;
+}
+
+.select-production-output .resource-amount, .resource-col.power-production .resource-amount {
+    color: #03b003;
+}
+
+.select-production h6 {
+    margin: 0;
 }
 
 .selected-production {
-    border: 2px solid white;
+    border: 2px solid #ff8f00;
     margin: 0;
 }
 
@@ -536,42 +644,150 @@ p {
     overflow: auto;
 }
 
-.statistics-panel-body .resource-row {
-    background: linear-gradient(to right, #242424, #0000);
+.statistics-panel-fac-output .resource-amount {
+    color: #03b003;
+}
+
+#hover-building-info {
+    background: #1a1a1a;
+    border: 2px solid black;
+    box-shadow: 0 0 10px black;
+    position: fixed;
+    top: 15px;
+    left: 365px;
+    text-align: left;
+    max-width: 600px;
+    z-index: 100;
+    pointer-events: none;
+}
+
+#hover-building-info > .building-info-name {
+    background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
     overflow: auto;
-    margin-bottom: 4px;
 }
 
-.statistics-panel-body .resource-icon {
-    width: 48px;
-    height: 48px;
-    background-color: #0B0B0B;
+#hover-building-info > .building-info-name > img {
+    width: 36px;
+    height: 36px;
+    background-color: #151515;
     float: left;
-    margin-right: 8px;
+    margin: 2px;
+    padding: 1px;
+    border: 1px solid black;
 }
 
-.statistics-panel-body .resource-name {
-    line-height: 20px;
+#hover-building-info > .building-info-name > h4 {
+    line-height: 40px;
+    margin: 0 0 0 48px;
+    padding-right: 10px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
 }
 
-.statistics-panel-body .resource-amount {
-    color: #d50101;
-    line-height: 25px;
+#hover-building-info > .building-info-upgrade {
+    background: #0b0b0b;
+    padding: 2px 7px;
 }
 
-.statistics-panel-fac-output .resource-amount {
+#hover-building-info > .building-info-body {
+    padding: 10px;
+}
+
+#hover-building-info > .building-info-body > p.building-info-description {
+    margin-bottom: 10px;
+    padding: 0;
+}
+
+#hover-building-info > .building-info-body > .building-info-production {
+    background: #0d0d0d;
+    border: 1px solid black;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    overflow: auto;
+}
+
+.produced-resource-row {
+    width: 50%;
+    float: left;
+    margin-bottom: 5px;
+}
+
+.produced-resource-row .production-recipe {
+    overflow: hidden;
+}
+
+.produced-resource-row .production-recipe * {
+    vertical-align: middle;
+}
+
+.produced-resource-row .production-recipe .building-icon {
+    margin-right: 5px;
+}
+
+.produced-resource-row .production-recipe .building-icon img {
+    width: 100%;
+    height: 100%;
+}
+
+.produced-resource-row .building-icon, .produced-resource-row .produced-resource-input, .produced-resource-row .produced-resource-output, .produced-resource-row .power-production {
+    width: 40px;
+    height: 40px;
+    float: left;
+}
+
+.produced-resource-row .produced-resource-output .resource-amount {
     color: #03b003;
 }
 
-.hover-menu {
-    position: fixed;
-    top: 0;
-    left: 350px;
-    background-color: #4a4a4a;
-    padding: 6px;
+.produced-resource-row .select-production-pointer {
+    width: 20px;
+    font-size: 18px;
+    line-height: 40px;
+    float: left;
+    text-align: center;
+}
+
+#hover-building-info > .building-info-body > .building-info-production .produced-resource {
+    color: #45d745;
+    font-size: 0.95em;
+    padding-right: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+#hover-building-info > .building-info-body > .building-info-production .produced-resource > span:not(:first-child)::before {
+    content: ', ';
+}
+
+#hover-building-info > .building-info-body > .building-info-production .produced-resource::before {
+    content: '';
+    display: inline-block;
+    background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
+    background: #45d745;
+    width: 10px;
+    height: 10px;
+    width: 8px;
+    height: 8px;
+    margin-right: 6px;
+}
+
+#hover-building-info > .building-info-body > .building-cost > div:last-child {
+    margin-bottom: 0;
+}
+
+#hover-building-info > .building-info-body > .power-cost, #hover-building-info > .building-info-body > .power-produced {
+    color: #d50101;
+    font-size: 1.2em;
+    position: absolute;
+    bottom: 0;
+    right: 5px;
+    z-index: 100;
+}
+
+#hover-building-info > .building-info-body > .power-produced {
+    color: #45d745;
 }
 
 .footer {
@@ -646,6 +862,10 @@ label.settings-option-wrapper input, .settings-option-wrapper label input {
 
 label.settings-option-wrapper input:not(.slider), .settings-option-wrapper label input:not(.slider) {
     width: 100px;
+}
+
+label.settings-option-wrapper input[type="checkbox"] {
+    width: 30px;
 }
 
 label.settings-option-wrapper select:focus, .settings-option-wrapper label select:focus,
