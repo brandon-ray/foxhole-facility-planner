@@ -1040,7 +1040,7 @@
                 width: 3,
                 length: 3,
                 range: 24,
-                icon: 'buildings/CraneIcon.png',
+                icon: 'buildings/CraneIcon.webp',
                 cost: {
                     processed_construction_material: 10
                 }
@@ -1108,7 +1108,7 @@
                 name: 'Power Station',
                 description: 'This Facility generates a large amount of power using Oil or Coal as inputs.', // Requires Construction Vehicle + Requires Tech
                 category: 'power',
-                icon: 'buildings/PowerStation.png',
+                icon: 'buildings/PowerStationIcon.webp',
                 power: 10,
                 width: 14,
                 length: 13,
