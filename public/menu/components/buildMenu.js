@@ -342,7 +342,7 @@ Vue.component('app-menu-statistics', {
                             power = production.power;
                         }
 
-                        let productionTime = Math.floor(this.time / production.time);
+                        let productionTime = (this.time / production.time);
                         if (production.input) {
                             let inputKeys = Object.keys(production.input);
                             for (let j = 0; j < inputKeys.length; j++) {
