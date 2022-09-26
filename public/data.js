@@ -1,3 +1,5 @@
+const buildingCategories = { foundations: 0, factories: 1, harvesters: 2, power: 3, misc: 4 };
+
 //https://foxhole.fandom.com/wiki/Category:Icons
 (function() {
     window.objectData = {
@@ -2405,6 +2407,7 @@
             */
             sound_test: {
                 name: 'Sus',
+                category: 'misc',
                 hideInList: true,
                 power: 0,
                 width: 2,
@@ -2486,5 +2489,9 @@
         objectList.sort((a, b) => {
             return a.name.localeCompare(b.name);
         });
+        
+        if (objectDataKey === 'buildings') {
+            objectList.sort((a, b) => buildingCategories[a.category] - buildingCategories[b.category]);
+        }
     }
 })();
