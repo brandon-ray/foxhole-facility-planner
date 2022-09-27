@@ -1418,22 +1418,45 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
         let boundsBuffer = 15;
         entity.canGrab = function() {
+            let bounds = entity.getBounds(true);
             if (entity.isRail && entity.bezier) {
-                let bounds = entity.getBounds(true);
                 bounds.x -= boundsBuffer;
                 bounds.y -= boundsBuffer;
                 bounds.width += boundsBuffer*2;
                 bounds.height += boundsBuffer*2;
-                if (mx >= bounds.x && mx <= bounds.x+bounds.width && my >= bounds.y && my <= bounds.y+bounds.height) {
+            }
+            if (mx >= bounds.x && mx <= bounds.x+bounds.width && my >= bounds.y && my <= bounds.y+bounds.height) {
+                if (entity.isRail && entity.bezier) {
                     let mousePos = entity.toLocal({x: mx, y: my}, undefined, undefined, true);
                     let projection = entity.bezier.project(mousePos);
                     if (projection.d <= 20) {
                         return true;
                     }
+                } else {
+                    // https://stackoverflow.com/a/67732811 <3
+                    const w = entity.width/2;
+                    const h = entity.height/2;
+                    const r = entity.rotation;
+
+                    // Rotate entity bounds.
+                    const [ax, ay] = [Math.cos(r), Math.sin(r)];
+                    const t = (x, y) => ({x: x * ax - y * ay + entity.x, y: x * ay + y * ax + entity.y});
+                    const bBounds = [t(w, h), t(-w, h), t(-w, -h), t(w, -h)];
+
+                    // Check if mouse position is within bounds.
+                    let i = 0;
+                    const l = {p1: bBounds[3]};
+                    while (i < bBounds.length) {
+                        l.p2 = bBounds[i++];
+                        if (!(0 < (l.p2.x - l.p1.x) * (gmy - l.p1.y) - (l.p2.y - l.p1.y) * (gmx - l.p1.x))) {
+                            return false;
+                        }
+                        l.p1 = l.p2;
+                    }
+                    return true;
                 }
-                return false;
             }
-            return Math.distanceBetween(entity, {x: gmx, y: gmy}) < 50;
+            return false;
         };
 
         entity.getZIndex = function() {
