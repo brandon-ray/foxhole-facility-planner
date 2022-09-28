@@ -1485,7 +1485,7 @@ const buildingCategories = {
                         }
                     },
                     {
-                        team: 'c',
+                        faction: 'c',
                         time: 180,
                         input: {
                             vehicle_03mm_caster: 1,
@@ -1496,7 +1496,7 @@ const buildingCategories = {
                         }
                     },
                     {
-                        team: 'c',
+                        faction: 'c',
                         time: 300,
                         input: {
                             vehicle_r_1_hauler: 1,
@@ -1507,7 +1507,7 @@ const buildingCategories = {
                         }
                     },
                     {
-                        team: 'c',
+                        faction: 'c',
                         time: 300,
                         input: {
                             vehicle_r_1_hauler: 1,
@@ -1518,7 +1518,7 @@ const buildingCategories = {
                         }
                     },
                     {
-                        team: 'c',
+                        faction: 'c',
                         time: 300,
                         input: {
                             vehicle_r_1_hauler: 1,
@@ -1529,7 +1529,7 @@ const buildingCategories = {
                         }
                     },
                     {
-                        team: 'w',
+                        faction: 'w',
                         time: 300,
                         input: {
                             vehicle_dunne_transport: 1,
@@ -1540,7 +1540,7 @@ const buildingCategories = {
                         }
                     },
                     {
-                        team: 'w',
+                        faction: 'w',
                         time: 300,
                         input: {
                             vehicle_dunne_transport: 1,
@@ -1594,7 +1594,7 @@ const buildingCategories = {
                         },
                         production: [
                             {
-                                team: 'c',
+                                faction: 'c',
                                 time: 300,
                                 input: {
                                     vehicle_t3_xiphos: 1,
@@ -1606,7 +1606,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'c',
+                                faction: 'c',
                                 time: 300,
                                 input: {
                                     vehicle_t3_xiphos: 1,
@@ -1618,7 +1618,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'c',
+                                faction: 'c',
                                 time: 300,
                                 input: {
                                     vehicle_t12_actaeon_tankette: 1,
@@ -1630,7 +1630,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'c',
+                                faction: 'c',
                                 time: 600,
                                 input: {
                                     vehicle_t12_actaeon_tankette: 1,
@@ -1642,7 +1642,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'c',
+                                faction: 'c',
                                 time: 180,
                                 input: {
                                     vehicle_uv_05a_argonaut: 1,
@@ -1653,7 +1653,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'c',
+                                faction: 'c',
                                 time: 180,
                                 input: {
                                     vehicle_uv_05a_argonaut: 1,
@@ -1665,7 +1665,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'w',
+                                faction: 'w',
                                 time: 300,
                                 input: {
                                     vehicle_obrien_v110: 1,
@@ -1677,7 +1677,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'w',
+                                faction: 'w',
                                 time: 300,
                                 input: {
                                     vehicle_obrien_v110: 1,
@@ -1689,7 +1689,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'w',
+                                faction: 'w',
                                 time: 300,
                                 input: {
                                     vehicle_obrien_v110: 1,
@@ -1701,7 +1701,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'w',
+                                faction: 'w',
                                 time: 300,
                                 input: {
                                     vehicle_obrien_v110: 1,
@@ -1713,7 +1713,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'w',
+                                faction: 'w',
                                 time: 180,
                                 input: {
                                     vehicle_drummond_100a: 1,
@@ -1725,7 +1725,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'w',
+                                faction: 'w',
                                 time: 180,
                                 input: {
                                     vehicle_drummond_100a: 1,
@@ -1747,7 +1747,7 @@ const buildingCategories = {
                         },
                         production: [
                             {
-                                team: 'c',
+                                faction: 'c',
                                 time: 300,
                                 input: {
                                     vehicle_r_1_hauler: 1,
@@ -1760,7 +1760,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'c',
+                                faction: 'c',
                                 time: 600,
                                 input: {
                                     processed_construction_material: 20,
@@ -1772,7 +1772,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'c',
+                                faction: 'c',
                                 time: 300,
                                 input: {
                                     vehicle_hh_a_javelin: 1,
@@ -1784,7 +1784,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'c',
+                                faction: 'c',
                                 time: 300,
                                 input: {
                                     vehicle_hh_a_javelin: 1,
@@ -1797,7 +1797,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'w',
+                                faction: 'w',
                                 time: 300,
                                 input: {
                                     vehicle_niska_mk_i_gun_motor_carraige: 1,
@@ -1810,7 +1810,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'w',
+                                faction: 'w',
                                 time: 600,
                                 input: {
                                     processed_construction_material: 20,
@@ -1822,7 +1822,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'w',
+                                faction: 'w',
                                 time: 300,
                                 input: {
                                     vehicle_niska_mk_i_gun_motor_carraige: 1,
@@ -1855,7 +1855,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'c',
+                                faction: 'c',
                                 time: 180,
                                 input: {
                                     vehicle_hc_7_ballista: 1,
@@ -1866,7 +1866,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'c',
+                                faction: 'c',
                                 time: 300,
                                 input: {
                                     vehicle_ab_8_acheron: 1,
@@ -1878,7 +1878,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'c',
+                                faction: 'c',
                                 time: 300,
                                 input: {
                                     vehicle_aa_2_battering_ram: 1,
@@ -1890,7 +1890,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'w',
+                                faction: 'w',
                                 time: 300,
                                 input: {
                                     vehicle_king_spire_mk_i: 1,
@@ -1902,7 +1902,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'w',
+                                faction: 'w',
                                 time: 300,
                                 input: {
                                     vehicle_collins_cannon_68mm: 1,
@@ -1924,7 +1924,7 @@ const buildingCategories = {
                         },
                         production: [
                             {
-                                team: 'c',
+                                faction: 'c',
                                 time: 300,
                                 input: {
                                     vehicle_h_5_hatchet: 1,
@@ -1937,7 +1937,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'c',
+                                faction: 'c',
                                 time: 300,
                                 input: {
                                     vehicle_h_5_hatchet: 1,
@@ -1950,7 +1950,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'c',
+                                faction: 'c',
                                 time: 300,
                                 input: {
                                     vehicle_h_5_hatchet: 1,
@@ -1963,7 +1963,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'c',
+                                faction: 'c',
                                 time: 420,
                                 input: {
                                     vehicle_85k_b_falchion: 1,
@@ -1976,7 +1976,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'c',
+                                faction: 'c',
                                 time: 420,
                                 input: {
                                     vehicle_86k_a_bardiche: 1,
@@ -1989,7 +1989,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'c',
+                                faction: 'c',
                                 time: 600,
                                 input: {
                                     processed_construction_material: 155,
@@ -2001,7 +2001,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'w',
+                                faction: 'w',
                                 time: 420,
                                 input: {
                                     vehicle_noble_widow_mk_xiv: 1,
@@ -2014,7 +2014,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'w',
+                                faction: 'w',
                                 time: 300,
                                 input: {
                                     vehicle_devitt_mk_iii: 1,
@@ -2027,7 +2027,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'w',
+                                faction: 'w',
                                 time: 300,
                                 input: {
                                     vehicle_devitt_mk_iii: 1,
@@ -2040,7 +2040,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'w',
+                                faction: 'w',
                                 time: 420,
                                 input: {
                                     vehicle_silverhand_mk_iv: 1,
@@ -2053,7 +2053,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'w',
+                                faction: 'w',
                                 time: 420,
                                 input: {
                                     vehicle_gallagher_outlaw_mk_ii: 1,
@@ -2066,7 +2066,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'w',
+                                faction: 'w',
                                 time: 600,
                                 input: {
                                     processed_construction_material: 135,
@@ -2088,7 +2088,7 @@ const buildingCategories = {
                         },
                         production: [
                             {
-                                team: 'c',
+                                faction: 'c',
                                 time: 420,
                                 input: {
                                     vehicle_aa_2_battering_ram: 1,
@@ -2101,7 +2101,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'c',
+                                faction: 'c',
                                 time: 600,
                                 input: {
                                     vehicle_85k_b_falchion: 1,
@@ -2113,7 +2113,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'w',
+                                faction: 'w',
                                 time: 420,
                                 input: {
                                     vehicle_balfour_wolfhound_40mm: 1,
@@ -2126,7 +2126,7 @@ const buildingCategories = {
                                 }
                             },
                             {
-                                team: 'w',
+                                faction: 'w',
                                 time: 600,
                                 input: {
                                     vehicle_gallagher_outlaw_mk_ii: 1,
