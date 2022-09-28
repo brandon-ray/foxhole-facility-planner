@@ -172,7 +172,7 @@ const buildingCategories = {
             },
             damaged_component: {
                 name: 'Damaged Component',
-                icon: 'resources/DamagedComponentIcon.png',
+                icon: 'resources/ComponentsDamagedIcon.webp',
                 type: 'solid'
             },
             metal_beam: {
@@ -658,6 +658,16 @@ const buildingCategories = {
             vehicle_dae_3b_2_hades_net: {
                 name: 'DAE 3b-2 "Hades\' Net"',
                 icon: 'vehicles/EmplacedMultiCStructureIcon.webp',
+                type: 'vehicle' // Colonial
+            },
+			vehicle_lance_36_battle_tank: {
+                name: 'Lance-36',
+                icon: 'vehicles/Lance-36_Vehicle_Icon.webp',
+                type: 'vehicle' // Colonial
+            },
+			vehicle_0_75b_ares_super_tank: {
+                name: 'O-75b "Ares"',
+                icon: 'vehicles/SuperTankCtemIcon.webp',
                 type: 'vehicle' // Colonial
             }
         },
@@ -1229,7 +1239,26 @@ const buildingCategories = {
                     output: {
                         component: 6
                     }
-                }]
+                }],
+				upgrades: {
+                    damaged_components: {
+                        name: 'Damaged Components',
+                        cost: {
+                            processed_construction_material: 75
+                        },
+                        production: [
+                            {
+                                time: 12,
+								input: {
+									petrol: 6
+								},
+                                output: {
+                                    damaged_component: 9
+                                }
+                            }
+                        ]
+                    }
+                }
             },
             stationary_harvester_coal: {
                 name: 'Stationary Harvester (Coal)',
@@ -1288,7 +1317,31 @@ const buildingCategories = {
                     output: {
                         water: 50
                     }
-                }]
+                }],
+				upgrades: {
+                    electric_water: {
+                        name: 'Electric Water',
+						power: 0,
+                        cost: {
+                            construction_material: 150
+                        },
+                        production: [
+                            {
+                                time: 50,
+								power: -0.5,
+                                output: {
+                                    water: 60
+                                }
+                            },
+							{
+                                time: 40,
+                                output: {
+                                    water: 50
+                                }
+                            }
+                        ]
+                    }
+                }
             },
             oil_well: {
                 name: 'Oil Well',
@@ -1305,7 +1358,57 @@ const buildingCategories = {
                     output: {
                         oil: 50
                     }
-                }]
+                }],
+				upgrades: {
+                    electric_oil: {
+                        name: 'Electric Oil Well',
+                        power: -2,
+                        cost: {
+                            processed_construction_material: 25
+                        },
+                        production: [
+                            {
+                                time: 26,
+                                output: {
+                                    oil: 50
+                                }
+                            },
+                            {
+                                time: 40,
+                                output: {
+                                    oil: 75
+                                }
+                            }
+                        ]
+                    },
+					fracking_oil: {
+                        name: 'Fracking Oil Well',
+                        power: -3,
+                        cost: {
+                            steel_construction_material: 25
+                        },
+                        production: [
+                            {
+                                time: 40,
+								input: {
+									water: 25
+								},
+                                output: {
+                                    oil: 100
+                                }
+                            },
+                            {
+                                time: 30,
+								input: {
+									water: 25
+								},
+                                output: {
+                                    oil: 75
+                                }
+                            }
+                        ]
+                    }
+                }
             },
             fuel_silo: {
                 name: 'Fuel Silo',
@@ -2094,7 +2197,72 @@ const buildingCategories = {
                             vehicle_bms_longrider: 1
                         }
                     }
-                ]
+                ],
+				upgrades: {
+                    train_assembly: {
+                        name: 'Train Assembly',
+                        cost: {
+                            steel_construction_material: 150
+                        },
+                        production: [
+                            {
+                                time: 259200,
+								input: {
+										steel_construction_material: 285,
+										assembly_materials3: 95,
+										assembly_materials4: 105,
+										assembly_materials5: 175
+								},
+								output: {
+									vehicle_tempest_cannon_ra_2: 1
+								}
+                            },
+							{
+                                time: 1800,
+								input: {
+										steel_construction_material: 30,
+										assembly_materials1: 30,
+										assembly_materials4: 30
+								},
+								output: {
+									vehicle_aegis_steelbreaker_k5a: 1
+								}
+                            }
+                        ]
+                    },
+                    heavy_tank_assembly: {
+                        name: 'Heavy Tank Assembly',
+                        cost: {
+                            steel_construction_material: 150
+                        },
+                        production: [
+                            {
+                                time: 64800,
+								input: {
+										steel_construction_material: 50,
+										assembly_materials3: 30,
+										assembly_materials4: 60,
+										assembly_materials5: 35
+								},
+								output: {
+									vehicle_lance_36_battle_tank: 1
+								}
+                            },
+							{
+                                time: 172800,
+								input: {
+										steel_construction_material: 275,
+										assembly_materials3: 105,
+										assembly_materials4: 95,
+										assembly_materials5: 175
+								},
+								output: {
+									vehicle_0_75b_ares_super_tank: 1
+								}
+                            }
+                        ]
+                    }
+                }
             },
             ammunition_factory: {
                 name: 'Ammunition Factory',
