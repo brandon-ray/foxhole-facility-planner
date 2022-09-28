@@ -150,7 +150,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
     };
     for (let i=0; i<window.objectData.buildings_list.length; i++) {
         let building = window.objectData.buildings_list[i];
-        asset_list[building.icon] = building.icon;
+        if (building.icon) {
+            asset_list[building.icon] = building.icon;
+        }
 
         if (building.texture) {
             if (typeof building.texture === 'object' && !Array.isArray(building.texture)) {
