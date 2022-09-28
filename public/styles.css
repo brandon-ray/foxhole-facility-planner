@@ -515,6 +515,38 @@ p {
     line-height: 30px;
 }
 
+.upgrade-list {
+    background: #151515;
+    margin: 0;
+    padding: 10px;
+    border: 1px solid black;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.upgrade-list > .upgrade-icon {
+    display: inline-block;
+    width: 52px;
+    height: 52px;
+    cursor: pointer;
+    margin-right: 5px;
+    float: none;
+}
+
+.upgrade-list > .upgrade-icon:last-child {
+    margin-right: 0;
+}
+
+.upgrade-list > .upgrade-icon:not(.selected-upgrade):hover {
+    background-color: black;
+    border-color: white;
+}
+
+.upgrade-list > .upgrade-icon.selected-upgrade {
+    background-color: #2c1407;
+    border-color: #ff8f00;
+}
+
 .select-production {
     background: #0d0d0d;
     border: 2px solid black;
@@ -547,7 +579,7 @@ p {
 }
 
 .selected-production {
-    border: 2px solid #ff8f00;
+    border-color: #ff8f00;
     margin: 0;
 }
 

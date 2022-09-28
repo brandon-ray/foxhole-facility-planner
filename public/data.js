@@ -935,7 +935,7 @@ const buildingCategories = {
                     coke_furnace: {
                         name: 'Coke Furnace',
                         power: -3,
-                        icon: 'buildings/upgrades/CR_CokeFurnaceIcon.webp',
+                        part: 'buildings/upgrades/parts/CR_CokeFurnaceIcon.webp',
                         production: [{
                             time: 120,
                             input: {

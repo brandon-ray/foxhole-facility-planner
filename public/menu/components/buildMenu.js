@@ -178,6 +178,12 @@ Vue.component('app-menu-building-selected', {
             }
             this.$forceUpdate();
         },
+        changeUpgrade: function(upgrade) {
+            this.bmc();
+            if (game.selectedEntity && game.selectedEntity.building) {
+                game.upgradeBuilding(game.selectedEntity, upgrade);
+            }
+        },
         destroyBuilding: function() {
             this.bmc();
             if (game.selectedEntity) {
@@ -204,6 +210,16 @@ Vue.component('app-menu-building-selected', {
                 <i class="fa fa-repeat" aria-hidden="true"></i> Rotation:
                 <input class="app-input" type="number" v-model="entityRotation" @change="updateRotation">
             </label>
+        </div>
+        <div v-if="selectedEntity.type === 'building' && selectedEntity.building && selectedEntity.building.upgrades">
+            <h5>Select Upgrade</h5>
+            <div class="upgrade-list">
+                <button class="resource-icon upgrade-icon" v-for="(upgrade, key) in selectedEntity.building.upgrades" :title="upgrade.name"
+                    :class="{'selected-upgrade': selectedEntity.building.parentKey && selectedEntity.building.key === selectedEntity.building.parentKey + '_' + key}"
+                    :style="{backgroundImage:'url(/assets/' + (upgrade.part ? upgrade.part : (upgrade.icon ? upgrade.icon : selectedEntity.building.icon)) + ')'}"
+                    @click="changeUpgrade(key)">
+                </button>
+            </div>
         </div>
         <div v-if="selectedEntity.type === 'building' && selectedEntity.building && selectedEntity.building.production && selectedEntity.building.production.length">
             <h5>Select Production</h5>
@@ -472,13 +488,10 @@ Vue.component('app-menu-settings', {
                 <input class="app-input" type="number" v-model="game.settings.snapRotationDegrees" @input="game.updateSettings">
             </label>
         </div>
-        <!--
-        Not including this until we get an upgrade selection inside of buildings since you won't be able to choose if we disable them in construction list.
         <label class="settings-option-wrapper">
-            <i class="fa fa-th-large" aria-hidden="true"></i> Show Upgrades as Buildings
+            <i class="fa fa-filter" aria-hidden="true"></i> Show Upgrades in Building List
             <input class="app-input" type="checkbox" v-model="game.settings.showUpgradesAsBuildings" @change="game.updateSettings">
         </label>
-        -->
     </div>
     `
 });

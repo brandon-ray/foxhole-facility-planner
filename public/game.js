@@ -1623,6 +1623,19 @@ const fontFamily = ['Recursive', 'sans-serif'];
         return currentBuilding;
     };
 
+    game.upgradeBuilding = function(entity, upgrade) {
+        let building = entity.building;
+        if (building) {
+            upgrade = building.parentKey ? building.parentKey + '_' + upgrade : building.key + '_' + upgrade;
+            upgrade = building.key === upgrade ? building.parentKey || building.key : upgrade;
+            building = createBuilding(upgrade, entity.x, entity.y, 0);
+            building.rotation = entity.rotation;
+            game.selectEntity(building);
+            entity.remove();
+            return building;
+        }
+    }
+
     game.removeEntities = function() {
         if (game.selectedEntity) {
             game.buildMenuComponent.changeMenu(null);
