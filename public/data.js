@@ -660,15 +660,25 @@ const buildingCategories = {
                 icon: 'vehicles/EmplacedMultiCStructureIcon.webp',
                 type: 'vehicle' // Colonial
             },
-			vehicle_lance_36_battle_tank: {
+            vehicle_lance_36_battle_tank: {
                 name: 'Lance-36',
                 icon: 'vehicles/Lance-36_Vehicle_Icon.webp',
                 type: 'vehicle' // Colonial
             },
-			vehicle_0_75b_ares_super_tank: {
-                name: 'O-75b "Ares"',
+            vehicle_flood_mk_i: {
+                name: 'Flood Mk. I',
+                icon: 'vehicles/Flood_Mk-1_Vehicle_Icon.webp',
+                type: 'vehicle' // Warden
+            },
+            vehicle_0_75b_ares_super_tank: {
+                name: 'O-75b “Ares”',
                 icon: 'vehicles/SuperTankCtemIcon.webp',
                 type: 'vehicle' // Colonial
+            },
+            vehicle_cullen_predator_mk_iii: {
+                name: 'Cullen Predator Mk. III',
+                icon: 'vehicles/SuperTankWVehicleIcon.webp',
+                type: 'vehicle' // Warden
             }
         },
         buildings: {
@@ -680,7 +690,7 @@ const buildingCategories = {
                 width: 5,
                 length: 5,
                 icon: 'buildings/ConcreteFoundation02Icon.png',
-                texture: 'concrete_corner_meter.png',
+                texture: 'buildings/textures/concrete_corner_meter.png',
                 sortOffset: -1000,
                 cost: {
                     gravel: 75
@@ -694,7 +704,7 @@ const buildingCategories = {
                 width: 5,
                 length: 5,
                 icon: 'buildings/ConcreteFoundation01Icon.png',
-                texture: 'concrete_meter.png',
+                texture: 'buildings/textures/concrete_meter.png',
                 sortOffset: -1000,
                 cost: {
                     gravel: 75
@@ -708,7 +718,7 @@ const buildingCategories = {
                 width: 5,
                 length: 10,
                 icon: 'buildings/ConcreteFoundation03Icon.png',
-                texture: 'concrete_meter.png',
+                texture: 'buildings/textures/concrete_meter.png',
                 sortOffset: -1000,
                 cost: {
                     gravel: 115
@@ -722,7 +732,7 @@ const buildingCategories = {
                 width: 10,
                 length: 10,
                 icon: 'buildings/ConcreteFoundation04Icon.png',
-                texture: 'concrete_meter.png',
+                texture: 'buildings/textures/concrete_meter.png',
                 sortOffset: -1000,
                 cost: {
                     gravel: 150
@@ -737,7 +747,7 @@ const buildingCategories = {
                 width: 5,
                 length: 2,
                 maxLength: 26,
-                texture: 'provisional_road.png',
+                texture: 'buildings/textures/provisional_road.png',
                 cost: {
                     gravel: 150
                 }
@@ -752,7 +762,7 @@ const buildingCategories = {
                 maxLength: 30,
                 icon: 'buildings/RailSmallIcon.png',
                 sortOffset: 100000,
-                texture: 'track_small_gauge.png',
+                texture: 'buildings/textures/track_small_gauge.png',
                 cost: {
                     construction_material: 25
                 }
@@ -767,7 +777,7 @@ const buildingCategories = {
                 maxLength: 30,
                 icon: 'buildings/RailLargeIcon.png',
                 sortOffset: 100000,
-                texture: 'track_large_gauge.png',
+                texture: 'buildings/textures/track_large_gauge.png',
                 cost: {
                     processed_construction_material: 5
                 }
@@ -806,7 +816,7 @@ const buildingCategories = {
                     forge: {
                         name: 'Forge',
                         power: -2,
-                        icon: 'buildings/MaterialsFactoryForgeIcon.webp',
+                        icon: 'buildings/upgrades/MF_ForgeIcon.webp',
                         cost: {
                             construction_material: 200
                         },
@@ -836,7 +846,7 @@ const buildingCategories = {
                     metal_press: {
                         name: 'Metal Press',
                         power: -4,
-                        icon: 'buildings/MaterialsFactoryMetalPressIcon.webp',
+                        icon: 'buildings/upgrades/MF_MetalPressIcon.webp',
                         cost: {
                             construction_material: 25
                         },
@@ -854,7 +864,7 @@ const buildingCategories = {
                     smelter: {
                         name: 'Smelter',
                         power: -4,
-                        icon: 'buildings/MaterialsFactorySmelterIcon.webp',
+                        icon: 'buildings/upgrades/MF_SmelterIcon.webp',
                         cost: {
                             construction_material: 25
                         },
@@ -872,7 +882,7 @@ const buildingCategories = {
                     recycler: {
                         name: 'Recycler',
                         power: -2,
-                        icon: 'buildings/MaterialsFactoryRecyclerIcon.webp',
+                        icon: 'buildings/upgrades/MF_RecyclerIcon.webp',
                         cost: {
                             basic_material: 50
                         },
@@ -925,7 +935,7 @@ const buildingCategories = {
                     coke_furnace: {
                         name: 'Coke Furnace',
                         power: -3,
-                        icon: 'buildings/CoalRefineryIcon.webp',
+                        icon: 'buildings/upgrades/CR_CokeFurnaceIcon.webp',
                         production: [{
                             time: 120,
                             input: {
@@ -940,7 +950,7 @@ const buildingCategories = {
                     liquifier: {
                         name: 'Coal Liquifier',
                         power: -4,
-                        icon: 'buildings/CoalRefineryIcon.webp',
+                        part: 'buildings/upgrades/parts/CR_CoalLiquefierIcon.webp',
                         production: [{
                             time: 120,
                             input: {
@@ -956,7 +966,7 @@ const buildingCategories = {
                     adv_liquifier: {
                         name: 'Advanced Coal Liquifier',
                         power: -4,
-                        icon: 'buildings/CoalRefineryIcon.webp',
+                        part: 'buildings/upgrades/parts/CR_AdvancedCoalLiquefierIcon.webp',
                         production: [{
                             time: 180,
                             input: {
@@ -995,7 +1005,7 @@ const buildingCategories = {
                     reformer: {
                         name: 'Reformer',
                         power: -1,
-                        icon: 'buildings/OilRefineryIcon.webp',
+                        part: 'buildings/upgrades/parts/OR_ReformerIcon.webp',
                         cost: {
                             construction_material: 200
                         },
@@ -1013,7 +1023,7 @@ const buildingCategories = {
                     cracking_unit: {
                         name: 'Cracking Unit',
                         power: -1.5,
-                        icon: 'buildings/OilRefineryIcon.webp',
+                        part: 'buildings/upgrades/parts/OR_CrackingUnitIcon.webp',
                         cost: {
                             processed_construction_material: 20
                         },
@@ -1030,7 +1040,7 @@ const buildingCategories = {
                     petro_plant: {
                         name: 'Petrochemical Plant',
                         power: -6,
-                        icon: 'buildings/OilRefineryIcon.webp',
+                        part: 'buildings/upgrades/parts/OR_PetrochemicalPlantIcon.webp',
                         cost: {
                             steel_construction_material: 25
                         },
@@ -1056,7 +1066,7 @@ const buildingCategories = {
                 length: 3,
                 range: 40,
                 overlapDist: 65,
-                icon: 'buildings/SupplyStationIcon.webp',
+                icon: 'buildings/MaintenanceTunnelIcon.webp',
                 cost: {
                     construction_material: 200
                 },
@@ -1092,7 +1102,6 @@ const buildingCategories = {
                 width: 1,
                 length: 1,
                 icon: 'buildings/PowerPoleIcon.webp',
-                texture: 'concrete_meter.png',
                 cost: {
                     basic_material: 20
                 }
@@ -1129,7 +1138,7 @@ const buildingCategories = {
                         name: 'Petrol Power Plant',
                         description: 'Generates a large amount of power using Petrol as input.',
                         power: 12,
-                        icon: 'buildings/DieselPowerPlantIcon.webp',
+                        part: 'buildings/upgrades/parts/DPP_PetrolPowerPlantIcon.webp',
                         cost: {
                             processed_construction_material: 50
                         },
@@ -1172,6 +1181,7 @@ const buildingCategories = {
                     sulfuric_reactor: {
                         name: 'Sulfuric Reactor',
                         power: 16,
+                        icon: 'buildings/upgrades/PS_SulfuricReactorIcon.webp',
                         cost: {
                             steel_construction_material: 25
                         },
@@ -1206,7 +1216,7 @@ const buildingCategories = {
                 power: 0,
                 width: 5,
                 length: 7,
-                icon: 'buildings/ScrapStationaryHarvesterIcon.webp',
+                icon: 'buildings/StationaryHarvesterScrapIcon.webp',
                 cost: {
                     construction_material: 150
                 },
@@ -1227,7 +1237,7 @@ const buildingCategories = {
                 power: 0,
                 width: 5,
                 length: 7,
-                icon: 'buildings/ComponentsStationaryHarvesterIcon.webp',
+                icon: 'buildings/StationaryHarvesterComponentsIcon.webp',
                 cost: {
                     construction_material: 175
                 },
@@ -1241,8 +1251,9 @@ const buildingCategories = {
                     }
                 }],
 				upgrades: {
-                    damaged_components: {
-                        name: 'Damaged Components',
+                    excavator: {
+                        name: 'Excavator (Damaged Components)',
+                        icon: 'buildings/upgrades/SHC_ExcavatorIcon.webp',
                         cost: {
                             processed_construction_material: 75
                         },
@@ -1267,7 +1278,7 @@ const buildingCategories = {
                 power: 0,
                 width: 5,
                 length: 7,
-                icon: 'buildings/CoalStationaryHarvesterIcon.webp',
+                icon: 'buildings/StationaryHarvesterCoalIcon.webp',
                 cost: {
                     processed_construction_material: 25
                 },
@@ -1288,7 +1299,7 @@ const buildingCategories = {
                 power: 0,
                 width: 5,
                 length: 7,
-                icon: 'buildings/SulfurStationaryHarvesterIcon.webp',
+                icon: 'buildings/StationaryHarvesterSulfurIcon.webp',
                 cost: {
                     steel_construction_material: 20
                 },
@@ -1322,6 +1333,7 @@ const buildingCategories = {
                     electric_water: {
                         name: 'Electric Water',
 						power: 0,
+                        icon: 'buildings/upgrades/WP_ElectricWaterPumpIcon.webp',
                         cost: {
                             construction_material: 150
                         },
@@ -1349,7 +1361,7 @@ const buildingCategories = {
                 category: 'harvesters',
                 width: 4,
                 length: 7,
-                icon: 'buildings/OilWellFrackerIcon.webp',
+                icon: 'buildings/OilWellIcon.webp',
                 cost: {
                     construction_material: 35
                 },
@@ -1363,6 +1375,7 @@ const buildingCategories = {
                     electric_oil: {
                         name: 'Electric Oil Well',
                         power: -2,
+                        icon: 'buildings/upgrades/OW_ElectricOilWellIcon.webp',
                         cost: {
                             processed_construction_material: 25
                         },
@@ -1384,6 +1397,7 @@ const buildingCategories = {
 					fracking_oil: {
                         name: 'Fracking Oil Well',
                         power: -3,
+                        icon: 'buildings/upgrades/OW_FrackerIcon.webp',
                         cost: {
                             steel_construction_material: 25
                         },
@@ -1588,7 +1602,7 @@ const buildingCategories = {
                     motor_pool: {
                         name: 'Motor Pool',
                         power: -2,
-                        icon: 'buildings/LightVehicleAssemblyStationIcon.webp', // REPLACEME
+                        part: 'buildings/upgrades/parts/LVAS_MotorPoolIcon.webp',
                         cost: {
                             construction_material: 200
                         },
@@ -1741,7 +1755,7 @@ const buildingCategories = {
                     rocket_factory: {
                         name: 'Rocket Factory',
                         power: -2,
-                        icon: 'buildings/LightVehicleAssemblyStationIcon.webp', // REPLACEME
+                        part: 'buildings/upgrades/parts/LVAS_ArtilleryFactoryIcon.webp',
                         cost: {
                             processed_construction_material: 65
                         },
@@ -1839,7 +1853,7 @@ const buildingCategories = {
                     field_station: {
                         name: 'Field Station',
                         power: -2,
-                        icon: 'buildings/LightVehicleAssemblyStationIcon.webp', // REPLACEME
+                        part: 'buildings/upgrades/parts/LVAS_FieldStationIcon.webp',
                         cost: {
                             processed_construction_material: 25
                         },
@@ -1918,7 +1932,7 @@ const buildingCategories = {
                     tank_factory: {
                         name: 'Tank Factory',
                         power: -2,
-                        icon: 'buildings/LightVehicleAssemblyStationIcon.webp', // REPLACEME
+                        part: 'buildings/upgrades/parts/LVAS_TankAssemblyIcon.webp',
                         cost: {
                             processed_construction_material: 200
                         },
@@ -2082,7 +2096,7 @@ const buildingCategories = {
                     weapons_platform: {
                         name: 'Weapons Platform',
                         power: -2,
-                        icon: 'buildings/LightVehicleAssemblyStationIcon.webp', // REPLACEME
+                        part: 'buildings/upgrades/parts/LVAS_WeaponsPlatformAssemblyIcon.webp',
                         cost: {
                             steel_construction_material: 20
                         },
@@ -2198,67 +2212,104 @@ const buildingCategories = {
                         }
                     }
                 ],
-				upgrades: {
+                upgrades: {
                     train_assembly: {
                         name: 'Train Assembly',
+                        part: 'buildings/upgrades/parts/LAF_TrainAssemblyIcon.webp',
                         cost: {
                             steel_construction_material: 150
                         },
                         production: [
                             {
-                                time: 259200,
-								input: {
-										steel_construction_material: 285,
-										assembly_materials3: 95,
-										assembly_materials4: 105,
-										assembly_materials5: 175
-								},
-								output: {
-									vehicle_tempest_cannon_ra_2: 1
-								}
-                            },
-							{
                                 time: 1800,
-								input: {
-										steel_construction_material: 30,
-										assembly_materials1: 30,
-										assembly_materials4: 30
-								},
-								output: {
-									vehicle_aegis_steelbreaker_k5a: 1
-								}
+                                input: {
+                                    steel_construction_material: 30,
+                                    assembly_materials1: 30,
+                                    assembly_materials4: 30
+                                },
+                                output: {
+                                    vehicle_aegis_steelbreaker_k5a: 1
+                                }
+                            },
+                            {
+                                time: 0, // Need time for this.
+                                input: {
+                                    steel_construction_material: 30,
+                                    assembly_materials1: 30,
+                                    assembly_materials4: 30
+                                },
+                                output: {
+                                    vehicle_obrien_warsmith_v215: 1
+                                }
+                            },
+                            {
+                                time: 259200,
+                                input: {
+                                    steel_construction_material: 285,
+                                    assembly_materials3: 95,
+                                    assembly_materials4: 105,
+                                    assembly_materials4: 175
+                                },
+                                output: {
+                                    vehicle_tempest_cannon_ra_2: 1
+                                }
                             }
                         ]
                     },
                     heavy_tank_assembly: {
                         name: 'Heavy Tank Assembly',
+                        part: 'buildings/upgrades/parts/LAF_HeavyTankAssemblyIcon.webp',
                         cost: {
                             steel_construction_material: 150
                         },
                         production: [
                             {
                                 time: 64800,
-								input: {
-										steel_construction_material: 50,
-										assembly_materials3: 30,
-										assembly_materials4: 60,
-										assembly_materials5: 35
-								},
-								output: {
-									vehicle_lance_36_battle_tank: 1
-								}
+                                input: {
+                                    steel_construction_material: 50,
+                                    assembly_materials3: 30,
+                                    assembly_materials4: 60,
+                                    assembly_materials5: 35
+                                },
+                                output: {
+                                    vehicle_lance_36_battle_tank: 1
+                                }
                             },
-							{
+                            {
+                                time: 0, // Need time this.
+                                input: {
+                                    steel_construction_material: 50,
+                                    assembly_materials3: 30,
+                                    assembly_materials4: 60,
+                                    assembly_materials5: 35
+                                },
+                                output: {
+                                    vehicle_flood_mk_i: 1
+                                }
+                            },
+                            {
                                 time: 172800,
-								input: {
-										steel_construction_material: 275,
-										assembly_materials3: 105,
-										assembly_materials4: 95,
-										assembly_materials5: 175
-								},
-								output: {
-									vehicle_0_75b_ares_super_tank: 1
-								}
+                                input: {
+                                    steel_construction_material: 275,
+                                    assembly_materials3 : 105,
+                                    assembly_materials4: 95,
+                                    assembly_materials5: 175
+                                },
+                                output: {
+                                    vehicle_0_75b_ares_super_tank: 1
+                                }
+                            },
+                            {
+                                time: 0, // Need time for this.
+                                input: {
+                                    steel_construction_material: 275,
+                                    assembly_materials3: 105,
+                                    assembly_materials4: 95,
+                                    assembly_materials5: 175
+                                },
+                                output: {
+                                    vehicle_cullen_predator_mk_iii: 1
+                                }
                             }
                         ]
                     }
@@ -2301,6 +2352,7 @@ const buildingCategories = {
                     rocket_factory: {
                         name: 'Rocket Factory',
                         power: -4,
+                        icon: 'buildings/upgrades/AF_RocketFactoryIcon.webp',
                         cost: {
                             processed_construction_material: 35
                         },
@@ -2330,6 +2382,7 @@ const buildingCategories = {
                     large_shell_factory: {
                         name: 'Large Shell Factory',
                         power: -4,
+                        icon: 'buildings/upgrades/AF_LargeShellFactoryIcon.webp',
                         cost: {
                             processed_construction_material: 175
                         },
@@ -2424,6 +2477,7 @@ const buildingCategories = {
                     blast_furnace: {
                         name: 'Blast Furnace',
                         power: -5,
+                        icon: 'buildings/upgrades/MWF_BlastFurnaceIcon.webp',
                         cost: {
                             processed_construction_material: 200
                         },
@@ -2465,6 +2519,7 @@ const buildingCategories = {
                     recycler: {
                         name: 'Recycler',
                         power: -5,
+                        icon: 'buildings/upgrades/MWF_RecyclerIcon.webp',
                         cost: {
                             construction_material: 25
                         },
@@ -2495,6 +2550,7 @@ const buildingCategories = {
                     engineering_station: {
                         name: 'Engineering Station',
                         power: -9,
+                        icon: 'buildings/upgrades/MWF_EngineeringStationIcon.webp',
                         cost: {
                             processed_construction_material: 150
                         },
@@ -2558,7 +2614,7 @@ const buildingCategories = {
                 description: 'Used for storing raw resources for transfer into and out of Facilities. The stockpile for this structure can be reserved.', // Requires Construction Vehicle
                 category: 'factories',
                 icon: 'buildings/ResourceTransferStationIcon.webp',
-                texture: 'buildings/resource_transfer_station_meter.png',
+                texture: 'buildings/textures/resource_transfer_station_meter.png',
                 width: 6,
                 length: 9.5,
                 cost: {
@@ -2570,7 +2626,7 @@ const buildingCategories = {
                 description: 'Used for storing materials for transfer into and out of Facilities. The stockpile for this structure can be reserved.', // Requires Construction Vehicle
                 category: 'factories',
                 icon: 'buildings/MaterialTransferStationIcon.webp',
-                texture: 'buildings/material_transfer_station_meter.png',
+                texture: 'buildings/textures/material_transfer_station_meter.png',
                 width: 6,
                 length: 12,
                 cost: {
@@ -2582,7 +2638,7 @@ const buildingCategories = {
                 description: 'Used for storing materials for transfer into and out of Facilities. The stockpile for this structure can be reserved.', // Requires Construction Vehicle
                 category: 'factories',
                 icon: 'buildings/LiquidTransferStationIcon.webp',
-                texture: 'buildings/liquid_transfer_station_meter.png',
+                texture: 'buildings/textures/liquid_transfer_station_meter.png',
                 width: 6,
                 length: 8.5,
                 cost: {
@@ -2606,9 +2662,8 @@ const buildingCategories = {
                 power: 0,
                 width: 2,
                 length: 2,
-                icon: 'buildings/FirePitIcon.webp',
                 texture: {
-                    sheet: 'sus.png',
+                    sheet: 'buildings/textures/sus.png',
                     speed: 0.132,
                     width: 220,
                     height: 184
