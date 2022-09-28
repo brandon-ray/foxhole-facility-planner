@@ -9,15 +9,20 @@ Made with ❤️ by the PEG Regiment using Vue.js and Pixi.js
 - **Facility Blueprint Editor**
     - Saving and Loading
     - *Mostly* Accurate Building Placement ;)
-    - Rail Construction
-- **Statistics Overview**
-    - Construction Costs
-    - Power Consumption
-    - Facility Resource Input and Output
-    - Garrison Supply Consumption
+    - Rail and Road Construction
+- **Building Browser**
+    - Category and Faction Filtering
+    - Production Recipes Overview
+    - Building Properties
+    - Upgrade and Production Selection
+- **Facility Statistics**
+    - Total Construction Cost
+    - Power and Garrison Supply Consumption
+    - Facility Resource Input and Production Output
+    - Production Time Filtering
 ## Screenshots
 
-![Screenshot](public/assets/screenshot1.jpg)
+![Screenshot](public/assets/screenshot2.jpg)
 
 
 ## Live Website (Latest Release)
