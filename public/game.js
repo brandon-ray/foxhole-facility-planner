@@ -1422,34 +1422,32 @@ const fontFamily = ['Recursive', 'sans-serif'];
         let boundsBuffer = 15;
         entity.canGrab = function() {
             let bounds = entity.getBounds(true);
-            if (entity.isRail && entity.bezier) {
-                // Rails are still borked for scaled browsers / operating systems.
-                // Ray pls fix <3 <3 <3
-                bounds.x -= boundsBuffer;
-                bounds.y -= boundsBuffer;
-                bounds.width += boundsBuffer*2;
-                bounds.height += boundsBuffer*2;
-                if (mx >= bounds.x && mx <= bounds.x+bounds.width && gmy >= bounds.y && my <= bounds.y+bounds.height) {
-                    let mousePos = entity.toLocal({x: mx, y: my}, undefined, undefined, true);
+            let boundsAdjustedPos = app.cstage.toLocal({x: bounds.x, y: bounds.y}, app.stage, undefined, true);
+            bounds.x = boundsAdjustedPos.x - boundsBuffer;
+            bounds.y = boundsAdjustedPos.y - boundsBuffer;
+            bounds.width = bounds.width/game.camera.zoom;
+            bounds.height = bounds.height/game.camera.zoom;
+            bounds.width += boundsBuffer * 2;
+            bounds.height += boundsBuffer * 2;
+
+            if (gmx >= bounds.x && gmx <= bounds.x+bounds.width && gmy >= bounds.y && gmy <= bounds.y+bounds.height) {
+                if (entity.isRail && entity.bezier) {
+                    let mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
                     let projection = entity.bezier.project(mousePos);
-                    if (projection.d <= 20) {
+                    if (projection.d <= 25) {
                         return true;
                     }
-                }
-            } else {
-                bounds.width = (bounds.width/2)/game.camera.zoom;
-                bounds.height = (bounds.height/2)/game.camera.zoom;
-                if (gmx >= entity.x-bounds.width && gmx <= entity.x+bounds.width && gmy >= entity.y-bounds.height && gmy <= entity.y+bounds.height) {
+                } else {
                     // https://stackoverflow.com/a/67732811 <3
-                    const w = entity.width/2;
-                    const h = entity.height/2;
+                    const w = entity.width / 2;
+                    const h = entity.height / 2;
                     const r = entity.rotation;
-    
+
                     // Create new oriented bounds.
                     const [ax, ay] = [Math.cos(r), Math.sin(r)];
                     const t = (x, y) => ({x: x * ax - y * ay + entity.x, y: x * ay + y * ax + entity.y});
                     const bBounds = [t(w, h), t(-w, h), t(-w, -h), t(w, -h)];
-    
+
                     // Check if mouse position is within new bounds.
                     let i = 0;
                     const l = {p1: bBounds[3]};
