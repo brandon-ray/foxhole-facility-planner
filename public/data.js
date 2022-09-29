@@ -1232,7 +1232,7 @@ const buildingCategories = {
             },
             stationary_harvester_components: {
                 name: 'Stationary Harvester (Components)',
-                description: 'A stationary harvester that automatically gathers Components using Heavy Oil as fuel.', // Requires Construction Vehicle
+                description: 'A stationary harvester that automatically gathers Components using Petrol as fuel.', // Requires Construction Vehicle
                 category: 'harvesters',
                 power: 0,
                 width: 5,
@@ -1244,7 +1244,7 @@ const buildingCategories = {
                 production: [{
                     time: 12,
                     input: {
-                        petrol: 4 // (The icon shown is clearly Petrol but the description states Heavy Oil in-game...)
+                        petrol: 4
                     },
                     output: {
                         component: 6
@@ -1252,7 +1252,7 @@ const buildingCategories = {
                 }],
 				upgrades: {
                     excavator: {
-                        name: 'Excavator (Damaged Components)',
+                        name: 'Excavator',
                         icon: 'buildings/upgrades/SHC_ExcavatorIcon.webp',
                         cost: {
                             processed_construction_material: 75
@@ -2221,6 +2221,7 @@ const buildingCategories = {
                         },
                         production: [
                             {
+                                faction: 'c',
                                 time: 1800,
                                 input: {
                                     steel_construction_material: 30,
@@ -2232,6 +2233,7 @@ const buildingCategories = {
                                 }
                             },
                             {
+                                faction: 'w',
                                 time: 0, // Need time for this.
                                 input: {
                                     steel_construction_material: 30,
@@ -2264,6 +2266,7 @@ const buildingCategories = {
                         },
                         production: [
                             {
+                                faction: 'c',
                                 time: 64800,
                                 input: {
                                     steel_construction_material: 50,
@@ -2276,6 +2279,7 @@ const buildingCategories = {
                                 }
                             },
                             {
+                                faction: 'w',
                                 time: 0, // Need time this.
                                 input: {
                                     steel_construction_material: 50,
@@ -2288,6 +2292,7 @@ const buildingCategories = {
                                 }
                             },
                             {
+                                faction: 'c',
                                 time: 172800,
                                 input: {
                                     steel_construction_material: 275,
@@ -2300,6 +2305,7 @@ const buildingCategories = {
                                 }
                             },
                             {
+                                faction: 'w',
                                 time: 0, // Need time for this.
                                 input: {
                                     steel_construction_material: 275,
