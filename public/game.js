@@ -1763,7 +1763,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         if (!entity.isRail || !entity.bezier) {
                             continue;
                         }
-                        let mousePos = entity.toLocal({x: mx, y: my}, undefined, undefined, true);
+                        let mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
                         let projection = entity.bezier.project(mousePos);
                         if (entity !== currentBuilding && entity.type === 'building' && currentBuilding.subtype === entity.subtype && projection.d <= 25) {
                             if (projection.t >= 0.95) {
