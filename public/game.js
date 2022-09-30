@@ -695,8 +695,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
         if (camera.zoom > 1.6) {
             camera.zoom = 1.6;
         }
-        if (camera.zoom < 0.3) {
-            camera.zoom = 0.3;
+        if (camera.zoom < 0.1) {
+            camera.zoom = 0.1;
         }
 
         let zoomAmount = camera.zoom - lastZoom;
