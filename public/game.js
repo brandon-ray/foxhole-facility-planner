@@ -144,9 +144,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
     let resources = null;
     let sounds = null;
     let asset_list = {
+        icon_background: 'icon_background.jpg',
         white: 'white.png',
         background: 'grid_32.webp',
-        buildingBackground: 'building_background.png'
+        building_background: 'building_background.png'
     };
     for (let i=0; i<window.objectData.buildings_list.length; i++) {
         let building = window.objectData.buildings_list[i];
@@ -268,18 +269,45 @@ const fontFamily = ['Recursive', 'sans-serif'];
     keyboardEventListenerObject.addEventListener('keydown', function (event) {
         event = event || window.event;
         let key = event.keyCode;
-        if (key === 113) {
-            ENABLE_DEBUG = !ENABLE_DEBUG;
-            if (debugText) {
-                debugText.visible = ENABLE_DEBUG;
-            }
-        } else if (key === 27) {
-            if (currentBuilding) {
-                currentBuilding.remove();
-                game.setCurrentBuilding(null);
-            }
+        switch (key) {
+            case 113: // F2
+                ENABLE_DEBUG = !ENABLE_DEBUG;
+                if (debugText) {
+                    debugText.visible = ENABLE_DEBUG;
+                }
+                break;
+            case 27: // Escape
+                if (currentBuilding) {
+                    currentBuilding.remove();
+                    game.selectEntity(null);
+                    game.setCurrentBuilding(null);
+                }
+                break;
+            case 46: // Delete
+                if (game.selectedEntity) {
+                    game.selectedEntity.remove();
+                    game.selectEntity(null);
+                    game.setCurrentBuilding(null);
+                }
+                break;
+            case 119: // F8
+                if (ENABLE_DEBUG) {
+                    setTimeout(() => {
+                        let x = 0;
+                        let y = 0;
+                        for (let i=0; i<1000; i++) {
+                            let buildingData = window.objectData.buildings_list[Math.floor(Math.random()*window.objectData.buildings_list.length)];
+                            createBuilding(buildingData.key, x, y, 0);
+                            x += 500;
+                            if (x >= 10000) {
+                                x = 0;
+                                y += 500;
+                            }
+                        }
+                    }, 1000);
+                }
+                break;
         }
-
         if (!keys[key]) {
             keys[key] = true;
         }
@@ -340,7 +368,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
     }
     window.addEventListener('resize', onWindowResize);
 
-    let playerLight;
     let ambientLight;
     let diffuseGroupLayer;
     let normalGroupLayer;
@@ -380,14 +407,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
             return 0;
         };
         app.cstage.addChild(ambientLight);
-
-        playerLight = new PIXI.lights.PointLight(0xFFFFFF, 0.4);
-        playerLight.position.set(500, 500);
-        playerLight.getZIndex = () => {
-            return 0;
-        };
-        app.cstage.addChild(playerLight);
-
 
         background = new PIXI.TilingSprite(resources['background'].texture);
         background.getZIndex = function () {
@@ -639,7 +658,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
     }
 
-    game.selectEntity = function(entity) {
+    game.selectEntity = function(entity, buildMenu) {
         let lastSelectedEntity = game.selectedEntity;
 
         if (entity) {
@@ -651,7 +670,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 icon: 'fa-wrench'
             });
         } else {
-            game.buildMenuComponent.changeMenu(null);
+            if (!buildMenu) {
+                game.buildMenuComponent.changeMenu(null);
+            }
             game.selectedEntity = null;
         }
 
@@ -709,10 +730,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
         let mouseButton = e.button;
         mouseDown[mouseButton] = true;
         if (mouseButton === 0) {
-            if (game.selectedEntity) {
-                game.selectEntity(null);
-            }
-
             if (!currentBuilding && !selectedPoint) {
                 entities.sort(function (a, b) {
                     return a.getZIndex() - b.getZIndex()
@@ -725,9 +742,14 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             y: gmy - entity.y
                         };
                         game.setCurrentBuilding(entity);
-                        game.selectEntity(entity);
-                        break;
+                        if (game.selectedEntity !== entity) {
+                            game.selectEntity(entity);
+                        }
+                        return;
                     }
+                }
+                if (game.selectedEntity) {
+                    game.selectEntity(null);
                 }
             }
         } else if (mouseButton === 1 || mouseButton === 4) {
@@ -765,6 +787,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
         if (mouseButton === 0) {
             if (currentBuilding) {
+                if (game.selectedEntity === currentBuilding) {
+                    game.selectedEntity.selectedBorder.visible = true;
+                }
                 game.setCurrentBuilding(null);
             }
         } else if (mouseButton === 1 || mouseButton === 4) {
@@ -889,10 +914,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
         entity.lights = [];
 
         entity.tick = function (delta) {
-            if (ENABLE_DEBUG && entity === player) {
-                debugText.text += 'Entities: ' + entities.length + '\n';
-            }
-
             for (let i=0; i<entity.lights.length; i++) {
                 let light = entity.lights[i];
                 light.tick();
@@ -968,11 +989,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
             y: camera.y + HEIGHT/2,
             z: camera.z
         };
-        if (player && player.valid && (!player.netData || player.netData.alive)) {
-            target.x = player.x;
-            target.y = player.y;
-            target.z = player.z;
-        }
         if (z === target.z) {
             let dist = Math.distanceBetween({x: x, y: y}, target);
             if (dist < maxScreenshakeDistance) {
@@ -1193,20 +1209,23 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
 
         if (!entity.isRail) {
-            sprite = new PIXI.TilingSprite(resources['buildingBackground'].texture);
+            sprite = new PIXI.TilingSprite(resources['building_background'].texture);
             sprite.width = building.width * METER_PIXEL_SIZE;
             sprite.height = building.length * METER_PIXEL_SIZE;
             sprite.anchor.set(0.5);
             entity.addChild(sprite);
+            entity.sprite = sprite;
             
             if (building.category !== 'foundations') {
                 if (!building.texture) {
                     sprite.tint = (building.color ? building.color : (buildingCategories[building.category] ? buildingCategories[building.category].color : 0x505050)); // Dark Grey
                 }
-                let spriteBorder = new PIXI.Graphics();
-                spriteBorder.lineStyle(3, 0xFFFFFF);
-                spriteBorder.drawRect(-(sprite.width/2), -(sprite.height/2), sprite.width, sprite.height);
-                entity.addChild(spriteBorder);
+                if (building.key !== 'sound_test') {
+                    let spriteBorder = new PIXI.Graphics();
+                    spriteBorder.lineStyle(3, 0xFFFFFF);
+                    spriteBorder.drawRect(-(sprite.width/2), -(sprite.height/2), sprite.width, sprite.height);
+                    entity.addChild(spriteBorder);
+                }
             }
         }
 
@@ -1233,24 +1252,32 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
 
         if (!building.texture && building.category !== 'foundations' && !entity.isRail) {
-            let iconBackground = new PIXI.Graphics();
-            iconBackground.lineStyle(3, 0xFFFFFF);
-            iconBackground.beginFill(0x0B0B0B);
+            let iconBackground = new PIXI.Sprite(resources.icon_background.texture);
+            iconBackground.width = 80;
+            iconBackground.height = 80;
+            iconBackground.anchor.set(0.5);
+            entity.addChild(iconBackground);
+            // Unfortunately fuel silo is exceptionally small compared to other buildings.
             if (building.key === 'fuel_silo') {
-                iconBackground.drawRect(-32, -32, 64, 64); // Unfortunately fuel silo is exceptionally small compared to other buildings.
-            } else {
-                iconBackground.drawRect(-40, -40, 80, 80);
+                iconBackground.width = 64;
+                iconBackground.height = 64;
             }
-            iconBackground.endFill();
             entity.addChild(iconBackground);
 
             let icon = new PIXI.Sprite(resources[building.icon].texture);
-            icon.anchor.set(0.5);
             icon.width = iconBackground.width - 10;
             icon.height = iconBackground.height - 10;
             icon.anchor.set(0.5);
             entity.addChild(icon);
         }
+
+        // We'll have to do something special for rails and roads, maybe a sprite or something that can be overlayed on top of them in the same way the rail / road textures are done.
+        let borderWidth = 6;
+        entity.selectedBorder = new PIXI.Graphics();
+        entity.selectedBorder.visible = false;
+        entity.selectedBorder.lineStyle(borderWidth, 0xFF8F00);
+        entity.selectedBorder.drawRect(-(entity.width/2)-borderWidth, -(entity.height/2)-borderWidth, entity.width+(borderWidth*2), entity.height+(borderWidth*2));
+        entity.addChild(entity.selectedBorder);
 
         setTimeout(() => {
             if (game.statisticsMenuComponent) {
@@ -1269,12 +1296,16 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
         const TRACK_SEGMENT_LENGTH = 16;
         entity.onSelect = function() {
+            entity.selectedBorder.visible = true;
+
             if (entity.rangeSprite) {
                 entity.rangeSprite.visible = true;
             }
             entity.updateHandles();
         };
         entity.onDeselect = function() {
+            entity.selectedBorder.visible = false;
+
             if (entity.rangeSprite) {
                 entity.rangeSprite.visible = false;
             }
@@ -1294,7 +1325,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
         let sound = null;
         entity.tick = function() {
-            if (sheet) {
+            if (entity.sprite) {
+                entity.visible = entity.isVisible();
+            }
+
+            if (sheet && entity.visible) {
                 frameX += building.texture.speed ? building.texture.speed : 0.1;
                 if (frameX >= frameWidth) {
                     frameX -= frameWidth;
@@ -1316,7 +1351,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 }
             }
 
-            if (!entity.locked && entity.isRail) {
+            if (entity.visible && !entity.locked && entity.isRail) {
                 if (selectedPoint && !mouseDown[0]) {
                     selectedPoint = null;
                 }
@@ -1450,10 +1485,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     if (projection.d <= 25) {
                         return true;
                     }
-                } else {
+                } else if (entity.sprite) {
                     // https://stackoverflow.com/a/67732811 <3
-                    const w = entity.width / 2;
-                    const h = entity.height / 2;
+                    const w = entity.sprite.width / 2;
+                    const h = entity.sprite.height / 2;
                     const r = entity.rotation;
 
                     // Create new oriented bounds.
@@ -1478,6 +1513,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
         };
 
         entity.getZIndex = function() {
+            if (entity === currentBuilding || entity === game.selectedEntity) {
+                return -100000;
+            }
             return -entity.y - (building.sortOffset ? building.sortOffset : 0);
         };
 
@@ -1641,7 +1679,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             x: 0,
             y: 0
         };
-        game.selectEntity(currentBuilding);
+        //game.selectEntity(currentBuilding);
         if (currentBuilding.isRail) {
             currentBuilding.shouldSelectLastRailPoint = true;
             currentBuildingOffset = {
@@ -1762,6 +1800,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 currentBuilding.rotation = angle;
             } else {
                 if (!selectedPoint && (!currentBuilding.selectPosition || (Date.now()-currentBuilding.selectTime > 250 || Math.distanceBetween(currentBuilding.selectPosition, {x: gmx, y: gmy}) > 20))) {
+                    currentBuilding.selectedBorder.visible = false;
                     currentBuilding.selectPosition = null;
 
                     currentBuilding.x = gmx - currentBuildingOffset.x;
@@ -1821,8 +1860,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
         if (ENABLE_DEBUG) {
             debugText.text = 'Press F2 to disable debug\n';
+            debugText.text += 'Press F8 to spawn 1k buildings\n';
             debugText.text += 'FPS: ' + Math.round(1000/delta) + '\n';
-            debugText.text += 'Latency: ' + latency + ' ms\n';
         }
 
         app.cstage.x = Math.floor(-camera.x);
