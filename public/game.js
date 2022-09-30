@@ -564,6 +564,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
     game.downloadSave = function() {
         let saveObject = {
             name: game.facilityName,
+            faction: game.settings.selectedFaction,
             entities: []
         };
         for (let i=0; i<entities.length; i++) {
@@ -573,6 +574,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 y: parseFloat(entity.y),
                 z: parseInt(entity.z),
                 rotation: entity.rotation,
+                locked: entity.locked,
                 type: entity.type,
                 subtype: entity.subtype
             };
@@ -589,6 +591,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
     game.loadSave = function(saveObject) {
         game.removeEntities();
+        game.setFaction(saveObject.faction);
         setTimeout(() => {
             let xTotal = 0;
             let yTotal = 0;
@@ -608,11 +611,14 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
                 if (entity) {
                     entity.rotation = entityData.rotation;
+                    entity.locked = entityData.locked;
                     entity.onLoad(entityData);
                 }
             }
-            camera.x = Math.round(xTotal/saveObject.entities.length) - WIDTH/2;
-            camera.y = Math.round(yTotal/saveObject.entities.length) - HEIGHT/2;
+            if (saveObject.entities.length) {
+                camera.x = Math.round(xTotal/saveObject.entities.length) - WIDTH/2;
+                camera.y = Math.round(yTotal/saveObject.entities.length) - HEIGHT/2;
+            }
             game.resetZoom();
         }, 1);
     };
@@ -624,6 +630,13 @@ const fontFamily = ['Recursive', 'sans-serif'];
     let eventPrefix = 'mouse';
     if (isMobile) {
         eventPrefix = 'pointer';
+    }
+
+    game.setFaction = function(faction) {
+        if (game.settings.selectedFaction !== faction) {
+            game.settings.selectedFaction = faction;
+            game.updateSettings();
+        }
     }
 
     game.selectEntity = function(entity) {
@@ -1303,7 +1316,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 }
             }
 
-            if (entity.isRail) {
+            if (!entity.locked && entity.isRail) {
                 if (selectedPoint && !mouseDown[0]) {
                     selectedPoint = null;
                 }
@@ -1604,12 +1617,23 @@ const fontFamily = ['Recursive', 'sans-serif'];
     }
 
     game.setCurrentBuilding = function(building) {
-        currentBuilding = building;
-        if (currentBuilding) {
-            currentBuilding.selectTime = Date.now();
-            currentBuilding.selectPosition = {x: gmx, y: gmy};
+        if (!building || !building.locked) {
+            currentBuilding = building;
+            if (currentBuilding) {
+                currentBuilding.selectTime = Date.now();
+                currentBuilding.selectPosition = {x: gmx, y: gmy};
+            }
         }
     };
+
+    game.lockBuilding = function(building) {
+        if (building) {
+            building.locked = !building.locked ? true : null;
+            if (building.locked && currentBuilding === building) {
+                game.setCurrentBuilding(null);
+            }
+        }
+    }
 
     game.startBuild = function(building) {
         game.setCurrentBuilding(createBuilding(building.key, 0, 0, 0, {}));

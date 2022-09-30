@@ -351,10 +351,11 @@ p {
 
 #sidebar-body .menu-page-title {
     background: #121212;
-    border: 1px solid black;
-    margin-bottom: 12px;
-    padding: 5px;
-    border-radius: 5px;
+    padding: 4px 0;
+    margin: -12px -12px 10px -12px;
+    font-size: 1.5em;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
 }
 
 #sidebar-body .menu-page {
@@ -474,10 +475,6 @@ p {
     background-repeat: no-repeat;
     background-position: center;
     border: 2px solid black;
-    /*
-    font-size: 22px;
-    text-shadow: 2px 2px #000;
-    */
     float: left;
     margin: 0;
 }
@@ -516,33 +513,45 @@ p {
 }
 
 .upgrade-list {
-    background: #151515;
+    background: #222222;
     margin: 0;
-    padding: 10px;
     border: 1px solid black;
+    border-radius: 5px;
     text-align: center;
     margin-bottom: 10px;
+    padding-bottom: 4px;
 }
 
-.upgrade-list > .upgrade-icon {
+.upgrade-list > .upgrade-name {
+    background: #151515;
+    font-size: 1.2em;
+    border-bottom: 1px solid black;
+    margin-bottom: 8px;
+    line-height: 38px;
+}
+
+.upgrade-list > .upgrade-button {
     display: inline-block;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px;
+}
+
+.upgrade-list > .upgrade-button > .resource-icon {
     width: 52px;
     height: 52px;
-    cursor: pointer;
-    margin-right: 5px;
+    background-color: #151515;
+    border-color: #0d0d0d;
     float: none;
 }
 
-.upgrade-list > .upgrade-icon:last-child {
-    margin-right: 0;
-}
-
-.upgrade-list > .upgrade-icon:not(.selected-upgrade):hover {
+.upgrade-list > .upgrade-button:not(.selected-upgrade) > .resource-icon:hover {
     background-color: black;
     border-color: white;
 }
 
-.upgrade-list > .upgrade-icon.selected-upgrade {
+.upgrade-list > .upgrade-button.selected-upgrade > .resource-icon {
     background-color: #2c1407;
     border-color: #ff8f00;
 }
@@ -560,20 +569,6 @@ p {
     border-color: white;
 }
 
-.select-production-input, .select-production-pointer, .select-production-output {
-    display: inline-block;
-    vertical-align: middle;
-}
-
-.select-production-pointer {
-    font-size: 22px;
-    margin-right: 5px;
-}
-
-.select-production-output .resource-amount, .resource-col.power-production .resource-amount {
-    color: #03b003;
-}
-
 .select-production h6 {
     margin: 0;
 }
@@ -581,6 +576,10 @@ p {
 .selected-production {
     border-color: #ff8f00;
     margin: 0;
+}
+
+.delete-button:hover {
+    background: linear-gradient(rgb(255, 0, 0), rgb(168, 0, 0)) !important;
 }
 
 .close-statistics-button, .footer-button {
@@ -740,13 +739,13 @@ p {
     overflow: auto;
 }
 
-.produced-resource-row {
+#hover-building-info .produced-resource-row {
     width: 50%;
     float: left;
-    margin-bottom: 5px;
 }
 
 .produced-resource-row .production-recipe {
+    display: inline-block;
     overflow: hidden;
 }
 
@@ -754,8 +753,12 @@ p {
     vertical-align: middle;
 }
 
-.produced-resource-row .production-recipe .building-icon {
+.produced-resource-row .production-recipe > div {
     margin-right: 5px;
+}
+
+.produced-resource-row .production-recipe > div:last-child {
+    margin-right: 0;
 }
 
 .produced-resource-row .production-recipe .building-icon img {
@@ -773,7 +776,7 @@ p {
     color: #03b003;
 }
 
-.produced-resource-row .select-production-pointer {
+.produced-resource-row .production-pointer {
     width: 20px;
     font-size: 18px;
     line-height: 40px;
@@ -781,20 +784,19 @@ p {
     text-align: center;
 }
 
-#hover-building-info > .building-info-body > .building-info-production .produced-resource {
+.produced-resource-row .produced-resource {
     color: #45d745;
     font-size: 0.95em;
-    padding-right: 10px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
 }
 
-#hover-building-info > .building-info-body > .building-info-production .produced-resource > span:not(:first-child)::before {
+.produced-resource-row .produced-resource > span:not(:first-child)::before {
     content: ', ';
 }
 
-#hover-building-info > .building-info-body > .building-info-production .produced-resource::before {
+.produced-resource-row .produced-resource::before {
     content: '';
     display: inline-block;
     background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
@@ -804,6 +806,14 @@ p {
     width: 8px;
     height: 8px;
     margin-right: 6px;
+}
+
+.produced-resource-row .power-production .resource-amount {
+    color: #45d745;
+}
+
+#hover-building-info .produced-resource-row .produced-resource {
+    padding-right: 10px;
 }
 
 #hover-building-info > .building-info-body > .building-cost > div:last-child {
@@ -862,12 +872,43 @@ p {
     background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
 }
 
+.lock-button {
+    width: 30px;
+    height: 30px;
+    line-height: initial;
+    background: #1a1a1a;
+    border: 2px solid #202020;
+    position: absolute;
+    top: 8px;
+    right: 6px;
+    cursor: pointer;
+    color: #777;
+}
+
+.lock-button .locked {
+    color: #dd3030;
+}
+
+.lock-button:hover {
+    color: white;
+    border-color: white;
+}
+
 .settings-option-wrapper {
     background: #222;
     border: 1px solid #131313;
     border-radius: 5px;
     line-height: 30px;
     margin-bottom: 12px;
+    overflow: hidden;
+}
+
+.settings-option-wrapper .building-title {
+    background: #151515;
+    position: relative;
+    font-size: 1.2em;
+    padding: 5px;
+    text-align: center;
 }
 
 label.settings-option-wrapper, .settings-option-wrapper label {
