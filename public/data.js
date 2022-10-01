@@ -1140,7 +1140,7 @@ const buildingCategories = {
                         power: 12,
                         part: 'buildings/upgrades/parts/DPP_PetrolPowerPlantIcon.webp',
                         cost: {
-                            processed_construction_material: 50
+                            construction_material: 100
                         },
                         production: [{
                             time: 90,
