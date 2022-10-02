@@ -319,7 +319,7 @@ Vue.component('app-menu-statistics', {
             for (let i=0; i<game.getEntities().length; i++) {
                 let entity = game.getEntities()[i];
                 if (entity.type === 'building') {
-                    garrisonSupplies += 2 * garrisonConsumptionRate;
+                    garrisonSupplies += (2 * (entity.building?.garrisonSupplyMultiplier ?? 1)) * garrisonConsumptionRate;
                 }
             }
 

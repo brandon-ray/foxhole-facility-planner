@@ -684,7 +684,7 @@ const buildingCategories = {
         buildings: {
             foundation_corner: {
                 name: 'Foundation Corner',
-                description: 'A foundation for building out areas suitable for Facilities construction.', // Requires Construction Vehicle + Consumes 2x more Garrison Supplies
+                description: 'A foundation for building out areas suitable for Facilities construction.', // Requires Construction Vehicle
                 category: 'foundations',
                 power: 0,
                 width: 5,
@@ -695,13 +695,14 @@ const buildingCategories = {
                     disabled: true
                 },
                 sortOffset: -1000,
+                garrisonSupplyMultiplier: 2,
                 cost: {
                     gravel: 75
                 }
             },
             foundation_1x1: {
                 name: 'Foundation 1x1',
-                description: 'A foundation for building out areas suitable for Facilities construction.', // Requires Construction Vehicle + Consumes 2x more Garrison Supplies
+                description: 'A foundation for building out areas suitable for Facilities construction.', // Requires Construction Vehicle
                 category: 'foundations',
                 power: 0,
                 width: 5,
@@ -712,13 +713,14 @@ const buildingCategories = {
                     disabled: true
                 },
                 sortOffset: -1000,
+                garrisonSupplyMultiplier: 2,
                 cost: {
                     gravel: 75
                 }
             },
             foundation_1x2: {
                 name: 'Foundation 1x2',
-                description: 'A foundation for building out areas suitable for Facilities construction.', // Requires Construction Vehicle + Consumes 2x more Garrison Supplies
+                description: 'A foundation for building out areas suitable for Facilities construction.', // Requires Construction Vehicle
                 category: 'foundations',
                 power: 0,
                 width: 5,
@@ -729,13 +731,14 @@ const buildingCategories = {
                     disabled: true
                 },
                 sortOffset: -1000,
+                garrisonSupplyMultiplier: 2,
                 cost: {
                     gravel: 115
                 }
             },
             foundation_2x2: {
                 name: 'Foundation 2x2',
-                description: 'A foundation for building out areas suitable for Facilities construction.', // Requires Construction Vehicle + Consumes 2x more Garrison Supplies
+                description: 'A foundation for building out areas suitable for Facilities construction.', // Requires Construction Vehicle
                 category: 'foundations',
                 power: 0,
                 width: 10,
@@ -746,23 +749,25 @@ const buildingCategories = {
                     disabled: true
                 },
                 sortOffset: -1000,
+                garrisonSupplyMultiplier: 2,
                 cost: {
                     gravel: 150
                 }
             },
             provisional_road: {
                 name: 'Provisional Road',
-                description: 'A temporary road used to enable vehicle access between main roads and remote bases.', // Requires Construction Vehicle + Consumes 3x more Garrison Supplies
+                description: 'A temporary road used to enable vehicle access between main roads and remote bases.', // Requires Construction Vehicle
                 category: 'foundations',
-                icon: 'buildings/ProvisionalRoadIcon.webp',
                 power: 0,
                 width: 5,
                 length: 2,
                 maxLength: 26,
+                icon: 'buildings/ProvisionalRoadIcon.webp',
                 texture: 'buildings/textures/provisional_road.png',
                 textureIcon: {
                     disabled: true
                 },
+                garrisonSupplyMultiplier: 3,
                 cost: {
                     gravel: 150
                 }
@@ -1514,9 +1519,10 @@ const buildingCategories = {
             },
             pipeline_underground: {
                 name: 'Pipeline (Underground)',
-                description: 'Transports various types of liquid automatically. Can connect to other types of pipes to form networks. This variant of pipe can be built underground.', // Requires Tech + Consumes 4x more Garrison Supplies
+                description: 'Transports various types of liquid automatically. Can connect to other types of pipes to form networks. This variant of pipe can be built underground.', // Requires Tech
                 category: 'factories',
                 icon: 'buildings/PipelineUndergroundIcon.webp',
+                garrisonSupplyMultiplier: 4,
                 cost: {
                     pipe: 6
                 },
