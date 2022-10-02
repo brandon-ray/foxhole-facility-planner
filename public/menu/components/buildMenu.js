@@ -199,12 +199,14 @@ Vue.component('app-menu-building-selected', {
     },
     template: html`
     <div style="text-align:left;" v-if="game.selectedEntity">
+        <button type="button" class="trash-button" v-on:click="destroyBuilding" @mouseenter="bme"><i class="fa fa-trash"></i></button>
         <button type="button" class="lock-button" v-on:click="lockBuilding" @mouseenter="bme">
             <span v-if="game.selectedEntity.locked" class="locked"><i class="fa fa-lock"></i></span>
             <span v-else><i class="fa fa-unlock"></i></span>
         </button>
+        <!--<button type="button" class="return-button" v-on:click="game.buildMenuComponent.changeMenu(null)" @mouseenter="bme"><i class="fa fa-arrow-left"></i></button>-->
         <div class="settings-option-wrapper">
-            <div v-if="game.selectedEntity.type === 'building'" class="building-title">
+            <div v-if="game.selectedEntity.type === 'building'" class="settings-title">
                 {{game.selectedEntity.building.parentName ? game.selectedEntity.building.parentName : game.selectedEntity.building.name}}
             </div>
             <label class="app-input-label">
@@ -220,30 +222,32 @@ Vue.component('app-menu-building-selected', {
                 <input class="app-input" type="number" v-model="entityRotation" @change="updateRotation">
             </label>
         </div>
-        <div v-if="game.selectedEntity.type === 'building' && game.selectedEntity.building && game.selectedEntity.building.upgrades">
-            <div class="upgrade-list">
-                <div class="upgrade-name">{{hoverUpgradeName ?? (game.selectedEntity.building.upgradeName ? game.selectedEntity.building.upgradeName : 'No Upgrade Selected')}}</div>
-                <button class="upgrade-button" v-for="(upgrade, key) in game.selectedEntity.building.upgrades" :class="{'selected-upgrade': game.selectedEntity.building.parentKey && game.selectedEntity.building.key === game.selectedEntity.building.parentKey + '_' + key}"
-                    @mouseenter="showUpgradeHover(key, upgrade)" @mouseleave="showUpgradeHover" @click="changeUpgrade(key)">
-                    <div class="resource-icon" :title="upgrade.name" :style="{backgroundImage:'url(/assets/' + (upgrade.part ? upgrade.part : (upgrade.icon ? upgrade.icon : game.selectedEntity.building.icon)) + ')'}"></div>
-                </button>
+        <div v-if="game.selectedEntity.type === 'building' && game.selectedEntity.building && game.selectedEntity.building.upgrades" class="settings-option-wrapper upgrade-list">
+            <div class="settings-title">{{hoverUpgradeName ?? (game.selectedEntity.building.upgradeName ? game.selectedEntity.building.upgradeName : 'No Upgrade Selected')}}</div>
+            <button class="upgrade-button" v-for="(upgrade, key) in game.selectedEntity.building.upgrades" :class="{'selected-upgrade': game.selectedEntity.building.parentKey && game.selectedEntity.building.key === game.selectedEntity.building.parentKey + '_' + key}"
+                @mouseenter="showUpgradeHover(key, upgrade)" @mouseleave="showUpgradeHover" @click="changeUpgrade(key)">
+                <div class="resource-icon" :title="upgrade.name" :style="{backgroundImage:'url(/assets/' + (upgrade.part ? upgrade.part : (upgrade.icon ? upgrade.icon : game.selectedEntity.building.icon)) + ')'}"></div>
+            </button>
+        </div>
+        <div v-if="game.selectedEntity.type === 'building' && game.selectedEntity.building && game.selectedEntity.building.production && game.selectedEntity.building.production.length" class="settings-option-wrapper">
+            <div class="settings-title">Select Production</div>
+            <div class="production-list">
+                <div class="select-production" v-for="(production, index) in game.selectedEntity.building.production"
+                    v-if="!production.faction || !game.settings.selectedFaction || production.faction == game.settings.selectedFaction" :class="{'selected-production': game.selectedEntity.selectedProduction === index}" @click="changeProduction(index)">
+                    <app-game-recipe :building="game.selectedEntity.building" :recipe="production"></app-game-recipe>
+                    <h6 class="production-requirements">
+                        <span v-if="game.selectedEntity.building.power"><i class="fa fa-bolt"></i> {{production.power ? production.power : game.selectedEntity.building.power}} MW</span>
+                        &nbsp;&nbsp;&nbsp;
+                        <i class="fa fa-clock-o"></i> {{production.time}}s
+                    </h6>
+                </div>
             </div>
         </div>
-        <div v-if="game.selectedEntity.type === 'building' && game.selectedEntity.building && game.selectedEntity.building.production && game.selectedEntity.building.production.length">
-            <h5>Select Production</h5>
-            <div class="select-production" style="margin-bottom:12px; text-align:center;" v-for="(production, index) in game.selectedEntity.building.production"
-                 v-if="!production.faction || !game.settings.selectedFaction || production.faction == game.settings.selectedFaction" :class="{'selected-production': game.selectedEntity.selectedProduction === index}" @click="changeProduction(index)">
-                <app-game-recipe :building="game.selectedEntity.building" :recipe="production"></app-game-recipe>
-                <h6 class="production-requirements" style="color: yellow;">
-                    <span v-if="game.selectedEntity.building.power"><i class="fa fa-bolt"></i> {{production.power ? production.power : game.selectedEntity.building.power}} MW</span>
-                    &nbsp;&nbsp;&nbsp;
-                    <i class="fa fa-clock-o"></i> {{production.time}}s
-                </h6>
-            </div>
-        </div>
+        <!--
         <button type="button" class="app-btn app-btn-secondary delete-button" v-on:click="destroyBuilding" @mouseenter="bme">
             <i class="fa fa-trash"></i> Destroy
         </button>
+        -->
     </div>
     `
 });
@@ -458,19 +462,29 @@ Vue.component('app-menu-settings', {
     props: ['menuData'],
     template: html`
     <div id="settings" class="text-left">
-        <label class="settings-option-wrapper">
-            <i class="fa fa-picture-o" aria-hidden="true"></i> Graphics
-            <select class="app-input" v-model="game.settings.quality" v-on:change="game.updateQuality">
-                <option value="auto">Auto</option>
-                <option value="high">High Quality</option>
-                <option value="low">Low Quality</option>
-            </select>
-        </label>
-        <label class="settings-option-wrapper">
-            <i class="fa fa-volume-up" aria-hidden="true"></i> Volume
-            <input type="range" v-model="game.settings.volume" min="0" max="1" step="0.1" class="slider" @input="game.updateSettings">
-        </label>
         <div class="settings-option-wrapper">
+            <div class="settings-title">General Settings</div>
+            <label class="app-input-label">
+                <i class="fa fa-picture-o" aria-hidden="true"></i> Graphics
+                <select class="app-input" v-model="game.settings.quality" v-on:change="game.updateQuality">
+                    <option value="auto">Auto</option>
+                    <option value="high">High Quality</option>
+                    <option value="low">Low Quality</option>
+                </select>
+            </label>
+            <label class="app-input-label">
+                <i class="fa fa-volume-up" aria-hidden="true"></i> Volume
+                <input type="range" v-model="game.settings.volume" min="0" max="1" step="0.1" class="slider" @input="game.updateSettings">
+            </label>
+        </div>
+        <div class="settings-option-wrapper">
+            <div class="settings-title">Board Settings</div>
+            <!--
+            <label class="app-input-label">
+                <i class="fa fa-header" aria-hidden="true"></i> Display Facility Name
+                <input class="app-input" type="checkbox" v-model="game.settings.showFacilityName" @change="game.updateSettings">
+            </label>
+            -->
             <label class="app-input-label">
                 <i class="fa fa-th-large" aria-hidden="true"></i> Snap Grid Size
                 <input class="app-input" type="number" v-model="game.settings.gridSize" @input="game.updateSettings">
@@ -480,10 +494,13 @@ Vue.component('app-menu-settings', {
                 <input class="app-input" type="number" v-model="game.settings.snapRotationDegrees" @input="game.updateSettings">
             </label>
         </div>
-        <label class="settings-option-wrapper">
-            <i class="fa fa-filter" aria-hidden="true"></i> Show Upgrades in Building List
-            <input class="app-input" type="checkbox" v-model="game.settings.showUpgradesAsBuildings" @change="game.updateSettings">
-        </label>
+        <div class="settings-option-wrapper">
+            <div class="settings-title">Construction Settings</div>
+            <label class="app-input-label">
+                <i class="fa fa-filter" aria-hidden="true"></i> Show Upgrades in Building List
+                <input class="app-input" type="checkbox" v-model="game.settings.showUpgradesAsBuildings" @change="game.updateSettings">
+            </label>
+        </div>
     </div>
     `
 });

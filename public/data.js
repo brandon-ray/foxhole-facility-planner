@@ -12,7 +12,7 @@ const buildingCategories = {
     harvesters: {
         name: 'Harvesters',
         order: 2,
-        color: 0x7cea92 // Green
+        color: 0x289665 // Forest Green
     },
     power: {
         name: 'Power',
@@ -691,6 +691,9 @@ const buildingCategories = {
                 length: 5,
                 icon: 'buildings/ConcreteFoundation02Icon.png',
                 texture: 'buildings/textures/concrete_corner_meter.png',
+                textureIcon: {
+                    disabled: true
+                },
                 sortOffset: -1000,
                 cost: {
                     gravel: 75
@@ -705,6 +708,9 @@ const buildingCategories = {
                 length: 5,
                 icon: 'buildings/ConcreteFoundation01Icon.png',
                 texture: 'buildings/textures/concrete_meter.png',
+                textureIcon: {
+                    disabled: true
+                },
                 sortOffset: -1000,
                 cost: {
                     gravel: 75
@@ -719,6 +725,9 @@ const buildingCategories = {
                 length: 10,
                 icon: 'buildings/ConcreteFoundation03Icon.png',
                 texture: 'buildings/textures/concrete_meter.png',
+                textureIcon: {
+                    disabled: true
+                },
                 sortOffset: -1000,
                 cost: {
                     gravel: 115
@@ -733,6 +742,9 @@ const buildingCategories = {
                 length: 10,
                 icon: 'buildings/ConcreteFoundation04Icon.png',
                 texture: 'buildings/textures/concrete_meter.png',
+                textureIcon: {
+                    disabled: true
+                },
                 sortOffset: -1000,
                 cost: {
                     gravel: 150
@@ -748,6 +760,9 @@ const buildingCategories = {
                 length: 2,
                 maxLength: 26,
                 texture: 'buildings/textures/provisional_road.png',
+                textureIcon: {
+                    disabled: true
+                },
                 cost: {
                     gravel: 150
                 }
@@ -763,6 +778,9 @@ const buildingCategories = {
                 icon: 'buildings/RailSmallIcon.png',
                 sortOffset: 100000,
                 texture: 'buildings/textures/track_small_gauge.png',
+                textureIcon: {
+                    disabled: true
+                },
                 cost: {
                     construction_material: 25
                 }
@@ -778,6 +796,9 @@ const buildingCategories = {
                 icon: 'buildings/RailLargeIcon.png',
                 sortOffset: 100000,
                 texture: 'buildings/textures/track_large_gauge.png',
+                textureIcon: {
+                    disabled: true
+                },
                 cost: {
                     processed_construction_material: 5
                 }
@@ -919,6 +940,7 @@ const buildingCategories = {
                 width: 6,
                 length: 10,
                 icon: 'buildings/CoalRefineryIcon.webp',
+                color: 0x404040, // Darker Grey
                 cost: {
                     construction_material: 50
                 },
@@ -989,6 +1011,7 @@ const buildingCategories = {
                 width: 4,
                 length: 11,
                 icon: 'buildings/OilRefineryIcon.webp',
+                color: 0x242424, // Black
                 cost: {
                     construction_material: 50
                 },
@@ -1067,6 +1090,11 @@ const buildingCategories = {
                 range: 40,
                 overlapDist: 65,
                 icon: 'buildings/MaintenanceTunnelIcon.webp',
+                textureIcon: {
+                    width: 96,
+                    height: 96
+                },
+                color: 0x101010, // Black
                 cost: {
                     construction_material: 200
                 },
@@ -1089,23 +1117,39 @@ const buildingCategories = {
                 length: 3,
                 range: 24,
                 icon: 'buildings/CraneIcon.webp',
+                textureIcon: {
+                    width: 96,
+                    height: 96
+                },
+                color: 0x101010, // Black
                 cost: {
                     processed_construction_material: 10
                 }
             },
-            /*
             power_pole: {
                 name: 'Power Pole',
                 description: 'Used to connect Power Lines together. Up to 4 Power Lines can be attached to a single pole.',
                 category: 'power',
-                power: 0,
                 width: 1,
                 length: 1,
                 icon: 'buildings/PowerPoleIcon.webp',
+                textureIcon: {
+                    disabled: true
+                },
                 cost: {
                     basic_material: 20
+                },
+                upgrades: {
+                    lamp: {
+                        name: 'Lamp',
+                        part: 'buildings/upgrades/parts/PP_LampIcon.webp',
+                        cost: {
+                            construction_material: 5
+                        }
+                    }
                 }
             },
+            /*
             power_line: {
                 name: 'Power Line',
                 description: 'Conducts power between two Power Poles.',
@@ -1155,10 +1199,14 @@ const buildingCategories = {
                 name: 'Power Station',
                 description: 'This Facility generates a large amount of power using Oil or Coal as inputs.', // Requires Construction Vehicle + Requires Tech
                 category: 'power',
-                icon: 'buildings/PowerStationIcon.webp',
                 power: 10,
                 width: 14,
                 length: 13,
+                icon: 'buildings/PowerStationIcon.webp',
+                textureIcon: {
+                    width: 256,
+                    height: 224
+                },
                 cost: {
                     processed_construction_material: 25
                 },
@@ -1320,6 +1368,7 @@ const buildingCategories = {
                 width: 5,
                 length: 6,
                 icon: 'buildings/WaterPumpIcon.webp',
+                color: 0x278CE0, // Blue
                 cost: {
                     construction_material: 35
                 },
@@ -1362,6 +1411,7 @@ const buildingCategories = {
                 width: 4,
                 length: 7,
                 icon: 'buildings/OilWellIcon.webp',
+                color: 0x242424, // Black
                 cost: {
                     construction_material: 35
                 },
@@ -1431,6 +1481,11 @@ const buildingCategories = {
                 width: 2,
                 length: 3,
                 icon: 'buildings/FuelSiloIcon.webp',
+                textureIcon: {
+                    width: 64,
+                    height: 96
+                },
+                color: 0x101010, // Black
                 cost: {
                     construction_material: 30
                 },
@@ -1485,6 +1540,11 @@ const buildingCategories = {
                 width: 8,
                 length: 14,
                 icon: 'buildings/LightVehicleAssemblyStationIcon.webp',
+                textureIcon: {
+                    width: 160,
+                    height: 160
+                },
+                color: 0x7ce1ea, // Blue
                 cost: {
                     construction_material: 75
                 },
@@ -2163,6 +2223,11 @@ const buildingCategories = {
                 width: 9,
                 length: 20,
                 icon: 'buildings/LargeAssemblyFactoryIcon.webp',
+                textureIcon: {
+                    width: 160,
+                    height: 160
+                },
+                color: 0x7ce1ea, // Blue
                 cost: {
                     processed_construction_material: 250
                 },
@@ -2455,6 +2520,10 @@ const buildingCategories = {
                 width: 9,
                 length: 12,
                 icon: 'buildings/MetalworksFactoryIcon.webp',
+                textureIcon: {
+                    width: 160,
+                    height: 160
+                },
                 cost: {
                     construction_material: 125
                 },
@@ -2611,6 +2680,11 @@ const buildingCategories = {
                 width: 10,
                 length: 16,
                 icon: 'buildings/FieldModificationCenterIcon.webp',
+                textureIcon: {
+                    width: 160,
+                    height: 160
+                },
+                color: 0x7ce1ea, // Blue
                 cost: {
                     processed_construction_material: 250
                 }
@@ -2620,9 +2694,13 @@ const buildingCategories = {
                 description: 'Used for storing raw resources for transfer into and out of Facilities. The stockpile for this structure can be reserved.', // Requires Construction Vehicle
                 category: 'factories',
                 icon: 'buildings/ResourceTransferStationIcon.webp',
-                texture: 'buildings/textures/resource_transfer_station_meter.png',
+                texture: 'buildings/textures/ResourceTransferStationTexture.jpg',
+                textureIcon: {
+                    y: -52
+                },
                 width: 6,
                 length: 9.5,
+                color: 0x7cea92, // Green
                 cost: {
                     construction_material: 35
                 }
@@ -2632,9 +2710,13 @@ const buildingCategories = {
                 description: 'Used for storing materials for transfer into and out of Facilities. The stockpile for this structure can be reserved.', // Requires Construction Vehicle
                 category: 'factories',
                 icon: 'buildings/MaterialTransferStationIcon.webp',
-                texture: 'buildings/textures/material_transfer_station_meter.png',
+                texture: 'buildings/textures/MaterialTransferStationTexture.jpg',
+                textureIcon: {
+                    y: -52
+                },
                 width: 6,
                 length: 12,
+                color: 0x7cea92, // Green
                 cost: {
                     construction_material: 35
                 }
@@ -2644,9 +2726,13 @@ const buildingCategories = {
                 description: 'Used for storing materials for transfer into and out of Facilities. The stockpile for this structure can be reserved.', // Requires Construction Vehicle
                 category: 'factories',
                 icon: 'buildings/LiquidTransferStationIcon.webp',
-                texture: 'buildings/textures/liquid_transfer_station_meter.png',
+                texture: 'buildings/textures/LiquidTransferStationTexture.jpg',
+                textureIcon: {
+                    y: -52
+                },
                 width: 6,
                 length: 8.5,
+                color: 0x7cea92, // Green
                 cost: {
                     construction_material: 35
                 }

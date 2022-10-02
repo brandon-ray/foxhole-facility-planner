@@ -11,6 +11,7 @@ const game = {
         snapRotationDegrees: 15,
         selectedFaction: null,
         showUpgradesAsBuildings: true,
+        showFacilityName: true,
         volume: 1
     },
     isPlayScreen: false,
@@ -1217,12 +1218,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
             entity.sprite = sprite;
             
             if (building.category !== 'foundations') {
-                if (!building.texture) {
-                    sprite.tint = (building.color ? building.color : (buildingCategories[building.category] ? buildingCategories[building.category].color : 0x505050)); // Dark Grey
-                }
+                sprite.tint = (building.color ? building.color : (buildingCategories[building.category] ? buildingCategories[building.category].color : 0x505050)); // Dark Grey
                 if (building.key !== 'sound_test') {
                     let spriteBorder = new PIXI.Graphics();
-                    spriteBorder.lineStyle(3, 0xFFFFFF);
+                    spriteBorder.lineStyle(4, 0xFFFFFF);
                     spriteBorder.drawRect(-(sprite.width/2), -(sprite.height/2), sprite.width, sprite.height);
                     entity.addChild(spriteBorder);
                 }
@@ -1251,23 +1250,47 @@ const fontFamily = ['Recursive', 'sans-serif'];
             entity.sprite = sprite;
         }
 
-        if (!building.texture && building.category !== 'foundations' && !entity.isRail) {
-            let iconBackground = new PIXI.Sprite(resources.icon_background.texture);
-            iconBackground.width = 80;
-            iconBackground.height = 80;
-            iconBackground.anchor.set(0.5);
-            entity.addChild(iconBackground);
-            // Unfortunately fuel silo is exceptionally small compared to other buildings.
-            if (building.key === 'fuel_silo') {
-                iconBackground.width = 64;
-                iconBackground.height = 64;
-            }
-            entity.addChild(iconBackground);
+        if (sprite && building.icon && (!building.textureIcon || !building.textureIcon.disabled)) {
+            let iconPadding = 28;
+            let iconWidth = sprite.width - iconPadding;
+            iconWidth = iconWidth > 128 ? 128 : iconWidth;
+            iconWidth = iconWidth > sprite.height ? sprite.height - iconPadding : iconWidth;
+            let iconHeight = iconWidth;
+            let iconYOffset = 0;
+            let iconTexture = resources[building.icon].texture;
 
-            let icon = new PIXI.Sprite(resources[building.icon].texture);
-            icon.width = iconBackground.width - 10;
-            icon.height = iconBackground.height - 10;
-            icon.anchor.set(0.5);
+            if (building.textureIcon) {
+                iconWidth = building.textureIcon.width ?? iconWidth;
+                iconHeight = building.textureIcon.height ?? iconHeight;
+                iconYOffset = building.textureIcon.y ?? iconYOffset;
+
+                // Crop the icon if necessary. This icon / texture should be stored inside of resources and on building data in the future.
+                if (iconWidth !== iconHeight) {
+                    let meterWidth = iconTexture.width;
+                    let meterHeight = iconTexture.height;
+                    if (iconWidth > iconHeight) {
+                        meterHeight = meterHeight * ((iconHeight / METER_PIXEL_SIZE) / (iconWidth / METER_PIXEL_SIZE));
+                    } else {
+                        meterWidth = meterWidth * ((iconWidth / METER_PIXEL_SIZE) / (iconHeight / METER_PIXEL_SIZE));
+                    }
+                    iconTexture = new PIXI.Texture(iconTexture, new PIXI.Rectangle(((iconTexture.width - meterWidth) / 2), ((iconTexture.height - meterHeight) / 2), meterWidth, meterHeight));
+                }
+            }
+
+            if (iconWidth !== sprite.width && iconHeight !== sprite.height) {
+                let iconBackground = new PIXI.Graphics();
+                iconBackground.lineStyle(4, 0xFFFFFF);
+                iconBackground.beginFill(0x0B0B0B);
+                iconBackground.drawRect(-(iconWidth/2), -(iconHeight/2) + iconYOffset, iconWidth, iconHeight);
+                iconBackground.endFill();
+                entity.addChild(iconBackground);
+            }
+
+            let icon = new PIXI.Sprite(iconTexture);
+            icon.y = iconYOffset;
+            icon.width = iconWidth - 10;
+            icon.height = iconHeight - 10;
+            icon.anchor.set(0.5, 0.5);
             entity.addChild(icon);
         }
 

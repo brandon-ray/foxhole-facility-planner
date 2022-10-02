@@ -50,6 +50,12 @@ if (isMobile && !isPhoneApp) {
                 <app-game-game-menu></app-game-game-menu>
                 <app-game-sidebar></app-game-sidebar>
                 
+                <!--
+                <div v-if="game.settings.showFacilityName && game.facilityName && game.facilityName !== 'Unnamed Facility'" class="facility-banner">
+                    <i class="fa fa-wrench" aria-hidden="true"></i> {{game.facilityName}}
+                </div>
+                -->
+
                 <div v-if="game.settings.enableStats" class="statistics-panel">
                     <app-menu-statistics></app-menu-statistics>
                 </div>

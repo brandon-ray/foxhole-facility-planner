@@ -350,10 +350,11 @@ p {
 }
 
 #sidebar-body .menu-page-title {
+    height: 45px;
     background: #121212;
     padding: 4px 0;
     margin: -12px -12px 10px -12px;
-    font-size: 1.5em;
+    font-size: 1.45em;
     border-top: 1px solid black;
     border-bottom: 1px solid black;
 }
@@ -519,15 +520,10 @@ p {
     border-radius: 5px;
     text-align: center;
     margin-bottom: 10px;
-    padding-bottom: 4px;
 }
 
-.upgrade-list > .upgrade-name {
-    background: #151515;
-    font-size: 1.2em;
-    border-bottom: 1px solid black;
+.upgrade-list > .settings-title {
     margin-bottom: 8px;
-    line-height: 38px;
 }
 
 .upgrade-list > .upgrade-button {
@@ -556,30 +552,52 @@ p {
     border-color: #ff8f00;
 }
 
-.select-production {
+.production-list {
+    padding: 12px;
+}
+
+.production-list > .select-production {
     background: #0d0d0d;
     border: 2px solid black;
-    padding: 6px;
+    margin-bottom: 12px;
+    padding: 0 8px 6px 8px;
     cursor: pointer;
+    text-align: center;
     overflow: auto;
 }
 
-.select-production:hover:not(.selected-production) {
+.production-list > .select-production:last-child {
+    margin-bottom: 0;
+}
+
+.production-list > .select-production:hover:not(.selected-production) {
     background: #131313;
     border-color: white;
 }
 
-.select-production h6 {
+.production-list > .select-production > .production-requirements {
+    color: yellow;
+}
+
+.production-list > .select-production h6 {
     margin: 0;
 }
 
-.selected-production {
+.production-list > .select-production.selected-production {
     border-color: #ff8f00;
-    margin: 0;
 }
 
 .delete-button:hover {
     background: linear-gradient(rgb(255, 0, 0), rgb(168, 0, 0)) !important;
+}
+
+.facility-banner {
+    position: fixed;
+    bottom: 50px;
+    left: 365px;
+    font-size: 1.8em;
+    text-shadow: 0 2px 3px #2d2d2d;
+    pointer-events: none;
 }
 
 .close-statistics-button, .footer-button {
@@ -649,7 +667,7 @@ p {
     right: 15px;
     width: 300px;
     padding: 0;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: #1a1a1a;
 }
 
 .statistics-panel-header {
@@ -872,26 +890,43 @@ p {
     background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
 }
 
-.lock-button {
-    width: 30px;
-    height: 30px;
+.trash-button, .lock-button, .return-button {
+    width: 35px;
+    height: 35px;
     line-height: initial;
     background: #1a1a1a;
     border: 2px solid #202020;
     position: absolute;
-    top: 8px;
-    right: 6px;
+    top: 5px;
+    right: 5px;
     cursor: pointer;
+    font-size: 1.2em;
     color: #777;
 }
 
-.lock-button .locked {
+.trash-button, .return-button {
+    /*left: 45px;*/
+    left: 5px;
+    right: auto;
+}
+
+/*
+.return-button {
+    left: 5px;
+}
+*/
+
+.lock-button:hover, .return-button:hover {
+    color: white;
+    border-color: white;
+}
+
+.lock-button .locked, .trash-button:hover {
     color: #dd3030;
 }
 
-.lock-button:hover {
-    color: white;
-    border-color: white;
+.trash-button:hover {
+    border-color: #dd3030;
 }
 
 .settings-option-wrapper {
@@ -899,15 +934,16 @@ p {
     border: 1px solid #131313;
     border-radius: 5px;
     line-height: 30px;
-    margin-bottom: 12px;
+    margin-bottom: 18px;
     overflow: hidden;
 }
 
-.settings-option-wrapper .building-title {
+.settings-option-wrapper .settings-title {
     background: #151515;
+    background: linear-gradient(#1a1a1a, #151515);
     position: relative;
     font-size: 1.2em;
-    padding: 5px;
+    padding: 5px 10px;
     text-align: center;
 }
 
@@ -938,7 +974,7 @@ label.settings-option-wrapper input:not(.slider), .settings-option-wrapper label
     width: 100px;
 }
 
-label.settings-option-wrapper input[type="checkbox"] {
+label.settings-option-wrapper input[type="checkbox"], .settings-option-wrapper label input[type="checkbox"] {
     width: 30px;
 }
 
