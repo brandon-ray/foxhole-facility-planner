@@ -1707,7 +1707,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 upgrade = bData.key === upgrade ? bData.parentKey || bData.key : upgrade;
             }
             let clone = upgrade ? createBuilding(upgrade, entity.x, entity.y, 0) : game.startBuild(bData);
-            clone.selectedProduction = entity.selectedProduction;
+            clone.selectedProduction = !upgrade ? entity.selectedProduction : null;
             clone.locked = entity.locked;
             clone.rotation = entity.rotation;
             game.selectEntity(clone);
