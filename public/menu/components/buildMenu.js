@@ -509,6 +509,13 @@ Vue.component('app-menu-settings', {
         <div class="settings-option-wrapper">
             <div class="settings-title">Construction Settings</div>
             <label class="app-input-label">
+                <i class="fa fa-folder-open" aria-hidden="true"></i> Default Category
+                <select class="app-input construction-category" v-model="game.settings.defaultBuildingCategory" @change="game.updateSettings">
+                    <option value="all">All Buildings</option>
+                    <option v-for="(category, key) in buildingCategories" v-bind:value="key">{{category.name}}</option>
+                </select>
+            </label>
+            <label class="app-input-label">
                 <i class="fa fa-filter" aria-hidden="true"></i> Show Upgrades in Building List
                 <input class="app-input" type="checkbox" v-model="game.settings.showUpgradesAsBuildings" @change="game.updateSettings">
             </label>

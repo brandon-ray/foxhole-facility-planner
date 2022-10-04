@@ -10,12 +10,12 @@ const game = {
         enableSnapRotation: true,
         snapRotationDegrees: 15,
         selectedFaction: null,
+        defaultBuildingCategory: 'all',
         showUpgradesAsBuildings: true,
         showFacilityName: true,
         volume: 1
     },
-    isPlayScreen: false,
-    selectedBuildingCategory: 'foundations'
+    isPlayScreen: false
 };
 
 function escapeHtml(str) {
@@ -71,6 +71,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
     };
 
     game.selectedEntity = null;
+    game.selectedBuildingCategory = game.settings.defaultBuildingCategory;
 
     if (isMobile && !isPhoneApp) {
         console.info('Mobile is disabled for now.');
@@ -1713,7 +1714,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
             clone.selectedProduction = entity.selectedProduction;
             clone.locked = entity.locked;
             clone.rotation = entity.rotation;
-            game.selectEntity(clone);
             if (upgrade) {
                 entity.remove();
             }
