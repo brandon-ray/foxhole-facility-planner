@@ -337,7 +337,12 @@ Vue.component('app-menu-statistics', {
                         continue;
                     }
 
-                    const productionSelected = typeof entity.selectedProduction === 'number';
+                    let productionSelected = typeof entity.selectedProduction === 'number';
+                    // Always show power for buildings that have no production, but still should show in power for stats.
+                    if (buildingData.key === 'field_modification_center' || buildingData.key === 'bms_foreman_stacker') {
+                        productionSelected = true;
+                    }
+
                     let power = productionSelected && buildingData.power ? buildingData.power : 0;
                     if (buildingData.cost) {
                         let costKeys = Object.keys(buildingData.cost);
