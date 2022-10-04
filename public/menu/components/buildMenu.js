@@ -67,9 +67,9 @@ Vue.component('app-game-sidebar', {
     template: html`
     <div id="sidebar">
         <div id="sidebar-header">
-            <button class="colonial-button" :class="{ selected: game.settings.selectedFaction == 'c' }" @click="selectFaction('c')"></button>
+            <button class="colonial-button" :class="{ selected: game.settings.selectedFaction == 'c' }" title="Colonial Faction" @click="selectFaction('c')"></button>
             <img class="sidebar-logo" src="/assets/logo_transparent.webp">
-            <button class="warden-button" :class="{ selected: game.settings.selectedFaction == 'w' }" @click="selectFaction('w')"></button>
+            <button class="warden-button" :class="{ selected: game.settings.selectedFaction == 'w' }" title="Warden Faction" @click="selectFaction('w')"></button>
         </div>
         <div id="sidebar-body">
             <div v-if="!currentMenu" class="menu-body">
@@ -160,7 +160,7 @@ Vue.component('app-menu-building-selected', {
             }
         },
         changeProduction: function(index) {
-            game.selectedEntity.selectedProduction = index;
+            game.selectedEntity.selectedProduction = game.selectedEntity.selectedProduction !== index ? index : null;
             if (game.statisticsMenuComponent) {
                 game.statisticsMenuComponent.refresh();
             }
@@ -168,9 +168,11 @@ Vue.component('app-menu-building-selected', {
         },
         changeUpgrade: function(upgrade) {
             this.bmc();
-            if (game.selectedEntity && game.selectedEntity.building) {
-                game.upgradeBuilding(game.selectedEntity, upgrade);
-            }
+            game.cloneBuilding(game.selectedEntity, upgrade);
+        },
+        cloneBuilding: function() {
+            this.bmc();
+            game.cloneBuilding(game.selectedEntity);
         },
         lockBuilding: function() {
             this.bmc();
@@ -199,12 +201,21 @@ Vue.component('app-menu-building-selected', {
     },
     template: html`
     <div style="text-align:left;" v-if="game.selectedEntity">
-        <button type="button" class="trash-button" v-on:click="destroyBuilding" @mouseenter="bme"><i class="fa fa-trash"></i></button>
-        <button type="button" class="lock-button" v-on:click="lockBuilding" @mouseenter="bme">
-            <span v-if="game.selectedEntity.locked" class="locked"><i class="fa fa-lock"></i></span>
-            <span v-else><i class="fa fa-unlock"></i></span>
+        <button type="button" class="title-button trash-button" v-on:click="destroyBuilding" title="Delete" @mouseenter="bme">
+            <div class="inner-button"><i class="fa fa-trash"></i></div>
         </button>
-        <!--<button type="button" class="return-button" v-on:click="game.buildMenuComponent.changeMenu(null)" @mouseenter="bme"><i class="fa fa-arrow-left"></i></button>-->
+        <button type="button" class="title-button return-button" v-on:click="game.buildMenuComponent.changeMenu(null)" title="Back" @mouseenter="bme">
+            <div class="inner-button"><i class="fa fa-arrow-left"></i></div>
+        </button>
+        <button type="button" class="title-button clone-button" v-on:click="cloneBuilding" title="Clone" @mouseenter="bme">
+            <div class="inner-button"><i class="fa fa-clone"></i></div>
+        </button>
+        <button type="button" class="title-button lock-button" v-on:click="lockBuilding" title="Lock" @mouseenter="bme">
+            <div class="inner-button">
+                <span v-if="game.selectedEntity.locked" class="locked"><i class="fa fa-lock"></i></span>
+                <span v-else><i class="fa fa-unlock"></i></span>
+            </div>
+        </button>
         <div class="settings-option-wrapper">
             <div v-if="game.selectedEntity.type === 'building'" class="settings-title">
                 {{game.selectedEntity.building.parentName ? game.selectedEntity.building.parentName : game.selectedEntity.building.name}}
@@ -243,11 +254,6 @@ Vue.component('app-menu-building-selected', {
                 </div>
             </div>
         </div>
-        <!--
-        <button type="button" class="app-btn app-btn-secondary delete-button" v-on:click="destroyBuilding" @mouseenter="bme">
-            <i class="fa fa-trash"></i> Destroy
-        </button>
-        -->
     </div>
     `
 });
@@ -331,7 +337,8 @@ Vue.component('app-menu-statistics', {
                         continue;
                     }
 
-                    let power = buildingData.power ? buildingData.power : 0;
+                    const productionSelected = typeof entity.selectedProduction === 'number';
+                    let power = productionSelected && buildingData.power ? buildingData.power : 0;
                     if (buildingData.cost) {
                         let costKeys = Object.keys(buildingData.cost);
                         for (let j = 0; j < costKeys.length; j++) {
@@ -346,48 +353,50 @@ Vue.component('app-menu-statistics', {
 
                     if (buildingData.production && buildingData.production.length) {
                         let productionList = buildingData.production;
-                        let production = productionList[entity.selectedProduction];
-                        if (production.power) {
-                            power = production.power;
-                        }
+                        if (productionSelected) {
+                            let production = productionList[entity.selectedProduction];
+                            if (production.power) {
+                                power = production.power;
+                            }
 
-                        let productionTime = Math.floor(this.time / production.time);
-                        if (production.input) {
-                            let inputKeys = Object.keys(production.input);
+                            let productionTime = Math.floor(this.time / production.time);
+                            if (production.input) {
+                                let inputKeys = Object.keys(production.input);
+                                for (let j = 0; j < inputKeys.length; j++) {
+                                    let key = inputKeys[j];
+                                    let value = production.input[key];
+                                    if (!input[key]) {
+                                        input[key] = 0;
+                                    }
+                                    input[key] += productionTime * value;
+                                }
+                            }
+
+                            if (production.output) {
+                                let outputKeys = Object.keys(production.output);
+                                for (let j = 0; j < outputKeys.length; j++) {
+                                    let key = outputKeys[j];
+                                    let value = production.output[key];
+                                    if (!output[key]) {
+                                        output[key] = 0;
+                                    }
+                                    output[key] += productionTime * value;
+                                }
+                            }
+
+                            let inputKeys = Object.keys(input);
                             for (let j = 0; j < inputKeys.length; j++) {
                                 let key = inputKeys[j];
-                                let value = production.input[key];
-                                if (!input[key]) {
-                                    input[key] = 0;
-                                }
-                                input[key] += productionTime * value;
-                            }
-                        }
-
-                        if (production.output) {
-                            let outputKeys = Object.keys(production.output);
-                            for (let j = 0; j < outputKeys.length; j++) {
-                                let key = outputKeys[j];
-                                let value = production.output[key];
-                                if (!output[key]) {
-                                    output[key] = 0;
-                                }
-                                output[key] += productionTime * value;
-                            }
-                        }
-
-                        let inputKeys = Object.keys(input);
-                        for (let j = 0; j < inputKeys.length; j++) {
-                            let key = inputKeys[j];
-                            if (output[key]) {
-                                let outputAmount = output[key];
-                                output[key] -= input[key];
-                                input[key] -= outputAmount;
-                                if (output[key] <= 0) {
-                                    delete output[key];
-                                }
-                                if (input[key] <= 0) {
-                                    delete input[key];
+                                if (output[key]) {
+                                    let outputAmount = output[key];
+                                    output[key] -= input[key];
+                                    input[key] -= outputAmount;
+                                    if (output[key] <= 0) {
+                                        delete output[key];
+                                    }
+                                    if (input[key] <= 0) {
+                                        delete input[key];
+                                    }
                                 }
                             }
                         }
@@ -479,12 +488,10 @@ Vue.component('app-menu-settings', {
         </div>
         <div class="settings-option-wrapper">
             <div class="settings-title">Board Settings</div>
-            <!--
             <label class="app-input-label">
                 <i class="fa fa-header" aria-hidden="true"></i> Display Facility Name
                 <input class="app-input" type="checkbox" v-model="game.settings.showFacilityName" @change="game.updateSettings">
             </label>
-            -->
             <label class="app-input-label">
                 <i class="fa fa-th-large" aria-hidden="true"></i> Snap Grid Size
                 <input class="app-input" type="number" v-model="game.settings.gridSize" @input="game.updateSettings">
@@ -522,6 +529,7 @@ Vue.component('app-menu-save-load', {
                     let saveObject = JSON.parse(jsonString);
                     if (saveObject.name) {
                         game.facilityName = saveObject.name;
+                        game.appComponent.$forceUpdate();
                     }
                     game.loadSave(saveObject);
                     component.$forceUpdate();
@@ -531,6 +539,13 @@ Vue.component('app-menu-save-load', {
                 }
             };
             reader.readAsArrayBuffer(file);
+        },
+        updateName: function() {
+            if (game.facilityName === '') {
+                game.facilityName = 'Unnamed Facility';
+            }
+            this.$forceUpdate();
+            game.appComponent.$forceUpdate();
         }
     },
     template: html`

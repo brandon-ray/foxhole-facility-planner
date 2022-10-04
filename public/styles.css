@@ -350,7 +350,7 @@ p {
 }
 
 #sidebar-body .menu-page-title {
-    height: 45px;
+    height: 46px;
     background: #121212;
     padding: 4px 0;
     margin: -12px -12px 10px -12px;
@@ -890,42 +890,78 @@ p {
     background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
 }
 
-.trash-button, .lock-button, .return-button {
-    width: 35px;
-    height: 35px;
-    line-height: initial;
+.title-button {
+    background: none;
+    border: none;
+    padding: 5px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+}
+
+.title-button .inner-button {
+    width: 36px;
+    height: 36px;
+    line-height: 32px;
     background: #1a1a1a;
     border: 2px solid #202020;
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    cursor: pointer;
     font-size: 1.2em;
     color: #777;
 }
 
-.trash-button, .return-button {
-    /*left: 45px;*/
-    left: 5px;
-    right: auto;
-}
-
-/*
-.return-button {
-    left: 5px;
-}
-*/
-
-.lock-button:hover, .return-button:hover {
+.title-button:hover .inner-button {
     color: white;
     border-color: white;
 }
 
-.lock-button .locked, .trash-button:hover {
+.title-button.trash-button {
+    left: 42px;
+}
+
+.title-button.clone-button, .title-button.lock-button {
+    left: auto;
+    right: 42px;
+}
+
+.title-button.lock-button {
+    right: 0;
+}
+
+.trash-button:hover .inner-button, .title-button.lock-button .locked {
     color: #dd3030;
 }
 
-.trash-button:hover {
+.trash-button:hover .inner-button {
+    border-color: #dd3030;
+}
+
+.settings-option-wrapper .settings-buttons {
+    padding: 5px;
+    text-align: center;
+}
+
+.settings-option-wrapper .settings-button {
+    display: inline-block;
+    width: 45px;
+    height: 45px;
+    background-color: #1a1a1a;
+    border: 2px solid #131313;
+    color: white;
+    cursor: pointer;
+    margin: 2px;
+    font-size: 1.4em;
+}
+
+.settings-option-wrapper .settings-button:hover {
+    border-color: white;
+}
+
+.settings-option-wrapper .settings-button.trash:hover, .settings-option-wrapper .settings-button.lock .locked {
+    color: #dd3030;
+}
+
+.settings-option-wrapper .settings-button.trash:hover {
     border-color: #dd3030;
 }
 

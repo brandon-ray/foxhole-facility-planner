@@ -1178,7 +1178,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
     const METER_PIXEL_SIZE = 32;
     function createBuilding(type, x, y, z, netData) {
         let entity = createEntity('building', type, x, y, z, netData);
-        entity.selectedProduction = 0;
 
         let building = window.objectData.buildings[type];
         if (!building) {
@@ -1574,7 +1573,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
         };
         entity.onLoad = function(entityData) {
-            if (entityData.selectedProduction) {
+            if (typeof entityData.selectedProduction === 'number') {
                 entity.selectedProduction = entityData.selectedProduction;
             }
 
@@ -1677,9 +1676,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
         return entity;
     }
 
-    game.setCurrentBuilding = function(building) {
-        if (!building || !building.locked) {
-            currentBuilding = building;
+    game.setCurrentBuilding = function(entity) {
+        if (!entity || !entity.locked) {
+            currentBuilding = entity;
             if (currentBuilding) {
                 currentBuilding.selectTime = Date.now();
                 currentBuilding.selectPosition = {x: gmx, y: gmy};
@@ -1687,22 +1686,12 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
     };
 
-    game.lockBuilding = function(building) {
-        if (building) {
-            building.locked = !building.locked ? true : null;
-            if (building.locked && currentBuilding === building) {
-                game.setCurrentBuilding(null);
-            }
-        }
-    }
-
-    game.startBuild = function(building) {
-        game.setCurrentBuilding(createBuilding(building.key, 0, 0, 0, {}));
+    game.startBuild = function(buildingData) {
+        game.setCurrentBuilding(createBuilding(buildingData.key, 0, 0, 0, {}));
         currentBuildingOffset = {
             x: 0,
             y: 0
         };
-        //game.selectEntity(currentBuilding);
         if (currentBuilding.isRail) {
             currentBuilding.shouldSelectLastRailPoint = true;
             currentBuildingOffset = {
@@ -1713,16 +1702,31 @@ const fontFamily = ['Recursive', 'sans-serif'];
         return currentBuilding;
     };
 
-    game.upgradeBuilding = function(entity, upgrade) {
-        let building = entity.building;
-        if (building) {
-            upgrade = building.parentKey ? building.parentKey + '_' + upgrade : building.key + '_' + upgrade;
-            upgrade = building.key === upgrade ? building.parentKey || building.key : upgrade;
-            building = createBuilding(upgrade, entity.x, entity.y, 0);
-            building.rotation = entity.rotation;
-            game.selectEntity(building);
-            entity.remove();
-            return building;
+    game.cloneBuilding = function(entity, upgrade) {
+        let bData = entity?.building;
+        if (bData) {
+            if (upgrade) {
+                upgrade = bData.parentKey ? bData.parentKey + '_' + upgrade : bData.key + '_' + upgrade;
+                upgrade = bData.key === upgrade ? bData.parentKey || bData.key : upgrade;
+            }
+            let clone = upgrade ? createBuilding(upgrade, entity.x, entity.y, 0) : game.startBuild(bData);
+            clone.selectedProduction = entity.selectedProduction;
+            clone.locked = entity.locked;
+            clone.rotation = entity.rotation;
+            game.selectEntity(clone);
+            if (upgrade) {
+                entity.remove();
+            }
+            return clone;
+        }
+    }
+
+    game.lockBuilding = function(entity) {
+        if (entity) {
+            entity.locked = !entity.locked ? true : null;
+            if (entity.locked && currentBuilding === entity) {
+                game.setCurrentBuilding(null);
+            }
         }
     }
 
