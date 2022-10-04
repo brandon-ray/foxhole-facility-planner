@@ -761,6 +761,7 @@ const buildingCategories = {
                 power: 0,
                 width: 5,
                 length: 2,
+                isBezier: true,
                 maxLength: 26,
                 icon: 'buildings/ProvisionalRoadIcon.webp',
                 texture: 'buildings/textures/provisional_road.png',
@@ -779,6 +780,7 @@ const buildingCategories = {
                 power: 0,
                 width: 2,
                 length: 2,
+                isBezier: true,
                 maxLength: 30,
                 icon: 'buildings/RailSmallIcon.png',
                 sortOffset: 100000,
@@ -797,6 +799,7 @@ const buildingCategories = {
                 power: 0,
                 width: 2,
                 length: 2,
+                isBezier: true,
                 maxLength: 30,
                 icon: 'buildings/RailLargeIcon.png',
                 sortOffset: 100000,
@@ -2764,7 +2767,8 @@ const buildingCategories = {
                     sheet: 'buildings/textures/sus.png',
                     speed: 0.132,
                     width: 220,
-                    height: 184
+                    height: 184,
+                    border: false
                 }
             },
         }

@@ -1203,13 +1203,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
             entity.addChild(entity.rangeSprite);
         }
-        
-        entity.isRail = false;
-        if (entity.subtype === 'rail_small_gauge' || entity.subtype === 'rail_large_gauge' || entity.subtype === 'provisional_road') {
-            entity.isRail = true;
-        }
 
-        if (!entity.isRail) {
+        if (!building.isBezier) {
             sprite = new PIXI.TilingSprite(resources['building_background'].texture);
             sprite.width = building.width * METER_PIXEL_SIZE;
             sprite.height = building.length * METER_PIXEL_SIZE;
@@ -1217,9 +1212,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
             entity.addChild(sprite);
             entity.sprite = sprite;
             
-            if (building.category !== 'foundations') {
+            if (!building.texture || !building.textureIcon?.disabled) {
                 sprite.tint = (building.color ? building.color : (buildingCategories[building.category] ? buildingCategories[building.category].color : 0x505050)); // Dark Grey
-                if (building.key !== 'sound_test') {
+                if (building.texture?.border !== false) {
                     let spriteBorder = new PIXI.Graphics();
                     spriteBorder.lineStyle(4, 0xFFFFFF);
                     spriteBorder.drawRect(-(sprite.width/2), -(sprite.height/2), sprite.width, sprite.height);
@@ -1233,15 +1228,15 @@ const fontFamily = ['Recursive', 'sans-serif'];
         let frameWidth = 0;
         let frameHeight = 0;
         let sheet = null;
-        if (building.texture && !entity.isRail) {
+        if (building.texture && !building.isBezier) {
             if (typeof building.texture === 'object' && !Array.isArray(building.texture)) {
                 sheet = loadSpritesheet(resources[building.texture.sheet].texture, building.texture.width, building.texture.height);
                 frameWidth = Math.floor(resources[building.texture.sheet].texture.width/building.texture.width);
                 frameHeight = Math.floor(resources[building.texture.sheet].texture.height/building.texture.height);
                 entity.removeChild(sprite);
                 sprite = new PIXI.Sprite(sheet[0][0]);
-                sprite.width = building.width * 32;
-                sprite.height = building.length * 32;
+                sprite.width = building.width * METER_PIXEL_SIZE;
+                sprite.height = building.length * METER_PIXEL_SIZE;
                 sprite.anchor.set(0.5);
                 entity.addChild(sprite);
             } else if (resources[building.texture]) {
@@ -1250,7 +1245,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             entity.sprite = sprite;
         }
 
-        if (sprite && building.icon && (!building.textureIcon || !building.textureIcon.disabled)) {
+        if (sprite && building.icon && (!building.textureIcon || !building.textureIcon?.disabled)) {
             let iconPadding = 28;
             let iconWidth = sprite.width - iconPadding;
             iconWidth = iconWidth > 128 ? 128 : iconWidth;
@@ -1333,7 +1328,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 entity.rangeSprite.visible = false;
             }
 
-            if (entity.isRail && entity.shouldSelectLastRailPoint && !selectedPoint) {
+            if (entity.building?.isBezier && entity.shouldSelectLastRailPoint && !selectedPoint) {
                 entity.shouldSelectLastRailPoint = false;
                 forceMouseDown[0] = true;
                 selectedPoint = points[1];
@@ -1374,7 +1369,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 }
             }
 
-            if (entity.visible && !entity.locked && entity.isRail) {
+            if (entity.visible && !entity.locked && building.isBezier) {
                 if (selectedPoint && !mouseDown[0]) {
                     selectedPoint = null;
                 }
@@ -1418,7 +1413,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
                         for (let i=0; i<entities.length; i++) {
                             let entity2 = entities[i];
-                            if (entity2 === entity || entity2.type !== 'building' || entity2.subtype !== entity.subtype || !entity2.isRail || !entity2.bezier) {
+                            if (entity2 === entity || entity2.type !== 'building' || entity2.subtype !== entity.subtype || !entity2.building?.isBezier || !entity2.bezier) {
                                 continue;
                             }
                             let selectedPointToEntity2Local = entity2.toLocal(selectedPoint, entity, undefined, true);
@@ -1502,7 +1497,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             bounds.height += boundsBuffer * 2;
 
             if (gmx >= bounds.x && gmx <= bounds.x+bounds.width && gmy >= bounds.y && gmy <= bounds.y+bounds.height) {
-                if (entity.isRail && entity.bezier) {
+                if (entity.building?.isBezier && entity.bezier) {
                     let mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
                     let projection = entity.bezier.project(mousePos);
                     if (projection.d <= 25) {
@@ -1559,7 +1554,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
         let points = [];
         entity.onSave = function(entityData) {
-            if (entity.isRail) {
+            if (entity.building?.isBezier) {
                 entityData.railPoints = [];
                 for (let i=0; i<points.length; i++) {
                     let point = points[i];
@@ -1578,7 +1573,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 entity.selectedProduction = entityData.selectedProduction;
             }
 
-            if (entity.isRail && entityData.railPoints) {
+            if (entity.building?.isBezier && entityData.railPoints) {
                 for (let i=0; i<points.length; i++) {
                     let point = points[i];
                     entity.removeChild(point.handle);
@@ -1669,7 +1664,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
         };
 
-        if (entity.isRail) {
+        if (entity.building?.isBezier) {
             entity.addPoint(0, 0);
             entity.addPoint(200, 0);
         }
@@ -1693,7 +1688,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
             x: 0,
             y: 0
         };
-        if (currentBuilding.isRail) {
+        //game.selectEntity(currentBuilding);
+        if (currentBuilding.building?.isBezier) {
             currentBuilding.shouldSelectLastRailPoint = true;
             currentBuildingOffset = {
                 x: 100,
@@ -1714,6 +1710,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             clone.selectedProduction = entity.selectedProduction;
             clone.locked = entity.locked;
             clone.rotation = entity.rotation;
+            game.selectEntity(clone);
             if (upgrade) {
                 entity.remove();
             }
@@ -1847,10 +1844,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     }
                 }
 
-                if (currentBuilding.isRail && !selectedPoint) {
+                if (currentBuilding.building?.isBezier && !selectedPoint) {
                     for (let i=0; i<entities.length; i++) {
                         let entity = entities[i];
-                        if (!entity.isRail || !entity.bezier) {
+                        if (!entity.building?.isBezier || !entity.bezier) {
                             continue;
                         }
                         let mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
