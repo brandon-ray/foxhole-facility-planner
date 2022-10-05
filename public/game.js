@@ -672,10 +672,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 icon: 'fa-wrench'
             });
         } else {
+            game.selectedEntity = null;
             if (!buildMenu) {
                 game.buildMenuComponent.changeMenu(null);
             }
-            game.selectedEntity = null;
         }
 
         if (lastSelectedEntity) {
@@ -732,26 +732,34 @@ const fontFamily = ['Recursive', 'sans-serif'];
         let mouseButton = e.button;
         mouseDown[mouseButton] = true;
         if (mouseButton === 0) {
-            if (!currentBuilding && !selectedPoint) {
-                entities.sort(function (a, b) {
-                    return a.getZIndex() - b.getZIndex()
-                });
-                for (let i=0; i<entities.length; i++) {
-                    let entity = entities[i];
-                    if (entity.type === 'building' && entity.canGrab()) {
-                        currentBuildingOffset = {
-                            x: gmx - entity.x,
-                            y: gmy - entity.y
-                        };
-                        game.setCurrentBuilding(entity);
-                        if (game.selectedEntity !== entity) {
-                            game.selectEntity(entity);
-                        }
-                        return;
+            if (!selectedPoint) {
+                if (currentBuilding) {
+                    if (currentBuilding?.bezier && currentBuilding.shouldSelectLastRailPoint) {
+                        currentBuilding.grabBezierPoint();
                     }
-                }
-                if (game.selectedEntity) {
-                    game.selectEntity(null);
+                } else {
+                    entities.sort(function (a, b) {
+                        return a.getZIndex() - b.getZIndex()
+                    });
+                    for (let i=0; i<entities.length; i++) {
+                        let entity = entities[i];
+                        if (entity.type === 'building' && entity.canGrab()) {
+                            currentBuildingOffset = {
+                                x: gmx - entity.x,
+                                y: gmy - entity.y
+                            };
+                            game.setCurrentBuilding(entity);
+                            if (game.selectedEntity !== entity) {
+                                game.selectEntity(entity);
+                            } else if (entity.bezier) {
+                                entity.grabBezierPoint();
+                            }
+                            return;
+                        }
+                    }
+                    if (game.selectedEntity) {
+                        game.selectEntity(null);
+                    }
                 }
             }
         } else if (mouseButton === 1 || mouseButton === 4) {
@@ -789,9 +797,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
         if (mouseButton === 0) {
             if (currentBuilding) {
-                if (game.selectedEntity === currentBuilding) {
-                    game.selectedEntity.selectedBorder.visible = true;
-                }
                 game.setCurrentBuilding(null);
             }
         } else if (mouseButton === 1 || mouseButton === 4) {
@@ -1328,16 +1333,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 entity.rangeSprite.visible = false;
             }
 
-            if (entity.building?.isBezier && entity.shouldSelectLastRailPoint && !selectedPoint) {
-                entity.shouldSelectLastRailPoint = false;
-                forceMouseDown[0] = true;
-                selectedPoint = points[1];
-                game.selectedEntity = entity;
-            } else if (entity.bezier && entity.bezier.length() <= TRACK_SEGMENT_LENGTH) {
+            if (entity.bezier && entity.bezier.length() <= TRACK_SEGMENT_LENGTH) {
                 selectedPoint = null;
                 entity.remove();
-                game.selectEntity(null);
             }
+
             entity.updateHandles();
         };
 
@@ -1367,6 +1367,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 if (sound.stopped) {
                     sound = null;
                 }
+            }
+
+            if (entity.visible && currentBuilding !== entity && game.selectedEntity === entity && !entity.selectedBorder.visible) {
+                entity.selectedBorder.visible = true;
             }
 
             if (entity.visible && !entity.locked && building.isBezier) {
@@ -1470,20 +1474,31 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             selectedPoint.handle.position.x = selectedPoint.x;
                             selectedPoint.handle.position.y = selectedPoint.y;
                         }
-                    } else {
-                        for (let i = 1; i < points.length; i++) {
-                            let point = points[i];
-                            let dist = Math.distanceBetween(mousePos, point);
-                            if (dist < 20) {
-                                selectedPoint = point;
-                                game.selectEntity(entity);
-                                break;
-                            }
-                        }
                     }
                 }
             }
         };
+
+        entity.grabBezierPoint = function() {
+            if (game.selectedEntity === entity && entity.bezier) {
+                if (entity.shouldSelectLastRailPoint) {
+                    entity.shouldSelectLastRailPoint = false;
+                    forceMouseDown[0] = true;
+                    selectedPoint = points[1];
+                    return true;
+                } else {
+                    let mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
+                    for (let i = 1; i < points.length; i++) {
+                        let point = points[i];
+                        if (Math.distanceBetween(mousePos, point) < 20) {
+                            selectedPoint = point;
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
 
         let boundsBuffer = 15;
         entity.canGrab = function() {
@@ -1532,7 +1547,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
         entity.getZIndex = function() {
             if (entity === currentBuilding || entity === game.selectedEntity) {
-                return -100000;
+                return -1000000;
             }
             return -entity.y - (building.sortOffset ? building.sortOffset : 0);
         };
@@ -1688,7 +1703,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             x: 0,
             y: 0
         };
-        //game.selectEntity(currentBuilding);
+        game.selectEntity(currentBuilding);
         if (currentBuilding.building?.isBezier) {
             currentBuilding.shouldSelectLastRailPoint = true;
             currentBuildingOffset = {
@@ -1824,7 +1839,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 currentBuilding.rotation = angle;
             } else {
                 if (!selectedPoint && (!currentBuilding.selectPosition || (Date.now()-currentBuilding.selectTime > 250 || Math.distanceBetween(currentBuilding.selectPosition, {x: gmx, y: gmy}) > 20))) {
-                    currentBuilding.selectedBorder.visible = false;
+                    if (!currentBuilding.building?.isBezier && currentBuilding.selectedBorder.visible) {
+                        currentBuilding.selectedBorder.visible = false;
+                    }
                     currentBuilding.selectPosition = null;
 
                     currentBuilding.x = gmx - currentBuildingOffset.x;
