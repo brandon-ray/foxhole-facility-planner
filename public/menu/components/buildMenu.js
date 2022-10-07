@@ -138,6 +138,11 @@ Vue.component('app-menu-building-selected', {
     props: ['menuData'],
     data: function() {
         return {
+            entityData: {
+                x: 0,
+                y: 0,
+                rotation: 0
+            },
             entityRotation: 0,
             hoverUpgradeName: null
         };
@@ -147,9 +152,15 @@ Vue.component('app-menu-building-selected', {
         this.refresh();
     },
     methods: {
-        refresh: function() {
+        refresh: function(noForce) {
             if (game.selectedEntity) {
-                this.entityRotation = Math.rad2deg(game.selectedEntity.rotation);
+                if (noForce && this.entityData.x === game.selectedEntity.position.x && this.entityData.y === game.selectedEntity.position.y && this.entityData.rotation === game.selectedEntity.rotation) {
+                    return;
+                }
+                this.entityData.x = game.selectedEntity.position.x;
+                this.entityData.y = game.selectedEntity.position.y;
+                this.entityData.rotation = game.selectedEntity.rotation;
+                this.entityRotation = Math.rad2deg(this.entityData.rotation);
             }
             this.$forceUpdate();
         },
@@ -186,10 +197,7 @@ Vue.component('app-menu-building-selected', {
         },
         destroyBuilding: function() {
             this.bmc();
-            if (game.selectedEntity) {
-                game.selectedEntity.remove();
-                game.selectEntity(null);
-            }
+            game.selectedEntity?.remove();
         },
         showUpgradeHover: function(key, upgrade) {
             this.hoverUpgradeName = upgrade ? upgrade.name : null;

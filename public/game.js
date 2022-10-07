@@ -279,18 +279,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 }
                 break;
             case 27: // Escape
-                if (currentBuilding) {
-                    currentBuilding.remove();
-                    game.selectEntity(null);
-                    game.setCurrentBuilding(null);
-                }
+                currentBuilding?.remove();
                 break;
             case 46: // Delete
-                if (game.selectedEntity) {
-                    game.selectedEntity.remove();
-                    game.selectEntity(null);
-                    game.setCurrentBuilding(null);
-                }
+                game.selectedEntity?.remove();
                 break;
             case 119: // F8
                 if (ENABLE_DEBUG) {
@@ -1334,7 +1326,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
 
             if (entity.bezier && entity.bezier.length() <= TRACK_SEGMENT_LENGTH) {
-                selectedPoint = null;
                 entity.remove();
             }
 
@@ -1553,6 +1544,15 @@ const fontFamily = ['Recursive', 'sans-serif'];
         };
 
         entity.onRemove = function() {
+            if (game.selectedEntity && game.selectedEntity === entity) {
+                game.selectEntity(null);
+            }
+            if (currentBuilding && currentBuilding === entity) {
+                game.setCurrentBuilding(null);
+            }
+            if (selectedPoint) {
+                selectedPoint = null;
+            }
             if (sound) {
                 soundStop(sound);
                 sound = null;
@@ -1743,10 +1743,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
     }
 
     game.removeEntities = function() {
-        if (game.selectedEntity) {
-            game.buildMenuComponent.changeMenu(null);
-            game.selectedEntity = null;
-        }
+        game.selectEntity(null);
+        game.setCurrentBuilding(null);
         for (let i=0; i<entities.length; i++) {
             let entity = entities[i];
             entity.remove();
@@ -1826,6 +1824,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
 
         if (currentBuilding) {
+            game.buildingSelectedMenuComponent?.refresh(true);
             if (mouseDown[2]) {
                 let angle = Math.angleBetween(currentBuilding, {x: gmx, y: gmy});
                 if (game.settings.enableSnapRotation) {
