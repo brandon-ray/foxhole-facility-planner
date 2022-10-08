@@ -1743,7 +1743,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
     }
 
     game.removeEntities = function() {
-        game.selectEntity(null);
+        if (game.selectedEntity) {
+            game.selectEntity(null);
+        }
         game.setCurrentBuilding(null);
         for (let i=0; i<entities.length; i++) {
             let entity = entities[i];

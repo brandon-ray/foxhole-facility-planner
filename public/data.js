@@ -1455,7 +1455,7 @@ const buildingCategories = {
 					fracking_oil: {
                         name: 'Fracking Oil Well',
                         power: -3,
-                        icon: 'buildings/upgrades/OW_FrackerIcon.webp',
+                        icon: 'buildings/OilWellIcon.webp',
                         cost: {
                             steel_construction_material: 25
                         },

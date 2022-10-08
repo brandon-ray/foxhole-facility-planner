@@ -213,7 +213,7 @@ Vue.component('app-menu-building-selected', {
         }
     },
     template: html`
-    <div style="text-align:left;" v-if="game.selectedEntity">
+    <div v-if="game.selectedEntity" class="text-left">
         <button type="button" class="title-button trash-button" v-on:click="destroyBuilding" title="Delete" @mouseenter="bme">
             <div class="inner-button"><i class="fa fa-trash"></i></div>
         </button>
