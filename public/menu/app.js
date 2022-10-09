@@ -43,6 +43,10 @@ if (isMobile && !isPhoneApp) {
                         game.removeEntities();
                     }
                     this.showDeleteConfirmation = false;
+                },
+                updateRangeSprites: function() {
+                    game.updateRangeSprites();
+                    game.updateSettings();
                 }
             },
             template: html`
@@ -81,6 +85,10 @@ if (isMobile && !isPhoneApp) {
                     <label class="checkbox-button align-middle">
                         <input type="checkbox" name="stats-info-toggle" v-model="game.settings.enableStats" @change="game.updateSettings" />
                         Show Stats
+                    </label>
+                    <label class="checkbox-button align-middle">
+                        <input type="checkbox" name="ranges-visible-toggle" v-model="game.settings.showRanges" @change="updateRangeSprites" />
+                        Show Structure Ranges
                     </label>
                     <button class="footer-button" @click="game.tryFullscreen">
                         <i class="fa fa-arrows-alt" aria-hidden="true"></i>

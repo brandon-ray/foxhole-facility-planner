@@ -1098,6 +1098,7 @@ const buildingCategories = {
                 range: 40,
                 overlapDist: 65,
                 icon: 'buildings/MaintenanceTunnelIcon.webp',
+                sortOffset: 1000000,
                 textureIcon: {
                     width: 96,
                     height: 96
@@ -1124,7 +1125,9 @@ const buildingCategories = {
                 width: 3,
                 length: 3,
                 range: 24,
+                rangeColor: 0x2dd5b5,
                 icon: 'buildings/CraneIcon.webp',
+                sortOffset: 1000000,
                 textureIcon: {
                     width: 96,
                     height: 96

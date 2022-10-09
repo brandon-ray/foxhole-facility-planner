@@ -13,6 +13,7 @@ const game = {
         defaultBuildingCategory: 'all',
         showUpgradesAsBuildings: true,
         showFacilityName: true,
+        showRanges: false,
         volume: 1
     },
     isPlayScreen: false
@@ -220,6 +221,15 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
         game.updateSettings();
     };
+
+    game.updateRangeSprites = function() {
+        for (let i = 0; i < entities.length; i++) {
+            let entity = entities[i];
+            if (entity !== game.selectedEntity && entity.rangeSprite) {
+                entity.rangeSprite.visible = game.settings.showRanges;
+            }
+        }
+    }
 
     game.updateSettings = function() {
         try {
@@ -1189,7 +1199,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
         if (building.range) {
             entity.rangeSprite = new PIXI.Graphics();
-            entity.rangeSprite.beginFill(0x72ff5a);
+            entity.rangeSprite.beginFill(building.rangeColor ?? 0x72ff5a);
             entity.rangeSprite.alpha = 0.25;
             entity.rangeSprite.visible = false;
             entity.rangeSprite.drawCircle(0, 0, building.range * METER_PIXEL_SIZE);
@@ -1294,6 +1304,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
         entity.selectedBorder.drawRect(-(entity.width/2)-borderWidth, -(entity.height/2)-borderWidth, entity.width+(borderWidth*2), entity.height+(borderWidth*2));
         entity.addChild(entity.selectedBorder);
 
+        if (entity.rangeSprite) {
+            entity.rangeSprite.visible = game.settings.showRanges;
+        }
+
         setTimeout(() => {
             if (game.statisticsMenuComponent) {
                 game.statisticsMenuComponent.refresh();
@@ -1313,7 +1327,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         entity.onSelect = function() {
             entity.selectedBorder.visible = true;
 
-            if (entity.rangeSprite) {
+            if (entity.rangeSprite && !entity.rangeSprite.visible) {
                 entity.rangeSprite.visible = true;
             }
             entity.updateHandles();
@@ -1321,7 +1335,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         entity.onDeselect = function() {
             entity.selectedBorder.visible = false;
 
-            if (entity.rangeSprite) {
+            if (entity.rangeSprite && !game.settings.showRanges) {
                 entity.rangeSprite.visible = false;
             }
 
@@ -1538,7 +1552,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
         entity.getZIndex = function() {
             if (entity === currentBuilding || entity === game.selectedEntity) {
-                return -1000000;
+                return -10000000;
             }
             return -entity.y - (building.sortOffset ? building.sortOffset : 0);
         };
@@ -1725,8 +1739,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
             clone.selectedProduction = !upgrade ? entity.selectedProduction : null;
             clone.locked = entity.locked;
             clone.rotation = entity.rotation;
-            game.selectEntity(clone);
             if (upgrade) {
+                game.selectEntity(clone);
                 entity.remove();
             }
             return clone;
