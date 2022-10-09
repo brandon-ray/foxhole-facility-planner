@@ -1108,12 +1108,12 @@ const buildingCategories = {
                     construction_material: 200
                 },
                 production: [{
-                    time: 450,
+                    time: 225,
                     input: {
                         construction_material: 1
                     },
                     output: {
-                        garrison_supplies: 20
+                        garrison_supplies: 10
                     }
                 }]
             },
@@ -2673,8 +2673,8 @@ const buildingCategories = {
                                 input: {
                                     steel_construction_material: 3,
                                     coke: 245,
-                                    assembly_materials1: 15,
-                                    assembly_materials2: 15
+                                    assembly_materials1: 10,
+                                    assembly_materials2: 10
                                 },
                                 output: {
                                     assembly_materials5: 1
