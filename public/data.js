@@ -1223,7 +1223,7 @@ const buildingCategories = {
                 },
                 production: [
                     {
-                        time: 20,
+                        time: 90,
                         input: {
                             oil: 50
                         }
