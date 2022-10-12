@@ -946,6 +946,10 @@ p {
     color: #dd3030;
 }
 
+.title-button.lock-button .partially-locked {
+    color: #ff8f00;
+}
+
 .trash-button:hover .inner-button {
     border-color: #dd3030;
 }

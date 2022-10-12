@@ -29,16 +29,11 @@ Vue.component('app-game-sidebar', {
         };
     },
     mounted: function () {
-        game.buildMenuComponent = this;
+        game.sidebarMenuComponent = this;
         this.changeMenu(null);
     },
     methods: {
         changeMenu: function(newMenu, menuData) {
-            if (game.selectedEntity && (!newMenu || newMenu.key !== 'building-selected')) {
-                game.setCurrentBuilding(null);
-                game.selectEntity(null, true);
-            }
-
             if (typeof newMenu === 'string' || newMenu instanceof String) {
                 for (let i=0; i<this.menuList.length; i++) {
                     let menu = this.menuList[i];
@@ -56,6 +51,10 @@ Vue.component('app-game-sidebar', {
                 this.currentMenu = null;
             }
             this.currentMenuData = menuData;
+
+            if (game.selectedEntities.length && (!this.currentMenu || this.currentMenu.key !== 'building-selected')) {
+                game.deselectEntities();
+            }
         },
         selectFaction: function(faction) {
             game.setFaction(game.settings.selectedFaction !== faction ? faction : null);
@@ -144,7 +143,8 @@ Vue.component('app-menu-building-selected', {
                 rotation: 0
             },
             entityRotation: 0,
-            hoverUpgradeName: null
+            hoverUpgradeName: null,
+            lockState: 0
         };
     },
     mounted: function() {
@@ -153,6 +153,7 @@ Vue.component('app-menu-building-selected', {
     },
     methods: {
         refresh: function(noForce) {
+            this.lockState = game.getSelectedLockState();
             if (game.selectedEntity) {
                 if (noForce && this.entityData.x === game.selectedEntity.position.x && this.entityData.y === game.selectedEntity.position.y && this.entityData.rotation === game.selectedEntity.rotation) {
                     return;
@@ -186,18 +187,18 @@ Vue.component('app-menu-building-selected', {
             this.bmc();
             game.cloneBuilding(game.selectedEntity, upgrade);
         },
-        cloneBuilding: function() {
+        cloneBuildings: function() {
             this.bmc();
-            game.cloneBuilding(game.selectedEntity);
+            game.cloneSelected();
         },
-        lockBuilding: function() {
+        lockBuildings: function() {
             this.bmc();
-            game.lockBuilding(game.selectedEntity);
-            this.$forceUpdate();
+            game.lockSelected();
+            this.refresh();
         },
-        destroyBuilding: function() {
+        destroyBuildings: function() {
             this.bmc();
-            game.selectedEntity?.remove();
+            game.deselectEntities(true);
         },
         showUpgradeHover: function(key, upgrade) {
             this.hoverUpgradeName = upgrade ? upgrade.name : null;
@@ -209,27 +210,28 @@ Vue.component('app-menu-building-selected', {
                     buildingUpgrade = window.objectData.buildings[(building.parentKey ? building.parentKey : building.key) + '_' + key];
                 }
             }
-            game.buildMenuComponent.showHoverMenu(buildingUpgrade);
+            game.sidebarMenuComponent.showHoverMenu(buildingUpgrade);
         }
     },
     template: html`
-    <div v-if="game.selectedEntity" class="text-left">
-        <button type="button" class="title-button trash-button" v-on:click="destroyBuilding" title="Delete" @mouseenter="bme">
+    <div class="text-left">
+        <button type="button" class="title-button trash-button" v-on:click="destroyBuildings" title="Delete" @mouseenter="bme">
             <div class="inner-button"><i class="fa fa-trash"></i></div>
         </button>
-        <button type="button" class="title-button return-button" v-on:click="game.buildMenuComponent.changeMenu(null)" title="Back" @mouseenter="bme">
+        <button type="button" class="title-button return-button" v-on:click="game.sidebarMenuComponent.changeMenu(null)" title="Back" @mouseenter="bme">
             <div class="inner-button"><i class="fa fa-arrow-left"></i></div>
         </button>
-        <button type="button" class="title-button clone-button" v-on:click="cloneBuilding" title="Clone" @mouseenter="bme">
+        <button type="button" class="title-button clone-button" v-on:click="cloneBuildings" title="Clone" @mouseenter="bme">
             <div class="inner-button"><i class="fa fa-clone"></i></div>
         </button>
-        <button type="button" class="title-button lock-button" v-on:click="lockBuilding" title="Lock" @mouseenter="bme">
+        <button type="button" class="title-button lock-button" v-on:click="lockBuildings" title="Lock" @mouseenter="bme">
             <div class="inner-button">
-                <span v-if="game.selectedEntity.locked" class="locked"><i class="fa fa-lock"></i></span>
+                <span v-if="lockState === 1" class="locked"><i class="fa fa-lock"></i></span>
+                <span v-else-if="lockState === 0" class="partially-locked"><i class="fa fa-unlock"></i></span>
                 <span v-else><i class="fa fa-unlock"></i></span>
             </div>
         </button>
-        <div class="settings-option-wrapper">
+        <div v-if="game.selectedEntity" class="settings-option-wrapper">
             <div v-if="game.selectedEntity.type === 'building'" class="settings-title">
                 {{game.selectedEntity.building.parentName ? game.selectedEntity.building.parentName : game.selectedEntity.building.name}}
             </div>
@@ -246,27 +248,38 @@ Vue.component('app-menu-building-selected', {
                 <input class="app-input" type="number" v-model="entityRotation" @change="updateRotation">
             </label>
         </div>
-        <div v-if="game.selectedEntity.type === 'building' && game.selectedEntity.building && game.selectedEntity.building.upgrades" class="settings-option-wrapper upgrade-list">
-            <div class="settings-title">{{hoverUpgradeName ?? (game.selectedEntity.building.upgradeName ? game.selectedEntity.building.upgradeName : 'No Upgrade Selected')}}</div>
-            <button class="upgrade-button" v-for="(upgrade, key) in game.selectedEntity.building.upgrades" :class="{'selected-upgrade': game.selectedEntity.building.parentKey && game.selectedEntity.building.key === game.selectedEntity.building.parentKey + '_' + key}"
-                @mouseenter="showUpgradeHover(key, upgrade)" @mouseleave="showUpgradeHover" @click="changeUpgrade(key)">
-                <div class="resource-icon" :title="upgrade.name" :style="{backgroundImage:'url(/assets/' + (upgrade.part ? upgrade.part : (upgrade.icon ? upgrade.icon : game.selectedEntity.building.icon)) + ')'}"></div>
-            </button>
+        <div v-else class="settings-option-wrapper">
+            <div class="settings-title">
+                ({{game.selectedEntities.length}}) Buildings Selected
+            </div>
+            <label class="app-input-label text-center">
+                <span style="color: red">Notice:</span> This is an experimental feature.<br>
+                Report issues to our GitHub or Discord.
+            </label>
         </div>
-        <div v-if="game.selectedEntity.type === 'building' && game.selectedEntity.building && game.selectedEntity.building.production && game.selectedEntity.building.production.length" class="settings-option-wrapper">
-            <div class="settings-title">Select Production</div>
-            <div class="production-list">
-                <div class="select-production" v-for="(production, index) in game.selectedEntity.building.production"
-                    v-if="!production.faction || !game.settings.selectedFaction || production.faction == game.settings.selectedFaction" :class="{'selected-production': game.selectedEntity.selectedProduction === index}" @click="changeProduction(index)">
-                    <app-game-recipe :building="game.selectedEntity.building" :recipe="production"></app-game-recipe>
-                    <h6 class="production-requirements">
-                        <span v-if="game.selectedEntity.building.power"><i class="fa fa-bolt"></i> {{production.power ? production.power : game.selectedEntity.building.power}} MW</span>
-                        &nbsp;&nbsp;&nbsp;
-                        <i class="fa fa-clock-o"></i> {{production.time}}s
-                    </h6>
+        <template v-if="game.selectedEntity">
+            <div v-if="game.selectedEntity.type === 'building' && game.selectedEntity.building && game.selectedEntity.building.upgrades" class="settings-option-wrapper upgrade-list">
+                <div class="settings-title">{{hoverUpgradeName ?? (game.selectedEntity.building.upgradeName ? game.selectedEntity.building.upgradeName : 'No Upgrade Selected')}}</div>
+                <button class="upgrade-button" v-for="(upgrade, key) in game.selectedEntity.building.upgrades" :class="{'selected-upgrade': game.selectedEntity.building.parentKey && game.selectedEntity.building.key === game.selectedEntity.building.parentKey + '_' + key}"
+                    @mouseenter="showUpgradeHover(key, upgrade)" @mouseleave="showUpgradeHover" @click="changeUpgrade(key)">
+                    <div class="resource-icon" :title="upgrade.name" :style="{backgroundImage:'url(/assets/' + (upgrade.part ? upgrade.part : (upgrade.icon ? upgrade.icon : game.selectedEntity.building.icon)) + ')'}"></div>
+                </button>
+            </div>
+            <div v-if="game.selectedEntity.type === 'building' && game.selectedEntity.building && game.selectedEntity.building.production && game.selectedEntity.building.production.length" class="settings-option-wrapper">
+                <div class="settings-title">Select Production</div>
+                <div class="production-list">
+                    <div class="select-production" v-for="(production, index) in game.selectedEntity.building.production"
+                        v-if="!production.faction || !game.settings.selectedFaction || production.faction == game.settings.selectedFaction" :class="{'selected-production': game.selectedEntity.selectedProduction === index}" @click="changeProduction(index)">
+                        <app-game-recipe :building="game.selectedEntity.building" :recipe="production"></app-game-recipe>
+                        <h6 class="production-requirements">
+                            <span v-if="game.selectedEntity.building.power"><i class="fa fa-bolt"></i> {{production.power ? production.power : game.selectedEntity.building.power}} MW</span>
+                            &nbsp;&nbsp;&nbsp;
+                            <i class="fa fa-clock-o"></i> {{production.time}}s
+                        </h6>
+                    </div>
                 </div>
             </div>
-        </div>
+        </template>
     </div>
     `
 });
@@ -285,10 +298,10 @@ Vue.component('app-menu-construction-list', {
         buildBuilding: function(building) {
             this.bmc();
             game.startBuild(building);
-            game.buildMenuComponent.showHoverMenu(null);
+            game.sidebarMenuComponent.showHoverMenu(null);
         },
         buildingHover: function(building) {
-            game.buildMenuComponent.showHoverMenu(building);
+            game.sidebarMenuComponent.showHoverMenu(building);
         }
     },
     template: html`

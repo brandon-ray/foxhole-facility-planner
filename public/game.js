@@ -16,7 +16,10 @@ const game = {
         showRanges: false,
         volume: 1
     },
-    isPlayScreen: false
+    isPlayScreen: false,
+    get selectedEntity() {
+        return this.selectedEntities.length === 1 ? this.selectedEntities[0] : null;
+    }
 };
 
 function escapeHtml(str) {
@@ -53,6 +56,9 @@ try {
     console.error('Failed to parse settings.');
 }
 
+const COLOR_RED = 0xFF0000;
+const COLOR_WHITE = 0xFFFFFF;
+
 const fontFamily = ['Recursive', 'sans-serif'];
 
 (function() {
@@ -64,14 +70,12 @@ const fontFamily = ['Recursive', 'sans-serif'];
     let MAP_HEIGHT = 4000;
     let idleTime = 0;
     let latency = 0;
-    let currentBuilding = null;
     let selectedPoint = null;
-    let currentBuildingOffset = {
-        x: 0,
-        y: 0
-    };
 
-    game.selectedEntity = null;
+    game.selectedEntities = [];
+    game.pickupEntities = false;
+    let pickupTime = null;
+    let pickupPosition = null;
     game.selectedBuildingCategory = game.settings.defaultBuildingCategory;
 
     if (isMobile && !isPhoneApp) {
@@ -225,7 +229,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
     game.updateRangeSprites = function() {
         for (let i = 0; i < entities.length; i++) {
             let entity = entities[i];
-            if (entity !== game.selectedEntity && entity.rangeSprite) {
+            if (!entity.selected && entity.rangeSprite) {
                 entity.rangeSprite.visible = game.settings.showRanges;
             }
         }
@@ -275,48 +279,53 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
     };
 
-    let keyboardEventListenerObject = game.app.view;
     app.view.tabIndex = 0;
+
     let keys = {};
-    keyboardEventListenerObject.addEventListener('keydown', function (event) {
-        event = event || window.event;
-        let key = event.keyCode;
-        switch (key) {
-            case 113: // F2
-                ENABLE_DEBUG = !ENABLE_DEBUG;
-                if (debugText) {
-                    debugText.visible = ENABLE_DEBUG;
-                }
-                break;
-            case 27: // Escape
-                currentBuilding?.remove();
-                break;
-            case 46: // Delete
-                game.selectedEntity?.remove();
-                break;
-            case 119: // F8
-                if (ENABLE_DEBUG) {
-                    setTimeout(() => {
-                        let x = 0;
-                        let y = 0;
-                        for (let i=0; i<1000; i++) {
-                            let buildingData = window.objectData.buildings_list[Math.floor(Math.random()*window.objectData.buildings_list.length)];
-                            createBuilding(buildingData.key, x, y, 0);
-                            x += 500;
-                            if (x >= 10000) {
-                                x = 0;
-                                y += 500;
+    document.addEventListener('keydown', function (event) {
+        if (!(document.activeElement && (document.activeElement.type === 'text' || document.activeElement.type === 'number'))) {
+            event = event || window.event;
+            let key = event.keyCode;
+            switch (key) {
+                case 113: // F2
+                    ENABLE_DEBUG = !ENABLE_DEBUG;
+                    if (debugText) {
+                        debugText.visible = ENABLE_DEBUG;
+                    }
+                    break;
+                case 27: // Escape
+                    if (!selectionArea.visible) {
+                        game.deselectEntities();
+                    }
+                    break;
+                case 46: // Delete
+                    game.deselectEntities(true);
+                    break;
+                case 119: // F8
+                    if (ENABLE_DEBUG) {
+                        setTimeout(() => {
+                            let x = 0;
+                            let y = 0;
+                            for (let i=0; i<1000; i++) {
+                                let buildingData = window.objectData.buildings_list[Math.floor(Math.random()*window.objectData.buildings_list.length)];
+                                createBuilding(buildingData.key, x, y, 0);
+                                x += 500;
+                                if (x >= 10000) {
+                                    x = 0;
+                                    y += 500;
+                                }
                             }
-                        }
-                    }, 1000);
-                }
-                break;
-        }
-        if (!keys[key]) {
-            keys[key] = true;
+                        }, 1000);
+                    }
+                    break;
+            }
+            if (!keys[key]) {
+                keys[key] = true;
+            }
         }
     });
-    keyboardEventListenerObject.addEventListener('keyup', function (event) {
+
+    document.addEventListener('keyup', function (event) {
         event = event || window.event;
         let key = event.keyCode;
 
@@ -336,6 +345,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
     }
 
     let background = null;
+    let selectionArea = null;
 
     function onWindowResize() {
         if (isMobile) {
@@ -441,6 +451,14 @@ const fontFamily = ['Recursive', 'sans-serif'];
             return -100000;
         };
         app.stage.addChild(debugText);
+
+        selectionArea = new PIXI.Graphics();
+        selectionArea.visible = false;
+        selectionArea.alpha = 0.3;
+        selectionArea.getZIndex = function () {
+            return -1000000000;
+        };
+        app.cstage.addChild(selectionArea);
 
         game.loadVueApp();
         document.getElementById('loading').remove();
@@ -646,6 +664,98 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }, 1);
     };
 
+    game.setFaction = function(faction) {
+        if (game.settings.selectedFaction !== faction) {
+            game.settings.selectedFaction = faction;
+            game.updateSettings();
+        }
+    }
+
+    game.selectEntity = function(entity) {
+        game.deselectEntities(false, true);
+        return game.addSelectedEntity(entity);
+    }
+
+    game.selectEntities = function(entities) {
+        if (entities?.length) {
+            game.deselectEntities(false, true);
+            entities.forEach(entity => {
+                game.addSelectedEntity(entity, true);
+            });
+            game.updateSelectedBuildingMenu();
+        }
+    }
+
+    game.addSelectedEntity = function(entity, noMenuUpdate) {
+        game.setPickupEntities(false);
+        if (entity?.selected === false) {
+            game.selectedEntities.push(entity);
+            entity.onSelect();
+            if (!noMenuUpdate) {
+                game.updateSelectedBuildingMenu();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    game.removeSelectedEntity = function(entity, noMenuUpdate) {
+        game.setPickupEntities(false);
+        if (entity?.selected) {
+            for (let i = 0; i < game.selectedEntities.length; i++) {
+                let selectedEntity = game.selectedEntities[i];
+                if (selectedEntity === entity) {
+                    game.selectedEntities.splice(i, 1);
+                    entity.onDeselect();
+                    break;
+                }
+            }
+            if (!noMenuUpdate) {
+                game.updateSelectedBuildingMenu();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    game.deselectEntities = function(remove, noMenuUpdate) {
+        if (game.selectedEntities.length) {
+            game.setPickupEntities(false);
+            for (let i = 0; i < game.selectedEntities.length; i++) {
+                let selectedEntity = game.selectedEntities[i];
+                if (remove) {
+                    selectedEntity.selected = false; // Ensures we don't call game.removeSelectedEntity
+                    selectedEntity.remove();
+                    continue;
+                }
+                selectedEntity.onDeselect();
+            }
+            game.selectedEntities = [];
+            if (!noMenuUpdate) {
+                game.updateSelectedBuildingMenu();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    game.updateSelectedBuildingMenu = function() {
+        let buildingMenuSelected = game.sidebarMenuComponent?.currentMenu?.key === 'building-selected';
+        if (game.selectedEntities.length) {
+            if (!buildingMenuSelected) {
+                game.sidebarMenuComponent.changeMenu({
+                    key: 'building-selected',
+                    name: 'Building',
+                    icon: 'fa-wrench'
+                });
+            } else {
+                game.buildingSelectedMenuComponent?.refresh();
+            }
+        } else if (buildingMenuSelected) {
+            game.sidebarMenuComponent.changeMenu(null);
+        }
+    }
+
     let lastmx = 0;
     let lastmy = 0;
     let mdx = 0;
@@ -655,79 +765,50 @@ const fontFamily = ['Recursive', 'sans-serif'];
         eventPrefix = 'pointer';
     }
 
-    game.setFaction = function(faction) {
-        if (game.settings.selectedFaction !== faction) {
-            game.settings.selectedFaction = faction;
-            game.updateSettings();
-        }
-    }
-
-    game.selectEntity = function(entity, buildMenu) {
-        let lastSelectedEntity = game.selectedEntity;
-
-        if (entity) {
-            game.selectedEntity = entity;
-            game.selectedEntity.onSelect();
-            game.buildMenuComponent.changeMenu({
-                key: 'building-selected',
-                name: 'Building',
-                icon: 'fa-wrench'
-            });
-        } else {
-            game.selectedEntity = null;
-            if (!buildMenu) {
-                game.buildMenuComponent.changeMenu(null);
-            }
-        }
-
-        if (lastSelectedEntity) {
-            lastSelectedEntity.onDeselect();
-        }
-
-        if (game.buildingSelectedMenuComponent) {
-            game.buildingSelectedMenuComponent.refresh();
-        }
-    }
-
     let mouseEventListenerObject = game.app.view;
     let dragCamera = false;
     let mouseDown = {};
     let forceMouseDown = {};
     mouseEventListenerObject.addEventListener('wheel', (e) => {
-        let lastZoom = camera.zoom;
-        camera.zoom -= (e.deltaY * 0.0005);
-        if (camera.zoom > 1.6) {
-            camera.zoom = 1.6;
+        if (!keys[17]) {
+            let lastZoom = camera.zoom;
+            camera.zoom -= (e.deltaY * 0.0005);
+            if (camera.zoom > 1.6) {
+                camera.zoom = 1.6;
+            }
+            if (camera.zoom < 0.1) {
+                camera.zoom = 0.1;
+            }
+
+            let zoomAmount = camera.zoom - lastZoom;
+
+            let zoomRatio1 = WIDTH/(WIDTH*lastZoom);
+            let pos1 = {
+                x: (camera.x + WIDTH/2) * zoomRatio1,
+                y: (camera.y + HEIGHT/2) * zoomRatio1,
+            };
+            camera.x = (pos1.x * camera.zoom) - WIDTH / 2;
+            camera.y = (pos1.y * camera.zoom) - HEIGHT / 2;
+
+            let zoomRatio2 = WIDTH/(WIDTH*camera.zoom);
+            let pos2 = {
+                x: (camera.x + WIDTH/2) * zoomRatio2,
+                y: (camera.y + HEIGHT/2) * zoomRatio2,
+            };
+            let dist = Math.distanceBetween(pos2, {x: gmx, y: gmy}) * zoomAmount;
+            let angle = Math.angleBetween(pos2, {x: gmx, y: gmy});
+            camera.x += Math.cos(angle) * dist;
+            camera.y += Math.sin(angle) * dist;
         }
-        if (camera.zoom < 0.1) {
-            camera.zoom = 0.1;
-        }
-
-        let zoomAmount = camera.zoom - lastZoom;
-
-        let zoomRatio1 = WIDTH/(WIDTH*lastZoom);
-        let pos1 = {
-            x: (camera.x + WIDTH/2) * zoomRatio1,
-            y: (camera.y + HEIGHT/2) * zoomRatio1,
-        };
-        camera.x = (pos1.x * camera.zoom) - WIDTH / 2;
-        camera.y = (pos1.y * camera.zoom) - HEIGHT / 2;
-
-        let zoomRatio2 = WIDTH/(WIDTH*camera.zoom);
-        let pos2 = {
-            x: (camera.x + WIDTH/2) * zoomRatio2,
-            y: (camera.y + HEIGHT/2) * zoomRatio2,
-        };
-        let dist = Math.distanceBetween(pos2, {x: gmx, y: gmy}) * zoomAmount;
-        let angle = Math.angleBetween(pos2, {x: gmx, y: gmy});
-        camera.x += Math.cos(angle) * dist;
-        camera.y += Math.sin(angle) * dist;
     });
     mouseEventListenerObject.addEventListener('contextmenu', (e) => {
         e.preventDefault();
     }, false);
     mouseEventListenerObject.addEventListener(eventPrefix + 'down', (e) => {
         e.preventDefault();
+        
+        game.tryGameFocus(true);
+
         mx = e.clientX;
         my = e.clientY;
 
@@ -735,9 +816,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
         mouseDown[mouseButton] = true;
         if (mouseButton === 0) {
             if (!selectedPoint) {
-                if (currentBuilding) {
-                    if (currentBuilding?.bezier && currentBuilding.shouldSelectLastRailPoint) {
-                        currentBuilding.grabBezierPoint();
+                if (game.pickupEntities) {
+                    if (game.selectedEntity?.bezier && game.selectedEntity.shouldSelectLastRailPoint) {
+                        game.selectedEntity.grabBezierPoint();
                     }
                 } else {
                     entities.sort(function (a, b) {
@@ -746,21 +827,26 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     for (let i=0; i<entities.length; i++) {
                         let entity = entities[i];
                         if (entity.type === 'building' && entity.canGrab()) {
-                            currentBuildingOffset = {
-                                x: gmx - entity.x,
-                                y: gmy - entity.y
-                            };
-                            game.setCurrentBuilding(entity);
-                            if (game.selectedEntity !== entity) {
-                                game.selectEntity(entity);
-                            } else if (entity.bezier) {
-                                entity.grabBezierPoint();
+                            if (keys[46]) {
+                                entity.remove();
+                            } else {
+                                if (!entity.selected) {
+                                    if (keys[16] || keys[17]) {
+                                        game.addSelectedEntity(entity);
+                                    } else {
+                                        game.selectEntity(entity);
+                                    }
+                                } else if (!entity.grabBezierPoint() && (keys[16] || keys[17])) {
+                                    game.removeSelectedEntity(entity);
+                                }
+                                game.setPickupEntities(true);
                             }
                             return;
                         }
                     }
-                    if (game.selectedEntity) {
-                        game.selectEntity(null);
+                    if (!(keys[16] || keys[17])) {
+                        game.deselectEntities();
+                        selectionArea.origin = { x: gmx, y: gmy };
                     }
                 }
             }
@@ -785,6 +871,46 @@ const fontFamily = ['Recursive', 'sans-serif'];
             camera.x += mdx;
             camera.y += mdy;
         }
+
+        if (selectionArea.origin) {
+            selectionArea.clear();
+            selectionArea.x = selectionArea.origin.x > gmx ? gmx : selectionArea.origin.x;
+            selectionArea.y = selectionArea.origin.y > gmy ? gmy : selectionArea.origin.y;
+            selectionArea.beginFill(0xE16931);
+            selectionArea.lineStyle(4, 0xFF8248);
+            selectionArea.drawRect(0, 0, Math.abs(gmx - selectionArea.origin.x), Math.abs(gmy - selectionArea.origin.y));
+            selectionArea.endFill();
+
+            if (!selectionArea.visible) {
+                selectionArea.visible = true;
+            }
+
+            let selectedChange = false;
+            entities.forEach(entity => {
+                let eX = entity.x, eY = entity.y;
+                if (entity.bezier) {
+                    // This should probably be stored somewhere.
+                    let bounds = entity.bezier.bbox();
+                    let rotatedPoint = Math.rotateAround(entity.x, entity.y, eX + bounds.x.mid, eY + bounds.y.mid, -entity.rotation);
+                    eX = rotatedPoint.x;
+                    eY = rotatedPoint.y;
+                }
+                if (eX > selectionArea.x && eX < selectionArea.x + selectionArea.width) {
+                    if (eY > selectionArea.y && eY < selectionArea.y + selectionArea.height) {
+                        if (game.addSelectedEntity(entity, true)) {
+                            selectedChange = true;
+                        }
+                        return;
+                    }
+                }
+                if (game.removeSelectedEntity(entity, true)) {
+                    selectedChange = true;
+                }
+            });
+            if (selectedChange) {
+                game.updateSelectedBuildingMenu();
+            }
+        }
     });
     mouseEventListenerObject.addEventListener(eventPrefix + 'up', (e) => {
         e.preventDefault();
@@ -798,8 +924,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
             forceMouseDown[mouseButton] = false;
         }
         if (mouseButton === 0) {
-            if (currentBuilding) {
-                game.setCurrentBuilding(null);
+            selectionArea.origin = null;
+            selectionArea.visible = false;
+            if (game.pickupEntities) {
+                game.setPickupEntities(false);
             }
         } else if (mouseButton === 1 || mouseButton === 4) {
             dragCamera = false;
@@ -1195,7 +1323,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
 
         entity.building = building;
-        let sprite;
+        entity.selected = false;
 
         if (building.range) {
             entity.rangeSprite = new PIXI.Graphics();
@@ -1211,6 +1339,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             entity.addChild(entity.rangeSprite);
         }
 
+        let sprite;
         if (!building.isBezier) {
             sprite = new PIXI.TilingSprite(resources['building_background'].texture);
             sprite.width = building.width * METER_PIXEL_SIZE;
@@ -1318,21 +1447,26 @@ const fontFamily = ['Recursive', 'sans-serif'];
             for (let i = 0; i < points.length; i++) {
                 let point = points[i];
                 if (point.handle) {
-                    point.handle.visible = game.selectedEntity === entity;
+                    point.handle.visible = entity.selected;
                 }
             }
         };
 
-        const TRACK_SEGMENT_LENGTH = 16;
         entity.onSelect = function() {
+            entity.selected = true;
+            entity.selectedBorder.tint = entity.locked ? COLOR_RED : COLOR_WHITE;
             entity.selectedBorder.visible = true;
 
             if (entity.rangeSprite && !entity.rangeSprite.visible) {
                 entity.rangeSprite.visible = true;
             }
+
             entity.updateHandles();
         };
+
+        const TRACK_SEGMENT_LENGTH = 16;
         entity.onDeselect = function() {
+            entity.selected = false;
             entity.selectedBorder.visible = false;
 
             if (entity.rangeSprite && !game.settings.showRanges) {
@@ -1374,7 +1508,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 }
             }
 
-            if (entity.visible && currentBuilding !== entity && game.selectedEntity === entity && !entity.selectedBorder.visible) {
+            if (entity.visible && !game.pickupEntities && entity.selected && !entity.selectedBorder.visible) {
                 entity.selectedBorder.visible = true;
             }
 
@@ -1383,7 +1517,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     selectedPoint = null;
                 }
 
-                if (game.selectedEntity === entity && mouseDown[0]) {
+                if (entity.selected && mouseDown[0]) {
                     let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
                     let gmxGrid = gmx;
                     let gmyGrid = gmy;
@@ -1393,7 +1527,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     }
                     let mousePos = entity.toLocal({x: gmxGrid, y: gmyGrid}, app.cstage, undefined, true);
                     if (selectedPoint) {
-                        game.setCurrentBuilding(null);
+                        game.setPickupEntities(false);
                         if (selectedPoint.index === 0) {
                             entity.x = gmx;
                             entity.y = gmy;
@@ -1470,9 +1604,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         let curve2 = entity.bezier.curvature(0.5);
                         let curve3 = entity.bezier.curvature(0.75);
                         if ((curve1.r !== 0 && (Math.abs(curve1.r) < 100 || Math.abs(curve2.r) < 200 || Math.abs(curve3.r) < 100)) || selectedPoint.x < 0) {
-                            entity.sprite.tint = 0xFF0000;
+                            entity.sprite.tint = COLOR_RED;
                         } else {
-                            entity.sprite.tint = 0xFFFFFF;
+                            entity.sprite.tint = COLOR_WHITE;
                         }
 
                         if (selectedPoint.handle) {
@@ -1485,7 +1619,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         };
 
         entity.grabBezierPoint = function() {
-            if (game.selectedEntity === entity && entity.bezier) {
+            if (entity.selected && entity.bezier) {
                 if (entity.shouldSelectLastRailPoint) {
                     entity.shouldSelectLastRailPoint = false;
                     forceMouseDown[0] = true;
@@ -1496,6 +1630,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     for (let i = 1; i < points.length; i++) {
                         let point = points[i];
                         if (Math.distanceBetween(mousePos, point) < 20) {
+                            game.selectEntity(entity);
                             selectedPoint = point;
                             return true;
                         }
@@ -1551,18 +1686,12 @@ const fontFamily = ['Recursive', 'sans-serif'];
         };
 
         entity.getZIndex = function() {
-            if (entity === currentBuilding || entity === game.selectedEntity) {
-                return -10000000;
-            }
-            return -entity.y - (building.sortOffset ? building.sortOffset : 0);
+            return -entity.y - (building.sortOffset ? building.sortOffset : 0) - (entity.selected ? 10000000 : 0);
         };
 
         entity.onRemove = function() {
-            if (game.selectedEntity && game.selectedEntity === entity) {
-                game.selectEntity(null);
-            }
-            if (currentBuilding && currentBuilding === entity) {
-                game.setCurrentBuilding(null);
+            if (entity.selected) {
+                game.removeSelectedEntity(entity);
             }
             if (selectedPoint) {
                 selectedPoint = null;
@@ -1633,7 +1762,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             if (index !== 0) {
                 let handle = new PIXI.Sprite(resources.white.texture);
                 handle.anchor.set(0.5);
-                handle.visible = game.selectedEntity === entity;
+                handle.visible = entity.selected;
                 handle.width = 16;
                 handle.height = 16;
                 handle.position.x = newPoint.x;
@@ -1701,31 +1830,40 @@ const fontFamily = ['Recursive', 'sans-serif'];
         return entity;
     }
 
-    game.setCurrentBuilding = function(entity) {
-        if (!entity || !entity.locked) {
-            currentBuilding = entity;
-            if (currentBuilding) {
-                currentBuilding.selectTime = Date.now();
-                currentBuilding.selectPosition = {x: gmx, y: gmy};
+    game.setPickupEntities = function(pickup, ignoreOffset, position, ignoreLock) {
+        if (game.pickupEntities !== pickup) {
+            if (!pickup) {
+                game.pickupEntities = false;
+            }
+            let locked = false;
+            game.selectedEntities.forEach(entity => {
+                if (!ignoreLock && entity.locked) {
+                    locked = true;
+                } else if (!locked) {
+                    entity.pickupOffset = {
+                        x: ignoreOffset ? (entity.building.isBezier ? 100 : 0) : (position?.x ?? gmx) - entity.x,
+                        y: ignoreOffset ? 0 : (position?.y ?? gmy) - entity.y
+                    };
+                }
+            });
+            if (!locked) {
+                if (pickup) {
+                    pickupTime = Date.now();
+                    pickupPosition = {x: gmx, y: gmy};
+                }
+                game.pickupEntities = pickup;
             }
         }
-    };
+    }
 
     game.startBuild = function(buildingData) {
-        game.setCurrentBuilding(createBuilding(buildingData.key, 0, 0, 0, {}));
-        currentBuildingOffset = {
-            x: 0,
-            y: 0
-        };
-        game.selectEntity(currentBuilding);
-        if (currentBuilding.building?.isBezier) {
-            currentBuilding.shouldSelectLastRailPoint = true;
-            currentBuildingOffset = {
-                x: 100,
-                y: 0
-            };
+        let entity = createBuilding(buildingData.key, 0, 0, 0, {});
+        game.selectEntity(entity);
+        game.setPickupEntities(true, true);
+        if (entity.building?.isBezier) {
+            entity.shouldSelectLastRailPoint = true;
         }
-        return currentBuilding;
+        return entity;
     };
 
     game.cloneBuilding = function(entity, upgrade) {
@@ -1738,6 +1876,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             let clone = upgrade ? createBuilding(upgrade, entity.x, entity.y, 0) : game.startBuild(bData);
             clone.selectedProduction = !upgrade ? entity.selectedProduction : null;
             clone.locked = entity.locked;
+            clone.selectedBorder.tint = clone.locked ? COLOR_RED : COLOR_WHITE;
             clone.rotation = entity.rotation;
             if (upgrade) {
                 game.selectEntity(clone);
@@ -1747,20 +1886,57 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
     }
 
-    game.lockBuilding = function(entity) {
-        if (entity) {
-            entity.locked = !entity.locked ? true : null;
-            if (entity.locked && currentBuilding === entity) {
-                game.setCurrentBuilding(null);
+    game.cloneSelected = function() {
+        let clonedEntities = [];
+        let xTotal = 0, yTotal = 0;
+        game.selectedEntities.forEach(selectedEntity => {
+            let clone = createBuilding(selectedEntity.building.key, selectedEntity.x, selectedEntity.y, 0);
+            clone.selectedProduction = selectedEntity.selectedProduction;
+            clone.locked = selectedEntity.locked;
+            clone.selectedBorder.tint = clone.locked ? COLOR_RED : COLOR_WHITE;
+            clone.rotation = selectedEntity.rotation;
+            clonedEntities.push(clone);
+            xTotal += parseFloat(clone.x);
+            yTotal += parseFloat(clone.y);
+        });
+        game.selectEntities(clonedEntities);
+        let centerPos = {
+            x: Math.round(xTotal/clonedEntities.length),
+            y: Math.round(yTotal/clonedEntities.length)
+        }
+        game.setPickupEntities(true, false, centerPos, true);
+    }
+
+    // Returns null = No buildings locked, 0 = Some buildings locked, 1 = All buildings locked.
+    game.getSelectedLockState = function() {
+        let locked = null; // Assume no buildings are locked.
+        game.selectedEntities.every((selectedEntity, i) => {
+            if (selectedEntity.locked) {
+                if (locked === null) {
+                    locked = i === 0 ? 1 : 0;  // Assume all are locked unless it's not the first index.
+                }
+            } else if (locked) {
+                locked = 0; // Some selected aren't locked.
             }
+            return locked !== 0;
+        });
+        return locked;
+    }
+
+    game.lockSelected = function() {
+        let locked = game.getSelectedLockState();
+        game.selectedEntities.forEach(selectedEntity => {
+            selectedEntity.locked = !locked ? true : null;
+            selectedEntity.selectedBorder.tint = selectedEntity.locked ? COLOR_RED : COLOR_WHITE;
+        });
+        if (locked && game.pickupEntities) {
+            game.setPickupEntities(false);
         }
     }
 
     game.removeEntities = function() {
-        if (game.selectedEntity) {
-            game.selectEntity(null);
-        }
-        game.setCurrentBuilding(null);
+        game.deselectEntities();
+        game.setPickupEntities(false);
         for (let i=0; i<entities.length; i++) {
             let entity = entities[i];
             entity.remove();
@@ -1839,44 +2015,53 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
         }
 
-        if (currentBuilding) {
+        if (game.pickupEntities) {
             game.buildingSelectedMenuComponent?.refresh(true);
-            if (mouseDown[2]) {
-                let angle = Math.angleBetween(currentBuilding, {x: gmx, y: gmy});
-                if (game.settings.enableSnapRotation) {
-                    let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ? game.settings.snapRotationDegrees : 15);
-                    angle = Math.floor(angle / snapRotationDegrees) * snapRotationDegrees;
-                }
-                currentBuildingOffset = {
-                    x: gmx - currentBuilding.x,
-                    y: gmy - currentBuilding.y
-                };
-                currentBuilding.rotation = angle;
-            } else {
-                if (!selectedPoint && (!currentBuilding.selectPosition || (Date.now()-currentBuilding.selectTime > 250 || Math.distanceBetween(currentBuilding.selectPosition, {x: gmx, y: gmy}) > 20))) {
-                    if (!currentBuilding.building?.isBezier && currentBuilding.selectedBorder.visible) {
-                        currentBuilding.selectedBorder.visible = false;
+            for (let i = 0; i < game.selectedEntities.length; i++) {
+                let pickupEntity = game.selectedEntities[i];
+                if (mouseDown[2] && game.selectedEntities.length === 1) {
+                    let angle = Math.angleBetween(pickupEntity, {x: gmx, y: gmy});
+                    if (game.settings.enableSnapRotation) {
+                        let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ? game.settings.snapRotationDegrees : 15);
+                        angle = Math.floor(angle / snapRotationDegrees) * snapRotationDegrees;
                     }
-                    currentBuilding.selectPosition = null;
-
-                    currentBuilding.x = gmx - currentBuildingOffset.x;
-                    currentBuilding.y = gmy - currentBuildingOffset.y;
-
-                    if (game.settings.enableGrid || keys[16]) {
-                        let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
-                        //Had to do all of this funky math to support half/quarter meters without changing the building center.
-                        let width = currentBuilding.building.width;
-                        let length = currentBuilding.building.length;
-                        let xOffsetWidth = (((width % Math.floor(width))) * METER_PIXEL_SIZE)/2;
-                        let yOffsetHeight = (((length % Math.floor(length))) * METER_PIXEL_SIZE)/2;
-                        let xOffset = (Math.cos(currentBuilding.rotation - Math.PI/2) * xOffsetWidth) + (Math.sin(currentBuilding.rotation) * yOffsetHeight);
-                        let yOffset = (Math.sin(currentBuilding.rotation - Math.PI/2) * yOffsetHeight) + (Math.cos(currentBuilding.rotation) * xOffsetWidth);
-                        currentBuilding.x = Math.round((Math.round(currentBuilding.x / gridSize) * gridSize) - xOffset);
-                        currentBuilding.y = Math.round((Math.round(currentBuilding.y / gridSize) * gridSize) - yOffset);
+                    pickupEntity.pickupOffset = {
+                        x: gmx - pickupEntity.x,
+                        y: gmy - pickupEntity.y
+                    };
+                    pickupEntity.rotation = angle;
+                } else {
+                    if (!selectedPoint && (!pickupPosition || (Date.now()-pickupTime > 250 || Math.distanceBetween(pickupPosition, {x: gmx, y: gmy}) > 20))) {
+                        if (!pickupEntity.building?.isBezier && pickupEntity.selectedBorder.visible) {
+                            pickupEntity.selectedBorder.visible = false;
+                        }
+                        pickupPosition = null;
+    
+                        pickupEntity.x = gmx - pickupEntity.pickupOffset.x;
+                        pickupEntity.y = gmy - pickupEntity.pickupOffset.y;
+    
+                        if (game.settings.enableGrid || keys[16]) {
+                            // Not snapping to grid for multiple tracks. It often separates the tracks.
+                            // Need to update the snapping so it's based on a single point, not each individual track.
+                            if (!(game.selectedEntities.length > 1 && pickupEntity.building?.isBezier)) {
+                                let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
+                                //Had to do all of this funky math to support half/quarter meters without changing the building center.
+                                let width = pickupEntity.building.width;
+                                let length = pickupEntity.building.length;
+                                let xOffsetWidth = (((width % Math.floor(width))) * METER_PIXEL_SIZE)/2;
+                                let yOffsetHeight = (((length % Math.floor(length))) * METER_PIXEL_SIZE)/2;
+                                let xOffset = (Math.cos(pickupEntity.rotation - Math.PI/2) * xOffsetWidth) + (Math.sin(pickupEntity.rotation) * yOffsetHeight);
+                                let yOffset = (Math.sin(pickupEntity.rotation - Math.PI/2) * yOffsetHeight) + (Math.cos(pickupEntity.rotation) * xOffsetWidth);
+                                pickupEntity.x = Math.round((Math.round(pickupEntity.x / gridSize) * gridSize) - xOffset);
+                                pickupEntity.y = Math.round((Math.round(pickupEntity.y / gridSize) * gridSize) - yOffset);
+                            }
+                        }
                     }
                 }
-
-                if (currentBuilding.building?.isBezier && !selectedPoint) {
+            }
+            if (game.selectedEntity) {
+                let pickupEntity = game.selectedEntities[0];
+                if (pickupEntity.building?.isBezier && !selectedPoint) {
                     for (let i=0; i<entities.length; i++) {
                         let entity = entities[i];
                         if (!entity.building?.isBezier || !entity.bezier) {
@@ -1884,7 +2069,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         }
                         let mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
                         let projection = entity.bezier.project(mousePos);
-                        if (entity !== currentBuilding && entity.type === 'building' && currentBuilding.subtype === entity.subtype && projection.d <= 25) {
+                        if (entity !== pickupEntity && entity.type === 'building' && pickupEntity.subtype === entity.subtype && projection.d <= 25) {
                             if (projection.t >= 0.95) {
                                 projection = entity.bezier.get(1);
                             } else if (projection.t <= 0.05) {
@@ -1893,20 +2078,19 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity, undefined, true);
                             let normal = entity.bezier.normal(projection.t);
                             let angle = Math.angleBetween({x: 0, y: 0}, normal);
-                            currentBuilding.x = global.x;
-                            currentBuilding.y = global.y;
+                            pickupEntity.x = global.x;
+                            pickupEntity.y = global.y;
 
                             let angleRight = entity.rotation + (angle - Math.PI/2) - Math.PI/2;
                             let angleLeft = entity.rotation + (angle + Math.PI/2) - Math.PI/2;
-                            let rightDiff = Math.atan2(Math.sin(angleRight-currentBuilding.rotation), Math.cos(angleRight-currentBuilding.rotation));
-                            let leftDiff = Math.atan2(Math.sin(angleLeft-currentBuilding.rotation), Math.cos(angleLeft-currentBuilding.rotation));
+                            let rightDiff = Math.atan2(Math.sin(angleRight-pickupEntity.rotation), Math.cos(angleRight-pickupEntity.rotation));
+                            let leftDiff = Math.atan2(Math.sin(angleLeft-pickupEntity.rotation), Math.cos(angleLeft-pickupEntity.rotation));
 
                             if (rightDiff < leftDiff) {
-                                currentBuilding.rotation = angleRight + Math.PI/2;
+                                pickupEntity.rotation = angleRight + Math.PI/2;
                             } else {
-                                currentBuilding.rotation = angleLeft + Math.PI/2;
+                                pickupEntity.rotation = angleLeft + Math.PI/2;
                             }
-                            //currentBuilding.shouldSelectLastRailPoint = true;
                             break;
                         }
                     }
@@ -1979,4 +2163,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
             y: vec1.y + (vec2.y - vec1.y) * value
         };
     };
+    Math.rotateAround = function (cx, cy, x, y, radians) {
+        let cos = Math.cos(radians), sin = Math.sin(radians);
+        return {
+            x: (cos * (x - cx)) + (sin * (y - cy)) + cx,
+            y: (cos * (y - cy)) - (sin * (x - cx)) + cy
+        };
+    }
 })();
