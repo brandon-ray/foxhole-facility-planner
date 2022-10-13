@@ -301,6 +301,17 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 case 46: // Delete
                     game.deselectEntities(true);
                     break;
+                case 65: // A
+                    if (event.ctrlKey) {
+                        entities.forEach(entity => {
+                            game.addSelectedEntity(entity, false);
+                        });
+                        game.updateSelectedBuildingMenu();
+                    }
+                    break;
+                case 76: // L
+                    game.lockSelected();
+                    break;
                 case 119: // F8
                     if (ENABLE_DEBUG) {
                         setTimeout(() => {
@@ -891,7 +902,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 if (entity.bezier) {
                     // This should probably be stored somewhere.
                     let bounds = entity.bezier.bbox();
-                    let rotatedPoint = Math.rotateAround(entity.x, entity.y, eX + bounds.x.mid, eY + bounds.y.mid, -entity.rotation);
+                    let rotatedPoint = Math.rotateAround(entity, { x: eX + bounds.x.mid, y: eY + bounds.y.mid }, -entity.rotation);
                     eX = rotatedPoint.x;
                     eY = rotatedPoint.y;
                 }
@@ -1949,6 +1960,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
     let lastTick = Date.now();
     let g_TICK = 10;
     let g_Time = 0;
+    let selectionRotation = null;
     function update() {
         requestAnimationFrame(update);
 
@@ -2017,19 +2029,68 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
         if (game.pickupEntities) {
             game.buildingSelectedMenuComponent?.refresh(true);
+            if (mouseDown[2]) {
+                if (!selectionRotation) {
+                    let cX = 0, cY = 0, rotationOffset = null;
+                    game.selectedEntities.forEach(selectedEntity => {
+                        if (rotationOffset !== false) {
+                            if (rotationOffset === null) {
+                                rotationOffset = selectedEntity.rotation;
+                            } else if (rotationOffset !== selectedEntity.rotation) {
+                                rotationOffset = false;
+                            }
+                        }
+                        selectedEntity.rotationData = {
+                            x: selectedEntity.x,
+                            y: selectedEntity.y,
+                            rotation: selectedEntity.rotation
+                        }
+                        let eX = selectedEntity.x, eY = selectedEntity.y;
+                        if (selectedEntity.bezier) {
+                            let bounds = selectedEntity.bezier.bbox();
+                            let rotatedPoint = Math.rotateAround(selectedEntity, { x: eX + bounds.x.mid, y: eY + bounds.y.mid }, -selectedEntity.rotation);
+                            eX = rotatedPoint.x;
+                            eY = rotatedPoint.y;
+                        }
+                        cX += parseFloat(eX);
+                        cY += parseFloat(eY);
+                    });
+                    cX = Math.round(cX / game.selectedEntities.length);
+                    cY = Math.round(cY / game.selectedEntities.length);
+                    selectionRotation = {
+                        x: cX, // X center of selection.
+                        y: cY, // Y center of selection.
+                        angle: Math.angleBetween({ x: cX, y: cY }, { x: gmx, y: gmy }), // Angle of mouse from the center of selection.
+                        offset: rotationOffset
+                    }
+                }
+            } else if (selectionRotation) {
+                selectionRotation = null;
+            }
+            let rotationAngle;
+            if (selectionRotation) {
+                rotationAngle = selectionRotation ? selectionRotation.angle - Math.angleBetween(selectionRotation, { x: gmx, y: gmy }) : null; // Get the angle of the mouse from center and subtract it from the angle of the selection.
+                if (game.settings.enableSnapRotation) {
+                    let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ?? 15);
+                    rotationAngle = Math.floor(rotationAngle / snapRotationDegrees) * snapRotationDegrees; // Snap the angle of the selection.
+                    if (typeof selectionRotation.offset === 'number') {
+                        rotationAngle -= (Math.floor(selectionRotation.offset / snapRotationDegrees) * snapRotationDegrees) - selectionRotation.offset; // Subtract the difference of the original offset.
+                    }
+                }
+            }
             for (let i = 0; i < game.selectedEntities.length; i++) {
                 let pickupEntity = game.selectedEntities[i];
-                if (mouseDown[2] && game.selectedEntities.length === 1) {
-                    let angle = Math.angleBetween(pickupEntity, {x: gmx, y: gmy});
-                    if (game.settings.enableSnapRotation) {
-                        let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ? game.settings.snapRotationDegrees : 15);
-                        angle = Math.floor(angle / snapRotationDegrees) * snapRotationDegrees;
+                if (mouseDown[2]) {
+                    if (selectionRotation) {
+                        let rotatedPosition = Math.rotateAround(selectionRotation, pickupEntity.rotationData, rotationAngle);
+                        pickupEntity.x = rotatedPosition.x;
+                        pickupEntity.y = rotatedPosition.y;
+                        pickupEntity.pickupOffset = {
+                            x: gmx - pickupEntity.x,
+                            y: gmy - pickupEntity.y
+                        };
+                        pickupEntity.rotation = pickupEntity.rotationData.rotation - rotationAngle;
                     }
-                    pickupEntity.pickupOffset = {
-                        x: gmx - pickupEntity.x,
-                        y: gmy - pickupEntity.y
-                    };
-                    pickupEntity.rotation = angle;
                 } else {
                     if (!selectedPoint && (!pickupPosition || (Date.now()-pickupTime > 250 || Math.distanceBetween(pickupPosition, {x: gmx, y: gmy}) > 20))) {
                         if (!pickupEntity.building?.isBezier && pickupEntity.selectedBorder.visible) {
@@ -2163,11 +2224,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
             y: vec1.y + (vec2.y - vec1.y) * value
         };
     };
-    Math.rotateAround = function (cx, cy, x, y, radians) {
+    Math.rotateAround = function (center, point, radians) {
         let cos = Math.cos(radians), sin = Math.sin(radians);
         return {
-            x: (cos * (x - cx)) + (sin * (y - cy)) + cx,
-            y: (cos * (y - cy)) - (sin * (x - cx)) + cy
+            x: (cos * (point.x - center.x)) + (sin * (point.y - center.y)) + center.x,
+            y: (cos * (point.y - center.y)) - (sin * (point.x - center.x)) + center.y
         };
     }
 })();
