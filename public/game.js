@@ -74,6 +74,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
     game.selectedEntities = [];
     game.pickupEntities = false;
+    game.pickupEntity = null;
     let pickupTime = null;
     let pickupPosition = null;
     game.selectedBuildingCategory = game.settings.defaultBuildingCategory;
@@ -307,6 +308,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             game.addSelectedEntity(entity, false);
                         });
                         game.updateSelectedBuildingMenu();
+                    }
+                    break;
+                case 67: // C
+                    if (event.ctrlKey) {
+                        game.cloneSelected();
                     }
                     break;
                 case 76: // L
@@ -850,6 +856,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 } else if (!entity.grabBezierPoint() && (keys[16] || keys[17])) {
                                     game.removeSelectedEntity(entity);
                                 }
+                                game.pickupEntity = entity;
                                 game.setPickupEntities(true);
                             }
                             return;
@@ -1845,6 +1852,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         if (game.pickupEntities !== pickup) {
             if (!pickup) {
                 game.pickupEntities = false;
+                game.pickupEntity = null;
             }
             let locked = false;
             game.selectedEntities.forEach(entity => {
@@ -1870,6 +1878,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
     game.startBuild = function(buildingData) {
         let entity = createBuilding(buildingData.key, 0, 0, 0, {});
         game.selectEntity(entity);
+        game.pickupEntity = entity;
         game.setPickupEntities(true, true);
         if (entity.building?.isBezier) {
             entity.shouldSelectLastRailPoint = true;
@@ -2029,93 +2038,85 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
         if (game.pickupEntities) {
             game.buildingSelectedMenuComponent?.refresh(true);
-            if (mouseDown[2]) {
-                if (!selectionRotation) {
-                    let cX = 0, cY = 0, rotationOffset = null;
-                    game.selectedEntities.forEach(selectedEntity => {
-                        if (rotationOffset !== false) {
-                            if (rotationOffset === null) {
-                                rotationOffset = selectedEntity.rotation;
-                            } else if (rotationOffset !== selectedEntity.rotation) {
-                                rotationOffset = false;
-                            }
-                        }
-                        selectedEntity.rotationData = {
-                            x: selectedEntity.x,
-                            y: selectedEntity.y,
-                            rotation: selectedEntity.rotation
-                        }
-                        let eX = selectedEntity.x, eY = selectedEntity.y;
-                        if (selectedEntity.bezier) {
-                            let bounds = selectedEntity.bezier.bbox();
-                            let rotatedPoint = Math.rotateAround(selectedEntity, { x: eX + bounds.x.mid, y: eY + bounds.y.mid }, -selectedEntity.rotation);
-                            eX = rotatedPoint.x;
-                            eY = rotatedPoint.y;
-                        }
-                        cX += parseFloat(eX);
-                        cY += parseFloat(eY);
-                    });
-                    cX = Math.round(cX / game.selectedEntities.length);
-                    cY = Math.round(cY / game.selectedEntities.length);
-                    selectionRotation = {
-                        x: cX, // X center of selection.
-                        y: cY, // Y center of selection.
-                        angle: Math.angleBetween({ x: cX, y: cY }, { x: gmx, y: gmy }), // Angle of mouse from the center of selection.
-                        offset: rotationOffset
-                    }
-                }
-            } else if (selectionRotation) {
-                selectionRotation = null;
-            }
-            let rotationAngle;
-            if (selectionRotation) {
-                rotationAngle = selectionRotation ? selectionRotation.angle - Math.angleBetween(selectionRotation, { x: gmx, y: gmy }) : null; // Get the angle of the mouse from center and subtract it from the angle of the selection.
-                if (game.settings.enableSnapRotation) {
-                    let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ?? 15);
-                    rotationAngle = Math.floor(rotationAngle / snapRotationDegrees) * snapRotationDegrees; // Snap the angle of the selection.
-                    if (typeof selectionRotation.offset === 'number') {
-                        rotationAngle -= (Math.floor(selectionRotation.offset / snapRotationDegrees) * snapRotationDegrees) - selectionRotation.offset; // Subtract the difference of the original offset.
-                    }
-                }
-            }
-            for (let i = 0; i < game.selectedEntities.length; i++) {
-                let pickupEntity = game.selectedEntities[i];
+            if (!selectedPoint && (!pickupPosition || (Date.now()-pickupTime > 250 || Math.distanceBetween(pickupPosition, {x: gmx, y: gmy}) > 20))) {
+                pickupPosition = null;
                 if (mouseDown[2]) {
-                    if (selectionRotation) {
-                        let rotatedPosition = Math.rotateAround(selectionRotation, pickupEntity.rotationData, rotationAngle);
-                        pickupEntity.x = rotatedPosition.x;
-                        pickupEntity.y = rotatedPosition.y;
-                        pickupEntity.pickupOffset = {
-                            x: gmx - pickupEntity.x,
-                            y: gmy - pickupEntity.y
-                        };
-                        pickupEntity.rotation = pickupEntity.rotationData.rotation - rotationAngle;
-                    }
-                } else {
-                    if (!selectedPoint && (!pickupPosition || (Date.now()-pickupTime > 250 || Math.distanceBetween(pickupPosition, {x: gmx, y: gmy}) > 20))) {
-                        if (!pickupEntity.building?.isBezier && pickupEntity.selectedBorder.visible) {
-                            pickupEntity.selectedBorder.visible = false;
+                    if (!selectionRotation) {
+                        let cX = 0, cY = 0, rotationOffset = null;
+                        game.selectedEntities.forEach(selectedEntity => {
+                            if (rotationOffset !== false) {
+                                if (rotationOffset === null) {
+                                    rotationOffset = selectedEntity.rotation;
+                                } else if (rotationOffset !== selectedEntity.rotation) {
+                                    rotationOffset = false;
+                                }
+                            }
+                            selectedEntity.rotationData = {
+                                x: selectedEntity.x,
+                                y: selectedEntity.y,
+                                rotation: selectedEntity.rotation
+                            }
+                            let eX = selectedEntity.x, eY = selectedEntity.y;
+                            if (selectedEntity.bezier) {
+                                let bounds = selectedEntity.bezier.bbox();
+                                let rotatedPoint = Math.rotateAround(selectedEntity, { x: eX + bounds.x.mid, y: eY + bounds.y.mid }, -selectedEntity.rotation);
+                                eX = rotatedPoint.x;
+                                eY = rotatedPoint.y;
+                            }
+                            cX += parseFloat(eX);
+                            cY += parseFloat(eY);
+                        });
+                        cX = Math.round(cX / game.selectedEntities.length);
+                        cY = Math.round(cY / game.selectedEntities.length);
+                        selectionRotation = {
+                            x: cX, // X center of selection.
+                            y: cY, // Y center of selection.
+                            angle: Math.angleBetween({ x: cX, y: cY }, { x: gmx, y: gmy }), // Angle of mouse from the center of selection.
+                            offset: rotationOffset
                         }
-                        pickupPosition = null;
-    
+                    }
+                } else if (selectionRotation) {
+                    selectionRotation = null;
+                }
+                let rotationAngle;
+                if (selectionRotation) {
+                    rotationAngle = selectionRotation.angle - Math.angleBetween(selectionRotation, { x: gmx, y: gmy }); // Get the angle of the mouse from center and subtract it from the angle of the selection.
+                    if (game.settings.enableSnapRotation) {
+                        let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ?? 15);
+                        rotationAngle = Math.floor(rotationAngle / snapRotationDegrees) * snapRotationDegrees; // Snap the angle of the selection.
+                        if (typeof selectionRotation.offset === 'number') {
+                            rotationAngle -= (Math.floor(selectionRotation.offset / snapRotationDegrees) * snapRotationDegrees) - selectionRotation.offset; // Subtract the difference of the original offset.
+                        }
+                    }
+                }
+                for (let i = 0; i < game.selectedEntities.length; i++) {
+                    let pickupEntity = game.selectedEntities[i];
+                    if (!pickupEntity.building?.isBezier && pickupEntity.selectedBorder.visible) {
+                        pickupEntity.selectedBorder.visible = false;
+                    }
+                    if (mouseDown[2]) {
+                        if (selectionRotation) {
+                            let rotatedPosition = Math.rotateAround(selectionRotation, pickupEntity.rotationData, rotationAngle);
+                            pickupEntity.x = rotatedPosition.x;
+                            pickupEntity.y = rotatedPosition.y;
+                            pickupEntity.pickupOffset = {
+                                x: gmx - pickupEntity.x,
+                                y: gmy - pickupEntity.y
+                            };
+                            pickupEntity.rotation = pickupEntity.rotationData.rotation - rotationAngle;
+                        }
+                    } else {
                         pickupEntity.x = gmx - pickupEntity.pickupOffset.x;
                         pickupEntity.y = gmy - pickupEntity.pickupOffset.y;
-    
                         if (game.settings.enableGrid || keys[16]) {
-                            // Not snapping to grid for multiple tracks. It often separates the tracks.
-                            // Need to update the snapping so it's based on a single point, not each individual track.
-                            if (!(game.selectedEntities.length > 1 && pickupEntity.building?.isBezier)) {
-                                let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
-                                //Had to do all of this funky math to support half/quarter meters without changing the building center.
-                                let width = pickupEntity.building.width;
-                                let length = pickupEntity.building.length;
-                                let xOffsetWidth = (((width % Math.floor(width))) * METER_PIXEL_SIZE)/2;
-                                let yOffsetHeight = (((length % Math.floor(length))) * METER_PIXEL_SIZE)/2;
-                                let xOffset = (Math.cos(pickupEntity.rotation - Math.PI/2) * xOffsetWidth) + (Math.sin(pickupEntity.rotation) * yOffsetHeight);
-                                let yOffset = (Math.sin(pickupEntity.rotation - Math.PI/2) * yOffsetHeight) + (Math.cos(pickupEntity.rotation) * xOffsetWidth);
-                                pickupEntity.x = Math.round((Math.round(pickupEntity.x / gridSize) * gridSize) - xOffset);
-                                pickupEntity.y = Math.round((Math.round(pickupEntity.y / gridSize) * gridSize) - yOffset);
-                            }
+                            let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
+                            let width = pickupEntity.building.width, length = pickupEntity.building.length;
+                            let xOffsetWidth = (((width % Math.floor(width))) * METER_PIXEL_SIZE)/2;
+                            let yOffsetHeight = (((length % Math.floor(length))) * METER_PIXEL_SIZE)/2;
+                            let xOffset = (Math.cos(pickupEntity.rotation - Math.PI/2) * xOffsetWidth) + (Math.sin(pickupEntity.rotation) * yOffsetHeight);
+                            let yOffset = (Math.sin(pickupEntity.rotation - Math.PI/2) * yOffsetHeight) + (Math.cos(pickupEntity.rotation) * xOffsetWidth);
+                            pickupEntity.x = Math.round((Math.round(pickupEntity.x / gridSize) * gridSize) - xOffset);
+                            pickupEntity.y = Math.round((Math.round(pickupEntity.y / gridSize) * gridSize) - yOffset);
                         }
                     }
                 }
