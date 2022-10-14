@@ -2232,6 +2232,7 @@ const buildingCategories = {
                 name: 'Large Assembly Factory',
                 description: 'Allows production of a wide variety of vehicles and equipment. Production takes time and can be halted if resources are depleted. Some variants require a base vehicle to be present on the Assembly Station before production can begin. Advanced vehicles like heavy tank classes and trains are produced here.', // Requires Tech
                 category: 'factories',
+                power: -8,
                 width: 9,
                 length: 20,
                 icon: 'buildings/LargeAssemblyFactoryIcon.webp',
@@ -2311,7 +2312,7 @@ const buildingCategories = {
                             },
                             {
                                 faction: 'w',
-                                time: 0, // Need time for this.
+                                time: 1800,
                                 input: {
                                     steel_construction_material: 30,
                                     assembly_materials1: 30,
@@ -2357,7 +2358,7 @@ const buildingCategories = {
                             },
                             {
                                 faction: 'w',
-                                time: 0, // Need time this.
+                                time: 64800,
                                 input: {
                                     steel_construction_material: 50,
                                     assembly_materials3: 30,
@@ -2383,7 +2384,7 @@ const buildingCategories = {
                             },
                             {
                                 faction: 'w',
-                                time: 0, // Need time for this.
+                                time: 172800,
                                 input: {
                                     steel_construction_material: 275,
                                     assembly_materials3: 105,
