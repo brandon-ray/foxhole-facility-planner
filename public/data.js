@@ -1839,7 +1839,7 @@ const buildingCategories = {
                                     vehicle_r_1_hauler: 1,
                                     processed_construction_material: 70,
                                     assembly_materials1: 10,
-                                    assembly_materials2: 8
+                                    assembly_materials3: 8
                                 },
                                 output: {
                                     vehicle_r_17_retiarius_skirmisher: 1
