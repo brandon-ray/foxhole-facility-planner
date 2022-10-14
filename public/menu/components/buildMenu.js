@@ -141,12 +141,13 @@ Vue.component('app-menu-building-selected', {
     props: ['menuData'],
     data: function() {
         return {
-            entityData: {
+            entity: {
                 x: 0,
                 y: 0,
-                rotation: 0
+                rotation: 0,
+                rotationDegrees: 0,
+                selectedProduction: null
             },
-            entityRotation: 0,
             hoverUpgradeName: null,
             lockState: 0
         };
@@ -158,38 +159,60 @@ Vue.component('app-menu-building-selected', {
     methods: {
         refresh: function(noForce) {
             this.lockState = game.getSelectedLockState();
-            if (game.selectedEntity) {
-                if (noForce && this.entityData.x === game.selectedEntity.position.x && this.entityData.y === game.selectedEntity.position.y && this.entityData.rotation === game.selectedEntity.rotation) {
+            let selectedEntity = game.getSelectedEntity();
+            if (selectedEntity) {
+                if (noForce && this.entity.x === selectedEntity.x && this.entity.y === selectedEntity.y && this.entity.rotation === selectedEntity.rotation) {
                     return;
                 }
-                this.entityData.x = game.selectedEntity.position.x;
-                this.entityData.y = game.selectedEntity.position.y;
-                this.entityData.rotation = game.selectedEntity.rotation;
-                this.entityRotation = Math.rad2deg(this.entityData.rotation);
+                this.entity = {
+                    x: selectedEntity.x,
+                    y: selectedEntity.y,
+                    rotation: selectedEntity.rotation,
+                    rotationDegrees: Math.rad2deg(selectedEntity.rotation),
+                    selectedProduction: selectedEntity.selectedProduction,
+                    building: selectedEntity.building
+                }
+            } else {
+                entity = null;
             }
             this.$forceUpdate();
         },
-        updateRotation: function() {
-            if (game.selectedEntity) {
-                game.selectedEntity.rotation = Math.deg2rad(parseInt(this.entityRotation));
+        updateEntity: function() {
+            if (this.entity) {
+                let selectedEntity = game.getSelectedEntity();
+                if (selectedEntity) {
+                    selectedEntity.x = this.entity.x;
+                    selectedEntity.y = this.entity.y;
+                    selectedEntity.rotation = Math.deg2rad(this.entity.rotationDegrees);
+                    this.entity.rotation = selectedEntity.rotation;
+                    selectedEntity.selectedProduction = this.entity.selectedProduction;
+                    if (game.statisticsMenuComponent) {
+                        game.statisticsMenuComponent.refresh();
+                    }
+                    this.$forceUpdate();
+                } else {
+                    this.refresh();
+                }
             }
         },
+        /*
         addRail: function() {
             this.bmc();
-            if (game.selectedEntity) {
-                game.selectedEntity.addPoint(100, 0);
+            if (this.entity) {
+                this.entity.addPoint(100, 0);
             }
         },
+        */
         changeProduction: function(index) {
-            game.selectedEntity.selectedProduction = game.selectedEntity.selectedProduction !== index ? index : null;
-            if (game.statisticsMenuComponent) {
-                game.statisticsMenuComponent.refresh();
+            this.bmc();
+            if (this.entity) {
+                this.entity.selectedProduction = this.entity.selectedProduction !== index ? index : null;
+                this.updateEntity();
             }
-            this.$forceUpdate();
         },
         changeUpgrade: function(upgrade) {
             this.bmc();
-            game.cloneBuilding(game.selectedEntity, upgrade);
+            game.upgradeBuilding(game.getSelectedEntity(), upgrade);
         },
         cloneBuildings: function() {
             this.bmc();
@@ -207,9 +230,9 @@ Vue.component('app-menu-building-selected', {
         showUpgradeHover: function(key, upgrade) {
             this.hoverUpgradeName = upgrade ? upgrade.name : null;
             let buildingUpgrade = null;
-            if (key && upgrade && game.selectedEntity) {
+            if (key && upgrade && this.entity) {
                 this.bme();
-                const building = game.selectedEntity.building;
+                const building = this.entity.building;
                 if (building) {
                     buildingUpgrade = window.objectData.buildings[(building.parentKey ? building.parentKey : building.key) + '_' + key];
                 }
@@ -232,21 +255,21 @@ Vue.component('app-menu-building-selected', {
                 <span v-else><i class="fa fa-unlock"></i></span>
             </div>
         </button>
-        <div v-if="game.selectedEntity" class="settings-option-wrapper">
-            <div v-if="game.selectedEntity.type === 'building'" class="settings-title">
-                {{game.selectedEntity.building.parentName ? game.selectedEntity.building.parentName : game.selectedEntity.building.name}}
+        <div v-if="entity" class="settings-option-wrapper">
+            <div v-if="entity.building" class="settings-title">
+                {{entity.building.parentName ? entity.building.parentName : entity.building.name}}
             </div>
             <label class="app-input-label">
                 <i class="fa fa-arrows" aria-hidden="true"></i> Position X:
-                <input class="app-input" type="number" v-model="game.selectedEntity.position.x">
+                <input class="app-input" type="number" v-model="entity.x" @input="updateEntity">
             </label>
             <label class="app-input-label">
                 <i class="fa fa-arrows" aria-hidden="true"></i> Position Y:
-                <input class="app-input" type="number" v-model="game.selectedEntity.position.y">
+                <input class="app-input" type="number" v-model="entity.y" @input="updateEntity">
             </label>
             <label class="app-input-label">
                 <i class="fa fa-repeat" aria-hidden="true"></i> Rotation:
-                <input class="app-input" type="number" v-model="entityRotation" @change="updateRotation">
+                <input class="app-input" type="number" v-model="entity.rotationDegrees" @input="updateEntity">
             </label>
         </div>
         <div v-else class="settings-option-wrapper">
@@ -258,22 +281,22 @@ Vue.component('app-menu-building-selected', {
                 Report issues to our GitHub or Discord.
             </label>
         </div>
-        <template v-if="game.selectedEntity">
-            <div v-if="game.selectedEntity.type === 'building' && game.selectedEntity.building && game.selectedEntity.building.upgrades" class="settings-option-wrapper upgrade-list">
-                <div class="settings-title">{{hoverUpgradeName ?? (game.selectedEntity.building.upgradeName ? game.selectedEntity.building.upgradeName : 'No Upgrade Selected')}}</div>
-                <button class="upgrade-button" v-for="(upgrade, key) in game.selectedEntity.building.upgrades" :class="{'selected-upgrade': game.selectedEntity.building.parentKey && game.selectedEntity.building.key === game.selectedEntity.building.parentKey + '_' + key}"
+        <template v-if="entity">
+            <div v-if="entity.building && entity.building.upgrades" class="settings-option-wrapper upgrade-list">
+                <div class="settings-title">{{hoverUpgradeName ?? (entity.building.upgradeName ? entity.building.upgradeName : 'No Upgrade Selected')}}</div>
+                <button class="upgrade-button" v-for="(upgrade, key) in entity.building.upgrades" :class="{'selected-upgrade': entity.building.parentKey && entity.building.key === entity.building.parentKey + '_' + key}"
                     @mouseenter="showUpgradeHover(key, upgrade)" @mouseleave="showUpgradeHover" @click="changeUpgrade(key)">
-                    <div class="resource-icon" :title="upgrade.name" :style="{backgroundImage:'url(/assets/' + (upgrade.part ? upgrade.part : (upgrade.icon ? upgrade.icon : game.selectedEntity.building.icon)) + ')'}"></div>
+                    <div class="resource-icon" :title="upgrade.name" :style="{backgroundImage:'url(/assets/' + (upgrade.part ? upgrade.part : (upgrade.icon ? upgrade.icon : entity.building.icon)) + ')'}"></div>
                 </button>
             </div>
-            <div v-if="game.selectedEntity.type === 'building' && game.selectedEntity.building && game.selectedEntity.building.production && game.selectedEntity.building.production.length" class="settings-option-wrapper">
+            <div v-if="entity.building && entity.building.production && entity.building.production.length" class="settings-option-wrapper">
                 <div class="settings-title">Select Production</div>
                 <div class="production-list">
-                    <div class="select-production" v-for="(production, index) in game.selectedEntity.building.production"
-                        v-if="!production.faction || !game.settings.selectedFaction || production.faction == game.settings.selectedFaction" :class="{'selected-production': game.selectedEntity.selectedProduction === index}" @click="changeProduction(index)">
-                        <app-game-recipe :building="game.selectedEntity.building" :recipe="production"></app-game-recipe>
+                    <div class="select-production" v-for="(production, index) in entity.building.production"
+                        v-if="!production.faction || !game.settings.selectedFaction || production.faction == game.settings.selectedFaction" :class="{'selected-production': entity.selectedProduction === index}" @click="changeProduction(index)">
+                        <app-game-recipe :building="entity.building" :recipe="production"></app-game-recipe>
                         <h6 class="production-requirements">
-                            <span v-if="game.selectedEntity.building.power"><i class="fa fa-bolt"></i> {{production.power ? production.power : game.selectedEntity.building.power}} MW</span>
+                            <span v-if="entity.building.power"><i class="fa fa-bolt"></i> {{production.power ? production.power : entity.building.power}} MW</span>
                             &nbsp;&nbsp;&nbsp;
                             <i class="fa fa-clock-o"></i> {{production.time}}s
                         </h6>
