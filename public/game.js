@@ -10,6 +10,7 @@ const game = {
         enableSnapRotation: true,
         snapRotationDegrees: 15,
         selectedFaction: null,
+        displayFactionTheme: true,
         defaultBuildingCategory: 'all',
         showUpgradesAsBuildings: true,
         showFacilityName: true,
@@ -651,8 +652,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
         game.removeEntities();
         game.setFaction(saveObject.faction);
         setTimeout(() => {
-            let xTotal = 0;
-            let yTotal = 0;
             for (let i=0; i<saveObject.entities.length; i++) {
                 let entityData = saveObject.entities[i];
                 let entity;
@@ -664,8 +663,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         console.error('Attempted to load invalid entity:', entityData);
                         continue;
                 }
-                xTotal += parseFloat(entityData.x);
-                yTotal += parseFloat(entityData.y);
 
                 if (entity) {
                     entity.rotation = entityData.rotation;
@@ -673,13 +670,27 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     entity.onLoad(entityData);
                 }
             }
-            if (saveObject.entities.length) {
-                camera.x = Math.round(xTotal/saveObject.entities.length) - WIDTH/2;
-                camera.y = Math.round(yTotal/saveObject.entities.length) - HEIGHT/2;
-            }
-            game.resetZoom();
+            game.zoomToFacilityCenter();
         }, 1);
     };
+
+    game.zoomToFacilityCenter = function() {
+        let xTotal = 0;
+        let yTotal = 0;
+        if (entities?.length) {
+            for (let i=0; i < entities.length; i++) {
+                let entity = entities[i];
+                xTotal += parseFloat(entity.x);
+                yTotal += parseFloat(entity.y);
+            }
+            camera.x = Math.round(xTotal/entities.length) - WIDTH/2;
+            camera.y = Math.round(yTotal/entities.length) - HEIGHT/2;
+        } else {
+            camera.x = 5000 - WIDTH/2;
+            camera.y = 5000 - WIDTH/2;
+        }
+        game.resetZoom();
+    }
 
     game.setFaction = function(faction) {
         if (game.settings.selectedFaction !== faction) {

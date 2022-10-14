@@ -57,6 +57,7 @@ Vue.component('app-game-sidebar', {
             }
         },
         selectFaction: function(faction) {
+            this.bmc();
             game.setFaction(game.settings.selectedFaction !== faction ? faction : null);
         },
         showHoverMenu: function(data) {
@@ -66,16 +67,19 @@ Vue.component('app-game-sidebar', {
     template: html`
     <div id="sidebar">
         <div id="sidebar-header">
-            <button class="colonial-button" :class="{ selected: game.settings.selectedFaction == 'c' }" title="Colonial Faction" @click="selectFaction('c')"></button>
+            <button class="colonial-button" :class="{ selected: game.settings.selectedFaction == 'c' }" title="Colonial Faction" @click="selectFaction('c')" @mouseenter="bme"></button>
             <img class="sidebar-logo" src="/assets/logo_transparent.webp">
-            <button class="warden-button" :class="{ selected: game.settings.selectedFaction == 'w' }" title="Warden Faction" @click="selectFaction('w')"></button>
+            <button class="warden-button" :class="{ selected: game.settings.selectedFaction == 'w' }" title="Warden Faction" @click="selectFaction('w')" @mouseenter="bme"></button>
         </div>
-        <div id="sidebar-body">
+        <div id="sidebar-body" :class="currentMenu ? currentMenu.key + '-page' : 'construction-page'">
             <div v-if="!currentMenu" class="menu-body">
                 <app-menu-construction-list></app-menu-construction-list>
             </div>
             <div v-if="currentMenu" class="menu-body">
                 <div class="menu-page-title"><i :class="'fa ' + currentMenu.icon"></i> {{currentMenu.name}}</div>
+                <button type="button" class="title-button return-button" v-on:click="changeMenu(null)" title="Back" @mouseenter="bme">
+                    <div class="inner-button"><i class="fa fa-arrow-left"></i></div>
+                </button>
                 <div class="menu-page">
                     <component v-bind:is="'app-menu-' + currentMenu.key" :menuData="currentMenuData"></component>
                 </div>
@@ -90,18 +94,18 @@ Vue.component('app-game-sidebar', {
             </div>
         </div>
         <div id="sidebar-footer">
-            <a class="float-left github-button" href="https://github.com/brandon-ray/foxhole-facility-planner" target="_blank">
+            <a class="float-left github-button" href="https://github.com/brandon-ray/foxhole-facility-planner" target="_blank" @click="bmc" @mouseenter="bme">
                 <i class="fa fa-github"></i>
             </a>
-            <a class="float-left discord-button" href="https://discord.gg/SnyEDQyAVr" target="_blank">
+            <a class="float-left discord-button" href="https://discord.gg/SnyEDQyAVr" target="_blank" @click="bmc" @mouseenter="bme">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36">
                     <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
                 </svg>
             </a>
-            <button v-on:click="event.preventDefault(); changeMenu('settings')" class="float-right">
+            <button v-on:click="event.preventDefault(); changeMenu('settings')" class="float-right" @mouseenter="bme">
                 <i class="fa fa-gear"></i>
             </button>
-            <button v-on:click="event.preventDefault(); changeMenu('about')" class="float-right">
+            <button v-on:click="event.preventDefault(); changeMenu('about')" class="float-right" @mouseenter="bme">
                 <i class="fa fa-question-circle"></i>
             </button>
         </div>
@@ -217,9 +221,6 @@ Vue.component('app-menu-building-selected', {
     <div class="text-left">
         <button type="button" class="title-button trash-button" v-on:click="destroyBuildings" title="Delete" @mouseenter="bme">
             <div class="inner-button"><i class="fa fa-trash"></i></div>
-        </button>
-        <button type="button" class="title-button return-button" v-on:click="game.sidebarMenuComponent.changeMenu(null)" title="Back" @mouseenter="bme">
-            <div class="inner-button"><i class="fa fa-arrow-left"></i></div>
         </button>
         <button type="button" class="title-button clone-button" v-on:click="cloneBuildings" title="Clone" @mouseenter="bme">
             <div class="inner-button"><i class="fa fa-clone"></i></div>
@@ -516,6 +517,10 @@ Vue.component('app-menu-settings', {
                 <i class="fa fa-volume-up" aria-hidden="true"></i> Volume
                 <input type="range" v-model="game.settings.volume" min="0" max="1" step="0.1" class="slider" @input="game.updateSettings">
             </label>
+            <label class="app-input-label">
+                <i class="fa fa-flag" aria-hidden="true"></i> Display Faction Colors
+                <input class="app-input" type="checkbox" v-model="game.settings.displayFactionTheme" @change="game.updateSettings">
+            </label>
         </div>
         <div class="settings-option-wrapper">
             <div class="settings-title">Board Settings</div>
@@ -588,18 +593,22 @@ Vue.component('app-menu-save-load', {
     },
     template: html`
     <div id="save-load-page">
-        <label class="app-input-label" style="width:100%;">
-            Facility Name:
-            <input class="app-input" type="text" v-model="game.facilityName">
-        </label>
-        <button type="button" class="app-btn app-btn-primary" v-on:click="game.downloadSave()" @mouseenter="bme">
-            <i class="fa fa-save"></i> Save
-        </button>
-        <br><br>
         <input id="fileUpload" @change="loadSave" type="file" ref="file" hidden>
-        <button type="button" class="app-btn app-btn-primary" v-on:click="openFileBrowser()" @mouseenter="bme">
-            <i class="fa fa-upload"></i> Load
-        </button>
+        <div class="settings-option-wrapper">
+            <div class="settings-title">Facility Properties</div>
+            <label class="app-input-label facility-name-input">
+                <i class="fa fa-pencil-square edit-icon" aria-hidden="true"></i>
+                <input class="app-input" type="text" v-model="game.facilityName" @change="updateName">
+            </label>
+            <div class="text-center">
+                <button class="app-btn app-btn-primary load-button" type="button" v-on:click="openFileBrowser()" @mouseenter="bme">
+                    <i class="fa fa-upload"></i> Load
+                </button>
+                <button class="app-btn app-btn-primary save-button" type="button" v-on:click="game.downloadSave()" @mouseenter="bme">
+                    <i class="fa fa-save"></i> Save
+                </button>
+            </div>
+        </div>
     </div>
     `
 });
