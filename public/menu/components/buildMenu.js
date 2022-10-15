@@ -52,7 +52,7 @@ Vue.component('app-game-sidebar', {
             }
             this.currentMenuData = menuData;
 
-            if (game.selectedEntities.length && (!this.currentMenu || this.currentMenu.key !== 'building-selected')) {
+            if (game.getSelectedEntities().length && (!this.currentMenu || this.currentMenu.key !== 'building-selected')) {
                 game.deselectEntities();
             }
         },
@@ -257,7 +257,7 @@ Vue.component('app-menu-building-selected', {
                 <span v-else><i class="fa fa-unlock"></i></span>
             </div>
         </button>
-        <div v-if="game.selectedEntities.length === 1" class="settings-option-wrapper">
+        <div v-if="game.getSelectedEntities().length === 1" class="settings-option-wrapper">
             <div v-if="entity.building" class="settings-title">
                 {{entity.building.parentName ? entity.building.parentName : entity.building.name}}
             </div>
@@ -276,7 +276,7 @@ Vue.component('app-menu-building-selected', {
         </div>
         <div v-else class="settings-option-wrapper text-center">
             <div class="settings-title">
-                ({{game.selectedEntities.length}}) Buildings Selected
+                ({{game.getSelectedEntities().length}}) Buildings Selected
             </div>
             <label class="app-input-label">
                 <span style="color: red">Notice:</span> This is an experimental feature.<br>
@@ -288,7 +288,7 @@ Vue.component('app-menu-building-selected', {
                 </button>
             </div>
         </div>
-        <template v-if="game.selectedEntities.length === 1">
+        <template v-if="game.getSelectedEntities().length === 1">
             <div v-if="entity.building && entity.building.upgrades" class="settings-option-wrapper upgrade-list">
                 <div class="settings-title">{{hoverUpgradeName ?? (entity.building.upgradeName ? entity.building.upgradeName : 'No Upgrade Selected')}}</div>
                 <button class="upgrade-button" v-for="(upgrade, key) in entity.building.upgrades" :class="{'selected-upgrade': entity.building.parentKey && entity.building.key === entity.building.parentKey + '_' + key}"
@@ -654,7 +654,7 @@ Vue.component('app-menu-save-load', {
                 <button class="text-button" type="button" v-on:click="openFileBrowser(true)" @mouseenter="bme">
                     <i class="fa fa-upload"></i> Import Selection
                 </button>
-                <button v-if="game.selectedEntities.length > 1" class="text-button" type="button" v-on:click="game.downloadSave(true)" @mouseenter="bme">
+                <button v-if="game.getSelectedEntities().length > 1" class="text-button" type="button" v-on:click="game.downloadSave(true)" @mouseenter="bme">
                     <i class="fa fa-save"></i> Export Selection
                 </button>
             </div>
