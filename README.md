@@ -8,6 +8,7 @@ Made with ❤️ by the PEG Regiment using Vue.js and Pixi.js
 
 - **Facility Blueprint Editor**
     - Saving and Loading
+    - Multi-Building Selection
     - *Mostly* Accurate Building Placement ;)
     - Rail and Road Construction
 - **Building Browser**
@@ -22,7 +23,7 @@ Made with ❤️ by the PEG Regiment using Vue.js and Pixi.js
     - Production Time Filtering
 ## Screenshots
 
-![Screenshot](public/assets/screenshot2.jpg)
+![Screenshot](public/assets/screenshot3.jpg)
 
 
 ## Live Website (Latest Release)
@@ -41,8 +42,6 @@ https://foxholeplanner.com
 - **Facility Image Export:** Save an image of your facility locally.
 - **Statistics CSV Export:** Save your Facility stats to a spreadsheet.
 - **Pipe & Power Line Construction** (Building Connection Points)
-- **Selection Tool:** Select and manipulate multiple objects at once.
-    - **Moving, Rotation, Copy & Paste, Deletion, etc.**
 - **Redo & Undo:** Revert mistakes and boo-boos.
 ## Run Locally
 
@@ -73,4 +72,4 @@ Start the server
 Go to http://localhost:3000/ in your browser
 ## Support & Feedback
 
-If you need help or have any feedback, e-mail brandon@bombsightgames.com
+If you need help or have any feedback, join our [Discord](https://discord.gg/SnyEDQyAVr) or e-mail brandon@bombsightgames.com

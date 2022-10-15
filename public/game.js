@@ -813,7 +813,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
     let mouseDown = {};
     let forceMouseDown = {};
     mouseEventListenerObject.addEventListener('wheel', (e) => {
-        if (!keys[17]) {
+        if (!e.ctrlKey) {
             let lastZoom = camera.zoom;
             camera.zoom -= (e.deltaY * 0.0005);
             if (camera.zoom > 1.6) {
@@ -875,12 +875,12 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 entity.remove();
                             } else {
                                 if (!entity.selected) {
-                                    if (keys[16] || keys[17]) {
+                                    if (e.ctrlKey || e.shiftKey) {
                                         game.addSelectedEntity(entity);
                                     } else {
                                         game.selectEntity(entity);
                                     }
-                                } else if (!entity.grabBezierPoint() && (keys[16] || keys[17])) {
+                                } else if (!entity.grabBezierPoint() && (e.ctrlKey || e.shiftKey)) {
                                     game.removeSelectedEntity(entity);
                                 }
                                 game.pickupEntity = entity;
@@ -889,7 +889,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             return;
                         }
                     }
-                    if (!(keys[16] || keys[17])) {
+                    if (!(e.ctrlKey || e.shiftKey)) {
                         game.deselectEntities();
                         if (selectionArea) {
                             selectionArea.origin = { x: gmx, y: gmy };
@@ -959,8 +959,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
         }
     });
-    mouseEventListenerObject.addEventListener(eventPrefix + 'up', (e) => {
-        e.preventDefault();
+    document.addEventListener(eventPrefix + 'up', (e) => {
         mx = e.clientX;
         my = e.clientY;
 
@@ -1606,7 +1605,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
                         for (let i=0; i<entities.length; i++) {
                             let entity2 = entities[i];
-                            if (entity2 === entity || entity2.type !== 'building' || entity2.subtype !== entity.subtype || !entity2.building?.isBezier || !entity2.bezier) {
+                            if (entity2 === entity || entity2.type !== 'building' || entity2.subtype !== entity.subtype || !entity2.bezier) {
                                 continue;
                             }
                             let selectedPointToEntity2Local = entity2.toLocal(selectedPoint, entity, undefined, true);
@@ -2133,7 +2132,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 }
                 for (let i = 0; i < game.selectedEntities.length; i++) {
                     let pickupEntity = game.selectedEntities[i];
-                    if (!pickupEntity.building?.isBezier && pickupEntity.selectedBorder.visible) {
+                    if (pickupEntity.building?.isBezier === false && pickupEntity.selectedBorder.visible) {
                         pickupEntity.selectedBorder.visible = false;
                     }
                     if (mouseDown[2]) {
@@ -2167,7 +2166,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             if (pickupEntity && pickupEntity.building?.isBezier && !selectedPoint) {
                 for (let i=0; i<entities.length; i++) {
                     let entity = entities[i];
-                    if (!entity.building?.isBezier || !entity.bezier) {
+                    if (!entity.bezier) {
                         continue;
                     }
                     let mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
