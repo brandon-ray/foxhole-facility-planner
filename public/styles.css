@@ -1042,19 +1042,30 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
     outline: 2px solid white;
 }
 
-.settings-option-wrapper button.settings-button {
-    width: 45%;
-    background: #353535;
-    margin: 5px;
-    padding: 3px;
+.settings-option-wrapper .text-button-wrapper {
+    padding: 6px 10px;
+    text-align: center;
+}
+
+.settings-option-wrapper button.text-button {
+    width: 100%;
+    height: 45px;
+    background: linear-gradient(rgb(91, 91, 91), rgb(62, 62, 62));
+    border: none;
+    box-shadow: 0 0 3px #000;
+    font-size: 1.3em;
     color: white;
-    border: 1px solid #131313;
+    margin: 5px 0;
+    padding: 0 15px;
+    transition-duration: 0.125s;
     cursor: pointer;
 }
 
-.settings-option-wrapper button.settings-button:hover {
-    background: #3f3f3f;
-    border-color: white;
+.settings-option-wrapper button.text-button:hover {
+    background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
+    font-size: 1.35em;
+    box-shadow: 0 0 5px #000;
+    text-decoration: none;
 }
 
 #save-load-page .facility-name-input {

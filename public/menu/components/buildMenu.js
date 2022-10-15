@@ -274,14 +274,19 @@ Vue.component('app-menu-building-selected', {
                 <input class="app-input" type="number" v-model="entity.rotationDegrees" @input="updateEntity">
             </label>
         </div>
-        <div v-else class="settings-option-wrapper">
+        <div v-else class="settings-option-wrapper text-center">
             <div class="settings-title">
                 ({{game.selectedEntities.length}}) Buildings Selected
             </div>
-            <label class="app-input-label text-center">
+            <label class="app-input-label">
                 <span style="color: red">Notice:</span> This is an experimental feature.<br>
                 Report issues to our GitHub or Discord.
             </label>
+            <div class="text-button-wrapper">
+                <button class="text-button" type="button" v-on:click="game.downloadSave(true)" @mouseenter="bme">
+                    <i class="fa fa-save"></i> Export Selection
+                </button>
+            </div>
         </div>
         <template v-if="game.selectedEntities.length === 1">
             <div v-if="entity.building && entity.building.upgrades" class="settings-option-wrapper upgrade-list">
@@ -585,9 +590,15 @@ Vue.component('app-menu-settings', {
 
 Vue.component('app-menu-save-load', {
     props: ['menuData'],
+    data() {
+        return {
+            importAsSelection: false
+        };
+    },
     methods: {
-        openFileBrowser: function() {
-            document.getElementById('fileUpload').click()
+        openFileBrowser: function(importAsSelection) {
+            this.importAsSelection = importAsSelection;
+            document.getElementById('fileUpload').click();
         },
         loadSave: function() {
             let file = this.$refs.file.files[0];
@@ -602,7 +613,7 @@ Vue.component('app-menu-save-load', {
                         game.facilityName = saveObject.name;
                         game.appComponent.$forceUpdate();
                     }
-                    game.loadSave(saveObject);
+                    game.loadSave(saveObject, component.importAsSelection);
                     component.$forceUpdate();
                 } catch (e) {
                     console.error('Failed to load save:', e);
@@ -634,6 +645,17 @@ Vue.component('app-menu-save-load', {
                 </button>
                 <button class="app-btn app-btn-primary save-button" type="button" v-on:click="game.downloadSave()" @mouseenter="bme">
                     <i class="fa fa-save"></i> Save
+                </button>
+            </div>
+        </div>
+        <div class="settings-option-wrapper">
+            <div class="settings-title">Selection Options</div>
+            <div class="text-button-wrapper">
+                <button class="text-button" type="button" v-on:click="openFileBrowser(true)" @mouseenter="bme">
+                    <i class="fa fa-upload"></i> Import Selection
+                </button>
+                <button v-if="game.selectedEntities.length > 1" class="text-button" type="button" v-on:click="game.downloadSave(true)" @mouseenter="bme">
+                    <i class="fa fa-save"></i> Export Selection
                 </button>
             </div>
         </div>

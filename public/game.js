@@ -629,14 +629,15 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
     }
 
-    game.downloadSave = function() {
+    game.downloadSave = function(isSelection) {
         let saveObject = {
             name: game.facilityName,
             faction: game.settings.selectedFaction,
             entities: []
         };
-        for (let i=0; i<entities.length; i++) {
-            let entity = entities[i];
+        let saveEntities = isSelection ? game.selectedEntities : entities;
+        for (let i = 0; i < saveEntities.length; i++) {
+            let entity = saveEntities[i];
             let entityData = {
                 x: parseFloat(entity.x),
                 y: parseFloat(entity.y),
@@ -654,13 +655,21 @@ const fontFamily = ['Recursive', 'sans-serif'];
             .replace(/[^\w\s-]/g, '')
             .replace(/[\s_-]+/g, '_')
             .replace(/^-+|-+$/g, '');
+        if (isSelection) {
+            fileName += '_selection';
+        }
         download(JSON.stringify(saveObject), fileName, 'application/json')
     };
 
-    game.loadSave = function(saveObject) {
-        game.removeEntities();
-        game.setFaction(saveObject.faction);
+    game.loadSave = function(saveObject, isSelection) {
+        if (isSelection) {
+            game.deselectEntities(false, true);
+        } else {
+            game.removeEntities();
+            game.setFaction(saveObject.faction);
+        }
         setTimeout(() => {
+            let xTotal = 0, yTotal = 0;
             for (let i=0; i<saveObject.entities.length; i++) {
                 let entityData = saveObject.entities[i];
                 let entity;
@@ -672,14 +681,27 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         console.error('Attempted to load invalid entity:', entityData);
                         continue;
                 }
-
                 if (entity) {
                     entity.rotation = entityData.rotation;
                     entity.locked = entityData.locked;
                     entity.onLoad(entityData);
+                    if (isSelection) {
+                        game.addSelectedEntity(entity, true);
+                        xTotal += parseFloat(entity.x);
+                        yTotal += parseFloat(entity.y);
+                    }
                 }
             }
-            game.zoomToFacilityCenter();
+            if (isSelection) {
+                let centerPos = {
+                    x: Math.round(xTotal/saveObject.entities.length),
+                    y: Math.round(yTotal/saveObject.entities.length)
+                }
+                game.setPickupEntities(true, false, centerPos, true);
+                game.updateSelectedBuildingMenu();
+            } else {
+                game.zoomToFacilityCenter();
+            }
         }, 1);
     };
 
@@ -2132,7 +2154,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 }
                 for (let i = 0; i < game.selectedEntities.length; i++) {
                     let pickupEntity = game.selectedEntities[i];
-                    if (pickupEntity.building?.isBezier === false && pickupEntity.selectedBorder.visible) {
+                    if (!pickupEntity.building?.isBezier && pickupEntity.selectedBorder.visible) {
                         pickupEntity.selectedBorder.visible = false;
                     }
                     if (mouseDown[2]) {
