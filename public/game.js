@@ -74,6 +74,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
     let running = false;
     let WIDTH = window.innerWidth;
     let HEIGHT = window.innerHeight;
+    let GRID_WIDTH = 10000;
+    let GRID_HEIGHT = 10000;
     let MAP_WIDTH = 4000;
     let MAP_HEIGHT = 4000;
     let idleTime = 0;
@@ -451,8 +453,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
         background.getZIndex = function () {
             return 100000;
         };
-        background.width = 10000;
-        background.height = 10000;
+        background.width = GRID_WIDTH;
+        background.height = GRID_HEIGHT;
         background.anchor.x = 0;
         background.anchor.y = 0;
         background.position.x = 0;
@@ -693,11 +695,12 @@ const fontFamily = ['Recursive', 'sans-serif'];
             camera.x = Math.round(xTotal/entities.length) - WIDTH/2;
             camera.y = Math.round(yTotal/entities.length) - HEIGHT/2;
         } else {
-            camera.x = 5000 - WIDTH/2;
-            camera.y = 5000 - WIDTH/2;
+            camera.x = (GRID_WIDTH/2) - WIDTH/2;
+            camera.y = (GRID_HEIGHT/2) - HEIGHT/2;
         }
         game.resetZoom();
     }
+    game.zoomToFacilityCenter();
 
     game.setFaction = function(faction) {
         if (game.settings.selectedFaction !== faction) {
@@ -1514,6 +1517,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         entity.onDeselect = function() {
             entity.selected = false;
             entity.selectedBorder.visible = false;
+            entity.prevRotation = null;
 
             if (entity.rangeSprite && !game.settings.showRanges) {
                 entity.rangeSprite.visible = false;
@@ -1558,12 +1562,12 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 entity.selectedBorder.visible = true;
             }
 
-            if (entity.visible && !entity.locked && building.isBezier) {
+            if (entity.visible && building.isBezier) {
                 if (selectedPoint && !mouseDown[0]) {
                     selectedPoint = null;
                 }
 
-                if (entity.selected && mouseDown[0]) {
+                if (entity.selected && !entity.locked && mouseDown[0]) {
                     let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
                     let gmxGrid = gmx;
                     let gmyGrid = gmy;
@@ -1777,7 +1781,18 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 entity.selectedProduction = entityData.selectedProduction;
             }
 
-            entity.setPoints(entityData.railPoints);
+            if (entity.building?.isBezier && entityData.railPoints) {
+                for (let i=0; i<points.length; i++) {
+                    let point = points[i];
+                    entity.removeChild(point.handle);
+                }
+                points = [];
+                for (let i=0; i<entityData.railPoints.length; i++) {
+                    let point = entityData.railPoints[i];
+                    entity.addPoint(point.x, point.y, null, point.rotation);
+                }
+                entity.regenerate();
+            }
         };
 
         entity.addPoint = function(x, y, index, rotation) {
@@ -1790,7 +1805,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 points: 0,
                 x: x,
                 y: y,
-                rotation: rotation ? rotation : Math.PI
+                rotation: isNaN(rotation) ? Math.PI : rotation
             };
             points.splice(index, 0, newPoint);
 
@@ -1809,25 +1824,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
             entity.regenerate();
             return newPoint;
         };
-
-        entity.getPoints = function() {
-            return points;
-        }
-
-        entity.setPoints = function(newPoints) {
-            if (entity.building?.isBezier && newPoints) {
-                for (let i=0; i<points.length; i++) {
-                    let point = points[i];
-                    entity.removeChild(point.handle);
-                }
-                points = [];
-                for (let i=0; i<newPoints.length; i++) {
-                    let point = newPoints[i];
-                    entity.addPoint(point.x, point.y, null, point.rotation);
-                }
-                entity.regenerate();
-            }
-        }
 
         entity.regenerate = function() {
             if (entity.sprite) {
@@ -1925,13 +1921,15 @@ const fontFamily = ['Recursive', 'sans-serif'];
     function cloneBuilding(entity, upgrade) {
         if (entity) {
             let clone = createBuilding(upgrade ?? entity.building.key, entity.x, entity.y, 0);
-            if (!upgrade) {
-                clone.selectedProduction = entity.selectedProduction;
-            }
             clone.locked = entity.locked;
             clone.selectedBorder.tint = clone.locked ? COLOR_RED : COLOR_WHITE;
             clone.rotation = entity.rotation;
-            clone.setPoints(entity.getPoints());
+            let entityData = {};
+            entity.onSave(entityData);
+            clone.onLoad(entityData);
+            if (upgrade) {
+                clone.selectedProduction = null;
+            }
             return clone;
         }
         return null;
@@ -2174,6 +2172,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     }
                     let mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
                     let projection = entity.bezier.project(mousePos);
+                    let rotationStored = typeof pickupEntity.prevRotation === 'number';
                     if (entity !== pickupEntity && entity.type === 'building' && pickupEntity.subtype === entity.subtype && projection.d <= 25) {
                         if (projection.t >= 0.95) {
                             projection = entity.bezier.get(1);
@@ -2191,12 +2190,23 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         let rightDiff = Math.atan2(Math.sin(angleRight-pickupEntity.rotation), Math.cos(angleRight-pickupEntity.rotation));
                         let leftDiff = Math.atan2(Math.sin(angleLeft-pickupEntity.rotation), Math.cos(angleLeft-pickupEntity.rotation));
 
+                        if (!rotationStored) {
+                            pickupEntity.prevRotation = pickupEntity.rotation;
+                        }
+
                         if (rightDiff < leftDiff) {
                             pickupEntity.rotation = angleRight + Math.PI/2;
                         } else {
                             pickupEntity.rotation = angleLeft + Math.PI/2;
                         }
                         break;
+                    } else if (rotationStored) {
+                        pickupEntity.rotation = pickupEntity.prevRotation;
+                        pickupEntity.prevRotation = null;
+                        pickupEntity.pickupOffset = {
+                            x: 0,
+                            y: 0
+                        };
                     }
                 }
             }
