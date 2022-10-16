@@ -175,7 +175,7 @@ Vue.component('app-menu-building-selected', {
                     building: selectedEntity.building
                 }
             } else {
-                entity = null;
+                this.entity = null;
             }
             this.$forceUpdate();
         },
@@ -609,7 +609,7 @@ Vue.component('app-menu-save-load', {
                 let jsonString = decoder.decode(new Uint8Array(this.result));
                 try {
                     let saveObject = JSON.parse(jsonString);
-                    if (saveObject.name) {
+                    if (saveObject.name && !component.importAsSelection) {
                         game.facilityName = saveObject.name;
                         game.appComponent.$forceUpdate();
                     }
