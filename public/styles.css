@@ -220,6 +220,15 @@ p {
     padding: 7px;
 }
 
+.colonial-faction #sidebar-header {
+    background: linear-gradient(rgb(24, 24, 24), rgb(5, 26, 6));
+}
+
+.warden-faction #sidebar-header {
+    /*background: linear-gradient(rgb(24, 24, 24), rgb(11, 34, 53));*/
+    background: linear-gradient(rgb(24, 24, 24), rgb(5, 16, 26));
+}
+
 #sidebar-header > .sidebar-logo {
     max-width: 100%;
     max-height: 100%;
@@ -228,11 +237,11 @@ p {
 #sidebar-header > .colonial-button, #sidebar-header > .warden-button {
     width: 54px;
     height: 54px;
-    background-color: gray;
-    background-size: 44px 44px;
+    background-color: transparent;
+    background-size: 48px;
     background-repeat: no-repeat;
     background-position: center;
-    border: 2px solid black;
+    border: none;
     cursor: pointer;
     transition-duration: 0.1s;
     filter: grayscale(100%);
@@ -240,15 +249,12 @@ p {
 
 #sidebar-header > .colonial-button.selected, #sidebar-header > .warden-button.selected,
 #sidebar-header > .colonial-button:hover, #sidebar-header > .warden-button:hover {
+    background-size: 54px;
     filter: none;
 }
 
 #sidebar-header > .colonial-button:not(.selected):hover, #sidebar-header > .warden-button:not(.selected):hover {
-    background-size: 48px 48px;
-}
-
-#sidebar-header > .colonial-button:hover, #sidebar-header > .warden-button:hover {
-    border: 2px solid white;
+    background-size: 50px;
 }
 
 #sidebar-header > .colonial-button {
@@ -259,18 +265,6 @@ p {
 #sidebar-header > .warden-button {
     background-image: url('/assets/warden_logo.webp');
     float: right;
-}
-
-#sidebar-header > .colonial-button.selected, #sidebar-header > .warden-button.selected {
-    box-shadow: inset 0 0 3px black;
-}
-
-#sidebar-header > .colonial-button.selected {
-    background-color: #516c4b;
-}
-
-#sidebar-header > .warden-button.selected {
-    background-color: #235683;
 }
 
 #sidebar .app-btn-primary, #sidebar .app-btn-secondary {
@@ -347,6 +341,15 @@ p {
     bottom: 64px;
     left: 0;
     right: 0;
+    text-align: left;
+}
+
+.colonial-faction #sidebar-body.construction-page {
+    background: linear-gradient(rgb(54, 79, 18), rgb(38, 51, 32));
+}
+
+.warden-faction #sidebar-body.construction-page {
+    background: linear-gradient(rgb(18, 50, 79), rgb(32, 42, 51));
 }
 
 #sidebar-body .menu-body {
@@ -359,6 +362,7 @@ p {
 }
 
 #sidebar-body .menu-footer-buttons {
+    height: 50px;
     position: absolute;
     bottom: 12px;
     left: 12px;
@@ -375,6 +379,7 @@ p {
     padding: 4px 0;
     font-size: 1.45em;
     border-bottom: 1px solid black;
+    text-align: center;
 }
 
 #sidebar-body .menu-page {
@@ -420,10 +425,6 @@ p {
     background: black;
     height: 100%;
     padding: 2px;
-}
-
-#about-page {
-    text-align: left;
 }
 
 #about-page > .about-section {
@@ -946,6 +947,10 @@ p {
     color: #dd3030;
 }
 
+.title-button.lock-button .partially-locked {
+    color: #ff8f00;
+}
+
 .trash-button:hover .inner-button {
     border-color: #dd3030;
 }
@@ -1035,4 +1040,64 @@ label.settings-option-wrapper input[type="checkbox"], .settings-option-wrapper l
 label.settings-option-wrapper select:focus, .settings-option-wrapper label select:focus,
 label.settings-option-wrapper input:focus, .settings-option-wrapper label input:focus {
     outline: 2px solid white;
+}
+
+.settings-option-wrapper .text-button-wrapper {
+    padding: 6px 10px;
+    text-align: center;
+}
+
+.settings-option-wrapper button.text-button {
+    width: 100%;
+    height: 45px;
+    background: linear-gradient(rgb(91, 91, 91), rgb(62, 62, 62));
+    border: none;
+    box-shadow: 0 0 3px #000;
+    font-size: 1.3em;
+    color: white;
+    margin: 5px 0;
+    padding: 0 15px;
+    transition-duration: 0.125s;
+    cursor: pointer;
+}
+
+.settings-option-wrapper button.text-button:hover {
+    background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
+    font-size: 1.35em;
+    box-shadow: 0 0 5px #000;
+    text-decoration: none;
+}
+
+#save-load-page .facility-name-input {
+    position: relative;
+    padding: 6px;
+}
+
+#save-load-page .edit-icon {
+    position: absolute;
+    top: 12px;
+    font-size: 1.5em;
+    right: 14px;
+    color: #555;
+    pointer-events: none;
+}
+
+#save-load-page .facility-name-input input {
+    width: 100%;
+    height: 36px;
+    color: white;
+    padding: 6px;
+    text-align: center;
+}
+
+#save-load-page .load-button, #save-load-page .save-button {
+    width: 45%;
+    height: 42px;
+    background: linear-gradient(rgb(91, 91, 91), rgb(62, 62, 62));
+    font-size: 1.3em;
+    margin: 10px 3px;
+}
+
+#save-load-page .load-button:hover, #save-load-page .save-button:hover {
+    font-size: 1.35em;
 }

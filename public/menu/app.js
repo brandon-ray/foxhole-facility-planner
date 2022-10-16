@@ -50,7 +50,7 @@ if (isMobile && !isPhoneApp) {
                 }
             },
             template: html`
-            <div ref="app">
+            <div ref="app" :class="{'colonial-faction': game.settings.displayFactionTheme && game.settings.selectedFaction === 'c', 'warden-faction': game.settings.displayFactionTheme && game.settings.selectedFaction === 'w' }">
                 <app-game-game-menu></app-game-game-menu>
                 <app-game-sidebar></app-game-sidebar>
                 
@@ -92,6 +92,9 @@ if (isMobile && !isPhoneApp) {
                     </label>
                     <button class="footer-button" @click="game.tryFullscreen">
                         <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                    </button>
+                    <button class="footer-button" @click="game.zoomToFacilityCenter">
+                        <i class="fa fa-expand" aria-hidden="true"></i>
                     </button>
                     <button class="footer-button" @click="showDeleteConfirmation = true">
                         <i class="fa fa-trash" aria-hidden="true"></i>
