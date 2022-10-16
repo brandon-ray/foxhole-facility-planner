@@ -1257,7 +1257,7 @@ const buildingCategories = {
                             {
                                 time: 120,
                                 input: {
-                                    coal: 60,
+                                    coke: 60,
                                     water: 25
                                 },
                                 output: {

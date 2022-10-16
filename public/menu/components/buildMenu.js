@@ -174,7 +174,7 @@ Vue.component('app-menu-building-selected', {
                     selectedProduction: selectedEntity.selectedProduction,
                     building: selectedEntity.building
                 }
-            } else {
+            } else if (this.entity) {
                 this.entity = null;
             }
             this.$forceUpdate();
