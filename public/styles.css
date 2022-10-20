@@ -525,6 +525,7 @@ p {
 .resource-row > .resource-amount, .resource-col > .resource-amount {
     color: #d50101;
     line-height: 16px;
+    pointer-events: none;
 }
 
 .resource-col.power-production .resource-icon {

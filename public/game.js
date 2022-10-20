@@ -1453,14 +1453,15 @@ const fontFamily = ['Recursive', 'sans-serif'];
             entity.sprite = sprite;
         }
 
-        if (sprite && building.icon && (!building.textureIcon || !building.textureIcon?.disabled)) {
+        let buildingIcon = building.parent?.icon ?? building.icon;
+        if (sprite && buildingIcon && (!building.textureIcon || !building.textureIcon?.disabled)) {
             let iconPadding = 28;
             let iconWidth = sprite.width - iconPadding;
             iconWidth = iconWidth > 128 ? 128 : iconWidth;
             iconWidth = iconWidth > sprite.height ? sprite.height - iconPadding : iconWidth;
             let iconHeight = iconWidth;
             let iconYOffset = 0;
-            let iconTexture = resources[building.icon].texture;
+            let iconTexture = resources[buildingIcon].texture;
 
             if (building.textureIcon) {
                 iconWidth = building.textureIcon.width ?? iconWidth;

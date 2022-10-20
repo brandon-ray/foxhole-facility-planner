@@ -32,14 +32,14 @@ Vue.component('app-game-resource-icon', {
         <div class="resource-col" v-if="column">
             <div class="resource-icon" :title="resourceData.name" :style="style"></div>
             <div class="resource-amount">
-                x{{amount.toLocaleString('en-US')}}<template v-if="resourceData.type === 'liquid'">L</template>
+                x{{amount.toLocaleString('en-US')}}<template v-if="resourceData.isLiquid">L</template>
             </div>
         </div>
         <div class="resource-row" v-else>
             <div class="resource-icon" :title="resourceData.name" :style="style"></div>
             <div class="resource-name">{{resourceData.name}}</div>
             <div class="resource-amount">
-                x{{amount.toLocaleString('en-US')}}<template v-if="resourceData.type === 'liquid'">L</template>
+                x{{amount.toLocaleString('en-US')}}<template v-if="resourceData.isLiquid">L</template>
             </div>
         </div>
     </template>
@@ -60,9 +60,9 @@ Vue.component('app-game-recipe', {
                 <i class="fa fa-play"></i>
             </div>
             <app-game-resource-icon class="produced-resource-output" v-for="(value, key) in recipe.output" :resource="key" :amount="value" :column="true" />
-            <div class="resource-col building-icon power-production" v-if="building.power > 0">
+            <div class="resource-col building-icon power-production" title="Power" v-if="recipe.power > 0 || building.power > 0">
                 <div class="resource-icon"><i class="fa fa-bolt"></i></div>
-                <div class="resource-amount">x{{building.power}}</div>
+                <div class="resource-amount">x{{recipe.power || building.power}}</div>
             </div>
         </div>
     </div>

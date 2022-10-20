@@ -205,10 +205,10 @@ Vue.component('app-menu-building-selected', {
             }
         },
         */
-        changeProduction: function(index) {
+        changeProduction: function(id) {
             this.bmc();
             if (this.entity) {
-                this.entity.selectedProduction = this.entity.selectedProduction !== index ? index : null;
+                this.entity.selectedProduction = this.entity.selectedProduction !== id ? id : null;
                 this.updateEntity();
             }
         },
@@ -293,19 +293,19 @@ Vue.component('app-menu-building-selected', {
                 <div class="settings-title">{{hoverUpgradeName ?? (entity.building.upgradeName ? entity.building.upgradeName : 'No Upgrade Selected')}}</div>
                 <button class="upgrade-button" v-for="(upgrade, key) in entity.building.upgrades" :class="{'selected-upgrade': entity.building.parentKey && entity.building.key === entity.building.parentKey + '_' + key}"
                     @mouseenter="showUpgradeHover(key, upgrade)" @mouseleave="showUpgradeHover" @click="changeUpgrade(key)">
-                    <div class="resource-icon" :title="upgrade.name" :style="{backgroundImage:'url(/assets/' + (upgrade.part ? upgrade.part : (upgrade.icon ? upgrade.icon : entity.building.icon)) + ')'}"></div>
+                    <div class="resource-icon" :title="upgrade.name" :style="{backgroundImage:'url(/assets/' + (upgrade.icon ?? entity.building.icon) + ')'}"></div>
                 </button>
             </div>
             <div v-if="entity.building && entity.building.production && entity.building.production.length" class="settings-option-wrapper">
                 <div class="settings-title">Select Production</div>
                 <div class="production-list">
-                    <template v-for="(production, index) in entity.building.production">
-                        <div class="select-production" v-if="!production.faction || !game.settings.selectedFaction || production.faction == game.settings.selectedFaction" :class="{'selected-production': entity.selectedProduction === index}" @click="changeProduction(index)">
+                    <template v-for="production in entity.building.production">
+                        <div class="select-production" v-if="!production.faction || !game.settings.selectedFaction || production.faction == game.settings.selectedFaction" :class="{'selected-production': entity.selectedProduction === production.id}" @click="changeProduction(production.id)">
                             <app-game-recipe :building="entity.building" :recipe="production"></app-game-recipe>
                             <h6 class="production-requirements">
-                                <span v-if="entity.building.power"><i class="fa fa-bolt"></i> {{production.power ? production.power : entity.building.power}} MW</span>
+                                <span v-if="production.power || entity.building.power" title="Power"><i class="fa fa-bolt"></i> {{production.power || entity.building.power}} MW</span>
                                 &nbsp;&nbsp;&nbsp;
-                                <i class="fa fa-clock-o"></i> {{production.time}}s
+                                <span title="Time"><i class="fa fa-clock-o"></i> {{production.time}}s</span>
                             </h6>
                         </div>
                     </template>
@@ -344,7 +344,7 @@ Vue.component('app-menu-construction-list', {
         </select>
         <div class="construction-items" class="menu-page">
             <template v-for="building in buildings">
-                <div v-if="!building.hideInList && (game.selectedBuildingCategory === 'all' || building.category === game.selectedBuildingCategory) && (!building.parentName || game.settings.showUpgradesAsBuildings)" class="build-icon" :style="{backgroundImage:'url(/assets/' + building.icon + ')'}"
+                <div v-if="!building.hideInList && (game.selectedBuildingCategory === 'all' || building.category === game.selectedBuildingCategory) && (!building.parent || game.settings.showUpgradesAsBuildings)" class="build-icon" :style="{backgroundImage:'url(/assets/' + (building.parent?.icon ?? building.icon) + ')'}"
                     @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" v-on:click="buildBuilding(building)">
                 </div>
             </template>
@@ -416,20 +416,24 @@ Vue.component('app-menu-statistics', {
                         }
                     }
 
-                    if (buildingData.production && buildingData.production.length) {
-                        let productionList = buildingData.production;
-                        if (productionSelected) {
-                            let production = productionList[entity.selectedProduction];
-                            if (production.power) {
-                                power = production.power;
+                    if (productionSelected && buildingData.production && buildingData.production.length) {
+                        let selectedProduction;
+                        buildingData.production.forEach(production => {
+                            if (production.id === entity.selectedProduction) {
+                                selectedProduction = production;
+                            }
+                        });
+                        if (selectedProduction) {
+                            if (selectedProduction.power) {
+                                power = selectedProduction.power;
                             }
 
-                            let productionTime = Math.floor(this.time / production.time);
-                            if (production.input) {
-                                let inputKeys = Object.keys(production.input);
+                            let productionTime = Math.floor(this.time / selectedProduction.time);
+                            if (selectedProduction.input) {
+                                let inputKeys = Object.keys(selectedProduction.input);
                                 for (let j = 0; j < inputKeys.length; j++) {
                                     let key = inputKeys[j];
-                                    let value = production.input[key];
+                                    let value = selectedProduction.input[key];
                                     if (!input[key]) {
                                         input[key] = 0;
                                     }
@@ -437,11 +441,11 @@ Vue.component('app-menu-statistics', {
                                 }
                             }
 
-                            if (production.output) {
-                                let outputKeys = Object.keys(production.output);
+                            if (selectedProduction.output) {
+                                let outputKeys = Object.keys(selectedProduction.output);
                                 for (let j = 0; j < outputKeys.length; j++) {
                                     let key = outputKeys[j];
-                                    let value = production.output[key];
+                                    let value = selectedProduction.output[key];
                                     if (!output[key]) {
                                         output[key] = 0;
                                     }
@@ -516,7 +520,7 @@ Vue.component('app-menu-statistics', {
                 <option value="60">Per 1 Minute</option>
             </select>
             <br><br>
-            <app-game-resource-icon :resource="'garrison_supplies'" :amount="garrisonSupplies"/>
+            <app-game-resource-icon :resource="'garrisonsupplies'" :amount="garrisonSupplies"/>
             <br>
             <h4><i class="fa fa-sign-in"></i> Facility Input</h4>
             <div class="statistics-panel-fac-input">
