@@ -715,6 +715,7 @@ p {
 }
 
 #hover-building-info {
+    width: 600px;
     background: #1a1a1a;
     border: 2px solid black;
     box-shadow: 0 0 10px black;
@@ -722,7 +723,6 @@ p {
     top: 15px;
     left: 365px;
     text-align: left;
-    max-width: 600px;
     z-index: 100;
     pointer-events: none;
 }
@@ -760,9 +760,18 @@ p {
     padding: 10px;
 }
 
-#hover-building-info > .building-info-body > p.building-info-description {
+#hover-building-info > .building-info-body > p.building-info-description, #hover-building-info > .building-info-body > p.building-tech-description {
     margin-bottom: 10px;
     padding: 0;
+}
+
+#hover-building-info > .building-info-body > p.building-tech-description {
+    font-size: 0.95em;
+    color: #0ff;
+}
+
+#hover-building-info > .building-info-body > p.building-tech-description span {
+    color: #00e7ff;
 }
 
 #hover-building-info > .building-info-body > .building-info-production {

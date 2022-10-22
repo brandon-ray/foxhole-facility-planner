@@ -5,6 +5,7 @@ const foxholeDataVariable = 'const foxholeData = ';
 let foxholeData = JSON.parse(fs.readFileSync('./public/foxholeData.js').toString().substring(foxholeDataVariable.length));
 
 let structureList = foxholeData.buildings;
+let techList = {};
 let itemList = {};
 
 // Switch IDs for CodeNames so the parser has an easier time identifying entries as their Foxhole counterpart.
@@ -36,7 +37,7 @@ const liquidResourceMap = {
 }
 
 function getLocalIcon(component) {
-    let iconPath = component?.Icon?.ObjectPath ?? component?.Icon?.ResourceObject?.ObjectPath;
+    let iconPath = component?.Icon?.ObjectPath ?? component?.Icon?.ResourceObject?.ObjectPath ?? component?.BrushOverride?.ResourceObject?.ObjectPath;
     if (iconPath) {
         return `game/${iconPath.slice(12, -1)}webp`;
     }
@@ -151,6 +152,7 @@ function iterateStructures(dirPath) {
                                     'textureIcon': structureData.textureIcon,
                                     'garrisonSupplyMultiplier': structure.DecaySupplyDrain ?? baseData.garrisonSupplyMultiplier,
                                     'power': (structure.PowerGridInfo?.PowerDelta ?? baseData.power) / 1000 || undefined,
+                                    'techId': structure.TechID && (structure.TechID !== 'ETechID::None') ? structure.TechID.substring(9).toLowerCase() : undefined,
                                     'cost': baseData.cost,
                                     '_productionLength': structureData._productionLength,
                                     'production': structureData.production,
@@ -159,6 +161,9 @@ function iterateStructures(dirPath) {
                                     'upgrades': structureData.upgrades
                                 }
                                 initializeStructureItems(structure);
+                                if (structureList[structureCodeName].techId) {
+                                    techList[structureList[structureCodeName].techId] = {};
+                                }
                                 if (structure.Modifications) {
                                     for (const [id, modification] of Object.entries(structure.Modifications)) {
                                         initializeStructureItems(modification);
@@ -175,14 +180,16 @@ function iterateStructures(dirPath) {
                                 const modificationData = modificationsData[codeName];
                                 if (codeName !== 'EFortModificationType::Default') {
                                     const displayName = codeName.substring(23);
-                                    const storedModData = structureData?.upgrades[displayName.toLowerCase()];
+                                    const modificationCodeName = displayName.toLowerCase();
+                                    const storedModData = structureData?.upgrades[modificationCodeName];
                                     modifications = modifications ?? {};
-                                    modifications[displayName.toLowerCase()] = {
+                                    modifications[modificationCodeName] = {
                                         'id': storedModData?.id,
                                         'name': modification.DisplayName?.SourceString ?? displayName,
                                         'codeName': displayName,
                                         'description': modification.Description?.SourceString ?? 'No Description Provided.',
                                         'icon': getLocalIcon(modification),
+                                        'techId': modification.TechID && (modification.TechID !== 'ETechID::None') ? modification.TechID.substring(9).toLowerCase() : undefined,
                                         'cost': undefined,
                                         '_productionLength': storedModData?._productionLength,
                                         'production': storedModData?.production,
@@ -190,10 +197,13 @@ function iterateStructures(dirPath) {
                                         'ConversionEntries': modificationData?.ConversionEntries
                                         // There is a FuelCost variable which is never used here.
                                     }
+                                    if (modifications[modificationCodeName].techId) {
+                                        techList[modifications[modificationCodeName].techId] = {};
+                                    }
                                     if (modification.Tiers) {
                                         for (let [tier, tierData] of Object.entries(modification.Tiers)) {
                                             if (tierData.ResourceAmounts) {
-                                                modifications[displayName.toLowerCase()].cost = getResourceCosts(tierData.ResourceAmounts);
+                                                modifications[modificationCodeName].cost = getResourceCosts(tierData.ResourceAmounts);
                                                 break; // Unsure how tiers work yet, and just want to make sure we don't get any extra data.
                                             }
                                         }
@@ -289,7 +299,6 @@ function iterateData(filePath, list, isItem) {
     }
 }
 
-// War/Content/Blueprints/Data/BPItemDynamicData.json - Doesn't appear to have any useful information ATM.
 iterateData('War/Content/Blueprints/Data/BPVehicleDynamicData.json', itemList, true);
 iterateData('War/Content/Blueprints/Data/BPStructureDynamicData.json', itemList, true); // Check for items in the structure data... Yes, Material Pallet is stored here.
 iterateData('War/Content/Blueprints/Data/BPStructureDynamicData.json', structureList);
@@ -329,6 +338,17 @@ function iterateAssets(dirPath) {
                                 'isLiquid': item.bIsLiquid ?? baseData.isLiquid,
                                 'cost': itemList[codeName]?.cost
                             };
+                        }
+                    } else if (item.ItemInfo) {
+                        for (const [codeName, techInfo] of Object.entries(item.ItemInfo)) {
+                            let techCodeName = codeName.substring(9).toLowerCase();
+                            if (techList[techCodeName]) {
+                                techList[techCodeName] = {
+                                    'name': techInfo.DisplayNameOverride?.SourceString,
+                                    'description': techInfo.DescriptionOverride?.SourceString,
+                                    'icon': getLocalIcon(techInfo)
+                                }
+                            }
                         }
                     }
                 }
@@ -442,6 +462,9 @@ function updateProductionRecipes(component) {
         });
         component._productionLength = id;
         component.production = constructionRecipes;
+    } else if ((typeof component._productionLength !== 'undefined') || component.production) {
+        delete component._productionLength;
+        delete component.production;
     }
 }
 
@@ -482,6 +505,7 @@ function sortList(list) {
 }
 
 fs.writeFile('public/foxholeData.js', foxholeDataVariable + JSON.stringify({
+    'tech': sortList(techList),
     'resources': sortList(itemList),
     'buildings': sortList(structureList)
 }, null, '\t'), err => {

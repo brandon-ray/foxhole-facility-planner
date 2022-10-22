@@ -1,4 +1,16 @@
 const foxholeData = {
+	"tech": {
+		"unlockfacilitytier2": {
+			"name": "Facilities (Tier 2)",
+			"description": "Allows for the construction of advanced Facilities structures.",
+			"icon": "game/Textures/UI/StructureIcons/FacilityRefinery2Icon.webp"
+		},
+		"unlockfacilitytier3": {
+			"name": "Facilities (Tier 3)",
+			"description": "Allows for the construction of specialized Facilities structures.",
+			"icon": "game/Textures/UI/StructureIcons/FacilityRefinery2Icon.webp"
+		}
+	},
 	"resources": {
 		"armoredcaratw": {
 			"name": "O’Brien V.113 Gravekeeper",
@@ -632,6 +644,7 @@ const foxholeData = {
 			"length": 14,
 			"icon": "game/Textures/UI/ItemIcons/AmmoFactoryBaseIcon.webp",
 			"power": -4,
+			"techId": "unlockfacilitytier2",
 			"cost": {
 				"facilitymaterials2": 25
 			},
@@ -666,6 +679,7 @@ const foxholeData = {
 					"codeName": "RocketFactory",
 					"description": "Produces various types of Rockets.",
 					"icon": "game/Textures/UI/ItemIcons/AmmoFactoryRocketFacilityModIcon.webp",
+					"techId": "unlockfacilitytier2",
 					"cost": {
 						"facilitymaterials2": 35
 					},
@@ -701,6 +715,7 @@ const foxholeData = {
 					"codeName": "LargeShellFactory",
 					"description": "Produces large calibre ordinance for use with tanks and artillery.",
 					"icon": "game/Textures/UI/ItemIcons/AmmoFactoryLargeShellFactoryModIcon.webp",
+					"techId": "unlockfacilitytier2",
 					"cost": {
 						"facilitymaterials2": 175
 					},
@@ -783,6 +798,7 @@ const foxholeData = {
 				"height": 96
 			},
 			"power": -0.5,
+			"techId": "unlockfacilitytier2",
 			"cost": {
 				"facilitymaterials2": 10
 			}
@@ -842,6 +858,7 @@ const foxholeData = {
 					"codeName": "CoalLiquefier",
 					"description": "Processing vats that refines Coal into Oil.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityCoalLiquefierIcon.webp",
+					"techId": "unlockfacilitytier2",
 					"cost": {
 						"facilitymaterials2": 20
 					},
@@ -867,6 +884,7 @@ const foxholeData = {
 					"codeName": "AdvCoalLiquefier",
 					"description": "Advanced processing vats that refine large amounts of coal into Heavy Oil.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityAdvancedCoalLiquefierIcon.webp",
+					"techId": "unlockfacilitytier3",
 					"cost": {
 						"facilitymaterials3": 65
 					},
@@ -948,6 +966,7 @@ const foxholeData = {
 				"height": 160
 			},
 			"power": -8,
+			"techId": "unlockfacilitytier2",
 			"cost": {
 				"facilitymaterials2": 250
 			}
@@ -1037,6 +1056,7 @@ const foxholeData = {
 				"width": 64,
 				"height": 96
 			},
+			"techId": "unlockfacilitytier2",
 			"cost": {
 				"facilitymaterials1": 15
 			}
@@ -1055,6 +1075,7 @@ const foxholeData = {
 				"height": 160
 			},
 			"power": -8,
+			"techId": "unlockfacilitytier2",
 			"cost": {
 				"facilitymaterials2": 250
 			},
@@ -1115,6 +1136,7 @@ const foxholeData = {
 					"codeName": "TrainAssembly",
 					"description": "An assembly station for producing train cars.",
 					"icon": "game/Textures/UI/ItemIcons/TrainAssemblyStation.webp",
+					"techId": "unlockfacilitytier3",
 					"cost": {
 						"facilitymaterials3": 150
 					},
@@ -1166,6 +1188,7 @@ const foxholeData = {
 					"codeName": "HeavyTankAssembly",
 					"description": "An assembly station for producing heavy tank class vehicles.",
 					"icon": "game/Textures/UI/ItemIcons/HeavyTankAssemblyStation.webp",
+					"techId": "unlockfacilitytier3",
 					"cost": {
 						"facilitymaterials3": 150
 					},
@@ -1530,6 +1553,7 @@ const foxholeData = {
 					"codeName": "ArtilleryFactory",
 					"description": "An assembly station for producing half-tracks and rocket vehicles.",
 					"icon": "game/Textures/UI/ItemIcons/ArtilleryFactoryIcon.webp",
+					"techId": "unlockfacilitytier2",
 					"cost": {
 						"facilitymaterials2": 65
 					},
@@ -1637,6 +1661,7 @@ const foxholeData = {
 					"codeName": "LightVehicleAssembly",
 					"description": "An assembly station for producing field weapons and utility vehicles such as Harvesters.",
 					"icon": "game/Textures/UI/ItemIcons/LightVehicleAssemblyIcon.webp",
+					"techId": "unlockfacilitytier2",
 					"cost": {
 						"facilitymaterials2": 25
 					},
@@ -1724,6 +1749,7 @@ const foxholeData = {
 					"codeName": "TankAssembly",
 					"description": "An assembly station for producing tank class vehicles.",
 					"icon": "game/Textures/UI/ItemIcons/TankAssemblyIcon.webp",
+					"techId": "unlockfacilitytier2",
 					"cost": {
 						"facilitymaterials2": 200
 					},
@@ -1902,6 +1928,7 @@ const foxholeData = {
 					"codeName": "WeaponsPlatformAssembly",
 					"description": "An assembly station for producing emplaced weapon platforms and specialized tanks.",
 					"icon": "game/Textures/UI/ItemIcons/WeaponPlatfromAssemblyIcon.webp",
+					"techId": "unlockfacilitytier3",
 					"cost": {
 						"facilitymaterials3": 20
 					},
@@ -2191,6 +2218,7 @@ const foxholeData = {
 				"height": 160
 			},
 			"power": -5,
+			"techId": "unlockfacilitytier2",
 			"cost": {
 				"facilitymaterials1": 125
 			},
@@ -2306,6 +2334,7 @@ const foxholeData = {
 					"codeName": "EngineeringStation",
 					"description": "An expanded workshop for manual process of delicate materials.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityEngineeringStationIcon.webp",
+					"techId": "unlockfacilitytier3",
 					"cost": {
 						"facilitymaterials2": 150
 					},
@@ -2412,6 +2441,7 @@ const foxholeData = {
 					"codeName": "CrackingUnit",
 					"description": "A high-heat furnace that catalyses raw oil into refined Heavy Oil.",
 					"icon": "game/Textures/UI/StructureIcons/OilRefineryMod2Icon.webp",
+					"techId": "unlockfacilitytier2",
 					"cost": {
 						"facilitymaterials2": 20
 					},
@@ -2435,6 +2465,7 @@ const foxholeData = {
 					"codeName": "PetrochemicalPlant",
 					"description": "A blast furnace that further refines Heavy Oil into an Enriched Oil needed for advanced processes.",
 					"icon": "game/Textures/UI/ItemIcons/OilRefineryPetrochemicalPlanetIcon.webp",
+					"techId": "unlockfacilitytier3",
 					"cost": {
 						"facilitymaterials3": 25
 					},
@@ -2484,6 +2515,7 @@ const foxholeData = {
 					"codeName": "Electric",
 					"description": "A generator that leverages electricity to pump oil through attached pipes.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityElectricOilWellIcon.webp",
+					"techId": "unlockfacilitytier2",
 					"cost": {
 						"facilitymaterials2": 25
 					},
@@ -2512,6 +2544,7 @@ const foxholeData = {
 					"codeName": "Fracker",
 					"description": "A machine that opens up cracks in the earth by injecting water at a high pressure to increase the output of Crude Oil.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityFrackerIcon.webp",
+					"techId": "unlockfacilitytier3",
 					"cost": {
 						"facilitymaterials3": 25
 					},
@@ -2582,6 +2615,7 @@ const foxholeData = {
 				"height": 224
 			},
 			"power": 15,
+			"techId": "unlockfacilitytier2",
 			"cost": {
 				"facilitymaterials2": 25
 			},
@@ -2611,6 +2645,7 @@ const foxholeData = {
 					"codeName": "SulfuricReactor",
 					"description": "A reactor that combines Water with Heavy Oil or refined Coke, resulting in a more pure natural gas, which in turn is more efficient at generating power. Chunks of raw Sulfur are created as a byproduct.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityPowerOilReactorIcon.webp",
+					"techId": "unlockfacilitytier3",
 					"cost": {
 						"facilitymaterials3": 25
 					},
@@ -2739,6 +2774,7 @@ const foxholeData = {
 			"width": 5,
 			"length": 7,
 			"icon": "game/Textures/UI/StructureIcons/FacilityMineResource4Icon.webp",
+			"techId": "unlockfacilitytier2",
 			"cost": {
 				"facilitymaterials2": 25
 			},
@@ -2786,6 +2822,7 @@ const foxholeData = {
 					"codeName": "Excavator",
 					"description": "Improves component excavation.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityExcavatorIcon.webp",
+					"techId": "unlockfacilitytier2",
 					"cost": {
 						"facilitymaterials2": 75
 					},
@@ -2838,6 +2875,7 @@ const foxholeData = {
 			"width": 5,
 			"length": 7,
 			"icon": "game/Textures/UI/StructureIcons/FacilityMineResource3Icon.webp",
+			"techId": "unlockfacilitytier3",
 			"cost": {
 				"facilitymaterials3": 20
 			},

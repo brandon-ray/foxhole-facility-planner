@@ -29,6 +29,7 @@ const buildingCategories = {
 //https://foxhole.fandom.com/wiki/Category:Icons
 (function() {
     window.objectData = {
+        "tech": foxholeData.tech,
         "resources": foxholeData.resources,
         "buildings": foxholeData.buildings
     };

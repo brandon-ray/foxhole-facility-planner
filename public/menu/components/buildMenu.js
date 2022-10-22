@@ -119,6 +119,9 @@ Vue.component('app-game-sidebar', {
             </div>
             <div class="building-info-body">
                 <p class="building-info-description">{{hoverData.description}}</p>
+                <p class="building-tech-description" v-if="hoverData.techId">
+                    <span>Requires Tech:</span> {{window.objectData.tech[hoverData.techId]?.name}}
+                </p>
                 <div class="building-info-production" v-if="hoverData.production && hoverData.production.length && hoverData.production.hasOutput">
                     <template v-for="(recipe, index) in hoverData.production">
                         <app-game-recipe v-if="!recipe.faction || !game.settings.selectedFaction || recipe.faction == game.settings.selectedFaction" :building="hoverData" :recipe="recipe"></app-game-recipe>
