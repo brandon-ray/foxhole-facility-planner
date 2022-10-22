@@ -428,19 +428,21 @@ function updateProductionRecipes(component) {
         });
         delete component.AssemblyItems;
     }
-    constructionRecipes.forEach(newRecipe => {
-        let oldId = undefined;
-        component.production?.every(oldRecipe => {
-            if (compareRecipe(oldRecipe, newRecipe)) {
-                oldId = oldRecipe.id;
-                return false;
-            }
-            return true;
+    if (constructionRecipes.length) {
+        constructionRecipes.forEach(newRecipe => {
+            let oldId = undefined;
+            component.production?.every(oldRecipe => {
+                if (compareRecipe(oldRecipe, newRecipe)) {
+                    oldId = oldRecipe.id;
+                    return false;
+                }
+                return true;
+            });
+            newRecipe.id = oldId ?? id++;
         });
-        newRecipe.id = oldId ?? id++;
-    });
-    component._productionLength = id;
-    component.production = constructionRecipes;
+        component._productionLength = id;
+        component.production = constructionRecipes;
+    }
 }
 
 for (let [codeName, structure] of Object.entries(structureList)) {

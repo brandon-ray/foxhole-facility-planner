@@ -785,9 +785,7 @@ const foxholeData = {
 			"power": -0.5,
 			"cost": {
 				"facilitymaterials2": 10
-			},
-			"_productionLength": 0,
-			"production": []
+			}
 		},
 		"coal_refinery": {
 			"name": "Coal Refinery",
@@ -952,9 +950,7 @@ const foxholeData = {
 			"power": -8,
 			"cost": {
 				"facilitymaterials2": 250
-			},
-			"_productionLength": 0,
-			"production": []
+			}
 		},
 		"foundation_1x1": {
 			"name": "Foundation (1x1)",
@@ -972,9 +968,7 @@ const foxholeData = {
 			"garrisonSupplyMultiplier": 2,
 			"cost": {
 				"groundmaterials": 75
-			},
-			"_productionLength": 0,
-			"production": []
+			}
 		},
 		"foundation_1x2": {
 			"name": "Foundation (1x2)",
@@ -992,9 +986,7 @@ const foxholeData = {
 			"garrisonSupplyMultiplier": 2,
 			"cost": {
 				"groundmaterials": 115
-			},
-			"_productionLength": 0,
-			"production": []
+			}
 		},
 		"foundation_2x2": {
 			"name": "Foundation (2x2)",
@@ -1012,9 +1004,7 @@ const foxholeData = {
 			"garrisonSupplyMultiplier": 2,
 			"cost": {
 				"groundmaterials": 150
-			},
-			"_productionLength": 0,
-			"production": []
+			}
 		},
 		"foundation_corner": {
 			"name": "Foundation Corner (1x1)",
@@ -1032,9 +1022,7 @@ const foxholeData = {
 			"garrisonSupplyMultiplier": 2,
 			"cost": {
 				"groundmaterials": 75
-			},
-			"_productionLength": 0,
-			"production": []
+			}
 		},
 		"fuel_silo": {
 			"name": "Fuel Silo",
@@ -1051,9 +1039,7 @@ const foxholeData = {
 			},
 			"cost": {
 				"facilitymaterials1": 15
-			},
-			"_productionLength": 0,
-			"production": []
+			}
 		},
 		"large_assembly_factory": {
 			"name": "Large Assembly Factory",
@@ -1996,9 +1982,7 @@ const foxholeData = {
 			},
 			"cost": {
 				"facilitymaterials1": 35
-			},
-			"_productionLength": 0,
-			"production": []
+			}
 		},
 		"maintenance_tunnel": {
 			"name": "Maintenance Tunnel",
@@ -2048,9 +2032,7 @@ const foxholeData = {
 			},
 			"cost": {
 				"facilitymaterials1": 35
-			},
-			"_productionLength": 0,
-			"production": []
+			}
 		},
 		"materials_factory": {
 			"name": "Materials Factory",
@@ -2575,8 +2557,6 @@ const foxholeData = {
 			"cost": {
 				"cloth": 20
 			},
-			"_productionLength": 0,
-			"production": [],
 			"upgrades": {
 				"lamp": {
 					"name": "Lamp",
@@ -2585,9 +2565,7 @@ const foxholeData = {
 					"icon": "game/Textures/UI/StructureIcons/PowerPoleLightIcon.webp",
 					"cost": {
 						"facilitymaterials1": 5
-					},
-					"_productionLength": 0,
-					"production": []
+					}
 				}
 			}
 		},
@@ -2682,9 +2660,7 @@ const foxholeData = {
 			"garrisonSupplyMultiplier": 3,
 			"cost": {
 				"groundmaterials": 150
-			},
-			"_productionLength": 0,
-			"production": []
+			}
 		},
 		"rail_large_gauge": {
 			"name": "Railway Track (Biarc)",
@@ -2703,9 +2679,7 @@ const foxholeData = {
 			},
 			"cost": {
 				"facilitymaterials2": 5
-			},
-			"_productionLength": 0,
-			"production": []
+			}
 		},
 		"rail_small_gauge": {
 			"name": "Small Gauge Railway Track (Biarc)",
@@ -2724,9 +2698,7 @@ const foxholeData = {
 			},
 			"cost": {
 				"facilitymaterials1": 25
-			},
-			"_productionLength": 0,
-			"production": []
+			}
 		},
 		"resource_transfer_station": {
 			"name": "Resource Transfer Station",
@@ -2743,9 +2715,7 @@ const foxholeData = {
 			},
 			"cost": {
 				"facilitymaterials1": 35
-			},
-			"_productionLength": 0,
-			"production": []
+			}
 		},
 		"sound_test": {
 			"name": "Sus",
@@ -2759,9 +2729,7 @@ const foxholeData = {
 				"width": 220,
 				"height": 184,
 				"border": false
-			},
-			"_productionLength": 0,
-			"production": []
+			}
 		},
 		"stationary_harvester_coal": {
 			"name": "Stationary Harvester (Coal)",
