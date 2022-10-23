@@ -416,7 +416,7 @@ p {
     border: 2px solid #090909;
 }
 
-#construction-page .construction-tech-button {
+#construction-page .construction-settings-button, #construction-page .construction-tech-button {
     width: 69px;
     height: 100%;
     background: #141414;
@@ -425,11 +425,18 @@ p {
     padding: 0;
     position: absolute;
     top: 0;
-    left: 0;
+    left: 42px;
     cursor: pointer;
 }
 
-#construction-page .construction-tech-button:hover {
+#construction-page .construction-settings-button {
+    width: 40px;
+    left: 0;
+    line-height: 40px;
+    font-size: 1.4em;
+}
+
+#construction-page .construction-settings-button:hover, #construction-page .construction-tech-button:hover {
     background: #222;
     border-color: white;
 }
@@ -438,7 +445,7 @@ p {
     height: 100%;
     position: absolute;
     top: 0;
-    left: 70px;
+    left: 112px;
     right: 0;
 }
 

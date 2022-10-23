@@ -326,9 +326,6 @@ Vue.component('app-menu-construction-list', {
             buildings: window.objectData.buildings_list
         };
     },
-    mounted() {
-        this.refresh();
-    },
     methods: {
         refresh: function() {
             this.$forceUpdate();
@@ -353,6 +350,7 @@ Vue.component('app-menu-construction-list', {
     template: html`
     <div id="construction-page">
         <div class="construction-filter-wrapper">
+            <button class="construction-settings-button" @click="game.sidebarMenuComponent?.changeMenu('settings')" title="Filter Settings"><i class="fa fa-sliders" aria-hidden="true"></i></button>
             <button class="construction-tech-button" @click="incrementTier" title="Filter by Tier">{{'Tier ' + game.settings.selectedTier}}</button>
             <div class="construction-category-wrapper">
                 <select class="app-input construction-category" @click="bmc" title="Filter by Category" v-model="game.selectedBuildingCategory" @change="refresh">
