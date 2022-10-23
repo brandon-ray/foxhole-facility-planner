@@ -326,9 +326,20 @@ Vue.component('app-menu-construction-list', {
             buildings: window.objectData.buildings_list
         };
     },
+    mounted() {
+        this.refresh();
+    },
     methods: {
         refresh: function() {
             this.$forceUpdate();
+        },
+        incrementTier: function() {
+            this.bmc();
+            game.settings.selectedTier++
+            if (game.settings.selectedTier >= 4) {
+                game.settings.selectedTier = 1;
+            }
+            game.updateSettings();
         },
         buildBuilding: function(building) {
             this.bmc();
@@ -341,14 +352,22 @@ Vue.component('app-menu-construction-list', {
     },
     template: html`
     <div id="construction-page">
-        <select class="app-input construction-category" v-model="game.selectedBuildingCategory" @change="refresh">
-            <option value="all">All Buildings</option>
-            <option v-for="(category, key) in buildingCategories" v-bind:value="key">{{category.name}}</option>
-        </select>
+        <div class="construction-filter-wrapper">
+            <button class="construction-tech-button" @click="incrementTier" title="Filter by Tier">{{'Tier ' + game.settings.selectedTier}}</button>
+            <div class="construction-category-wrapper">
+                <select class="app-input construction-category" @click="bmc" title="Filter by Category" v-model="game.selectedBuildingCategory" @change="refresh">
+                    <option value="all">All Buildings</option>
+                    <option v-for="(category, key) in buildingCategories" v-bind:value="key">{{category.name}}</option>
+                </select>
+            </div>
+        </div>
         <div class="construction-items" class="menu-page">
             <template v-for="building in buildings">
-                <div v-if="!building.hideInList && (game.selectedBuildingCategory === 'all' || building.category === game.selectedBuildingCategory) && (!building.parent || game.settings.showUpgradesAsBuildings)" class="build-icon" :style="{backgroundImage:'url(/assets/' + (building.parent?.icon ?? building.icon) + ')'}"
-                    @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" v-on:click="buildBuilding(building)">
+                <div v-if="!building.hideInList && (game.selectedBuildingCategory === 'all' || building.category === game.selectedBuildingCategory) &&
+                    (!building.parent || game.settings.showUpgradesAsBuildings) &&
+                    (!building.techId || (game.settings.selectedTier === 2 && building.techId === 'unlockfacilitytier2') || game.settings.selectedTier === 3)"
+                    class="build-icon" :style="{backgroundImage:'url(/assets/' + (building.parent?.icon ?? building.icon) + ')'}"
+                    @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" @click="buildBuilding(building)">
                 </div>
             </template>
         </div>

@@ -408,17 +408,53 @@ p {
     padding: 1px;
 }
 
+#construction-page .construction-filter-wrapper {
+    width: 100%;
+    height: 45px;
+    background: #090909;
+    position: relative;
+    border: 2px solid #090909;
+}
+
+#construction-page .construction-tech-button {
+    width: 69px;
+    height: 100%;
+    background: #141414;
+    color: white;
+    border: 1px solid transparent;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+}
+
+#construction-page .construction-tech-button:hover {
+    background: #222;
+    border-color: white;
+}
+
+#construction-page .construction-category-wrapper {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 70px;
+    right: 0;
+}
+
 #construction-page .construction-category {
     background: #141414;
     width: 100%;
-    line-height: 30px;
+    height: 100%;
+    border: 1px solid transparent;
     border-radius: 0;
-    font-size: 1.3em;
-    padding: 10px;
+    font-size: 1.1em;
+    padding: 0 10px;
+    cursor: pointer;
 }
 
-#construction-page .construction-category:focus {
-    border: 1px solid white;
+#construction-page .construction-category:hover, #construction-page .construction-category:focus {
+    border-color: white;
 }
 
 #construction-page .construction-items {

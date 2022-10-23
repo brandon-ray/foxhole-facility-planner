@@ -10,9 +10,10 @@ const game = {
         enableSnapRotation: true,
         snapRotationDegrees: 15,
         selectedFaction: null,
+        selectedTier: 3,
         displayFactionTheme: true,
         defaultBuildingCategory: 'all',
-        showUpgradesAsBuildings: true,
+        showUpgradesAsBuildings: false,
         showFacilityName: true,
         showRanges: false,
         volume: 1
