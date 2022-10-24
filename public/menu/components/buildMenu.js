@@ -613,7 +613,7 @@ Vue.component('app-menu-settings', {
             </label>
             <label class="app-input-label">
                 <i class="fa fa-sitemap" aria-hidden="true"></i> Selected Tech Tier
-                <select class="app-input" v-model="game.settings.selectedTier" @change="game.updateSettings">
+                <select class="app-input" v-model.number="game.settings.selectedTier" @change="game.updateSettings">
                     <option value="1">Tier 1</option>
                     <option value="2">Tier 2</option>
                     <option value="3">Tier 3</option>
