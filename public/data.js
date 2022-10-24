@@ -60,6 +60,7 @@ const buildingCategories = {
                         upgradeBuildingCost[resource] = amount;
                     }
                 }
+                upgradeBuilding.upgradeCost = upgradeBuilding.cost;
                 upgradeBuilding.cost = upgradeBuildingCost;
 
                 window.objectData.buildings[buildingKey + '_' + upgradeKey] = upgradeBuilding;

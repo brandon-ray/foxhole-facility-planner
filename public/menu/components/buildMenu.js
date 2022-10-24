@@ -128,7 +128,7 @@ Vue.component('app-game-sidebar', {
                     </template>
                 </div>
                 <div class="building-cost">
-                    <app-game-resource-icon v-for="(value, key) in hoverData.cost" :resource="key" :amount="value"/>
+                    <app-game-resource-icon v-for="(value, key) in (hoverData.upgradeCost ?? hoverData.cost)" :resource="key" :amount="value"/>
                 </div>
                 <div class="power-cost" v-if="hoverData.power < 0">
                     <i class="fa fa-bolt"></i> {{hoverData.power}} MW
@@ -598,13 +598,29 @@ Vue.component('app-menu-settings', {
             <div class="settings-title">Construction Settings</div>
             <label class="app-input-label">
                 <i class="fa fa-folder-open" aria-hidden="true"></i> Default Category
-                <select class="app-input construction-category" v-model="game.settings.defaultBuildingCategory" @change="game.updateSettings">
+                <select class="app-input" v-model="game.settings.defaultBuildingCategory" @change="game.updateSettings">
                     <option value="all">All Buildings</option>
                     <option v-for="(category, key) in buildingCategories" v-bind:value="key">{{category.name}}</option>
                 </select>
             </label>
             <label class="app-input-label">
-                <i class="fa fa-filter" aria-hidden="true"></i> Show Upgrades in Building List
+                <i class="fa fa-users" aria-hidden="true"></i> Selected Faction
+                <select class="app-input" v-model="game.settings.selectedFaction" @change="game.updateSettings">
+                    <option :value="null">Neutral</option>
+                    <option value="c">Colonials</option>
+                    <option value="w">Wardens</option>
+                </select>
+            </label>
+            <label class="app-input-label">
+                <i class="fa fa-sitemap" aria-hidden="true"></i> Selected Tech Tier
+                <select class="app-input" v-model="game.settings.selectedTier" @change="game.updateSettings">
+                    <option value="1">Tier 1</option>
+                    <option value="2">Tier 2</option>
+                    <option value="3">Tier 3</option>
+                </select>
+            </label>
+            <label class="app-input-label">
+                <i class="fa fa-chevron-circle-up" aria-hidden="true"></i> Show Upgrades in Building List
                 <input class="app-input" type="checkbox" v-model="game.settings.showUpgradesAsBuildings" @change="game.updateSettings">
             </label>
         </div>
