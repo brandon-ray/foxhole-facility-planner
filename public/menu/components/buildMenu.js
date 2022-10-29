@@ -332,7 +332,7 @@ Vue.component('app-menu-construction-list', {
         },
         incrementTier: function() {
             this.bmc();
-            game.settings.selectedTier++
+            game.settings.selectedTier++;
             if (game.settings.selectedTier >= 4) {
                 game.settings.selectedTier = 1;
             }

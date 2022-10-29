@@ -143,7 +143,7 @@ function iterateStructures(dirPath) {
                                     'length': structureData.length,
                                     'range': structureData.range,
                                     'rangeColor': structureData.rangeColor,
-                                    'overlapDist': structure.overlapDist,
+                                    'overlapDist': structureData.overlapDist,
                                     'sortOffset': structureData.sortOffset,
                                     'isBezier': structureData.isBezier,
                                     'maxLength': structureData.maxLength,
@@ -153,7 +153,7 @@ function iterateStructures(dirPath) {
                                     'garrisonSupplyMultiplier': structure.DecaySupplyDrain ?? baseData.garrisonSupplyMultiplier,
                                     'power': (structure.PowerGridInfo?.PowerDelta ?? baseData.power) / 1000 || undefined,
                                     'techId': structure.TechID && (structure.TechID !== 'ETechID::None') ? structure.TechID.substring(9).toLowerCase() : undefined,
-                                    'cost': baseData.cost,
+                                    'cost': structureData.cost ?? baseData.cost,
                                     '_productionLength': structureData._productionLength,
                                     'production': structureData.production,
                                     'AssemblyItems': structure.AssemblyItems,
@@ -201,11 +201,9 @@ function iterateStructures(dirPath) {
                                         techList[modifications[modificationCodeName].techId] = {};
                                     }
                                     if (modification.Tiers) {
-                                        for (let [tier, tierData] of Object.entries(modification.Tiers)) {
-                                            if (tierData.ResourceAmounts) {
-                                                modifications[modificationCodeName].cost = getResourceCosts(tierData.ResourceAmounts);
-                                                break; // Unsure how tiers work yet, and just want to make sure we don't get any extra data.
-                                            }
+                                        const tierData = modification.Tiers['EFortTier::T1'];
+                                        if (tierData) {
+                                            modifications[modificationCodeName].cost = getResourceCosts(tierData.ResourceAmounts);
                                         }
                                     }
                                 }

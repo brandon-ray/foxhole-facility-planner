@@ -2020,6 +2020,7 @@ const foxholeData = {
 			"width": 3,
 			"length": 3,
 			"range": 40,
+			"overlapDist": 65,
 			"sortOffset": 1000000,
 			"icon": "game/Textures/UI/StructureIcons/TunnelNetworkStructureIcon.webp",
 			"textureIcon": {
