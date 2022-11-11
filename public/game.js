@@ -122,7 +122,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
     let entities = [];
     let selectedEntities = [];
-    let selectedBezierPoint = null;
+    let selectedHandlePoint = null;
     let pickupSelectedEntities = false;
     let pickupTime = null;
     let pickupPosition = null;
@@ -183,6 +183,14 @@ const fontFamily = ['Recursive', 'sans-serif'];
             } else {
                 asset_list[building.texture] = building.texture;
             }
+        }
+        
+        if (building.textureFrontCap) {
+            asset_list[building.textureFrontCap] = building.textureFrontCap;
+        }
+        
+        if (building.textureBackCap) {
+            asset_list[building.textureBackCap] = building.textureBackCap;
         }
     }
 
@@ -884,11 +892,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
         let mouseButton = e.button;
         mouseDown[mouseButton] = true;
         if (mouseButton === 0) {
-            if (!selectedBezierPoint) {
+            if (!selectedHandlePoint) {
                 if (pickupSelectedEntities) {
                     let selectedEntity = game.getSelectedEntity();
-                    if (selectedEntity?.bezier && selectedEntity.shouldSelectLastRailPoint) {
-                        selectedEntity.grabBezierPoint();
+                    if (selectedEntity?.building?.hasHandle && selectedEntity.shouldSelectLastHandlePoint) {
+                        selectedEntity.grabHandlePoint();
                     }
                 } else {
                     entities.sort(function (a, b) {
@@ -906,7 +914,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                     } else {
                                         game.selectEntity(entity);
                                     }
-                                } else if (!entity.grabBezierPoint() && (e.ctrlKey || e.shiftKey)) {
+                                } else if (!entity.grabHandlePoint() && (e.ctrlKey || e.shiftKey)) {
                                     game.removeSelectedEntity(entity);
                                 }
                                 game.setPickupEntities(true);
@@ -1398,62 +1406,40 @@ const fontFamily = ['Recursive', 'sans-serif'];
         entity.building = building;
         entity.selected = false;
 
-        if (building.range) {
-            entity.rangeSprite = new PIXI.Graphics();
-            entity.rangeSprite.beginFill(building.rangeColor ?? COLOR_RANGE);
-            entity.rangeSprite.alpha = 0.25;
-            entity.rangeSprite.visible = false;
-            entity.rangeSprite.drawCircle(0, 0, building.range * METER_PIXEL_SIZE);
-            entity.rangeSprite.endFill();
-            if (building.overlapDist) {
-                entity.rangeSprite.lineStyle(10, COLOR_RANGE_BORDER, 1);
-                entity.rangeSprite.drawCircle(0, 0, building.overlapDist * METER_PIXEL_SIZE);
-            }
-            entity.addChild(entity.rangeSprite);
-        }
-
         let sprite;
-        if (!building.isBezier) {
-            sprite = new PIXI.TilingSprite(resources['building_background'].texture);
-            sprite.width = building.width * METER_PIXEL_SIZE;
-            sprite.height = building.length * METER_PIXEL_SIZE;
-            sprite.anchor.set(0.5);
-            entity.addChild(sprite);
-            entity.sprite = sprite;
-            
-            if (!building.texture || !building.textureIcon?.disabled) {
-                sprite.tint = (building.color ? building.color : (buildingCategories[building.category] ? buildingCategories[building.category].color : COLOR_DARKGREY));
-                if (building.texture?.border !== false) {
-                    let spriteBorder = new PIXI.Graphics();
-                    spriteBorder.lineStyle(4, COLOR_WHITE);
-                    spriteBorder.drawRect(-(sprite.width/2), -(sprite.height/2), sprite.width, sprite.height);
-                    entity.addChild(spriteBorder);
-                }
-            }
-        }
-
         let frameX = 0;
         let frameY = 0;
         let frameWidth = 0;
         let frameHeight = 0;
         let sheet = null;
-        if (building.texture && !building.isBezier) {
+
+        // All this texture stuff should be done once on load with the textures themselves, not here. Makes no sense here.
+
+        if (building.texture && !building.hasHandle) {
             if (typeof building.texture === 'object' && !Array.isArray(building.texture)) {
                 sheet = loadSpritesheet(resources[building.texture.sheet].texture, building.texture.width, building.texture.height);
                 frameWidth = Math.floor(resources[building.texture.sheet].texture.width/building.texture.width);
                 frameHeight = Math.floor(resources[building.texture.sheet].texture.height/building.texture.height);
-                entity.removeChild(sprite);
                 sprite = new PIXI.Sprite(sheet[0][0]);
                 sprite.width = building.width * METER_PIXEL_SIZE;
                 sprite.height = building.length * METER_PIXEL_SIZE;
-                sprite.anchor.set(0.5);
-                entity.addChild(sprite);
             } else if (resources[building.texture]) {
-                sprite.texture = resources[building.texture].texture;
+                sprite = new PIXI.Sprite(resources[building.texture].texture);
+                frameWidth = resources[building.texture].texture.width;
+                frameHeight = resources[building.texture].texture.height;
+                sprite.width = (frameWidth / 100) * METER_PIXEL_SIZE;
+                sprite.height = (frameHeight / 100) * METER_PIXEL_SIZE;
+            }
+            if (!building.textureOffset) {
+                sprite.anchor.set(0.5);
+            } else {
+                sprite.x = -(building.textureOffset.x / 100) * METER_PIXEL_SIZE;
+                sprite.y = -(building.textureOffset.y / 100) * METER_PIXEL_SIZE;
             }
             entity.sprite = sprite;
         }
 
+        /*
         let buildingIcon = building.parent?.icon ?? building.icon;
         if (sprite && buildingIcon && (!building.textureIcon || !building.textureIcon?.disabled)) {
             let iconPadding = 28;
@@ -1498,14 +1484,50 @@ const fontFamily = ['Recursive', 'sans-serif'];
             icon.anchor.set(0.5, 0.5);
             entity.addChild(icon);
         }
+        */
+
+        if (building.range || building.overlapDist) {
+            entity.rangeSprite = new PIXI.Graphics();
+            entity.rangeSprite.alpha = 0.25;
+            entity.rangeSprite.visible = false;
+            if (building.range) {
+                if (isNaN(building.range)) {
+                    entity.rangeSprite.lineStyle((building.range.max - building.range.min) * METER_PIXEL_SIZE, COLOR_RANGE, 1);
+                    entity.rangeSprite.drawCircle(0, 0, ((building.range.min + building.range.max) / 2) * METER_PIXEL_SIZE);
+                } else {
+                    entity.rangeSprite.beginFill(COLOR_RANGE);
+                    entity.rangeSprite.drawCircle(0, 0, building.range * METER_PIXEL_SIZE);
+                    entity.rangeSprite.endFill();
+                }
+            }
+            if (building.overlapDist) {
+                entity.rangeSprite.lineStyle(10, COLOR_RANGE_BORDER, 1);
+                let overlapDist = building.overlapDist * METER_PIXEL_SIZE;
+                entity.rangeSprite.drawCircle(0, 0, overlapDist);
+                //entity.rangeSprite.drawRect(-(sprite.width/2) - overlapDist, -(sprite.height/2) - overlapDist, sprite.width + overlapDist*2, sprite.height + overlapDist*2);
+            }
+            entity.addChild(entity.rangeSprite);
+        }
 
         // We'll have to do something special for rails and roads, maybe a sprite or something that can be overlayed on top of them in the same way the rail / road textures are done.
         let borderWidth = 6;
-        entity.selectedBorder = new PIXI.Graphics();
-        entity.selectedBorder.visible = false;
-        entity.selectedBorder.lineStyle(borderWidth, COLOR_ORANGE);
-        entity.selectedBorder.drawRect(-(entity.width/2)-borderWidth, -(entity.height/2)-borderWidth, entity.width+(borderWidth*2), entity.height+(borderWidth*2));
-        entity.addChild(entity.selectedBorder);
+        entity.selectionArea = new PIXI.Graphics();
+        entity.selectionArea.visible = false;
+        if (!building.hasHandle) {
+            const buildingWidth = building.width ? building.width * METER_PIXEL_SIZE : sprite?.width ?? 0;
+            const buildingLength = building.length ? building.length * METER_PIXEL_SIZE : sprite?.height ?? 0;
+            entity.selectionArea.lineStyle(borderWidth, COLOR_ORANGE);
+            entity.selectionArea.drawRect(-(buildingWidth/2)-borderWidth, -(buildingLength/2)-borderWidth, buildingWidth+(borderWidth*2), buildingLength+(borderWidth*2));
+        } else {
+            entity.selectionArea.beginFill(COLOR_ORANGE);
+            entity.selectionArea.drawRect(-8, -8, 16, 16);
+            entity.selectionArea.endFill();
+        }
+        entity.addChild(entity.selectionArea);
+
+        if (sprite) {
+            entity.addChild(sprite);
+        }
 
         if (entity.rangeSprite) {
             entity.rangeSprite.visible = game.settings.showRanges;
@@ -1528,8 +1550,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
         entity.onSelect = function() {
             entity.selected = true;
-            entity.selectedBorder.tint = entity.locked ? COLOR_RED : COLOR_WHITE;
-            entity.selectedBorder.visible = true;
+            entity.selectionArea.tint = entity.locked ? COLOR_RED : COLOR_WHITE;
+            entity.selectionArea.visible = true;
 
             if (entity.rangeSprite && !entity.rangeSprite.visible) {
                 entity.rangeSprite.visible = true;
@@ -1541,14 +1563,14 @@ const fontFamily = ['Recursive', 'sans-serif'];
         const TRACK_SEGMENT_LENGTH = 16;
         entity.onDeselect = function() {
             entity.selected = false;
-            entity.selectedBorder.visible = false;
+            entity.selectionArea.visible = false;
             entity.prevRotation = null;
 
             if (entity.rangeSprite && !game.settings.showRanges) {
                 entity.rangeSprite.visible = false;
             }
 
-            if (entity.bezier && entity.bezier.length() <= TRACK_SEGMENT_LENGTH) {
+            if (entity.bezier && entity.bezier.length() <= entity.building?.minLength) {
                 entity.remove();
             }
 
@@ -1583,13 +1605,13 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 }
             }
 
-            if (entity.visible && !pickupSelectedEntities && entity.selected && !entity.selectedBorder.visible) {
-                entity.selectedBorder.visible = true;
+            if (entity.visible && !pickupSelectedEntities && entity.selected && !entity.selectionArea.visible) {
+                entity.selectionArea.visible = true;
             }
 
-            if (entity.visible && building.isBezier) {
-                if (selectedBezierPoint && !mouseDown[0]) {
-                    selectedBezierPoint = null;
+            if (entity.visible && building.hasHandle) {
+                if (selectedHandlePoint && !mouseDown[0]) {
+                    selectedHandlePoint = null;
                 }
 
                 if (entity.selected && !entity.locked && mouseDown[0]) {
@@ -1601,9 +1623,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         gmyGrid = Math.floor(gmyGrid / gridSize) * gridSize;
                     }
                     let mousePos = entity.toLocal({x: gmxGrid, y: gmyGrid}, app.cstage, undefined, true);
-                    if (selectedBezierPoint) {
+                    if (selectedHandlePoint) {
                         game.setPickupEntities(false);
-                        if (selectedBezierPoint.index === 0) {
+                        if (selectedHandlePoint.index === 0) {
                             entity.x = gmx;
                             entity.y = gmy;
 
@@ -1612,20 +1634,29 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 entity.y = Math.floor(entity.y / gridSize) * gridSize;
                             }
                         } else {
-                            if (mouseDown[2]) {
-                                let angle = Math.angleBetween(selectedBezierPoint, mousePos);
+                            if (mouseDown[2] && entity.building?.isBezier) {
+                                let angle = Math.angleBetween(selectedHandlePoint, mousePos);
                                 if (game.settings.enableSnapRotation) {
                                     let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ? game.settings.snapRotationDegrees : 15);
                                     angle = Math.floor(angle / snapRotationDegrees) * snapRotationDegrees;
                                 }
-                                selectedBezierPoint.rotation = angle + Math.PI;
+                                selectedHandlePoint.rotation = angle + Math.PI;
                             } else {
-                                selectedBezierPoint.x = mousePos.x;
-                                selectedBezierPoint.y = mousePos.y;
+                                selectedHandlePoint.x = mousePos.x;
+                                selectedHandlePoint.y = mousePos.y;
                             }
 
-                            if (Math.abs(selectedBezierPoint.y) < 25) {
-                                selectedBezierPoint.y = 0;
+                            if (!entity.building?.isBezier || Math.abs(selectedHandlePoint.y) < 25) {
+                                selectedHandlePoint.y = 0;
+                            }
+
+                            if (!entity.building?.isBezier) {
+                                if (entity.building.minLength) {
+                                    const minLength = entity.building?.minLength * METER_PIXEL_SIZE;
+                                    if (selectedHandlePoint.x < minLength) {
+                                        selectedHandlePoint.x = minLength;
+                                    }
+                                }
                             }
                         }
 
@@ -1634,7 +1665,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             if (entity2 === entity || entity2.type !== 'building' || entity2.subtype !== entity.subtype || !entity2.bezier) {
                                 continue;
                             }
-                            let selectedPointToEntity2Local = entity2.toLocal(selectedBezierPoint, entity, undefined, true);
+                            let selectedPointToEntity2Local = entity2.toLocal(selectedHandlePoint, entity, undefined, true);
                             let projection = entity2.bezier.project(selectedPointToEntity2Local);
                             if (projection.d <= 25) {
                                 if (projection.t >= 0.95) {
@@ -1645,60 +1676,61 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 let local = entity.toLocal({x: projection.x, y: projection.y}, entity2, undefined, true);
                                 let normal = entity2.bezier.normal(projection.t);
                                 let angle = Math.angleBetween({x: 0, y: 0}, normal);
-                                selectedBezierPoint.x = local.x;
-                                selectedBezierPoint.y = local.y;
+                                selectedHandlePoint.x = local.x;
+                                selectedHandlePoint.y = local.y;
 
-                                let currentRot = entity.rotation + selectedBezierPoint.rotation;
+                                let currentRot = entity.rotation + selectedHandlePoint.rotation;
                                 let angleRight = entity2.rotation + (angle - Math.PI/2) - Math.PI/2;
                                 let angleLeft = entity2.rotation + (angle + Math.PI/2) - Math.PI/2;
                                 let rightDiff = Math.atan2(Math.sin(angleRight-currentRot), Math.cos(angleRight-currentRot));
                                 let leftDiff = Math.atan2(Math.sin(angleLeft-currentRot), Math.cos(angleLeft-currentRot));
 
                                 if (rightDiff < leftDiff) {
-                                    selectedBezierPoint.rotation = (angleRight + Math.PI/2) - entity.rotation;
+                                    selectedHandlePoint.rotation = (angleRight + Math.PI/2) - entity.rotation;
                                 } else {
-                                    selectedBezierPoint.rotation = (angleLeft + Math.PI/2) - entity.rotation;
+                                    selectedHandlePoint.rotation = (angleLeft + Math.PI/2) - entity.rotation;
                                 }
                                 break;
                             }
                         }
 
+                        const MIN_SEGMENT_DISTANCE = entity.building.minLength * METER_PIXEL_SIZE;
                         const MAX_SEGMENT_DISTANCE = entity.building.maxLength * METER_PIXEL_SIZE;
-                        if (selectedBezierPoint.index === 1) {
-                            let dist = Math.distanceBetween({x: 0, y: 0}, selectedBezierPoint);
-                            let angle = Math.angleBetween({x: 0, y: 0}, selectedBezierPoint);
+                        let dist = Math.distanceBetween({x: 0, y: 0}, selectedHandlePoint);
+                        if (selectedHandlePoint.index === 1) {
+                            let angle = Math.angleBetween({x: 0, y: 0}, selectedHandlePoint);
                             if (dist > MAX_SEGMENT_DISTANCE) {
                                 dist = MAX_SEGMENT_DISTANCE;
                             }
-                            selectedBezierPoint.x = Math.cos(angle) * dist;
-                            selectedBezierPoint.y = Math.sin(angle) * dist;
+                            selectedHandlePoint.x = Math.cos(angle) * dist;
+                            selectedHandlePoint.y = Math.sin(angle) * dist;
                         }
 
                         entity.regenerate();
                         let curve1 = entity.bezier.curvature(0.25);
                         let curve2 = entity.bezier.curvature(0.5);
                         let curve3 = entity.bezier.curvature(0.75);
-                        if ((curve1.r !== 0 && (Math.abs(curve1.r) < 100 || Math.abs(curve2.r) < 200 || Math.abs(curve3.r) < 100)) || selectedBezierPoint.x < 0) {
+                        if (dist < MIN_SEGMENT_DISTANCE || (curve1.r !== 0 && (Math.abs(curve1.r) < 100 || Math.abs(curve2.r) < 200 || Math.abs(curve3.r) < 100)) || selectedHandlePoint.x < 0) {
                             entity.sprite.tint = COLOR_RED;
                         } else {
                             entity.sprite.tint = COLOR_WHITE;
                         }
 
-                        if (selectedBezierPoint.handle) {
-                            selectedBezierPoint.handle.position.x = selectedBezierPoint.x;
-                            selectedBezierPoint.handle.position.y = selectedBezierPoint.y;
+                        if (selectedHandlePoint.handle) {
+                            selectedHandlePoint.handle.position.x = selectedHandlePoint.x;
+                            selectedHandlePoint.handle.position.y = selectedHandlePoint.y;
                         }
                     }
                 }
             }
         };
 
-        entity.grabBezierPoint = function() {
-            if (entity.selected && entity.bezier) {
-                if (entity.shouldSelectLastRailPoint) {
-                    entity.shouldSelectLastRailPoint = false;
+        entity.grabHandlePoint = function() {
+            if (entity.selected && entity.building?.hasHandle) {
+                if (entity.shouldSelectLastHandlePoint) {
+                    entity.shouldSelectLastHandlePoint = false;
                     forceMouseDown[0] = true;
-                    selectedBezierPoint = points[1];
+                    selectedHandlePoint = points[1];
                     return true;
                 } else {
                     let mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
@@ -1706,7 +1738,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         let point = points[i];
                         if (Math.distanceBetween(mousePos, point) < 20) {
                             game.selectEntity(entity);
-                            selectedBezierPoint = point;
+                            selectedHandlePoint = point;
                             return true;
                         }
                     }
@@ -1727,7 +1759,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             bounds.height += boundsBuffer * 2;
 
             if (gmx >= bounds.x && gmx <= bounds.x+bounds.width && gmy >= bounds.y && gmy <= bounds.y+bounds.height) {
-                if (entity.building?.isBezier && entity.bezier) {
+                if (entity.building?.hasHandle && entity.bezier) {
                     let mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
                     let projection = entity.bezier.project(mousePos);
                     if (projection.d <= 25) {
@@ -1735,8 +1767,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     }
                 } else if (entity.sprite) {
                     // https://stackoverflow.com/a/67732811 <3
-                    const w = entity.sprite.width / 2;
-                    const h = entity.sprite.height / 2;
+                    const w = entity.selectionArea.width / 2;
+                    const h = entity.selectionArea.height / 2;
                     const r = entity.rotation;
 
                     // Create new oriented bounds.
@@ -1768,8 +1800,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
             if (entity.selected) {
                 game.removeSelectedEntity(entity);
             }
-            if (selectedBezierPoint) {
-                selectedBezierPoint = null;
+            if (selectedHandlePoint) {
+                selectedHandlePoint = null;
             }
             if (sound) {
                 soundStop(sound);
@@ -1787,7 +1819,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
         let points = [];
         entity.onSave = function(entityData) {
-            if (entity.building?.isBezier) {
+            if (entity.building?.hasHandle) {
                 entityData.railPoints = [];
                 for (let i=0; i<points.length; i++) {
                     let point = points[i];
@@ -1806,7 +1838,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 entity.selectedProduction = entityData.selectedProduction;
             }
 
-            if (entity.building?.isBezier && entityData.railPoints) {
+            if (entity.building?.hasHandle && entityData.railPoints) {
                 for (let i=0; i<points.length; i++) {
                     let point = points[i];
                     entity.removeChild(point.handle);
@@ -1894,12 +1926,30 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 let segments = Math.round(entity.bezier.length()/TRACK_SEGMENT_LENGTH);
                 entity.sprite = new PIXI.SimpleRope(resources[entity.building.texture].texture, entity.bezier.getLUT(segments), 1);
                 entity.addChild(entity.sprite);
+                if (entity.building.textureFrontCap) {
+                    entity.removeChild(entity.frontCap);
+                    entity.frontCap = new PIXI.Sprite(resources[entity.building.textureFrontCap].texture);
+                    entity.frontCap.anchor.set(1, 0.5);
+                    entity.frontCap.x = points[0].x;
+                    entity.frontCap.y = points[0].y;
+                    entity.frontCap.rotation = points[0].rotation;
+                    entity.addChild(entity.frontCap);
+                }
+                if (entity.building.textureBackCap) {
+                    entity.removeChild(entity.backCap);
+                    entity.backCap = new PIXI.Sprite(resources[entity.building.textureBackCap].texture);
+                    entity.backCap.anchor.set(0, 0.5);
+                    entity.backCap.x = points[points.length - 1].x;
+                    entity.backCap.y = points[points.length - 1].y;
+                    entity.backCap.rotation = points[points.length - 1].rotation;
+                    entity.addChild(entity.backCap);
+                }
             }
         };
 
-        if (entity.building?.isBezier) {
+        if (entity.building?.hasHandle) {
             entity.addPoint(0, 0);
-            entity.addPoint(200, 0);
+            entity.addPoint(entity.building.minLength ? entity.building.minLength * METER_PIXEL_SIZE : 200, 0);
         }
 
         return entity;
@@ -1916,7 +1966,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     locked = true;
                 } else if (!locked) {
                     entity.pickupOffset = {
-                        x: ignoreOffset ? (entity.building.isBezier ? 100 : 0) : (position?.x ?? gmx) - entity.x,
+                        x: ignoreOffset ? (entity.building.hasHandle ? (entity.building.minLength ? (entity.building.minLength * METER_PIXEL_SIZE) / 2 : 100) : 0) : (position?.x ?? gmx) - entity.x,
                         y: ignoreOffset ? 0 : (position?.y ?? gmy) - entity.y
                     };
                 }
@@ -1935,8 +1985,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
         let entity = createBuilding(buildingData.key, 0, 0, 0, {});
         game.selectEntity(entity);
         game.setPickupEntities(true, true);
-        if (entity.building?.isBezier) {
-            entity.shouldSelectLastRailPoint = true;
+        if (entity.building?.hasHandle) {
+            entity.shouldSelectLastHandlePoint = true;
         }
         return entity;
     };
@@ -1945,7 +1995,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         if (entity) {
             let clone = createBuilding(upgrade ?? entity.building.key, entity.x, entity.y, 0);
             clone.locked = entity.locked;
-            clone.selectedBorder.tint = clone.locked ? COLOR_RED : COLOR_WHITE;
+            clone.selectionArea.tint = clone.locked ? COLOR_RED : COLOR_WHITE;
             clone.rotation = entity.rotation;
             let entityData = {};
             entity.onSave(entityData);
@@ -2012,7 +2062,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         let locked = game.getSelectedLockState();
         selectedEntities.forEach(selectedEntity => {
             selectedEntity.locked = !locked ? true : null;
-            selectedEntity.selectedBorder.tint = selectedEntity.locked ? COLOR_RED : COLOR_WHITE;
+            selectedEntity.selectionArea.tint = selectedEntity.locked ? COLOR_RED : COLOR_WHITE;
         });
         if (locked && pickupSelectedEntities) {
             game.setPickupEntities(false);
@@ -2103,7 +2153,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
         if (pickupSelectedEntities) {
             game.buildingSelectedMenuComponent?.refresh(true);
-            if (!selectedBezierPoint && (!pickupPosition || (Date.now()-pickupTime > 250 || Math.distanceBetween(pickupPosition, {x: gmx, y: gmy}) > 20))) {
+            if (!selectedHandlePoint && (!pickupPosition || (Date.now()-pickupTime > 250 || Math.distanceBetween(pickupPosition, {x: gmx, y: gmy}) > 20))) {
                 pickupPosition = null;
                 if (mouseDown[2]) {
                     if (!selectionRotation) {
@@ -2156,8 +2206,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 }
                 for (let i = 0; i < selectedEntities.length; i++) {
                     let pickupEntity = selectedEntities[i];
-                    if (!pickupEntity.building?.isBezier && pickupEntity.selectedBorder.visible) {
-                        pickupEntity.selectedBorder.visible = false;
+                    if (!pickupEntity.building?.hasHandle && pickupEntity.selectionArea.visible) {
+                        pickupEntity.selectionArea.visible = false;
                     }
                     if (mouseDown[2]) {
                         if (selectionRotation) {
@@ -2175,19 +2225,14 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         pickupEntity.y = gmy - pickupEntity.pickupOffset.y;
                         if (game.settings.enableGrid || keys[16]) {
                             let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
-                            let width = pickupEntity.building.width, length = pickupEntity.building.length;
-                            let xOffsetWidth = (((width % Math.floor(width))) * METER_PIXEL_SIZE)/2;
-                            let yOffsetHeight = (((length % Math.floor(length))) * METER_PIXEL_SIZE)/2;
-                            let xOffset = (Math.cos(pickupEntity.rotation - Math.PI/2) * xOffsetWidth) + (Math.sin(pickupEntity.rotation) * yOffsetHeight);
-                            let yOffset = (Math.sin(pickupEntity.rotation - Math.PI/2) * yOffsetHeight) + (Math.cos(pickupEntity.rotation) * xOffsetWidth);
-                            pickupEntity.x = Math.round((Math.round(pickupEntity.x / gridSize) * gridSize) - xOffset);
-                            pickupEntity.y = Math.round((Math.round(pickupEntity.y / gridSize) * gridSize) - yOffset);
+                            pickupEntity.x = (Math.round(pickupEntity.x / gridSize) * gridSize);
+                            pickupEntity.y = (Math.round(pickupEntity.y / gridSize) * gridSize);
                         }
                     }
                 }
             }
             let pickupEntity = game.getSelectedEntity();
-            if (pickupEntity && pickupEntity.building?.isBezier && !selectedBezierPoint) {
+            if (pickupEntity && pickupEntity.building?.hasHandle && !selectedHandlePoint) {
                 for (let i=0; i<entities.length; i++) {
                     let entity = entities[i];
                     if (!entity.bezier) {
@@ -2201,6 +2246,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             projection = entity.bezier.get(1);
                         } else if (projection.t <= 0.05) {
                             projection = entity.bezier.get(0);
+                        } else if (!entity.building?.isBezier) {
+                            break;
                         }
                         let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity, undefined, true);
                         let normal = entity.bezier.normal(projection.t);
