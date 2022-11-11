@@ -1668,14 +1668,22 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             let selectedPointToEntity2Local = entity2.toLocal(selectedHandlePoint, entity, undefined, true);
                             let projection = entity2.bezier.project(selectedPointToEntity2Local);
                             if (projection.d <= 25) {
+                                let middleConnection = false;
                                 if (projection.t >= 0.95) {
                                     projection = entity2.bezier.get(1);
                                 } else if (projection.t <= 0.05) {
                                     projection = entity2.bezier.get(0);
+                                } else if (entity.subtype === 'pipeline') {
+                                    projection = entity2.bezier.get(0.5);
+                                    middleConnection = true;
                                 }
+
                                 let local = entity.toLocal({x: projection.x, y: projection.y}, entity2, undefined, true);
                                 let normal = entity2.bezier.normal(projection.t);
                                 let angle = Math.angleBetween({x: 0, y: 0}, normal);
+                                if (entity.subtype === 'pipeline' && middleConnection) {
+                                    angle += Math.PI/2;
+                                }
                                 selectedHandlePoint.x = local.x;
                                 selectedHandlePoint.y = local.y;
 
@@ -1689,6 +1697,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                     selectedHandlePoint.rotation = (angleRight + Math.PI/2) - entity.rotation;
                                 } else {
                                     selectedHandlePoint.rotation = (angleLeft + Math.PI/2) - entity.rotation;
+                                }
+                                if (entity.subtype === 'pipeline' && middleConnection) {
+                                    selectedHandlePoint.x += Math.cos(selectedHandlePoint.rotation) * 8;
+                                    selectedHandlePoint.y += Math.sin(selectedHandlePoint.rotation) * 8;
                                 }
                                 break;
                             }
@@ -1707,13 +1719,21 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         }
 
                         entity.regenerate();
-                        let curve1 = entity.bezier.curvature(0.25);
-                        let curve2 = entity.bezier.curvature(0.5);
-                        let curve3 = entity.bezier.curvature(0.75);
-                        if (dist < MIN_SEGMENT_DISTANCE || (curve1.r !== 0 && (Math.abs(curve1.r) < 100 || Math.abs(curve2.r) < 200 || Math.abs(curve3.r) < 100)) || selectedHandlePoint.x < 0) {
-                            entity.sprite.tint = COLOR_RED;
+                        if (entity.subtype === 'pipeline') {
+                            if (dist < 3*METER_PIXEL_SIZE) {
+                                entity.sprite.tint = COLOR_RED;
+                            } else {
+                                entity.sprite.tint = COLOR_WHITE;
+                            }
                         } else {
-                            entity.sprite.tint = COLOR_WHITE;
+                            let curve1 = entity.bezier.curvature(0.25);
+                            let curve2 = entity.bezier.curvature(0.5);
+                            let curve3 = entity.bezier.curvature(0.75);
+                            if (dist < MIN_SEGMENT_DISTANCE || (curve1.r !== 0 && (Math.abs(curve1.r) < 100 || Math.abs(curve2.r) < 200 || Math.abs(curve3.r) < 100)) || selectedHandlePoint.x < 0) {
+                                entity.sprite.tint = COLOR_RED;
+                            } else {
+                                entity.sprite.tint = COLOR_WHITE;
+                            }
                         }
 
                         if (selectedHandlePoint.handle) {
@@ -1891,34 +1911,95 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 let bezierPoints = [];
                 for (let i=0; i<points.length; i++) {
                     let point = points[i];
-                    if (i < points.length-1) {
-                        bezierPoints.push({
-                            x: point.x,
-                            y: point.y
-                        });
 
-                        let point2 = points[i+1];
-                        if (point2) {
-                            let dist = Math.distanceBetween(point, point2)*0.4;
+                    if (type === 'pipeline') {
+                        if (i < points.length - 1) {
                             bezierPoints.push({
-                                x: point.x + dist,
+                                x: point.x,
+                                y: point.y
+                            });
+
+                            let point2 = points[i + 1];
+                            if (point2) {
+                                let dist = Math.distanceBetween(point, point2) * 0.1;
+                                if (dist < 35) {
+                                    dist = 35;
+                                }
+                                if (dist > 50) {
+                                    dist = 50;
+                                }
+                                bezierPoints.push({
+                                    x: point.x + dist,
+                                    y: point.y
+                                });
+                                bezierPoints.push({
+                                    x: point.x + dist,
+                                    y: point.y
+                                });
+                                bezierPoints.push({
+                                    x: point.x + dist,
+                                    y: point.y
+                                });
+                            }
+                        } else {
+                            let point1 = points[i - 1];
+                            if (point1) {
+                                let dist = Math.distanceBetween(point, point1) * 0.1;
+                                if (dist < 35) {
+                                    dist = 35;
+                                }
+                                if (dist > 50) {
+                                    dist = 50;
+                                }
+                                bezierPoints.push({
+                                    x: point.x + (Math.cos(point.rotation) * dist),
+                                    y: point.y + (Math.sin(point.rotation) * dist)
+                                });
+                                bezierPoints.push({
+                                    x: point.x + (Math.cos(point.rotation) * dist),
+                                    y: point.y + (Math.sin(point.rotation) * dist)
+                                });
+                                bezierPoints.push({
+                                    x: point.x + (Math.cos(point.rotation) * dist),
+                                    y: point.y + (Math.sin(point.rotation) * dist)
+                                });
+                            }
+
+                            bezierPoints.push({
+                                x: point.x,
                                 y: point.y
                             });
                         }
                     } else {
-                        let point1 = points[i-1];
-                        if (point1) {
-                            let dist = Math.distanceBetween(point, point1)*0.4;
+                        if (i < points.length - 1) {
                             bezierPoints.push({
-                                x: point.x + (Math.cos(point.rotation) * dist),
-                                y: point.y + (Math.sin(point.rotation) * dist)
+                                x: point.x,
+                                y: point.y
+                            });
+
+                            let point2 = points[i + 1];
+                            if (point2) {
+                                let dist = Math.distanceBetween(point, point2) * 0.4;
+                                bezierPoints.push({
+                                    x: point.x + dist,
+                                    y: point.y
+                                });
+                            }
+                        } else {
+                            let point1 = points[i - 1];
+                            if (point1) {
+                                let dist = Math.distanceBetween(point, point1) * 0.4;
+                                bezierPoints.push({
+                                    x: point.x + (Math.cos(point.rotation) * dist),
+                                    y: point.y + (Math.sin(point.rotation) * dist)
+                                });
+                            }
+
+                            bezierPoints.push({
+                                x: point.x,
+                                y: point.y
                             });
                         }
-
-                        bezierPoints.push({
-                            x: point.x,
-                            y: point.y
-                        });
                     }
                 }
                 entity.bezier = new Bezier(bezierPoints);
@@ -2242,16 +2323,23 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     let projection = entity.bezier.project(mousePos);
                     let rotationStored = typeof pickupEntity.prevRotation === 'number';
                     if (entity !== pickupEntity && entity.type === 'building' && pickupEntity.subtype === entity.subtype && projection.d <= 25) {
+                        let middleConnection = false;
                         if (projection.t >= 0.95) {
                             projection = entity.bezier.get(1);
                         } else if (projection.t <= 0.05) {
                             projection = entity.bezier.get(0);
+                        } else if (entity.subtype === 'pipeline') {
+                            projection = entity.bezier.get(0.5);
+                            middleConnection = true;
                         } else if (!entity.building?.isBezier) {
                             break;
                         }
                         let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity, undefined, true);
                         let normal = entity.bezier.normal(projection.t);
                         let angle = Math.angleBetween({x: 0, y: 0}, normal);
+                        if (entity.subtype === 'pipeline' && middleConnection) {
+                            angle += Math.PI/2;
+                        }
                         pickupEntity.x = global.x;
                         pickupEntity.y = global.y;
 
@@ -2268,6 +2356,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             pickupEntity.rotation = angleRight + Math.PI/2;
                         } else {
                             pickupEntity.rotation = angleLeft + Math.PI/2;
+                        }
+                        if (entity.subtype === 'pipeline' && middleConnection) {
+                            pickupEntity.x += Math.cos(pickupEntity.rotation) * 8;
+                            pickupEntity.y += Math.sin(pickupEntity.rotation) * 8;
                         }
                         break;
                     } else if (rotationStored) {
