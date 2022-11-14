@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
+const METER_UNREAL_UNITS = 100;
 const foxholeDataDirectory = 'dev/';
 const foxholeDataVariable = 'const foxholeData = ';
 let foxholeData = JSON.parse(fs.readFileSync('./public/foxholeData.js').toString().substring(foxholeDataVariable.length));
@@ -91,8 +92,8 @@ function iterateBaseStructures(uProperty, baseData) {
                     baseData.name = structure.DisplayName?.SourceString ?? baseData.name;
                     baseData.description = structure.Description?.SourceString ?? baseData.description;
                     baseData.BuildCategory = structure.BuildCategory ?? baseData.BuildCategory;
-                    baseData.minLength = structure.ConnectorMinLength ? structure.ConnectorMinLength / 100 : undefined ?? baseData.minLength;
-                    baseData.maxLength = structure.ConnectorMaxLength ? structure.ConnectorMaxLength / 100 : undefined ?? baseData.maxLength;
+                    baseData.minLength = structure.ConnectorMinLength ? structure.ConnectorMinLength / METER_UNREAL_UNITS : undefined ?? baseData.minLength;
+                    baseData.maxLength = structure.ConnectorMaxLength ? structure.ConnectorMaxLength / METER_UNREAL_UNITS : undefined ?? baseData.maxLength;
                     baseData.icon = getLocalIcon(structure) ?? baseData.icon;
                     baseData.garrisonSupplyMultiplier = structure.DecaySupplyDrain ?? baseData.garrisonSupplyMultiplier;
                     baseData.power = structure.PowerGridInfo?.PowerDelta ?? baseData.power;
@@ -145,20 +146,23 @@ function iterateStructures(dirPath) {
                                     'length': structureData.length,
                                     'range': structureData.range,
                                     'rangeColor': structureData.rangeColor,
-                                    'overlapDist': structure.MinDistanceToSameStructure ? structure.MinDistanceToSameStructure / 100 : undefined,
+                                    //'overlapDist': structure.MinDistanceToSameStructure ? structure.MinDistanceToSameStructure / METER_UNREAL_UNITS : undefined,
+                                    'overlapDist': structureData.overlapDist,
                                     'sortOffset': structureData.sortOffset,
                                     'hasHandle': structureData.hasHandle,
                                     'isBezier': structureData.isBezier,
-                                    'minLength': structure.ConnectorMinLength ? structure.ConnectorMinLength / 100 : undefined ?? baseData.minLength,
-                                    'maxLength': structure.ConnectorMaxLength ? structure.ConnectorMaxLength / 100 : undefined ?? baseData.maxLength,
+                                    'minLength': structure.ConnectorMinLength ? structure.ConnectorMinLength / METER_UNREAL_UNITS : undefined ?? baseData.minLength,
+                                    'maxLength': structure.ConnectorMaxLength ? structure.ConnectorMaxLength / METER_UNREAL_UNITS : undefined ?? baseData.maxLength,
                                     'icon': getLocalIcon(structure) ?? baseData.icon,
                                     'texture': structureData.texture ?? `game/Textures/Structures/${structureData.id}.webp`,
                                     'textureFrontCap': structureData.textureFrontCap, // `game/Textures/Structures/${structureData.id}_front.webp`
                                     'textureBackCap': structureData.textureBackCap, // `game/Textures/Structures/${structureData.id}_back.webp`
                                     'textureIcon': structureData.textureIcon,
                                     'textureOffset': structureData.textureOffset,
-                                    'garrisonSupplyMultiplier': structure.DecaySupplyDrain ?? baseData.garrisonSupplyMultiplier,
+                                    'garrisonSupplyMultiplier': structure.DecaySupplyDrain ?? baseData.garrisonSupplyMultiplier ?? structureData.garrisonSupplyMultiplier,
                                     'power': (structure.PowerGridInfo?.PowerDelta ?? baseData.power) / 1000 || undefined,
+                                    'canSnap': structureData.canSnap,
+                                    'sockets': structureData.sockets,
                                     'techId': structure.TechID && (structure.TechID !== 'ETechID::None') ? structure.TechID.substring(9).toLowerCase() : undefined,
                                     'liquidCapacity': structure.LiquidTank?.MaxAmount ?? structureData.liquidCapacity,
                                     'cost': structureData.cost ?? baseData.cost,
@@ -198,6 +202,7 @@ function iterateStructures(dirPath) {
                                         'description': modification.Description?.SourceString ?? 'No Description Provided.',
                                         'icon': getLocalIcon(modification),
                                         'texture': storedModData?.texture ?? `game/Textures/Structures/${structureData.id}_${storedModData?.id}.webp`,
+                                        'sockets': storedModData?.sockets,
                                         'techId': modification.TechID && (modification.TechID !== 'ETechID::None') ? modification.TechID.substring(9).toLowerCase() : undefined,
                                         'cost': undefined,
                                         '_productionLength': storedModData?._productionLength,
