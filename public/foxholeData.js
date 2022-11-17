@@ -860,6 +860,7 @@ const foxholeData = {
 			"category": "misc",
 			"sortOffset": 500000,
 			"hasHandle": true,
+			"hasOutline": false,
 			"minLength": 8,
 			"maxLength": 20,
 			"icon": "game/Textures/UI/ItemIcons/facilitieCatwalkPlatfromIcon.webp",
@@ -1213,7 +1214,7 @@ const foxholeData = {
 					"id": 0,
 					"type": "power",
 					"x": 104,
-					"y": 488,
+					"y": 142,
 					"rotation": 0
 				}
 			],
@@ -3331,7 +3332,8 @@ const foxholeData = {
 			"name": "Pipeline",
 			"codeName": "FacilityPipe",
 			"description": "Industrial piping that allows for automatic transport of various liquids and fuels into a network of pipes that connect to various facility structures.",
-			"category": "misc",
+			"category": "factories",
+			"sortOffset": -500,
 			"hasHandle": true,
 			"isBezier": true,
 			"minLength": 3,
@@ -3351,6 +3353,18 @@ const foxholeData = {
 				{
 					"id": 1,
 					"type": "pipe",
+					"cap": "left",
+					"rotation": 180
+				},
+				{
+					"id": 2,
+					"type": "pipe",
+					"cap": "right",
+					"rotation": 0
+				},
+				{
+					"id": 3,
+					"type": "pipe",
 					"cap": "back",
 					"rotation": 90
 				}
@@ -3365,7 +3379,8 @@ const foxholeData = {
 			"name": "Pipeline (Overhead)",
 			"codeName": "FacilityPipeOverhead",
 			"description": "Industrial piping that allows for automatic transport of various liquids and fuels. These specialized pipes can be built overhead to connect to pipe networks across areas with high traffic.",
-			"category": "misc",
+			"category": "factories",
+			"sortOffset": 1400000,
 			"hasHandle": true,
 			"minLength": 8,
 			"maxLength": 20,
@@ -3398,7 +3413,8 @@ const foxholeData = {
 			"name": "Pipeline (Underground)",
 			"codeName": "FacilityPipeUnderground",
 			"description": "Industrial piping that allows for automatic transport of various liquids and fuels. These specialized pipes can be built underground to connect to pipe networks across areas with high traffic.",
-			"category": "misc",
+			"category": "factories",
+			"sortOffset": -500,
 			"hasHandle": true,
 			"isBezier": true,
 			"minLength": 5,
@@ -3433,7 +3449,8 @@ const foxholeData = {
 			"name": "Pipeline Valve",
 			"codeName": "FacilityPipeValve",
 			"description": "A weighted valve that controls the rate of flow through a pipeline. Requires a Wrench.",
-			"category": "misc",
+			"category": "factories",
+			"sortOffset": 1000,
 			"icon": "game/Textures/UI/ItemIcons/FacilityPipeValveIcon.webp",
 			"texture": "game/Textures/Structures/pipeline_valve.webp",
 			"canSnap": true,
@@ -3465,6 +3482,7 @@ const foxholeData = {
 			"category": "power",
 			"sortOffset": 1500000,
 			"hasHandle": true,
+			"hasOutline": false,
 			"minLength": 0.1,
 			"maxLength": 25,
 			"icon": "game/Textures/UI/StructureIcons/PowelineIcon.webp",
@@ -3474,6 +3492,9 @@ const foxholeData = {
 			},
 			"garrisonSupplyMultiplier": 0,
 			"canSnap": true,
+			"canSnapStructureType": false,
+			"ignoreSnapSettings": true,
+			"requireConnection": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -3509,7 +3530,7 @@ const foxholeData = {
 					"x": 14,
 					"y": 14,
 					"rotation": 270,
-					"connections": 4
+					"connectionLimit": 4
 				}
 			],
 			"cost": {
@@ -3529,7 +3550,7 @@ const foxholeData = {
 							"x": 14,
 							"y": 21,
 							"rotation": 270,
-							"connections": 4
+							"connectionLimit": 4
 						}
 					],
 					"cost": {

@@ -150,6 +150,7 @@ function iterateStructures(dirPath) {
                                     'overlapDist': structureData.overlapDist,
                                     'sortOffset': structureData.sortOffset,
                                     'hasHandle': structureData.hasHandle,
+                                    'hasOutline': structureData.hasOutline,
                                     'isBezier': structureData.isBezier,
                                     'minLength': structure.ConnectorMinLength ? structure.ConnectorMinLength / METER_UNREAL_UNITS : undefined ?? baseData.minLength,
                                     'maxLength': structure.ConnectorMaxLength ? structure.ConnectorMaxLength / METER_UNREAL_UNITS : undefined ?? baseData.maxLength,
@@ -162,6 +163,9 @@ function iterateStructures(dirPath) {
                                     'garrisonSupplyMultiplier': structure.DecaySupplyDrain ?? baseData.garrisonSupplyMultiplier ?? structureData.garrisonSupplyMultiplier,
                                     'power': (structure.PowerGridInfo?.PowerDelta ?? baseData.power) / 1000 || undefined,
                                     'canSnap': structureData.canSnap,
+                                    'canSnapStructureType': structureData.canSnapStructureType,
+                                    'ignoreSnapSettings': structureData.ignoreSnapSettings,
+                                    'requireConnection': structureData.requireConnection,
                                     'sockets': structureData.sockets,
                                     'techId': structure.TechID && (structure.TechID !== 'ETechID::None') ? structure.TechID.substring(9).toLowerCase() : undefined,
                                     'liquidCapacity': structure.LiquidTank?.MaxAmount ?? structureData.liquidCapacity,
@@ -228,8 +232,8 @@ function iterateStructures(dirPath) {
                     case 'CraneComponent':
                         if (structure && uProperty.Properties?.Config) {
                             structureList[structureCodeName]['range'] = {
-                                "min": uProperty.Properties.Config.MinHorizontalDistanceToTarget / 100,
-                                "max": uProperty.Properties.Config.MaxHorizontalDistanceToTarget / 100
+                                "min": uProperty.Properties.Config.MinHorizontalDistanceToTarget / METER_UNREAL_UNITS,
+                                "max": uProperty.Properties.Config.MaxHorizontalDistanceToTarget / METER_UNREAL_UNITS
                             };
                         }
                         break;

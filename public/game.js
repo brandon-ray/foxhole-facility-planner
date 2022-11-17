@@ -123,6 +123,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
     let gmx = 0;
     let gmy = 0;
 
+    let _entityIds = 0;
     let entities = [];
     let selectedEntities = [];
     let selectedHandlePoint = null;
@@ -138,6 +139,16 @@ const fontFamily = ['Recursive', 'sans-serif'];
     game.getEntities = () => {
         return entities;
     };
+
+    game.getEntityById = (id) => {
+        const entityId = typeof id !== 'number' ? Number(id) : id;
+        for (let i = 0; i < entities.length; i++) {
+            const entity = entities[i];
+            if (entity.id === entityId) {
+                return entity;
+            }
+        }
+    }
 
     game.getSelectedEntities = () => {
         return selectedEntities;
@@ -175,7 +186,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
         background: 'grid_32.webp',
         building_background: 'building_background.png',
         pointer: 'pointer.webp',
-        bipointer: 'bipointer.webp'
+        bipointer: 'bipointer.webp',
+        power: 'power.webp'
     };
     for (let i=0; i<window.objectData.buildings_list.length; i++) {
         let building = window.objectData.buildings_list[i];
@@ -651,12 +663,14 @@ const fontFamily = ['Recursive', 'sans-serif'];
         let saveObject = {
             name: game.facilityName,
             faction: game.settings.selectedFaction,
+            entityIds: _entityIds,
             entities: []
         };
         let saveEntities = isSelection ? selectedEntities : entities;
         for (let i = 0; i < saveEntities.length; i++) {
             let entity = saveEntities[i];
             let entityData = {
+                id: entity.id,
                 x: parseFloat(entity.x),
                 y: parseFloat(entity.y),
                 z: parseInt(entity.z),
@@ -688,12 +702,16 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
         setTimeout(() => {
             let xTotal = 0, yTotal = 0;
+            let entityIds = _entityIds;
+            if (typeof saveObject.entityIds === 'number') {
+                _entityIds += saveObject.entityIds;
+            }
             for (let i=0; i<saveObject.entities.length; i++) {
                 let entityData = saveObject.entities[i];
                 let entity;
                 switch (entityData.type) {
                     case 'building':
-                        entity = createBuilding(entityData.subtype, parseFloat(entityData.x), parseFloat(entityData.y), parseInt(entityData.z));
+                        entity = createBuilding(entityData.subtype, parseFloat(entityData.x), parseFloat(entityData.y), parseInt(entityData.z), isNaN(entityData.id) ? undefined : entityIds + parseInt(entityData.id));
                         break;
                     default:
                         console.error('Attempted to load invalid entity:', entityData);
@@ -1114,10 +1132,12 @@ const fontFamily = ['Recursive', 'sans-serif'];
         return light;
     }
 
-    let entityIds = 1;
-    function createEntity(type, subtype, x, y, z, netData) {
+    function createEntity(type, subtype, x, y, z, id, netData) {
         let entity = new PIXI.Container();
-        entity.id = entityIds++;
+        if (typeof id === 'number' && _entityIds <= id) {
+            _entityIds = id + 1;
+        }
+        entity.id = id ?? _entityIds++;
         entity.subtype = subtype;
         entity.netData = netData;
 
@@ -1401,8 +1421,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
     const METER_PIXEL_SIZE = 32;
     const METER_UNREAL_UNITS = 100;
     const METER_PIXEL_SCALE = METER_UNREAL_UNITS / METER_PIXEL_SIZE;
-    function createBuilding(type, x, y, z, netData) {
-        let entity = createEntity('building', type, x, y, z, netData);
+    function createBuilding(type, x, y, z, id, netData) {
+        let entity = createEntity('building', type, x, y, z, id, netData);
 
         let building = window.objectData.buildings[type];
         if (!building) {
@@ -1492,11 +1512,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
         const socketWidth = 32, socketThickness = 6, powerSocketSize = 8;
         if (building.sockets) {
             entity.sockets = new PIXI.Container();
-            // Replace this bit so its only declared once above selectionarea.
             const buildingWidthOffset = -(building.width ? building.width * METER_PIXEL_SIZE : sprite?.width ?? 0) / 2;
             const buildingLengthOffset = -(building.length ? building.length * METER_PIXEL_SIZE : sprite?.height ?? 0) / 2;
             for (let i = 0; i < building.sockets.length; i++) {
                 let socket = new PIXI.Graphics();
+                socket.connections = {};
                 socket.socketData = Object.assign({}, building.sockets[i]);
                 socket.socketData.x = isNaN(socket.socketData.x) ? 0 : buildingWidthOffset + (socket.socketData.x / METER_PIXEL_SCALE);
                 socket.socketData.y = isNaN(socket.socketData.y) ? 0 : buildingLengthOffset + (socket.socketData.y / METER_PIXEL_SCALE);
@@ -1525,30 +1545,38 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 }
                 // Might want to add what kind of liquid it expects, water, oil, power, etc.
                 if (socket.socketData.flow === 'in') {
-                    let socketPointer = new PIXI.Sprite(resources.pointer.texture);
-                    socketPointer.anchor.set(0.5, -0.5);
-                    socketPointer.rotation = Math.PI;
-                    socket.addChild(socketPointer);
+                    socket.pointer = new PIXI.Sprite(resources.pointer.texture);
+                    socket.pointer.anchor.set(0.5, -0.5);
+                    socket.pointer.rotation = Math.PI;
+                    socket.addChild(socket.pointer);
                 } else if (socket.socketData.flow === 'out') {
-                    let socketPointer = new PIXI.Sprite(resources.pointer.texture);
-                    socketPointer.anchor.set(0.5, 1.5);
-                    socket.addChild(socketPointer);
+                    socket.pointer = new PIXI.Sprite(resources.pointer.texture);
+                    socket.pointer.anchor.set(0.5, 1.5);
+                    socket.addChild(socket.pointer);
                 } else if (socket.socketData.type === 'pipe') {
-                    let socketPointer = new PIXI.Sprite(resources.bipointer.texture);
-                    socketPointer.anchor.set(0.5, 1.5);
-                    socket.addChild(socketPointer);
-                }
-                /*
+                    socket.pointer = new PIXI.Sprite(resources.bipointer.texture);
+                    socket.pointer.anchor.set(0.5, 1.5);
+                    socket.addChild(socket.pointer);
                 } else if (socket.socketData.type === 'power') {
-                    let socketPointer = new PIXI.Sprite(resources.bipointer.texture);
-                    socketPointer.anchor.set(0.5, 1.5);
-                    socket.addChild(socketPointer);
-                } else {
-                    let socketPointer = new PIXI.Sprite(resources.bipointer.texture);
-                    socketPointer.anchor.set(0.5, 1.5);
-                    socket.addChild(socketPointer);
+                    socket.pointer = new PIXI.Sprite(resources.power.texture);
+                    socket.pointer.anchor.set(0.5, 1.5);
+                    socket.pointer.rotation = -(entity.rotation + socket.rotation);
+                    socket.addChild(socket.pointer);
                 }
-                */
+                socket.setConnection = function(connectingEntityId, connectingSocket) {
+                    if (!isNaN(connectingEntityId) && connectingSocket?.socketData && (isNaN(socket.connections[connectingEntityId]) || socket.connections[connectingEntityId] !== connectingSocket.socketData.id)) {
+                        entity.removeConnections(socket.socketData.cap !== 'back' || socket.socketData.id);
+                        socket.connections[connectingEntityId] = connectingSocket.socketData.id;
+                        connectingSocket.connections[entity.id] = socket.socketData.id;
+                        socket.updatePointer(false);
+                        connectingSocket.updatePointer(false);
+                    }
+                }
+                socket.updatePointer = function(visible) {
+                    if (socket.pointer) {
+                        socket.pointer.visible = visible ?? Object.keys(socket.connections).length === 0;
+                    }
+                }
                 entity.sockets.addChild(socket);
             }
             entity.addChild(entity.sockets);
@@ -1644,6 +1672,15 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
             if (entity.bezier && entity.bezier.length() <= entity.building?.minLength) {
                 entity.remove();
+            } else if (entity.building?.requireConnection) {
+                // Requires all sockets have at least one connection. Mainly for power lines.
+                for (let i = 0; i < entity.sockets.children.length; i++) {
+                    const socket = entity.sockets.children[i];
+                    if (Object.keys(socket.connections).length === 0) {
+                        entity.remove();
+                        break;
+                    }
+                }
             }
 
             entity.updateHandles();
@@ -1690,7 +1727,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
                     let gmxGrid = gmx;
                     let gmyGrid = gmy;
-                    if (game.settings.enableGrid || keys[16]) {
+                    if (!entity.building?.ignoreSnapSettings && (game.settings.enableGrid || keys[16])) {
                         gmxGrid = Math.floor(gmxGrid / gridSize) * gridSize;
                         gmyGrid = Math.floor(gmyGrid / gridSize) * gridSize;
                     }
@@ -1701,14 +1738,14 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             entity.x = gmx;
                             entity.y = gmy;
 
-                            if (game.settings.enableGrid || keys[16]) {
+                            if (!entity.building?.ignoreSnapSettings && (game.settings.enableGrid || keys[16])) {
                                 entity.x = Math.floor(entity.x / gridSize) * gridSize;
                                 entity.y = Math.floor(entity.y / gridSize) * gridSize;
                             }
                         } else {
                             if (mouseDown[2] && entity.building?.isBezier) {
                                 let angle = Math.angleBetween(selectedHandlePoint, mousePos);
-                                if (game.settings.enableSnapRotation) {
+                                if (!entity.building?.ignoreSnapSettings && game.settings.enableSnapRotation) {
                                     let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ? game.settings.snapRotationDegrees : 15);
                                     angle = Math.floor(angle / snapRotationDegrees) * snapRotationDegrees;
                                 }
@@ -1719,9 +1756,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             }
                             
                             if (!entity.building?.isBezier || Math.abs(selectedHandlePoint.y) < 25) {
-                                if (!entity.building?.isBezier) {
+                                if (!entity.building?.isBezier && (entity.subtype === 'power_line' || !entity.hasConnections())) {
                                     let angle = Math.angleBetween(entity, { x: gmx, y: gmy });
-                                    if (game.settings.enableSnapRotation) {
+                                    if (!entity.building?.ignoreSnapSettings && game.settings.enableSnapRotation) {
                                         let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ? game.settings.snapRotationDegrees : 15);
                                         angle = Math.round(angle / snapRotationDegrees) * snapRotationDegrees;
                                     }
@@ -1740,75 +1777,78 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             }
                         }
 
-                        for (let i=0; i<entities.length; i++) {
-                            let entity2 = entities[i];
-                            if (entity2 === entity || entity2.type !== 'building' || !(entity.sockets && entity2.sockets)) {
-                                continue;
+                        if (!mouseDown[2]) {
+                            let handleSocket;
+                            let connectionEstablished = false;
+                            if (entity.sockets) {
+                                handleSocket = entity.sockets.children[entity.sockets.children.length - 1];
                             }
-                            if (entity2.sockets) {
-                                for (let i = 0; i < entity2.sockets.children.length; i++) {
-                                    let socket = entity2.sockets.children[i];
-                                    let mousePos2 = entity2.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
-                                    if (Math.distanceBetween(mousePos2, socket) < 35) {
-                                        let endSocket = entity.sockets.children[entity.sockets.children.length - 1];
-                                        if (typeof endSocket.socketData.type === 'string' && endSocket.socketData.type === socket.socketData.type) {
-                                            let socketPosition = app.cstage.toLocal({x: socket.x, y: socket.y}, entity2, undefined, true);
-                                            if (endSocket.socketData.type === 'power') {
-                                                entity.rotation = Math.angleBetween(entity, socketPosition);
-                                            }
-                                            socketPosition = entity.toLocal(socketPosition, app.cstage, undefined, true);
-                                            let socketRotation = ((entity2.rotation - Math.PI/2) + Math.deg2rad(socket.socketData.rotation)) - entity.rotation;
-                                            if (endSocket.socketData.type === 'power' || selectedHandlePoint.rotation === socketRotation && Math.floor(socketPosition.y) === 0 || entity.building?.isBezier) {
-                                                selectedHandlePoint.x = socketPosition.x;
-                                                selectedHandlePoint.y = socketPosition.y;
-                                                if (entity.building?.isBezier) {
-                                                    selectedHandlePoint.rotation = socketRotation;
+                            for (let i = 0; i < entities.length; i++) {
+                                let entity2 = entities[i];
+                                if (entity2 === entity || entity2.type !== 'building' || !(entity.sockets && entity2.sockets)) {
+                                    continue;
+                                }
+                                if (entity2.sockets) {
+                                    for (let i = 0; i < entity2.sockets.children.length; i++) {
+                                        let entitySocket = entity2.sockets.children[i];
+                                        let mousePos2 = entity2.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
+                                        if (entity.building?.canSnapStructureType !== false || entity.subtype !== entity2.subtype) {
+                                            if (Math.distanceBetween(mousePos2, entitySocket) < 35 || entity.subtype === 'power_line' && entity2.canGrab()) {
+                                                if (typeof handleSocket.socketData.type === 'string' && handleSocket.socketData.type === entitySocket.socketData.type) {
+                                                    if (Object.keys(entitySocket.connections).length === 0 || (entitySocket.connections[entity.id] === handleSocket.socketData.id || (!entity.hasConnectionToEntityId(entity2.id) && Object.keys(entitySocket.connections).length < entitySocket.socketData.connectionLimit))) {
+                                                        let socketPosition = app.cstage.toLocal({x: entitySocket.x, y: entitySocket.y}, entity2, undefined, true);
+                                                        if (Math.distanceBetween(entity, socketPosition) <= (entity.building?.maxLength * METER_PIXEL_SIZE)) {
+                                                            if (handleSocket.socketData.type === 'power') {
+                                                                entity.rotation = Math.angleBetween(entity, socketPosition);
+                                                            }
+                                                            socketPosition = entity.toLocal(socketPosition, app.cstage, undefined, true);
+                                                            let socketRotation = ((entity2.rotation + entitySocket.rotation) - entity.rotation) - Math.deg2rad(handleSocket.socketData.rotation);
+                                                            if (handleSocket.socketData.type === 'power' || selectedHandlePoint.rotation === socketRotation && Math.floor(socketPosition.y) === 0 || entity.building?.isBezier) {
+                                                                handleSocket.setConnection(entity2.id, entitySocket);
+                                                                selectedHandlePoint.x = socketPosition.x;
+                                                                if (entity.building?.isBezier) {
+                                                                    selectedHandlePoint.y = socketPosition.y;
+                                                                    selectedHandlePoint.rotation = socketRotation;
+                                                                }
+                                                                connectionEstablished = true;
+                                                            }
+                                                            break;
+                                                        }
+                                                    }
                                                 }
                                             }
-                                            break;
                                         }
                                     }
                                 }
-                            } else {
-                                let selectedPointToEntity2Local = entity2.toLocal(selectedHandlePoint, entity, undefined, true);
-                                let projection = entity2.bezier.project(selectedPointToEntity2Local);
-                                if (projection.d <= 25) {
-                                    let middleConnection = false;
-                                    if (projection.t >= 0.95) {
-                                        projection = entity2.bezier.get(1);
-                                    } else if (projection.t <= 0.05) {
-                                        projection = entity2.bezier.get(0);
-                                    } else if (entity.subtype === 'pipeline') {
-                                        projection = entity2.bezier.get(0.5);
-                                        middleConnection = true;
+                                if (!connectionEstablished && entity2.bezier && entity2.building?.isBezier && entity.subtype === entity2.subtype) {
+                                    let selectedPointToEntity2Local = entity2.toLocal(selectedHandlePoint, entity, undefined, true);
+                                    let projection = entity2.bezier.project(selectedPointToEntity2Local);
+                                    if (projection.d <= 25) {
+                                        let local = entity.toLocal({x: projection.x, y: projection.y}, entity2, undefined, true);
+                                        let normal = entity2.bezier.normal(projection.t);
+                                        let angle = Math.angleBetween({x: 0, y: 0}, normal);
+                                        selectedHandlePoint.x = local.x;
+                                        selectedHandlePoint.y = local.y;
+        
+                                        let currentRot = entity.rotation + selectedHandlePoint.rotation;
+                                        let angleRight = entity2.rotation + (angle - Math.PI/2) - Math.PI/2;
+                                        let angleLeft = entity2.rotation + (angle + Math.PI/2) - Math.PI/2;
+                                        let rightDiff = Math.atan2(Math.sin(angleRight-currentRot), Math.cos(angleRight-currentRot));
+                                        let leftDiff = Math.atan2(Math.sin(angleLeft-currentRot), Math.cos(angleLeft-currentRot));
+        
+                                        // TODO: Handle saving previous rotations of snapped handles as well.
+
+                                        if (rightDiff < leftDiff) {
+                                            selectedHandlePoint.rotation = (angleRight + Math.PI/2) - entity.rotation;
+                                        } else {
+                                            selectedHandlePoint.rotation = (angleLeft + Math.PI/2) - entity.rotation;
+                                        }
+                                        break;
                                     }
-    
-                                    let local = entity.toLocal({x: projection.x, y: projection.y}, entity2, undefined, true);
-                                    let normal = entity2.bezier.normal(projection.t);
-                                    let angle = Math.angleBetween({x: 0, y: 0}, normal);
-                                    if (entity.subtype === 'pipeline' && middleConnection) {
-                                        angle += Math.PI/2;
-                                    }
-                                    selectedHandlePoint.x = local.x;
-                                    selectedHandlePoint.y = local.y;
-    
-                                    let currentRot = entity.rotation + selectedHandlePoint.rotation;
-                                    let angleRight = entity2.rotation + (angle - Math.PI/2) - Math.PI/2;
-                                    let angleLeft = entity2.rotation + (angle + Math.PI/2) - Math.PI/2;
-                                    let rightDiff = Math.atan2(Math.sin(angleRight-currentRot), Math.cos(angleRight-currentRot));
-                                    let leftDiff = Math.atan2(Math.sin(angleLeft-currentRot), Math.cos(angleLeft-currentRot));
-    
-                                    if (rightDiff < leftDiff) {
-                                        selectedHandlePoint.rotation = (angleRight + Math.PI/2) - entity.rotation;
-                                    } else {
-                                        selectedHandlePoint.rotation = (angleLeft + Math.PI/2) - entity.rotation;
-                                    }
-                                    if (entity.subtype === 'pipeline' && middleConnection) {
-                                        selectedHandlePoint.x += Math.cos(selectedHandlePoint.rotation) * 8;
-                                        selectedHandlePoint.y += Math.sin(selectedHandlePoint.rotation) * 8;
-                                    }
-                                    break;
                                 }
+                            }
+                            if (handleSocket && !connectionEstablished) {
+                                entity.removeConnections(handleSocket.socketData.id);
                             }
                         }
 
@@ -1845,6 +1885,20 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         if (selectedHandlePoint.handle) {
                             selectedHandlePoint.handle.position.x = selectedHandlePoint.x;
                             selectedHandlePoint.handle.position.y = selectedHandlePoint.y;
+                        }
+                    }
+                }
+            }
+
+            if (entity.visible && entity.sockets) {
+                if (entity.outline && entity.outline.visible !== entity.selected) {
+                    entity.outline.visible = entity.selected;
+                }
+                if (entity.selected) {
+                    for (let i = 0; i < entity.sockets.children.length; i++) {
+                        let socket = entity.sockets.children[i];
+                        if (socket.pointer?.visible && socket.socketData.type === 'power') {
+                            socket.pointer.rotation = -(entity.rotation + socket.rotation);
                         }
                     }
                 }
@@ -1908,6 +1962,62 @@ const fontFamily = ['Recursive', 'sans-serif'];
             return false;
         };
 
+        entity.hasConnections = function() {
+            if (entity.sockets) {
+                for (let i = 0; i < entity.sockets.children.length; i++) {
+                    const entitySocket = entity.sockets.children[i];
+                    if (Object.keys(entitySocket.connections).length > 0) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        entity.hasConnectionToEntityId = function(entityId) {
+            if (entity.sockets) {
+                for (let i = 0; i < entity.sockets.children.length; i++) {
+                    const entitySocket = entity.sockets.children[i];
+                    if (typeof entitySocket.connections[entityId] === 'number') {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        entity.removeConnections = function(socketId) {
+            if (entity.sockets) {
+                // Iterate sockets to make sure we either remove the connections and update the socket or remove the entity altogether.
+                for (let i = 0; i < entity.sockets.children.length; i++) {
+                    const entitySocket = entity.sockets.children[i];
+                    if (typeof socketId !== 'number' || entitySocket.socketData.id === socketId) {
+                        for (const [connectedEntityId, connectedSocketId] of Object.entries(entitySocket.connections)) {
+                            const connectedEntity = game.getEntityById(connectedEntityId);
+                            if (connectedEntity) {
+                                for (let k = 0; k < connectedEntity.sockets.children.length; k++) {
+                                    const connectedSocket = connectedEntity.sockets.children[k];
+                                    if (connectedSocket.socketData.id === connectedSocketId) {
+                                        delete connectedSocket.connections[entity.id];
+                                        if (Object.keys(connectedSocket.connections).length === 0) {
+                                            if (connectedEntity.building?.requireConnection) {
+                                                connectedEntity.remove();
+                                            } else {
+                                                connectedSocket.updatePointer(true);
+                                            }
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                            delete entitySocket.connections[connectedEntityId];
+                        }
+                        entitySocket.updatePointer(true);
+                    }
+                }
+            }
+        }
+
         entity.getZIndex = function() {
             return -entity.y - (building.sortOffset ? building.sortOffset : 0) - (entity.selected ? 10000000 : 0);
         };
@@ -1919,6 +2029,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             if (selectedHandlePoint) {
                 selectedHandlePoint = null;
             }
+            entity.removeConnections();
             if (sound) {
                 soundStop(sound);
                 sound = null;
@@ -2124,22 +2235,39 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     entity.backCap.rotation = backPoint.rotation + Math.PI;
                     entity.addChild(entity.backCap);
                 }
-                if (entity.sockets && backPoint) {
+                if (entity.sockets) {
+                    let midPoint = entity.bezier.get(0.5);
+                    let midNormal = entity.bezier.normal(midPoint.t);
+                    let midAngle = Math.angleBetween({x: 0, y: 0}, midNormal) - Math.PI/2;
                     for (let i = 0; i < entity.sockets.children.length; i++) {
                         let socket = entity.sockets.children[i];
-                        if (socket.socketData.cap === 'back') {
-                            socket.position.set(backPoint.x, backPoint.y);
-                            socket.rotation = backPoint.rotation - Math.PI/2;
-                            break;
+                        let socketPosition, socketRotation;
+                        if (socket.socketData.cap === 'left' || socket.socketData.cap === 'right') {
+                            socketRotation = midAngle + Math.deg2rad(socket.socketData.rotation);
+                            socketPosition = Math.extendPoint(midPoint, 8, socketRotation - Math.PI/2);
+                        }
+                        switch (socket.socketData.cap) {
+                            case 'left':
+                                socket.position.set(socketPosition.x, socketPosition.y);
+                                socket.rotation = socketRotation;
+                                break;
+                            case 'right':
+                                socket.position.set(socketPosition.x, socketPosition.y);
+                                socket.rotation = socketRotation;
+                                break;
+                            case 'back':
+                                socket.position.set(backPoint.x, backPoint.y);
+                                socket.rotation = backPoint.rotation - Math.PI/2;
+                                break;
                         }
                     }
                 }
-                /*
-                entity.removeChild(entity.outline);
-                entity.outline = new PIXI.SimpleRope(resources.white.texture, entity.bezier.getLUT(segments), 1);
-                entity.outline.tint = COLOR_ORANGE;
-                entity.addChild(entity.outline);
-                */
+                if (entity.building?.hasOutline !== false) {
+                    entity.removeChild(entity.outline);
+                    entity.outline = new PIXI.SimpleRope(resources.white.texture, entity.bezier.getLUT(segments), 1);
+                    entity.outline.tint = COLOR_ORANGE;
+                    entity.addChild(entity.outline);
+                }
             }
         };
 
@@ -2179,7 +2307,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
     }
 
     game.startBuild = function(buildingData) {
-        let entity = createBuilding(buildingData.key, 0, 0, 0, {});
+        let entity = createBuilding(buildingData.key, 0, 0, 0);
         game.selectEntity(entity);
         game.setPickupEntities(true, true);
         if (entity.building?.hasHandle) {
@@ -2273,6 +2401,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             let entity = entities[i];
             entity.remove();
         }
+        _entityIds = 0;
     }
 
     const FPSMIN = 30;
@@ -2333,6 +2462,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 entity.tick(delta);
             } else {
                 entities.splice(i, 1);
+                if (entities.length === 0) {
+                    _entityIds = 0;
+                }
                 i--;
                 entity.afterRemove();
             }
@@ -2351,6 +2483,45 @@ const fontFamily = ['Recursive', 'sans-serif'];
         if (pickupSelectedEntities) {
             game.buildingSelectedMenuComponent?.refresh(true);
             if (!selectedHandlePoint && (!ignoreMousePickup || (Date.now()-pickupTime > 250 || Math.distanceBetween(pickupPosition, {x: gmx, y: gmy}) > 20))) {
+                if (ignoreMousePickup) {
+                    for (let i = 0; i < selectedEntities.length; i++) {
+                        // Destroying any connections with entities that aren't selected, it might be worth checking if the mouse / selection position has changed before doing so or checking for rotation.
+                        let pickupEntity = selectedEntities[i];
+                        if (pickupEntity.sockets) {
+                            for (let j = 0; j < pickupEntity.sockets.children.length; j++) {
+                                const pickupSocket = pickupEntity.sockets.children[j];
+                                for (const [connectedEntityId, connectedSocketId] of Object.entries(pickupSocket.connections)) {
+                                    const connectedEntity = game.getEntityById(connectedEntityId);
+                                    if (connectedEntity && !connectedEntity.selected) {
+                                        // TODO: Update entity.removeConnections to support specifying an entity to remove a connection for, because this is all basically the same code.
+                                        for (let k = 0; k < connectedEntity.sockets.children.length; k++) {
+                                            const connectedSocket = connectedEntity.sockets.children[k];
+                                            if (connectedSocket.socketData.id === connectedSocketId) {
+                                                delete connectedSocket.connections[pickupEntity.id];
+                                                if (Object.keys(connectedSocket.connections).length === 0) {
+                                                    if (connectedEntity.building?.requireConnection) {
+                                                        connectedEntity.remove();
+                                                    } else {
+                                                        connectedSocket.updatePointer(true);
+                                                    }
+                                                }
+                                                break;
+                                            }
+                                        }
+                                        delete pickupSocket.connections[connectedEntity.id];
+                                        if (Object.keys(pickupSocket.connections).length === 0) {
+                                            if (pickupEntity.building?.requireConnection) {
+                                                pickupEntity.remove();
+                                            } else {
+                                                pickupSocket.updatePointer(true);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 ignoreMousePickup = false;
                 if (mouseDown[2]) {
                     if (!selectionRotation) {
@@ -2433,7 +2604,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     } else {
                         pickupEntity.x = gmx - pickupEntity.pickupOffset.x;
                         pickupEntity.y = gmy - pickupEntity.pickupOffset.y;
-                        if (game.settings.enableGrid || keys[16]) {
+                        if (!pickupEntity.building?.ignoreSnapSettings && (game.settings.enableGrid || keys[16])) {
                             let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
                             pickupEntity.x = (Math.round(pickupEntity.x / gridSize) * gridSize);
                             pickupEntity.y = (Math.round(pickupEntity.y / gridSize) * gridSize);
@@ -2443,59 +2614,53 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
             let pickupEntity = game.getSelectedEntity();
             if (pickupEntity && pickupEntity.building?.canSnap && !selectedHandlePoint) {
-                let isRotated = false;
+                let connectionEstablished = false;
                 for (let i=0; i<entities.length; i++) {
                     let entity = entities[i];
                     let mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
                     let projection = entity.bezier?.project(mousePos);
                     if (entity !== pickupEntity && entity.type === 'building' && (pickupEntity.subtype === entity.subtype || (pickupEntity.sockets && entity.sockets)) && (!projection || projection.d <= 25)) {
                         if (pickupEntity.sockets && entity.sockets) {
-                            for (let i = 0; i < entity.sockets.children.length; i++) {
-                                let entitySocket = entity.sockets.children[i];
-                                if (Math.distanceBetween(mousePos, entitySocket) < 35) {
-                                    for (let i = 0; i < pickupEntity.sockets.children.length; i++) {
-                                        let pickupSocket = pickupEntity.sockets.children[i];
-                                        if (entitySocket.socketData.type === pickupSocket.socketData.type) {
-                                            if (entitySocket.socketData.flow && entitySocket.socketData.flow === pickupSocket.socketData.flow) {
-                                                continue;
+                            for (let j = 0; j < entity.sockets.children.length; j++) {
+                                let entitySocket = entity.sockets.children[j];
+                                if (pickupEntity.building?.canSnapStructureType !== false || pickupEntity.subtype !== entity.subtype) {
+                                    if (Math.distanceBetween(mousePos, entitySocket) < 35 || pickupEntity.subtype === 'power_line' && entity.canGrab()) {
+                                        for (let k = 0; k < pickupEntity.sockets.children.length; k++) {
+                                            let pickupSocket = pickupEntity.sockets.children[k];
+                                            if (entitySocket.socketData.type === pickupSocket.socketData.type) {
+                                                if (Object.keys(entitySocket.connections).length === 0 || Object.keys(entitySocket.connections).length < entitySocket.socketData.connectionLimit || entitySocket.connections[pickupEntity.id] === pickupSocket.socketData.id) {
+                                                    if (entitySocket.socketData.flow && entitySocket.socketData.flow === pickupSocket.socketData.flow) {
+                                                        continue;
+                                                    }
+                                                    if (isNaN(pickupEntity.prevRotation)) {
+                                                        pickupEntity.prevRotation = pickupEntity.rotation;
+                                                    }
+                                                    pickupSocket.setConnection(entity.id, entitySocket);
+                                                    let socketDistance = Math.distanceBetween({ x: 0, y: 0 }, pickupSocket);
+                                                    let entitySocketPosition = app.cstage.toLocal({x: entitySocket.x, y: entitySocket.y}, entity, undefined, true);
+                                                    let entitySocketRotation = entity.rotation + entitySocket.rotation;
+                                                    let extendedPoint = Math.extendPoint(entitySocketPosition, socketDistance, entitySocketRotation - Math.PI/2);
+                                                    pickupEntity.position.set(extendedPoint.x, extendedPoint.y);
+                                                    pickupEntity.rotation = entitySocketRotation + pickupSocket.rotation;
+                                                    if (pickupSocket.socketData.flow) {
+                                                        pickupEntity.rotation -= Math.PI;
+                                                    }
+                                                    connectionEstablished = true;
+                                                    break;
+                                                }
                                             }
-                                            if (isNaN(pickupEntity.prevRotation)) {
-                                                pickupEntity.prevRotation = pickupEntity.rotation;
-                                            }
-                                            let socketDistance = Math.distanceBetween({ x: 0, y: 0 }, pickupSocket);
-                                            let entitySocketPosition = app.cstage.toLocal({x: entitySocket.x, y: entitySocket.y}, entity, undefined, true);
-                                            let extendedPoint = Math.extendPoint(entitySocketPosition, socketDistance, (entity.rotation + Math.deg2rad(entitySocket.socketData.rotation)) - Math.PI/2);
-                                            pickupEntity.position.set(extendedPoint.x, extendedPoint.y);
-                                            pickupEntity.rotation = (Math.deg2rad(pickupSocket.socketData.rotation) + (entity.rotation + Math.deg2rad(entitySocket.socketData.rotation)));
-                                            if (pickupSocket.socketData.flow) {
-                                                pickupEntity.rotation -= Math.PI;
-                                            }
-                                            isRotated = true;
+                                        }
+                                        if (connectionEstablished) {
                                             break;
                                         }
                                     }
-                                    break;
                                 }
                             }
                         }
-                        if (entity.bezier) {
-                            let middleConnection = false;
-                            if (projection.t >= 0.95) {
-                                projection = entity.bezier.get(1);
-                            } else if (projection.t <= 0.05) {
-                                projection = entity.bezier.get(0);
-                            } else if (entity.subtype === 'pipeline') {
-                                projection = entity.bezier.get(0.5);
-                                middleConnection = true;
-                            } else if (!entity.building?.isBezier) {
-                                break;
-                            }
+                        if (!connectionEstablished && entity.bezier && entity.building?.isBezier && pickupEntity.subtype === entity.subtype) {
                             let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity, undefined, true);
                             let normal = entity.bezier.normal(projection.t);
                             let angle = Math.angleBetween({x: 0, y: 0}, normal);
-                            if (entity.subtype === 'pipeline' && middleConnection) {
-                                angle += Math.PI/2;
-                            }
                             pickupEntity.x = global.x;
                             pickupEntity.y = global.y;
 
@@ -2513,16 +2678,15 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             } else {
                                 pickupEntity.rotation = angleLeft + Math.PI/2;
                             }
-                            isRotated = true;
-                            if (entity.subtype === 'pipeline' && middleConnection) {
-                                pickupEntity.x += Math.cos(pickupEntity.rotation) * 8;
-                                pickupEntity.y += Math.sin(pickupEntity.rotation) * 8;
-                            }
+                            connectionEstablished = true;
                             break;
                         }
                     }
                 }
-                if (!isRotated && !isNaN(pickupEntity.prevRotation)) {
+                if (!connectionEstablished) {
+                    pickupEntity.removeConnections();
+                }
+                if (!connectionEstablished && !isNaN(pickupEntity.prevRotation)) {
                     pickupEntity.rotation = pickupEntity.prevRotation;
                     delete pickupEntity.prevRotation;
                     pickupEntity.pickupOffset = {
