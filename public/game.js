@@ -659,7 +659,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
     }
 
-    game.downloadSave = function(isSelection) {
+    game.getSaveData = function(isSelection) {
         let saveObject = {
             name: game.facilityName,
             faction: game.settings.selectedFaction,
@@ -682,7 +682,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
             entity.onSave(entityData);
             saveObject.entities.push(entityData);
         }
+        return saveObject;
+    }
 
+    game.downloadSave = function(isSelection) {
         let fileName = game.facilityName.toLowerCase().trim()
             .replace(/[^\w\s-]/g, '')
             .replace(/[\s_-]+/g, '_')
@@ -690,7 +693,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         if (isSelection) {
             fileName += '_selection';
         }
-        download(JSON.stringify(saveObject), fileName, 'application/json')
+        download(JSON.stringify(game.getSaveData(isSelection)), fileName, 'application/json');
     };
 
     game.loadSave = function(saveObject, isSelection) {
@@ -703,10 +706,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
         setTimeout(() => {
             let xTotal = 0, yTotal = 0;
             let entityIds = _entityIds;
+            let entityIdMap = {};
             if (typeof saveObject.entityIds === 'number') {
                 _entityIds += saveObject.entityIds;
             }
-            for (let i=0; i<saveObject.entities.length; i++) {
+            for (let i = 0; i < saveObject.entities.length; i++) {
                 let entityData = saveObject.entities[i];
                 let entity;
                 switch (entityData.type) {
@@ -718,6 +722,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         continue;
                 }
                 if (entity) {
+                    entityData.createdEntity = entity;
+                    if (entity.id !== entityData.id) {
+                        entityIdMap[entityData.id] = entity.id;
+                    }
                     entity.rotation = entityData.rotation;
                     entity.locked = entityData.locked;
                     entity.onLoad(entityData);
@@ -727,6 +735,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         yTotal += parseFloat(entity.y);
                     }
                 }
+            }
+            for (let i = 0; i < saveObject.entities.length; i++) {
+                let entityData = saveObject.entities[i];
+                entityData.createdEntity?.afterLoad(entityData, entityIdMap);
             }
             if (isSelection) {
                 let centerPos = {
@@ -769,7 +781,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
     game.selectEntity = function(entity) {
         game.appComponent.bmc();
-        game.deselectEntities(false, true);
+        if (selectedEntities.length > 1 || selectedEntities[0] !== entity) {
+            game.deselectEntities(false, true);
+        }
         return game.addSelectedEntity(entity);
     }
 
@@ -801,7 +815,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
     }
 
     game.removeSelectedEntity = function(entity, noMenuUpdate) {
-        game.setPickupEntities(false);
         if (entity?.selected) {
             for (let i = 0; i < selectedEntities.length; i++) {
                 let selectedEntity = selectedEntities[i];
@@ -811,6 +824,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     break;
                 }
             }
+            if (!selectedEntities.length) {
+                game.setPickupEntities(false);
+            } 
             if (!noMenuUpdate) {
                 game.updateSelectedBuildingMenu();
             }
@@ -1553,7 +1569,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     socket.pointer = new PIXI.Sprite(resources.pointer.texture);
                     socket.pointer.anchor.set(0.5, 1.5);
                     socket.addChild(socket.pointer);
-                } else if (socket.socketData.type === 'pipe') {
+                } else if (socket.socketData.type === 'pipe' && socket.socketData.cap !== 'left' && socket.socketData.cap !== 'right') {
                     socket.pointer = new PIXI.Sprite(resources.bipointer.texture);
                     socket.pointer.anchor.set(0.5, 1.5);
                     socket.addChild(socket.pointer);
@@ -1563,13 +1579,15 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     socket.pointer.rotation = -(entity.rotation + socket.rotation);
                     socket.addChild(socket.pointer);
                 }
-                socket.setConnection = function(connectingEntityId, connectingSocket) {
-                    if (!isNaN(connectingEntityId) && connectingSocket?.socketData && (isNaN(socket.connections[connectingEntityId]) || socket.connections[connectingEntityId] !== connectingSocket.socketData.id)) {
-                        entity.removeConnections(socket.socketData.cap !== 'back' || socket.socketData.id);
-                        socket.connections[connectingEntityId] = connectingSocket.socketData.id;
-                        connectingSocket.connections[entity.id] = socket.socketData.id;
+                socket.setConnection = function(connectingEntityId, connectingSocket, connectingSocketId) {
+                    if (!isNaN(connectingEntityId) && (typeof connectingSocketId === 'number' || connectingSocket?.socketData) && (isNaN(socket.connections[connectingEntityId]) || socket.connections[connectingEntityId] !== (connectingSocketId ?? connectingSocket.socketData.id))) {
+                        if (connectingSocket) {
+                            entity.removeConnections(socket.socketData.cap !== 'back' || socket.socketData.id);
+                            connectingSocket.connections[entity.id] = socket.socketData.id;
+                            connectingSocket.updatePointer(false);
+                        }
+                        socket.connections[connectingEntityId] = connectingSocketId ?? connectingSocket.socketData.id;
                         socket.updatePointer(false);
-                        connectingSocket.updatePointer(false);
                     }
                 }
                 socket.updatePointer = function(visible) {
@@ -1788,39 +1806,44 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 if (entity2 === entity || entity2.type !== 'building' || !(entity.sockets && entity2.sockets)) {
                                     continue;
                                 }
-                                if (entity2.sockets) {
+                                if (entity2.sockets && (entity.building?.canSnapStructureType !== false || entity.subtype !== entity2.subtype)) {
+                                    const mousePos2 = entity2.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
+                                    let nearestSocket, nearestSocketPos, nearestSocketDist = null;
                                     for (let i = 0; i < entity2.sockets.children.length; i++) {
-                                        let entitySocket = entity2.sockets.children[i];
-                                        let mousePos2 = entity2.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
-                                        if (entity.building?.canSnapStructureType !== false || entity.subtype !== entity2.subtype) {
-                                            if (Math.distanceBetween(mousePos2, entitySocket) < 35 || entity.subtype === 'power_line' && entity2.canGrab()) {
-                                                if (typeof handleSocket.socketData.type === 'string' && handleSocket.socketData.type === entitySocket.socketData.type) {
-                                                    if (Object.keys(entitySocket.connections).length === 0 || (entitySocket.connections[entity.id] === handleSocket.socketData.id || (!entity.hasConnectionToEntityId(entity2.id) && Object.keys(entitySocket.connections).length < entitySocket.socketData.connectionLimit))) {
-                                                        let socketPosition = app.cstage.toLocal({x: entitySocket.x, y: entitySocket.y}, entity2, undefined, true);
-                                                        if (Math.distanceBetween(entity, socketPosition) <= (entity.building?.maxLength * METER_PIXEL_SIZE)) {
-                                                            if (handleSocket.socketData.type === 'power') {
-                                                                entity.rotation = Math.angleBetween(entity, socketPosition);
-                                                            }
-                                                            socketPosition = entity.toLocal(socketPosition, app.cstage, undefined, true);
-                                                            let socketRotation = ((entity2.rotation + entitySocket.rotation) - entity.rotation) - Math.deg2rad(handleSocket.socketData.rotation);
-                                                            if (handleSocket.socketData.type === 'power' || selectedHandlePoint.rotation === socketRotation && Math.floor(socketPosition.y) === 0 || entity.building?.isBezier) {
-                                                                handleSocket.setConnection(entity2.id, entitySocket);
-                                                                selectedHandlePoint.x = socketPosition.x;
-                                                                if (entity.building?.isBezier) {
-                                                                    selectedHandlePoint.y = socketPosition.y;
-                                                                    selectedHandlePoint.rotation = socketRotation;
-                                                                }
-                                                                connectionEstablished = true;
-                                                            }
-                                                            break;
-                                                        }
+                                        const entitySocket = entity2.sockets.children[i];
+                                        if (typeof handleSocket.socketData.type === 'string' && handleSocket.socketData.type === entitySocket.socketData.type) {
+                                            const socketDistance = Math.distanceBetween(mousePos2, entitySocket);
+                                            if ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || entity.subtype === 'power_line' && entity2.canGrab()) {
+                                                const entityConnections = Object.keys(entitySocket.connections).length;
+                                                if (entitySocket.connections[entity.id] === handleSocket.socketData.id || (!entity.hasConnectionToEntityId(entity2.id) && (entityConnections === 0 || entityConnections < entitySocket.socketData.connectionLimit))) {
+                                                    nearestSocketPos = app.cstage.toLocal({x: entitySocket.x, y: entitySocket.y}, entity2, undefined, true);
+                                                    if (Math.distanceBetween(entity, nearestSocketPos) <= (entity.building?.maxLength * METER_PIXEL_SIZE)) {
+                                                        nearestSocket = entitySocket;
+                                                        nearestSocketDist = socketDistance;
                                                     }
                                                 }
                                             }
                                         }
                                     }
+                                    if (nearestSocket) {
+                                        if (handleSocket.socketData.type === 'power') {
+                                            entity.rotation = Math.angleBetween(entity, nearestSocketPos);
+                                        }
+                                        nearestSocketPos = entity.toLocal(nearestSocketPos, app.cstage, undefined, true);
+                                        let socketRotation = ((entity2.rotation + nearestSocket.rotation) - entity.rotation) - Math.deg2rad(handleSocket.socketData.rotation);
+                                        if (handleSocket.socketData.type === 'power' || selectedHandlePoint.rotation === socketRotation && Math.floor(nearestSocketPos.y) === 0 || entity.building?.isBezier) {
+                                            handleSocket.setConnection(entity2.id, nearestSocket);
+                                            selectedHandlePoint.x = nearestSocketPos.x;
+                                            if (entity.building?.isBezier) {
+                                                selectedHandlePoint.y = nearestSocketPos.y;
+                                                selectedHandlePoint.rotation = socketRotation;
+                                            }
+                                            connectionEstablished = true;
+                                            break;
+                                        }
+                                    }
                                 }
-                                if (!connectionEstablished && entity2.bezier && entity2.building?.isBezier && entity.subtype === entity2.subtype) {
+                                if (!connectionEstablished && entity2.bezier && entity2.building?.isBezier && entity2.building?.canSnapAlongBezier && entity.subtype === entity2.subtype) {
                                     let selectedPointToEntity2Local = entity2.toLocal(selectedHandlePoint, entity, undefined, true);
                                     let projection = entity2.bezier.project(selectedPointToEntity2Local);
                                     if (projection.d <= 25) {
@@ -2059,6 +2082,16 @@ const fontFamily = ['Recursive', 'sans-serif'];
             } else {
                 entityData.selectedProduction = entity.selectedProduction;
             }
+
+            if (entity.sockets) {
+                entityData.connections = {};
+                for (let i = 0; i < entity.sockets.children.length; i++) {
+                    let socket = entity.sockets.children[i];
+                    if (Object.keys(socket.connections).length) {
+                        entityData.connections[socket.socketData.id] = socket.connections;
+                    }
+                }
+            }
         };
         entity.onLoad = function(entityData) {
             if (typeof entityData.selectedProduction === 'number') {
@@ -2078,6 +2111,30 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 entity.regenerate();
             }
         };
+
+        entity.afterLoad = function(entityData, entityIdMap, isUpgrade) {
+            if (entity.sockets && entityData.connections) {
+                for (let i = 0; i < entity.sockets.children.length; i++) {
+                    const socket = entity.sockets.children[i];
+                    const socketConnectionData = entityData.connections[socket.socketData.id];
+                    if (socketConnectionData) {
+                        for (const [connectedEntityId, connectedSocketId] of Object.entries(socketConnectionData)) {
+                            let connectedEntitySocket = null;
+                            if (isUpgrade) {
+                                const connectedEntity = game.getEntityById(connectedEntityId);
+                                for (let j = 0; j < connectedEntity.sockets.children.length; j++) {
+                                    const connectedSocket = connectedEntity.sockets.children[j];
+                                    if (connectedSocket.socketData.id === connectedSocketId) {
+                                        connectedEntitySocket = connectedSocket;
+                                    }
+                                }
+                            }
+                            socket.setConnection(entityIdMap && typeof entityIdMap[connectedEntityId] === 'number' ? entityIdMap[connectedEntityId] : connectedEntityId, connectedEntitySocket, connectedSocketId);
+                        }
+                    }
+                }
+            }
+        }
 
         entity.addPoint = function(x, y, index, rotation) {
             if (index == null) {
@@ -2316,55 +2373,43 @@ const fontFamily = ['Recursive', 'sans-serif'];
         return entity;
     };
 
-    function cloneBuilding(entity, upgrade) {
-        if (entity) {
-            let clone = createBuilding(upgrade ?? entity.building.key, entity.x, entity.y, 0);
-            clone.locked = entity.locked;
-            clone.selectionArea.tint = clone.locked ? COLOR_RED : COLOR_WHITE;
-            clone.rotation = entity.rotation;
-            let entityData = {};
-            entity.onSave(entityData);
-            clone.onLoad(entityData);
-            if (upgrade) {
-                clone.selectedProduction = null;
-            }
-            return clone;
-        }
-        return null;
+    game.cloneSelected = function() {
+        game.loadSave(game.getSaveData(true), true);
     }
-
-    game.upgradeBuilding = function(entity, upgrade) {
+    
+    game.upgradeSelected = function(upgrade) {
+        let entity = game.getSelectedEntity();
         let bData = entity?.building;
         if (bData) {
             if (upgrade) {
                 upgrade = bData.parentKey ? bData.parentKey + '_' + upgrade : bData.key + '_' + upgrade;
                 upgrade = bData.key === upgrade ? bData.parentKey || bData.key : upgrade;
             }
-            let clone = cloneBuilding(entity, upgrade);
+            let clone = createBuilding(upgrade ?? entity.building.key, entity.x, entity.y, 0);
             if (upgrade) {
-                game.selectEntity(clone);
-                entity.remove();
+                if (entity.building?.positionOffset) {
+                    clone.x -= (entity.building.positionOffset.x ?? 0) / METER_PIXEL_SCALE;
+                    clone.y -= (entity.building.positionOffset.y ?? 0) / METER_PIXEL_SCALE;
+                }
+                if (clone.building?.positionOffset) {
+                    clone.x += (clone.building.positionOffset.x ?? 0) / METER_PIXEL_SCALE;
+                    clone.y += (clone.building.positionOffset.y ?? 0) / METER_PIXEL_SCALE;
+                }
             }
+            // TODO: Cleanup
+            clone.locked = entity.locked;
+            clone.selectedProduction = null;
+            clone.selectionArea.tint = clone.locked ? COLOR_RED : COLOR_WHITE;
+            clone.rotation = entity.rotation;
+            let entityData = {};
+            entity.onSave(entityData);
+            clone.onLoad(entityData);
+            clone.afterLoad(entityData, null, true);
+            game.selectEntity(clone);
+            entity.remove();
             return clone;
         }
         return null;
-    }
-
-    game.cloneSelected = function() {
-        let clonedEntities = [];
-        let xTotal = 0, yTotal = 0;
-        selectedEntities.forEach(selectedEntity => {
-            let clone = cloneBuilding(selectedEntity);
-            clonedEntities.push(clone);
-            xTotal += parseFloat(clone.x);
-            yTotal += parseFloat(clone.y);
-        });
-        game.selectEntities(clonedEntities);
-        let centerPos = {
-            x: Math.round(xTotal/clonedEntities.length),
-            y: Math.round(yTotal/clonedEntities.length)
-        }
-        game.setPickupEntities(true, false, centerPos, true);
     }
 
     // Returns null = No buildings locked, 0 = Some buildings locked, 1 = All buildings locked.
@@ -2510,7 +2555,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                         }
                                         delete pickupSocket.connections[connectedEntity.id];
                                         if (Object.keys(pickupSocket.connections).length === 0) {
-                                            if (pickupEntity.building?.requireConnection) {
+                                            if (pickupEntity.building?.requireConnection && selectedEntities.length > 1) {
                                                 pickupEntity.remove();
                                             } else {
                                                 pickupSocket.updatePointer(true);
@@ -2572,127 +2617,129 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         }
                     }
                 }
+                // TODO: Fix imported selections and clones no longer being snapped to grid.
+                let snappedMX = gmx, snappedMY = gmy;
+                if (game.settings.enableGrid || keys[16]) {
+                    let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
+                    let mXDiff = pickupPosition.x - snappedMX;
+                    let mYDiff = pickupPosition.y - snappedMY;
+                    snappedMX = pickupPosition.x - (Math.round(mXDiff / gridSize) * gridSize);
+                    snappedMY = pickupPosition.y - (Math.round(mYDiff / gridSize) * gridSize);
+                }
                 for (let i = 0; i < selectedEntities.length; i++) {
                     let pickupEntity = selectedEntities[i];
                     if (!pickupEntity.building?.hasHandle && pickupEntity.selectionArea.visible) {
                         pickupEntity.selectionArea.visible = false;
                     }
-                    if (mouseDown[2]) {
-                        if (selectionRotation) {
-                            let rotatedPosition = Math.rotateAround(selectionRotation, pickupEntity.rotationData, rotationAngle);
-                            pickupEntity.x = rotatedPosition.x;
-                            pickupEntity.y = rotatedPosition.y;
-                            pickupEntity.pickupOffset = {
-                                x: gmx - pickupEntity.x,
-                                y: gmy - pickupEntity.y
-                            };
-                            pickupEntity.rotation = pickupEntity.rotationData.rotation - rotationAngle;
-                        }
-                    } else if (selectedEntities.length > 1) {
-                        // This assumes buildings start on the grid and won't work for importing selections and cloning selections.
-                        // Also weird bug that structures will shift slightly if you spam right click. Not sure the math here is right, probably needs to account for building offsets.
-                        let snappedMX = gmx, snappedMY = gmy;
-                        if (game.settings.enableGrid || keys[16]) {
-                            let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
-                            let mXDiff = pickupPosition.x - snappedMX;
-                            let mYDiff = pickupPosition.y - snappedMY;
-                            snappedMX = pickupPosition.x - (Math.round(mXDiff / gridSize) * gridSize);
-                            snappedMY = pickupPosition.y - (Math.round(mYDiff / gridSize) * gridSize);
-                        }
+                    if (selectionRotation) {
+                        let rotatedPosition = Math.rotateAround(selectionRotation, pickupEntity.rotationData, rotationAngle);
+                        pickupEntity.x = rotatedPosition.x;
+                        pickupEntity.y = rotatedPosition.y;
+                        pickupEntity.pickupOffset = {
+                            x: snappedMX - pickupEntity.x,
+                            y: snappedMY - pickupEntity.y
+                        };
+                        pickupEntity.rotation = pickupEntity.rotationData.rotation - rotationAngle;
+                    } else {
                         pickupEntity.x = snappedMX - pickupEntity.pickupOffset.x;
                         pickupEntity.y = snappedMY - pickupEntity.pickupOffset.y;
-                    } else {
-                        pickupEntity.x = gmx - pickupEntity.pickupOffset.x;
-                        pickupEntity.y = gmy - pickupEntity.pickupOffset.y;
-                        if (!pickupEntity.building?.ignoreSnapSettings && (game.settings.enableGrid || keys[16])) {
+                        if (selectedEntities.length === 1 && !pickupEntity.building?.ignoreSnapSettings && (game.settings.enableGrid || keys[16])) {
                             let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
                             pickupEntity.x = (Math.round(pickupEntity.x / gridSize) * gridSize);
                             pickupEntity.y = (Math.round(pickupEntity.y / gridSize) * gridSize);
                         }
                     }
                 }
-            }
-            let pickupEntity = game.getSelectedEntity();
-            if (pickupEntity && pickupEntity.building?.canSnap && !selectedHandlePoint) {
-                let connectionEstablished = false;
-                for (let i=0; i<entities.length; i++) {
-                    let entity = entities[i];
-                    let mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
-                    let projection = entity.bezier?.project(mousePos);
-                    if (entity !== pickupEntity && entity.type === 'building' && (pickupEntity.subtype === entity.subtype || (pickupEntity.sockets && entity.sockets)) && (!projection || projection.d <= 25)) {
-                        if (pickupEntity.sockets && entity.sockets) {
-                            for (let j = 0; j < entity.sockets.children.length; j++) {
-                                let entitySocket = entity.sockets.children[j];
-                                if (pickupEntity.building?.canSnapStructureType !== false || pickupEntity.subtype !== entity.subtype) {
-                                    if (Math.distanceBetween(mousePos, entitySocket) < 35 || pickupEntity.subtype === 'power_line' && entity.canGrab()) {
+                let pickupEntity = game.getSelectedEntity();
+                if (pickupEntity && pickupEntity.building?.canSnap) {
+                    let connectionEstablished = false;
+                    for (let i = 0; i < entities.length; i++) {
+                        let entity = entities[i];
+                        if (entity === pickupEntity || entity.type !== 'building') {
+                            continue;
+                        }
+                        const mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
+                        const projection = entity.bezier?.project(mousePos);
+                        if ((pickupEntity.subtype === entity.subtype || (pickupEntity.sockets && entity.sockets)) && (!projection || projection.d <= 25)) {
+                            if (pickupEntity.sockets && entity.sockets && (pickupEntity.building?.canSnapStructureType !== false || pickupEntity.subtype !== entity.subtype)) {
+                                let frontSocket, nearestSocket, nearestSocketDist = null;
+                                for (let j = 0; j < entity.sockets.children.length; j++) {
+                                    let entitySocket = entity.sockets.children[j];
+                                    const socketDistance = Math.distanceBetween(mousePos, entitySocket);
+                                    if ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || pickupEntity.subtype === 'power_line' && entity.canGrab()) {
                                         for (let k = 0; k < pickupEntity.sockets.children.length; k++) {
                                             let pickupSocket = pickupEntity.sockets.children[k];
-                                            if (entitySocket.socketData.type === pickupSocket.socketData.type) {
+                                            if (typeof entitySocket.socketData.type === 'string' && entitySocket.socketData.type === pickupSocket.socketData.type) {
                                                 if (Object.keys(entitySocket.connections).length === 0 || Object.keys(entitySocket.connections).length < entitySocket.socketData.connectionLimit || entitySocket.connections[pickupEntity.id] === pickupSocket.socketData.id) {
                                                     if (entitySocket.socketData.flow && entitySocket.socketData.flow === pickupSocket.socketData.flow) {
                                                         continue;
                                                     }
-                                                    if (isNaN(pickupEntity.prevRotation)) {
-                                                        pickupEntity.prevRotation = pickupEntity.rotation;
-                                                    }
-                                                    pickupSocket.setConnection(entity.id, entitySocket);
-                                                    let socketDistance = Math.distanceBetween({ x: 0, y: 0 }, pickupSocket);
-                                                    let entitySocketPosition = app.cstage.toLocal({x: entitySocket.x, y: entitySocket.y}, entity, undefined, true);
-                                                    let entitySocketRotation = entity.rotation + entitySocket.rotation;
-                                                    let extendedPoint = Math.extendPoint(entitySocketPosition, socketDistance, entitySocketRotation - Math.PI/2);
-                                                    pickupEntity.position.set(extendedPoint.x, extendedPoint.y);
-                                                    pickupEntity.rotation = entitySocketRotation + pickupSocket.rotation;
-                                                    if (pickupSocket.socketData.flow) {
-                                                        pickupEntity.rotation -= Math.PI;
-                                                    }
-                                                    connectionEstablished = true;
+                                                    frontSocket = pickupSocket;
+                                                    nearestSocket = entitySocket;
+                                                    nearestSocketDist = socketDistance;
+    
+                                                    // TODO: Get proximity to the closest socket on pickup entity while it's being picked up instead. Will allow foundations to have their sockets snap based on their proximity to each other and foundation position will be fixed too.
                                                     break;
                                                 }
                                             }
                                         }
-                                        if (connectionEstablished) {
-                                            break;
-                                        }
                                     }
                                 }
+                                if (nearestSocket) {
+                                    if (isNaN(pickupEntity.prevRotation)) {
+                                        pickupEntity.prevRotation = pickupEntity.rotation;
+                                    }
+                                    frontSocket.setConnection(entity.id, nearestSocket);
+                                    let nearestSocketPosition = app.cstage.toLocal({x: nearestSocket.x, y: nearestSocket.y}, entity, undefined, true);
+                                    let nearestSocketRotation = entity.rotation + nearestSocket.rotation;
+                                    let frontSocketDist = Math.distanceBetween({ x: 0, y: 0 }, frontSocket);
+                                    let extendedPoint = Math.extendPoint(nearestSocketPosition, frontSocketDist, nearestSocketRotation - Math.PI/2);
+                                    pickupEntity.position.set(extendedPoint.x, extendedPoint.y);
+                                    pickupEntity.rotation = nearestSocketRotation + frontSocket.rotation;
+                                    if (frontSocket.socketData.flow) {
+                                        pickupEntity.rotation -= Math.PI;
+                                    }
+                                    connectionEstablished = true;
+                                    break;
+                                }
                             }
-                        }
-                        if (!connectionEstablished && entity.bezier && entity.building?.isBezier && pickupEntity.subtype === entity.subtype) {
-                            let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity, undefined, true);
-                            let normal = entity.bezier.normal(projection.t);
-                            let angle = Math.angleBetween({x: 0, y: 0}, normal);
-                            pickupEntity.x = global.x;
-                            pickupEntity.y = global.y;
-
-                            let angleRight = entity.rotation + (angle - Math.PI/2) - Math.PI/2;
-                            let angleLeft = entity.rotation + (angle + Math.PI/2) - Math.PI/2;
-                            let rightDiff = Math.atan2(Math.sin(angleRight-pickupEntity.rotation), Math.cos(angleRight-pickupEntity.rotation));
-                            let leftDiff = Math.atan2(Math.sin(angleLeft-pickupEntity.rotation), Math.cos(angleLeft-pickupEntity.rotation));
-
-                            if (isNaN(pickupEntity.prevRotation)) {
-                                pickupEntity.prevRotation = pickupEntity.rotation;
-                            }
+                            if (!connectionEstablished && entity.bezier && entity.building?.isBezier && entity.building?.canSnapAlongBezier && pickupEntity.subtype === entity.subtype) {
+                                let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity, undefined, true);
+                                let normal = entity.bezier.normal(projection.t);
+                                let angle = Math.angleBetween({x: 0, y: 0}, normal);
+                                pickupEntity.x = global.x;
+                                pickupEntity.y = global.y;
     
-                            if (rightDiff < leftDiff) {
-                                pickupEntity.rotation = angleRight + Math.PI/2;
-                            } else {
-                                pickupEntity.rotation = angleLeft + Math.PI/2;
+                                let angleRight = entity.rotation + (angle - Math.PI/2) - Math.PI/2;
+                                let angleLeft = entity.rotation + (angle + Math.PI/2) - Math.PI/2;
+                                let rightDiff = Math.atan2(Math.sin(angleRight-pickupEntity.rotation), Math.cos(angleRight-pickupEntity.rotation));
+                                let leftDiff = Math.atan2(Math.sin(angleLeft-pickupEntity.rotation), Math.cos(angleLeft-pickupEntity.rotation));
+    
+                                if (isNaN(pickupEntity.prevRotation)) {
+                                    pickupEntity.prevRotation = pickupEntity.rotation;
+                                }
+        
+                                if (rightDiff < leftDiff) {
+                                    pickupEntity.rotation = angleRight + Math.PI/2;
+                                } else {
+                                    pickupEntity.rotation = angleLeft + Math.PI/2;
+                                }
+                                connectionEstablished = true;
+                                break;
                             }
-                            connectionEstablished = true;
-                            break;
                         }
                     }
-                }
-                if (!connectionEstablished) {
-                    pickupEntity.removeConnections();
-                }
-                if (!connectionEstablished && !isNaN(pickupEntity.prevRotation)) {
-                    pickupEntity.rotation = pickupEntity.prevRotation;
-                    delete pickupEntity.prevRotation;
-                    pickupEntity.pickupOffset = {
-                        x: 0,
-                        y: 0
-                    };
+                    if (!connectionEstablished) {
+                        pickupEntity.removeConnections();
+                    }
+                    if (!connectionEstablished && !isNaN(pickupEntity.prevRotation)) {
+                        pickupEntity.rotation = pickupEntity.prevRotation;
+                        delete pickupEntity.prevRotation;
+                        pickupEntity.pickupOffset = {
+                            x: 0,
+                            y: 0
+                        };
+                    }
                 }
             }
         }

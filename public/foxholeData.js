@@ -993,6 +993,9 @@ const foxholeData = {
 					"description": "A high powered furnace that brings Coal to high temperatures to separate out non-volatile Coke.",
 					"icon": "game/Textures/UI/ItemIcons/FacilitiesCoolRefineryCokeFurnaceIcon.webp",
 					"texture": "game/Textures/Structures/coal_refinery_coke_furnace.webp",
+					"positionOffset": {
+						"x": -21
+					},
 					"cost": {
 						"facilitymaterials1": 200
 					},
@@ -1017,6 +1020,9 @@ const foxholeData = {
 					"description": "Processing vats that refines Coal into Oil.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityCoalLiquefierIcon.webp",
 					"texture": "game/Textures/Structures/coal_refinery_liquifier.webp",
+					"positionOffset": {
+						"x": 52
+					},
 					"sockets": [
 						{
 							"id": 0,
@@ -1069,6 +1075,9 @@ const foxholeData = {
 					"description": "Advanced processing vats that refine large amounts of coal into Heavy Oil.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityAdvancedCoalLiquefierIcon.webp",
 					"texture": "game/Textures/Structures/coal_refinery_adv_liquifier.webp",
+					"positionOffset": {
+						"x": 52
+					},
 					"sockets": [
 						{
 							"id": 0,
@@ -1162,6 +1171,9 @@ const foxholeData = {
 					"description": "A generator that burns petrol to generate more power.",
 					"icon": "game/Textures/UI/ItemIcons/DiesePowerPlanetPetrolIcon.webp",
 					"texture": "game/Textures/Structures/diesel_power_plant_petrol_power.webp",
+					"positionOffset": {
+						"x": -8
+					},
 					"sockets": [
 						{
 							"id": 0,
@@ -2574,6 +2586,10 @@ const foxholeData = {
 					"description": "A unique factory for forging specialized machinery parts needed to construct vehicles. Requires Coke or Petrol.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityForgeIcon.webp",
 					"texture": "game/Textures/Structures/materials_factory_forge.webp",
+					"positionOffset": {
+						"x": -69,
+						"y": -10
+					},
 					"sockets": [
 						{
 							"id": 0,
@@ -2626,6 +2642,10 @@ const foxholeData = {
 					"description": "A heavy automatic press that refines materials into a denser form.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityMetalPressIcon.webp",
 					"texture": "game/Textures/Structures/materials_factory_metal_press.webp",
+					"positionOffset": {
+						"x": -32,
+						"y": 55
+					},
 					"sockets": [
 						{
 							"id": 0,
@@ -2668,6 +2688,10 @@ const foxholeData = {
 					"description": "An assembly bay with specialized equipment for quickly building and packing materials needed on the frontline.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityRecyclerIcon.webp",
 					"texture": "game/Textures/Structures/materials_factory_recycler.webp",
+					"positionOffset": {
+						"x": -41,
+						"y": 21
+					},
 					"sockets": [
 						{
 							"id": 0,
@@ -2712,6 +2736,10 @@ const foxholeData = {
 					"description": "An industrial smelter for melting down Salvage to remove impurities. Requires Coke.",
 					"icon": "game/Textures/UI/StructureIcons/FacilitySmelterIcon.webp",
 					"texture": "game/Textures/Structures/materials_factory_smelter.webp",
+					"positionOffset": {
+						"x": -41,
+						"y": 21
+					},
 					"sockets": [
 						{
 							"id": 0,
@@ -2798,6 +2826,9 @@ const foxholeData = {
 					"description": "Advanced sorting machinery for sifting piles of scrap metal for useful materials.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityRefinery2RecyclerIcon.webp",
 					"texture": "game/Textures/Structures/metalworks_factory_recycler.webp",
+					"positionOffset": {
+						"x": -13
+					},
 					"sockets": [
 						{
 							"id": 0,
@@ -2843,6 +2874,10 @@ const foxholeData = {
 					"description": "A large industrial cauldron for liquefying metals to remove impurities from advanced materials.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityBlastFurnaceIcon.webp",
 					"texture": "game/Textures/Structures/metalworks_factory_blast_furnace.webp",
+					"positionOffset": {
+						"x": -42,
+						"y": -22
+					},
 					"sockets": [
 						{
 							"id": 0,
@@ -2908,6 +2943,10 @@ const foxholeData = {
 					"description": "An expanded workshop for manual process of delicate materials.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityEngineeringStationIcon.webp",
 					"texture": "game/Textures/Structures/metalworks_factory_engineering_station.webp",
+					"positionOffset": {
+						"x": -70,
+						"y": -29
+					},
 					"sockets": [
 						{
 							"id": 0,
@@ -3042,6 +3081,9 @@ const foxholeData = {
 					"description": "A large processing drum that allows for the controlled introduction of hydrogen to yield a similar output of Petrol for less raw Oil. ",
 					"icon": "game/Textures/UI/StructureIcons/OilRefineryMod3Icon.webp",
 					"texture": "game/Textures/Structures/oil_refinery_reformer.webp",
+					"positionOffset": {
+						"y": 75
+					},
 					"sockets": [
 						{
 							"id": 0,
@@ -3099,6 +3141,9 @@ const foxholeData = {
 					"description": "A high-heat furnace that catalyses raw oil into refined Heavy Oil.",
 					"icon": "game/Textures/UI/StructureIcons/OilRefineryMod2Icon.webp",
 					"texture": "game/Textures/Structures/oil_refinery_cracking_unit.webp",
+					"positionOffset": {
+						"x": -1
+					},
 					"sockets": [
 						{
 							"id": 0,
@@ -3149,6 +3194,9 @@ const foxholeData = {
 					"description": "A blast furnace that further refines Heavy Oil into an Enriched Oil needed for advanced processes.",
 					"icon": "game/Textures/UI/ItemIcons/OilRefineryPetrochemicalPlanetIcon.webp",
 					"texture": "game/Textures/Structures/oil_refinery_petro_plant.webp",
+					"positionOffset": {
+						"x": -1
+					},
 					"sockets": [
 						{
 							"id": 0,
@@ -3224,6 +3272,10 @@ const foxholeData = {
 					"description": "A generator that leverages electricity to pump oil through attached pipes.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityElectricOilWellIcon.webp",
 					"texture": "game/Textures/Structures/oil_well_electric_oil.webp",
+					"positionOffset": {
+						"x": -50,
+						"y": -79
+					},
 					"sockets": [
 						{
 							"id": 0,
@@ -3271,6 +3323,10 @@ const foxholeData = {
 					"description": "A machine that opens up cracks in the earth by injecting water at a high pressure to increase the output of Crude Oil.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityFrackerIcon.webp",
 					"texture": "game/Textures/Structures/oil_well_fracking_oil.webp",
+					"positionOffset": {
+						"x": -2,
+						"y": -79
+					},
 					"sockets": [
 						{
 							"id": 0,
@@ -3543,6 +3599,9 @@ const foxholeData = {
 					"description": "A light that illuminates the surrounding area. Requires at least a minimum amount of power to function.",
 					"icon": "game/Textures/UI/StructureIcons/PowerPoleLightIcon.webp",
 					"texture": "game/Textures/Structures/power_pole_lamp.webp",
+					"positionOffset": {
+						"x": 24
+					},
 					"sockets": [
 						{
 							"id": 0,
@@ -3619,6 +3678,10 @@ const foxholeData = {
 					"description": "A reactor that combines Water with Heavy Oil or refined Coke, resulting in a more pure natural gas, which in turn is more efficient at generating power. Chunks of raw Sulfur are created as a byproduct.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityPowerOilReactorIcon.webp",
 					"texture": "game/Textures/Structures/power_station_sulfuric_reactor.webp",
+					"positionOffset": {
+						"x": -20,
+						"y": 34
+					},
 					"sockets": [
 						{
 							"id": 0,
@@ -3749,6 +3812,7 @@ const foxholeData = {
 				"disabled": true
 			},
 			"canSnap": true,
+			"canSnapAlongBezier": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -3783,6 +3847,7 @@ const foxholeData = {
 				"disabled": true
 			},
 			"canSnap": true,
+			"canSnapAlongBezier": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -3905,6 +3970,9 @@ const foxholeData = {
 					"description": "Improves component excavation.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityExcavatorIcon.webp",
 					"texture": "game/Textures/Structures/stationary_harvester_components_excavator.webp",
+					"positionOffset": {
+						"x": -10
+					},
 					"sockets": [
 						{
 							"id": 0,
@@ -4032,6 +4100,10 @@ const foxholeData = {
 					"description": "A generator that pumps water more efficiently. Requires Power.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityElectricWaterPumpIcon.webp",
 					"texture": "game/Textures/Structures/water_pump_electric_water.webp",
+					"positionOffset": {
+						"x": 68,
+						"y": 28
+					},
 					"sockets": [
 						{
 							"id": 0,

@@ -103,7 +103,7 @@ function iterateBaseStructures(uProperty, baseData) {
     });
 }
 
-let buildCategories = ['EBuildCategory::Foundation', 'EBuildCategory::Facility', 'EBuildCategory::Power', 'EBuildCategory::Mining'];
+//let buildCategories = ['EBuildCategory::Foundation', 'EBuildCategory::Facility', 'EBuildCategory::Power', 'EBuildCategory::Mining'];
 
 function iterateStructures(dirPath) {
     dirPath = dirPath ?? `${foxholeDataDirectory}War/Content/Blueprints/`;
@@ -142,6 +142,7 @@ function iterateStructures(dirPath) {
                                     'category': structureData.category,
                                     'color': structureData.color,
                                     'hideInList': structureData.hideInList,
+                                    'hideProperties': structureData.hideProperties,
                                     'width': structureData.width,
                                     'length': structureData.length,
                                     'range': structureData.range,
@@ -164,6 +165,7 @@ function iterateStructures(dirPath) {
                                     'power': (structure.PowerGridInfo?.PowerDelta ?? baseData.power) / 1000 || undefined,
                                     'canSnap': structureData.canSnap,
                                     'canSnapStructureType': structureData.canSnapStructureType,
+                                    'canSnapAlongBezier': structureData.canSnapAlongBezier,
                                     'ignoreSnapSettings': structureData.ignoreSnapSettings,
                                     'requireConnection': structureData.requireConnection,
                                     'sockets': structureData.sockets,
@@ -206,6 +208,7 @@ function iterateStructures(dirPath) {
                                         'description': modification.Description?.SourceString ?? 'No Description Provided.',
                                         'icon': getLocalIcon(modification),
                                         'texture': storedModData?.texture ?? `game/Textures/Structures/${structureData.id}_${storedModData?.id}.webp`,
+                                        'positionOffset': storedModData?.positionOffset,
                                         'sockets': storedModData?.sockets,
                                         'techId': modification.TechID && (modification.TechID !== 'ETechID::None') ? modification.TechID.substring(9).toLowerCase() : undefined,
                                         'cost': undefined,
