@@ -3324,7 +3324,7 @@ const foxholeData = {
 			"minLength": 5,
 			"maxLength": 20,
 			"icon": "game/Textures/UI/StructureIcons/PipeIntersectionIcon.webp",
-			"texture": "game/Textures/Structures/pipeline_underground.webp",
+			"texture": null,
 			"textureFrontCap": "game/Textures/Structures/pipeline_underground_front.webp",
 			"textureBackCap": "game/Textures/Structures/pipeline_underground_back.webp",
 			"garrisonSupplyMultiplier": 4,

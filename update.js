@@ -156,7 +156,7 @@ function iterateStructures(dirPath) {
                                     'minLength': structure.ConnectorMinLength ? structure.ConnectorMinLength / METER_UNREAL_UNITS : undefined ?? baseData.minLength,
                                     'maxLength': structure.ConnectorMaxLength ? structure.ConnectorMaxLength / METER_UNREAL_UNITS : undefined ?? baseData.maxLength,
                                     'icon': getLocalIcon(structure) ?? baseData.icon,
-                                    'texture': structureData.texture ?? `game/Textures/Structures/${structureData.id}.webp`,
+                                    'texture': typeof structureData.texture === 'string' || structureData.texture === null ? structureData.texture : `game/Textures/Structures/${structureData.id}.webp`,
                                     'textureFrontCap': structureData.textureFrontCap, // `game/Textures/Structures/${structureData.id}_front.webp`
                                     'textureBackCap': structureData.textureBackCap, // `game/Textures/Structures/${structureData.id}_back.webp`
                                     'textureIcon': structureData.textureIcon,

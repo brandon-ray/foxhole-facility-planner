@@ -672,7 +672,7 @@ p {
     margin: 3px;
 }
 
-#delete-confirmation-dialog {
+#confirmation-dialog {
     width: 400px;
     height: 200px;
     background-color: #1a1a1a;
@@ -683,27 +683,27 @@ p {
     margin-left: -200px;
 }
 
-#delete-confirmation-dialog .confirmation-header {
+#confirmation-dialog .confirmation-header {
     background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
     padding: 4px 4px 4px 9px;
     position: relative;
     text-align: left;
 }
 
-#delete-confirmation-dialog .confirmation-header > h3 {
+#confirmation-dialog .confirmation-header > h3 {
     display: inline-block;
     margin: 0;
 }
 
-#delete-confirmation-dialog .confirmation-header > button {
+#confirmation-dialog .confirmation-header > button {
     margin: 2px;
 }
 
-#delete-confirmation-dialog .confirmation-body {
+#confirmation-dialog .confirmation-body {
     padding: 20px;
 }
 
-#delete-confirmation-dialog .confirmation-body > button {
+#confirmation-dialog .confirmation-body > button {
     width: 100%;
     background: linear-gradient(rgb(255, 0, 0), rgb(168, 0, 0));
     margin-top: 14px;
@@ -716,7 +716,7 @@ p {
     cursor: pointer;
 }
 
-#delete-confirmation-dialog .confirmation-body > button:hover {
+#confirmation-dialog .confirmation-body > button:hover {
     border: 2px solid white;
 }
 

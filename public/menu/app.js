@@ -15,8 +15,7 @@ if (isMobile && !isPhoneApp) {
                 return {
                     isPlayScreen: game.isPlayScreen,
                     isInMenu: game.isInMenu,
-                    settings: game.settings,
-                    showDeleteConfirmation: false
+                    settings: game.settings
                 };
             },
             methods: {
@@ -38,12 +37,6 @@ if (isMobile && !isPhoneApp) {
                         this.reloadMenu();
                     }
                 },
-                closeDeleteConfirmation: function (deleteEntities) {
-                    if (deleteEntities === true) {
-                        game.removeEntities();
-                    }
-                    this.showDeleteConfirmation = false;
-                },
                 updateRangeSprites: function() {
                     game.updateRangeSprites();
                     game.updateSettings();
@@ -61,17 +54,8 @@ if (isMobile && !isPhoneApp) {
                 <div v-if="game.settings.enableStats" class="statistics-panel">
                     <app-menu-statistics></app-menu-statistics>
                 </div>
-                
-                <div v-if="showDeleteConfirmation" id="delete-confirmation-dialog">
-                    <div class="confirmation-header">
-                        <h3><i class="fa fa-trash" aria-hidden="true"></i> Confirm Deletion</h3><button class="footer-button" @click="closeDeleteConfirmation"><i class="fa fa-times" aria-hidden="true"></i></button>
-                    </div>
-                    <p class="confirmation-body">
-                        This will delete all objects you have placed.<br>
-                        Note: This <u>cannot</u> be undone.
-                        <button @click="closeDeleteConfirmation(true)">Delete All Buildings</button>
-                    </p>
-                </div>
+
+                <app-game-confirmation-popup></app-game-confirmation-popup>
 
                 <div class="footer">
                     <label class="checkbox-button align-middle">
@@ -96,7 +80,7 @@ if (isMobile && !isPhoneApp) {
                     <button class="footer-button" @click="game.zoomToFacilityCenter">
                         <i class="fa fa-expand" aria-hidden="true"></i>
                     </button>
-                    <button class="footer-button" @click="showDeleteConfirmation = true">
+                    <button class="footer-button" @click="game.confirmDeletion">
                         <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
                 </div>
@@ -105,3 +89,60 @@ if (isMobile && !isPhoneApp) {
         });
     }
 }
+
+Vue.component('app-game-confirmation-popup', {
+    mounted: function() {
+        game.confirmationPopup = this;
+    },
+    data: function() {
+        return {
+            type: null,
+            callback: null,
+            confirmationVisible: false
+        };
+    },
+    methods: {
+        showPopup: function(type, callback) {
+            this.type = type;
+            this.callback = callback;
+            this.confirmationVisible = true;
+            this.$forceUpdate();
+        },
+        closePopup: function(confirmed) {
+            this.confirmationVisible = false;
+            if (typeof this.callback === 'function') {
+                setTimeout(this.callback(confirmed), 1);
+            }
+            this.removePopup();
+        },
+        removePopup: function() {
+            this.confirmationVisible = false;
+            this.type = null;
+            this.callback = null;
+        }
+    },
+    template: html`
+    <div v-if="confirmationVisible" id="confirmation-dialog">
+        <template v-if="type === 'delete'">
+            <div class="confirmation-header">
+                <h3><i class="fa fa-trash" aria-hidden="true"></i> Confirm Deletion</h3><button class="footer-button" @click="closePopup(false)"><i class="fa fa-times" aria-hidden="true"></i></button>
+            </div>
+            <p class="confirmation-body">
+                This will delete all objects you have placed.<br>
+                Note: This <u>cannot</u> be undone.
+                <button @click="closePopup(true)">Erase Board</button>
+            </p>
+        </template>
+        <template v-else-if="type === 'save-work'">
+            <div class="confirmation-header">
+                <h3><i class="fa fa-upload" aria-hidden="true"></i> Confirm Load</h3><button class="footer-button" @click="closePopup(false)"><i class="fa fa-times" aria-hidden="true"></i></button>
+            </div>
+            <p class="confirmation-body">
+                Your current work will be lost if you don't save.<br>
+                Note: This <u>cannot</u> be undone.
+                <button @click="closePopup(true)">Erase Board</button>
+            </p>
+        </template>
+    </div>
+    `
+});

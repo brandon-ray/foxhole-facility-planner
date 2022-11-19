@@ -700,7 +700,14 @@ const fontFamily = ['Recursive', 'sans-serif'];
         if (isSelection) {
             game.deselectEntities(false, true);
         } else {
-            game.removeEntities();
+            if (entities.length > 0) {
+                game.confirmDeletion(confirmed => {
+                    if (confirmed) {
+                        game.loadSave(saveObject, isSelection);
+                    }
+                }, true);
+                return;
+            }
             game.setFaction(saveObject.faction);
         }
         setTimeout(() => {
@@ -1805,7 +1812,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             }
                             for (let i = 0; i < entities.length; i++) {
                                 let entity2 = entities[i];
-                                if (entity2 === entity || entity2.type !== 'building' || !(entity.sockets && entity2.sockets)) {
+                                if (!entity2.visible || entity2 === entity || entity2.type !== 'building' || !(entity.sockets && entity2.sockets) || Math.distanceBetween({x: gmx, y: gmy}, entity2) > 1000) {
                                     continue;
                                 }
                                 if (entity2.sockets && (entity.building?.canSnapStructureType !== false || entity.subtype !== entity2.subtype)) {
@@ -2447,11 +2454,26 @@ const fontFamily = ['Recursive', 'sans-serif'];
     game.removeEntities = function() {
         game.deselectEntities();
         game.setPickupEntities(false);
-        for (let i=0; i<entities.length; i++) {
+        for (let i = 0; i < entities.length; i++) {
             let entity = entities[i];
             entity.remove();
         }
+        entities = [];
         _entityIds = 0;
+        if (game.statisticsMenuComponent) {
+            game.statisticsMenuComponent.refresh();
+        }
+    }
+
+    game.confirmDeletion = function(callback, loading) {
+        game.confirmationPopup.showPopup(loading ? 'save-work' : 'delete', confirmed => {
+            if (confirmed) {
+                game.removeEntities();
+            }
+            if (typeof callback === 'function') {
+                callback(confirmed);
+            }
+        });
     }
 
     const FPSMIN = 30;
@@ -2631,106 +2653,84 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     snappedMX = pickupPosition.x - (Math.round(mXDiff / gridSize) * gridSize);
                     snappedMY = pickupPosition.y - (Math.round(mYDiff / gridSize) * gridSize);
                 }
-                for (let i = 0; i < selectedEntities.length; i++) {
-                    let pickupEntity = selectedEntities[i];
-                    if (!pickupEntity.building?.hasHandle && pickupEntity.selectionArea.visible) {
-                        pickupEntity.selectionArea.visible = false;
-                    }
-                    if (selectionRotation) {
-                        let rotatedPosition = Math.rotateAround(selectionRotation, pickupEntity.rotationData, rotationAngle);
-                        pickupEntity.x = rotatedPosition.x;
-                        pickupEntity.y = rotatedPosition.y;
-                        pickupEntity.pickupOffset = {
-                            x: snappedMX - pickupEntity.x,
-                            y: snappedMY - pickupEntity.y
-                        };
-                        pickupEntity.rotation = pickupEntity.rotationData.rotation - rotationAngle;
-                    } else {
-                        pickupEntity.x = snappedMX - pickupEntity.pickupOffset.x;
-                        pickupEntity.y = snappedMY - pickupEntity.pickupOffset.y;
-                        if (selectedEntities.length === 1 && !pickupEntity.building?.ignoreSnapSettings && (game.settings.enableGrid || keys[16])) {
-                            let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
-                            pickupEntity.x = (Math.round(pickupEntity.x / gridSize) * gridSize);
-                            pickupEntity.y = (Math.round(pickupEntity.y / gridSize) * gridSize);
-                        }
-                    }
-                }
                 let pickupEntity = game.getSelectedEntity();
+                let connectionEstablished = false;
                 if (pickupEntity && pickupEntity.building?.canSnap) {
-                    let connectionEstablished = false;
                     for (let i = 0; i < entities.length; i++) {
                         let entity = entities[i];
-                        if (entity === pickupEntity || entity.type !== 'building') {
+                        if (!entity.visible || entity === pickupEntity || entity.type !== 'building' || !(pickupEntity.sockets && entity.sockets) || Math.distanceBetween({x: gmx, y: gmy}, entity) > 1000) {
                             continue;
                         }
-                        const mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
-                        const projection = entity.bezier?.project(mousePos);
-                        if ((pickupEntity.subtype === entity.subtype || (pickupEntity.sockets && entity.sockets)) && (!projection || projection.d <= 25)) {
-                            if (pickupEntity.sockets && entity.sockets && (pickupEntity.building?.canSnapStructureType !== false || pickupEntity.subtype !== entity.subtype)) {
-                                let frontSocket, nearestSocket, nearestSocketDist = null;
-                                for (let j = 0; j < entity.sockets.children.length; j++) {
-                                    let entitySocket = entity.sockets.children[j];
-                                    const socketDistance = Math.distanceBetween(mousePos, entitySocket);
-                                    if ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || pickupEntity.subtype === 'power_line' && entity.canGrab()) {
-                                        for (let k = 0; k < pickupEntity.sockets.children.length; k++) {
-                                            let pickupSocket = pickupEntity.sockets.children[k];
-                                            if (typeof entitySocket.socketData.type === 'string' && entitySocket.socketData.type === pickupSocket.socketData.type) {
-                                                if (Object.keys(entitySocket.connections).length === 0 || Object.keys(entitySocket.connections).length < entitySocket.socketData.connectionLimit || entitySocket.connections[pickupEntity.id] === pickupSocket.socketData.id) {
-                                                    if (entitySocket.socketData.flow && entitySocket.socketData.flow === pickupSocket.socketData.flow) {
-                                                        continue;
+                        if (pickupEntity.subtype === entity.subtype || (pickupEntity.sockets && entity.sockets)) {
+                            const mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
+                            const projection = entity.bezier?.project(mousePos);
+                            if (!projection || projection.d <= 25) {
+                                if (pickupEntity.sockets && entity.sockets && (pickupEntity.building?.canSnapStructureType !== false || pickupEntity.subtype !== entity.subtype)) {
+                                    let frontSocket, nearestSocket, nearestSocketDist = null;
+                                    for (let j = 0; j < entity.sockets.children.length; j++) {
+                                        let entitySocket = entity.sockets.children[j];
+                                        const socketDistance = Math.distanceBetween(mousePos, entitySocket);
+                                        if ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || pickupEntity.subtype === 'power_line' && entity.canGrab()) {
+                                            for (let k = 0; k < pickupEntity.sockets.children.length; k++) {
+                                                let pickupSocket = pickupEntity.sockets.children[k];
+                                                if (typeof entitySocket.socketData.type === 'string' && entitySocket.socketData.type === pickupSocket.socketData.type) {
+                                                    if (Object.keys(entitySocket.connections).length === 0 || Object.keys(entitySocket.connections).length < entitySocket.socketData.connectionLimit || entitySocket.connections[pickupEntity.id] === pickupSocket.socketData.id) {
+                                                        if (entitySocket.socketData.flow && entitySocket.socketData.flow === pickupSocket.socketData.flow) {
+                                                            continue;
+                                                        }
+                                                        frontSocket = pickupSocket;
+                                                        nearestSocket = entitySocket;
+                                                        nearestSocketDist = socketDistance;
+        
+                                                        // TODO: Get proximity to the closest socket on pickup entity while it's being picked up instead. Will allow foundations to have their sockets snap based on their proximity to each other and foundation position will be fixed too.
+                                                        break;
                                                     }
-                                                    frontSocket = pickupSocket;
-                                                    nearestSocket = entitySocket;
-                                                    nearestSocketDist = socketDistance;
-    
-                                                    // TODO: Get proximity to the closest socket on pickup entity while it's being picked up instead. Will allow foundations to have their sockets snap based on their proximity to each other and foundation position will be fixed too.
-                                                    break;
                                                 }
                                             }
                                         }
                                     }
+                                    if (nearestSocket) {
+                                        if (isNaN(pickupEntity.prevRotation)) {
+                                            pickupEntity.prevRotation = pickupEntity.rotation;
+                                        }
+                                        frontSocket.setConnection(entity.id, nearestSocket);
+                                        let nearestSocketPosition = app.cstage.toLocal({x: nearestSocket.x, y: nearestSocket.y}, entity, undefined, true);
+                                        let nearestSocketRotation = entity.rotation + nearestSocket.rotation;
+                                        let frontSocketDist = Math.distanceBetween({ x: 0, y: 0 }, frontSocket);
+                                        let extendedPoint = Math.extendPoint(nearestSocketPosition, frontSocketDist, nearestSocketRotation - Math.PI/2);
+                                        pickupEntity.position.set(extendedPoint.x, extendedPoint.y);
+                                        pickupEntity.rotation = nearestSocketRotation + frontSocket.rotation;
+                                        if (frontSocket.socketData.flow) {
+                                            pickupEntity.rotation -= Math.PI;
+                                        }
+                                        connectionEstablished = true;
+                                        break;
+                                    }
                                 }
-                                if (nearestSocket) {
+                                if (!connectionEstablished && entity.bezier && entity.building?.isBezier && entity.building?.canSnapAlongBezier && pickupEntity.subtype === entity.subtype) {
+                                    let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity, undefined, true);
+                                    let normal = entity.bezier.normal(projection.t);
+                                    let angle = Math.angleBetween({x: 0, y: 0}, normal);
+                                    pickupEntity.x = global.x;
+                                    pickupEntity.y = global.y;
+        
+                                    let angleRight = entity.rotation + (angle - Math.PI/2) - Math.PI/2;
+                                    let angleLeft = entity.rotation + (angle + Math.PI/2) - Math.PI/2;
+                                    let rightDiff = Math.atan2(Math.sin(angleRight-pickupEntity.rotation), Math.cos(angleRight-pickupEntity.rotation));
+                                    let leftDiff = Math.atan2(Math.sin(angleLeft-pickupEntity.rotation), Math.cos(angleLeft-pickupEntity.rotation));
+        
                                     if (isNaN(pickupEntity.prevRotation)) {
                                         pickupEntity.prevRotation = pickupEntity.rotation;
                                     }
-                                    frontSocket.setConnection(entity.id, nearestSocket);
-                                    let nearestSocketPosition = app.cstage.toLocal({x: nearestSocket.x, y: nearestSocket.y}, entity, undefined, true);
-                                    let nearestSocketRotation = entity.rotation + nearestSocket.rotation;
-                                    let frontSocketDist = Math.distanceBetween({ x: 0, y: 0 }, frontSocket);
-                                    let extendedPoint = Math.extendPoint(nearestSocketPosition, frontSocketDist, nearestSocketRotation - Math.PI/2);
-                                    pickupEntity.position.set(extendedPoint.x, extendedPoint.y);
-                                    pickupEntity.rotation = nearestSocketRotation + frontSocket.rotation;
-                                    if (frontSocket.socketData.flow) {
-                                        pickupEntity.rotation -= Math.PI;
+            
+                                    if (rightDiff < leftDiff) {
+                                        pickupEntity.rotation = angleRight + Math.PI/2;
+                                    } else {
+                                        pickupEntity.rotation = angleLeft + Math.PI/2;
                                     }
                                     connectionEstablished = true;
                                     break;
                                 }
-                            }
-                            if (!connectionEstablished && entity.bezier && entity.building?.isBezier && entity.building?.canSnapAlongBezier && pickupEntity.subtype === entity.subtype) {
-                                let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity, undefined, true);
-                                let normal = entity.bezier.normal(projection.t);
-                                let angle = Math.angleBetween({x: 0, y: 0}, normal);
-                                pickupEntity.x = global.x;
-                                pickupEntity.y = global.y;
-    
-                                let angleRight = entity.rotation + (angle - Math.PI/2) - Math.PI/2;
-                                let angleLeft = entity.rotation + (angle + Math.PI/2) - Math.PI/2;
-                                let rightDiff = Math.atan2(Math.sin(angleRight-pickupEntity.rotation), Math.cos(angleRight-pickupEntity.rotation));
-                                let leftDiff = Math.atan2(Math.sin(angleLeft-pickupEntity.rotation), Math.cos(angleLeft-pickupEntity.rotation));
-    
-                                if (isNaN(pickupEntity.prevRotation)) {
-                                    pickupEntity.prevRotation = pickupEntity.rotation;
-                                }
-        
-                                if (rightDiff < leftDiff) {
-                                    pickupEntity.rotation = angleRight + Math.PI/2;
-                                } else {
-                                    pickupEntity.rotation = angleLeft + Math.PI/2;
-                                }
-                                connectionEstablished = true;
-                                break;
                             }
                         }
                     }
@@ -2744,6 +2744,32 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             x: 0,
                             y: 0
                         };
+                    }
+                }
+                if (!connectionEstablished) {
+                    for (let i = 0; i < selectedEntities.length; i++) {
+                        let pickupEntity = selectedEntities[i];
+                        if (!pickupEntity.building?.hasHandle && pickupEntity.selectionArea.visible) {
+                            pickupEntity.selectionArea.visible = false;
+                        }
+                        if (selectionRotation) {
+                            let rotatedPosition = Math.rotateAround(selectionRotation, pickupEntity.rotationData, rotationAngle);
+                            pickupEntity.x = rotatedPosition.x;
+                            pickupEntity.y = rotatedPosition.y;
+                            pickupEntity.pickupOffset = {
+                                x: snappedMX - pickupEntity.x,
+                                y: snappedMY - pickupEntity.y
+                            };
+                            pickupEntity.rotation = pickupEntity.rotationData.rotation - rotationAngle;
+                        } else {
+                            pickupEntity.x = snappedMX - pickupEntity.pickupOffset.x;
+                            pickupEntity.y = snappedMY - pickupEntity.pickupOffset.y;
+                            if (selectedEntities.length === 1 && !pickupEntity.building?.ignoreSnapSettings && (game.settings.enableGrid || keys[16])) {
+                                let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
+                                pickupEntity.x = (Math.round(pickupEntity.x / gridSize) * gridSize);
+                                pickupEntity.y = (Math.round(pickupEntity.y / gridSize) * gridSize);
+                            }
+                        }
                     }
                 }
             }
