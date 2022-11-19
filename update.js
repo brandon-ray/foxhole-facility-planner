@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
+const METER_UNREAL_UNITS = 100;
+const foxholeDataDirectory = 'dev/';
 const foxholeDataVariable = 'const foxholeData = ';
 let foxholeData = JSON.parse(fs.readFileSync('./public/foxholeData.js').toString().substring(foxholeDataVariable.length));
 
@@ -71,32 +73,40 @@ function initializeStructureItems(component) {
 }
 
 function iterateBaseStructures(uProperty, baseData) {
-    let basePath = `${uProperty.SuperStruct.ObjectPath.slice(0, -1)}json`;
+    let basePath = `${foxholeDataDirectory}${uProperty.SuperStruct.ObjectPath.slice(0, -1)}json`;
     let baseAsset = fs.readFileSync(basePath);
     baseAsset = JSON.parse(baseAsset);
     let className = null;
+    let structure = null;
     baseAsset.forEach(uProperty => {
-        if (uProperty.Type === 'BlueprintGeneratedClass') {
-            className = uProperty.Name ?? className;
-            if (uProperty.Super) {
-                iterateBaseStructures(uProperty, baseData);
-            }
-        } else if (uProperty.Type === className && uProperty.Properties) {
-            const structure = uProperty.Properties;
-            baseData.name = structure.DisplayName?.SourceString ?? baseData.name;
-            baseData.description = structure.Description?.SourceString ?? baseData.description;
-            baseData.BuildCategory = structure.BuildCategory ?? baseData.BuildCategory;
-            baseData.icon = getLocalIcon(structure) ?? baseData.icon;
-            baseData.garrisonSupplyMultiplier = structure.DecaySupplyDrain ?? baseData.garrisonSupplyMultiplier;
-            baseData.power = structure.PowerGridInfo?.PowerDelta ?? baseData.power;
+        switch(uProperty.Type) {
+            case 'BlueprintGeneratedClass':
+                className = uProperty.Name ?? className;
+                if (uProperty.Super) {
+                    iterateBaseStructures(uProperty, baseData);
+                }
+                break;
+            case className:
+                if (uProperty.Properties) {
+                    structure = uProperty.Properties;
+                    baseData.name = structure.DisplayName?.SourceString ?? baseData.name;
+                    baseData.description = structure.Description?.SourceString ?? baseData.description;
+                    baseData.BuildCategory = structure.BuildCategory ?? baseData.BuildCategory;
+                    baseData.minLength = structure.ConnectorMinLength ? structure.ConnectorMinLength / METER_UNREAL_UNITS : undefined ?? baseData.minLength;
+                    baseData.maxLength = structure.ConnectorMaxLength ? structure.ConnectorMaxLength / METER_UNREAL_UNITS : undefined ?? baseData.maxLength;
+                    baseData.icon = getLocalIcon(structure) ?? baseData.icon;
+                    baseData.garrisonSupplyMultiplier = structure.DecaySupplyDrain ?? baseData.garrisonSupplyMultiplier;
+                    baseData.power = structure.PowerGridInfo?.PowerDelta ?? baseData.power;
+                }
+                break;
         }
     });
 }
 
-let buildCategories = ['EBuildCategory::Foundation', 'EBuildCategory::Facility', 'EBuildCategory::Power', 'EBuildCategory::Mining'];
+//let buildCategories = ['EBuildCategory::Foundation', 'EBuildCategory::Facility', 'EBuildCategory::Power', 'EBuildCategory::Mining'];
 
 function iterateStructures(dirPath) {
-    dirPath = dirPath ?? 'War/Content/Blueprints/';
+    dirPath = dirPath ?? `${foxholeDataDirectory}War/Content/Blueprints/`;
     let files = fs.readdirSync(dirPath);
     files.forEach(file => {
         const filePath = path.join(dirPath, file);
@@ -107,15 +117,7 @@ function iterateStructures(dirPath) {
             let structureCodeName = null;
             let structure = null;
             let structureData;
-            let baseData = {
-                'name': undefined,
-                'description': 'No Description Provided.',
-                'category': undefined,
-                'icon': undefined,
-                'garrisonSupplyMultiplier': undefined,
-                'power': undefined,
-                'cost': undefined
-            };
+            let baseData = {};
             let modificationsData = [];
             uAsset.forEach(uProperty => {
                 switch(uProperty.Type) {
@@ -126,7 +128,8 @@ function iterateStructures(dirPath) {
                         }
                         break;
                     case className:
-                        if (uProperty.Properties && uProperty.Properties.CodeName && ((uProperty.Properties.BuildCategory && buildCategories.includes(uProperty.Properties.BuildCategory) || (baseData.BuildCategory && buildCategories.includes(baseData.BuildCategory))))) {
+                        // if (uProperty.Properties && uProperty.Properties.CodeName && ((uProperty.Properties.BuildCategory && buildCategories.includes(uProperty.Properties.BuildCategory) || (baseData.BuildCategory && buildCategories.includes(baseData.BuildCategory))))) {
+                        if (uProperty.Properties && uProperty.Properties.CodeName) {
                             structureCodeName = uProperty.Properties.CodeName.toLowerCase();
                             if (structureList[structureCodeName]) {
                                 structure = uProperty.Properties;
@@ -139,20 +142,35 @@ function iterateStructures(dirPath) {
                                     'category': structureData.category,
                                     'color': structureData.color,
                                     'hideInList': structureData.hideInList,
+                                    'hideProperties': structureData.hideProperties,
                                     'width': structureData.width,
                                     'length': structureData.length,
                                     'range': structureData.range,
                                     'rangeColor': structureData.rangeColor,
+                                    //'overlapDist': structure.MinDistanceToSameStructure ? structure.MinDistanceToSameStructure / METER_UNREAL_UNITS : undefined,
                                     'overlapDist': structureData.overlapDist,
                                     'sortOffset': structureData.sortOffset,
+                                    'hasHandle': structureData.hasHandle,
+                                    'hasOutline': structureData.hasOutline,
                                     'isBezier': structureData.isBezier,
-                                    'maxLength': structureData.maxLength,
+                                    'minLength': structure.ConnectorMinLength ? structure.ConnectorMinLength / METER_UNREAL_UNITS : undefined ?? baseData.minLength,
+                                    'maxLength': structure.ConnectorMaxLength ? structure.ConnectorMaxLength / METER_UNREAL_UNITS : undefined ?? baseData.maxLength,
                                     'icon': getLocalIcon(structure) ?? baseData.icon,
-                                    'texture': structureData.texture,
+                                    'texture': typeof structureData.texture === 'string' || structureData.texture === null ? structureData.texture : `game/Textures/Structures/${structureData.id}.webp`,
+                                    'textureFrontCap': structureData.textureFrontCap, // `game/Textures/Structures/${structureData.id}_front.webp`
+                                    'textureBackCap': structureData.textureBackCap, // `game/Textures/Structures/${structureData.id}_back.webp`
                                     'textureIcon': structureData.textureIcon,
-                                    'garrisonSupplyMultiplier': structure.DecaySupplyDrain ?? baseData.garrisonSupplyMultiplier,
+                                    'textureOffset': structureData.textureOffset,
+                                    'garrisonSupplyMultiplier': structure.DecaySupplyDrain ?? baseData.garrisonSupplyMultiplier ?? structureData.garrisonSupplyMultiplier,
                                     'power': (structure.PowerGridInfo?.PowerDelta ?? baseData.power) / 1000 || undefined,
+                                    'canSnap': structureData.canSnap,
+                                    'canSnapStructureType': structureData.canSnapStructureType,
+                                    'canSnapAlongBezier': structureData.canSnapAlongBezier,
+                                    'ignoreSnapSettings': structureData.ignoreSnapSettings,
+                                    'requireConnection': structureData.requireConnection,
+                                    'sockets': structureData.sockets,
                                     'techId': structure.TechID && (structure.TechID !== 'ETechID::None') ? structure.TechID.substring(9).toLowerCase() : undefined,
+                                    'liquidCapacity': structure.LiquidTank?.MaxAmount ?? structureData.liquidCapacity,
                                     'cost': structureData.cost ?? baseData.cost,
                                     '_productionLength': structureData._productionLength,
                                     'production': structureData.production,
@@ -189,6 +207,9 @@ function iterateStructures(dirPath) {
                                         'codeName': displayName,
                                         'description': modification.Description?.SourceString ?? 'No Description Provided.',
                                         'icon': getLocalIcon(modification),
+                                        'texture': storedModData?.texture ?? `game/Textures/Structures/${structureData.id}_${storedModData?.id}.webp`,
+                                        'positionOffset': storedModData?.positionOffset,
+                                        'sockets': storedModData?.sockets,
                                         'techId': modification.TechID && (modification.TechID !== 'ETechID::None') ? modification.TechID.substring(9).toLowerCase() : undefined,
                                         'cost': undefined,
                                         '_productionLength': storedModData?._productionLength,
@@ -211,16 +232,13 @@ function iterateStructures(dirPath) {
                             structureList[structureCodeName].upgrades = modifications;
                         }
                         break;
-                    case 'BoxComponent':
-                        /*
-                        
-                        Avoid this for now.
-
-                        if (structure && uProperty.Name === 'UseAreaBox' && uProperty.Properties?.BoxExtent) {
-                            structureList[structureCodeName].width = uProperty.Properties.BoxExtent.Y;
-                            structureList[structureCodeName].length = uProperty.Properties.BoxExtent.X;
+                    case 'CraneComponent':
+                        if (structure && uProperty.Properties?.Config) {
+                            structureList[structureCodeName]['range'] = {
+                                "min": uProperty.Properties.Config.MinHorizontalDistanceToTarget / METER_UNREAL_UNITS,
+                                "max": uProperty.Properties.Config.MaxHorizontalDistanceToTarget / METER_UNREAL_UNITS
+                            };
                         }
-                        */
                         break;
                 }
             });
@@ -229,10 +247,10 @@ function iterateStructures(dirPath) {
         }
     });
 }
-iterateStructures('War/Content/Blueprints/Structures/');
+iterateStructures(`${foxholeDataDirectory}War/Content/Blueprints/`);
 
 function iterateBaseAssets(uProperty, baseData) {
-    let basePath = `${uProperty.SuperStruct.ObjectPath.slice(0, -1)}json`;
+    let basePath = `${foxholeDataDirectory}${uProperty.SuperStruct.ObjectPath.slice(0, -1)}json`;
     let baseAsset = fs.readFileSync(basePath);
     baseAsset = JSON.parse(baseAsset);
     let className = null;
@@ -297,9 +315,9 @@ function iterateData(filePath, list, isItem) {
     }
 }
 
-iterateData('War/Content/Blueprints/Data/BPVehicleDynamicData.json', itemList, true);
-iterateData('War/Content/Blueprints/Data/BPStructureDynamicData.json', itemList, true); // Check for items in the structure data... Yes, Material Pallet is stored here.
-iterateData('War/Content/Blueprints/Data/BPStructureDynamicData.json', structureList);
+iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPVehicleDynamicData.json`, itemList, true);
+iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, itemList, true); // Check for items in the structure data... Yes, Material Pallet is stored here.
+iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, structureList);
 
 function iterateAssets(dirPath) {
     let files = fs.readdirSync(dirPath);
@@ -356,7 +374,7 @@ function iterateAssets(dirPath) {
         }
     });
 }
-iterateAssets('War/Content/Blueprints/');
+iterateAssets(`${foxholeDataDirectory}War/Content/Blueprints/`);
 
 function compareItems(oldItems, newItems) {
     if (!oldItems || !newItems) {

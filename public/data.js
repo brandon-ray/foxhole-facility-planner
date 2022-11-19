@@ -99,9 +99,13 @@ const buildingCategories = {
 
         window.objectData[objectDataKey + '_list'] = objectList;
 
+        /*
+        Not sure this is needed anymore...
+        
         objectList.sort((a, b) => {
             return a.name.localeCompare(b.name);
         });
+        */
         
         if (objectDataKey === 'buildings') {
             objectList.sort((a, b) => buildingCategories[a.category].order - buildingCategories[b.category].order);

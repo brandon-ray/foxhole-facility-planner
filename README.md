@@ -9,10 +9,11 @@ Made with ❤️ by the PEG Regiment using Vue.js and Pixi.js
 - **Facility Blueprint Editor**
     - Saving and Loading
     - Multi-Building Selection
-    - *Mostly* Accurate Building Placement ;)
+    - Building Placement
+    - Pipe and Power Line Construction
     - Rail and Road Construction
 - **Building Browser**
-    - Category and Faction Filtering
+    - Category, Faction, and Tier Filtering
     - Production Recipes Overview
     - Building Properties
     - Upgrade and Production Selection
@@ -21,9 +22,10 @@ Made with ❤️ by the PEG Regiment using Vue.js and Pixi.js
     - Power and Garrison Supply Consumption
     - Facility Resource Input and Production Output
     - Production Time Filtering
+
 ## Screenshots
 
-![Screenshot](public/assets/screenshot3.jpg)
+![Screenshot](public/assets/screenshot4.jpg)
 
 
 ## Live Website (Latest Release)
@@ -31,18 +33,21 @@ Made with ❤️ by the PEG Regiment using Vue.js and Pixi.js
 https://foxholeplanner.com
 
 
-## Authors
+## Project Authors / Maintainers
 
-- [@brandon-ray](https://github.com/brandon-ray)
-- [@jimdcunningham](https://github.com/jimdcunningham)
+- **Brandon Ray** ([@brandon-ray](https://github.com/brandon-ray))
+- **James Cunningham** ([@jimdcunningham](https://github.com/jimdcunningham))
+
+## Special Thanks
+- **[22-ACR] Justin**: Exporting images for all the structures from the game.
 
 ## Potential Future Features 
 ***Note:** These are things we might add in the future.*
 
 - **Facility Image Export:** Save an image of your facility locally.
 - **Statistics CSV Export:** Save your Facility stats to a spreadsheet.
-- **Pipe & Power Line Construction** (Building Connection Points)
 - **Redo & Undo:** Revert mistakes and boo-boos.
+
 ## Run Locally
 
 Clone the project
@@ -72,4 +77,6 @@ Start the server
 Go to http://localhost:3000/ in your browser
 ## Support & Feedback
 
-If you need help or have any feedback, join our [Discord](https://discord.gg/SnyEDQyAVr) or e-mail brandon@bombsightgames.com
+If you need help or have any feedback, join our [Discord](https://discord.gg/SnyEDQyAVr) or e-mail us.
+- **Brandon (Rayboy)**: brandon@bombsightgames.com
+- **James (Jimbo)**: james@tegature.com

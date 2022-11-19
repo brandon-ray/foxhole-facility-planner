@@ -640,10 +640,18 @@ const foxholeData = {
 			"codeName": "FacilityFactoryAmmo",
 			"description": "A factory for producing advanced ammo types such as large calibre shells, rockets, and flame ammo.",
 			"category": "factories",
-			"width": 7,
-			"length": 14,
 			"icon": "game/Textures/UI/ItemIcons/AmmoFactoryBaseIcon.webp",
+			"texture": "game/Textures/Structures/ammunition_factory.webp",
 			"power": -4,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "power",
+					"x": 60,
+					"y": 974,
+					"rotation": 270
+				}
+			],
 			"techId": "unlockfacilitytier2",
 			"cost": {
 				"facilitymaterials2": 25
@@ -679,6 +687,7 @@ const foxholeData = {
 					"codeName": "RocketFactory",
 					"description": "Produces various types of Rockets.",
 					"icon": "game/Textures/UI/ItemIcons/AmmoFactoryRocketFacilityModIcon.webp",
+					"texture": "game/Textures/Structures/ammunition_factory_rocket_factory.webp",
 					"techId": "unlockfacilitytier2",
 					"cost": {
 						"facilitymaterials2": 35
@@ -715,6 +724,7 @@ const foxholeData = {
 					"codeName": "LargeShellFactory",
 					"description": "Produces large calibre ordinance for use with tanks and artillery.",
 					"icon": "game/Textures/UI/ItemIcons/AmmoFactoryLargeShellFactoryModIcon.webp",
+					"texture": "game/Textures/Structures/ammunition_factory_large_shell_factory.webp",
 					"techId": "unlockfacilitytier2",
 					"cost": {
 						"facilitymaterials2": 175
@@ -787,17 +797,156 @@ const foxholeData = {
 			"description": "The Foreman is an all-purpose, no-frills, easy to assemble crane. Perfect for hauling heavy loads in facilities where loading and offloading is commonplace.",
 			"category": "misc",
 			"color": 1052688,
-			"width": 3,
-			"length": 3,
-			"range": 24,
+			"width": 3.74,
+			"length": 3.74,
+			"range": {
+				"min": 4.5,
+				"max": 22.5
+			},
 			"rangeColor": 3003829,
-			"sortOffset": 1000000,
+			"sortOffset": 2000000,
 			"icon": "game/Textures/UI/StaticCraneItemIcon.webp",
+			"texture": "game/Textures/Structures/bms_foreman_stacker.webp",
 			"textureIcon": {
 				"width": 96,
 				"height": 96
 			},
+			"textureOffset": {
+				"x": 445,
+				"y": 258
+			},
 			"power": -0.5,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "power",
+					"x": -22,
+					"y": 330,
+					"rotation": 270
+				}
+			],
+			"techId": "unlockfacilitytier2",
+			"cost": {
+				"facilitymaterials2": 10
+			}
+		},
+		"bms_overseer_skyhauler": {
+			"name": "BMS Overseer Sky-Hauler",
+			"codeName": "LargeCrane",
+			"description": "The star of the BMS arsenal of military-grade construction equipment, the Overseer Sky-Hauler makes several tonnes look like a feather, and enjoys a high level of mobility while deployed along heavy-duty rail lines.",
+			"category": "misc",
+			"width": 6.86,
+			"length": 11.52,
+			"range": {
+				"min": 13.75,
+				"max": 33.75
+			},
+			"sortOffset": 2000000,
+			"icon": "game/Textures/UI/LargeCraneItemIcon.webp",
+			"texture": "game/Textures/Structures/large_crane.webp",
+			"textureOffset": {
+				"x": 382,
+				"y": 578
+			},
+			"techId": "unlockfacilitytier3",
+			"cost": {
+				"facilitymaterials3": 35
+			}
+		},
+		"catwalk_bridge": {
+			"name": "Catwalk Bridge",
+			"codeName": "FacilityCatwalkBridge",
+			"description": "A raised walkway for creating paths above complex Facilities.",
+			"category": "misc",
+			"sortOffset": 500000,
+			"hasHandle": true,
+			"hasOutline": false,
+			"minLength": 8,
+			"maxLength": 20,
+			"icon": "game/Textures/UI/ItemIcons/facilitieCatwalkPlatfromIcon.webp",
+			"texture": "game/Textures/Structures/catwalk_bridge.webp",
+			"canSnap": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "catwalk",
+					"cap": "front",
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "catwalk",
+					"cap": "back",
+					"rotation": 90
+				}
+			],
+			"techId": "unlockfacilitytier2",
+			"cost": {
+				"facilitymaterials2": 10
+			}
+		},
+		"catwalk_platform": {
+			"name": "Catwalk Platform",
+			"codeName": "FacilityCatwalkPlatform",
+			"description": "A raised walkway for creating paths above complex Facilities.",
+			"category": "misc",
+			"sortOffset": 500000,
+			"icon": "game/Textures/UI/ItemIcons/FacilityCatwalkRampConnectorIcon.webp",
+			"texture": "game/Textures/Structures/catwalk_platform.webp",
+			"canSnap": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "catwalk",
+					"x": 3,
+					"y": 138,
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "catwalk",
+					"x": 139,
+					"y": 2,
+					"rotation": 0
+				},
+				{
+					"id": 2,
+					"type": "catwalk",
+					"x": 276,
+					"y": 138,
+					"rotation": 90
+				},
+				{
+					"id": 3,
+					"type": "catwalk",
+					"x": 139,
+					"y": 275,
+					"rotation": 180
+				}
+			],
+			"techId": "unlockfacilitytier2",
+			"cost": {
+				"facilitymaterials2": 10
+			}
+		},
+		"catwalk_stairs": {
+			"name": "Catwalk Stairs",
+			"codeName": "FacilityCatwalkStairs",
+			"description": "Stairs that connect to raised Catwalks, which create paths above complex Facilities.",
+			"category": "misc",
+			"sortOffset": 500000,
+			"icon": "game/Textures/UI/ItemIcons/FacilityCatwalkRampIcon.webp",
+			"texture": "game/Textures/Structures/catwalk_stairs.webp",
+			"canSnap": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "catwalk",
+					"x": 1235,
+					"y": 141,
+					"rotation": 90
+				}
+			],
 			"techId": "unlockfacilitytier2",
 			"cost": {
 				"facilitymaterials2": 10
@@ -809,10 +958,18 @@ const foxholeData = {
 			"description": "A processing plant that refines Coal into useful materials used in facility production and power.",
 			"category": "factories",
 			"color": 4210752,
-			"width": 6,
-			"length": 10,
 			"icon": "game/Textures/UI/ItemIcons/FacilitiesCoolRefineryBaseIcon.webp",
+			"texture": "game/Textures/Structures/coal_refinery.webp",
 			"power": -3,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "power",
+					"x": 0,
+					"y": 273,
+					"rotation": 270
+				}
+			],
 			"cost": {
 				"facilitymaterials1": 50
 			},
@@ -835,6 +992,10 @@ const foxholeData = {
 					"codeName": "CokeFurnace",
 					"description": "A high powered furnace that brings Coal to high temperatures to separate out non-volatile Coke.",
 					"icon": "game/Textures/UI/ItemIcons/FacilitiesCoolRefineryCokeFurnaceIcon.webp",
+					"texture": "game/Textures/Structures/coal_refinery_coke_furnace.webp",
+					"positionOffset": {
+						"x": -21
+					},
 					"cost": {
 						"facilitymaterials1": 200
 					},
@@ -858,6 +1019,35 @@ const foxholeData = {
 					"codeName": "CoalLiquefier",
 					"description": "Processing vats that refines Coal into Oil.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityCoalLiquefierIcon.webp",
+					"texture": "game/Textures/Structures/coal_refinery_liquifier.webp",
+					"positionOffset": {
+						"x": 52
+					},
+					"sockets": [
+						{
+							"id": 0,
+							"type": "power",
+							"x": 0,
+							"y": 273,
+							"rotation": 270
+						},
+						{
+							"id": 1,
+							"type": "pipe",
+							"flow": "out",
+							"x": 611,
+							"y": 494,
+							"rotation": 180
+						},
+						{
+							"id": 2,
+							"type": "pipe",
+							"flow": "in",
+							"x": 502,
+							"y": 747,
+							"rotation": 180
+						}
+					],
 					"techId": "unlockfacilitytier2",
 					"cost": {
 						"facilitymaterials2": 20
@@ -884,6 +1074,35 @@ const foxholeData = {
 					"codeName": "AdvCoalLiquefier",
 					"description": "Advanced processing vats that refine large amounts of coal into Heavy Oil.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityAdvancedCoalLiquefierIcon.webp",
+					"texture": "game/Textures/Structures/coal_refinery_adv_liquifier.webp",
+					"positionOffset": {
+						"x": 52
+					},
+					"sockets": [
+						{
+							"id": 0,
+							"type": "power",
+							"x": 0,
+							"y": 273,
+							"rotation": 270
+						},
+						{
+							"id": 1,
+							"type": "pipe",
+							"flow": "out",
+							"x": 611,
+							"y": 494,
+							"rotation": 180
+						},
+						{
+							"id": 3,
+							"type": "pipe",
+							"flow": "in",
+							"x": 503,
+							"y": 963,
+							"rotation": 180
+						}
+					],
 					"techId": "unlockfacilitytier3",
 					"cost": {
 						"facilitymaterials3": 65
@@ -912,10 +1131,26 @@ const foxholeData = {
 			"codeName": "FacilityPowerDiesel",
 			"description": "A structure that generates power by burning Diesel.",
 			"category": "power",
-			"width": 7,
-			"length": 7,
 			"icon": "game/Textures/UI/ItemIcons/DiesePowerPlanetBaseIcon.webp",
+			"texture": "game/Textures/Structures/diesel_power_plant.webp",
 			"power": 5,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "pipe",
+					"flow": "in",
+					"x": 152,
+					"y": 57,
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "power",
+					"x": 548,
+					"y": 770,
+					"rotation": 180
+				}
+			],
 			"cost": {
 				"cloth": 150
 			},
@@ -935,6 +1170,27 @@ const foxholeData = {
 					"codeName": "Petrol",
 					"description": "A generator that burns petrol to generate more power.",
 					"icon": "game/Textures/UI/ItemIcons/DiesePowerPlanetPetrolIcon.webp",
+					"texture": "game/Textures/Structures/diesel_power_plant_petrol_power.webp",
+					"positionOffset": {
+						"x": -8
+					},
+					"sockets": [
+						{
+							"id": 0,
+							"type": "pipe",
+							"flow": "in",
+							"x": 167,
+							"y": 57,
+							"rotation": 270
+						},
+						{
+							"id": 1,
+							"type": "power",
+							"x": 563,
+							"y": 770,
+							"rotation": 180
+						}
+					],
 					"cost": {
 						"facilitymaterials1": 100
 					},
@@ -958,14 +1214,22 @@ const foxholeData = {
 			"description": "A garage that facilitates vehicle modifications and upgrades.",
 			"category": "factories",
 			"color": 8184298,
-			"width": 10,
-			"length": 16,
 			"icon": "game/Textures/UI/StructureIcons/FacilityModificationCenterIcon.webp",
+			"texture": "game/Textures/Structures/field_modification_center.webp",
 			"textureIcon": {
 				"width": 160,
 				"height": 160
 			},
 			"power": -8,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "power",
+					"x": 104,
+					"y": 142,
+					"rotation": 0
+				}
+			],
 			"techId": "unlockfacilitytier2",
 			"cost": {
 				"facilitymaterials2": 250
@@ -976,11 +1240,9 @@ const foxholeData = {
 			"codeName": "Foundation01T1",
 			"description": "A foundation that provides a suitable surface for constructing Facilities.",
 			"category": "foundations",
-			"width": 5,
-			"length": 5,
 			"sortOffset": -1000,
 			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation01Icon.webp",
-			"texture": "buildings/textures/concrete_meter.png",
+			"texture": "game/Textures/Structures/foundation_1x1.webp",
 			"textureIcon": {
 				"disabled": true
 			},
@@ -994,11 +1256,9 @@ const foxholeData = {
 			"codeName": "Foundation011x2T1",
 			"description": "A foundation that provides a suitable surface for constructing Facilities.",
 			"category": "foundations",
-			"width": 5,
-			"length": 10,
 			"sortOffset": -1000,
 			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation03Icon.webp",
-			"texture": "buildings/textures/concrete_meter.png",
+			"texture": "game/Textures/Structures/foundation_1x2.webp",
 			"textureIcon": {
 				"disabled": true
 			},
@@ -1012,11 +1272,9 @@ const foxholeData = {
 			"codeName": "Foundation012x2T1",
 			"description": "A foundation that provides a suitable surface for constructing Facilities.",
 			"category": "foundations",
-			"width": 10,
-			"length": 10,
 			"sortOffset": -1000,
 			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation04Icon.webp",
-			"texture": "buildings/textures/concrete_meter.png",
+			"texture": "game/Textures/Structures/foundation_2x2.webp",
 			"textureIcon": {
 				"disabled": true
 			},
@@ -1030,11 +1288,9 @@ const foxholeData = {
 			"codeName": "Foundation02T1",
 			"description": "A foundation that provides a suitable surface for constructing Facilities.",
 			"category": "foundations",
-			"width": 5,
-			"length": 5,
 			"sortOffset": -1000,
 			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation02Icon.webp",
-			"texture": "buildings/textures/concrete_corner_meter.png",
+			"texture": "game/Textures/Structures/foundation_corner.webp",
 			"textureIcon": {
 				"disabled": true
 			},
@@ -1043,20 +1299,51 @@ const foxholeData = {
 				"groundmaterials": 75
 			}
 		},
+		"fuel_container": {
+			"name": "Fuel Container",
+			"codeName": "FuelContainer",
+			"description": "A container for storing high volumes of fuel. Nearby structures and vehicles can refuel directly from this container. ",
+			"category": "misc",
+			"icon": "game/Textures/UI/StructureIcons/FuelTankIcon.webp",
+			"texture": "game/Textures/Structures/fuel_container.webp",
+			"garrisonSupplyMultiplier": 0,
+			"cost": {
+				"cloth": 100
+			}
+		},
 		"fuel_silo": {
 			"name": "Fuel Silo",
 			"codeName": "FacilitySiloOil",
 			"description": "An industrial silo for storing various types of Fuel.",
 			"category": "factories",
 			"color": 1052688,
-			"width": 2,
-			"length": 3,
 			"icon": "game/Textures/UI/StructureIcons/OilSiloIcon.webp",
+			"texture": "game/Textures/Structures/fuel_silo.webp",
 			"textureIcon": {
 				"width": 64,
 				"height": 96
 			},
+			"canSnap": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "pipe",
+					"flow": "in",
+					"x": 98,
+					"y": 264,
+					"rotation": 180
+				},
+				{
+					"id": 1,
+					"type": "pipe",
+					"flow": "out",
+					"x": 98,
+					"y": 0,
+					"rotation": 0
+				}
+			],
 			"techId": "unlockfacilitytier2",
+			"liquidCapacity": 500,
 			"cost": {
 				"facilitymaterials1": 15
 			}
@@ -1067,14 +1354,22 @@ const foxholeData = {
 			"description": "A large Assembly Station for production of advanced vehicles and equipment, such as tanks and trains. Construction will take time and may be halted if resources are depleted.",
 			"category": "factories",
 			"color": 8184298,
-			"width": 9,
-			"length": 20,
 			"icon": "game/Textures/UI/ItemIcons/LargeAssemblyStation.webp",
+			"texture": "game/Textures/Structures/large_assembly_factory.webp",
 			"textureIcon": {
 				"width": 160,
 				"height": 160
 			},
 			"power": -8,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "power",
+					"x": 69,
+					"y": 108,
+					"rotation": 0
+				}
+			],
 			"techId": "unlockfacilitytier2",
 			"cost": {
 				"facilitymaterials2": 250
@@ -1136,6 +1431,7 @@ const foxholeData = {
 					"codeName": "TrainAssembly",
 					"description": "An assembly station for producing train cars.",
 					"icon": "game/Textures/UI/ItemIcons/TrainAssemblyStation.webp",
+					"texture": "game/Textures/Structures/large_assembly_factory_train_assembly.webp",
 					"techId": "unlockfacilitytier3",
 					"cost": {
 						"facilitymaterials3": 150
@@ -1188,6 +1484,7 @@ const foxholeData = {
 					"codeName": "HeavyTankAssembly",
 					"description": "An assembly station for producing heavy tank class vehicles.",
 					"icon": "game/Textures/UI/ItemIcons/HeavyTankAssemblyStation.webp",
+					"texture": "game/Textures/Structures/large_assembly_factory_heavy_tank_assembly.webp",
 					"techId": "unlockfacilitytier3",
 					"cost": {
 						"facilitymaterials3": 150
@@ -1260,14 +1557,22 @@ const foxholeData = {
 			"description": "A standard Assembly Station for production of essential vehicles and equipment. Construction will take time and may be halted if resources are depleted. Some projects require a base vehicle to be present on the Assembly Station before production can begin.",
 			"category": "factories",
 			"color": 8184298,
-			"width": 8,
-			"length": 14,
 			"icon": "game/Textures/UI/ItemIcons/fieldAssembly01Icon.webp",
+			"texture": "game/Textures/Structures/light_vehicle_assembly_station.webp",
 			"textureIcon": {
 				"width": 160,
 				"height": 160
 			},
 			"power": -2,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "power",
+					"x": 108,
+					"y": 41,
+					"rotation": 0
+				}
+			],
 			"cost": {
 				"facilitymaterials1": 75
 			},
@@ -1386,6 +1691,7 @@ const foxholeData = {
 					"codeName": "MotorPool",
 					"description": "An assembly station for producing light-duty logistics vehicles like trucks.",
 					"icon": "game/Textures/UI/ItemIcons/MotorPoolAssemblyIcon.webp",
+					"texture": "game/Textures/Structures/light_vehicle_assembly_station_motor_pool.webp",
 					"cost": {
 						"facilitymaterials1": 200
 					},
@@ -1553,6 +1859,7 @@ const foxholeData = {
 					"codeName": "ArtilleryFactory",
 					"description": "An assembly station for producing half-tracks and rocket vehicles.",
 					"icon": "game/Textures/UI/ItemIcons/ArtilleryFactoryIcon.webp",
+					"texture": "game/Textures/Structures/light_vehicle_assembly_station_rocket_factory.webp",
 					"techId": "unlockfacilitytier2",
 					"cost": {
 						"facilitymaterials2": 65
@@ -1661,6 +1968,7 @@ const foxholeData = {
 					"codeName": "LightVehicleAssembly",
 					"description": "An assembly station for producing field weapons and utility vehicles such as Harvesters.",
 					"icon": "game/Textures/UI/ItemIcons/LightVehicleAssemblyIcon.webp",
+					"texture": "game/Textures/Structures/light_vehicle_assembly_station_field_station.webp",
 					"techId": "unlockfacilitytier2",
 					"cost": {
 						"facilitymaterials2": 25
@@ -1749,6 +2057,7 @@ const foxholeData = {
 					"codeName": "TankAssembly",
 					"description": "An assembly station for producing tank class vehicles.",
 					"icon": "game/Textures/UI/ItemIcons/TankAssemblyIcon.webp",
+					"texture": "game/Textures/Structures/light_vehicle_assembly_station_tank_factory.webp",
 					"techId": "unlockfacilitytier2",
 					"cost": {
 						"facilitymaterials2": 200
@@ -1928,6 +2237,7 @@ const foxholeData = {
 					"codeName": "WeaponsPlatformAssembly",
 					"description": "An assembly station for producing emplaced weapon platforms and specialized tanks.",
 					"icon": "game/Textures/UI/ItemIcons/WeaponPlatfromAssemblyIcon.webp",
+					"texture": "game/Textures/Structures/light_vehicle_assembly_station_weapons_platform.webp",
 					"techId": "unlockfacilitytier3",
 					"cost": {
 						"facilitymaterials3": 20
@@ -2000,13 +2310,29 @@ const foxholeData = {
 			"description": "Metal drums for storing various fuels that can be transferred into and out of Facilities. Stockpiles may be public or reserved.",
 			"category": "factories",
 			"color": 8186514,
-			"width": 6,
-			"length": 8.5,
 			"icon": "game/Textures/UI/ItemIcons/MaterialTransferStationLiquidIcon.webp",
-			"texture": "buildings/textures/LiquidTransferStationTexture.jpg",
+			"texture": "game/Textures/Structures/liquid_transfer_station.webp",
 			"textureIcon": {
 				"y": -52
 			},
+			"sockets": [
+				{
+					"id": 0,
+					"type": "pipe",
+					"flow": "in",
+					"x": 13,
+					"y": 431,
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "pipe",
+					"flow": "out",
+					"x": 13,
+					"y": 154,
+					"rotation": 270
+				}
+			],
 			"cost": {
 				"facilitymaterials1": 35
 			}
@@ -2017,17 +2343,25 @@ const foxholeData = {
 			"description": "A supply tunnel that provides Garrison Supplies to nearby Facilities and Railway Tracks. Garrison Supplies may also be produced on-site using Construction Materials. The rate of consumption is 2 Garrison Supplies per-hour per-structure once decay begins. Some structures have additional consumption requirements.",
 			"category": "misc",
 			"color": 1052688,
-			"width": 3,
-			"length": 3,
 			"range": 40,
 			"overlapDist": 65,
 			"sortOffset": 1000000,
 			"icon": "game/Textures/UI/StructureIcons/TunnelNetworkStructureIcon.webp",
+			"texture": "game/Textures/Structures/maintenance_tunnel.webp",
 			"textureIcon": {
 				"width": 96,
 				"height": 96
 			},
 			"power": -2,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "power",
+					"x": 310,
+					"y": 191,
+					"rotation": 90
+				}
+			],
 			"cost": {
 				"facilitymaterials1": 200
 			},
@@ -2051,10 +2385,8 @@ const foxholeData = {
 			"description": "A space marked for storing refined materials that can be transferred into and out of Facilities. Stockpiles may be public or reserved.",
 			"category": "factories",
 			"color": 8186514,
-			"width": 6,
-			"length": 12,
 			"icon": "game/Textures/UI/ItemIcons/FacilityResourceTransfer3Icon.webp",
-			"texture": "buildings/textures/MaterialTransferStationTexture.jpg",
+			"texture": "game/Textures/Structures/material_transfer_station.webp",
 			"textureIcon": {
 				"y": -52
 			},
@@ -2067,10 +2399,18 @@ const foxholeData = {
 			"codeName": "FacilityRefinery1",
 			"description": "A factory that refines raw resources into Construction Materials for advanced facilities. Additional modifications allow for the development of a variety of different materials.",
 			"category": "factories",
-			"width": 6,
-			"length": 12,
 			"icon": "game/Textures/UI/StructureIcons/MetalworksFactoryBase.webp",
+			"texture": "game/Textures/Structures/materials_factory.webp",
 			"power": -2,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "power",
+					"x": 324,
+					"y": 1287,
+					"rotation": 180
+				}
+			],
 			"cost": {
 				"cloth": 200
 			},
@@ -2093,6 +2433,28 @@ const foxholeData = {
 					"codeName": "Forge",
 					"description": "A unique factory for forging specialized machinery parts needed to construct vehicles. Requires Coke or Petrol.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityForgeIcon.webp",
+					"texture": "game/Textures/Structures/materials_factory_forge.webp",
+					"positionOffset": {
+						"x": -69,
+						"y": -10
+					},
+					"sockets": [
+						{
+							"id": 0,
+							"type": "power",
+							"x": 412,
+							"y": 1306,
+							"rotation": 180
+						},
+						{
+							"id": 1,
+							"type": "pipe",
+							"flow": "in",
+							"x": 360,
+							"y": 54,
+							"rotation": 270
+						}
+					],
 					"cost": {
 						"facilitymaterials1": 200
 					},
@@ -2127,6 +2489,28 @@ const foxholeData = {
 					"codeName": "MetalPress",
 					"description": "A heavy automatic press that refines materials into a denser form.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityMetalPressIcon.webp",
+					"texture": "game/Textures/Structures/materials_factory_metal_press.webp",
+					"positionOffset": {
+						"x": -32,
+						"y": 55
+					},
+					"sockets": [
+						{
+							"id": 0,
+							"type": "power",
+							"x": 363,
+							"y": 1177,
+							"rotation": 180
+						},
+						{
+							"id": 2,
+							"type": "pipe",
+							"flow": "in",
+							"x": 51,
+							"y": 66,
+							"rotation": 0
+						}
+					],
 					"cost": {
 						"facilitymaterials1": 25
 					},
@@ -2151,6 +2535,20 @@ const foxholeData = {
 					"codeName": "Recycler",
 					"description": "An assembly bay with specialized equipment for quickly building and packing materials needed on the frontline.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityRecyclerIcon.webp",
+					"texture": "game/Textures/Structures/materials_factory_recycler.webp",
+					"positionOffset": {
+						"x": -41,
+						"y": 21
+					},
+					"sockets": [
+						{
+							"id": 0,
+							"type": "power",
+							"x": 324,
+							"y": 1246,
+							"rotation": 180
+						}
+					],
 					"cost": {
 						"cloth": 50
 					},
@@ -2185,6 +2583,20 @@ const foxholeData = {
 					"codeName": "Smelter",
 					"description": "An industrial smelter for melting down Salvage to remove impurities. Requires Coke.",
 					"icon": "game/Textures/UI/StructureIcons/FacilitySmelterIcon.webp",
+					"texture": "game/Textures/Structures/materials_factory_smelter.webp",
+					"positionOffset": {
+						"x": -41,
+						"y": 21
+					},
+					"sockets": [
+						{
+							"id": 0,
+							"type": "power",
+							"x": 324,
+							"y": 1246,
+							"rotation": 180
+						}
+					],
 					"cost": {
 						"facilitymaterials1": 25
 					},
@@ -2211,14 +2623,22 @@ const foxholeData = {
 			"codeName": "FacilityRefinery2",
 			"description": "A factory for refining raw resources into Processed Construction Materials. Additional modifications can allow for additional refined materials needed for advanced facility operations.",
 			"category": "factories",
-			"width": 9,
-			"length": 12,
 			"icon": "game/Textures/UI/StructureIcons/FacilityRefinery2Icon.webp",
+			"texture": "game/Textures/Structures/metalworks_factory.webp",
 			"textureIcon": {
 				"width": 160,
 				"height": 160
 			},
 			"power": -5,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "power",
+					"x": 295,
+					"y": 1277,
+					"rotation": 180
+				}
+			],
 			"techId": "unlockfacilitytier2",
 			"cost": {
 				"facilitymaterials1": 125
@@ -2253,6 +2673,19 @@ const foxholeData = {
 					"codeName": "Recycler",
 					"description": "Advanced sorting machinery for sifting piles of scrap metal for useful materials.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityRefinery2RecyclerIcon.webp",
+					"texture": "game/Textures/Structures/metalworks_factory_recycler.webp",
+					"positionOffset": {
+						"x": -13
+					},
+					"sockets": [
+						{
+							"id": 0,
+							"type": "power",
+							"x": 296,
+							"y": 1277,
+							"rotation": 180
+						}
+					],
 					"cost": {
 						"facilitymaterials1": 25
 					},
@@ -2288,6 +2721,28 @@ const foxholeData = {
 					"codeName": "BlastFurnace",
 					"description": "A large industrial cauldron for liquefying metals to remove impurities from advanced materials.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityBlastFurnaceIcon.webp",
+					"texture": "game/Textures/Structures/metalworks_factory_blast_furnace.webp",
+					"positionOffset": {
+						"x": -42,
+						"y": -22
+					},
+					"sockets": [
+						{
+							"id": 0,
+							"type": "power",
+							"x": 336,
+							"y": 1320,
+							"rotation": 180
+						},
+						{
+							"id": 1,
+							"type": "pipe",
+							"flow": "in",
+							"x": 293,
+							"y": 52,
+							"rotation": 270
+						}
+					],
 					"cost": {
 						"facilitymaterials2": 200
 					},
@@ -2335,6 +2790,36 @@ const foxholeData = {
 					"codeName": "EngineeringStation",
 					"description": "An expanded workshop for manual process of delicate materials.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityEngineeringStationIcon.webp",
+					"texture": "game/Textures/Structures/metalworks_factory_engineering_station.webp",
+					"positionOffset": {
+						"x": -70,
+						"y": -29
+					},
+					"sockets": [
+						{
+							"id": 0,
+							"type": "power",
+							"x": 357,
+							"y": 1336,
+							"rotation": 180
+						},
+						{
+							"id": 2,
+							"type": "pipe",
+							"flow": "in",
+							"x": 791,
+							"y": 2,
+							"rotation": 0
+						},
+						{
+							"id": 3,
+							"type": "pipe",
+							"flow": "in",
+							"x": 968,
+							"y": 58,
+							"rotation": 0
+						}
+					],
 					"techId": "unlockfacilitytier3",
 					"cost": {
 						"facilitymaterials2": 150
@@ -2393,10 +2878,34 @@ const foxholeData = {
 			"description": "A refinery that processes Oil into other useful materials for the purposes of production and power generation.",
 			"category": "factories",
 			"color": 2368548,
-			"width": 4,
-			"length": 11,
 			"icon": "game/Textures/UI/ItemIcons/OilRefineryBaseIcon.webp",
+			"texture": "game/Textures/Structures/oil_refinery.webp",
 			"power": -1,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "power",
+					"x": 255,
+					"y": 149,
+					"rotation": 0
+				},
+				{
+					"id": 1,
+					"type": "pipe",
+					"flow": "in",
+					"x": 53,
+					"y": 1104,
+					"rotation": 180
+				},
+				{
+					"id": 2,
+					"type": "pipe",
+					"flow": "out",
+					"x": 255,
+					"y": 2,
+					"rotation": 0
+				}
+			],
 			"cost": {
 				"facilitymaterials1": 50
 			},
@@ -2419,6 +2928,43 @@ const foxholeData = {
 					"codeName": "Reformer",
 					"description": "A large processing drum that allows for the controlled introduction of hydrogen to yield a similar output of Petrol for less raw Oil. ",
 					"icon": "game/Textures/UI/StructureIcons/OilRefineryMod3Icon.webp",
+					"texture": "game/Textures/Structures/oil_refinery_reformer.webp",
+					"positionOffset": {
+						"y": 75
+					},
+					"sockets": [
+						{
+							"id": 0,
+							"type": "power",
+							"x": 255,
+							"y": 149,
+							"rotation": 0
+						},
+						{
+							"id": 1,
+							"type": "pipe",
+							"flow": "in",
+							"x": 52,
+							"y": 1104,
+							"rotation": 180
+						},
+						{
+							"id": 2,
+							"type": "pipe",
+							"flow": "out",
+							"x": 255,
+							"y": 2,
+							"rotation": 0
+						},
+						{
+							"id": 3,
+							"type": "pipe",
+							"flow": "in",
+							"x": 298,
+							"y": 1255,
+							"rotation": 180
+						}
+					],
 					"cost": {
 						"facilitymaterials1": 200
 					},
@@ -2442,6 +2988,35 @@ const foxholeData = {
 					"codeName": "CrackingUnit",
 					"description": "A high-heat furnace that catalyses raw oil into refined Heavy Oil.",
 					"icon": "game/Textures/UI/StructureIcons/OilRefineryMod2Icon.webp",
+					"texture": "game/Textures/Structures/oil_refinery_cracking_unit.webp",
+					"positionOffset": {
+						"x": -1
+					},
+					"sockets": [
+						{
+							"id": 0,
+							"type": "power",
+							"x": 255,
+							"y": 149,
+							"rotation": 0
+						},
+						{
+							"id": 1,
+							"type": "pipe",
+							"flow": "in",
+							"x": 53,
+							"y": 1104,
+							"rotation": 180
+						},
+						{
+							"id": 2,
+							"type": "pipe",
+							"flow": "out",
+							"x": 255,
+							"y": 2,
+							"rotation": 0
+						}
+					],
 					"techId": "unlockfacilitytier2",
 					"cost": {
 						"facilitymaterials2": 20
@@ -2466,6 +3041,35 @@ const foxholeData = {
 					"codeName": "PetrochemicalPlant",
 					"description": "A blast furnace that further refines Heavy Oil into an Enriched Oil needed for advanced processes.",
 					"icon": "game/Textures/UI/ItemIcons/OilRefineryPetrochemicalPlanetIcon.webp",
+					"texture": "game/Textures/Structures/oil_refinery_petro_plant.webp",
+					"positionOffset": {
+						"x": -1
+					},
+					"sockets": [
+						{
+							"id": 0,
+							"type": "power",
+							"x": 255,
+							"y": 149,
+							"rotation": 0
+						},
+						{
+							"id": 1,
+							"type": "pipe",
+							"flow": "in",
+							"x": 53,
+							"y": 1104,
+							"rotation": 180
+						},
+						{
+							"id": 2,
+							"type": "pipe",
+							"flow": "out",
+							"x": 255,
+							"y": 2,
+							"rotation": 0
+						}
+					],
 					"techId": "unlockfacilitytier3",
 					"cost": {
 						"facilitymaterials3": 25
@@ -2494,9 +3098,8 @@ const foxholeData = {
 			"description": "Extracts fuel from Crude Oil Fields. Must be constructed nearby.",
 			"category": "harvesters",
 			"color": 2368548,
-			"width": 4,
-			"length": 7,
 			"icon": "game/Textures/UI/StructureIcons/OilWellMineIcon.webp",
+			"texture": "game/Textures/Structures/oil_well.webp",
 			"cost": {
 				"facilitymaterials1": 35
 			},
@@ -2516,6 +3119,28 @@ const foxholeData = {
 					"codeName": "Electric",
 					"description": "A generator that leverages electricity to pump oil through attached pipes.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityElectricOilWellIcon.webp",
+					"texture": "game/Textures/Structures/oil_well_electric_oil.webp",
+					"positionOffset": {
+						"x": -50,
+						"y": -79
+					},
+					"sockets": [
+						{
+							"id": 0,
+							"type": "power",
+							"x": 297,
+							"y": 218,
+							"rotation": 0
+						},
+						{
+							"id": 1,
+							"type": "pipe",
+							"flow": "out",
+							"x": 297,
+							"y": 2,
+							"rotation": 0
+						}
+					],
 					"techId": "unlockfacilitytier2",
 					"cost": {
 						"facilitymaterials2": 25
@@ -2545,6 +3170,36 @@ const foxholeData = {
 					"codeName": "Fracker",
 					"description": "A machine that opens up cracks in the earth by injecting water at a high pressure to increase the output of Crude Oil.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityFrackerIcon.webp",
+					"texture": "game/Textures/Structures/oil_well_fracking_oil.webp",
+					"positionOffset": {
+						"x": -2,
+						"y": -79
+					},
+					"sockets": [
+						{
+							"id": 0,
+							"type": "power",
+							"x": 284,
+							"y": 218,
+							"rotation": 0
+						},
+						{
+							"id": 1,
+							"type": "pipe",
+							"flow": "out",
+							"x": 283,
+							"y": 2,
+							"rotation": 0
+						},
+						{
+							"id": 2,
+							"type": "pipe",
+							"flow": "in",
+							"x": 512,
+							"y": 3,
+							"rotation": 0
+						}
+					],
 					"techId": "unlockfacilitytier3",
 					"cost": {
 						"facilitymaterials3": 25
@@ -2577,17 +3232,211 @@ const foxholeData = {
 				}
 			}
 		},
+		"pipeline": {
+			"name": "Pipeline",
+			"codeName": "FacilityPipe",
+			"description": "Industrial piping that allows for automatic transport of various liquids and fuels into a network of pipes that connect to various facility structures.",
+			"category": "factories",
+			"sortOffset": -500,
+			"hasHandle": true,
+			"isBezier": true,
+			"minLength": 3,
+			"maxLength": 20,
+			"icon": "game/Textures/UI/StructureIcons/PipelineSegmentIcon.webp",
+			"texture": "game/Textures/Structures/pipeline.webp",
+			"textureFrontCap": "game/Textures/Structures/pipeline_front.webp",
+			"textureBackCap": "game/Textures/Structures/pipeline_back.webp",
+			"canSnap": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "pipe",
+					"cap": "front",
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "pipe",
+					"cap": "left",
+					"rotation": 180
+				},
+				{
+					"id": 2,
+					"type": "pipe",
+					"cap": "right",
+					"rotation": 0
+				},
+				{
+					"id": 3,
+					"type": "pipe",
+					"cap": "back",
+					"rotation": 90
+				}
+			],
+			"techId": "unlockfacilitytier2",
+			"liquidCapacity": 100,
+			"cost": {
+				"pipematerials": 1
+			}
+		},
+		"pipeline_overhead": {
+			"name": "Pipeline (Overhead)",
+			"codeName": "FacilityPipeOverhead",
+			"description": "Industrial piping that allows for automatic transport of various liquids and fuels. These specialized pipes can be built overhead to connect to pipe networks across areas with high traffic.",
+			"category": "factories",
+			"sortOffset": 1400000,
+			"hasHandle": true,
+			"minLength": 8,
+			"maxLength": 20,
+			"icon": "game/Textures/UI/ItemIcons/OverheadPowelineIcon.webp",
+			"texture": "game/Textures/Structures/pipeline_overhead.webp",
+			"textureFrontCap": "game/Textures/Structures/pipeline_overhead_front.webp",
+			"textureBackCap": "game/Textures/Structures/pipeline_overhead_back.webp",
+			"canSnap": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "pipe",
+					"cap": "front",
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "pipe",
+					"cap": "back",
+					"rotation": 90
+				}
+			],
+			"techId": "unlockfacilitytier2",
+			"liquidCapacity": 100,
+			"cost": {
+				"pipematerials": 2
+			}
+		},
+		"pipeline_underground": {
+			"name": "Pipeline (Underground)",
+			"codeName": "FacilityPipeUnderground",
+			"description": "Industrial piping that allows for automatic transport of various liquids and fuels. These specialized pipes can be built underground to connect to pipe networks across areas with high traffic.",
+			"category": "factories",
+			"sortOffset": -500,
+			"hasHandle": true,
+			"isBezier": true,
+			"minLength": 5,
+			"maxLength": 20,
+			"icon": "game/Textures/UI/StructureIcons/PipeIntersectionIcon.webp",
+			"texture": null,
+			"textureFrontCap": "game/Textures/Structures/pipeline_underground_front.webp",
+			"textureBackCap": "game/Textures/Structures/pipeline_underground_back.webp",
+			"garrisonSupplyMultiplier": 4,
+			"canSnap": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "pipe",
+					"cap": "front",
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "pipe",
+					"cap": "back",
+					"rotation": 90
+				}
+			],
+			"techId": "unlockfacilitytier2",
+			"liquidCapacity": 100,
+			"cost": {
+				"pipematerials": 6
+			}
+		},
+		"pipeline_valve": {
+			"name": "Pipeline Valve",
+			"codeName": "FacilityPipeValve",
+			"description": "A weighted valve that controls the rate of flow through a pipeline. Requires a Wrench.",
+			"category": "factories",
+			"sortOffset": 1000,
+			"icon": "game/Textures/UI/ItemIcons/FacilityPipeValveIcon.webp",
+			"texture": "game/Textures/Structures/pipeline_valve.webp",
+			"canSnap": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "pipe",
+					"x": 2,
+					"y": 51,
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "pipe",
+					"x": 185,
+					"y": 51,
+					"rotation": 90
+				}
+			],
+			"techId": "unlockfacilitytier2",
+			"cost": {
+				"pipematerials": 2
+			}
+		},
+		"power_line": {
+			"name": "Power Line",
+			"codeName": "PowerLine",
+			"description": "Conducts power between two Power Poles.",
+			"category": "power",
+			"sortOffset": 1500000,
+			"hasHandle": true,
+			"hasOutline": false,
+			"minLength": 0.1,
+			"maxLength": 25,
+			"icon": "game/Textures/UI/StructureIcons/PowelineIcon.webp",
+			"texture": "game/Textures/Structures/power_line.webp",
+			"textureIcon": {
+				"disabled": true
+			},
+			"garrisonSupplyMultiplier": 0,
+			"canSnap": true,
+			"canSnapStructureType": false,
+			"ignoreSnapSettings": true,
+			"requireConnection": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "power",
+					"cap": "front",
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "power",
+					"cap": "back",
+					"rotation": 270
+				}
+			],
+			"cost": {
+				"cloth": 1
+			}
+		},
 		"power_pole": {
 			"name": "Power Pole",
 			"codeName": "PowerPole",
 			"description": "Used to connect Power Lines. Up to 4 Power Lines can be attached to a singe pole.",
 			"category": "power",
-			"width": 1,
-			"length": 1,
 			"icon": "game/Textures/UI/StructureIcons/PowerLineB.webp",
+			"texture": "game/Textures/Structures/power_pole.webp",
 			"textureIcon": {
 				"disabled": true
 			},
+			"sockets": [
+				{
+					"id": 0,
+					"type": "power",
+					"x": 14,
+					"y": 14,
+					"rotation": 270,
+					"connectionLimit": 4
+				}
+			],
 			"cost": {
 				"cloth": 20
 			},
@@ -2597,6 +3446,20 @@ const foxholeData = {
 					"codeName": "Light",
 					"description": "A light that illuminates the surrounding area. Requires at least a minimum amount of power to function.",
 					"icon": "game/Textures/UI/StructureIcons/PowerPoleLightIcon.webp",
+					"texture": "game/Textures/Structures/power_pole_lamp.webp",
+					"positionOffset": {
+						"x": 24
+					},
+					"sockets": [
+						{
+							"id": 0,
+							"type": "power",
+							"x": 14,
+							"y": 21,
+							"rotation": 270,
+							"connectionLimit": 4
+						}
+					],
 					"cost": {
 						"facilitymaterials1": 5
 					}
@@ -2608,14 +3471,30 @@ const foxholeData = {
 			"codeName": "FacilityPowerOil",
 			"description": "A power plant that generates a large amount of electricity using Oil or Coal.",
 			"category": "power",
-			"width": 14,
-			"length": 13,
 			"icon": "game/Textures/UI/StructureIcons/FacilityPowerOilIcon.webp",
+			"texture": "game/Textures/Structures/power_station.webp",
 			"textureIcon": {
 				"width": 256,
 				"height": 224
 			},
 			"power": 15,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "pipe",
+					"flow": "in",
+					"x": 933,
+					"y": 1309,
+					"rotation": 180
+				},
+				{
+					"id": 1,
+					"type": "power",
+					"x": 576,
+					"y": 78,
+					"rotation": 270
+				}
+			],
 			"techId": "unlockfacilitytier2",
 			"cost": {
 				"facilitymaterials2": 25
@@ -2646,6 +3525,28 @@ const foxholeData = {
 					"codeName": "SulfuricReactor",
 					"description": "A reactor that combines Water with Heavy Oil or refined Coke, resulting in a more pure natural gas, which in turn is more efficient at generating power. Chunks of raw Sulfur are created as a byproduct.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityPowerOilReactorIcon.webp",
+					"texture": "game/Textures/Structures/power_station_sulfuric_reactor.webp",
+					"positionOffset": {
+						"x": -20,
+						"y": 34
+					},
+					"sockets": [
+						{
+							"id": 0,
+							"type": "pipe",
+							"flow": "in",
+							"x": 936,
+							"y": 1313,
+							"rotation": 180
+						},
+						{
+							"id": 1,
+							"type": "power",
+							"x": 576,
+							"y": 78,
+							"rotation": 270
+						}
+					],
 					"techId": "unlockfacilitytier3",
 					"cost": {
 						"facilitymaterials3": 25
@@ -2684,18 +3585,63 @@ const foxholeData = {
 			"codeName": "FacilityRoad",
 			"description": "A temporary road used to enable vehicle access between main roads and remote bases.",
 			"category": "foundations",
-			"width": 5,
-			"length": 2,
+			"hasHandle": true,
 			"isBezier": true,
-			"maxLength": 26,
+			"minLength": 9.01,
+			"maxLength": 30,
 			"icon": "game/Textures/UI/ItemIcons/FacilityRoadItemIcon.webp",
-			"texture": "buildings/textures/provisional_road.png",
+			"texture": "provisional_road.png",
 			"textureIcon": {
 				"disabled": true
 			},
 			"garrisonSupplyMultiplier": 3,
+			"canSnap": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "road",
+					"cap": "front",
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "road",
+					"cap": "back",
+					"rotation": 90
+				}
+			],
 			"cost": {
 				"groundmaterials": 150
+			}
+		},
+		"rail_large_crane": {
+			"name": "Crane Railway Track",
+			"codeName": "CraneRailTrackSpline",
+			"description": "A segment of railway for heavy cranes. This type of railway can only be built on Foundations.",
+			"category": "foundations",
+			"hasHandle": true,
+			"minLength": 5,
+			"maxLength": 30,
+			"icon": "game/Textures/UI/StructureIcons/CraneRailTrackIcon.webp",
+			"texture": "game/Textures/Structures/rail_large_crane.webp",
+			"canSnap": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "cranerail",
+					"cap": "front",
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "cranerail",
+					"cap": "back",
+					"rotation": 90
+				}
+			],
+			"techId": "unlockfacilitytier3",
+			"cost": {
+				"facilitymaterials3": 3
 			}
 		},
 		"rail_large_gauge": {
@@ -2703,16 +3649,32 @@ const foxholeData = {
 			"codeName": "RailTrackSplineBiarc",
 			"description": "A segment of railway for train cars. Tracks can attach to or fork from existing railways to form complex networks.",
 			"category": "foundations",
-			"width": 2,
-			"length": 2,
 			"sortOffset": 100000,
+			"hasHandle": true,
 			"isBezier": true,
+			"minLength": 5,
 			"maxLength": 30,
 			"icon": "game/Textures/UI/StructureIcons/BiarcRailTrackIcon.webp",
-			"texture": "buildings/textures/track_large_gauge.png",
+			"texture": "game/Textures/Structures/rail_large_gauge.webp",
 			"textureIcon": {
 				"disabled": true
 			},
+			"canSnap": true,
+			"canSnapAlongBezier": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "largerail",
+					"cap": "front",
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "largerail",
+					"cap": "back",
+					"rotation": 90
+				}
+			],
 			"cost": {
 				"facilitymaterials2": 5
 			}
@@ -2722,16 +3684,32 @@ const foxholeData = {
 			"codeName": "SmallRailTrackSplineBiarc",
 			"description": "A segment of railway for small gauge train cars. Tracks can attach to or fork from existing railways to form complex networks.",
 			"category": "foundations",
-			"width": 2,
-			"length": 2,
 			"sortOffset": 100000,
+			"hasHandle": true,
 			"isBezier": true,
+			"minLength": 5,
 			"maxLength": 30,
 			"icon": "game/Textures/UI/StructureIcons/BiarcSmallRailTrackIcon.webp",
-			"texture": "buildings/textures/track_small_gauge.png",
+			"texture": "game/Textures/Structures/rail_small_gauge.webp",
 			"textureIcon": {
 				"disabled": true
 			},
+			"canSnap": true,
+			"canSnapAlongBezier": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "smallrail",
+					"cap": "front",
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "smallrail",
+					"cap": "back",
+					"rotation": 90
+				}
+			],
 			"cost": {
 				"facilitymaterials1": 25
 			}
@@ -2742,10 +3720,8 @@ const foxholeData = {
 			"description": "An open container marked for storing raw resources that can be transferred into and out of Facilities. Stockpiles may be public or reserved.",
 			"category": "factories",
 			"color": 8186514,
-			"width": 6,
-			"length": 9.5,
 			"icon": "game/Textures/UI/ItemIcons/MaterialTransferStationIcon.webp",
-			"texture": "buildings/textures/ResourceTransferStationTexture.jpg",
+			"texture": "game/Textures/Structures/resource_transfer_station.webp",
 			"textureIcon": {
 				"y": -52
 			},
@@ -2760,7 +3736,7 @@ const foxholeData = {
 			"width": 2,
 			"length": 2,
 			"texture": {
-				"sheet": "buildings/textures/sus.png",
+				"sheet": "sus.png",
 				"speed": 0.132,
 				"width": 220,
 				"height": 184,
@@ -2772,9 +3748,18 @@ const foxholeData = {
 			"codeName": "FacilityMineResource4",
 			"description": "A stationary harvester that automatically gathers Coal. Requires Petrol. ",
 			"category": "harvesters",
-			"width": 5,
-			"length": 7,
 			"icon": "game/Textures/UI/StructureIcons/FacilityMineResource4Icon.webp",
+			"texture": "game/Textures/Structures/stationary_harvester.webp",
+			"sockets": [
+				{
+					"id": 0,
+					"type": "pipe",
+					"flow": "in",
+					"x": 457,
+					"y": 805,
+					"rotation": 180
+				}
+			],
 			"techId": "unlockfacilitytier2",
 			"cost": {
 				"facilitymaterials2": 25
@@ -2798,9 +3783,18 @@ const foxholeData = {
 			"codeName": "FacilityMineResource2",
 			"description": "A stationary harvester that automatically gathers Components. Requires Petrol.",
 			"category": "harvesters",
-			"width": 5,
-			"length": 7,
 			"icon": "game/Textures/UI/StructureIcons/FacilityMineResource2Icon.webp",
+			"texture": "game/Textures/Structures/stationary_harvester.webp",
+			"sockets": [
+				{
+					"id": 0,
+					"type": "pipe",
+					"flow": "in",
+					"x": 457,
+					"y": 805,
+					"rotation": 180
+				}
+			],
 			"cost": {
 				"facilitymaterials1": 175
 			},
@@ -2823,6 +3817,20 @@ const foxholeData = {
 					"codeName": "Excavator",
 					"description": "Improves component excavation.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityExcavatorIcon.webp",
+					"texture": "game/Textures/Structures/stationary_harvester_components_excavator.webp",
+					"positionOffset": {
+						"x": -10
+					},
+					"sockets": [
+						{
+							"id": 0,
+							"type": "pipe",
+							"flow": "in",
+							"x": 476,
+							"y": 805,
+							"rotation": 180
+						}
+					],
 					"techId": "unlockfacilitytier2",
 					"cost": {
 						"facilitymaterials2": 75
@@ -2848,9 +3856,18 @@ const foxholeData = {
 			"codeName": "FacilityMineResource1",
 			"description": "A stationary harvester that automatically gathers Salvage. Requires Petrol. ",
 			"category": "harvesters",
-			"width": 5,
-			"length": 7,
 			"icon": "game/Textures/UI/StructureIcons/FacilityMineResource1Icon.webp",
+			"texture": "game/Textures/Structures/stationary_harvester.webp",
+			"sockets": [
+				{
+					"id": 0,
+					"type": "pipe",
+					"flow": "in",
+					"x": 457,
+					"y": 805,
+					"rotation": 180
+				}
+			],
 			"cost": {
 				"facilitymaterials1": 150
 			},
@@ -2873,9 +3890,18 @@ const foxholeData = {
 			"codeName": "FacilityMineResource3",
 			"description": "A stationary harvester that automatically gathers Sulfur using Heavy Oil as fuel.",
 			"category": "harvesters",
-			"width": 5,
-			"length": 7,
 			"icon": "game/Textures/UI/StructureIcons/FacilityMineResource3Icon.webp",
+			"texture": "game/Textures/Structures/stationary_harvester.webp",
+			"sockets": [
+				{
+					"id": 0,
+					"type": "pipe",
+					"flow": "in",
+					"x": 457,
+					"y": 805,
+					"rotation": 180
+				}
+			],
 			"techId": "unlockfacilitytier3",
 			"cost": {
 				"facilitymaterials3": 20
@@ -2900,9 +3926,8 @@ const foxholeData = {
 			"description": "Pumps water through pipes. Must be built on bodies of water.",
 			"category": "harvesters",
 			"color": 2591968,
-			"width": 5,
-			"length": 6,
 			"icon": "game/Textures/UI/StructureIcons/FacilityMineWaterIcon.webp",
+			"texture": "game/Textures/Structures/water_pump.webp",
 			"cost": {
 				"facilitymaterials1": 35
 			},
@@ -2922,6 +3947,28 @@ const foxholeData = {
 					"codeName": "Electric",
 					"description": "A generator that pumps water more efficiently. Requires Power.",
 					"icon": "game/Textures/UI/StructureIcons/FacilityElectricWaterPumpIcon.webp",
+					"texture": "game/Textures/Structures/water_pump_electric_water.webp",
+					"positionOffset": {
+						"x": 68,
+						"y": 28
+					},
+					"sockets": [
+						{
+							"id": 0,
+							"type": "pipe",
+							"flow": "out",
+							"x": 580,
+							"y": 304,
+							"rotation": 90
+						},
+						{
+							"id": 1,
+							"type": "power",
+							"x": 395,
+							"y": 304,
+							"rotation": 90
+						}
+					],
 					"cost": {
 						"facilitymaterials1": 150
 					},

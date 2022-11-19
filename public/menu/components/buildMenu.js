@@ -182,10 +182,13 @@ Vue.component('app-menu-building-selected', {
             }
             this.$forceUpdate();
         },
-        updateEntity: function() {
+        updateEntity: function(removeConnections) {
             if (this.entity) {
                 let selectedEntity = game.getSelectedEntity();
                 if (selectedEntity) {
+                    if (removeConnections) {
+                        selectedEntity.removeConnections();
+                    }
                     selectedEntity.x = parseInt(this.entity.x);
                     selectedEntity.y = parseInt(this.entity.y);
                     selectedEntity.rotation = Math.deg2rad(parseInt(this.entity.rotationDegrees));
@@ -217,7 +220,7 @@ Vue.component('app-menu-building-selected', {
         },
         changeUpgrade: function(upgrade) {
             this.bmc();
-            game.upgradeBuilding(game.getSelectedEntity(), upgrade);
+            game.upgradeSelected(upgrade);
         },
         cloneBuildings: function() {
             this.bmc();
@@ -266,15 +269,15 @@ Vue.component('app-menu-building-selected', {
             </div>
             <label class="app-input-label">
                 <i class="fa fa-arrows" aria-hidden="true"></i> Position X:
-                <input class="app-input" type="number" v-model="entity.x" @input="updateEntity">
+                <input class="app-input" type="number" v-model="entity.x" @input="updateEntity(true)">
             </label>
             <label class="app-input-label">
                 <i class="fa fa-arrows" aria-hidden="true"></i> Position Y:
-                <input class="app-input" type="number" v-model="entity.y" @input="updateEntity">
+                <input class="app-input" type="number" v-model="entity.y" @input="updateEntity(true)">
             </label>
             <label class="app-input-label">
                 <i class="fa fa-repeat" aria-hidden="true"></i> Rotation:
-                <input class="app-input" type="number" v-model="entity.rotationDegrees" @input="updateEntity">
+                <input class="app-input" type="number" v-model="entity.rotationDegrees" @input="updateEntity(true)">
             </label>
         </div>
         <div v-else class="settings-option-wrapper text-center">
