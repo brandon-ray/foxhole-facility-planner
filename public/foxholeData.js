@@ -898,30 +898,30 @@ const foxholeData = {
 				{
 					"id": 0,
 					"type": "catwalk",
+					"x": 3,
+					"y": 138,
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "catwalk",
 					"x": 139,
 					"y": 2,
 					"rotation": 0
 				},
 				{
-					"id": 1,
+					"id": 2,
 					"type": "catwalk",
 					"x": 276,
 					"y": 138,
 					"rotation": 90
 				},
 				{
-					"id": 2,
+					"id": 3,
 					"type": "catwalk",
 					"x": 139,
 					"y": 275,
 					"rotation": 180
-				},
-				{
-					"id": 3,
-					"type": "catwalk",
-					"x": 3,
-					"y": 138,
-					"rotation": 270
 				}
 			],
 			"techId": "unlockfacilitytier2",
@@ -1034,17 +1034,17 @@ const foxholeData = {
 						{
 							"id": 1,
 							"type": "pipe",
-							"flow": "in",
-							"x": 502,
-							"y": 747,
+							"flow": "out",
+							"x": 611,
+							"y": 494,
 							"rotation": 180
 						},
 						{
 							"id": 2,
 							"type": "pipe",
-							"flow": "out",
-							"x": 611,
-							"y": 494,
+							"flow": "in",
+							"x": 502,
+							"y": 747,
 							"rotation": 180
 						}
 					],
@@ -1089,17 +1089,17 @@ const foxholeData = {
 						{
 							"id": 1,
 							"type": "pipe",
-							"flow": "in",
-							"x": 503,
-							"y": 963,
-							"rotation": 180
-						},
-						{
-							"id": 2,
-							"type": "pipe",
 							"flow": "out",
 							"x": 611,
 							"y": 494,
+							"rotation": 180
+						},
+						{
+							"id": 3,
+							"type": "pipe",
+							"flow": "in",
+							"x": 503,
+							"y": 963,
 							"rotation": 180
 						}
 					],
@@ -1247,37 +1247,6 @@ const foxholeData = {
 				"disabled": true
 			},
 			"garrisonSupplyMultiplier": 2,
-			"canSnap": true,
-			"sockets": [
-				{
-					"id": 0,
-					"type": "foundation",
-					"x": 250,
-					"y": 0,
-					"rotation": 0
-				},
-				{
-					"id": 1,
-					"type": "foundation",
-					"x": 500,
-					"y": 250,
-					"rotation": 90
-				},
-				{
-					"id": 2,
-					"type": "foundation",
-					"x": 250,
-					"y": 500,
-					"rotation": 180
-				},
-				{
-					"id": 3,
-					"type": "foundation",
-					"x": 0,
-					"y": 250,
-					"rotation": 270
-				}
-			],
 			"cost": {
 				"groundmaterials": 75
 			}
@@ -1294,51 +1263,6 @@ const foxholeData = {
 				"disabled": true
 			},
 			"garrisonSupplyMultiplier": 2,
-			"canSnap": true,
-			"sockets": [
-				{
-					"id": 0,
-					"type": "foundation",
-					"x": 250,
-					"y": 0,
-					"rotation": 0
-				},
-				{
-					"id": 1,
-					"type": "foundation",
-					"x": 500,
-					"y": 250,
-					"rotation": 90
-				},
-				{
-					"id": 2,
-					"type": "foundation",
-					"x": 500,
-					"y": 750,
-					"rotation": 90
-				},
-				{
-					"id": 3,
-					"type": "foundation",
-					"x": 250,
-					"y": 1000,
-					"rotation": 180
-				},
-				{
-					"id": 4,
-					"type": "foundation",
-					"x": 0,
-					"y": 750,
-					"rotation": 270
-				},
-				{
-					"id": 5,
-					"type": "foundation",
-					"x": 0,
-					"y": 250,
-					"rotation": 270
-				}
-			],
 			"cost": {
 				"groundmaterials": 115
 			}
@@ -1355,65 +1279,6 @@ const foxholeData = {
 				"disabled": true
 			},
 			"garrisonSupplyMultiplier": 2,
-			"canSnap": true,
-			"sockets": [
-				{
-					"id": 0,
-					"type": "foundation",
-					"x": 250,
-					"y": 0,
-					"rotation": 0
-				},
-				{
-					"id": 1,
-					"type": "foundation",
-					"x": 750,
-					"y": 0,
-					"rotation": 0
-				},
-				{
-					"id": 2,
-					"type": "foundation",
-					"x": 1000,
-					"y": 250,
-					"rotation": 90
-				},
-				{
-					"id": 3,
-					"type": "foundation",
-					"x": 1000,
-					"y": 750,
-					"rotation": 90
-				},
-				{
-					"id": 4,
-					"type": "foundation",
-					"x": 750,
-					"y": 1000,
-					"rotation": 180
-				},
-				{
-					"id": 5,
-					"type": "foundation",
-					"x": 250,
-					"y": 1000,
-					"rotation": 180
-				},
-				{
-					"id": 6,
-					"type": "foundation",
-					"x": 0,
-					"y": 750,
-					"rotation": 270
-				},
-				{
-					"id": 7,
-					"type": "foundation",
-					"x": 0,
-					"y": 250,
-					"rotation": 270
-				}
-			],
 			"cost": {
 				"groundmaterials": 150
 			}
@@ -1430,23 +1295,6 @@ const foxholeData = {
 				"disabled": true
 			},
 			"garrisonSupplyMultiplier": 2,
-			"canSnap": true,
-			"sockets": [
-				{
-					"id": 0,
-					"type": "foundation",
-					"x": 500,
-					"y": 250,
-					"rotation": 90
-				},
-				{
-					"id": 1,
-					"type": "foundation",
-					"x": 250,
-					"y": 500,
-					"rotation": 180
-				}
-			],
 			"cost": {
 				"groundmaterials": 75
 			}
@@ -2655,7 +2503,7 @@ const foxholeData = {
 							"rotation": 180
 						},
 						{
-							"id": 1,
+							"id": 2,
 							"type": "pipe",
 							"flow": "in",
 							"x": 51,
@@ -2956,7 +2804,7 @@ const foxholeData = {
 							"rotation": 180
 						},
 						{
-							"id": 1,
+							"id": 2,
 							"type": "pipe",
 							"flow": "in",
 							"x": 791,
@@ -2964,7 +2812,7 @@ const foxholeData = {
 							"rotation": 0
 						},
 						{
-							"id": 2,
+							"id": 3,
 							"type": "pipe",
 							"flow": "in",
 							"x": 968,
@@ -3036,6 +2884,13 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
+					"type": "power",
+					"x": 255,
+					"y": 149,
+					"rotation": 0
+				},
+				{
+					"id": 1,
 					"type": "pipe",
 					"flow": "in",
 					"x": 53,
@@ -3043,18 +2898,11 @@ const foxholeData = {
 					"rotation": 180
 				},
 				{
-					"id": 1,
+					"id": 2,
 					"type": "pipe",
 					"flow": "out",
 					"x": 255,
 					"y": 2,
-					"rotation": 0
-				},
-				{
-					"id": 2,
-					"type": "power",
-					"x": 255,
-					"y": 149,
 					"rotation": 0
 				}
 			],
@@ -3087,6 +2935,13 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
+							"type": "power",
+							"x": 255,
+							"y": 149,
+							"rotation": 0
+						},
+						{
+							"id": 1,
 							"type": "pipe",
 							"flow": "in",
 							"x": 52,
@@ -3094,18 +2949,11 @@ const foxholeData = {
 							"rotation": 180
 						},
 						{
-							"id": 1,
+							"id": 2,
 							"type": "pipe",
 							"flow": "out",
 							"x": 255,
 							"y": 2,
-							"rotation": 0
-						},
-						{
-							"id": 2,
-							"type": "power",
-							"x": 255,
-							"y": 149,
 							"rotation": 0
 						},
 						{
@@ -3147,6 +2995,13 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
+							"type": "power",
+							"x": 255,
+							"y": 149,
+							"rotation": 0
+						},
+						{
+							"id": 1,
 							"type": "pipe",
 							"flow": "in",
 							"x": 53,
@@ -3154,18 +3009,11 @@ const foxholeData = {
 							"rotation": 180
 						},
 						{
-							"id": 1,
+							"id": 2,
 							"type": "pipe",
 							"flow": "out",
 							"x": 255,
 							"y": 2,
-							"rotation": 0
-						},
-						{
-							"id": 2,
-							"type": "power",
-							"x": 255,
-							"y": 149,
 							"rotation": 0
 						}
 					],
@@ -3200,6 +3048,13 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
+							"type": "power",
+							"x": 255,
+							"y": 149,
+							"rotation": 0
+						},
+						{
+							"id": 1,
 							"type": "pipe",
 							"flow": "in",
 							"x": 53,
@@ -3207,18 +3062,11 @@ const foxholeData = {
 							"rotation": 180
 						},
 						{
-							"id": 1,
+							"id": 2,
 							"type": "pipe",
 							"flow": "out",
 							"x": 255,
 							"y": 2,
-							"rotation": 0
-						},
-						{
-							"id": 2,
-							"type": "power",
-							"x": 255,
-							"y": 149,
 							"rotation": 0
 						}
 					],
@@ -3279,17 +3127,17 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": "pipe",
-							"flow": "out",
+							"type": "power",
 							"x": 297,
-							"y": 2,
+							"y": 218,
 							"rotation": 0
 						},
 						{
 							"id": 1,
-							"type": "power",
+							"type": "pipe",
+							"flow": "out",
 							"x": 297,
-							"y": 218,
+							"y": 2,
 							"rotation": 0
 						}
 					],
@@ -3330,10 +3178,9 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": "pipe",
-							"flow": "in",
-							"x": 512,
-							"y": 3,
+							"type": "power",
+							"x": 284,
+							"y": 218,
 							"rotation": 0
 						},
 						{
@@ -3346,9 +3193,10 @@ const foxholeData = {
 						},
 						{
 							"id": 2,
-							"type": "power",
-							"x": 284,
-							"y": 218,
+							"type": "pipe",
+							"flow": "in",
+							"x": 512,
+							"y": 3,
 							"rotation": 0
 						}
 					],

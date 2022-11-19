@@ -1582,7 +1582,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 socket.setConnection = function(connectingEntityId, connectingSocket, connectingSocketId) {
                     if (!isNaN(connectingEntityId) && (typeof connectingSocketId === 'number' || connectingSocket?.socketData) && (isNaN(socket.connections[connectingEntityId]) || socket.connections[connectingEntityId] !== (connectingSocketId ?? connectingSocket.socketData.id))) {
                         if (connectingSocket) {
-                            entity.removeConnections(socket.socketData.cap !== 'back' || socket.socketData.id);
+                            entity.removeConnections(socket.socketData.id);
                             connectingSocket.connections[entity.id] = socket.socketData.id;
                             connectingSocket.updatePointer(false);
                         }
@@ -2376,7 +2376,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
     game.cloneSelected = function() {
         game.loadSave(game.getSaveData(true), true);
     }
-    
+
     game.upgradeSelected = function(upgrade) {
         let entity = game.getSelectedEntity();
         let bData = entity?.building;
@@ -2387,14 +2387,17 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
             let clone = createBuilding(upgrade ?? entity.building.key, entity.x, entity.y, 0);
             if (upgrade) {
+                let position = { x: clone.x, y: clone.y };
                 if (entity.building?.positionOffset) {
-                    clone.x -= (entity.building.positionOffset.x ?? 0) / METER_PIXEL_SCALE;
-                    clone.y -= (entity.building.positionOffset.y ?? 0) / METER_PIXEL_SCALE;
+                    position.x -= (entity.building.positionOffset.x ?? 0) / METER_PIXEL_SCALE;
+                    position.y -= (entity.building.positionOffset.y ?? 0) / METER_PIXEL_SCALE;
                 }
                 if (clone.building?.positionOffset) {
-                    clone.x += (clone.building.positionOffset.x ?? 0) / METER_PIXEL_SCALE;
-                    clone.y += (clone.building.positionOffset.y ?? 0) / METER_PIXEL_SCALE;
+                    position.x += (clone.building.positionOffset.x ?? 0) / METER_PIXEL_SCALE;
+                    position.y += (clone.building.positionOffset.y ?? 0) / METER_PIXEL_SCALE;
                 }
+                position = Math.rotateAround(clone, position, -entity.rotation);
+                clone.position.set(position.x, position.y);
             }
             // TODO: Cleanup
             clone.locked = entity.locked;
