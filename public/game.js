@@ -752,6 +752,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     x: Math.round(xTotal/saveObject.entities.length),
                     y: Math.round(yTotal/saveObject.entities.length)
                 }
+                if (game.settings.enableGrid) {
+                    let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
+                    centerPos.x = Math.floor(centerPos.x / gridSize) * gridSize;
+                    centerPos.y = Math.floor(centerPos.y / gridSize) * gridSize;
+                }
                 game.setPickupEntities(true, false, centerPos, true);
                 game.updateSelectedBuildingMenu();
             } else {
@@ -1555,7 +1560,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     socket.beginFill(COLOR_GREEN);
                     socket.drawRect(-socketWidth/2, -socketThickness, socketWidth, socketThickness);
                     socket.endFill();
-                } else if (socket.socketData.type === 'pipe') {
+                } else if (socket.socketData.type === 'pipe' && socket.socketData.cap !== 'left' && socket.socketData.cap !== 'right') {
                     socket.beginFill(COLOR_BLUE);
                     socket.drawRect(-socketWidth/2, -socketThickness, socketWidth, socketThickness);
                     socket.endFill();
@@ -1563,7 +1568,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     socket.beginFill(COLOR_YELLOW);
                     socket.drawRect(-powerSocketSize/2, -powerSocketSize/2, powerSocketSize, powerSocketSize);
                     socket.endFill();
-                } else {
+                } else if (socket.socketData.type === 'smallrail' || socket.socketData.type === 'largerail' || socket.socketData.type === 'cranerail' || socket.socketData.type === 'road') {
                     socket.beginFill(COLOR_ORANGE);
                     socket.drawRect(-socketThickness/2, -socketThickness, socketThickness, socketThickness);
                     socket.endFill();
@@ -1593,14 +1598,16 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         if (connectingSocket) {
                             entity.removeConnections(socket.socketData.id);
                             connectingSocket.connections[entity.id] = socket.socketData.id;
-                            connectingSocket.updatePointer(false);
+                            connectingSocket.setVisible(false);
                         }
                         socket.connections[connectingEntityId] = connectingSocketId ?? connectingSocket.socketData.id;
-                        socket.updatePointer(false);
+                        socket.setVisible(false);
                     }
                 }
-                socket.updatePointer = function(visible) {
-                    if (socket.pointer) {
+                socket.setVisible = function(visible) {
+                    if (socket.socketData.type !== 'power') {
+                        socket.visible = visible;
+                    } else if (socket.pointer) {
                         socket.pointer.visible = visible ?? Object.keys(socket.connections).length === 0;
                     }
                 }
@@ -1926,12 +1933,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 if (entity.outline && entity.outline.visible !== entity.selected) {
                     entity.outline.visible = entity.selected;
                 }
-                if (entity.selected) {
-                    for (let i = 0; i < entity.sockets.children.length; i++) {
-                        let socket = entity.sockets.children[i];
-                        if (socket.pointer?.visible && socket.socketData.type === 'power') {
-                            socket.pointer.rotation = -(entity.rotation + socket.rotation);
-                        }
+                for (let i = 0; i < entity.sockets.children.length; i++) {
+                    let socket = entity.sockets.children[i];
+                    if (entity.selected && socket.pointer?.visible && socket.socketData.type === 'power') {
+                        socket.pointer.rotation = -(entity.rotation + socket.rotation);
                     }
                 }
             }
@@ -2035,7 +2040,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                             if (connectedEntity.building?.requireConnection) {
                                                 connectedEntity.remove();
                                             } else {
-                                                connectedSocket.updatePointer(true);
+                                                connectedSocket.setVisible(true);
                                             }
                                         }
                                         break;
@@ -2044,7 +2049,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             }
                             delete entitySocket.connections[connectedEntityId];
                         }
-                        entitySocket.updatePointer(true);
+                        entitySocket.setVisible(true);
                     }
                 }
             }
@@ -2364,7 +2369,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             if (!locked) {
                 if (pickup) {
                     pickupTime = Date.now();
-                    pickupPosition = {x: gmx, y: gmy};
+                    pickupPosition = {x: position?.x ?? gmx, y: position?.y ?? gmy};
                     ignoreMousePickup = true;
                 }
                 pickupSelectedEntities = pickup;
@@ -2574,7 +2579,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                                     if (connectedEntity.building?.requireConnection) {
                                                         connectedEntity.remove();
                                                     } else {
-                                                        connectedSocket.updatePointer(true);
+                                                        connectedSocket.setVisible(true);
                                                     }
                                                 }
                                                 break;
@@ -2585,7 +2590,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                             if (pickupEntity.building?.requireConnection && selectedEntities.length > 1) {
                                                 pickupEntity.remove();
                                             } else {
-                                                pickupSocket.updatePointer(true);
+                                                pickupSocket.setVisible(true);
                                             }
                                         }
                                     }
@@ -2644,7 +2649,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         }
                     }
                 }
-                // TODO: Fix imported selections and clones no longer being snapped to grid.
                 let snappedMX = gmx, snappedMY = gmy;
                 if (game.settings.enableGrid || keys[16]) {
                     let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
