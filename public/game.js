@@ -1435,8 +1435,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
     };
 
     const METER_PIXEL_SIZE = 32;
-    const METER_UNREAL_UNITS = 100;
-    const METER_PIXEL_SCALE = METER_UNREAL_UNITS / METER_PIXEL_SIZE;
+    const METER_UNREAL_UNITS = 100, METER_PIXEL_UNIT = 50; // 100 Unreal Units = 50 Pixels // Both equivalent to one meter.
+    const METER_TEXTURE_SCALE = METER_UNREAL_UNITS / METER_PIXEL_UNIT;
+    const METER_PIXEL_SCALE = METER_PIXEL_UNIT / METER_PIXEL_SIZE;
+
     function createBuilding(type, x, y, z, id, netData) {
         let entity = createEntity('building', type, x, y, z, id, netData);
 
@@ -1477,8 +1479,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
             if (!building.textureOffset) {
                 sprite.anchor.set(0.5);
             } else {
-                sprite.x = -building.textureOffset.x / METER_PIXEL_SCALE;
-                sprite.y = -building.textureOffset.y / METER_PIXEL_SCALE;
+                sprite.x = (-building.textureOffset.x / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
+                sprite.y = (-building.textureOffset.y / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
             }
             entity.sprite = sprite;
         }
@@ -1534,8 +1536,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 let socket = new PIXI.Graphics();
                 socket.connections = {};
                 socket.socketData = Object.assign({}, building.sockets[i]);
-                socket.socketData.x = isNaN(socket.socketData.x) ? 0 : buildingWidthOffset + (socket.socketData.x / METER_PIXEL_SCALE);
-                socket.socketData.y = isNaN(socket.socketData.y) ? 0 : buildingLengthOffset + (socket.socketData.y / METER_PIXEL_SCALE);
+                socket.socketData.x = isNaN(socket.socketData.x) ? 0 : buildingWidthOffset + ((socket.socketData.x / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE);
+                socket.socketData.y = isNaN(socket.socketData.y) ? 0 : buildingLengthOffset + ((socket.socketData.y / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE);
                 socket.position.set(socket.socketData.x, socket.socketData.y);
                 socket.rotation = Math.deg2rad(socket.socketData.rotation);
                 if (socket.socketData.flow === 'in') {
@@ -2389,12 +2391,12 @@ const fontFamily = ['Recursive', 'sans-serif'];
             if (upgrade) {
                 let position = { x: clone.x, y: clone.y };
                 if (entity.building?.positionOffset) {
-                    position.x -= (entity.building.positionOffset.x ?? 0) / METER_PIXEL_SCALE;
-                    position.y -= (entity.building.positionOffset.y ?? 0) / METER_PIXEL_SCALE;
+                    position.x -= ((entity.building.positionOffset.x ?? 0) / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
+                    position.y -= ((entity.building.positionOffset.y ?? 0) / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
                 }
                 if (clone.building?.positionOffset) {
-                    position.x += (clone.building.positionOffset.x ?? 0) / METER_PIXEL_SCALE;
-                    position.y += (clone.building.positionOffset.y ?? 0) / METER_PIXEL_SCALE;
+                    position.x += ((clone.building.positionOffset.x ?? 0) / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
+                    position.y += ((clone.building.positionOffset.y ?? 0) / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
                 }
                 position = Math.rotateAround(clone, position, -entity.rotation);
                 clone.position.set(position.x, position.y);
