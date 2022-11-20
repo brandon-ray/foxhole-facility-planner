@@ -153,6 +153,7 @@ function iterateStructures(dirPath) {
                                     'hasHandle': structureData.hasHandle,
                                     'hasOutline': structureData.hasOutline,
                                     'isBezier': structureData.isBezier,
+                                    'lineWidth': structureData.lineWidth,
                                     'minLength': structure.ConnectorMinLength ? structure.ConnectorMinLength / METER_UNREAL_UNITS : undefined ?? baseData.minLength,
                                     'maxLength': structure.ConnectorMaxLength ? structure.ConnectorMaxLength / METER_UNREAL_UNITS : undefined ?? baseData.maxLength,
                                     'icon': getLocalIcon(structure) ?? baseData.icon,

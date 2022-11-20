@@ -3387,6 +3387,7 @@ const foxholeData = {
 			"sortOffset": 1500000,
 			"hasHandle": true,
 			"hasOutline": false,
+			"lineWidth": 5,
 			"minLength": 0.1,
 			"maxLength": 25,
 			"icon": "game/Textures/UI/StructureIcons/PowelineIcon.webp",
@@ -3422,6 +3423,7 @@ const foxholeData = {
 			"codeName": "PowerPole",
 			"description": "Used to connect Power Lines. Up to 4 Power Lines can be attached to a singe pole.",
 			"category": "power",
+			"sortOffset": 1400000,
 			"icon": "game/Textures/UI/StructureIcons/PowerLineB.webp",
 			"texture": "game/Textures/Structures/power_pole.webp",
 			"textureIcon": {

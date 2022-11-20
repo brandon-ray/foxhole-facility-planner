@@ -1862,7 +1862,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 if (!connectionEstablished && entity2.bezier && entity2.building?.isBezier && entity2.building?.canSnapAlongBezier && entity.subtype === entity2.subtype) {
                                     let selectedPointToEntity2Local = entity2.toLocal(selectedHandlePoint, entity, undefined, true);
                                     let projection = entity2.bezier.project(selectedPointToEntity2Local);
-                                    if (projection.d <= 25) {
+                                    if (projection.d <= (entity2.building?.lineWidth ?? 25)) {
                                         let local = entity.toLocal({x: projection.x, y: projection.y}, entity2, undefined, true);
                                         let normal = entity2.bezier.normal(projection.t);
                                         let angle = Math.angleBetween({x: 0, y: 0}, normal);
@@ -1981,7 +1981,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 if (entity.building?.hasHandle && entity.bezier) {
                     let mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
                     let projection = entity.bezier.project(mousePos);
-                    if (projection.d <= 25) {
+                    if (projection.d <= (entity.building?.lineWidth ?? 25)) {
                         return true;
                     }
                 } else if (entity.sprite) {
@@ -2670,7 +2670,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         if (pickupEntity.subtype === entity.subtype || (pickupEntity.sockets && entity.sockets)) {
                             const mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
                             const projection = entity.bezier?.project(mousePos);
-                            if (!projection || projection.d <= 25) {
+                            if (!projection || projection.d <= (entity.building?.lineWidth ?? 25)) {
                                 if (pickupEntity.sockets && entity.sockets && (pickupEntity.building?.canSnapStructureType !== false || pickupEntity.subtype !== entity.subtype)) {
                                     let frontSocket, nearestSocket, nearestSocketDist = null;
                                     for (let j = 0; j < entity.sockets.children.length; j++) {
