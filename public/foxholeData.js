@@ -3596,6 +3596,7 @@ const foxholeData = {
 			},
 			"garrisonSupplyMultiplier": 3,
 			"canSnap": true,
+			"canSnapAlongBezier": true,
 			"sockets": [
 				{
 					"id": 0,
