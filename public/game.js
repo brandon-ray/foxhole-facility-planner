@@ -1904,20 +1904,22 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         }
 
                         entity.regenerate();
-                        if (entity.subtype === 'pipeline') {
-                            if (dist < 3*METER_PIXEL_SIZE) {
-                                entity.sprite.tint = COLOR_RED;
+                        if (entity.sprite) {
+                            if (entity.subtype === 'pipeline') {
+                                if (dist < 3*METER_PIXEL_SIZE) {
+                                    entity.sprite.tint = COLOR_RED;
+                                } else {
+                                    entity.sprite.tint = COLOR_WHITE;
+                                }
                             } else {
-                                entity.sprite.tint = COLOR_WHITE;
-                            }
-                        } else {
-                            let curve1 = entity.bezier.curvature(0.25);
-                            let curve2 = entity.bezier.curvature(0.5);
-                            let curve3 = entity.bezier.curvature(0.75);
-                            if (dist < MIN_SEGMENT_DISTANCE || (curve1.r !== 0 && (Math.abs(curve1.r) < 100 || Math.abs(curve2.r) < 200 || Math.abs(curve3.r) < 100)) || selectedHandlePoint.x < 0) {
-                                entity.sprite.tint = COLOR_RED;
-                            } else {
-                                entity.sprite.tint = COLOR_WHITE;
+                                let curve1 = entity.bezier.curvature(0.25);
+                                let curve2 = entity.bezier.curvature(0.5);
+                                let curve3 = entity.bezier.curvature(0.75);
+                                if (dist < MIN_SEGMENT_DISTANCE || (curve1.r !== 0 && (Math.abs(curve1.r) < 100 || Math.abs(curve2.r) < 200 || Math.abs(curve3.r) < 100)) || selectedHandlePoint.x < 0) {
+                                    entity.sprite.tint = COLOR_RED;
+                                } else {
+                                    entity.sprite.tint = COLOR_WHITE;
+                                }
                             }
                         }
 
