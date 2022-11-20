@@ -296,7 +296,7 @@ Vue.component('app-menu-building-selected', {
         </div>
         <template v-if="game.getSelectedEntities().length === 1">
             <div v-if="entity.building && entity.building.upgrades" class="settings-option-wrapper upgrade-list">
-                <div class="settings-title">{{hoverUpgradeName ?? (entity.building.upgradeName ? entity.building.upgradeName : 'No Upgrade Selected')}}</div>
+                <div class="settings-title">{{hoverUpgradeName ?? (entity.building.upgradeName ?? 'No Upgrade Selected')}}</div>
                 <button class="upgrade-button" v-for="(upgrade, key) in entity.building.upgrades" :class="{'selected-upgrade': entity.building.parentKey && entity.building.key === entity.building.parentKey + '_' + key}"
                     @mouseenter="showUpgradeHover(key, upgrade)" @mouseleave="showUpgradeHover" @click="changeUpgrade(key)">
                     <div class="resource-icon" :title="upgrade.name" :style="{backgroundImage:'url(/assets/' + (upgrade.icon ?? entity.building.icon) + ')'}"></div>
@@ -313,6 +313,7 @@ Vue.component('app-menu-building-selected', {
                                 &nbsp;&nbsp;&nbsp;
                                 <span title="Time"><i class="fa fa-clock-o"></i> {{production.time}}s</span>
                             </h6>
+                            <div class="production-enabled"><i class="fa fa-power-off " aria-hidden="true"></i></div>
                         </div>
                     </template>
                 </div>

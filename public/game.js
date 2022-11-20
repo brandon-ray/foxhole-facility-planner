@@ -2417,13 +2417,13 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
             // TODO: Cleanup
             clone.locked = entity.locked;
-            clone.selectedProduction = null;
             clone.selectionArea.tint = clone.locked ? COLOR_RED : COLOR_WHITE;
             clone.rotation = entity.rotation;
             let entityData = {};
             entity.onSave(entityData);
             clone.onLoad(entityData);
             clone.afterLoad(entityData, null, true);
+            clone.selectedProduction = null;
             game.selectEntity(clone);
             entity.remove();
             return clone;

@@ -620,6 +620,7 @@ p {
     border: 2px solid black;
     margin-bottom: 12px;
     padding: 0 8px 6px 8px;
+    position: relative;
     cursor: pointer;
     text-align: center;
     overflow: auto;
@@ -638,12 +639,23 @@ p {
     color: yellow;
 }
 
+.production-list > .select-production > .production-enabled {
+    color: black;
+    position: absolute;
+    bottom: 0;
+    right: 8px;
+}
+
+.production-list > .select-production.selected-production > .production-enabled {
+    color: #03b003;
+}
+
 .production-list > .select-production h6 {
     margin: 0;
 }
 
 .production-list > .select-production.selected-production {
-    border-color: #ff8f00;
+    border-color: #03b003;
 }
 
 .delete-button:hover {
