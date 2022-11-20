@@ -482,9 +482,19 @@ p {
     padding: 6px 12px;
 }
 
-#about-page > .about-section > p {
+#about-page > .about-section > p, #about-page > .about-section > div {
     background: #1c1c1c;
     padding: 8px 14px;
+}
+
+#about-page > .about-section .controls-section-body {
+    font-size: 0.96em;
+}
+
+#about-page > .about-section hr {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    border-top: 1px solid #2d2d2d;
 }
 
 #about-page > .about-section a {
@@ -498,6 +508,70 @@ p {
 
 #about-page > .about-section > .contributors-list a {
     white-space: nowrap;
+}
+
+#about-page > .about-section .left-mouse-button,
+#about-page > .about-section .right-mouse-button,
+#about-page > .about-section .middle-mouse-button {
+    display: inline-block;
+    min-width: 18px;
+    min-height: 25px;
+    position: relative;
+    background: white;
+    border-radius: 6px;
+    overflow: hidden;
+    vertical-align: middle;
+    margin-bottom: 5px;
+}
+
+#about-page > .about-section .left-mouse-button::before,
+#about-page > .about-section .right-mouse-button::before ,
+#about-page > .about-section .middle-mouse-button::before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-top: 1px solid black;
+    top: 10px;
+}
+
+#about-page > .about-section .left-mouse-button::after,
+#about-page > .about-section .right-mouse-button::after,
+#about-page > .about-section .middle-mouse-button::after {
+    content: '';
+    display: block;
+    background: #ff8f00;
+    width: 50%;
+    height: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#about-page > .about-section .right-mouse-button::after {
+    left: 50%;
+}
+
+#about-page > .about-section .middle-mouse-button::after {
+    width: 4px;
+    border-radius: 6px;
+    position: initial;
+    margin: 0 auto;
+}
+
+#about-page > .about-section .keyboard-key {
+    display: inline-block;
+    min-width: 25px;
+    min-height: 25px;
+    background: white;
+    border-radius: 3px;
+    color: black;
+    padding: 0 4px;
+    text-align: center;
+    border: 2px solid #ccc;
+    vertical-align: middle;
+    margin-bottom: 5px;
 }
 
 .build-icon {

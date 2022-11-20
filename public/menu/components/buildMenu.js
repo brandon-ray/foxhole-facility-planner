@@ -718,31 +718,44 @@ Vue.component('app-menu-about', {
     template: html`
     <div id="about-page">
         <div class="about-section">
-            <div class="about-section-header"><i class="fa fa-question-circle"></i> What is this?</div>
+            <div class="about-section-header"><i class="fa fa-question-circle"></i> What is Foxhole Planner?</div>
             <p>
-                Foxhole Facility Planner is a tool that allows you to draw up plans for facilities from Foxhole's new Inferno update.
+                This is a tool that allows you to draw up plans for facilities from Foxhole's Inferno update.
             </p>
         </div>
         <div class="about-section">
-            <div class="about-section-header"><i class="fa fa-wrench" aria-hidden="true"></i> Measurements</div>
-            <p>
-                Measurements for everything in the planner are not exact. We had to do some creative things to figure out ranges and the sizes of buildings, but the planner should work well enough as a guideline for building placement.
-            </p>
+            <div class="about-section-header"><i class="fa fa-keyboard-o " aria-hidden="true"></i> Controls + Hotkeys</div>
+            <div class="controls-section-body">
+                <div class="middle-mouse-button"></div> Move board position.<br>
+                <div class="middle-mouse-button"></div> Scroll to zoom in/out board.
+                <hr>
+                <div class="left-mouse-button"></div> Select a single structure.<br>
+                <div class="left-mouse-button"></div> Drag to select multiple structures.<br>
+                <div class="right-mouse-button"></div> Rotate held structures.
+                <hr>
+                <div class="keyboard-key">ctrl</div> + <div class="left-mouse-button"></div> Add structure to selection.<br>
+                <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">A</div> Select all structures.<br>
+                <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">C</div> Clone selection.
+                <hr>
+                <div class="keyboard-key">shift</div> + <div class="left-mouse-button"></div> Add structure to selection.<br>
+                <div class="keyboard-key">shift</div> + <div class="left-mouse-button"></div> Snap structure to grid.
+                <hr>
+                <div class="keyboard-key">L</div> Toggle lock for selected structures.<br>
+                <div class="keyboard-key">del</div> Delete selected structures.<br>
+                <div class="keyboard-key">esc</div> Clear selection.<br>
+                <div class="keyboard-key">F2</div> Debug menu.
+            </div>
         </div>
         <div class="about-section">
-            <div class="about-section-header"><i class="fa fa-github" aria-hidden="true"></i> Contributors</div>
-            <p class="contributors-list">
-                <a href="https://bombsightgames.com/" target="_blank">[PEG] Rayboy</a>, <a href="https://github.com/jimdcunningham" target="_blank">[PEG] Jimbo</a>
-            </p>
-        </div>
-        <div class="about-section">
-            <p class="text-center">
-                Made with ❤️ by the PEG Regiment.<br>
-                <span style="font-size:10px;">
+            <div class="about-section-header"><i class="fa fa-code" aria-hidden="true"></i> Project Credits</div>
+            <div class="text-center">
+                Made with ❤️ by <a href="https://bombsightgames.com/" target="_blank">Ray</a> and <a href="https://github.com/jimdcunningham" target="_blank">Jimbo</a>.<br>
+                <hr>
+                <p style="font-size:10px;">
                     <a href="https://www.foxholegame.com/" target="_blank">Foxhole</a> is a registered trademark of <a href="https://www.siegecamp.com/" target="_blank">Siege Camp</a>.<br>
                     We are not affiliated with Siege Camp, this is a fan project.
-                </span>
-            </p>
+                </p>
+            </div>
         </div>
         <span style="font-size:7px; cursor:pointer; " @click="buildBuilding('sound_test')">worden smely 🤮</span>
     </div>
