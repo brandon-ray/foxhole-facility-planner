@@ -419,12 +419,14 @@ const fontFamily = ['Recursive', 'sans-serif'];
             app.renderer.view.style.height = h + 'px';
             WIDTH = Math.round(w * resolution);
             HEIGHT = Math.round(h * resolution);
+            /*
             if (WIDTH > 2560) {
                 WIDTH = 2560;
             }
             if (HEIGHT > 1440) {
                 HEIGHT = 1440;
             }
+            */
             app.renderer.resize(WIDTH, HEIGHT);
         }
 
