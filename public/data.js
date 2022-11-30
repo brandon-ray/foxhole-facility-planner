@@ -19,9 +19,13 @@ const buildingCategories = {
         order: 3,
         color: 0xf2ec7a // Yellow
     },
+    vehicles: {
+        name: 'Vehicles',
+        order: 4
+    },
     misc: {
         name: 'Miscellaneous',
-        order: 4,
+        order: 5,
         color: 0x7ce1ea // Blue
     }
 };
@@ -80,7 +84,7 @@ const buildingCategories = {
             let data = objectData[key];
             data.key = key;
 
-            if (objectDataKey == 'buildings' && data.production) {
+            if (objectDataKey === 'buildings' && data.production) {
                 if (data.power > 0) {
                     data.production.hasOutput = true;
                 } else {

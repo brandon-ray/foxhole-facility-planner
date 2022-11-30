@@ -12,6 +12,26 @@ const foxholeData = {
 		}
 	},
 	"resources": {
+		"ambulancec": {
+			"name": "R-12 - “Salus” Ambulance",
+			"description": "The “Salus” Ambulance is efficient at transporting Critically Wounded Soldiers and carrying medical supplies.",
+			"icon": "game/Textures/UI/VehicleIcons/Ambulance.webp"
+		},
+		"ambulanceflamec": {
+			"name": "R-12b - “Salva” Flame Truck",
+			"description": "This simple variant of the “Salus” ambulance is fitted with a high-powered hose designed to quell wildfires.",
+			"icon": "game/Textures/UI/VehicleIcons/AmbulanceFlameC.webp"
+		},
+		"ambulanceflamew": {
+			"name": "Dunne Dousing Engine 3r",
+			"description": "A simple variant of the Dunne Responder 3e that’s fitted with a high-powered hose designed to extinguish raging flames.",
+			"icon": "game/Textures/UI/VehicleIcons/AmbulanceFlameW.webp"
+		},
+		"ambulancew": {
+			"name": "Dunne Responder 3e",
+			"description": "The Responder Ambulance is efficient at transporting Critically Wounded Soldiers and carrying medical supplies.",
+			"icon": "game/Textures/UI/VehicleIcons/AmbulanceWar.webp"
+		},
 		"armoredcaratw": {
 			"name": "O’Brien V.113 Gravekeeper",
 			"description": "A slight variation of the V.110, the Gravekeeper comes fitted with an embedded Bonesaw launcher, transforming the humble armoured car into an effective indirect anti-armour vehicle.",
@@ -52,6 +72,11 @@ const foxholeData = {
 			"description": "Fitted with twin RPG launchers, the T8 employs hit-and-run assaults against enemy structures and emplacements.",
 			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarTwinCItemIcon.webp"
 		},
+		"armoredcartwinw": {
+			"name": "O’Brien v.190 Knave",
+			"description": "One of Conor O’Brien’s best traits was his ability to modernize and make use of older technology in his designs. The v.190 Knave is the perfect example of this philosophy. Fitted with a modified, outdated twin-grenade launcher turret, the Knave is a surprising combination of speed and subterfuge that quickly routs the enemy, leaving them befuddled.",
+			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarTwinWIcon.webp"
+		},
 		"armoredcarw": {
 			"name": "O’Brien V.110",
 			"description": "Warden Armoured Cars are quick, well-rounded urban assault platforms. These anti-infantry vehicles are equipped with twin-barrelled machineguns.",
@@ -61,6 +86,16 @@ const foxholeData = {
 			"name": "94.5mm",
 			"description": "A heavy anti-tank shell.",
 			"icon": "game/Textures/UI/ATLargeAmmoIcon.webp"
+		},
+		"atrifletc": {
+			"name": "“Typhon” ra.XII",
+			"description": "This mounted anti-tank rifle boasts improved accuracy over its free-standing counterparts. The Typhon was specifically designed with shock absorption in mind, allowing for faster, more consistent firing patterns.",
+			"icon": "game/Textures/UI/ItemIcons/ATRifleTCIcon.webp"
+		},
+		"atrpgtw": {
+			"name": "Bonesaw MK.3",
+			"description": "This variant of the Bonesaw MK.3 is specially designed for use with tripod mounts. This affords it with increased stability and maximum potential range.",
+			"icon": "game/Textures/UI/ItemIcons/ATMortarWTripodItemIcon.webp"
 		},
 		"barbedwirematerials": {
 			"name": "Barbed Wire",
@@ -72,10 +107,20 @@ const foxholeData = {
 			"description": "Standard payload for battle tanks.",
 			"icon": "game/Textures/UI/ItemIcons/BattleTankAmmoItemIcon.webp"
 		},
+		"battletankatc": {
+			"name": "Lance-25 “Hasta”",
+			"description": "A lighter Lance variation, the 25, or “Hasta”, was employed in the first siege on Brightwall, a city now colloquially referred to as, “The Blemish”. Bombarded by heavy storms and dense fog in northern Veli, Colonial tank regiments requested a heavy vehicle with improved visibility with a wider field of view to protect flanks. Fitted with a 94.5mm turret, the “Hasta” is a capable tank destroyer.",
+			"icon": "game/Textures/UI/VehicleIcons/BattleTankATCIcon.webp"
+		},
 		"battletankc": {
 			"name": "Lance-36",
 			"description": "A heavy-duty Battle Tank with thick armour plating and destructive firepower. The Lance is fitted with a 75mm turret and a front-facing 12.7mm anti-infantry machine gun. The heavy armour limits top speed, but in exchange it can take a lot of punishment.",
 			"icon": "game/Textures/UI/VehicleIcons/BattleTank.webp"
+		},
+		"battletankdefensivew": {
+			"name": "Flood Juggernaut Mk. VII",
+			"description": "The Juggernaut is a heavily armoured Flood variant fitted with a heavy flamethrower turret that fires an advanced adhesive propellant. Its shovel-like treads may hinder top speeds, but this beast is quite capable in extreme weather conditions.",
+			"icon": "game/Textures/UI/VehicleIcons/BattleTankWarDefensiveVehicleIcon.webp"
 		},
 		"battletankw": {
 			"name": "Flood Mk. I",
@@ -255,6 +300,11 @@ const foxholeData = {
 			"description": "Supplies for maintaining structures. Store at Bases to prevent decay on surrounding structures.",
 			"icon": "game/Textures/UI/ItemIcons/GarrisonSuppliesIcon.webp"
 		},
+		"grenadelaunchertc": {
+			"name": "Fissura gd.I",
+			"description": "Capable of firing different grenades, quickly and at long range, the Fissura gd.I is mobile enough for easy transport, while increasing the effectiveness of infantry ordinance. ",
+			"icon": "game/Textures/UI/ItemIcons/GrenadeLauncherTCIcon.webp"
+		},
 		"groundmaterials": {
 			"name": "Gravel",
 			"description": "Resource used for building Roads and Foundations.",
@@ -309,6 +359,11 @@ const foxholeData = {
 			"name": "3C-High Explosive Rocket",
 			"description": "Standard calibre rocket with a heavy explosive payload. Chance to ignite objects near impact.",
 			"icon": "game/Textures/UI/ItemIcons/HERocketAmmoIcon.webp"
+		},
+		"isgtc": {
+			"name": "Daucus isg.III",
+			"description": "This heavy infantry cannon requires a tripod for stability. The Daucus is designed to give infantry a foothold against enemy vehicles and light fortifications or established fortified garrisons.",
+			"icon": "game/Textures/UI/ItemIcons/InfantrySupportGunItemIcon.webp"
 		},
 		"landingcraftc": {
 			"name": "AB-8 “Acheron”",
@@ -435,6 +490,16 @@ const foxholeData = {
 			"description": "Used to construct Metal Beam defenses.",
 			"icon": "game/Textures/UI/ItemIcons/MetalBeamMaterialItemIcon.webp"
 		},
+		"mgtc": {
+			"name": "Lamentum mm.IV",
+			"description": "Built on the bones of the first automatic weapons introduced to the Legion, the “Lamentum” mm.IV is still quite an intimidating force to encounter on the battlefield. Boasting a large magazine and impressive active range, this mounted machinegun excels at laying down consistent suppressive fire.",
+			"icon": "game/Textures/UI/ItemIcons/HeavyMachineGunIcon.webp"
+		},
+		"mgtw": {
+			"name": "Malone Ratcatcher MK.1",
+			"description": "Early iterations of this machinegun were built to be emplaced in bunkers and on the decks of lightly armed warships, the Ratcatcher is Harvey Malone’s first freely mountable infantry weapon designed for field use. Just like its predecessors, this heavy weapon suppresses enemy soldiers with unmatched efficiency. ",
+			"icon": "game/Textures/UI/ItemIcons/MGHeavyTWItemIcon.webp"
+		},
 		"mortartankammo": {
 			"name": "250mm",
 			"description": "A shell that is launched over short distances by a spigot mortar.",
@@ -471,6 +536,11 @@ const foxholeData = {
 			"name": "Pipe",
 			"description": "Used to construct various types of pipelines for transporting liquids.",
 			"icon": "game/Textures/UI/StructureIcons/EngineRoomPipeIcon.webp"
+		},
+		"rpgtw": {
+			"name": "Cutler Foebreaker",
+			"description": "This unique dual-barrelled RPG launcher can fire two RPG shells in relatively quick succession. This increase in firepower makes it nearly impossible for a single soldier to operate without the support of a sturdy mount.",
+			"icon": "game/Textures/UI/ItemIcons/ATRPGTWIcon.webp"
 		},
 		"sandbagmaterials": {
 			"name": "Sandbag",
@@ -557,6 +627,11 @@ const foxholeData = {
 			"description": "A bombastic variant of the T12 Tankette, the “Ixion” provides its crew with more support and a mounted Infantry Support Gun. Added weight from the armour results in reduced overall speed.",
 			"icon": "game/Textures/UI/VehicleIcons/TanketteOffensiveCVehicleIcon.webp"
 		},
+		"traincaboose": {
+			"name": "BMS Roadhouse",
+			"description": "A simple caboose that allows rail crews to maintain tracks more efficiently.",
+			"icon": "game/Textures/UI/VehicleIcons/TrainCabooseItemIcon.webp"
+		},
 		"traincoal": {
 			"name": "BMS Rockhold",
 			"description": "A container car for transporting coal to refuel trains over long-distance trips. ",
@@ -564,7 +639,7 @@ const foxholeData = {
 		},
 		"traincombatcarc": {
 			"name": "Aegis Steelbreaker K5a",
-			"description": "Known across the colonies as King of the Rails, this heavily armoured train car is designed to protect and exert dominance over contest rail lines, especially when transporting supplies into contested territory as well as safely transporting infantry. This armoured beast boasts a forward facing cannon, as well as heavy lateral guns.",
+			"description": "Known across the colonies as King of the Rails, this heavily armoured train car is designed to protect and exert dominance over contested rail lines, especially when transporting supplies into contested territory as well as safely transporting infantry. This armoured beast boasts a forward facing cannon, as well as heavy lateral guns.",
 			"icon": "game/Textures/UI/VehicleIcons/CombatCarCVehicleIcon.webp"
 		},
 		"traincombatcarw": {
@@ -591,6 +666,11 @@ const foxholeData = {
 			"name": "Tempest Cannon RA-2",
 			"description": "All the power of a stationary Storm Cannon, but easily relocated via rails. This devastating cannon is capable of leveling enemy fortifications at very large distances.",
 			"icon": "game/Textures/UI/VehicleIcons/TrainLRArtilleryVehicleIcon.webp"
+		},
+		"tripod": {
+			"name": "Tripod",
+			"description": "A mount point for deployable infantry weapons and equipment.",
+			"icon": "game/Textures/UI/ItemIcons/DeployableTripodItemIcon.webp"
 		},
 		"truckc": {
 			"name": "R-1 Hauler",
@@ -682,6 +762,114 @@ const foxholeData = {
 				}
 			],
 			"upgrades": {
+				"tripod_factory": {
+					"name": "Tripod Factory",
+					"codeName": "TripodFactory",
+					"description": "Produces various types of tripod weapons.",
+					"icon": "game/Textures/UI/ItemIcons/FacilityFactoryAmmoTripod.webp",
+					"texture": "game/Textures/Structures/ammunition_factory_tripod_factory.webp",
+					"techId": "unlockfacilitytier2",
+					"cost": {
+						"facilitymaterials2": 50
+					},
+					"_productionLength": 8,
+					"production": [
+						{
+							"id": 0,
+							"input": {
+								"facilitymaterials1": 2,
+								"facilitymaterials2": 1
+							},
+							"output": {
+								"isgtc": 1
+							},
+							"faction": "c",
+							"time": 25
+						},
+						{
+							"id": 1,
+							"input": {
+								"facilitymaterials1": 2,
+								"facilitymaterials2": 1
+							},
+							"output": {
+								"grenadelaunchertc": 1
+							},
+							"faction": "c",
+							"time": 25
+						},
+						{
+							"id": 2,
+							"input": {
+								"facilitymaterials1": 2,
+								"facilitymaterials2": 1
+							},
+							"output": {
+								"atrifletc": 1
+							},
+							"faction": "c",
+							"time": 25
+						},
+						{
+							"id": 3,
+							"input": {
+								"facilitymaterials1": 2,
+								"facilitymaterials2": 1
+							},
+							"output": {
+								"mgtc": 1
+							},
+							"faction": "c",
+							"time": 25
+						},
+						{
+							"id": 4,
+							"input": {
+								"facilitymaterials1": 2
+							},
+							"output": {
+								"tripod": 1
+							},
+							"time": 25
+						},
+						{
+							"id": 5,
+							"input": {
+								"facilitymaterials1": 2,
+								"facilitymaterials2": 1
+							},
+							"output": {
+								"atrpgtw": 1
+							},
+							"faction": "w",
+							"time": 25
+						},
+						{
+							"id": 6,
+							"input": {
+								"facilitymaterials1": 2,
+								"facilitymaterials2": 1
+							},
+							"output": {
+								"rpgtw": 1
+							},
+							"faction": "w",
+							"time": 25
+						},
+						{
+							"id": 7,
+							"input": {
+								"facilitymaterials1": 2,
+								"facilitymaterials2": 1
+							},
+							"output": {
+								"mgtw": 1
+							},
+							"faction": "w",
+							"time": 25
+						}
+					]
+				},
 				"rocket_factory": {
 					"name": "Rocket Factory",
 					"codeName": "RocketFactory",
@@ -762,7 +950,7 @@ const foxholeData = {
 							"output": {
 								"lrartilleryammo": 1
 							},
-							"time": 60,
+							"time": 120,
 							"power": -6
 						},
 						{
@@ -805,7 +993,7 @@ const foxholeData = {
 			},
 			"rangeColor": 3003829,
 			"sortOffset": 2000000,
-			"icon": "game/Textures/UI/StaticCraneItemIcon.webp",
+			"icon": "game/Textures/UI/FacilityCraneIcon.webp",
 			"texture": "game/Textures/Structures/bms_foreman_stacker.webp",
 			"textureIcon": {
 				"width": 96,
@@ -1354,7 +1542,7 @@ const foxholeData = {
 			"description": "A large Assembly Station for production of advanced vehicles and equipment, such as tanks and trains. Construction will take time and may be halted if resources are depleted.",
 			"category": "factories",
 			"color": 8184298,
-			"icon": "game/Textures/UI/ItemIcons/LargeAssemblyStation.webp",
+			"icon": "game/Textures/UI/ItemIcons/LargeAssemblyStationIcon.webp",
 			"texture": "game/Textures/Structures/large_assembly_factory.webp",
 			"textureIcon": {
 				"width": 160,
@@ -1374,7 +1562,7 @@ const foxholeData = {
 			"cost": {
 				"facilitymaterials2": 250
 			},
-			"_productionLength": 4,
+			"_productionLength": 5,
 			"production": [
 				{
 					"id": 0,
@@ -1421,6 +1609,18 @@ const foxholeData = {
 					},
 					"output": {
 						"trainflatbed": 1
+					},
+					"time": 1800
+				},
+				{
+					"id": 4,
+					"input": {
+						"facilitymaterials2": 20,
+						"facilitymaterials5": 15,
+						"facilitymaterials6": 5
+					},
+					"output": {
+						"traincaboose": 1
 					},
 					"time": 1800
 				}
@@ -1489,7 +1689,7 @@ const foxholeData = {
 					"cost": {
 						"facilitymaterials3": 150
 					},
-					"_productionLength": 4,
+					"_productionLength": 6,
 					"production": [
 						{
 							"id": 2,
@@ -1509,9 +1709,9 @@ const foxholeData = {
 							"id": 3,
 							"input": {
 								"facilitymaterials3": 275,
+								"facilitymaterials8": 175,
 								"facilitymaterials6": 105,
-								"facilitymaterials7": 95,
-								"facilitymaterials8": 175
+								"facilitymaterials7": 95
 							},
 							"output": {
 								"supertankw": 1
@@ -1546,6 +1746,34 @@ const foxholeData = {
 							},
 							"faction": "w",
 							"time": 64800
+						},
+						{
+							"id": 4,
+							"input": {
+								"facilitymaterials3": 60,
+								"facilitymaterials6": 65,
+								"facilitymaterials7": 45,
+								"facilitymaterials8": 65
+							},
+							"output": {
+								"battletankatc": 1
+							},
+							"faction": "c",
+							"time": 86400
+						},
+						{
+							"id": 5,
+							"input": {
+								"facilitymaterials3": 55,
+								"facilitymaterials6": 65,
+								"facilitymaterials7": 30,
+								"facilitymaterials8": 45
+							},
+							"output": {
+								"battletankdefensivew": 1
+							},
+							"faction": "w",
+							"time": 79200
 						}
 					]
 				}
@@ -1557,7 +1785,7 @@ const foxholeData = {
 			"description": "A standard Assembly Station for production of essential vehicles and equipment. Construction will take time and may be halted if resources are depleted. Some projects require a base vehicle to be present on the Assembly Station before production can begin.",
 			"category": "factories",
 			"color": 8184298,
-			"icon": "game/Textures/UI/ItemIcons/fieldAssembly01Icon.webp",
+			"icon": "game/Textures/UI/ItemIcons/AssemblyStationIcon.webp",
 			"texture": "game/Textures/Structures/light_vehicle_assembly_station.webp",
 			"textureIcon": {
 				"width": 160,
@@ -1576,7 +1804,7 @@ const foxholeData = {
 			"cost": {
 				"facilitymaterials1": 75
 			},
-			"_productionLength": 10,
+			"_productionLength": 12,
 			"production": [
 				{
 					"id": 0,
@@ -1682,6 +1910,32 @@ const foxholeData = {
 					"output": {
 						"smalltrainresourceplatform": 1
 					},
+					"time": 300
+				},
+				{
+					"id": 10,
+					"input": {
+						"ambulancec": 1,
+						"facilitymaterials1": 15,
+						"facilitymaterials5": 5
+					},
+					"output": {
+						"ambulanceflamec": 1
+					},
+					"faction": "c",
+					"time": 300
+				},
+				{
+					"id": 11,
+					"input": {
+						"ambulancew": 1,
+						"facilitymaterials1": 15,
+						"facilitymaterials5": 5
+					},
+					"output": {
+						"ambulanceflamew": 1
+					},
+					"faction": "w",
 					"time": 300
 				}
 			],
@@ -1816,7 +2070,7 @@ const foxholeData = {
 						{
 							"id": 9,
 							"input": {
-								"armoredcarw": 1,
+								"armoredcartwinw": 1,
 								"facilitymaterials1": 15,
 								"facilitymaterials4": 15
 							},
@@ -2069,7 +2323,7 @@ const foxholeData = {
 							"input": {
 								"destroyertankw": 1,
 								"facilitymaterials2": 10,
-								"facilitymaterials4": 10,
+								"facilitymaterials5": 10,
 								"facilitymaterials6": 15
 							},
 							"output": {
@@ -3277,6 +3531,18 @@ const foxholeData = {
 			"liquidCapacity": 100,
 			"cost": {
 				"pipematerials": 1
+			},
+			"upgrades": {
+				"insulation": {
+					"name": "Insulated Pipe",
+					"codeName": "Insulation",
+					"description": "An insulating material to keep the pipe from freezing during harsh weather conditions.",
+					"icon": "game/Textures/UI/StructureIcons/PipelineSegmentIcon.webp",
+					"texture": "game/Textures/Structures/pipeline_insulated.webp",
+					"cost": {
+						"pipematerials": 1
+					}
+				}
 			}
 		},
 		"pipeline_overhead": {
@@ -3311,6 +3577,18 @@ const foxholeData = {
 			"liquidCapacity": 100,
 			"cost": {
 				"pipematerials": 2
+			},
+			"upgrades": {
+				"insulation": {
+					"name": "Insulated Pipe",
+					"codeName": "Insulation",
+					"description": "An insulating material to keep the pipe from freezing during harsh weather conditions.",
+					"icon": "game/Textures/UI/ItemIcons/OverheadPowelineIcon.webp",
+					"texture": "game/Textures/Structures/pipeline_overhead_insulated.webp",
+					"cost": {
+						"pipematerials": 1
+					}
+				}
 			}
 		},
 		"pipeline_underground": {
@@ -3347,6 +3625,20 @@ const foxholeData = {
 			"liquidCapacity": 100,
 			"cost": {
 				"pipematerials": 6
+			},
+			"upgrades": {
+				"insulation": {
+					"name": "Insulated Pipe",
+					"codeName": "Insulation",
+					"description": "An insulating material to keep the pipe from freezing during harsh weather conditions.",
+					"icon": "game/Textures/UI/StructureIcons/PipeIntersectionIcon.webp",
+					"texture": null,
+					"textureFrontCap": "game/Textures/Structures/pipeline_underground_front_insulated.webp",
+					"textureBackCap": "game/Textures/Structures/pipeline_underground_back_insulated.webp",
+					"cost": {
+						"pipematerials": 1
+					}
+				}
 			}
 		},
 		"pipeline_valve": {
@@ -3379,11 +3671,33 @@ const foxholeData = {
 				"pipematerials": 2
 			}
 		},
+		"power_box": {
+			"name": "Power Switch",
+			"codeName": "PowerBox",
+			"description": "A power interface for manually disabling power in a circuit.",
+			"category": "power",
+			"icon": "game/Textures/UI/StructureIcons/FacilityPowerBoxIcon.webp",
+			"texture": "game/Textures/Structures/power_box.webp",
+			"sockets": [
+				{
+					"id": 0,
+					"type": "power",
+					"x": 223,
+					"y": 41,
+					"rotation": 90,
+					"connectionLimit": 4
+				}
+			],
+			"cost": {
+				"facilitymaterials1": 25
+			}
+		},
 		"power_line": {
 			"name": "Power Line",
 			"codeName": "PowerLine",
 			"description": "Conducts power between two Power Poles.",
 			"category": "power",
+			"color": 0,
 			"sortOffset": 1500000,
 			"hasHandle": true,
 			"hasOutline": false,
@@ -3732,6 +4046,33 @@ const foxholeData = {
 				"facilitymaterials1": 35
 			}
 		},
+		"smalltraindump": {
+			"name": "BMS Railtruck",
+			"codeName": "SmallTrainDump",
+			"description": "A small gauge container car for transporting raw materials. ",
+			"category": "vehicles",
+			"sortOffset": 120000,
+			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeResourceCarVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/smalltraindump.webp"
+		},
+		"smalltrainengine": {
+			"name": "BMS Mineseeker",
+			"codeName": "SmallTrainEngine",
+			"description": "The Mineseeker is the Bassett Motor Society’s mechanized mule. This small 0-4-0 locomotive can haul tonnes of weight over short distances with little overhead. Ideal for a mining operation or short-range supply chains. ",
+			"category": "vehicles",
+			"sortOffset": 120000,
+			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeEngineVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/smalltrainengine.webp"
+		},
+		"smalltrainresourceplatform": {
+			"name": "BMS Linerunner",
+			"codeName": "SmallTrainResourcePlatform",
+			"description": "A low profile flatbed car for transporting large resources and munitions over short distances on small gauge tracks.",
+			"category": "vehicles",
+			"sortOffset": 120000,
+			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeFlatbedCarVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/smalltrainresourceplatform.webp"
+		},
 		"sound_test": {
 			"name": "Sus",
 			"category": "misc",
@@ -3922,6 +4263,46 @@ const foxholeData = {
 					"time": 12
 				}
 			]
+		},
+		"traincaboose": {
+			"name": "BMS Roadhouse",
+			"codeName": "TrainCaboose",
+			"description": "A simple caboose that allows rail crews to maintain tracks more efficiently.",
+			"category": "vehicles",
+			"sortOffset": 120000,
+			"icon": "game/Textures/UI/VehicleIcons/TrainCabooseItemIcon.webp",
+			"texture": "game/Textures/Vehicles/traincaboose.webp",
+			"techId": "unlockfacilitytier2"
+		},
+		"traincoal": {
+			"name": "BMS Rockhold",
+			"codeName": "TrainCoal",
+			"description": "A container car for transporting coal to refuel trains over long-distance trips. ",
+			"category": "vehicles",
+			"sortOffset": 120000,
+			"icon": "game/Textures/UI/VehicleIcons/TrainCoalCarVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/traincoal.webp",
+			"techId": "unlockfacilitytier2"
+		},
+		"trainengine": {
+			"name": "BMS Black Bolt",
+			"codeName": "TrainEngine",
+			"description": "One of the most storied mass-market 0-6-2 locomotives engineered by the Bassett Motor Society, this coal-powered industrial train engine is reliable, tested, and incredibly durable. The Black Bolt’s legacy is unmatched having aided the Bassett Motor Society in supplying countries across the globe.",
+			"category": "vehicles",
+			"sortOffset": 120000,
+			"icon": "game/Textures/UI/VehicleIcons/TrainEngineVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/trainengine.webp",
+			"techId": "unlockfacilitytier2"
+		},
+		"trainflatbed": {
+			"name": "BMS Longrider",
+			"codeName": "TrainFlatbed",
+			"description": "A flatbed car for transporting large resources and munitions by train over long-distances. ",
+			"category": "vehicles",
+			"sortOffset": 120000,
+			"icon": "game/Textures/UI/VehicleIcons/TrainCarVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/trainflatbed.webp",
+			"techId": "unlockfacilitytier2"
 		},
 		"water_pump": {
 			"name": "Water Pump",

@@ -147,12 +147,18 @@ Vue.component('app-menu-building-selected', {
     data: function() {
         return {
             entity: {
+                type: null,
+                subtype: null,
                 x: 0,
                 y: 0,
                 rotation: 0,
                 rotationDegrees: 0,
-                selectedProduction: null
+                selectedProduction: null,
+                productionScale: null,
+                label: null,
+                style: null
             },
+            productionData: null,
             hoverUpgradeName: null,
             lockState: 0
         };
@@ -160,25 +166,38 @@ Vue.component('app-menu-building-selected', {
     mounted: function() {
         game.buildingSelectedMenuComponent = this;
         this.refresh();
+        this.focusText();
     },
     methods: {
         refresh: function(noForce) {
             this.lockState = game.getSelectedLockState();
             let selectedEntity = game.getSelectedEntity();
             if (selectedEntity) {
-                if (noForce && this.entity.x === selectedEntity.x && this.entity.y === selectedEntity.y && this.entity.rotation === selectedEntity.rotation) {
+                if (noForce && this.entity && this.entity.x === selectedEntity.x && this.entity.y === selectedEntity.y && this.entity.rotation === selectedEntity.rotation) {
                     return;
                 }
                 this.entity = {
+                    type: selectedEntity.type,
+                    subtype: selectedEntity.subtype,
                     x: selectedEntity.x,
                     y: selectedEntity.y,
                     rotation: selectedEntity.rotation,
                     rotationDegrees: Math.rad2deg(selectedEntity.rotation),
                     selectedProduction: selectedEntity.selectedProduction,
-                    building: selectedEntity.building
+                    productionScale: selectedEntity.productionScale,
+                    building: selectedEntity.building,
+                    label: selectedEntity.label?.text,
+                    style: Object.assign({}, selectedEntity.labelStyle ?? selectedEntity.shapeStyle)
                 }
-            } else if (this.entity) {
+                this.updateProduction();
+                if (this.entity.type === 'shape') {
+                    this.entity.style.alpha = this.entity.style.alpha * 100;
+                    this.entity.style.fillColor = `#${this.entity.style.fillColor.toString(16)}`;
+                    this.entity.style.lineColor = `#${this.entity.style.lineColor.toString(16)}`;
+                }
+            } else if (this.entity || this.productionData) {
                 this.entity = null;
+                this.productionData = null;
             }
             this.$forceUpdate();
         },
@@ -186,14 +205,29 @@ Vue.component('app-menu-building-selected', {
             if (this.entity) {
                 let selectedEntity = game.getSelectedEntity();
                 if (selectedEntity) {
-                    if (removeConnections) {
-                        selectedEntity.removeConnections();
-                    }
-                    selectedEntity.x = parseInt(this.entity.x);
-                    selectedEntity.y = parseInt(this.entity.y);
-                    selectedEntity.rotation = Math.deg2rad(parseInt(this.entity.rotationDegrees));
+                    selectedEntity.x = this.entity.x;
+                    selectedEntity.y = this.entity.y;
+                    selectedEntity.rotation = Math.deg2rad(this.entity.rotationDegrees);
                     this.entity.rotation = selectedEntity.rotation;
-                    selectedEntity.selectedProduction = this.entity.selectedProduction;
+                    if (selectedEntity.type === 'building') {
+                        if (removeConnections) {
+                            selectedEntity.removeConnections();
+                        }
+                        selectedEntity.setProductionId(this.entity.selectedProduction);
+                    }
+                    if (selectedEntity.type === 'text') {
+                        selectedEntity.setLabel(this.entity.label);
+                        this.entity.style.fontSize = this.entity.style.fontSize > 500 ? 500 : this.entity.style.fontSize < 12 ? 12 : this.entity.style.fontSize;
+                        selectedEntity.setLabelStyle(this.entity.style);
+                    } else if (selectedEntity.type === 'shape') {
+                        let style = Object.assign({}, this.entity.style);
+                        style.alpha = style.alpha / 100;
+                        style.alpha = style.alpha > 1 ? 1 : style.alpha < 0 ? 0 : style.alpha;
+                        style.fillColor = parseInt(style.fillColor.slice(1), 16);
+                        style.lineWidth = style.lineWidth > 64 ? 64 : style.lineWidth < 6 ? 6 : style.lineWidth;
+                        style.lineColor = parseInt(style.lineColor.slice(1), 16);
+                        selectedEntity.setShapeStyle(style);
+                    }
                     if (game.statisticsMenuComponent) {
                         game.statisticsMenuComponent.refresh();
                     }
@@ -215,7 +249,31 @@ Vue.component('app-menu-building-selected', {
             this.bmc();
             if (this.entity) {
                 this.entity.selectedProduction = this.entity.selectedProduction !== id ? id : null;
+                this.entity.productionScale = null;
                 this.updateEntity();
+            }
+        },
+        updateProduction: function() {
+            let selectedEntity = game.getSelectedEntity();
+            if (selectedEntity && selectedEntity.type === 'building') {
+                if (typeof this.entity.selectedProduction !== 'number') {
+                    this.productionData = null;
+                    selectedEntity.productionScale = null;
+                } else {
+                    for (let i = 0; i < this.entity.building.production.length; i++) {
+                        let production = this.entity.building.production[i];
+                        if (production.id === this.entity.selectedProduction) {
+                            this.productionData = production;
+                            this.productionData.max = Math.floor(3600 / production.time);
+                            if (this.productionData.max > 0) {
+                                this.entity.productionScale = this.entity.productionScale ?? this.productionData.max;
+                                selectedEntity.productionScale = this.entity.productionScale;
+                            }
+                            break;
+                        }
+                    }
+                }
+                game.statisticsMenuComponent?.refresh();
             }
         },
         changeUpgrade: function(upgrade) {
@@ -246,6 +304,11 @@ Vue.component('app-menu-building-selected', {
                 }
             }
             game.sidebarMenuComponent.showHoverMenu(buildingUpgrade);
+        },
+        focusText: function() {
+            if (this.entity && this.entity.type === 'text') {
+                this.$nextTick(() => this.$refs.label?.focus());
+            }
         }
     },
     template: html`
@@ -263,23 +326,57 @@ Vue.component('app-menu-building-selected', {
                 <span v-else><i class="fa fa-unlock"></i></span>
             </div>
         </button>
-        <div v-if="game.getSelectedEntities().length === 1" class="settings-option-wrapper">
-            <div v-if="entity.building" class="settings-title">
-                {{entity.building.parentName ? entity.building.parentName : entity.building.name}}
+        <template v-if="game.getSelectedEntities().length === 1">
+            <div class="settings-option-wrapper">
+                <div v-if="entity.building" class="settings-title">
+                    {{entity.building.parentName ? entity.building.parentName : entity.building.name}}
+                </div>
+                <label class="app-input-label">
+                    <i class="fa fa-arrows" aria-hidden="true"></i> Position X:
+                    <input class="app-input" type="number" v-model.number="entity.x" @input="updateEntity(true)">
+                </label>
+                <label class="app-input-label">
+                    <i class="fa fa-arrows" aria-hidden="true"></i> Position Y:
+                    <input class="app-input" type="number" v-model.number="entity.y" @input="updateEntity(true)">
+                </label>
+                <label class="app-input-label">
+                    <i class="fa fa-repeat" aria-hidden="true"></i> Rotation:
+                    <input class="app-input" type="number" v-model.number="entity.rotationDegrees" @input="updateEntity(true)">
+                </label>
             </div>
-            <label class="app-input-label">
-                <i class="fa fa-arrows" aria-hidden="true"></i> Position X:
-                <input class="app-input" type="number" v-model="entity.x" @input="updateEntity(true)">
-            </label>
-            <label class="app-input-label">
-                <i class="fa fa-arrows" aria-hidden="true"></i> Position Y:
-                <input class="app-input" type="number" v-model="entity.y" @input="updateEntity(true)">
-            </label>
-            <label class="app-input-label">
-                <i class="fa fa-repeat" aria-hidden="true"></i> Rotation:
-                <input class="app-input" type="number" v-model="entity.rotationDegrees" @input="updateEntity(true)">
-            </label>
-        </div>
+            <div v-if="entity.type === 'text'" class="settings-option-wrapper">
+                <div class="settings-title">Text Options</div>
+                <!--<i class="fa fa-text-height" aria-hidden="true"></i>-->
+                <div class="settings-option d-flex justify-content-center">
+                    <button class="btn-small" :class="{ 'btn-active': entity.style.fontWeight === 'bold' }" type="button" @click="entity.style.fontWeight = entity.style.fontWeight === 'bold' ? 'normal' : 'bold'; updateEntity();"><i class="fa fa-bold" aria-hidden="true"></i></button>
+                    <button class="btn-small" :class="{ 'btn-active': entity.style.fontStyle === 'italic' }" type="button" @click="entity.style.fontStyle = entity.style.fontStyle === 'italic' ? 'normal' : 'italic'; updateEntity();"><i class="fa fa-italic" aria-hidden="true"></i></button>
+                    <button class="btn-small ml-auto" :class="{ 'btn-active': entity.style.align === 'left' }" type="button" @click="entity.style.align = 'left'; updateEntity();"><i class="fa fa-align-left" aria-hidden="true"></i></button>
+                    <button class="btn-small" :class="{ 'btn-active': entity.style.align === 'center' }" type="button" @click="entity.style.align = 'center'; updateEntity();"><i class="fa fa-align-center" aria-hidden="true"></i></button>
+                    <button class="btn-small mr-auto" :class="{ 'btn-active': entity.style.align === 'right' }" type="button" @click="entity.style.align = 'right'; updateEntity();"><i class="fa fa-align-right" aria-hidden="true"></i></button>
+                    <input class="btn-small small-number-input" type="number" v-model.number="entity.style.fontSize" style="width: 40px;" @input="updateEntity" min="12" max="500">
+                    <input class="btn-small" type="color" v-model="entity.style.fill" style="padding: 1px;" @input="updateEntity">
+                </div>
+                <textarea ref="label" v-model.trim="entity.label" @input="updateEntity" maxlength="500" placeholder="Text Required"></textarea>
+            </div>
+            <div v-else-if="entity.type === 'shape'" class="settings-option-wrapper">
+                <div class="settings-title">Shape Options</div>
+                <div class="settings-option d-flex justify-content-center">
+                    <input class="btn-small small-number-input" type="number" v-model.number="entity.style.alpha" style="width: 40px;" @input="updateEntity" min="1" max="100">
+
+                    <template v-if="entity.subtype === 'line'">
+                        <button class="btn-small" :class="{ 'btn-active': entity.style.frontArrow }" type="button" @click="entity.style.frontArrow = !entity.style.frontArrow; updateEntity();"><i class="fa fa-caret-left" aria-hidden="true"></i></button>
+                        <button class="btn-small" :class="{ 'btn-active': entity.style.backArrow }" type="button" @click="entity.style.backArrow = !entity.style.backArrow; updateEntity();"><i class="fa fa-caret-right" aria-hidden="true"></i></button>
+                    </template>
+                    
+                    <!--<button v-if="entity.subtype !== 'line'" class="btn-small" :class="{ 'btn-active': entity.style.fill }" type="button" @click="entity.style.fill = !entity.style.fill; updateEntity();"><i class="fa fa-square" aria-hidden="true"></i></button>-->
+                    <input class="btn-small" type="color" v-model="entity.style.fillColor" style="padding: 1px;" @input="updateEntity">
+
+                    <button v-if="entity.subtype !== 'line'" class="btn-small" :class="{ 'btn-active': entity.style.border }" type="button" @click="entity.style.border = !entity.style.border; updateEntity();"><i class="fa fa-square-o" aria-hidden="true"></i></button>
+                    <input class="btn-small small-number-input" type="number" v-model.number="entity.style.lineWidth" style="width: 40px;" @input="updateEntity" min="6" max="64" :disabled="entity.subtype !== 'line' && !entity.style.border">
+                    <!--<input v-if="entity.subtype !== 'line'" class="btn-small" type="color" v-model="entity.style.lineColor" style="padding: 1px;" @input="updateEntity">-->
+                </div>
+            </div>
+        </template>
         <div v-else class="settings-option-wrapper text-center">
             <div class="settings-title">
                 ({{game.getSelectedEntities().length}}) Buildings Selected
@@ -302,7 +399,39 @@ Vue.component('app-menu-building-selected', {
                     <div class="resource-icon" :title="upgrade.name" :style="{backgroundImage:'url(/assets/' + (upgrade.icon ?? entity.building.icon) + ')'}"></div>
                 </button>
             </div>
-            <div v-if="entity.building && entity.building.production && entity.building.production.length" class="settings-option-wrapper">
+            <div v-if="productionData" class="settings-option-wrapper">
+                <div class="settings-title">
+                    <button type="button" class="title-button return-button" v-on:click="changeProduction(null)" title="Back" @mouseenter="bme" style="padding: 1px 2px;">
+                        <div class="inner-button"><i class="fa fa-arrow-left"></i></div>
+                    </button>
+                    Production Stats
+                </div>
+                <div class="production-stats">
+                    <div class="select-production" v-if="!productionData.faction || !game.settings.selectedFaction || productionData.faction == game.settings.selectedFaction">
+                        <app-game-recipe :building="entity.building" :recipe="productionData"></app-game-recipe>
+                        <h6 class="production-requirements">
+                            <span v-if="productionData.power || entity.building.power" title="Power"><i class="fa fa-bolt"></i> {{productionData.power || entity.building.power}} MW</span>
+                            &nbsp;&nbsp;&nbsp;
+                            <span title="Time"><i class="fa fa-clock-o"></i> {{productionData.time}}s</span>
+                        </h6>
+                    </div>
+                    <label v-if="productionData.max > 0" class="app-input-label">
+                        <i class="fa fa-arrow-circle-down" aria-hidden="true"></i> Limiter x{{entity.productionScale}}/hr
+                        <input type="range" class="slider w-100" v-model.number="entity.productionScale" min="0" :max="productionData.max" step="1" @input="updateProduction">
+                    </label>
+                    <div class="production-stats" v-if="productionData">
+                        <h5><i class="fa fa-sign-in"></i> Building Input</h5>
+                        <div class="statistics-panel-fac-input">
+                            <app-game-resource-icon v-for="(value, key) in productionData.input" :resource="key" :amount="entity.productionScale * value"/>
+                        </div>
+                        <h5><i class="fa fa-sign-out"></i> Building Output</h5>
+                        <div class="statistics-panel-fac-output">
+                            <app-game-resource-icon v-for="(value, key) in productionData.output" :resource="key" :amount="entity.productionScale * value"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div v-else-if="entity.building && entity.building.production && entity.building.production.length" class="settings-option-wrapper">
                 <div class="settings-title">Select Production</div>
                 <div class="production-list">
                     <template v-for="production in entity.building.production">
@@ -330,6 +459,10 @@ Vue.component('app-menu-construction-list', {
             buildings: window.objectData.buildings_list
         };
     },
+    mounted: function() {
+        game.constructionMenuComponent = this;
+        this.refresh();
+    },
     methods: {
         refresh: function() {
             this.$forceUpdate();
@@ -344,15 +477,25 @@ Vue.component('app-menu-construction-list', {
         },
         buildBuilding: function(building) {
             this.bmc();
-            game.startBuild(building);
+            game.create('building', building.key);
             game.sidebarMenuComponent.showHoverMenu(null);
         },
         buildingHover: function(building) {
             game.sidebarMenuComponent.showHoverMenu(building);
+        },
+        setConstructionMode: function(mode) {
+            this.bmc();
+            game.setConstructionMode(mode);
         }
     },
     template: html`
     <div id="construction-page">
+        <div class="construction-modes-wrapper row">
+            <button v-for="mode in game.constructionModes" class="construction-mode-button col" :class="[{ 'mode-selected': game.constructionMode.key === mode.key }, mode.key + '-mode-button']" :title="mode.title" @mouseenter="bme" @click="setConstructionMode(mode)">
+                <i v-if="mode.icon" :class="'fa ' + mode.icon" aria-hidden="true"></i>
+                <span v-else-if="mode.text">{{mode.text}}</span>
+            </button>
+        </div>
         <div class="construction-filter-wrapper">
             <button class="construction-settings-button" @click="game.sidebarMenuComponent?.changeMenu('settings')" title="Filter Settings"><i class="fa fa-sliders" aria-hidden="true"></i></button>
             <button class="construction-tech-button" @click="incrementTier" title="Filter by Tier">{{'Tier ' + game.settings.selectedTier}}</button>
@@ -363,9 +506,9 @@ Vue.component('app-menu-construction-list', {
                 </select>
             </div>
         </div>
-        <div class="construction-items" class="menu-page">
+        <div class="menu-page">
             <template v-for="building in buildings">
-                <div v-if="!building.hideInList && (game.selectedBuildingCategory === 'all' || building.category === game.selectedBuildingCategory) &&
+                <div v-if="!building.hideInList && ((game.selectedBuildingCategory === 'all' && building.category !== 'vehicles') || building.category === game.selectedBuildingCategory) &&
                     (!building.parent || game.settings.showUpgradesAsBuildings) &&
                     (!building.techId || (game.settings.selectedTier === 2 && building.techId === 'unlockfacilitytier2') || game.settings.selectedTier === 3)"
                     class="build-icon" :style="{backgroundImage:'url(/assets/' + (building.parent?.icon ?? building.icon) + ')'}"
@@ -452,43 +595,45 @@ Vue.component('app-menu-statistics', {
                                 power = selectedProduction.power;
                             }
 
-                            let productionTime = Math.floor(this.time / selectedProduction.time);
-                            if (selectedProduction.input) {
-                                let inputKeys = Object.keys(selectedProduction.input);
+                            let productionTime = Math.floor(typeof entity.productionScale === 'number' ? (entity.productionScale * (this.time / 3600)) : (this.time / selectedProduction.time));
+                            if (productionTime > 0) {
+                                if (selectedProduction.input) {
+                                    let inputKeys = Object.keys(selectedProduction.input);
+                                    for (let j = 0; j < inputKeys.length; j++) {
+                                        let key = inputKeys[j];
+                                        let value = selectedProduction.input[key];
+                                        if (!input[key]) {
+                                            input[key] = 0;
+                                        }
+                                        input[key] += productionTime * value;
+                                    }
+                                }
+
+                                if (selectedProduction.output) {
+                                    let outputKeys = Object.keys(selectedProduction.output);
+                                    for (let j = 0; j < outputKeys.length; j++) {
+                                        let key = outputKeys[j];
+                                        let value = selectedProduction.output[key];
+                                        if (!output[key]) {
+                                            output[key] = 0;
+                                        }
+                                        output[key] += productionTime * value;
+                                    }
+                                }
+
+                                let inputKeys = Object.keys(input);
                                 for (let j = 0; j < inputKeys.length; j++) {
                                     let key = inputKeys[j];
-                                    let value = selectedProduction.input[key];
-                                    if (!input[key]) {
-                                        input[key] = 0;
-                                    }
-                                    input[key] += productionTime * value;
-                                }
-                            }
-
-                            if (selectedProduction.output) {
-                                let outputKeys = Object.keys(selectedProduction.output);
-                                for (let j = 0; j < outputKeys.length; j++) {
-                                    let key = outputKeys[j];
-                                    let value = selectedProduction.output[key];
-                                    if (!output[key]) {
-                                        output[key] = 0;
-                                    }
-                                    output[key] += productionTime * value;
-                                }
-                            }
-
-                            let inputKeys = Object.keys(input);
-                            for (let j = 0; j < inputKeys.length; j++) {
-                                let key = inputKeys[j];
-                                if (output[key]) {
-                                    let outputAmount = output[key];
-                                    output[key] -= input[key];
-                                    input[key] -= outputAmount;
-                                    if (output[key] <= 0) {
-                                        delete output[key];
-                                    }
-                                    if (input[key] <= 0) {
-                                        delete input[key];
+                                    if (output[key]) {
+                                        let outputAmount = output[key];
+                                        output[key] -= input[key];
+                                        input[key] -= outputAmount;
+                                        if (output[key] <= 0) {
+                                            delete output[key];
+                                        }
+                                        if (input[key] <= 0) {
+                                            delete input[key];
+                                        }
                                     }
                                 }
                             }
@@ -636,7 +781,8 @@ Vue.component('app-menu-save-load', {
     props: ['menuData'],
     data() {
         return {
-            importAsSelection: false
+            importAsSelection: false,
+            presetName: null
         };
     },
     methods: {
@@ -644,25 +790,40 @@ Vue.component('app-menu-save-load', {
             this.importAsSelection = importAsSelection;
             document.getElementById('fileUpload').click();
         },
-        loadSave: function() {
+        loadSave: function(saveObject) {
+            try {
+                if (typeof saveObject === 'string') {
+                    saveObject = JSON.parse(saveObject);
+                }
+                if (saveObject.name && !this.importAsSelection) {
+                    game.facilityName = saveObject.name;
+                    game.appComponent.$forceUpdate();
+                }
+                game.loadSave(saveObject, this.importAsSelection);
+                this.$forceUpdate();
+            } catch (e) {
+                console.error('Failed to load save:', e);
+                game.showGrowl('Failed to load save.');
+            }
+        },
+        fetchPreset: function() {
+            if (this.presetName !== null) {
+                this.importAsSelection = false;
+                fetch(`./assets/presets/${this.presetName}.json`).then(response => {
+                    return response.json();
+                }).then(saveObject => this.loadSave(saveObject)).catch(e => {
+                    console.error('Failed to load preset:', e);
+                    game.showGrowl('Failed to load preset.');
+                });
+            }
+        },
+        loadFile: function() {
             let file = this.$refs.file.files[0];
             let reader = new FileReader();
             let component = this;
             reader.onload = function() {
                 let decoder = new TextDecoder("utf-8");
-                let jsonString = decoder.decode(new Uint8Array(this.result));
-                try {
-                    let saveObject = JSON.parse(jsonString);
-                    if (saveObject.name && !component.importAsSelection) {
-                        game.facilityName = saveObject.name;
-                        game.appComponent.$forceUpdate();
-                    }
-                    game.loadSave(saveObject, component.importAsSelection);
-                    component.$forceUpdate();
-                } catch (e) {
-                    console.error('Failed to load save:', e);
-                    game.showGrowl('Failed to load save.');
-                }
+                component.loadSave(decoder.decode(new Uint8Array(this.result)));
             };
             reader.readAsArrayBuffer(file);
         },
@@ -676,7 +837,7 @@ Vue.component('app-menu-save-load', {
     },
     template: html`
     <div id="save-load-page">
-        <input id="fileUpload" @change="loadSave" type="file" ref="file" hidden>
+        <input id="fileUpload" @change="loadFile" type="file" ref="file" hidden>
         <div class="settings-option-wrapper">
             <div class="settings-title">Facility Properties</div>
             <label class="app-input-label facility-name-input">
@@ -689,6 +850,21 @@ Vue.component('app-menu-save-load', {
                 </button>
                 <button class="app-btn app-btn-primary save-button" type="button" v-on:click="game.downloadSave()" @mouseenter="bme">
                     <i class="fa fa-save"></i> Save
+                </button>
+            </div>
+        </div>
+        <div class="settings-option-wrapper">
+            <div class="settings-title">Facility Presets</div>
+            <div class="text-center">
+                <div class="select-preset-wrapper">
+                    <select title="Load a Preset" v-model="presetName">
+                        <option v-bind:value="null">Choose a Preset</option>
+                        <option value="all_structures">All Buildings + Upgrades</option>
+                        <option value="small_120mm_facility">Small 120mm Facility</option>
+                    </select>
+                </div>
+                <button class="preset-load-button" type="button" v-on:click="fetchPreset" @mouseenter="bme">
+                    <i class="fa fa-upload"></i> Load
                 </button>
             </div>
         </div>
@@ -741,6 +917,7 @@ Vue.component('app-menu-about', {
                 <div class="keyboard-key">shift</div> + <div class="left-mouse-button"></div> Snap structure to grid.
                 <hr>
                 <div class="keyboard-key">L</div> Toggle lock for selected structures.<br>
+                <div class="keyboard-key">P</div> Toggle production output icons.<br>
                 <div class="keyboard-key">del</div> Delete selected structures.<br>
                 <div class="keyboard-key">esc</div> Clear selection.<br>
                 <div class="keyboard-key">F2</div> Debug menu.

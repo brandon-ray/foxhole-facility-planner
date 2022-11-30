@@ -170,7 +170,7 @@ function iterateStructures(dirPath) {
                                     'ignoreSnapSettings': structureData.ignoreSnapSettings,
                                     'requireConnection': structureData.requireConnection,
                                     'sockets': structureData.sockets,
-                                    'techId': structure.TechID && (structure.TechID !== 'ETechID::None') ? structure.TechID.substring(9).toLowerCase() : undefined,
+                                    'techId': structureData.techId ?? (structure.TechID && (structure.TechID !== 'ETechID::None') ? structure.TechID.substring(9).toLowerCase() : undefined),
                                     'liquidCapacity': structure.LiquidTank?.MaxAmount ?? structureData.liquidCapacity,
                                     'cost': structureData.cost ?? baseData.cost,
                                     '_productionLength': structureData._productionLength,
@@ -200,7 +200,10 @@ function iterateStructures(dirPath) {
                                 if (codeName !== 'EFortModificationType::Default') {
                                     const displayName = codeName.substring(23);
                                     const modificationCodeName = displayName.toLowerCase();
-                                    const storedModData = structureData?.upgrades[modificationCodeName];
+                                    let storedModData;
+                                    if (structureData?.upgrades) {
+                                        storedModData = structureData.upgrades[modificationCodeName];
+                                    }
                                     modifications = modifications ?? {};
                                     modifications[modificationCodeName] = {
                                         'id': storedModData?.id,
