@@ -346,7 +346,7 @@ input[type=number].btn-small {
     fill: #fff;
 }
 
-#sidebar-footer a:hover, #sidebar-footer button:hover, .close-statistics-button:hover, .footer-button:hover, .btn-small:hover {
+#sidebar-footer a:hover, #sidebar-footer button:hover, .close-statistics-button:hover, .footer-button:hover, .btn-small:hover, .title-button:hover .btn-small {
     border: 2px solid white;
     color: white;
 }
@@ -793,7 +793,7 @@ input[type=number].btn-small {
     border-color: white;
 }
 
-.production-list > .select-production > .production-requirements {
+.select-production > .production-requirements {
     color: yellow;
 }
 

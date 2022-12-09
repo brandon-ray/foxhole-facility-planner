@@ -2330,7 +2330,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 entity.sprite.beginFill(entity.shapeStyle.fillColor);
                             }
                             if (entity.subtype === 'rectangle') {
-                                entity.sprite.drawRect(0, 0, endPoint.x, endPoint.y);
+                                const p1 = { x: endPoint.x < 0 ? endPoint.x : 0, y: endPoint.y < 0 ? endPoint.y : 0 };
+                                const w = endPoint.x > 0 ? endPoint.x : -endPoint.x;
+                                const h = endPoint.y > 0 ? endPoint.y : -endPoint.y;
+                                entity.sprite.drawRect(p1.x, p1.y, w, h);
                             } else if (entity.subtype === 'circle') {
                                 entity.sprite.drawCircle(0, 0, endPoint.x);
                             }

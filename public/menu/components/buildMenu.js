@@ -264,7 +264,7 @@ Vue.component('app-menu-building-selected', {
                         let production = this.entity.building.production[i];
                         if (production.id === this.entity.selectedProduction) {
                             this.productionData = production;
-                            this.productionData.max = Math.floor(3600 / production.time);
+                            this.productionData.max = Math.floor((production.time > 3600 ? 86400 : 3600) / production.time);
                             if (this.productionData.max > 0) {
                                 this.entity.productionScale = this.entity.productionScale ?? this.productionData.max;
                                 selectedEntity.productionScale = this.entity.productionScale;
@@ -402,12 +402,12 @@ Vue.component('app-menu-building-selected', {
             <div v-if="productionData" class="settings-option-wrapper">
                 <div class="settings-title">
                     <button type="button" class="title-button return-button" v-on:click="changeProduction(null)" title="Back" @mouseenter="bme" style="padding: 1px 2px;">
-                        <div class="inner-button"><i class="fa fa-arrow-left"></i></div>
+                        <div class="btn-small m-1"><i class="fa fa-arrow-left"></i></div>
                     </button>
                     Production Stats
                 </div>
                 <div class="production-stats">
-                    <div class="select-production" v-if="!productionData.faction || !game.settings.selectedFaction || productionData.faction == game.settings.selectedFaction">
+                    <div class="select-production m-2" v-if="!productionData.faction || !game.settings.selectedFaction || productionData.faction == game.settings.selectedFaction">
                         <app-game-recipe :building="entity.building" :recipe="productionData"></app-game-recipe>
                         <h6 class="production-requirements">
                             <span v-if="productionData.power || entity.building.power" title="Power"><i class="fa fa-bolt"></i> {{productionData.power || entity.building.power}} MW</span>
@@ -415,20 +415,32 @@ Vue.component('app-menu-building-selected', {
                             <span title="Time"><i class="fa fa-clock-o"></i> {{productionData.time}}s</span>
                         </h6>
                     </div>
-                    <label v-if="productionData.max > 0" class="app-input-label">
-                        <i class="fa fa-arrow-circle-down" aria-hidden="true"></i> Limiter x{{entity.productionScale}}/hr
-                        <input type="range" class="slider w-100" v-model.number="entity.productionScale" min="0" :max="productionData.max" step="1" @input="updateProduction">
-                    </label>
-                    <div class="production-stats" v-if="productionData">
-                        <h5><i class="fa fa-sign-in"></i> Building Input</h5>
-                        <div class="statistics-panel-fac-input">
-                            <app-game-resource-icon v-for="(value, key) in productionData.input" :resource="key" :amount="entity.productionScale * value"/>
-                        </div>
-                        <h5><i class="fa fa-sign-out"></i> Building Output</h5>
-                        <div class="statistics-panel-fac-output">
-                            <app-game-resource-icon v-for="(value, key) in productionData.output" :resource="key" :amount="entity.productionScale * value"/>
-                        </div>
-                    </div>
+                    <template v-if="productionData">
+                        <template v-if="entity.building.category !== 'power' && productionData.max > 0">
+                            <div class="text-center p-2 mb-1">
+                                <i class="fa fa-arrow-circle-down" aria-hidden="true"></i> Limiter: 
+                                <span v-if="productionData.time < 3600">x{{entity.productionScale}} cycles/hr</span>
+                                <span v-else>x{{entity.productionScale}} cycles/day</span>
+                                <input type="range" class="slider w-100" v-model.number="entity.productionScale" min="0" :max="productionData.max" step="1" @input="updateProduction">
+                            </div>
+                        </template>
+                        <template v-if="entity.productionScale > 0">
+                            <div class="production-stats">
+                                <div class="mb-3">
+                                    <h5><i class="fa fa-sign-in"></i> Building Input</h5>
+                                    <div class="statistics-panel-fac-input">
+                                        <app-game-resource-icon v-for="(value, key) in productionData.input" :resource="key" :amount="entity.productionScale * value"/>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h5><i class="fa fa-sign-out"></i> Building Output</h5>
+                                    <div class="statistics-panel-fac-output">
+                                        <app-game-resource-icon v-for="(value, key) in productionData.output" :resource="key" :amount="entity.productionScale * value"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </template>
                 </div>
             </div>
             <div v-else-if="entity.building && entity.building.production && entity.building.production.length" class="settings-option-wrapper">
@@ -595,8 +607,14 @@ Vue.component('app-menu-statistics', {
                                 power = selectedProduction.power;
                             }
 
-                            let productionTime = Math.floor(typeof entity.productionScale === 'number' ? (entity.productionScale * (this.time / 3600)) : (this.time / selectedProduction.time));
-                            if (productionTime > 0) {
+                            let productionCycles = ~~(this.time / selectedProduction.time);
+                            if (typeof entity.productionScale === 'number') {
+                                const productionTime = this.time / (selectedProduction.time > 3600 ? 86400 : 3600);
+                                const productionLimit = productionTime < 1 ? entity.productionScale : ~~(entity.productionScale * productionTime);
+                                productionCycles = Math.min(productionCycles, productionLimit);
+                            }
+
+                            if (productionCycles > 0) {
                                 if (selectedProduction.input) {
                                     let inputKeys = Object.keys(selectedProduction.input);
                                     for (let j = 0; j < inputKeys.length; j++) {
@@ -605,7 +623,7 @@ Vue.component('app-menu-statistics', {
                                         if (!input[key]) {
                                             input[key] = 0;
                                         }
-                                        input[key] += productionTime * value;
+                                        input[key] += productionCycles * value;
                                     }
                                 }
 
@@ -617,7 +635,7 @@ Vue.component('app-menu-statistics', {
                                         if (!output[key]) {
                                             output[key] = 0;
                                         }
-                                        output[key] += productionTime * value;
+                                        output[key] += productionCycles * value;
                                     }
                                 }
 
