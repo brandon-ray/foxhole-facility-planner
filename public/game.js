@@ -1642,6 +1642,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
             entity.addChild(entity.selectionArea);
         }
 
+        if (subtype === 'trainengine') {
+            //entity.isTrain = true;
+        }
+
         entity.setSelectionSize = function(width, height) {
             entity.selectionArea.clear();
             entity.selectionArea.lineStyle(SELECTION_BORDER_WIDTH, COLOR_ORANGE);
@@ -2730,6 +2734,102 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     }
                 }
             }
+
+            if (entity.isTrain && entity.currentTrack && entity.currentTrack.bezier) {
+                if (entity.currentTrackT === null) {
+                    const projection = entity.currentTrack.bezier?.project(entity.currentTrack.toLocal({x: entity.x, y: entity.y}, app.cstage, undefined, true));
+                    entity.currentTrackT = projection.t;
+
+                    if (Math.abs(entity.lastTrackT - entity.currentTrackT) <= 0.1) {
+                        entity.trackDirection *= -1;
+                    }
+                }
+
+                let projection = entity.currentTrack.bezier.get(entity.currentTrackT);
+                let local = app.cstage.toLocal({
+                    x: projection.x,
+                    y: projection.y
+                }, entity.currentTrack, undefined, true);
+                entity.x = local.x;
+                entity.y = local.y;
+
+                if (!entity.trackVelocity) {
+                    entity.trackVelocity = 0;
+                }
+
+                if (!entity.trackDirection) {
+                    entity.trackDirection = 1;
+                }
+
+                let normal = entity.currentTrack.bezier.normal(entity.currentTrackT);
+                let angle = Math.angleBetween({x: 0, y: 0}, normal);
+                if (entity.trackDirection === -1) {
+                    angle += Math.PI;
+                }
+                entity.rotation = entity.currentTrack.rotation + (angle - Math.PI/2);
+
+                if (!entity.throttle) {
+                    entity.throttle = 0.01;
+                }
+
+                entity.trackVelocity += entity.throttle;
+                entity.trackVelocity *= 0.999;
+                if (Math.abs(entity.trackVelocity) <= 0.001) {
+                    entity.trackVelocity = 0;
+                }
+                entity.currentTrackT += (entity.trackVelocity/entity.currentTrack.bezier.length()) * entity.trackDirection;
+                if (entity.currentTrackT < 0 || entity.currentTrackT > 1) {
+                    let closestSocket = null;
+                    let closestDist = 1000000;
+                    for (let j = 0; j < entity.currentTrack.sockets.children.length; j++) {
+                        const socket = entity.currentTrack.sockets.children[j];
+                        let worldSocketPos = app.cstage.toLocal({
+                            x: socket.x,
+                            y: socket.y
+                        }, entity.currentTrack, undefined, true);
+                        let dist = Math.distanceBetween(entity, worldSocketPos);
+                        if (dist <= closestDist) {
+                            closestDist = dist;
+                            closestSocket = socket;
+                        }
+                    }
+
+                    if (closestSocket && closestSocket.connections && Object.keys(closestSocket.connections).length) {
+                        for (const [connectedEntityId] of Object.entries(closestSocket.connections)) {
+                            const connectedEntity = game.getEntityById(connectedEntityId);
+                            entity.currentTrack = connectedEntity;
+                            entity.lastTrackT = entity.currentTrackT;
+                            entity.currentTrackT = null;
+                            break;
+                        }
+                    } else {
+                        if (entity.currentTrackT >= 1) {
+                            entity.currentTrackT = 1;
+                        } else if (entity.currentTrackT <= 0) {
+                            entity.currentTrackT = 0;
+                        }
+                        entity.throttle *= -1;
+                        entity.trackVelocity = 0;
+                    }
+                }
+
+                /*
+                for (let i = 0; i < entities.length; i++) {
+                    let entity2 = entities[i];
+                    if (entity2 !== entity && entity2.bezier && Math.distanceBetween(entity2, entity) < 2000) {
+                        const localPos = entity2.toLocal({x: entity.x + Math.cos(entity.angle) * 50, y: entity.y + Math.sin(entity.angle) * 50}, app.cstage, undefined, true);
+                        let projection = entity2.bezier.project({
+                            x: localPos.x,
+                            y: localPos.y
+                        });
+                        let local = app.cstage.toLocal({x: projection.x, y: projection.y}, entity2, undefined, true);
+                        entity.x = local.x;
+                        entity.y = local.y;
+                        break;
+                    }
+                }
+                */
+            }
         };
 
         return entity;
@@ -3055,14 +3155,20 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     snappedMY = pickupPosition.y - (Math.round(mYDiff / gridSize) * gridSize);
                 }
                 let pickupEntity = game.getSelectedEntity();
+                if (pickupEntity.isTrain) {
+                    pickupEntity.currentTrack = null;
+                    pickupEntity.currentTrackT = null;
+                    pickupEntity.trackVelocity = 0;
+                }
+
                 let connectionEstablished = false;
-                if (pickupEntity && pickupEntity.building?.canSnap) {
+                if (pickupEntity && (pickupEntity.building?.canSnap || pickupEntity.isTrain)) {
                     for (let i = 0; i < entities.length; i++) {
                         let entity = entities[i];
-                        if (!entity.visible || entity === pickupEntity || entity.type !== 'building' || !(pickupEntity.sockets && entity.sockets) || Math.distanceBetween({x: gmx, y: gmy}, entity) > 1000) {
+                        if (!entity.visible || entity === pickupEntity || entity.type !== 'building' || !((pickupEntity.sockets && entity.sockets) || pickupEntity.isTrain) || Math.distanceBetween({x: gmx, y: gmy}, entity) > 1000) {
                             continue;
                         }
-                        if (pickupEntity.subtype === entity.subtype || (pickupEntity.sockets && entity.sockets)) {
+                        if (pickupEntity.subtype === entity.subtype || (pickupEntity.sockets && entity.sockets) || pickupEntity.isTrain) {
                             const mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
                             const projection = entity.bezier?.project(mousePos);
                             if (!projection || projection.d <= (entity.building?.lineWidth ?? 25)) {
@@ -3108,7 +3214,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                         break;
                                     }
                                 }
-                                if (!connectionEstablished && entity.bezier && entity.building?.isBezier && entity.building?.canSnapAlongBezier && pickupEntity.subtype === entity.subtype) {
+
+                                if (!connectionEstablished && entity.bezier && entity.building?.isBezier && entity.building?.canSnapAlongBezier && (pickupEntity.subtype === entity.subtype || pickupEntity.isTrain)) {
                                     let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity, undefined, true);
                                     let normal = entity.bezier.normal(projection.t);
                                     let angle = Math.angleBetween({x: 0, y: 0}, normal);
@@ -3122,6 +3229,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
         
                                     if (isNaN(pickupEntity.prevRotation)) {
                                         pickupEntity.prevRotation = pickupEntity.rotation;
+                                    }
+
+                                    if (pickupEntity.isTrain) {
+                                        pickupEntity.currentTrack = entity;
+                                        pickupEntity.currentTrackT = projection.t;
                                     }
             
                                     if (rightDiff < leftDiff) {
