@@ -3154,8 +3154,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     snappedMX = pickupPosition.x - (Math.round(mXDiff / gridSize) * gridSize);
                     snappedMY = pickupPosition.y - (Math.round(mYDiff / gridSize) * gridSize);
                 }
+                
                 let pickupEntity = game.getSelectedEntity();
-                if (pickupEntity.isTrain) {
+                if (pickupEntity?.isTrain) {
                     pickupEntity.currentTrack = null;
                     pickupEntity.currentTrackT = null;
                     pickupEntity.trackVelocity = 0;
