@@ -1086,7 +1086,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         if (selectionArea) {
                             selectionArea.origin = { x: gmx, y: gmy };
                         }
-                    } else {
+                    } else if (constructionCursor) {
                         const entity = game.create(game.constructionMode.eType, game.constructionMode.eSubType, constructionCursor.x, constructionCursor.y);
                         if (entity.hasHandle) {
                             entity.grabHandlePoint();
@@ -1105,7 +1105,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
     });
     mouseEventListenerObject.addEventListener(eventPrefix + 'leave', (e) => {
-        constructionCursor.visible = false;
+        if (constructionCursor) {
+            constructionCursor.visible = false;
+        }
         if (document.body.style.cursor === 'none') {
             document.body.style.cursor = 'unset';
         }
@@ -1129,17 +1131,19 @@ const fontFamily = ['Recursive', 'sans-serif'];
             camera.y += mdy;
         }
         
-        constructionCursor.visible = game.constructionMode.key !== 'select';
-        if (constructionCursor.visible) {
-            let gmxGrid = gmx;
-            let gmyGrid = gmy;
-            if (game.settings.enableGrid || keys[16]) {
-                let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
-                gmxGrid = Math.round(gmxGrid / gridSize) * gridSize;
-                gmyGrid = Math.round(gmyGrid / gridSize) * gridSize;
+        if (constructionCursor) {
+            constructionCursor.visible = game.constructionMode.key !== 'select';
+            if (constructionCursor.visible) {
+                let gmxGrid = gmx;
+                let gmyGrid = gmy;
+                if (game.settings.enableGrid || keys[16]) {
+                    let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
+                    gmxGrid = Math.round(gmxGrid / gridSize) * gridSize;
+                    gmyGrid = Math.round(gmyGrid / gridSize) * gridSize;
+                }
+                constructionCursor.x = gmxGrid;
+                constructionCursor.y = gmyGrid;
             }
-            constructionCursor.x = gmxGrid;
-            constructionCursor.y = gmyGrid;
         }
 
         if (selectionArea && selectionArea.origin) {
@@ -1771,78 +1775,148 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
 
             const socketWidth = 32, socketThickness = 6, powerSocketSize = 8;
-            if (building.sockets) {
-                entity.sockets = new PIXI.Container();
-                for (let i = 0; i < building.sockets.length; i++) {
-                    let socket = new PIXI.Graphics();
-                    socket.connections = {};
-                    socket.socketData = Object.assign({}, building.sockets[i]);
-                    socket.socketData.x = isNaN(socket.socketData.x) ? 0 : (-buildingWidth/2) + ((socket.socketData.x / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE);
-                    socket.socketData.y = isNaN(socket.socketData.y) ? 0 : (-buildingLength/2) + ((socket.socketData.y / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE);
-                    socket.position.set(socket.socketData.x, socket.socketData.y);
-                    socket.rotation = Math.deg2rad(socket.socketData.rotation);
+            entity.createSocket = function(socketData, x, y, rotation) {
+                if (!entity.sockets) {
+                    entity.sockets = new PIXI.Container();
+                    entity.addChild(entity.sockets);
+                }
+
+                let socket;
+                if (ENABLE_DEBUG || !socketData.temp) {
+                    socket = new PIXI.Graphics();
+                } else {
+                    socket = new PIXI.Container();
+                }
+
+                socket.connections = {};
+                socket.socketData = socketData;
+                socket.socketData.x = x ?? (isNaN(socket.socketData.x) ? 0 : (-buildingWidth/2) + ((socket.socketData.x / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE));
+                socket.socketData.y = y ?? (isNaN(socket.socketData.y) ? 0 : (-buildingLength/2) + ((socket.socketData.y / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE));
+                socket.socketData.rotation = rotation ?? socket.socketData.rotation;
+                socket.position.set(socket.socketData.x, socket.socketData.y);
+                socket.rotation = rotation ?? Math.deg2rad(socket.socketData.rotation);
+                if (ENABLE_DEBUG || !socketData.temp) {
                     if (socket.socketData.flow === 'in') {
                         socket.beginFill(COLOR_RED);
                         socket.drawRect(-socketWidth/2, -socketThickness, socketWidth, socketThickness);
-                        socket.endFill();
                     } else if (socket.socketData.flow === 'out') {
                         socket.beginFill(COLOR_GREEN);
                         socket.drawRect(-socketWidth/2, -socketThickness, socketWidth, socketThickness);
-                        socket.endFill();
                     } else if (socket.socketData.type === 'pipe' && socket.socketData.cap !== 'left' && socket.socketData.cap !== 'right') {
                         socket.beginFill(COLOR_BLUE);
                         socket.drawRect(-socketWidth/2, -socketThickness, socketWidth, socketThickness);
-                        socket.endFill();
                     } else if (socket.socketData.type === 'power') {
                         socket.beginFill(COLOR_YELLOW);
                         socket.drawRect(-powerSocketSize/2, -powerSocketSize/2, powerSocketSize, powerSocketSize);
-                        socket.endFill();
-                    } else if (socket.socketData.type === 'smallrail' || socket.socketData.type === 'largerail' || socket.socketData.type === 'cranerail' || socket.socketData.type === 'road') {
+                    } else if (socket.socketData.type === 'traincar' || socket.socketData.type === 'smalltraincar' || socket.socketData.type === 'smallrail' || socket.socketData.type === 'largerail' || socket.socketData.type === 'cranerail' || socket.socketData.type === 'road') {
                         socket.beginFill(COLOR_ORANGE);
                         socket.drawRect(-socketThickness/2, -socketThickness, socketThickness, socketThickness);
-                        socket.endFill();
                     }
+                    socket.endFill();
                     // Might want to add what kind of liquid it expects, water, oil, power, etc.
                     if (socket.socketData.flow === 'in') {
                         socket.pointer = new PIXI.Sprite(resources.pointer.texture);
                         socket.pointer.anchor.set(0.5, -0.5);
                         socket.pointer.rotation = Math.PI;
-                        socket.addChild(socket.pointer);
                     } else if (socket.socketData.flow === 'out') {
                         socket.pointer = new PIXI.Sprite(resources.pointer.texture);
                         socket.pointer.anchor.set(0.5, 1.5);
-                        socket.addChild(socket.pointer);
                     } else if (socket.socketData.type === 'pipe' && socket.socketData.cap !== 'left' && socket.socketData.cap !== 'right') {
                         socket.pointer = new PIXI.Sprite(resources.bipointer.texture);
                         socket.pointer.anchor.set(0.5, 1.5);
-                        socket.addChild(socket.pointer);
                     } else if (socket.socketData.type === 'power') {
                         socket.pointer = new PIXI.Sprite(resources.power.texture);
                         socket.pointer.anchor.set(0.5, 1.5);
                         socket.pointer.rotation = -(entity.rotation + socket.rotation);
+                    } else if (socket.socketData.temp) {
+                        socket.pointer = new PIXI.Sprite(resources.bipointer.texture);
+                        socket.pointer.anchor.set(0.5, 1.5);
+                    }
+                    if (socket.pointer) {
                         socket.addChild(socket.pointer);
                     }
-                    socket.setConnection = function(connectingEntityId, connectingSocket, connectingSocketId) {
-                        if (!isNaN(connectingEntityId) && (typeof connectingSocketId === 'number' || connectingSocket?.socketData) && (isNaN(socket.connections[connectingEntityId]) || socket.connections[connectingEntityId] !== (connectingSocketId ?? connectingSocket.socketData.id))) {
-                            if (connectingSocket) {
-                                entity.removeConnections(socket.socketData.id);
-                                connectingSocket.connections[entity.id] = socket.socketData.id;
-                                connectingSocket.setVisible(false);
+                }
+                socket.setConnection = function(connectingEntityId, connectingSocket, connectingSocketId) {
+                    if (!isNaN(connectingEntityId) && (typeof connectingSocketId === 'number' || connectingSocket?.socketData) && (isNaN(socket.connections[connectingEntityId]) || socket.connections[connectingEntityId] !== (connectingSocketId ?? connectingSocket.socketData.id))) {
+                        if (connectingSocket) {
+                            entity.removeConnections(socket.socketData.id);
+                            connectingSocket.connections[entity.id] = socket.socketData.id;
+                            connectingSocket.setVisible(false);
+                        } else {
+                            const connectingEntity = game.getEntityById(connectingEntityId);
+                            if (connectingEntity.sockets) {
+                                for (let i = 0; i < connectingEntity.sockets.children.length; i++) {
+                                    const connectingEntitySocket = connectingEntity.sockets.children[i];
+                                    if (connectingEntitySocket.socketData.id === connectingSocketId) {
+                                        connectingSocket = connectingEntitySocket;
+                                        break;
+                                    }
+                                }
+                                if (!connectingSocket) {
+                                    console.log('okay we might have to create the connection here, ALL SOCKETS SHOULD ALREADY EXIST, HOPEFULLY');
+                                    // socket.createConnection(connectingEntity, socket.socketData.x, socket.socketData.y, socket.socketData.rotation);
+                                }
                             }
-                            socket.connections[connectingEntityId] = connectingSocketId ?? connectingSocket.socketData.id;
-                            socket.setVisible(false);
+                        }
+                        socket.connections[connectingEntityId] = connectingSocketId ?? connectingSocket.socketData.id;
+                        socket.setVisible(false);
+                    }
+                }
+                // This works for rails, unsure about anything else. Could just use the position of the socket, but we already have positional and rotation data from snapping.
+                socket.createConnection = function(connectingEntity, x, y, rotation) {
+                    if (connectingEntity?.sockets) {
+                        let connectingSocket = null;
+                        for (let i = 0; i < connectingEntity.sockets.children.length; i++) {
+                            const socket2 = connectingEntity.sockets.children[i];
+                            if (typeof socket2.connections[entity.id] === 'number') {
+                                connectingSocket = socket2;
+                            }
+                        }
+                        if (connectingSocket) {
+                            if (connectingSocket.socketData.cap) {
+                                entity.removeConnections(socket.id);
+                                connectingSocket = null;
+                            } else {
+                                connectingSocket.position.set(x, y);
+                                connectingSocket.rotation = rotation;
+                            }
+                        }
+                        if (!connectingSocket) {
+                            let socketData = {
+                                "id": connectingEntity.sockets.children.length,
+                                "type": socket.socketData.type,
+                                "temp": true
+                            };
+                            connectingSocket = connectingEntity.createSocket(socketData, x, y, rotation);
+                            if (connectingSocket) {
+                                connectingSocket.connections[entity.id] = socket.socketData.id;
+                                if (typeof socket.connections[connectingEntity.id] === 'number') {
+                                    console.log('oh that is not good, I might have to look into this');
+                                    entity.removeConnections(socket.socketData.id);
+                                }
+                                socket.connections[connectingEntity.id] = connectingSocket.socketData.id;
+                                socket.setVisible(false);
+                            }
                         }
                     }
-                    socket.setVisible = function(visible) {
+                }
+                socket.setVisible = function(visible) {
+                    if (!ENABLE_DEBUG) {
                         if (socket.socketData.type !== 'power') {
                             socket.visible = visible;
                         } else if (socket.pointer) {
                             socket.pointer.visible = visible ?? Object.keys(socket.connections).length === 0;
                         }
                     }
-                    entity.sockets.addChild(socket);
                 }
-                entity.addChild(entity.sockets);
+                entity.sockets.addChild(socket);
+                return socket;
+            }
+
+            if (building.sockets) {
+                for (let i = 0; i < building.sockets.length; i++) {
+                    entity.createSocket(Object.assign({}, building.sockets[i]));
+                }
             }
 
             /*
@@ -1924,6 +1998,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
             entity.removeConnections = function(socketId) {
                 if (entity.sockets) {
+                    console.log('entity.removeConnections', socketId);
                     // Iterate sockets to make sure we either remove the connections and update the socket or remove the entity altogether.
                     for (let i = 0; i < entity.sockets.children.length; i++) {
                         const entitySocket = entity.sockets.children[i];
@@ -1938,6 +2013,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                             if (Object.keys(connectedSocket.connections).length === 0) {
                                                 if (connectedEntity.building?.requireConnection) {
                                                     connectedEntity.remove();
+                                                } else if (connectedSocket.socketData.temp) {
+                                                    connectedEntity.sockets.removeChild(connectedSocket);
                                                 } else {
                                                     connectedSocket.setVisible(true);
                                                 }
@@ -1948,7 +2025,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 }
                                 delete entitySocket.connections[connectedEntityId];
                             }
-                            entitySocket.setVisible(true);
+                            if (entitySocket.socketData.temp) {
+                                entity.sockets.removeChild(entitySocket);
+                            } else {
+                                entitySocket.setVisible(true);
+                            }
                         }
                     }
                 }
@@ -2631,7 +2712,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                     let nearestSocket, nearestSocketPos, nearestSocketDist = null;
                                     for (let i = 0; i < entity2.sockets.children.length; i++) {
                                         const entitySocket = entity2.sockets.children[i];
-                                        if (typeof handleSocket.socketData.type === 'string' && handleSocket.socketData.type === entitySocket.socketData.type) {
+                                        if (typeof handleSocket.socketData.type === 'string' && handleSocket.socketData.type === entitySocket.socketData.type && !entitySocket.socketData.temp) {
                                             const socketDistance = Math.distanceBetween(mousePos2, entitySocket);
                                             if ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || entity.subtype === 'power_line' && entity2.canGrab()) {
                                                 const entityConnections = Object.keys(entitySocket.connections).length;
@@ -2686,6 +2767,12 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                         } else {
                                             selectedHandlePoint.rotation = (angleLeft + Math.PI/2) - entity.rotation;
                                         }
+
+                                        if (handleSocket && (entity.subtype === 'rail_large_gauge' || entity.subtype === 'rail_small_gauge')) {
+                                            handleSocket.createConnection(entity2, projection.x, projection.y, angle + Math.PI);
+                                        }
+
+                                        connectionEstablished = true;
                                         break;
                                     }
                                 }
@@ -3178,7 +3265,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                     for (let j = 0; j < entity.sockets.children.length; j++) {
                                         let entitySocket = entity.sockets.children[j];
                                         const socketDistance = Math.distanceBetween(mousePos, entitySocket);
-                                        if ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || pickupEntity.subtype === 'power_line' && entity.canGrab()) {
+                                        if (!entitySocket.socketData.temp && ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || pickupEntity.subtype === 'power_line' && entity.canGrab())) {
                                             for (let k = 0; k < pickupEntity.sockets.children.length; k++) {
                                                 let pickupSocket = pickupEntity.sockets.children[k];
                                                 if (typeof entitySocket.socketData.type === 'string' && entitySocket.socketData.type === pickupSocket.socketData.type) {
@@ -3216,7 +3303,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                     }
                                 }
 
-                                if (!connectionEstablished && entity.bezier && entity.building?.isBezier && entity.building?.canSnapAlongBezier && (pickupEntity.subtype === entity.subtype || pickupEntity.isTrain)) {
+                                if ((!connectionEstablished && entity.bezier && entity.building?.isBezier && entity.building?.canSnapAlongBezier && pickupEntity.subtype === entity.subtype) || pickupEntity.isTrain) {
                                     let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity, undefined, true);
                                     let normal = entity.bezier.normal(projection.t);
                                     let angle = Math.angleBetween({x: 0, y: 0}, normal);
@@ -3242,6 +3329,19 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                     } else {
                                         pickupEntity.rotation = angleLeft + Math.PI/2;
                                     }
+
+                                    if (pickupEntity.sockets && (pickupEntity.subtype === 'rail_large_gauge' || pickupEntity.subtype === 'rail_small_gauge')) {
+                                        for (let k = 0; k < pickupEntity.sockets.children.length; k++) {
+                                            let pickupSocket = pickupEntity.sockets.children[k];
+                                            if (pickupSocket.socketData.cap === 'front') {
+                                                pickupSocket.createConnection(entity, projection.x, projection.y, angle);
+                                                break;
+                                            }
+                                        }
+                                    } else {
+                                        pickupEntity.removeConnections();
+                                    }
+
                                     connectionEstablished = true;
                                     break;
                                 }
