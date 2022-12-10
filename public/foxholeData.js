@@ -4053,7 +4053,24 @@ const foxholeData = {
 			"category": "vehicles",
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeResourceCarVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/smalltraindump.webp"
+			"texture": "game/Textures/Vehicles/smalltraindump.webp",
+			"canSnap": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "smalltraincar",
+					"x": 446,
+					"y": 114,
+					"rotation": 90
+				},
+				{
+					"id": 1,
+					"type": "smalltraincar",
+					"x": 0,
+					"y": 114,
+					"rotation": 270
+				}
+			]
 		},
 		"smalltrainengine": {
 			"name": "BMS Mineseeker",
@@ -4062,7 +4079,24 @@ const foxholeData = {
 			"category": "vehicles",
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeEngineVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/smalltrainengine.webp"
+			"texture": "game/Textures/Vehicles/smalltrainengine.webp",
+			"canSnap": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "smalltraincar",
+					"x": 446,
+					"y": 90,
+					"rotation": 90
+				},
+				{
+					"id": 1,
+					"type": "smalltraincar",
+					"x": 0,
+					"y": 90,
+					"rotation": 270
+				}
+			]
 		},
 		"smalltrainresourceplatform": {
 			"name": "BMS Linerunner",
@@ -4071,7 +4105,24 @@ const foxholeData = {
 			"category": "vehicles",
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeFlatbedCarVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/smalltrainresourceplatform.webp"
+			"texture": "game/Textures/Vehicles/smalltrainresourceplatform.webp",
+			"canSnap": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "smalltraincar",
+					"x": 430,
+					"y": 115,
+					"rotation": 90
+				},
+				{
+					"id": 1,
+					"type": "smalltraincar",
+					"x": 0,
+					"y": 115,
+					"rotation": 270
+				}
+			]
 		},
 		"sound_test": {
 			"name": "Sus",
@@ -4272,6 +4323,23 @@ const foxholeData = {
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/TrainCabooseItemIcon.webp",
 			"texture": "game/Textures/Vehicles/traincaboose.webp",
+			"canSnap": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "traincar",
+					"x": 1008,
+					"y": 186,
+					"rotation": 90
+				},
+				{
+					"id": 1,
+					"type": "traincar",
+					"x": 0,
+					"y": 186,
+					"rotation": 270
+				}
+			],
 			"techId": "unlockfacilitytier2"
 		},
 		"traincoal": {
@@ -4282,6 +4350,23 @@ const foxholeData = {
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/TrainCoalCarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/traincoal.webp",
+			"canSnap": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "traincar",
+					"x": 608,
+					"y": 197,
+					"rotation": 90
+				},
+				{
+					"id": 1,
+					"type": "traincar",
+					"x": 0,
+					"y": 197,
+					"rotation": 270
+				}
+			],
 			"techId": "unlockfacilitytier2"
 		},
 		"trainengine": {
@@ -4292,6 +4377,23 @@ const foxholeData = {
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/TrainEngineVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/trainengine.webp",
+			"canSnap": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "traincar",
+					"x": 1244,
+					"y": 190,
+					"rotation": 90
+				},
+				{
+					"id": 1,
+					"type": "traincar",
+					"x": 0,
+					"y": 190,
+					"rotation": 270
+				}
+			],
 			"techId": "unlockfacilitytier2"
 		},
 		"trainflatbed": {
@@ -4302,6 +4404,23 @@ const foxholeData = {
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/TrainCarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/trainflatbed.webp",
+			"canSnap": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "traincar",
+					"x": 900,
+					"y": 193,
+					"rotation": 90
+				},
+				{
+					"id": 1,
+					"type": "traincar",
+					"x": 0,
+					"y": 193,
+					"rotation": 270
+				}
+			],
 			"techId": "unlockfacilitytier2"
 		},
 		"water_pump": {
