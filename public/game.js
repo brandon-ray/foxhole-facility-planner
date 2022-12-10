@@ -302,6 +302,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 src: ['assets/button_click.mp3'],
                 loop: false,
                 volume: 0.25
+            }),
+            train_wheel_loop: new Howl({
+                src: ['assets/train_wheel_loop.wav'],
+                loop: true,
+                volume: 0.25
             })
         };
 
@@ -1130,7 +1135,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             camera.x += mdx;
             camera.y += mdy;
         }
-        
+
         if (constructionCursor) {
             constructionCursor.visible = game.constructionMode.key !== 'select';
             if (constructionCursor.visible) {
@@ -1652,7 +1657,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
         if (subtype === 'trainflatbed') {
             entity.isTrain = true;
-            entity.mass = 50;
+            entity.mass = 25;
         }
         if (entity.isTrain) {
             entity.trackVelocity = 0;
@@ -2265,14 +2270,14 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             let bezierPoints = [];
                             for (let i=0; i<points.length; i++) {
                                 let point = points[i];
-    
+
                                 if (subtype === 'pipeline' || subtype === 'pipeline_insulation') {
                                     if (i < points.length - 1) {
                                         bezierPoints.push({
                                             x: point.x,
                                             y: point.y
                                         });
-    
+
                                         let point2 = points[i + 1];
                                         if (point2) {
                                             let dist = Math.distanceBetween(point, point2) * 0.1;
@@ -2318,7 +2323,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                                 y: point.y + (Math.sin(point.rotation) * dist)
                                             });
                                         }
-    
+
                                         bezierPoints.push({
                                             x: point.x,
                                             y: point.y
@@ -2330,7 +2335,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                             x: point.x,
                                             y: point.y
                                         });
-    
+
                                         let point2 = points[i + 1];
                                         if (point2) {
                                             let dist = Math.distanceBetween(point, point2) * 0.4;
@@ -2348,7 +2353,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                                 y: point.y + (Math.sin(point.rotation) * dist)
                                             });
                                         }
-    
+
                                         bezierPoints.push({
                                             x: point.x,
                                             y: point.y
@@ -2441,7 +2446,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 entity.sprite = new PIXI.Graphics();
                 entity.addChild(entity.sprite);
                 entity.shapeStyle = Object.assign({}, entity.subtype === 'line' ? DEFAULT_LINE_STYLE : DEFAULT_SHAPE_STYLE);
-    
+
                 function updateArrow(sprite, visible) {
                     if (visible) {
                         if (!sprite) {
@@ -2458,14 +2463,14 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     }
                     return null;
                 }
-    
+
                 entity.setShapeStyle = function(style) {
                     entity.shapeStyle = style;
                     entity.frontCap = updateArrow(entity.frontCap, entity.shapeStyle.frontArrow);
                     entity.backCap = updateArrow(entity.backCap, entity.shapeStyle.backArrow);
                     entity.regenerate();
                 }
-    
+
                 entity.selectionArea.clear();
                 entity.selectionArea.beginFill(COLOR_ORANGE);
                 entity.selectionArea.drawRect(-8, -8, 16, 16);
@@ -2498,7 +2503,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 entity.updateHandles();
             }
         };
-        
+
         entity.onDeselect = function() {
             entity.selected = false;
             entity.selectionArea.visible = false;
@@ -2599,6 +2604,12 @@ const fontFamily = ['Recursive', 'sans-serif'];
             return -entity.y - ((entity.building ?? entity.metaData)?.sortOffset ?? 0) - (entity.type === 'text' ? 10000000 : (entity.selected ? 5000000 : 0));
         };
 
+        if (entity.building && entity.building.isBezier) {
+            entity.isVisible = function () {
+                return true;
+            };
+        }
+
         let frameX = 0, frameY = 0;
         let sound = null;
         entity.tick = function() {
@@ -2621,15 +2632,45 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     }
                     entity.sprite.texture = sheet[Math.floor(frameX)][Math.floor(frameY)];
                 }
-    
-                if (!sound && entity.building.sound && sounds[entity.building.sound]) {
-                    sound = soundPlay(sounds[entity.building.sound], entity, 0.4);
-                }
-    
-                if (sound) {
-                    soundUpdate(sound);
-                    if (sound.stopped) {
-                        sound = null;
+
+                if (entity.building.sound) {
+                    if (!sound && entity.building.sound && sounds[entity.building.sound]) {
+                        sound = soundPlay(sounds[entity.building.sound], entity, 0.4);
+                    }
+
+                    if (sound) {
+                        soundUpdate(sound);
+                        if (sound.stopped) {
+                            sound = null;
+                        }
+                    }
+                } else if (entity.isTrain) {
+                    let rate = Math.abs(entity.trackVelocity)/6;
+                    if (rate < 0) {
+                        rate = 0;
+                    }
+                    if (rate > 1) {
+                        rate = 1;
+                    }
+
+                    if (rate > 0.2) {
+                        if (!sound) {
+                            sound = soundPlay(sounds['train_wheel_loop'], entity, 0.4);
+                        }
+
+                        if (sound) {
+                            soundUpdate(sound);
+
+                            sound.sound.rate(rate, sound.id);
+                            if (sound.stopped) {
+                                sound = null;
+                            }
+                        }
+                    } else {
+                        if (sound) {
+                            soundStop(sound);
+                            sound = null;
+                        }
                     }
                 }
             }
@@ -2670,7 +2711,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 selectedHandlePoint.x = mousePos.x;
                                 selectedHandlePoint.y = mousePos.y;
                             }
-                            
+
                             if (entity.subtype === 'line' || entity.subtype === 'circle') {
                                 let angle = Math.angleBetween(entity, { x: gmx, y: gmy });
                                 if (game.settings.enableSnapRotation) {
@@ -2693,7 +2734,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                     }
                                     selectedHandlePoint.y = 0;
                                 }
-    
+
                                 if (!entity.building.isBezier) {
                                     if (entity.building.minLength) {
                                         const minLength = entity.building.minLength * METER_PIXEL_SIZE;
@@ -2762,13 +2803,13 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                         let angle = Math.angleBetween({x: 0, y: 0}, normal);
                                         selectedHandlePoint.x = local.x;
                                         selectedHandlePoint.y = local.y;
-        
+
                                         let currentRot = entity.rotation + selectedHandlePoint.rotation;
                                         let angleRight = entity2.rotation + (angle - Math.PI/2) - Math.PI/2;
                                         let angleLeft = entity2.rotation + (angle + Math.PI/2) - Math.PI/2;
                                         let rightDiff = Math.atan2(Math.sin(angleRight-currentRot), Math.cos(angleRight-currentRot));
                                         let leftDiff = Math.atan2(Math.sin(angleLeft-currentRot), Math.cos(angleLeft-currentRot));
-        
+
                                         // TODO: Handle saving previous rotations of snapped handles as well.
 
                                         if (rightDiff < leftDiff) {
@@ -2852,10 +2893,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     entity.throttle = 0.01;
                 }
 
-                if (entity.throttle) {
-                    entity.trackVelocity += entity.throttle;
-                }
-
                 entity.trackVelocity *= 0.999;
                 if (Math.abs(entity.trackVelocity) <= 0.0001) {
                     entity.trackVelocity = 0;
@@ -2866,6 +2903,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     entity.trackVelocity = -10;
                 }
                 entity.moveAlongBezier((entity.trackVelocity/entity.currentTrack.bezier.length()) * entity.trackDirection);
+
+                if (entity.throttle) {
+                    entity.trackVelocity += entity.throttle;
+                }
 
                 /*
                 for (let i = 0; i < entities.length; i++) {
@@ -2970,7 +3011,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
         }
     }
-    
+
     game.create = function(type, subtype, x, y, z) {
         game.updateConstructionMode(type, subtype);
         let entity = createSelectableEntity(type, subtype, x ?? 0, y ?? 0, z ?? 0);
@@ -3082,6 +3123,18 @@ const fontFamily = ['Recursive', 'sans-serif'];
         });
     }
 
+    function shuffle(array) {
+        let currentIndex = array.length, temporaryValue, randomIndex;
+        while (0 !== currentIndex) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+            temporaryValue = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temporaryValue;
+        }
+        return array;
+    }
+
     const FPSMIN = 30;
     let fpsCheck = null;
     let menuInit = false;
@@ -3134,7 +3187,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
         }
 
-        const SOLVER_STEPS = 4;
+        shuffle(entities);
+        //const SOLVER_STEPS = 8;
+        const SOLVER_STEPS = 1;
         for (let k=0; k<SOLVER_STEPS; k++) {
             for (let i = 0; i < entities.length; i++) {
                 let entity = entities[i];
@@ -3147,27 +3202,24 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             }
 
                             let dist = Math.distanceBetween(entity, entity2);
+                            let angle = Math.angleBetween(entity, entity2);
                             let colDist = (entity.width / 2) + (entity2.width / 2);
+
+                            //let ellipse1 = new Ellipse(entity.x, entity.y, entity.width/2, entity.height/2, Math.rad2deg(entity.rotation));
+                            //let ellipse2 = new Ellipse(entity2.x, entity2.y, entity2.width/2, entity2.height/2, Math.rad2deg(entity2.rotation));
+
                             if (dist <= colDist) {
                                 let pPos = app.cstage.toLocal(entity.currentTrack.bezier.get(entity.currentTrackT + (0.05 * entity.trackDirection)), entity.currentTrack, undefined, true);
                                 let pNeg = app.cstage.toLocal(entity.currentTrack.bezier.get(entity.currentTrackT - (0.05 * entity.trackDirection)), entity.currentTrack, undefined, true);
 
-                                //impulse += Math.abs(entity.trackVelocity-entity2.trackVelocity);
                                 let distDiff = Math.abs(colDist - dist);
                                 let distDiffScaled = (distDiff / entity.currentTrack.bezier.length()) * entity.trackDirection;
                                 if (Math.distanceBetween(entity2, pPos) >= Math.distanceBetween(entity2, pNeg)) {
                                     entity.moveAlongBezier(distDiffScaled/2);
                                     entity.trackVelocity += distDiff/entity.mass;
-                                    //entity2.trackVelocity -= distDiff/2;
-                                    //entity.trackVelocity += entity2.trackVelocity * massRatio;
-                                    //entity2.trackVelocity += entity.trackVelocity * massRatio;
                                 } else {
                                     entity.moveAlongBezier(-distDiffScaled/2);
                                     entity.trackVelocity -= distDiff/entity.mass;
-                                    //entity2.trackVelocity += distDiff/2;
-                                    //entity2.trackVelocity -= distDiff/2;
-                                    //entity.trackVelocity -= impulse * massRatio;
-                                    //entity.trackVelocity += entity2.trackVelocity * massRatio;
                                 }
                             }
                         }
@@ -3305,7 +3357,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     snappedMX = pickupPosition.x - (Math.round(mXDiff / gridSize) * gridSize);
                     snappedMY = pickupPosition.y - (Math.round(mYDiff / gridSize) * gridSize);
                 }
-                
+
                 let pickupEntity = game.getSelectedEntity();
                 if (pickupEntity?.isTrain) {
                     pickupEntity.currentTrack = null;
@@ -3340,7 +3392,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                                         frontSocket = pickupSocket;
                                                         nearestSocket = entitySocket;
                                                         nearestSocketDist = socketDistance;
-        
+
                                                         // TODO: Get proximity to the closest socket on pickup entity while it's being picked up instead. Will allow foundations to have their sockets snap based on their proximity to each other and foundation position will be fixed too.
                                                         break;
                                                     }
@@ -3367,18 +3419,18 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                     }
                                 }
 
-                                if ((!connectionEstablished && entity.bezier && entity.building?.isBezier && entity.building?.canSnapAlongBezier && pickupEntity.subtype === entity.subtype) || pickupEntity.isTrain) {
+                                if (projection && ((!connectionEstablished && entity.bezier && entity.building?.isBezier && entity.building?.canSnapAlongBezier && pickupEntity.subtype === entity.subtype) || pickupEntity.isTrain)) {
                                     let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity, undefined, true);
                                     let normal = entity.bezier.normal(projection.t);
                                     let angle = Math.angleBetween({x: 0, y: 0}, normal);
                                     pickupEntity.x = global.x;
                                     pickupEntity.y = global.y;
-        
+
                                     let angleRight = entity.rotation + (angle - Math.PI/2) - Math.PI/2;
                                     let angleLeft = entity.rotation + (angle + Math.PI/2) - Math.PI/2;
                                     let rightDiff = Math.atan2(Math.sin(angleRight-pickupEntity.rotation), Math.cos(angleRight-pickupEntity.rotation));
                                     let leftDiff = Math.atan2(Math.sin(angleLeft-pickupEntity.rotation), Math.cos(angleLeft-pickupEntity.rotation));
-        
+
                                     if (isNaN(pickupEntity.prevRotation)) {
                                         pickupEntity.prevRotation = pickupEntity.rotation;
                                     }
@@ -3387,7 +3439,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                         pickupEntity.currentTrack = entity;
                                         pickupEntity.currentTrackT = projection.t;
                                     }
-            
+
                                     if (rightDiff < leftDiff) {
                                         pickupEntity.rotation = angleRight + Math.PI/2;
                                     } else {
