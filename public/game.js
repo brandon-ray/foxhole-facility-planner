@@ -3188,8 +3188,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
 
         shuffle(entities);
-        //const SOLVER_STEPS = 8;
-        const SOLVER_STEPS = 1;
+        const SOLVER_STEPS = 8;
         for (let k=0; k<SOLVER_STEPS; k++) {
             for (let i = 0; i < entities.length; i++) {
                 let entity = entities[i];
@@ -3200,19 +3199,37 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             if (!entity2 || !entity2.isTrain || !entity2.currentTrack) {
                                 continue;
                             }
-
                             let dist = Math.distanceBetween(entity, entity2);
-                            let angle = Math.angleBetween(entity, entity2);
-                            let colDist = (entity.width / 2) + (entity2.width / 2);
+                            if (dist > 1000) {
+                                continue;
+                            }
 
-                            //let ellipse1 = new Ellipse(entity.x, entity.y, entity.width/2, entity.height/2, Math.rad2deg(entity.rotation));
-                            //let ellipse2 = new Ellipse(entity2.x, entity2.y, entity2.width/2, entity2.height/2, Math.rad2deg(entity2.rotation));
+                            let buffer = 15;
+                            let poly1Width = (entity.width-buffer)/2;
+                            let poly1Height = (entity.height-buffer)/2;
+                            let box1 = new SAT.Polygon(new SAT.Vector(entity.x, entity.y), [
+                                new SAT.Vector(-poly1Width,-poly1Height),
+                                new SAT.Vector(poly1Width,-poly1Height),
+                                new SAT.Vector(poly1Width,poly1Height),
+                                new SAT.Vector(-poly1Width,poly1Height),
+                            ]);
+                            box1.setAngle(entity.rotation);
+                            let poly2Width = (entity2.width-buffer)/2;
+                            let poly2Height = (entity2.height-buffer)/2;
+                            let box2 = new SAT.Polygon(new SAT.Vector(entity2.x, entity2.y), [
+                                new SAT.Vector(-poly2Width,-poly2Height),
+                                new SAT.Vector(poly2Width,-poly2Height),
+                                new SAT.Vector(poly2Width,poly2Height),
+                                new SAT.Vector(-poly2Width,poly2Height),
+                            ]);
+                            box2.setAngle(entity2.rotation);
 
-                            if (dist <= colDist) {
+                            let response = new SAT.Response();
+                            if (SAT.testPolygonPolygon(box1, box2, response)) {
                                 let pPos = app.cstage.toLocal(entity.currentTrack.bezier.get(entity.currentTrackT + (0.05 * entity.trackDirection)), entity.currentTrack, undefined, true);
                                 let pNeg = app.cstage.toLocal(entity.currentTrack.bezier.get(entity.currentTrackT - (0.05 * entity.trackDirection)), entity.currentTrack, undefined, true);
 
-                                let distDiff = Math.abs(colDist - dist);
+                                let distDiff = response.overlap;
                                 let distDiffScaled = (distDiff / entity.currentTrack.bezier.length()) * entity.trackDirection;
                                 if (Math.distanceBetween(entity2, pPos) >= Math.distanceBetween(entity2, pNeg)) {
                                     entity.moveAlongBezier(distDiffScaled/2);
