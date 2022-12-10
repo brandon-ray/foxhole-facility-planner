@@ -1643,7 +1643,16 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
 
         if (subtype === 'trainengine') {
-            //entity.isTrain = true;
+            entity.isTrain = true;
+            entity.mass = 1000;
+        }
+        if (subtype === 'trainflatbed') {
+            entity.isTrain = true;
+            entity.mass = 50;
+        }
+        if (entity.isTrain) {
+            entity.trackVelocity = 0;
+            entity.trackDirection = 1;
         }
 
         entity.setSelectionSize = function(width, height) {
@@ -2745,22 +2754,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     }
                 }
 
-                let projection = entity.currentTrack.bezier.get(entity.currentTrackT);
-                let local = app.cstage.toLocal({
-                    x: projection.x,
-                    y: projection.y
-                }, entity.currentTrack, undefined, true);
-                entity.x = local.x;
-                entity.y = local.y;
-
-                if (!entity.trackVelocity) {
-                    entity.trackVelocity = 0;
-                }
-
-                if (!entity.trackDirection) {
-                    entity.trackDirection = 1;
-                }
-
                 let normal = entity.currentTrack.bezier.normal(entity.currentTrackT);
                 let angle = Math.angleBetween({x: 0, y: 0}, normal);
                 if (entity.trackDirection === -1) {
@@ -2768,50 +2761,24 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 }
                 entity.rotation = entity.currentTrack.rotation + (angle - Math.PI/2);
 
-                if (!entity.throttle) {
+                if (subtype === 'trainengine' && !entity.throttle) {
                     entity.throttle = 0.01;
                 }
 
-                entity.trackVelocity += entity.throttle;
+                if (entity.throttle) {
+                    entity.trackVelocity += entity.throttle;
+                }
+
                 entity.trackVelocity *= 0.999;
-                if (Math.abs(entity.trackVelocity) <= 0.001) {
+                if (Math.abs(entity.trackVelocity) <= 0.0001) {
                     entity.trackVelocity = 0;
                 }
-                entity.currentTrackT += (entity.trackVelocity/entity.currentTrack.bezier.length()) * entity.trackDirection;
-                if (entity.currentTrackT < 0 || entity.currentTrackT > 1) {
-                    let closestSocket = null;
-                    let closestDist = 1000000;
-                    for (let j = 0; j < entity.currentTrack.sockets.children.length; j++) {
-                        const socket = entity.currentTrack.sockets.children[j];
-                        let worldSocketPos = app.cstage.toLocal({
-                            x: socket.x,
-                            y: socket.y
-                        }, entity.currentTrack, undefined, true);
-                        let dist = Math.distanceBetween(entity, worldSocketPos);
-                        if (dist <= closestDist) {
-                            closestDist = dist;
-                            closestSocket = socket;
-                        }
-                    }
-
-                    if (closestSocket && closestSocket.connections && Object.keys(closestSocket.connections).length) {
-                        for (const [connectedEntityId] of Object.entries(closestSocket.connections)) {
-                            const connectedEntity = game.getEntityById(connectedEntityId);
-                            entity.currentTrack = connectedEntity;
-                            entity.lastTrackT = entity.currentTrackT;
-                            entity.currentTrackT = null;
-                            break;
-                        }
-                    } else {
-                        if (entity.currentTrackT >= 1) {
-                            entity.currentTrackT = 1;
-                        } else if (entity.currentTrackT <= 0) {
-                            entity.currentTrackT = 0;
-                        }
-                        entity.throttle *= -1;
-                        entity.trackVelocity = 0;
-                    }
+                if (entity.trackVelocity > 10) {
+                    entity.trackVelocity = 10;
+                } else if (entity.trackVelocity < -10) {
+                    entity.trackVelocity = -10;
                 }
+                entity.moveAlongBezier((entity.trackVelocity/entity.currentTrack.bezier.length()) * entity.trackDirection);
 
                 /*
                 for (let i = 0; i < entities.length; i++) {
@@ -2830,6 +2797,61 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 }
                 */
             }
+        };
+
+        entity.moveAlongBezier = function(amount) {
+            entity.currentTrackT += amount;
+            if (entity.currentTrackT < 0 || entity.currentTrackT > 1) {
+                let closestSocket = null;
+                let closestDist = 1000000;
+                for (let j = 0; j < entity.currentTrack.sockets.children.length; j++) {
+                    const socket = entity.currentTrack.sockets.children[j];
+                    let worldSocketPos = app.cstage.toLocal({
+                        x: socket.x,
+                        y: socket.y
+                    }, entity.currentTrack, undefined, true);
+                    let dist = Math.distanceBetween(entity, worldSocketPos);
+                    if (dist <= closestDist) {
+                        closestDist = dist;
+                        closestSocket = socket;
+                    }
+                }
+
+                if (closestSocket && closestSocket.connections && Object.keys(closestSocket.connections).length) {
+                    for (const [connectedEntityId] of Object.entries(closestSocket.connections)) {
+                        const connectedEntity = game.getEntityById(connectedEntityId);
+                        entity.currentTrack = connectedEntity;
+                        entity.lastTrackT = entity.currentTrackT;
+                        entity.currentTrackT = null;
+                        break;
+                    }
+                } else {
+                    if (entity.currentTrackT >= 1) {
+                        entity.currentTrackT = 1;
+                    } else if (entity.currentTrackT <= 0) {
+                        entity.currentTrackT = 0;
+                    }
+                    entity.throttle *= -1;
+                    entity.trackVelocity = 0;
+                }
+            }
+
+            if (entity.currentTrackT === null) {
+                const projection = entity.currentTrack.bezier?.project(entity.currentTrack.toLocal({x: entity.x, y: entity.y}, app.cstage, undefined, true));
+                entity.currentTrackT = projection.t;
+
+                if (Math.abs(entity.lastTrackT - entity.currentTrackT) <= 0.1) {
+                    entity.trackDirection *= -1;
+                }
+            }
+
+            let projection = entity.currentTrack.bezier.get(entity.currentTrackT);
+            let global = app.cstage.toLocal({
+                x: projection.x,
+                y: projection.y
+            }, entity.currentTrack, undefined, true);
+            entity.x = global.x;
+            entity.y = global.y;
         };
 
         return entity;
@@ -3022,6 +3044,48 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 menuInit = true;
 
                 game.appComponent.gameLoaded();
+            }
+        }
+
+        const SOLVER_STEPS = 4;
+        for (let k=0; k<SOLVER_STEPS; k++) {
+            for (let i = 0; i < entities.length; i++) {
+                let entity = entities[i];
+                if (entity.valid && entity.isTrain && entity.currentTrack) {
+                    for (let j=entities.length-1; j>=0; j--) {
+                        if (i !== j) {
+                            let entity2 = entities[j];
+                            if (!entity2 || !entity2.isTrain || !entity2.currentTrack) {
+                                continue;
+                            }
+
+                            let dist = Math.distanceBetween(entity, entity2);
+                            let colDist = (entity.width / 2) + (entity2.width / 2);
+                            if (dist <= colDist) {
+                                let pPos = app.cstage.toLocal(entity.currentTrack.bezier.get(entity.currentTrackT + (0.05 * entity.trackDirection)), entity.currentTrack, undefined, true);
+                                let pNeg = app.cstage.toLocal(entity.currentTrack.bezier.get(entity.currentTrackT - (0.05 * entity.trackDirection)), entity.currentTrack, undefined, true);
+
+                                //impulse += Math.abs(entity.trackVelocity-entity2.trackVelocity);
+                                let distDiff = Math.abs(colDist - dist);
+                                let distDiffScaled = (distDiff / entity.currentTrack.bezier.length()) * entity.trackDirection;
+                                if (Math.distanceBetween(entity2, pPos) >= Math.distanceBetween(entity2, pNeg)) {
+                                    entity.moveAlongBezier(distDiffScaled/2);
+                                    entity.trackVelocity += distDiff/entity.mass;
+                                    //entity2.trackVelocity -= distDiff/2;
+                                    //entity.trackVelocity += entity2.trackVelocity * massRatio;
+                                    //entity2.trackVelocity += entity.trackVelocity * massRatio;
+                                } else {
+                                    entity.moveAlongBezier(-distDiffScaled/2);
+                                    entity.trackVelocity -= distDiff/entity.mass;
+                                    //entity2.trackVelocity += distDiff/2;
+                                    //entity2.trackVelocity -= distDiff/2;
+                                    //entity.trackVelocity -= impulse * massRatio;
+                                    //entity.trackVelocity += entity2.trackVelocity * massRatio;
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
