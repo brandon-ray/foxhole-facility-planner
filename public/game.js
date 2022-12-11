@@ -2012,7 +2012,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
             entity.removeConnections = function(socketId) {
                 if (entity.sockets) {
-                    console.log('entity.removeConnections', socketId);
                     // Iterate sockets to make sure we either remove the connections and update the socket or remove the entity altogether.
                     for (let i = 0; i < entity.sockets.children.length; i++) {
                         const entitySocket = entity.sockets.children[i];
@@ -3237,6 +3236,55 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 } else {
                                     entity.moveAlongBezier(-distDiffScaled/2);
                                     entity.trackVelocity -= distDiff/entity.mass;
+                                }
+
+                                if (k === 0) {
+                                    let closestSocketDist = 25;
+                                    let closestEntitySocket = null;
+                                    let closestEntity2Socket = null;
+                                    if (!entity.hasConnectionToEntityId(entity2)) {
+                                        for (let l = 0; l < entity.sockets.children.length; l++) {
+                                            let entitySocket = entity.sockets.children[l];
+                                            if (!Object.keys(entitySocket.connections).length) {
+                                                for (let p = 0; p < entity2.sockets.children.length; p++) {
+                                                    let entity2Socket = entity2.sockets.children[p];
+                                                    if (!Object.keys(entity2Socket.connections).length) {
+                                                        let socket1Pos = app.cstage.toLocal(entitySocket.position, entity, undefined, true);
+                                                        let socket2Pos = app.cstage.toLocal(entity2Socket.position, entity2, undefined, true);
+                                                        let socketDist = Math.distanceBetween(socket1Pos, socket2Pos);
+                                                        if (socketDist <= closestSocketDist) {
+                                                            closestEntitySocket = entitySocket;
+                                                            closestEntity2Socket = entity2Socket;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if (closestEntitySocket && closestEntity2Socket) {
+                                        closestEntitySocket.setConnection(entity2.id, closestEntity2Socket);
+                                    }
+                                }
+                            }
+
+                            if (entity.hasConnectionToEntityId(entity2.id) && dist > entity.width/2+entity2.width/2+10) {
+                                if (dist > entity.width+entity2.width) {
+                                    continue;
+                                }
+                                let pPos = app.cstage.toLocal(entity.currentTrack.bezier.get(entity.currentTrackT + (0.05 * entity.trackDirection)), entity.currentTrack, undefined, true);
+                                let pNeg = app.cstage.toLocal(entity.currentTrack.bezier.get(entity.currentTrackT - (0.05 * entity.trackDirection)), entity.currentTrack, undefined, true);
+
+                                let distDiff = dist-(entity.width/2+entity2.width/2+10);
+                                //let distDiffScaled = (distDiff / entity.currentTrack.bezier.length()) * entity.trackDirection;
+                                if (Math.distanceBetween(entity2, pPos) >= Math.distanceBetween(entity2, pNeg)) {
+                                    //entity.trackVelocity -= distDiffScaled/4;
+                                    entity.trackVelocity -= distDiff/entity.mass;
+                                    //entity.moveAlongBezier(-distDiffScaled/2);
+                                } else {
+                                    //entity.trackVelocity += distDiffScaled/4;
+                                    entity.trackVelocity += distDiff/entity.mass;
+                                    //entity.moveAlongBezier(distDiffScaled/2);
                                 }
                             }
                         }
