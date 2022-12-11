@@ -2710,7 +2710,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     if (entity.subtype === 'trainengine' && entity.currentTrack && Math.abs(entity.userThrottle) > 0) {
                         if (game.settings.quality === 'auto' || game.settings.quality === 'high') {
                             if (!entity.smokeTime || entity.smokeTime <= 0) {
-                                entity.smokeTime = 6 - Math.floor(entity.trackVelocity*0.5);
+                                entity.smokeTime = 6 - Math.floor(Math.abs(entity.trackVelocity)*0.5);
                                 let angle = (Math.PI * 2) * Math.random();
                                 let size = 70 + Math.round(Math.random() * 10);
                                 let speed = 0.25 + (Math.random() * 0.2);
