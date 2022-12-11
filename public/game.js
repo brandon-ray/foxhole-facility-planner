@@ -252,7 +252,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
         pointer: 'pointer.webp',
         bipointer: 'bipointer.webp',
         power: 'power.webp',
-        power_x128: 'power_x128.webp'
+        power_x128: 'power_x128.webp',
+        smoke_particles: 'smoke_particles.png'
     };
 
     for (let i=0; i<window.objectData.buildings_list.length; i++) {
@@ -305,6 +306,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }),
             train_wheel_loop: new Howl({
                 src: ['assets/train_wheel_loop.wav'],
+                loop: true,
+                volume: 0.25
+            }),
+            train_engine: new Howl({
+                src: ['assets/train_engine.wav'],
                 loop: true,
                 volume: 0.25
             })
@@ -1429,6 +1435,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
         return '#' + r + g + b;
     }
 
+    let windAngle = (Math.PI*2) * Math.random();
+    let windStrength = 0.01;
+    let environmentUpdateTime = Date.now() + 5000;
     function createEffect(type, x, y, z, width, height, data) {
         if (beforeRecordingStart) {
             return {};
@@ -1496,7 +1505,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
 
         if (effect.sprite && !disableLighting) {
-            effect.sprite.parentGroup = PIXI.lights.diffuseGroup;
+            //effect.sprite.parentGroup = PIXI.lights.diffuseGroup;
         }
 
         effect.lifetime = effect.maxLifetime;
@@ -1517,6 +1526,18 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
             if (effectSound && effectSound.stopped) {
                 effectSound = null;
+            }
+
+            if (type === 'smoke') {
+                let angle = windAngle;
+                let speed = windStrength;
+                effect.dx += Math.cos(angle) * speed;
+                effect.dy += Math.sin(angle) * speed;
+
+                let lifePercentage = (effect.lifetime/effect.maxLifetime);
+                effect.sprite.alpha = 0.75 * lifePercentage;
+                zOffset = 2000000 + (-25 * lifePercentage);
+                effect.scale.set(0.5 + ((1-(effect.lifetime/effect.maxLifetime)) * 2.5));
             }
 
             if (effect.sprite) {
@@ -1662,6 +1683,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         if (entity.isTrain) {
             entity.trackVelocity = 0;
             entity.trackDirection = 1;
+            entity.userThrottle = 0;
         }
 
         entity.setSelectionSize = function(width, height) {
@@ -2664,9 +2686,30 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         rate = 1;
                     }
 
-                    if (rate > 0.2) {
+                    if (entity.subtype === 'trainengine' && entity.currentTrack && Math.abs(entity.userThrottle) > 0) {
+                        if (game.settings.quality === 'auto' || game.settings.quality === 'high') {
+                            if (!entity.smokeTime || entity.smokeTime <= 0) {
+                                entity.smokeTime = 6 - Math.floor(entity.trackVelocity*0.5);
+                                let angle = (Math.PI * 2) * Math.random();
+                                let size = 70 + Math.round(Math.random() * 10);
+                                let speed = 0.25 + (Math.random() * 0.2);
+                                createEffect('smoke', entity.x + Math.cos(entity.rotation) * 90, entity.y + Math.sin(entity.rotation) * 90, entity.z, size, size, {
+                                    dx: Math.cos(angle) * (speed * Math.random()),
+                                    dy: Math.sin(angle) * (speed * Math.random()),
+                                    tint: 0xCCCCCC
+                                });
+                            }
+                            entity.smokeTime--;
+                        }
+                    }
+
+                    if (rate > 0.15) {
                         if (!sound) {
-                            sound = soundPlay(sounds['train_wheel_loop'], entity, 0.4);
+                            let soundKey = 'train_wheel_loop';
+                            if (entity.subtype === 'trainengine' && Math.abs(entity.userThrottle) >= 0.05) {
+                                soundKey = 'train_engine';
+                            }
+                            sound = soundPlay(sounds[soundKey], entity, 0.4);
                         }
 
                         if (sound) {
@@ -2904,8 +2947,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 }
                 entity.rotation = entity.currentTrack.rotation + (angle - Math.PI/2);
 
-                if (subtype === 'trainengine' && !entity.throttle) {
-                    entity.throttle = 0.01;
+                if (subtype === 'trainengine') {
+                    entity.throttle = 0.01 * entity.userThrottle;
                 }
 
                 entity.trackVelocity *= 0.999;
@@ -2922,23 +2965,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 if (entity.throttle) {
                     entity.trackVelocity += entity.throttle;
                 }
-
-                /*
-                for (let i = 0; i < entities.length; i++) {
-                    let entity2 = entities[i];
-                    if (entity2 !== entity && entity2.bezier && Math.distanceBetween(entity2, entity) < 2000) {
-                        const localPos = entity2.toLocal({x: entity.x + Math.cos(entity.angle) * 50, y: entity.y + Math.sin(entity.angle) * 50}, app.cstage, undefined, true);
-                        let projection = entity2.bezier.project({
-                            x: localPos.x,
-                            y: localPos.y
-                        });
-                        let local = app.cstage.toLocal({x: projection.x, y: projection.y}, entity2, undefined, true);
-                        entity.x = local.x;
-                        entity.y = local.y;
-                        break;
-                    }
-                }
-                */
             }
         };
 
@@ -2974,7 +3000,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     } else if (entity.currentTrackT <= 0) {
                         entity.currentTrackT = 0;
                     }
-                    entity.throttle *= -1;
+                    entity.userThrottle = 0;
                     entity.trackVelocity = 0;
                 }
             }
@@ -3192,6 +3218,17 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
         */
 
+        if (Date.now() >= environmentUpdateTime) {
+            environmentUpdateTime = Date.now() + 5000;
+            windAngle += -0.4 + (Math.random() * 0.8);
+            windStrength += -0.001 + (Math.random() * 0.002);
+            if (windStrength > 0.03) {
+                windStrength = 0.03;
+            } else if (windStrength < 0.005) {
+                windStrength = 0.005;
+            }
+        }
+
         if (!game.isPlayScreen) {
             if (!menuInit) {
                 MAP_WIDTH = WIDTH+5;
@@ -3203,7 +3240,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
 
         shuffle(entities);
-        const SOLVER_STEPS = 8;
+        const SOLVER_STEPS = 4;
         for (let k=0; k<SOLVER_STEPS; k++) {
             for (let i = 0; i < entities.length; i++) {
                 let entity = entities[i];
@@ -3292,14 +3329,16 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 let pNeg = app.cstage.toLocal(entity.currentTrack.bezier.get(entity.currentTrackT - (0.05 * entity.trackDirection)), entity.currentTrack, undefined, true);
 
                                 let distDiff = dist-(entity.width/2+entity2.width/2+10);
-                                //let distDiffScaled = (distDiff / entity.currentTrack.bezier.length()) * entity.trackDirection;
+                                let distDiffScaled = (distDiff / entity.currentTrack.bezier.length()) * entity.trackDirection;
                                 if (Math.distanceBetween(entity2, pPos) >= Math.distanceBetween(entity2, pNeg)) {
                                     //entity.trackVelocity -= distDiffScaled/4;
                                     entity.trackVelocity -= distDiff/entity.mass;
+                                    //entity.moveAlongBezier(distDiffScaled/2);
                                     //entity.moveAlongBezier(-distDiffScaled/2);
                                 } else {
                                     //entity.trackVelocity += distDiffScaled/4;
                                     entity.trackVelocity += distDiff/entity.mass;
+                                    //entity.moveAlongBezier(distDiffScaled/2);
                                     //entity.moveAlongBezier(distDiffScaled/2);
                                 }
                             }

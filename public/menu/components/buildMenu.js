@@ -187,7 +187,11 @@ Vue.component('app-menu-building-selected', {
                     productionScale: selectedEntity.productionScale,
                     building: selectedEntity.building,
                     label: selectedEntity.label?.text,
-                    style: Object.assign({}, selectedEntity.labelStyle ?? selectedEntity.shapeStyle)
+                    style: Object.assign({}, selectedEntity.labelStyle ?? selectedEntity.shapeStyle),
+                    isTrain: selectedEntity.isTrain
+                };
+                if (selectedEntity.isTrain) {
+                    this.entity.userThrottle = selectedEntity.userThrottle;
                 }
                 this.updateProduction();
                 if (this.entity.type === 'shape') {
@@ -228,6 +232,7 @@ Vue.component('app-menu-building-selected', {
                         style.lineColor = parseInt(style.lineColor.slice(1), 16);
                         selectedEntity.setShapeStyle(style);
                     }
+
                     if (game.statisticsMenuComponent) {
                         game.statisticsMenuComponent.refresh();
                     }
@@ -398,6 +403,10 @@ Vue.component('app-menu-building-selected', {
                     @mouseenter="showUpgradeHover(key, upgrade)" @mouseleave="showUpgradeHover" @click="changeUpgrade(key)">
                     <div class="resource-icon" :title="upgrade.name" :style="{backgroundImage:'url(/assets/' + (upgrade.icon ?? entity.building.icon) + ')'}"></div>
                 </button>
+            </div>
+            <div v-if="entity.isTrain">
+                <h2>Throttle ({{Math.round(entity.userThrottle*100)}}%)</h2>
+                <input type="range" class="slider w-100" v-model.number="entity.userThrottle" min="-1" :max="1" step="0.1" @input="game.getSelectedEntity().userThrottle = entity.userThrottle">
             </div>
             <div v-if="productionData" class="settings-option-wrapper">
                 <div class="settings-title">
