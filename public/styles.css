@@ -832,7 +832,7 @@ input[type=number].btn-small {
 .close-statistics-button, .footer-button, .btn-small {
     width: 30px;
     height: 30px;
-    line-height: 27px;
+    line-height: 26px;
     margin: 6px 6px 6px 0;
     font-size: 1.15em;
     float: right;

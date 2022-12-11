@@ -614,8 +614,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
         constructionCursor = new PIXI.Graphics();
         constructionCursor.visible = false;
         constructionCursor.alpha = 0.75;
-        constructionCursor.lineStyle(SELECTION_BORDER_WIDTH, COLOR_SELECTION_BORDER).moveTo(-20, 0).lineTo(20, 0);
-        constructionCursor.lineStyle(SELECTION_BORDER_WIDTH, COLOR_SELECTION_BORDER).moveTo(0, 20).lineTo(0, -20);
+        constructionCursor.lineStyle(SELECTION_BORDER_WIDTH, COLOR_WHITE).moveTo(-20, 0).lineTo(20, 0);
+        constructionCursor.lineStyle(SELECTION_BORDER_WIDTH, COLOR_WHITE).moveTo(0, 20).lineTo(0, -20);
         constructionCursor.getZIndex = function () {
             return -1000000000;
         };
@@ -1092,7 +1092,14 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             selectionArea.origin = { x: gmx, y: gmy };
                         }
                     } else if (constructionCursor) {
-                        const entity = game.create(game.constructionMode.eType, game.constructionMode.eSubType, constructionCursor.x, constructionCursor.y);
+                        let gmxGrid = gmx;
+                        let gmyGrid = gmy;
+                        if (game.settings.enableGrid || keys[16]) {
+                            let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
+                            gmxGrid = Math.round(gmxGrid / gridSize) * gridSize;
+                            gmyGrid = Math.round(gmyGrid / gridSize) * gridSize;
+                        }
+                        const entity = game.create(game.constructionMode.eType, game.constructionMode.eSubType, gmxGrid, gmyGrid);
                         if (entity.hasHandle) {
                             entity.grabHandlePoint();
                         }
@@ -1139,15 +1146,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
         if (constructionCursor) {
             constructionCursor.visible = game.constructionMode.key !== 'select';
             if (constructionCursor.visible) {
-                let gmxGrid = gmx;
-                let gmyGrid = gmy;
-                if (game.settings.enableGrid || keys[16]) {
-                    let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
-                    gmxGrid = Math.round(gmxGrid / gridSize) * gridSize;
-                    gmyGrid = Math.round(gmyGrid / gridSize) * gridSize;
-                }
-                constructionCursor.x = gmxGrid;
-                constructionCursor.y = gmyGrid;
+                constructionCursor.x = gmx;
+                constructionCursor.y = gmy;
             }
         }
 
@@ -1783,9 +1783,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 entity.setSelectionSize(buildingWidth, buildingLength);
             } else {
                 entity.selectionArea.clear();
-                entity.selectionArea.beginFill(COLOR_ORANGE);
-                entity.selectionArea.drawRect(-8, -8, 16, 16);
-                entity.selectionArea.endFill();
             }
 
             const socketWidth = 32, socketThickness = 6, powerSocketSize = 8;
@@ -1867,8 +1864,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                     }
                                 }
                                 if (!connectingSocket) {
-                                    console.log('okay we might have to create the connection here, ALL SOCKETS SHOULD ALREADY EXIST, HOPEFULLY');
-                                    // socket.createConnection(connectingEntity, socket.socketData.x, socket.socketData.y, socket.socketData.rotation);
+                                    const socketPosition = connectingEntity.toLocal(socket, entity);
+                                    socket.createConnection(connectingEntity, socketPosition.x, socketPosition.y, (entity.rotation + socket.rotation) + Math.PI);
                                 }
                             }
                         }
@@ -1889,6 +1886,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         if (connectingSocket) {
                             if (connectingSocket.socketData.cap) {
                                 entity.removeConnections(socket.id);
+                                console.log('hmmm 2');
+                                //entity.removeConnections(socket.id);
                                 connectingSocket = null;
                             } else {
                                 connectingSocket.position.set(x, y);
@@ -2197,27 +2196,41 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         }
                     }
                 }
+
+                if (entity.type === 'shape') {
+                    for (const[key, value] of Object.entries(entity.shapeStyle)) {
+                        if (value !== DEFAULT_SHAPE_STYLE[key]) {
+                            if (!entityData.shapeStyle) {
+                                entityData.shapeStyle = {};
+                            }
+                            entityData.shapeStyle[key] = value;
+                        }
+                    }
+                }
             };
 
             entity.onLoad = function(entityData) {
-                if (entity.building) {
-                    if (typeof entityData.selectedProduction === 'number') {
-                        entity.productionScale = entityData.productionScale;
-                        entity.setProductionId(entityData.selectedProduction);
-                    }
+                if (entity.building && typeof entityData.selectedProduction === 'number') {
+                    entity.productionScale = entityData.productionScale;
+                    entity.setProductionId(entityData.selectedProduction);
+                }
 
-                    if (entity.hasHandle && entityData.railPoints) {
-                        for (let i=0; i<points.length; i++) {
-                            let point = points[i];
-                            entity.removeChild(point.handle);
-                        }
-                        points = [];
-                        for (let i=0; i<entityData.railPoints.length; i++) {
-                            let point = entityData.railPoints[i];
-                            entity.addPoint(point.x, point.y, null, point.rotation);
-                        }
-                        entity.regenerate();
+                if (entity.hasHandle && entityData.railPoints) {
+                    for (let i=0; i<points.length; i++) {
+                        let point = points[i];
+                        entity.removeChild(point.handle);
                     }
+                    points = [];
+                    for (let i=0; i<entityData.railPoints.length; i++) {
+                        let point = entityData.railPoints[i];
+                        entity.addPoint(point.x, point.y, null, point.rotation);
+                    }
+                    entity.regenerate();
+                }
+
+                if (entity.type === 'shape') {
+                    Object.assign(entity.shapeStyle, entityData.shapeStyle);
+                    entity.setShapeStyle(entity.shapeStyle);
                 }
             };
 
@@ -2235,16 +2248,18 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 };
                 points.splice(index, 0, newPoint);
 
-                if (index !== 0) {
-                    let handle = new PIXI.Sprite(resources.white.texture);
-                    handle.anchor.set(0.5);
-                    handle.visible = entity.selected;
-                    handle.width = 16;
-                    handle.height = 16;
-                    handle.position.x = newPoint.x;
-                    handle.position.y = newPoint.y;
-                    entity.addChild(handle);
-                    newPoint.handle = handle;
+                let handle = new PIXI.Sprite(resources.white.texture);
+                handle.anchor.set(0.5);
+                handle.visible = entity.selected;
+                handle.width = 16;
+                handle.height = 16;
+                handle.position.x = newPoint.x;
+                handle.position.y = newPoint.y;
+                entity.addChild(handle);
+                newPoint.handle = handle;
+
+                if (index === 0) {
+                    handle.tint = COLOR_ORANGE;
                 }
 
                 entity.regenerate();
@@ -2471,9 +2486,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 }
 
                 entity.selectionArea.clear();
-                entity.selectionArea.beginFill(COLOR_ORANGE);
-                entity.selectionArea.drawRect(-8, -8, 16, 16);
-                entity.selectionArea.endFill();
             }
 
             if (entity.hasHandle) {
@@ -2757,6 +2769,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                     continue;
                                 }
                                 if (entity2.sockets && (entity.building?.canSnapStructureType !== false || entity.subtype !== entity2.subtype)) {
+                                    if (entity.hasConnectionToEntityId(entity2.id)) {
+                                        connectionEstablished = true;
+                                        continue;
+                                    }
                                     const mousePos2 = entity2.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
                                     let nearestSocket, nearestSocketPos, nearestSocketDist = null;
                                     for (let i = 0; i < entity2.sockets.children.length; i++) {
@@ -2796,7 +2812,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 if (!connectionEstablished && entity2.bezier && entity2.building?.isBezier && entity2.building?.canSnapAlongBezier && entity.subtype === entity2.subtype) {
                                     let selectedPointToEntity2Local = entity2.toLocal(selectedHandlePoint, entity, undefined, true);
                                     let projection = entity2.bezier.project(selectedPointToEntity2Local);
-                                    if (projection.d <= (entity2.building?.lineWidth ?? 25)) {
+                                    if (projection.d <= (entity2.building?.lineWidth ?? 25) && (!entity.building?.maxLength || Math.distanceBetween(entity, {x: gmx, y: gmy}) <= entity.building.maxLength * METER_PIXEL_SIZE)) {
                                         let local = entity.toLocal({x: projection.x, y: projection.y}, entity2, undefined, true);
                                         let normal = entity2.bezier.normal(projection.t);
                                         let angle = Math.angleBetween({x: 0, y: 0}, normal);
@@ -3511,7 +3527,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                         pickupEntity.rotation = angleLeft + Math.PI/2;
                                     }
 
-                                    if (pickupEntity.sockets && (pickupEntity.subtype === 'rail_large_gauge' || pickupEntity.subtype === 'rail_small_gauge')) {
+                                    if (!connectionEstablished && pickupEntity.sockets && (pickupEntity.subtype === 'rail_large_gauge' || pickupEntity.subtype === 'rail_small_gauge')) {
                                         for (let k = 0; k < pickupEntity.sockets.children.length; k++) {
                                             let pickupSocket = pickupEntity.sockets.children[k];
                                             if (pickupSocket.socketData.cap === 'front') {
