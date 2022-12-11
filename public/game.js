@@ -871,10 +871,13 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     }
                 }
             }
-            for (let i = 0; i < saveObject.entities.length; i++) {
-                let entityData = saveObject.entities[i];
-                entityData.createdEntity?.afterLoad(entityData, entityIdMap);
-            }
+            setTimeout(() => {
+                for (let i = 0; i < saveObject.entities.length; i++) {
+                    let entityData = saveObject.entities[i];
+                    entityData.createdEntity?.afterLoad(entityData, entityIdMap);
+                }
+            }, 1);
+
             if (isSelection) {
                 let centerPos = {
                     x: Math.round(xTotal/saveObject.entities.length),
@@ -2117,6 +2120,25 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         }
                     }
                 }
+
+                if (entity.isTrain) {
+                    for (let i = 0; i < entities.length; i++) {
+                        let entity2 = entities[i];
+                        if (entity !== entity2 && entity2.bezier) {
+                            const entPos = entity2.toLocal({x: entity.x, y: entity.y}, app.cstage, undefined, true);
+                            const projection = entity2.bezier?.project(entPos);
+
+                            if (projection && projection.d <= (entity2.building?.lineWidth ?? 25)) {
+                                let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity2, undefined, true);
+                                entity.x = global.x;
+                                entity.y = global.y;
+
+                                entity.currentTrack = entity2;
+                                entity.currentTrackT = projection.t;
+                            }
+                        }
+                    }
+                }
             }
 
             function createProductionIcon(icon) {
@@ -2973,10 +2995,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 if (Math.abs(entity.trackVelocity) <= 0.0001) {
                     entity.trackVelocity = 0;
                 }
-                if (entity.trackVelocity > 10) {
-                    entity.trackVelocity = 10;
-                } else if (entity.trackVelocity < -10) {
-                    entity.trackVelocity = -10;
+                if (entity.trackVelocity > 15) {
+                    entity.trackVelocity = 15;
+                } else if (entity.trackVelocity < -15) {
+                    entity.trackVelocity = -15;
                 }
                 entity.moveAlongBezier((entity.trackVelocity/entity.currentTrack.bezier.length()) * entity.trackDirection);
 
@@ -3257,15 +3279,34 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
         }
 
-        shuffle(entities);
+        let vehicles = [];
+        for (let i=0; i<entities.length; i++) {
+            let entity = entities[i];
+            if (entity.valid) {
+                entity.tick(delta);
+
+                if (entity.isTrain) {
+                    vehicles.push(entity);
+                }
+            } else {
+                entities.splice(i, 1);
+                if (entities.length === 0) {
+                    _entityIds = 0;
+                }
+                i--;
+                entity.afterRemove();
+            }
+        }
+
+        shuffle(vehicles);
         const SOLVER_STEPS = 4;
         for (let k=0; k<SOLVER_STEPS; k++) {
-            for (let i = 0; i < entities.length; i++) {
-                let entity = entities[i];
+            for (let i = 0; i < vehicles.length; i++) {
+                let entity = vehicles[i];
                 if (entity.valid && entity.isTrain && entity.currentTrack) {
-                    for (let j=entities.length-1; j>=0; j--) {
+                    for (let j=vehicles.length-1; j>=0; j--) {
                         if (i !== j) {
-                            let entity2 = entities[j];
+                            let entity2 = vehicles[j];
                             if (!entity2 || !entity2.isTrain || !entity2.currentTrack) {
                                 continue;
                             }
@@ -3349,34 +3390,16 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 let distDiff = dist-(entity.width/2+entity2.width/2+10);
                                 let distDiffScaled = (distDiff / entity.currentTrack.bezier.length()) * entity.trackDirection;
                                 if (Math.distanceBetween(entity2, pPos) >= Math.distanceBetween(entity2, pNeg)) {
-                                    //entity.trackVelocity -= distDiffScaled/4;
                                     entity.trackVelocity -= distDiff/entity.mass;
-                                    //entity.moveAlongBezier(distDiffScaled/2);
-                                    //entity.moveAlongBezier(-distDiffScaled/2);
+                                    entity.moveAlongBezier(-distDiffScaled/2);
                                 } else {
-                                    //entity.trackVelocity += distDiffScaled/4;
                                     entity.trackVelocity += distDiff/entity.mass;
-                                    //entity.moveAlongBezier(distDiffScaled/2);
-                                    //entity.moveAlongBezier(distDiffScaled/2);
+                                    entity.moveAlongBezier(distDiffScaled/2);
                                 }
                             }
                         }
                     }
                 }
-            }
-        }
-
-        for (let i=0; i<entities.length; i++) {
-            let entity = entities[i];
-            if (entity.valid) {
-                entity.tick(delta);
-            } else {
-                entities.splice(i, 1);
-                if (entities.length === 0) {
-                    _entityIds = 0;
-                }
-                i--;
-                entity.afterRemove();
             }
         }
 
