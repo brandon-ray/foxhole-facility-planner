@@ -128,6 +128,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
     let entities = [];
     let selectedEntities = [];
     let selectedHandlePoint = null;
+    let followEntity = null;
     let pickupSelectedEntities = false;
     let pickupTime = null;
     let pickupPosition = null;
@@ -189,6 +190,20 @@ const fontFamily = ['Recursive', 'sans-serif'];
     game.getSelectedEntities = () => {
         return selectedEntities;
     };
+
+    game.followEntity = function(entity) {
+        if (entity !== followEntity) {
+            if (followEntity) {
+                followEntity.following = false;
+            }
+            followEntity = entity;
+            if (followEntity) {
+                followEntity.following = true;
+            } else {
+                game.buildingSelectedMenuComponent?.refresh();
+            }
+        }
+    }
 
     game.setConstructionMode = function(mode) {
         mode = mode ?? game.constructionModes[game.constructionModes.length - 1];
@@ -1054,6 +1069,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
         mx = e.clientX;
         my = e.clientY;
 
+        game.followEntity(null);
+
         let mouseButton = e.button;
         mouseDown[mouseButton] = true;
         if (mouseButton === 0) {
@@ -1872,7 +1889,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 socket.setConnection = function(connectingEntityId, connectingSocket, connectingSocketId) {
                     if (!isNaN(connectingEntityId) && (typeof connectingSocketId === 'number' || connectingSocket?.socketData) && (isNaN(socket.connections[connectingEntityId]) || socket.connections[connectingEntityId] !== (connectingSocketId ?? connectingSocket.socketData.id))) {
                         if (connectingSocket) {
-                            entity.removeConnections(socket.socketData.id);
+                            socket.removeConnections();
                             connectingSocket.connections[entity.id] = socket.socketData.id;
                             connectingSocket.setVisible(false);
                         } else {
@@ -1907,9 +1924,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         }
                         if (connectingSocket) {
                             if (connectingSocket.socketData.cap) {
-                                entity.removeConnections(socket.id);
-                                console.log('hmmm 2');
-                                //entity.removeConnections(socket.id);
+                                socket.removeConnections();
                                 connectingSocket = null;
                             } else {
                                 connectingSocket.position.set(x, y);
@@ -1926,8 +1941,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             if (connectingSocket) {
                                 connectingSocket.connections[entity.id] = socket.socketData.id;
                                 if (typeof socket.connections[connectingEntity.id] === 'number') {
-                                    console.log('oh that is not good, I might have to look into this');
-                                    entity.removeConnections(socket.socketData.id);
+                                    //console.log('oh that is not good, I might have to look into this');
+                                    socket.removeConnections();
                                 }
                                 socket.connections[connectingEntity.id] = connectingSocket.socketData.id;
                                 socket.setVisible(false);
@@ -1935,6 +1950,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         }
                     }
                 }
+                socket.removeConnections = () => entity.removeConnections(socket.socketData.id);
                 socket.setVisible = function(visible) {
                     if (!ENABLE_DEBUG) {
                         if (socket.socketData.type !== 'power') {
@@ -2030,6 +2046,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 }
                 return false;
             }
+
+            entity.hasConnectionToEntity = (connectingEntity) => entity.hasConnectionToEntityId(connectingEntity.id);
 
             entity.removeConnections = function(socketId) {
                 if (entity.sockets) {
@@ -2575,6 +2593,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
             if (entity.selected) {
                 game.removeSelectedEntity(entity);
             }
+            if (entity.following) {
+                game.followEntity(null);
+            }
             if (selectedHandlePoint) {
                 selectedHandlePoint = null;
             }
@@ -2812,10 +2833,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                     continue;
                                 }
                                 if (entity2.sockets && (entity.building?.canSnapStructureType !== false || entity.subtype !== entity2.subtype)) {
-                                    if (entity.hasConnectionToEntityId(entity2.id)) {
-                                        connectionEstablished = true;
-                                        continue;
-                                    }
                                     const mousePos2 = entity2.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
                                     let nearestSocket, nearestSocketPos, nearestSocketDist = null;
                                     for (let i = 0; i < entity2.sockets.children.length; i++) {
@@ -2824,7 +2841,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                             const socketDistance = Math.distanceBetween(mousePos2, entitySocket);
                                             if ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || entity.subtype === 'power_line' && entity2.canGrab()) {
                                                 const entityConnections = Object.keys(entitySocket.connections).length;
-                                                if (entitySocket.connections[entity.id] === handleSocket.socketData.id || (!entity.hasConnectionToEntityId(entity2.id) && (entityConnections === 0 || entityConnections < entitySocket.socketData.connectionLimit))) {
+                                                if (entitySocket.connections[entity.id] === handleSocket.socketData.id || (!entity.hasConnectionToEntity(entity2) && (entityConnections === 0 || entityConnections < entitySocket.socketData.connectionLimit))) {
                                                     nearestSocketPos = app.cstage.toLocal({x: entitySocket.x, y: entitySocket.y}, entity2, undefined, true);
                                                     if (Math.distanceBetween(entity, nearestSocketPos) <= (entity.building?.maxLength * METER_PIXEL_SIZE)) {
                                                         nearestSocket = entitySocket;
@@ -2852,6 +2869,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                         }
                                     }
                                 }
+                                // TODO: Prevent an entity from connecting to something they are already attached to.
                                 if (!connectionEstablished && entity2.bezier && entity2.building?.isBezier && entity2.building?.canSnapAlongBezier && entity.subtype === entity2.subtype) {
                                     let selectedPointToEntity2Local = entity2.toLocal(selectedHandlePoint, entity, undefined, true);
                                     let projection = entity2.bezier.project(selectedPointToEntity2Local);
@@ -2886,7 +2904,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 }
                             }
                             if (handleSocket && !connectionEstablished) {
-                                entity.removeConnections(handleSocket.socketData.id);
+                                handleSocket.removeConnections();
                             }
                         }
 
@@ -3295,7 +3313,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                     let closestSocketDist = 25;
                                     let closestEntitySocket = null;
                                     let closestEntity2Socket = null;
-                                    if (!entity.hasConnectionToEntityId(entity2)) {
+                                    if (!entity.hasConnectionToEntity(entity2)) {
                                         for (let l = 0; l < entity.sockets.children.length; l++) {
                                             let entitySocket = entity.sockets.children[l];
                                             if (!Object.keys(entitySocket.connections).length) {
@@ -3321,7 +3339,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 }
                             }
 
-                            if (entity.hasConnectionToEntityId(entity2.id) && dist > entity.width/2+entity2.width/2+10) {
+                            if (entity.hasConnectionToEntity(entity2) && dist > entity.width/2+entity2.width/2+10) {
                                 if (dist > entity.width+entity2.width) {
                                     continue;
                                 }
@@ -3623,6 +3641,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     }
                 }
             }
+        } else if (followEntity) {
+            camera.x = (followEntity.x * camera.zoom) - WIDTH/2;
+            camera.y = (followEntity.y * camera.zoom) - HEIGHT/2;
         }
 
         for (let i = 0; i < entities.length; i++) {

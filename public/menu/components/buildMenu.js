@@ -155,6 +155,7 @@ Vue.component('app-menu-building-selected', {
                 rotationDegrees: 0,
                 selectedProduction: null,
                 productionScale: null,
+                following: false,
                 label: null,
                 style: null
             },
@@ -186,6 +187,7 @@ Vue.component('app-menu-building-selected', {
                     selectedProduction: selectedEntity.selectedProduction,
                     productionScale: selectedEntity.productionScale,
                     building: selectedEntity.building,
+                    following: selectedEntity.following,
                     label: selectedEntity.label?.text,
                     style: Object.assign({}, selectedEntity.labelStyle ?? selectedEntity.shapeStyle),
                     isTrain: selectedEntity.isTrain
@@ -272,13 +274,15 @@ Vue.component('app-menu-building-selected', {
                             this.productionData.max = Math.floor((production.time > 3600 ? 86400 : 3600) / production.time);
                             if (this.productionData.max > 0) {
                                 this.entity.productionScale = this.entity.productionScale ?? this.productionData.max;
-                                selectedEntity.productionScale = this.entity.productionScale;
+                                if (selectedEntity.productionScale !== this.entity.productionScale) {
+                                    selectedEntity.productionScale = this.entity.productionScale;
+                                    game.statisticsMenuComponent?.refresh();
+                                }
                             }
                             break;
                         }
                     }
                 }
-                game.statisticsMenuComponent?.refresh();
             }
         },
         changeUpgrade: function(upgrade) {
@@ -314,6 +318,11 @@ Vue.component('app-menu-building-selected', {
             if (this.entity && this.entity.type === 'text') {
                 this.$nextTick(() => this.$refs.label?.focus());
             }
+        },
+        toggleFollow: function() {
+            this.entity.following = !this.entity.following;
+            let selectedEntity = game.getSelectedEntity();
+            game.followEntity(this.entity.following && selectedEntity ? selectedEntity : null);
         }
     },
     template: html`
@@ -335,6 +344,7 @@ Vue.component('app-menu-building-selected', {
             <div class="settings-option-wrapper">
                 <div v-if="entity.building" class="settings-title">
                     {{entity.building.parentName ? entity.building.parentName : entity.building.name}}
+                    <button v-if="entity.building?.category === 'vehicles'" class="btn-small m-0" :class="{ 'btn-active': entity.following }" title="Follow" @click="toggleFollow"><i class="fa fa-crosshairs" aria-hidden="true"></i></button>
                 </div>
                 <label class="app-input-label">
                     <i class="fa fa-arrows" aria-hidden="true"></i> Position X:
