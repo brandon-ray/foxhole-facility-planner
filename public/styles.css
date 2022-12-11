@@ -1233,7 +1233,7 @@ input[type=number].btn-small {
     float: left;
 }
 
-.settings-option-wrapper .settings-option .btn-small.btn-active {
+.btn-small.btn-active {
     color: #ff8034;
 }
 
