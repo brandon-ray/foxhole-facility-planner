@@ -3088,7 +3088,15 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 const projection = entity.currentTrack.bezier?.project(entity.currentTrack.toLocal({x: entity.x, y: entity.y}, app.cstage, undefined, true));
                 entity.currentTrackT = projection.t;
 
-                if (Math.abs(entity.lastTrackT - entity.currentTrackT) <= 0.1) {
+                let normal = entity.currentTrack.bezier.normal(entity.currentTrackT);
+                let newAngle = Math.angleBetween({x: 0, y: 0}, normal);
+                if (entity.trackDirection === -1) {
+                    newAngle += Math.PI;
+                }
+                newAngle = Math.normalizeAngleRadians(entity.currentTrack.rotation + (newAngle - Math.PI/2));
+                let currentAngle = Math.normalizeAngleRadians(entity.rotation);
+
+                if (Math.abs(currentAngle-newAngle) >= Math.PI/2) {
                     entity.trackDirection *= -1;
                 }
             }
@@ -3760,6 +3768,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
     };
     Math.rad2deg = function(radians) {
         return radians * (180/Math.PI);
+    };
+    Math.normalizeAngleRadians = function(radians) {
+        return radians - Math.PI2 * Math.floor(radians / Math.PI2);
     };
     Math.magnitude = function (p1) {
         return Math.hypot(p1.dx, p1.dy);
