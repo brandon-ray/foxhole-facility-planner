@@ -109,7 +109,7 @@ const foxholeData = {
 		},
 		"battletankatc": {
 			"name": "Lance-25 “Hasta”",
-			"description": "A lighter Lance variation, the 25, or “Hasta”, was employed in the first siege on Brightwall, a city now colloquially referred to as, “The Blemish”. Bombarded by heavy storms and dense fog in northern Veli, Colonial tank regiments requested a heavy vehicle with improved visibility with a wider field of view to protect flanks. Fitted with a 94.5mm turret, the “Hasta” is a capable tank destroyer.",
+			"description": "A heavy Lance variation, the 25, or “Hasta”, was employed in the first siege on Brightwall, a city now colloquially referred to as, “The Blemish”. Bombarded by heavy, armoured resistance in northern Veli, Colonial tank regiments requested a heavy vehicle with more effective search and destroy capabilities. Fitted with a front-facing 94.5mm cannon, the “Hasta” is a more than capable tank destroyer.",
 			"icon": "game/Textures/UI/VehicleIcons/BattleTankATCIcon.webp"
 		},
 		"battletankc": {
@@ -301,7 +301,7 @@ const foxholeData = {
 			"icon": "game/Textures/UI/ItemIcons/GarrisonSuppliesIcon.webp"
 		},
 		"grenadelaunchertc": {
-			"name": "Fissura gd.I",
+			"name": "Mounted Fissura gd.I",
 			"description": "Capable of firing different grenades, quickly and at long range, the Fissura gd.I is mobile enough for easy transport, while increasing the effectiveness of infantry ordinance. ",
 			"icon": "game/Textures/UI/ItemIcons/GrenadeLauncherTCIcon.webp"
 		},
