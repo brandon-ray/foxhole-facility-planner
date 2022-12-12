@@ -2144,7 +2144,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 if (entity.isTrain) {
                     for (let i = 0; i < entities.length; i++) {
                         let entity2 = entities[i];
-                        if (entity !== entity2 && entity2.bezier) {
+                        if (entity !== entity2 && entity2.bezier && entity2.subtype === 'rail_large_gauge') {
                             const entPos = entity2.toLocal({x: entity.x, y: entity.y}, app.cstage, undefined, true);
                             const projection = entity2.bezier?.project(entPos);
 
@@ -3604,7 +3604,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                     }
                                 }
 
-                                if (projection && ((!connectionEstablished && entity.bezier && entity.building?.isBezier && entity.building?.canSnapAlongBezier && pickupEntity.subtype === entity.subtype) || pickupEntity.isTrain)) {
+                                if (projection && ((!connectionEstablished && entity.bezier && entity.building?.isBezier && entity.building?.canSnapAlongBezier && pickupEntity.subtype === entity.subtype) || (pickupEntity.isTrain && entity.subtype === 'rail_large_gauge'))) {
                                     let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity, undefined, true);
                                     let normal = entity.bezier.normal(projection.t);
                                     let angle = Math.angleBetween({x: 0, y: 0}, normal);
