@@ -3024,7 +3024,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 if (entity.trackDirection === -1) {
                     angle += Math.PI;
                 }
-                entity.rotation = entity.currentTrack.rotation + (angle - Math.PI/2);
+                entity.rotation = Math.normalizeAngleRadians(entity.currentTrack.rotation + (angle - Math.PI/2));
 
                 if (subtype === 'trainengine') {
                     entity.throttle = 0.01 * entity.userThrottle;
@@ -3093,10 +3093,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 if (entity.trackDirection === -1) {
                     newAngle += Math.PI;
                 }
-                newAngle = Math.normalizeAngleRadians(entity.currentTrack.rotation + (newAngle - Math.PI/2));
+                newAngle = Math.normalizeAngleRadians(entity.currentTrack.rotation + (newAngle - Math.PI / 2));
                 let currentAngle = Math.normalizeAngleRadians(entity.rotation);
-
-                if (Math.abs(currentAngle-newAngle) >= Math.PI/2) {
+                if (Math.abs(Math.differenceBetweenAngles(currentAngle, newAngle)) >= Math.PI / 2) {
                     entity.trackDirection *= -1;
                 }
             }
@@ -3338,7 +3337,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             if (entity.valid) {
                 entity.tick(delta);
 
-                if (entity.isTrain) {
+                if (entity.isTrain && entity.currentTrack) {
                     vehicles.push(entity);
                 }
             } else {
@@ -3772,6 +3771,14 @@ const fontFamily = ['Recursive', 'sans-serif'];
     Math.normalizeAngleRadians = function(radians) {
         return radians - Math.PI2 * Math.floor(radians / Math.PI2);
     };
+    Math.differenceBetweenAngles = function(current, target) {
+        let mod = function ( a, n ) { return ( a % n + n ) % n; }
+
+        let a = mod( ( current - target ), Math.PI2 );
+        let b = mod( ( target - current ), Math.PI2 );
+
+        return a < b ? -a : b;
+    }
     Math.magnitude = function (p1) {
         return Math.hypot(p1.dx, p1.dy);
     };
