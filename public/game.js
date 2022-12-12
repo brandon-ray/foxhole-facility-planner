@@ -837,11 +837,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
         setTimeout(() => {
             let xTotal = 0, yTotal = 0;
-            let entityIds = _entityIds;
             let entityIdMap = {};
-            if (typeof saveObject.entityIds === 'number') {
-                _entityIds += saveObject.entityIds;
-            }
             for (let i = 0; i < saveObject.entities.length; i++) {
                 let entityData = saveObject.entities[i];
                 let entity;
@@ -849,7 +845,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     case 'building':
                     case 'text':
                     case 'shape':
-                        entity = createSelectableEntity(entityData.type, entityData.subtype, parseFloat(entityData.x), parseFloat(entityData.y), parseInt(entityData.z), entityData.rotation, isNaN(entityData.id) ? undefined : entityIds + parseInt(entityData.id));
+                        entity = createSelectableEntity(entityData.type, entityData.subtype, parseFloat(entityData.x), parseFloat(entityData.y), parseInt(entityData.z), entityData.rotation, isNaN(entityData.id) ? undefined : _entityIds + parseInt(entityData.id));
                         break;
                     default:
                         console.error('Attempted to load invalid entity:', entityData);
