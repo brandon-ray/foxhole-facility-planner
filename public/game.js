@@ -849,7 +849,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     case 'building':
                     case 'text':
                     case 'shape':
-                        entity = createSelectableEntity(entityData.type, entityData.subtype, parseFloat(entityData.x), parseFloat(entityData.y), parseInt(entityData.z), isNaN(entityData.id) ? undefined : entityIds + parseInt(entityData.id));
+                        entity = createSelectableEntity(entityData.type, entityData.subtype, parseFloat(entityData.x), parseFloat(entityData.y), parseInt(entityData.z), entityData.rotation, isNaN(entityData.id) ? undefined : entityIds + parseInt(entityData.id));
                         break;
                     default:
                         console.error('Attempted to load invalid entity:', entityData);
@@ -861,7 +861,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     if (entity.id !== entityData.id) {
                         entityIdMap[entityData.id] = entity.id;
                     }
-                    entity.rotation = entityData.rotation;
                     entity.locked = entityData.locked;
                     entity.onLoad(entityData);
                     if (isSelection) {
@@ -1575,7 +1574,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         };
 
         effect.getZIndex = function () {
-            return -effect.y - zOffset;
+            return (-effect.y - zOffset) - 6000000;
         };
 
         effect.isVisible = function () {
@@ -1667,8 +1666,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
         backArrow: true
     });
 
-    function createSelectableEntity(type, subtype, x, y, z, id, netData) {
+    function createSelectableEntity(type, subtype, x, y, z, rotation, id, netData) {
         let entity = createEntity(type, subtype, x, y, z, id, netData);
+        
+        entity.rotation = rotation ?? 0;
 
         // TODO: Change building to metaData.
         let building;
@@ -1895,7 +1896,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             socket.removeConnections();
                             connectingSocket.connections[entity.id] = socket.socketData.id;
                             connectingSocket.setVisible(false);
-                        } else {
+                        } else if (typeof connectingSocketId !== 'number') {
                             const connectingEntity = game.getEntityById(connectingEntityId);
                             if (connectingEntity.sockets) {
                                 for (let i = 0; i < connectingEntity.sockets.children.length; i++) {
@@ -1907,7 +1908,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 }
                                 if (!connectingSocket) {
                                     const socketPosition = connectingEntity.toLocal(socket, entity);
-                                    socket.createConnection(connectingEntity, socketPosition.x, socketPosition.y, (entity.rotation + socket.rotation) + Math.PI);
+                                    connectingSocket = socket.createConnection(connectingEntity, socketPosition.x, socketPosition.y, (entity.rotation + socket.rotation) + Math.PI);
                                 }
                             }
                         }
@@ -1923,6 +1924,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             const socket2 = connectingEntity.sockets.children[i];
                             if (typeof socket2.connections[entity.id] === 'number') {
                                 connectingSocket = socket2;
+                                break;
                             }
                         }
                         if (connectingSocket) {
@@ -1944,14 +1946,15 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             if (connectingSocket) {
                                 connectingSocket.connections[entity.id] = socket.socketData.id;
                                 if (typeof socket.connections[connectingEntity.id] === 'number') {
-                                    //console.log('oh that is not good, I might have to look into this');
                                     socket.removeConnections();
                                 }
                                 socket.connections[connectingEntity.id] = connectingSocket.socketData.id;
                                 socket.setVisible(false);
+                                return connectingSocket;
                             }
                         }
                     }
+                    return false;
                 }
                 socket.removeConnections = () => entity.removeConnections(socket.socketData.id);
                 socket.setVisible = function(visible) {
@@ -2167,6 +2170,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     if (typeof id === 'number') {
                         entity.productionIcons = new PIXI.Container();
                         entity.productionIcons.visible = game.settings.showProductionIcons;
+                        entity.productionIcons.rotation = -entity.rotation;
                         for (let i = 0; i < entity.building.production.length; i++) {
                             const production = entity.building.production[i];
                             if (production.id === id) {
@@ -2184,6 +2188,15 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                     if (productionIcons.length > 1) {
                                         productionIcon.x = -55;
                                         productionIcons[1].x = 55;
+                                    } else if (entity.sprite.width < 125 && entity.sprite.height < 125) { // Small
+                                        productionIcon.width = 64;
+                                        productionIcon.height = 64;
+                                    } else if (entity.sprite.width < 200 && entity.sprite.height < 200) { // Medium
+                                        productionIcon.width = 80;
+                                        productionIcon.height = 80;
+                                    } else if (entity.sprite.width > 280 && entity.sprite.height > 280) { // Extra Large
+                                        productionIcon.width = 192;
+                                        productionIcon.height = 192;
                                     } else {
                                         productionIcon.width = 128;
                                         productionIcon.height = 128;
@@ -2204,6 +2217,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 for (let i = 0; i < points.length; i++) {
                     let point = points[i];
                     if (point.handle) {
+                        point.handle.tint = entity.locked ? COLOR_RED : (point.index === 0 ? COLOR_ORANGE : COLOR_WHITE);
                         point.handle.visible = entity.selected;
                     }
                 }
@@ -2476,7 +2490,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             if (entity.building.hasOutline !== false) {
                                 entity.sprite.removeChild(entity.sprite.outline);
                                 entity.sprite.outline = new PIXI.SimpleRope(resources.white.texture, lut, 1);
-                                entity.sprite.outline.tint = COLOR_ORANGE;
+                                entity.sprite.outline.tint = entity.locked ? COLOR_RED : COLOR_ORANGE;
                                 entity.sprite.addChild(entity.sprite.outline);
                             }
                         } else if (entity.type === 'shape') {
@@ -2570,6 +2584,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
             if (entity.rangeSprite && !entity.rangeSprite.visible) {
                 entity.rangeSprite.visible = true;
+            }
+
+            if (entity.sprite?.outline) {
+                entity.sprite.outline.tint = entity.locked ? COLOR_RED : COLOR_ORANGE;
             }
 
             if (entity.hasHandle) {
@@ -3173,6 +3191,12 @@ const fontFamily = ['Recursive', 'sans-serif'];
         selectedEntities.forEach(selectedEntity => {
             selectedEntity.locked = !locked ? true : null;
             selectedEntity.selectionArea.tint = selectedEntity.locked ? COLOR_RED : COLOR_WHITE;
+            if (selectedEntity.sprite?.outline) {
+                selectedEntity.sprite.outline.tint = selectedEntity.locked ? COLOR_RED : COLOR_ORANGE;
+            }
+            if (selectedEntity.hasHandle) {
+                selectedEntity.updateHandles();
+            }
         });
         if (locked && pickupSelectedEntities) {
             game.setPickupEntities(false);
@@ -3665,6 +3689,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 }
             }
         } else if (followEntity) {
+            if (followEntity.selectionArea.visible) {
+                followEntity.selectionArea.visible = false;
+            }
             camera.x = (followEntity.x * camera.zoom) - WIDTH/2;
             camera.y = (followEntity.y * camera.zoom) - HEIGHT/2;
         }
