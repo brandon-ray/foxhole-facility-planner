@@ -569,6 +569,12 @@ Vue.component('app-menu-statistics', {
         game.statisticsMenuComponent = this;
     },
     methods: {
+        sortKeys: function(list) {
+            return Object.keys(list).sort().reduce((data, key) => {
+                data[key] = list[key];
+                return data;
+            }, {});
+        },
         refresh: function() {
             let cost = {};
             let input = {};
@@ -675,6 +681,10 @@ Vue.component('app-menu-statistics', {
                             }
                         }
                     }
+
+                    // TODO: Sort resources by actual display name. Probably not worth doing. This is fine
+                    input = this.sortKeys(input);
+                    output = this.sortKeys(output);
 
                     powerTotal += power;
                     if (power > 0) {
