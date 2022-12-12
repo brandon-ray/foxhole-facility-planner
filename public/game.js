@@ -2141,23 +2141,13 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     }
                 }
 
-                if (entity.isTrain) {
-                    for (let i = 0; i < entities.length; i++) {
-                        let entity2 = entities[i];
-                        if (entity !== entity2 && entity2.bezier && entity2.subtype === 'rail_large_gauge') {
-                            const entPos = entity2.toLocal({x: entity.x, y: entity.y}, app.cstage, undefined, true);
-                            const projection = entity2.bezier?.project(entPos);
-
-                            if (projection && projection.d <= (entity2.building?.lineWidth ?? 25)) {
-                                let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity2, undefined, true);
-                                entity.x = global.x;
-                                entity.y = global.y;
-
-                                entity.currentTrack = entity2;
-                                entity.currentTrackT = projection.t;
-                            }
-                        }
+                if (entity.isTrain && entityData.currentTrackId) {
+                    if (entityIdMap && typeof entityIdMap[entityData.currentTrackId] === 'number') {
+                        entity.currentTrack = game.getEntityById(entityIdMap[entityData.currentTrackId]);
+                    } else {
+                        entity.currentTrack = game.getEntityById(entityData.currentTrackId);
                     }
+                    entity.currentTrackT = entityData.currentTrackT;
                 }
             }
 
@@ -2300,6 +2290,17 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         }
                     }
                 }
+
+                if (entity.isTrain) {
+                    if (entity.currentTrack && entity.currentTrack.id) {
+                        entityData.currentTrackId = entity.currentTrack.id;
+                        entityData.currentTrackT = entity.currentTrackT;
+                    }
+
+                    if (entity.trackDirection) {
+                        entityData.trackDirection = entity.trackDirection;
+                    }
+                }
             };
 
             entity.onLoad = function(entityData) {
@@ -2324,6 +2325,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 if (entity.type === 'shape') {
                     Object.assign(entity.shapeStyle, entityData.shapeStyle);
                     entity.setShapeStyle(entity.shapeStyle);
+                }
+
+                if (entity.isTrain && entityData.trackDirection) {
+                    entity.trackDirection = entityData.trackDirection;
                 }
             };
 
@@ -3067,8 +3072,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
                 if (closestSocket && closestSocket.connections && Object.keys(closestSocket.connections).length) {
                     for (const [connectedEntityId] of Object.entries(closestSocket.connections)) {
-                        const connectedEntity = game.getEntityById(connectedEntityId);
-                        entity.currentTrack = connectedEntity;
+                        entity.currentTrack = game.getEntityById(connectedEntityId);
                         entity.lastTrackT = entity.currentTrackT;
                         entity.currentTrackT = null;
                         break;
