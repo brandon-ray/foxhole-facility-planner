@@ -1911,9 +1911,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                     connectingSocket = socket.createConnection(connectingEntity, socketPosition.x, socketPosition.y, (entity.rotation + socket.rotation) + Math.PI);
                                 }
                             }
+                        } else {
+                            socket.connections[connectingEntityId] = connectingSocketId ?? connectingSocket.socketData.id;
+                            socket.setVisible(false);
                         }
-                        socket.connections[connectingEntityId] = connectingSocketId ?? connectingSocket.socketData.id;
-                        socket.setVisible(false);
                     }
                 }
                 // This works for rails, unsure about anything else. Could just use the position of the socket, but we already have positional and rotation data from snapping.
@@ -2055,7 +2056,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
             entity.hasConnectionToEntity = (connectingEntity) => entity.hasConnectionToEntityId(connectingEntity.id);
 
-            entity.removeConnections = function(socketId) {
+            entity.removeConnections = function(socketId, ignoreSelected) {
                 if (entity.sockets) {
                     // Iterate sockets to make sure we either remove the connections and update the socket or remove the entity altogether.
                     for (let i = 0; i < entity.sockets.children.length; i++) {
@@ -2063,7 +2064,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         if (typeof socketId !== 'number' || entitySocket.socketData.id === socketId) {
                             for (const [connectedEntityId, connectedSocketId] of Object.entries(entitySocket.connections)) {
                                 const connectedEntity = game.getEntityById(connectedEntityId);
-                                if (connectedEntity) {
+                                if (connectedEntity && (!ignoreSelected || !connectedEntity.selected)) {
                                     for (let k = 0; k < connectedEntity.sockets.children.length; k++) {
                                         const connectedSocket = connectedEntity.sockets.children[k];
                                         if (connectedSocket.socketData.id === connectedSocketId) {
@@ -2865,7 +2866,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             let handleSocket;
                             let connectionEstablished = false;
                             if (entity.sockets) {
-                                handleSocket = entity.sockets.children[entity.sockets.children.length - 1];
+                                // TODO: Store this somewhere in sockets.
+                                handleSocket = entity.sockets.children[1];
                             }
                             for (let i = 0; i < entities.length; i++) {
                                 let entity2 = entities[i];
@@ -3498,39 +3500,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     for (let i = 0; i < selectedEntities.length; i++) {
                         // Destroying any connections with entities that aren't selected, it might be worth checking if the mouse / selection position has changed before doing so or checking for rotation.
                         let pickupEntity = selectedEntities[i];
-                        if (pickupEntity.sockets) {
-                            for (let j = 0; j < pickupEntity.sockets.children.length; j++) {
-                                const pickupSocket = pickupEntity.sockets.children[j];
-                                for (const [connectedEntityId, connectedSocketId] of Object.entries(pickupSocket.connections)) {
-                                    const connectedEntity = game.getEntityById(connectedEntityId);
-                                    if (connectedEntity && !connectedEntity.selected) {
-                                        // TODO: Update entity.removeConnections to support specifying an entity to remove a connection for, because this is all basically the same code.
-                                        for (let k = 0; k < connectedEntity.sockets.children.length; k++) {
-                                            const connectedSocket = connectedEntity.sockets.children[k];
-                                            if (connectedSocket.socketData.id === connectedSocketId) {
-                                                delete connectedSocket.connections[pickupEntity.id];
-                                                if (Object.keys(connectedSocket.connections).length === 0) {
-                                                    if (connectedEntity.building?.requireConnection) {
-                                                        connectedEntity.remove();
-                                                    } else {
-                                                        connectedSocket.setVisible(true);
-                                                    }
-                                                }
-                                                break;
-                                            }
-                                        }
-                                        delete pickupSocket.connections[connectedEntity.id];
-                                        if (Object.keys(pickupSocket.connections).length === 0) {
-                                            if (pickupEntity.building?.requireConnection && selectedEntities.length > 1) {
-                                                pickupEntity.remove();
-                                            } else {
-                                                pickupSocket.setVisible(true);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        pickupEntity.removeConnections(undefined, true);
                     }
                 }
                 ignoreMousePickup = false;
@@ -3635,6 +3605,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                         for (let k = 0; k < pickupEntity.sockets.children.length; k++) {
                                             let pickupSocket = pickupEntity.sockets.children[k];
                                             if (pickupSocket.socketData.cap === 'front') {
+                                                // TODO: Store this somewhere so we don't have to loop each time for sockets. There will only ever be one front and back socket for rails.
                                                 pickupSocket.createConnection(entity, projection.x, projection.y, angle);
                                                 break;
                                             }
