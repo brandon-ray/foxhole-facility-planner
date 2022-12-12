@@ -1911,10 +1911,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                     connectingSocket = socket.createConnection(connectingEntity, socketPosition.x, socketPosition.y, (entity.rotation + socket.rotation) + Math.PI);
                                 }
                             }
-                        } else {
-                            socket.connections[connectingEntityId] = connectingSocketId ?? connectingSocket.socketData.id;
-                            socket.setVisible(false);
+                            return;
                         }
+                        socket.connections[connectingEntityId] = connectingSocketId ?? connectingSocket.socketData.id;
+                        socket.setVisible(false);
                     }
                 }
                 // This works for rails, unsure about anything else. Could just use the position of the socket, but we already have positional and rotation data from snapping.
@@ -2062,9 +2062,14 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     for (let i = 0; i < entity.sockets.children.length; i++) {
                         const entitySocket = entity.sockets.children[i];
                         if (typeof socketId !== 'number' || entitySocket.socketData.id === socketId) {
+                            let connectionEstablished = false;
                             for (const [connectedEntityId, connectedSocketId] of Object.entries(entitySocket.connections)) {
                                 const connectedEntity = game.getEntityById(connectedEntityId);
-                                if (connectedEntity && (!ignoreSelected || !connectedEntity.selected)) {
+                                if (connectedEntity) {
+                                    if (ignoreSelected && connectedEntity.selected) {
+                                        connectionEstablished = true;
+                                        continue;
+                                    }
                                     for (let k = 0; k < connectedEntity.sockets.children.length; k++) {
                                         const connectedSocket = connectedEntity.sockets.children[k];
                                         if (connectedSocket.socketData.id === connectedSocketId) {
@@ -2084,10 +2089,12 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 }
                                 delete entitySocket.connections[connectedEntityId];
                             }
-                            if (entitySocket.socketData.temp) {
-                                entity.sockets.removeChild(entitySocket);
-                            } else {
-                                entitySocket.setVisible(true);
+                            if (!connectionEstablished) {
+                                if (entitySocket.socketData.temp) {
+                                    entity.sockets.removeChild(entitySocket);
+                                } else {
+                                    entitySocket.setVisible(true);
+                                }
                             }
                         }
                     }
