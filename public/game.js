@@ -199,9 +199,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
             followEntity = entity;
             if (followEntity) {
                 followEntity.following = true;
-            } else {
-                game.buildingSelectedMenuComponent?.refresh();
             }
+            game.buildingSelectedMenuComponent?.refresh();
         }
     }
 
@@ -896,6 +895,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
     };
 
     game.zoomToFacilityCenter = function() {
+        if (followEntity) {
+            game.followEntity(null);
+        }
         let xTotal = 0;
         let yTotal = 0;
         if (entities?.length) {
@@ -1071,6 +1073,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         mx = e.clientX;
         my = e.clientY;
 
+        //const followNext = followEntity !== null;
         game.followEntity(null);
 
         let mouseButton = e.button;
@@ -1101,6 +1104,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 } else if (!(entity.hasHandle && entity.grabHandlePoint()) && (e.ctrlKey || e.shiftKey)) {
                                     game.removeSelectedEntity(entity);
                                 }
+                                /* Not sure how I feel about this yet. Might be worth keeping, unsure.
+                                if (entity.selected && followNext) {
+                                    game.followEntity(entity);
+                                }
+                                */
                                 if (entity.selected && entity.type === 'text') {
                                     game.buildingSelectedMenuComponent?.focusText();
                                 }
@@ -2703,7 +2711,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         };
 
         entity.getZIndex = function() {
-            return -entity.y - ((entity.building ?? entity.metaData)?.sortOffset ?? 0) - (entity.type === 'text' ? 10000000 : (entity.selected ? 5000000 : 0));
+            return -entity.y - ((entity.building ?? entity.metaData)?.sortOffset ?? 0) - (entity.type === 'text' ? 10000000 : (entity.selected && !entity.following ? 5000000 : 0));
         };
 
         if (entity.building && entity.building.isBezier) {
@@ -2881,6 +2889,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 if (!entity2.visible || entity2 === entity || entity2.type !== 'building' || !(entity.sockets && entity2.sockets) || Math.distanceBetween({x: gmx, y: gmy}, entity2) > 1000) {
                                     continue;
                                 }
+                                // TODO: Prevent rails from attaching to a rail they're already attached to.
                                 if (entity2.sockets && (entity.building?.canSnapStructureType !== false || entity.subtype !== entity2.subtype)) {
                                     const mousePos2 = entity2.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
                                     let nearestSocket, nearestSocketPos, nearestSocketDist = null;
@@ -3349,8 +3358,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             }
 
                             let buffer = 15;
-                            let poly1Width = (entity.width-buffer)/2;
-                            let poly1Height = (entity.height-buffer)/2;
+                            let poly1Width = (entity.sprite.width-buffer)/2;
+                            let poly1Height = (entity.sprite.height-buffer)/2;
                             let box1 = new SAT.Polygon(new SAT.Vector(entity.x, entity.y), [
                                 new SAT.Vector(-poly1Width,-poly1Height),
                                 new SAT.Vector(poly1Width,-poly1Height),
@@ -3358,8 +3367,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 new SAT.Vector(-poly1Width,poly1Height),
                             ]);
                             box1.setAngle(entity.rotation);
-                            let poly2Width = (entity2.width-buffer)/2;
-                            let poly2Height = (entity2.height-buffer)/2;
+                            let poly2Width = (entity2.sprite.width-buffer)/2;
+                            let poly2Height = (entity2.sprite.height-buffer)/2;
                             let box2 = new SAT.Polygon(new SAT.Vector(entity2.x, entity2.y), [
                                 new SAT.Vector(-poly2Width,-poly2Height),
                                 new SAT.Vector(poly2Width,-poly2Height),
@@ -3413,14 +3422,14 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 }
                             }
 
-                            if (entity.hasConnectionToEntity(entity2) && dist > entity.width/2+entity2.width/2+10) {
-                                if (dist > entity.width+entity2.width) {
+                            if (entity.hasConnectionToEntity(entity2) && dist > entity.sprite.width/2+entity2.sprite.width/2+10) {
+                                if (dist > entity.sprite.width+entity2.sprite.width) {
                                     continue;
                                 }
                                 let pPos = app.cstage.toLocal(entity.currentTrack.bezier.get(entity.currentTrackT + (0.05 * entity.trackDirection)), entity.currentTrack, undefined, true);
                                 let pNeg = app.cstage.toLocal(entity.currentTrack.bezier.get(entity.currentTrackT - (0.05 * entity.trackDirection)), entity.currentTrack, undefined, true);
 
-                                let distDiff = dist-(entity.width/2+entity2.width/2+10);
+                                let distDiff = dist-(entity.sprite.width/2+entity2.sprite.width/2+10);
                                 let distDiffScaled = (distDiff / entity.currentTrack.bezier.length()) * entity.trackDirection;
                                 if (Math.distanceBetween(entity2, pPos) >= Math.distanceBetween(entity2, pNeg)) {
                                     entity.trackVelocity -= distDiff/entity.mass;
@@ -3504,6 +3513,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
             game.buildingSelectedMenuComponent?.refresh(true);
             if (!selectedHandlePoint && (!ignoreMousePickup || (Date.now()-pickupTime > 250 || Math.distanceBetween(pickupPosition, {x: gmx, y: gmy}) > 20))) {
                 if (ignoreMousePickup) {
+                    if (followEntity) {
+                        game.followEntity(null);
+                    }
                     for (let i = 0; i < selectedEntities.length; i++) {
                         // Destroying any connections with entities that aren't selected, it might be worth checking if the mouse / selection position has changed before doing so or checking for rotation.
                         let pickupEntity = selectedEntities[i];

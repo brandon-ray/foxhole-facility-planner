@@ -320,9 +320,8 @@ Vue.component('app-menu-building-selected', {
             }
         },
         toggleFollow: function() {
-            this.entity.following = !this.entity.following;
             let selectedEntity = game.getSelectedEntity();
-            game.followEntity(this.entity.following && selectedEntity ? selectedEntity : null);
+            game.followEntity(!selectedEntity.following && selectedEntity ? selectedEntity : null);
         }
     },
     template: html`
@@ -898,6 +897,7 @@ Vue.component('app-menu-save-load', {
                         <option v-bind:value="null">Choose a Preset</option>
                         <option value="all_structures">All Buildings + Upgrades</option>
                         <option value="small_120mm_facility">Small 120mm Facility</option>
+                        <option value="train_test">Train Testing</option>
                     </select>
                 </div>
                 <button class="preset-load-button" type="button" v-on:click="fetchPreset" @mouseenter="bme">
