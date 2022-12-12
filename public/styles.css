@@ -394,6 +394,7 @@ input[type=number].btn-small {
 
 #sidebar-body .menu-page-title {
     height: 46px;
+    line-height: 36px;
     background: #121212;
     padding: 4px 0;
     font-size: 1.45em;
@@ -426,6 +427,10 @@ input[type=number].btn-small {
     right: 0;
     padding: 0;
     border: 1px solid black;
+}
+
+#construction-page > .menu-page.modes-disabled {
+    top: 52px;
 }
 
 #construction-page .construction-modes-wrapper {

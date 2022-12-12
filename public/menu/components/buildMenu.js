@@ -322,6 +322,12 @@ Vue.component('app-menu-building-selected', {
         toggleFollow: function() {
             let selectedEntity = game.getSelectedEntity();
             game.followEntity(!selectedEntity.following && selectedEntity ? selectedEntity : null);
+        },
+        setColor: function () {
+            let selectedEntity = game.getSelectedEntity();
+            if (selectedEntity && selectedEntity.type === 'building') {
+                selectedEntity.sprite.rope.tint = parseInt(this.entity.color.slice(1), 16);
+            }
         }
     },
     template: html`
@@ -356,6 +362,10 @@ Vue.component('app-menu-building-selected', {
                 <label class="app-input-label">
                     <i class="fa fa-repeat" aria-hidden="true"></i> Rotation:
                     <input class="app-input" type="number" v-model.number="entity.rotationDegrees" @input="updateEntity(true)">
+                </label>
+                <label v-if="game.settings.enableExperimental && entity.subtype === 'power_line'" class="app-input-label">
+                    <i class="fa fa-paint-brush" aria-hidden="true"></i> Color:
+                    <input type="color" v-model="entity.color" style="padding: 1px;" @input="setColor">
                 </label>
             </div>
             <div v-if="entity.type === 'text'" class="settings-option-wrapper">
@@ -520,7 +530,7 @@ Vue.component('app-menu-construction-list', {
     },
     template: html`
     <div id="construction-page">
-        <div class="construction-modes-wrapper row">
+        <div v-if="game.settings.enableExperimental" class="construction-modes-wrapper row">
             <button v-for="mode in game.constructionModes" class="construction-mode-button col" :class="[{ 'mode-selected': game.constructionMode.key === mode.key }, mode.key + '-mode-button']" :title="mode.title" @mouseenter="bme" @click="setConstructionMode(mode)">
                 <i v-if="mode.icon" :class="'fa ' + mode.icon" aria-hidden="true"></i>
                 <span v-else-if="mode.text">{{mode.text}}</span>
@@ -536,7 +546,7 @@ Vue.component('app-menu-construction-list', {
                 </select>
             </div>
         </div>
-        <div class="menu-page">
+        <div class="menu-page" :class="{ 'modes-disabled': !game.settings.enableExperimental }">
             <template v-for="building in buildings">
                 <div v-if="!building.hideInList && ((game.selectedBuildingCategory === 'all' && building.category !== 'vehicles') || building.category === game.selectedBuildingCategory) &&
                     (!building.parent || game.settings.showUpgradesAsBuildings) &&
@@ -569,6 +579,12 @@ Vue.component('app-menu-statistics', {
         game.statisticsMenuComponent = this;
     },
     methods: {
+        sortKeys: function(list) {
+            return Object.keys(list).sort().reduce((data, key) => {
+                data[key] = list[key];
+                return data;
+            }, {});
+        },
         refresh: function() {
             let cost = {};
             let input = {};
@@ -676,6 +692,10 @@ Vue.component('app-menu-statistics', {
                         }
                     }
 
+                    // TODO: Sort resources by actual display name. Probably not worth doing. This is fine
+                    input = this.sortKeys(input);
+                    output = this.sortKeys(output);
+
                     powerTotal += power;
                     if (power > 0) {
                         powerProduced += power;
@@ -762,6 +782,10 @@ Vue.component('app-menu-settings', {
             <label class="app-input-label">
                 <i class="fa fa-flag" aria-hidden="true"></i> Display Faction Colors
                 <input class="app-input" type="checkbox" v-model="game.settings.displayFactionTheme" @change="game.updateSettings">
+            </label>
+            <label class="app-input-label">
+                <i class="fa fa-flask" aria-hidden="true"></i> Enable Experimental Features
+                <input class="app-input" type="checkbox" v-model="game.settings.enableExperimental" @change="game.updateSettings">
             </label>
         </div>
         <div class="settings-option-wrapper">

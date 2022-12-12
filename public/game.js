@@ -4,6 +4,7 @@ const game = {
         quality: 'auto',
         disableSound: false,
         disableHUD: false,
+        enableExperimental: false,
         enableGrid: true,
         enableStats: true,
         gridSize: 16,
@@ -17,7 +18,7 @@ const game = {
         showFacilityName: true,
         showRanges: false,
         showProductionIcons: false,
-        volume: 1
+        volume: 0.2
     },
     isPlayScreen: false
 };
@@ -2681,7 +2682,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 bounds.bufferHeight = bounds.height + (boundsBuffer * 2);
 
                 if (gmx >= bounds.x && gmx <= bounds.x + bounds.bufferWidth && gmy >= bounds.y && gmy <= bounds.y + bounds.bufferHeight) {
-                    if (entity.building?.isBezier && entity.bezier) {
+                    // TODO: Add padding around sprite so that it's easier to select.
+                    // Will need to check for entity.building?.isBezier and entity.bezier when that happens.
+                    if (entity.bezier) {
                         let mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
                         let projection = entity.bezier.project(mousePos);
                         if (projection.d <= (entity.building?.lineWidth ?? 25)) {
