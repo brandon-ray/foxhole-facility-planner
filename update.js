@@ -176,6 +176,7 @@ function iterateStructures(dirPath) {
                                     'cost': structureData.cost ?? baseData.cost,
                                     '_productionLength': structureData._productionLength,
                                     'production': structureData.production,
+                                    'productionScaling': structureData.productionScaling,
                                     'AssemblyItems': structure.AssemblyItems,
                                     'ConversionEntries': structure.ConversionEntries,
                                     'upgrades': structureData.upgrades

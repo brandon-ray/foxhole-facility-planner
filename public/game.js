@@ -3274,6 +3274,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             clone.onLoad(entityData);
             clone.afterLoad(entityData, null, true);
             game.selectEntity(clone);
+            entity.sockets = null;
             entity.remove();
             return clone;
         }
