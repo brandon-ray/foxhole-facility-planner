@@ -170,6 +170,7 @@ function iterateStructures(dirPath) {
                                     'ignoreSnapSettings': structureData.ignoreSnapSettings,
                                     'requireConnection': structureData.requireConnection,
                                     'sockets': structureData.sockets,
+                                    'vehicle': structureData.vehicle,
                                     'techId': structureData.techId ?? (structure.TechID && (structure.TechID !== 'ETechID::None') ? structure.TechID.substring(9).toLowerCase() : undefined),
                                     'liquidCapacity': structure.LiquidTank?.MaxAmount ?? structureData.liquidCapacity,
                                     'cost': structureData.cost ?? baseData.cost,

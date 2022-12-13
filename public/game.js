@@ -1982,7 +1982,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     }
                 }
 
-                if (socketData.switch === 'rail') {
+                if (game.settings.enableExperimental && socketData.switch === 'rail') {
                     let railSwitch = new PIXI.Sprite(resources['white'].texture);
                     railSwitch.anchor.set(0.5);
                     railSwitch.tint = 0xFF0000;
@@ -3179,6 +3179,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }, entity.currentTrack, undefined, true);
             entity.x = global.x;
             entity.y = global.y;
+
+            if (game.getSelectedEntity() === entity) {
+                game.buildingSelectedMenuComponent?.refresh(true);
+            }
         };
 
         return entity;

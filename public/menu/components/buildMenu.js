@@ -190,11 +190,9 @@ Vue.component('app-menu-building-selected', {
                     following: selectedEntity.following,
                     label: selectedEntity.label?.text,
                     style: Object.assign({}, selectedEntity.labelStyle ?? selectedEntity.shapeStyle),
-                    isTrain: selectedEntity.isTrain
+                    userThrottle: selectedEntity.userThrottle,
+                    trackVelocity: selectedEntity.trackVelocity
                 };
-                if (selectedEntity.isTrain) {
-                    this.entity.userThrottle = selectedEntity.userThrottle;
-                }
                 this.updateProduction();
                 if (this.entity.type === 'shape') {
                     this.entity.style.alpha = this.entity.style.alpha * 100;
@@ -211,15 +209,20 @@ Vue.component('app-menu-building-selected', {
             if (this.entity) {
                 let selectedEntity = game.getSelectedEntity();
                 if (selectedEntity) {
-                    selectedEntity.x = this.entity.x;
-                    selectedEntity.y = this.entity.y;
-                    selectedEntity.rotation = Math.deg2rad(this.entity.rotationDegrees);
+                    if (!selectedEntity.building?.vehicle) {
+                        selectedEntity.x = this.entity.x;
+                        selectedEntity.y = this.entity.y;
+                        selectedEntity.rotation = Math.deg2rad(this.entity.rotationDegrees);
+                    }
                     this.entity.rotation = selectedEntity.rotation;
                     if (selectedEntity.type === 'building') {
                         if (removeConnections) {
                             selectedEntity.removeConnections();
                         }
                         selectedEntity.setProductionId(this.entity.selectedProduction);
+                        if (typeof this.entity.userThrottle === 'number') {
+                            selectedEntity.userThrottle = this.entity.userThrottle;
+                        }
                     }
                     if (selectedEntity.type === 'text') {
                         selectedEntity.setLabel(this.entity.label);
@@ -349,23 +352,36 @@ Vue.component('app-menu-building-selected', {
             <div class="settings-option-wrapper">
                 <div v-if="entity.building" class="settings-title">
                     {{entity.building.parentName ? entity.building.parentName : entity.building.name}}
-                    <button v-if="entity.building?.category === 'vehicles'" class="btn-small m-0" :class="{ 'btn-active': entity.following }" title="Follow" @click="toggleFollow"><i class="fa fa-crosshairs" aria-hidden="true"></i></button>
                 </div>
                 <label class="app-input-label">
                     <i class="fa fa-arrows" aria-hidden="true"></i> Position X:
-                    <input class="app-input" type="number" v-model.number="entity.x" @input="updateEntity(true)">
+                    <input class="app-input" type="number" v-model.number="entity.x" @input="updateEntity(true)" :disabled="entity.building?.vehicle">
                 </label>
                 <label class="app-input-label">
                     <i class="fa fa-arrows" aria-hidden="true"></i> Position Y:
-                    <input class="app-input" type="number" v-model.number="entity.y" @input="updateEntity(true)">
+                    <input class="app-input" type="number" v-model.number="entity.y" @input="updateEntity(true)" :disabled="entity.building?.vehicle">
                 </label>
                 <label class="app-input-label">
                     <i class="fa fa-repeat" aria-hidden="true"></i> Rotation:
-                    <input class="app-input" type="number" v-model.number="entity.rotationDegrees" @input="updateEntity(true)">
+                    <input class="app-input" type="number" v-model.number="entity.rotationDegrees" @input="updateEntity(true)" :disabled="entity.building?.vehicle">
                 </label>
                 <label v-if="game.settings.enableExperimental && entity.subtype === 'power_line'" class="app-input-label">
                     <i class="fa fa-paint-brush" aria-hidden="true"></i> Color:
                     <input type="color" v-model="entity.color" style="padding: 1px;" @input="setColor">
+                </label>
+            </div>
+            <div v-if="entity.building?.vehicle?.engine" class="settings-option-wrapper">
+                <div class="settings-title">
+                    Train Controls
+                    <button class="btn-small m-0" :class="{ 'btn-active': entity.following }" style="font-size: 0.9em; position: absolute; right: 6px;" title="Follow" @click="toggleFollow"><i class="fa fa-video-camera" aria-hidden="true"></i></button>
+                </div>
+                <label class="app-input-label">
+                    <i class="fa fa-train" aria-hidden="true"></i> Speed
+                    <input class="app-input" type="number" v-model.number="entity.trackVelocity" disabled>
+                </label>
+                <label class="app-input-label">
+                    <i class="fa fa-train" aria-hidden="true"></i> Throttle ({{Math.round(entity.userThrottle*100)}}%)
+                    <input type="range" class="slider w-50" v-model.number="entity.userThrottle" min="-1" max="1" step="0.1" @input="updateEntity">
                 </label>
             </div>
             <div v-if="entity.type === 'text'" class="settings-option-wrapper">
@@ -422,10 +438,6 @@ Vue.component('app-menu-building-selected', {
                     @mouseenter="showUpgradeHover(key, upgrade)" @mouseleave="showUpgradeHover" @click="changeUpgrade(key)">
                     <div class="resource-icon" :title="upgrade.name" :style="{backgroundImage:'url(/assets/' + (upgrade.icon ?? entity.building.icon) + ')'}"></div>
                 </button>
-            </div>
-            <div v-if="entity.isTrain">
-                <h2>Throttle ({{Math.round(entity.userThrottle*100)}}%)</h2>
-                <input type="range" class="slider w-100" v-model.number="entity.userThrottle" min="-1" :max="1" step="0.1" @input="game.getSelectedEntity().userThrottle = entity.userThrottle">
             </div>
             <div v-if="productionData" class="settings-option-wrapper">
                 <div class="settings-title">
@@ -542,7 +554,9 @@ Vue.component('app-menu-construction-list', {
             <div class="construction-category-wrapper">
                 <select class="app-input construction-category" @click="bmc" title="Filter by Category" v-model="game.selectedBuildingCategory" @change="refresh">
                     <option value="all">All Buildings</option>
-                    <option v-for="(category, key) in buildingCategories" v-bind:value="key">{{category.name}}</option>
+                    <template v-for="(category, key) in buildingCategories">
+                        <option v-if="game.settings.enableExperimental || key !== 'vehicles'" :value="key">{{category.name}}</option>
+                    </template>
                 </select>
             </div>
         </div>
@@ -809,7 +823,9 @@ Vue.component('app-menu-settings', {
                 <i class="fa fa-folder-open" aria-hidden="true"></i> Default Category
                 <select class="app-input" v-model="game.settings.defaultBuildingCategory" @change="game.updateSettings">
                     <option value="all">All Buildings</option>
-                    <option v-for="(category, key) in buildingCategories" v-bind:value="key">{{category.name}}</option>
+                    <template v-for="(category, key) in buildingCategories">
+                        <option v-if="game.settings.enableExperimental || key !== 'vehicles'" :value="key">{{category.name}}</option>
+                    </template>
                 </select>
             </label>
             <label class="app-input-label">
@@ -921,7 +937,7 @@ Vue.component('app-menu-save-load', {
                         <option v-bind:value="null">Choose a Preset</option>
                         <option value="all_structures">All Buildings + Upgrades</option>
                         <option value="small_120mm_facility">Small 120mm Facility</option>
-                        <option value="train_test">Train Testing</option>
+                        <option v-if="game.settings.enableExperimental" value="train_test">Train Testing</option>
                     </select>
                 </div>
                 <button class="preset-load-button" type="button" v-on:click="fetchPreset" @mouseenter="bme">
