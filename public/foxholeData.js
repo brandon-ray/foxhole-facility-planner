@@ -4070,7 +4070,12 @@ const foxholeData = {
 					"y": 114,
 					"rotation": 270
 				}
-			]
+			],
+			"vehicle": {
+				"type": "smalltrain",
+				"track": "rail_small_gauge",
+				"mass": 10
+			}
 		},
 		"smalltrainengine": {
 			"name": "BMS Mineseeker",
@@ -4096,7 +4101,14 @@ const foxholeData = {
 					"y": 90,
 					"rotation": 270
 				}
-			]
+			],
+			"vehicle": {
+				"type": "smalltrain",
+				"track": "rail_small_gauge",
+				"engine": true,
+				"mass": 500,
+				"maxSpeed": 2
+			}
 		},
 		"smalltrainresourceplatform": {
 			"name": "BMS Linerunner",
@@ -4122,7 +4134,12 @@ const foxholeData = {
 					"y": 115,
 					"rotation": 270
 				}
-			]
+			],
+			"vehicle": {
+				"type": "smalltrain",
+				"track": "rail_small_gauge",
+				"mass": 10
+			}
 		},
 		"sound_test": {
 			"name": "Sus",
@@ -4340,6 +4357,11 @@ const foxholeData = {
 					"rotation": 270
 				}
 			],
+			"vehicle": {
+				"type": "train",
+				"track": "rail_large_gauge",
+				"mass": 25
+			},
 			"techId": "unlockfacilitytier2"
 		},
 		"traincoal": {
@@ -4367,6 +4389,11 @@ const foxholeData = {
 					"rotation": 270
 				}
 			],
+			"vehicle": {
+				"type": "train",
+				"track": "rail_large_gauge",
+				"mass": 25
+			},
 			"techId": "unlockfacilitytier2"
 		},
 		"trainengine": {
@@ -4394,6 +4421,13 @@ const foxholeData = {
 					"rotation": 270
 				}
 			],
+			"vehicle": {
+				"type": "train",
+				"track": "rail_large_gauge",
+				"engine": true,
+				"mass": 1000,
+				"maxSpeed": 15
+			},
 			"techId": "unlockfacilitytier2"
 		},
 		"trainflatbed": {
@@ -4421,6 +4455,11 @@ const foxholeData = {
 					"rotation": 270
 				}
 			],
+			"vehicle": {
+				"type": "train",
+				"track": "rail_large_gauge",
+				"mass": 25
+			},
 			"techId": "unlockfacilitytier2"
 		},
 		"water_pump": {

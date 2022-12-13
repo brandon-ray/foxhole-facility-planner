@@ -1698,20 +1698,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
             entity.addChild(entity.selectionArea);
         }
 
-        if (subtype === 'trainengine') {
-            entity.isTrain = true;
-            entity.mass = 1000;
-        }
-        if (subtype === 'trainflatbed') {
-            entity.isTrain = true;
-            entity.mass = 25;
-        }
-        if (entity.isTrain) {
-            entity.trackVelocity = 0;
-            entity.trackDirection = 1;
-            entity.userThrottle = 0;
-        }
-
         entity.setSelectionSize = function(width, height) {
             entity.selectionArea.clear();
             entity.selectionArea.lineStyle(SELECTION_BORDER_WIDTH, COLOR_ORANGE);
@@ -1831,6 +1817,20 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 entity.setSelectionSize(buildingWidth, buildingLength);
             } else {
                 entity.selectionArea.clear();
+            }
+
+            if (building.vehicle) {
+                const vehicle = building.vehicle;
+                entity.isTrain = (vehicle.type === 'train' || vehicle.type === 'smalltrain') ?? false;
+                entity.mass = vehicle.mass ?? 25;
+    
+                if (entity.isTrain) {
+                    entity.trackVelocity = 0;
+                    entity.trackDirection = 1;
+                    if (vehicle.engine) {
+                        entity.userThrottle = 0;
+                    }
+                }
             }
 
             const socketWidth = 32, socketThickness = 6, powerSocketSize = 8;
@@ -3057,7 +3057,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 }
                 entity.rotation = Math.normalizeAngleRadians(entity.currentTrack.rotation + (angle - Math.PI/2));
 
-                if (subtype === 'trainengine') {
+                if (entity.building.vehicle.engine) {
                     entity.throttle = 0.01 * entity.userThrottle;
                 }
 
@@ -3065,10 +3065,12 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 if (Math.abs(entity.trackVelocity) <= 0.0001) {
                     entity.trackVelocity = 0;
                 }
-                if (entity.trackVelocity > 15) {
-                    entity.trackVelocity = 15;
-                } else if (entity.trackVelocity < -15) {
-                    entity.trackVelocity = -15;
+
+                let maxVelocity = entity.building.vehicle.maxSpeed;
+                if (entity.trackVelocity > maxVelocity) {
+                    entity.trackVelocity = maxVelocity;
+                } else if (entity.trackVelocity < -maxVelocity) {
+                    entity.trackVelocity = -maxVelocity;
                 }
                 entity.moveAlongBezier((entity.trackVelocity/entity.currentTrack.bezier.length()) * entity.trackDirection);
 
@@ -3675,7 +3677,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                     }
                                 }
 
-                                if (projection && ((!connectionEstablished && entity.bezier && entity.building?.isBezier && entity.building?.canSnapAlongBezier && pickupEntity.subtype === entity.subtype) || (pickupEntity.isTrain && entity.subtype === 'rail_large_gauge'))) {
+                                if (projection && ((!connectionEstablished && entity.bezier && entity.building?.isBezier && entity.building?.canSnapAlongBezier && pickupEntity.subtype === entity.subtype) || (pickupEntity.isTrain && entity.subtype === pickupEntity.building.vehicle.track))) {
                                     let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity, undefined, true);
                                     let normal = entity.bezier.normal(projection.t);
                                     let angle = Math.angleBetween({x: 0, y: 0}, normal);
