@@ -1920,7 +1920,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                     connectingSocket = socket.createConnection(connectingEntity, socketPosition.x, socketPosition.y, (entity.rotation + socket.rotation) + Math.PI);
                                 }
                             }
-                            return;
+                            return connectingSocket;
                         }
                         socket.connections[connectingEntityId] = connectingSocketId ?? connectingSocket.socketData.id;
                         socket.setVisible(false);
@@ -1946,13 +1946,16 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 connectingSocket.rotation = rotation;
                             }
                         }
+
                         if (!connectingSocket) {
                             let socketData = {
-                                "id": connectingEntity.sockets.children.length,
-                                "type": socket.socketData.type,
-                                "temp": true
+                                'id': connectingEntity.sockets.children.length,
+                                'type': socket.socketData.type,
+                                'temp': true,
+                                'switch': 'rail'
                             };
                             connectingSocket = connectingEntity.createSocket(socketData, x, y, rotation);
+
                             if (connectingSocket) {
                                 connectingSocket.connections[entity.id] = socket.socketData.id;
                                 if (typeof socket.connections[connectingEntity.id] === 'number') {
@@ -1960,8 +1963,14 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 }
                                 socket.connections[connectingEntity.id] = connectingSocket.socketData.id;
                                 socket.setVisible(false);
-                                return connectingSocket;
                             }
+                        }
+
+                        if (connectingSocket) {
+                            const projection = connectingEntity.bezier?.project({x: x, y: y});
+                            connectingSocket.switchT = projection.t;
+
+                            return connectingSocket;
                         }
                     }
                     return false;
@@ -1976,6 +1985,27 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         }
                     }
                 }
+
+                if (socketData.switch === 'rail') {
+                    let railSwitch = new PIXI.Sprite(resources['white'].texture);
+                    railSwitch.anchor.set(0.5);
+                    railSwitch.tint = 0xFF0000;
+                    railSwitch.width = 30;
+                    railSwitch.height = 30;
+                    railSwitch.position.x += 100;
+                    railSwitch.interactive = true;
+                    socket.switchEnabled = false;
+                    railSwitch.on('pointerdown', () => {
+                        socket.switchEnabled = !socket.switchEnabled;
+                        if (socket.switchEnabled) {
+                            railSwitch.tint = COLOR_GREEN;
+                        } else {
+                            railSwitch.tint = COLOR_RED;
+                        }
+                    });
+                    socket.addChild(railSwitch);
+                }
+
                 entity.sockets.addChild(socket);
                 return socket;
             }
@@ -3053,6 +3083,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         };
 
         entity.moveAlongBezier = function(amount) {
+            let previousTrackT = entity.currentTrackT;
             entity.currentTrackT += amount;
             if (entity.currentTrackT < 0 || entity.currentTrackT > 1) {
                 let closestSocket = null;
@@ -3085,6 +3116,45 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     }
                     entity.userThrottle = 0;
                     entity.trackVelocity = 0;
+                }
+            } else {
+                let closeSocket = null;
+                for (let j = 0; j < entity.currentTrack.sockets.children.length; j++) {
+                    const socket = entity.currentTrack.sockets.children[j];
+                    if (socket.switchEnabled &&
+                        ((previousTrackT <= socket.switchT && entity.currentTrackT >= socket.switchT) ||
+                        (previousTrackT >= socket.switchT && entity.currentTrackT <= socket.switchT))
+                    ) {
+                        closeSocket = socket;
+                        break;
+                    }
+                }
+
+                if (closeSocket && closeSocket.socketData.switch === 'rail') {
+                    for (const [connectedEntityId] of Object.entries(closeSocket.connections)) {
+                        let projection1 = entity.currentTrack.bezier.get(entity.currentTrackT);
+                        let curTrackPos = app.cstage.toLocal({
+                            x: projection1.x,
+                            y: projection1.y
+                        }, entity.currentTrack, undefined, true);
+                        let angle1 = Math.angleBetween(entity, curTrackPos);
+
+                        let newTrack = game.getEntityById(connectedEntityId);
+                        let projection2 = newTrack.bezier?.project(newTrack.toLocal({x: entity.x, y: entity.y}, app.cstage, undefined, true));
+                        let newTrackGet = newTrack.bezier.get(projection2.t + (projection2.t > 0.5 ? -0.1 : 0.1));
+                        let newTrackPos = app.cstage.toLocal({
+                            x: newTrackGet.x,
+                            y: newTrackGet.y
+                        }, newTrack, undefined, true);
+                        let angle2 = Math.angleBetween(entity, newTrackPos);
+                        let angleDiff = Math.abs(Math.differenceBetweenAngles(angle1, angle2));
+                        if (angleDiff <= Math.PI/4) {
+                            entity.currentTrack = newTrack;
+                            entity.lastTrackT = entity.currentTrackT;
+                            entity.currentTrackT = null;
+                        }
+                        break;
+                    }
                 }
             }
 
