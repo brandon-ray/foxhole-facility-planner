@@ -40,6 +40,10 @@ if (isMobile && !isPhoneApp) {
                 updateRangeSprites: function() {
                     game.updateRangeSprites();
                     game.updateSettings();
+                },
+                updateProductionIcons: function() {
+                    game.updateProductionIcons();
+                    game.updateSettings();
                 }
             },
             template: html`
@@ -73,6 +77,10 @@ if (isMobile && !isPhoneApp) {
                     <label class="checkbox-button align-middle">
                         <input type="checkbox" name="ranges-visible-toggle" v-model="game.settings.showRanges" @change="updateRangeSprites" />
                         Show Structure Ranges
+                    </label>
+                    <label class="checkbox-button align-middle">
+                        <input type="checkbox" name="production-visible-toggle" v-model="game.settings.showProductionIcons" @change="updateProductionIcons" />
+                        (P) Show Production Icons
                     </label>
                     <button class="footer-button" @click="game.tryFullscreen">
                         <i class="fa fa-arrows-alt" aria-hidden="true"></i>

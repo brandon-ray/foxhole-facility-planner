@@ -294,7 +294,7 @@ p {
     text-align: left;
 }
 
-#sidebar-footer a, #sidebar-footer button, .close-statistics-button, .footer-button {
+#sidebar-footer a, #sidebar-footer button, .close-statistics-button, .footer-button, .btn-small {
     display: inline-block;
     background: #050505;
     border: 2px solid #202020;
@@ -304,9 +304,28 @@ p {
     width: 48px;
     height: 48px;
     margin: 0 2px;
+    padding: 0;
     line-height: 42px;
     vertical-align: middle;
     text-align: center;
+}
+
+.btn-small:focus {
+    border-color: white;
+    color: white;
+    outline: none;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input.btn-small::-webkit-outer-spin-button,
+input.btn-small::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number].btn-small {
+    -moz-appearance: textfield;
 }
 
 #sidebar-footer a.github-button {
@@ -327,7 +346,7 @@ p {
     fill: #fff;
 }
 
-#sidebar-footer a:hover, #sidebar-footer button:hover, .close-statistics-button:hover, .footer-button:hover {
+#sidebar-footer a:hover, #sidebar-footer button:hover, .close-statistics-button:hover, .footer-button:hover, .btn-small:hover, .title-button:hover .btn-small {
     border: 2px solid white;
     color: white;
 }
@@ -375,6 +394,7 @@ p {
 
 #sidebar-body .menu-page-title {
     height: 46px;
+    line-height: 36px;
     background: #121212;
     padding: 4px 0;
     font-size: 1.45em;
@@ -401,11 +421,60 @@ p {
 #construction-page > .menu-page {
     background: black;
     position: absolute;
-    top: 52px;
+    top: 100px;
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 1px;
+    padding: 0;
+    border: 1px solid black;
+}
+
+#construction-page > .menu-page.modes-disabled {
+    top: 52px;
+}
+
+#construction-page .construction-modes-wrapper {
+    width: 100%;
+    height: 45px;
+    background: #090909;
+    position: relative;
+    border: 1px solid #090909;
+    margin: 0 0 5px 0;
+}
+
+#construction-page .construction-mode-button {
+    background: #141414;
+    font-size: 1.4em;
+    color: white;
+    border: 1px solid #090909;
+    cursor: pointer;
+}
+
+#construction-page .construction-mode-button.select-mode-button {
+    font-size: 1.1em;
+}
+
+#construction-page .construction-mode-button.mode-selected {
+    background: white;
+    color: black;
+}
+
+/*
+.colonial-faction #construction-page .construction-mode-button.mode-selected {
+    background: #619b12;
+}
+
+.warden-faction #construction-page .construction-mode-button.mode-selected {
+    background: #1a92ff;
+}
+*/
+
+#construction-page .construction-mode-button:hover {
+    border-color: white;
+}
+
+#construction-page .construction-mode-button:not(.mode-selected):hover {
+    background: #222;
 }
 
 #construction-page .construction-filter-wrapper {
@@ -464,10 +533,19 @@ p {
     border-color: white;
 }
 
-#construction-page .construction-items {
-    background: black;
-    height: 100%;
-    padding: 2px;
+#construction-page .construction-item-category {
+    background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
+    background: linear-gradient(to right, #242424, #0000);
+    background: linear-gradient(to right, rgb(233, 109, 52), #0000);
+    background: #0f0f0f;
+    padding: 4px 8px;
+    border: 1px solid black;
+    cursor: pointer;
+    clear: both;
+}
+
+#construction-page .construction-item-category:hover {
+    background: #1b1b1b;
 }
 
 #about-page > .about-section {
@@ -685,6 +763,22 @@ p {
     border-color: #ff8f00;
 }
 
+.production-stats {
+    background: #0d0d0d;
+    padding: 0 8px 6px 8px;
+    position: relative;
+    overflow: auto;
+}
+
+.production-stats > .select-production {
+    text-align: center;
+}
+
+.production-stats-resources span {
+    font-size: 0.85em;
+    color: #a2a2a2;
+}
+
 .production-list {
     padding: 12px;
 }
@@ -709,7 +803,7 @@ p {
     border-color: white;
 }
 
-.production-list > .select-production > .production-requirements {
+.select-production > .production-requirements {
     color: yellow;
 }
 
@@ -745,7 +839,7 @@ p {
     pointer-events: none;
 }
 
-.close-statistics-button, .footer-button {
+.close-statistics-button, .footer-button, .btn-small {
     width: 30px;
     height: 30px;
     line-height: 25px;
@@ -1054,6 +1148,10 @@ p {
     cursor: pointer;
 }
 
+.title-button {
+    outline: none !important;
+}
+
 .title-button .inner-button {
     width: 36px;
     height: 36px;
@@ -1132,6 +1230,27 @@ p {
     overflow: hidden;
 }
 
+.settings-option-wrapper .settings-option {
+    background: #0c0c0c;
+    position: relative;
+    border-bottom: 1px solid #1c1c1c;
+    padding: 0 3px;
+    overflow: auto;
+}
+
+.settings-option-wrapper .settings-option .btn-small {
+    margin: 6px 3px;
+    float: left;
+}
+
+.btn-small.btn-active {
+    color: #ff8034;
+}
+
+.settings-option-wrapper .settings-option .btn-right {
+    float: right;
+}
+
 .menu-body .settings-option-wrapper:last-child {
     margin-bottom: 0;
 }
@@ -1207,6 +1326,22 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
     text-decoration: none;
 }
 
+.settings-option-wrapper textarea {
+    display: block;
+    width: 100%;
+    min-height: 150px;
+    max-height: 400px;
+    line-height: 20px;
+    background: #131313;
+    color: white;
+    padding: 6px 10px;
+    border: none;
+}
+
+.settings-option-wrapper textarea:focus {
+    outline: none;
+}
+
 #save-load-page .facility-name-input {
     position: relative;
     padding: 6px;
@@ -1239,4 +1374,43 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
 
 #save-load-page .load-button:hover, #save-load-page .save-button:hover {
     font-size: 1.35em;
+}
+
+#save-load-page .select-preset-wrapper {
+    display: inline-block;
+    height: 40px;
+    margin: 10px 0;
+    vertical-align: middle;
+}
+
+#save-load-page .select-preset-wrapper select {
+    width: 100%;
+    height: 100%;
+    background-color: #131313;
+    color: white;
+    padding: 0 10px;
+    border: 1px solid #101010;
+    vertical-align: middle;
+}
+
+#save-load-page .select-preset-wrapper select:focus {
+    border-color: white;
+}
+
+#save-load-page .preset-load-button {
+    width: 80px;
+    height: 40px;
+    background: linear-gradient(rgb(91, 91, 91), rgb(62, 62, 62));
+    color: white;
+    margin: 10px 0;
+    padding: 0 10px;
+    text-align: center;
+    border: 1px solid #101010;
+    cursor: pointer;
+    transition-duration: 0.125s;
+    vertical-align: middle;
+}
+
+#save-load-page .preset-load-button:hover {
+    background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
 }

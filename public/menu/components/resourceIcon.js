@@ -29,14 +29,14 @@ Vue.component('app-game-resource-icon', {
     },
     template: html`
     <template v-if="resourceData">
-        <div class="resource-col" v-if="column">
-            <div class="resource-icon" :title="resourceData.name" :style="style"></div>
+        <div class="resource-col" v-if="column" :title="resourceData.name">
+            <div class="resource-icon" :style="style"></div>
             <div class="resource-amount">
                 x{{amount.toLocaleString('en-US')}}<template v-if="resourceData.isLiquid">L</template>
             </div>
         </div>
-        <div class="resource-row" v-else>
-            <div class="resource-icon" :title="resourceData.name" :style="style"></div>
+        <div class="resource-row" v-else :title="resourceData.name">
+            <div class="resource-icon" :style="style"></div>
             <div class="resource-name">{{resourceData.name}}</div>
             <div class="resource-amount">
                 x{{amount.toLocaleString('en-US')}}<template v-if="resourceData.isLiquid">L</template>
