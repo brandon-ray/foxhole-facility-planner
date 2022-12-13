@@ -80,7 +80,7 @@ if (isMobile && !isPhoneApp) {
                     </label>
                     <label class="checkbox-button align-middle">
                         <input type="checkbox" name="production-visible-toggle" v-model="game.settings.showProductionIcons" @change="updateProductionIcons" />
-                        Show Production Output
+                        (P) Show Production Icons
                     </label>
                     <button class="footer-button" @click="game.tryFullscreen">
                         <i class="fa fa-arrows-alt" aria-hidden="true"></i>

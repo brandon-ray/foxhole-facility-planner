@@ -774,6 +774,11 @@ input[type=number].btn-small {
     text-align: center;
 }
 
+.production-stats-resources span {
+    font-size: 0.85em;
+    color: #a2a2a2;
+}
+
 .production-list {
     padding: 12px;
 }

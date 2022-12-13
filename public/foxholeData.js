@@ -1352,6 +1352,7 @@ const foxholeData = {
 					"time": 45
 				}
 			],
+			"productionScaling": false,
 			"upgrades": {
 				"petrol_power": {
 					"name": "Petrol Power Plant",
@@ -3367,6 +3368,7 @@ const foxholeData = {
 					"time": 50
 				}
 			],
+			"productionScaling": false,
 			"upgrades": {
 				"electric_oil": {
 					"name": "Electric Oil Well",
@@ -3482,7 +3484,8 @@ const foxholeData = {
 							"time": 30,
 							"power": -3
 						}
-					]
+					],
+					"productionScaling": true
 				}
 			}
 		},
@@ -3835,6 +3838,7 @@ const foxholeData = {
 					"power": 10
 				}
 			],
+			"productionScaling": false,
 			"upgrades": {
 				"sulfuric_reactor": {
 					"name": "Sulfuric Reactor",
@@ -4483,6 +4487,7 @@ const foxholeData = {
 					"time": 50
 				}
 			],
+			"productionScaling": false,
 			"upgrades": {
 				"electric_water": {
 					"name": "Electric Water Pump",

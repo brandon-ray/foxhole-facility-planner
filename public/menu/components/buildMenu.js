@@ -456,24 +456,24 @@ Vue.component('app-menu-building-selected', {
                         </h6>
                     </div>
                     <template v-if="productionData">
-                        <template v-if="entity.building.category !== 'power' && productionData.max > 0">
+                        <template v-if="entity.building.productionScaling !== false && productionData.max > 0">
                             <div class="text-center p-2 mb-1">
                                 <i class="fa fa-arrow-circle-down" aria-hidden="true"></i> Limiter: 
-                                <span v-if="productionData.time < 3600">x{{entity.productionScale}} cycles/hr</span>
+                                <span v-if="productionData.time <= 3600">x{{entity.productionScale}} cycles/hr</span>
                                 <span v-else>x{{entity.productionScale}} cycles/day</span>
                                 <input type="range" class="slider w-100" v-model.number="entity.productionScale" min="0" :max="productionData.max" step="1" @input="updateProduction">
                             </div>
                         </template>
                         <template v-if="entity.productionScale > 0">
-                            <div class="production-stats">
-                                <div class="mb-3">
-                                    <h5><i class="fa fa-sign-in"></i> Building Input</h5>
+                            <div class="production-stats-resources">
+                                <div v-if="productionData.input && Object.keys(productionData.input).length" class="mb-3">
+                                    <h5><i class="fa fa-sign-in"></i> Building Input<span v-if="productionData.time <= 3600">/hr</span><span v-else>/day</span></h5>
                                     <div class="statistics-panel-fac-input">
                                         <app-game-resource-icon v-for="(value, key) in productionData.input" :resource="key" :amount="entity.productionScale * value"/>
                                     </div>
                                 </div>
-                                <div>
-                                    <h5><i class="fa fa-sign-out"></i> Building Output</h5>
+                                <div v-if="productionData.output && Object.keys(productionData.output).length">
+                                    <h5><i class="fa fa-sign-out"></i> Building Output<span v-if="productionData.time <= 3600">/hr</span><span v-else>/day</span></h5>
                                     <div class="statistics-panel-fac-output">
                                         <app-game-resource-icon v-for="(value, key) in productionData.output" :resource="key" :amount="entity.productionScale * value"/>
                                     </div>
