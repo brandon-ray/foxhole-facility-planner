@@ -251,7 +251,7 @@ const foxholeData = {
 			"icon": "game/Textures/UI/VehicleIcons/FieldAntiTankColVehicleIcon.webp"
 		},
 		"fieldatdamagew": {
-			"name": "Balfour Rampart 40mm",
+			"name": "Balfour Rampart 68mm",
 			"description": "The Rampart is a high-velocity, anti-armour field cannon capable of dealing devastating damage to all but the heaviest armoured vehicles while providing its crew with comprehensive ballistic shielding.",
 			"icon": "game/Textures/UI/VehicleIcons/FieldCannonOffensiveWIcon.webp"
 		},
@@ -402,7 +402,7 @@ const foxholeData = {
 		},
 		"lighttankflamec": {
 			"name": "H-19 “Vulcan”",
-			"description": "This modified “Hatchet” features a reinforced fuel cell fixed to its rear alongside a heavy flamethrower turret. This light tank can launch litres of burning fuel a fair distance, while its crew remains protected behind light armour plating.",
+			"description": "This modified “Hatchet” features a reinforced fuel cell fixed to its rear alongside a flamethrower turret. This light tank can launch litres of burning fuel a fair distance, while its crew remains protected behind light armour plating.",
 			"icon": "game/Textures/UI/VehicleIcons/LightTankFlameCIcon.webp"
 		},
 		"lighttankmobilityc": {
@@ -770,15 +770,14 @@ const foxholeData = {
 					"texture": "game/Textures/Structures/ammunition_factory_tripod_factory.webp",
 					"techId": "unlockfacilitytier2",
 					"cost": {
-						"facilitymaterials2": 50
+						"facilitymaterials1": 50
 					},
 					"_productionLength": 8,
 					"production": [
 						{
 							"id": 0,
 							"input": {
-								"facilitymaterials1": 2,
-								"facilitymaterials2": 1
+								"facilitymaterials1": 3
 							},
 							"output": {
 								"isgtc": 1
@@ -789,8 +788,7 @@ const foxholeData = {
 						{
 							"id": 1,
 							"input": {
-								"facilitymaterials1": 2,
-								"facilitymaterials2": 1
+								"facilitymaterials1": 3
 							},
 							"output": {
 								"grenadelaunchertc": 1
@@ -801,8 +799,7 @@ const foxholeData = {
 						{
 							"id": 2,
 							"input": {
-								"facilitymaterials1": 2,
-								"facilitymaterials2": 1
+								"facilitymaterials1": 3
 							},
 							"output": {
 								"atrifletc": 1
@@ -813,8 +810,7 @@ const foxholeData = {
 						{
 							"id": 3,
 							"input": {
-								"facilitymaterials1": 2,
-								"facilitymaterials2": 1
+								"facilitymaterials1": 3
 							},
 							"output": {
 								"mgtc": 1
@@ -835,8 +831,7 @@ const foxholeData = {
 						{
 							"id": 5,
 							"input": {
-								"facilitymaterials1": 2,
-								"facilitymaterials2": 1
+								"facilitymaterials1": 3
 							},
 							"output": {
 								"atrpgtw": 1
@@ -847,8 +842,7 @@ const foxholeData = {
 						{
 							"id": 6,
 							"input": {
-								"facilitymaterials1": 2,
-								"facilitymaterials2": 1
+								"facilitymaterials1": 3
 							},
 							"output": {
 								"rpgtw": 1
@@ -859,8 +853,7 @@ const foxholeData = {
 						{
 							"id": 7,
 							"input": {
-								"facilitymaterials1": 2,
-								"facilitymaterials2": 1
+								"facilitymaterials1": 3
 							},
 							"output": {
 								"mgtw": 1
