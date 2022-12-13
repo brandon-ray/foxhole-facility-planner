@@ -797,10 +797,12 @@ Vue.component('app-menu-settings', {
                 <i class="fa fa-flag" aria-hidden="true"></i> Display Faction Colors
                 <input class="app-input" type="checkbox" v-model="game.settings.displayFactionTheme" @change="game.updateSettings">
             </label>
+            <!--
             <label class="app-input-label">
                 <i class="fa fa-flask" aria-hidden="true"></i> Enable Experimental Features
                 <input class="app-input" type="checkbox" v-model="game.settings.enableExperimental" @change="game.updateSettings">
             </label>
+            -->
         </div>
         <div class="settings-option-wrapper">
             <div class="settings-title">Board Settings</div>
@@ -929,7 +931,7 @@ Vue.component('app-menu-save-load', {
                 </button>
             </div>
         </div>
-        <div class="settings-option-wrapper">
+        <div v-if="game.settings.enableExperimental" class="settings-option-wrapper">
             <div class="settings-title">Facility Presets</div>
             <div class="text-center">
                 <div class="select-preset-wrapper">
@@ -937,7 +939,7 @@ Vue.component('app-menu-save-load', {
                         <option v-bind:value="null">Choose a Preset</option>
                         <option value="all_structures">All Buildings + Upgrades</option>
                         <option value="small_120mm_facility">Small 120mm Facility</option>
-                        <option v-if="game.settings.enableExperimental" value="train_test">Train Testing</option>
+                        <option value="train_test">Train Testing</option>
                     </select>
                 </div>
                 <button class="preset-load-button" type="button" v-on:click="fetchPreset" @mouseenter="bme">

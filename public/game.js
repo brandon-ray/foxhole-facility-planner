@@ -2916,7 +2916,13 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             let connectionEstablished = false;
                             if (entity.sockets) {
                                 // TODO: Store this somewhere in sockets.
-                                handleSocket = entity.sockets.children[1];
+                                for (let i = 0; i < entity.sockets.children.length; i++) {
+                                    const entitySocket = entity.sockets.children[i];
+                                    if (entitySocket.socketData?.cap === 'back') {
+                                        handleSocket = entitySocket;
+                                        break;
+                                    }
+                                }
                             }
                             for (let i = 0; i < entities.length; i++) {
                                 let entity2 = entities[i];
@@ -2949,7 +2955,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                         }
                                         nearestSocketPos = entity.toLocal(nearestSocketPos, app.cstage, undefined, true);
                                         let socketRotation = ((entity2.rotation + nearestSocket.rotation) - entity.rotation) - Math.deg2rad(handleSocket.socketData.rotation);
-                                        if (handleSocket.socketData.type === 'power' || selectedHandlePoint.rotation === socketRotation && Math.floor(nearestSocketPos.y) === 0 || entity.building?.isBezier) {
+                                        if (handleSocket.socketData.type === 'power' || selectedHandlePoint.rotation === socketRotation && Math.round(nearestSocketPos.y) === 0 || entity.building?.isBezier) {
                                             handleSocket.setConnection(entity2.id, nearestSocket);
                                             selectedHandlePoint.x = nearestSocketPos.x;
                                             if (entity.building?.isBezier) {
