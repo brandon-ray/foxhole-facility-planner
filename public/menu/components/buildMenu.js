@@ -381,7 +381,7 @@ Vue.component('app-menu-building-selected', {
                 </label>
                 <label class="app-input-label">
                     <i class="fa fa-train" aria-hidden="true"></i> Throttle ({{Math.round(entity.userThrottle*100)}}%)
-                    <input type="range" class="slider w-50" v-model.number="entity.userThrottle" min="-1" max="1" step="0.1" @input="updateEntity">
+                    <input type="range" class="slider w-50" v-model.number="entity.userThrottle" min="-1" max="1" step="0.1" @input="updateEntity(true)">
                 </label>
             </div>
             <div v-if="entity.type === 'text'" class="settings-option-wrapper">
@@ -797,12 +797,10 @@ Vue.component('app-menu-settings', {
                 <i class="fa fa-flag" aria-hidden="true"></i> Display Faction Colors
                 <input class="app-input" type="checkbox" v-model="game.settings.displayFactionTheme" @change="game.updateSettings">
             </label>
-            <!--
             <label class="app-input-label">
                 <i class="fa fa-flask" aria-hidden="true"></i> Enable Experimental Features
                 <input class="app-input" type="checkbox" v-model="game.settings.enableExperimental" @change="game.updateSettings">
             </label>
-            -->
         </div>
         <div class="settings-option-wrapper">
             <div class="settings-title">Board Settings</div>
