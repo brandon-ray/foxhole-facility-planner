@@ -323,13 +323,25 @@ Vue.component('app-menu-building-selected', {
             }
         },
         toggleFollow: function() {
-            let selectedEntity = game.getSelectedEntity();
+            const selectedEntity = game.getSelectedEntity();
             game.followEntity(!selectedEntity.following && selectedEntity ? selectedEntity : null);
         },
         setColor: function() {
-            let selectedEntity = game.getSelectedEntity();
+            const selectedEntity = game.getSelectedEntity();
             if (selectedEntity && selectedEntity.type === 'building') {
                 selectedEntity.sprite.rope.tint = parseInt(this.entity.color.slice(1), 16);
+            }
+        },
+        detachConnections: function() {
+            const selectedEntity = game.getSelectedEntity();
+            if (selectedEntity && selectedEntity.sockets) {
+                selectedEntity.removeConnections();
+            }
+        },
+        flipTrain: function() {
+            const selectedEntity = game.getSelectedEntity();
+            if (selectedEntity && selectedEntity.isTrain) {
+                selectedEntity.trackDirection *= -1;
             }
         }
     },
@@ -368,6 +380,14 @@ Vue.component('app-menu-building-selected', {
                 <label v-if="game.settings.enableExperimental && entity.subtype === 'power_line'" class="app-input-label">
                     <i class="fa fa-paint-brush" aria-hidden="true"></i> Color:
                     <input type="color" v-model="entity.color" style="padding: 1px;" @input="setColor()">
+                </label>
+                <label v-if="entity.building?.vehicle" class="app-input-label">
+                    <i class="fa fa-chain-broken" aria-hidden="true"></i> Detach vehicle
+                    <button class="btn-small m-0" type="button" @click="detachConnections()"><i class="fa fa-chain-broken" aria-hidden="true"></i></button>
+                </label>
+                <label v-if="entity.building?.vehicle" class="app-input-label">
+                    <i class="fa fa-exchange" aria-hidden="true"></i> Flip Train
+                    <button class="btn-small m-0" type="button" @click="flipTrain()"><i class="fa fa-exchange" aria-hidden="true"></i></button>
                 </label>
             </div>
             <div v-if="entity.building?.vehicle?.engine" class="settings-option-wrapper">

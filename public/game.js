@@ -1070,10 +1070,13 @@ const fontFamily = ['Recursive', 'sans-serif'];
         mx = e.clientX;
         my = e.clientY;
 
-        //const followNext = followEntity !== null;
-        game.followEntity(null);
-
         let mouseButton = e.button;
+
+        //const followNext = followEntity !== null;
+        if (mouseButton !== 2) {
+            game.followEntity(null);
+        }
+
         mouseDown[mouseButton] = true;
         if (mouseButton === 0) {
             if (!selectedHandlePoint) {
@@ -1901,7 +1904,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             socket.removeConnections();
                             connectingSocket.connections[entity.id] = socket.socketData.id;
                             connectingSocket.setVisible(false);
-                        } else if (typeof connectingSocketId !== 'number') {
+                        } else if (typeof connectingSocketId === 'number') {
                             const connectingEntity = game.getEntityById(connectingEntityId);
                             if (connectingEntity.sockets) {
                                 for (let i = 0; i < connectingEntity.sockets.children.length; i++) {
@@ -1916,10 +1919,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                     connectingSocket = socket.createConnection(connectingEntity, socketPosition.x, socketPosition.y, (entity.rotation + socket.rotation) + Math.PI);
                                 }
                             }
-                            return connectingSocket;
                         }
                         socket.connections[connectingEntityId] = connectingSocketId ?? connectingSocket.socketData.id;
                         socket.setVisible(false);
+                        return connectingSocket;
                     }
                 }
                 // This works for rails, unsure about anything else. Could just use the position of the socket, but we already have positional and rotation data from snapping.
