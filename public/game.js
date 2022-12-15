@@ -3293,6 +3293,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 position = Math.rotateAround(clone, position, -entity.rotation);
                 clone.position.set(position.x, position.y);
             }
+            clone.locked = entity.locked;
+            clone.selectionArea.tint = clone.locked ? COLOR_RED : COLOR_WHITE;
             let entityData = {};
             entity.onSave(entityData);
             entityData.selectedProduction = null;
