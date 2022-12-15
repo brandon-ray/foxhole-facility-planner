@@ -1898,7 +1898,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 socket.setConnection = function(connectingEntityId, connectingSocket, connectingSocketId) {
                     if (!isNaN(connectingEntityId) && (typeof connectingSocketId === 'number' || connectingSocket?.socketData) && (isNaN(socket.connections[connectingEntityId]) || socket.connections[connectingEntityId] !== (connectingSocketId ?? connectingSocket.socketData.id))) {
                         if (connectingSocket) {
-                            socket.removeConnections();
+                            connectingSocket.removeConnections();
                             connectingSocket.connections[entity.id] = socket.socketData.id;
                             connectingSocket.setVisible(false);
                         } else if (typeof connectingSocketId === 'number') {
