@@ -2308,7 +2308,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         let socketConnections = isSelection ? {} : socket.connections;
                         if (isSelection) {
                             for (const [connectedEntityId, connectedSocketId] of Object.entries(socket.connections)) {
-                                if (game.getEntityById(connectedEntityId).selected) {
+                                const connectedEntity = game.getEntityById(connectedEntityId);
+                                if (connectedEntity?.selected) {
                                     socketConnections[connectedEntityId] = connectedSocketId;
                                 }
                             }
@@ -3298,7 +3299,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             clone.selectionArea.tint = clone.locked ? COLOR_RED : COLOR_WHITE;
             clone.rotation = entity.rotation;
             let entityData = {};
-            entity.onSave(entityData, true);
+            entity.onSave(entityData);
             entityData.selectedProduction = null;
             clone.onLoad(entityData);
             clone.afterLoad(entityData, null, true);
