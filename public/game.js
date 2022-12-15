@@ -3542,8 +3542,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 }
                             }
 
-                            if (entity.hasConnectionToEntity(entity2) && dist > entity.sprite.width/2+entity2.sprite.width/2+10) {
-                                if (dist > entity.sprite.width+entity2.sprite.width) {
+                            if (entity.hasConnectionToEntity(entity2) && dist > entity.sprite.width/2+entity2.sprite.width/2+5) {
+                                if (dist > entity.sprite.width/2+entity2.sprite.width/2+30) {
+                                    entity.removeConnectionsToEntity(entity2);
                                     continue;
                                 }
                                 let pPos = app.cstage.toLocal(entity.currentTrack.bezier.get(entity.currentTrackT + (0.05 * entity.trackDirection)), entity.currentTrack, undefined, true);
@@ -3558,9 +3559,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                     entity.trackVelocity += distDiff/entity.mass;
                                     entity.moveAlongBezier(distDiffScaled/2);
                                 }
-
-                                // TODO: Wasn't sure which number was which so here's a neat little function to detach train cars from each other.
-                                // entity.removeConnectionsToEntity(entity2);
                             }
                         }
                     }
