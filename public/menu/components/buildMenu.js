@@ -67,9 +67,9 @@ Vue.component('app-game-sidebar', {
     template: html`
     <div id="sidebar">
         <div id="sidebar-header">
-            <button class="colonial-button" :class="{ selected: game.settings.selectedFaction == 'c' }" title="Colonial Faction" @click="selectFaction('c')" @mouseenter="bme"></button>
+            <button class="colonial-button" :class="{ selected: game.settings.selectedFaction == 'c' }" title="Colonial Faction" @click="selectFaction('c')" @mouseenter="bme()"></button>
             <img class="sidebar-logo" src="/assets/logo_transparent.webp">
-            <button class="warden-button" :class="{ selected: game.settings.selectedFaction == 'w' }" title="Warden Faction" @click="selectFaction('w')" @mouseenter="bme"></button>
+            <button class="warden-button" :class="{ selected: game.settings.selectedFaction == 'w' }" title="Warden Faction" @click="selectFaction('w')" @mouseenter="bme()"></button>
         </div>
         <div id="sidebar-body" :class="currentMenu ? currentMenu.key + '-page' : 'construction-page'">
             <div v-if="!currentMenu" class="menu-body">
@@ -77,7 +77,7 @@ Vue.component('app-game-sidebar', {
             </div>
             <div v-if="currentMenu" class="menu-body">
                 <div class="menu-page-title"><i :class="'fa ' + currentMenu.icon"></i> {{currentMenu.name}}</div>
-                <button type="button" class="title-button return-button" v-on:click="changeMenu(null)" title="Back" @mouseenter="bme">
+                <button type="button" class="title-button return-button" v-on:click="changeMenu(null)" title="Back" @mouseenter="bme()">
                     <div class="inner-button"><i class="fa fa-arrow-left"></i></div>
                 </button>
                 <div class="menu-page">
@@ -85,27 +85,27 @@ Vue.component('app-game-sidebar', {
                 </div>
             </div>
             <div class="menu-footer-buttons">
-                <button v-if="!currentMenu" type="button" class="app-btn app-btn-primary" v-on:click="changeMenu('save-load')" @mouseenter="bme">
+                <button v-if="!currentMenu" type="button" class="app-btn app-btn-primary" v-on:click="changeMenu('save-load')" @mouseenter="bme()">
                     <i class="fa fa-save"></i> Save/Load
                 </button>
-                <button v-if="currentMenu"  type="button" class="app-btn app-btn-primary" v-on:click="changeMenu(null)" @mouseenter="bme">
+                <button v-if="currentMenu"  type="button" class="app-btn app-btn-primary" v-on:click="changeMenu(null)" @mouseenter="bme()">
                     <i class="fa fa-arrow-left"></i> Return
                 </button>
             </div>
         </div>
         <div id="sidebar-footer">
-            <a class="float-left github-button" href="https://github.com/brandon-ray/foxhole-facility-planner" target="_blank" @click="bmc" @mouseenter="bme">
+            <a class="float-left github-button" href="https://github.com/brandon-ray/foxhole-facility-planner" target="_blank" @click="bmc()" @mouseenter="bme()">
                 <i class="fa fa-github"></i>
             </a>
-            <a class="float-left discord-button" href="https://discord.gg/SnyEDQyAVr" target="_blank" @click="bmc" @mouseenter="bme">
+            <a class="float-left discord-button" href="https://discord.gg/SnyEDQyAVr" target="_blank" @click="bmc()" @mouseenter="bme()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36">
                     <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
                 </svg>
             </a>
-            <button v-on:click="event.preventDefault(); changeMenu('settings')" class="float-right" @mouseenter="bme">
+            <button v-on:click="event.preventDefault(); changeMenu('settings')" class="float-right" @mouseenter="bme()">
                 <i class="fa fa-gear"></i>
             </button>
-            <button v-on:click="event.preventDefault(); changeMenu('about')" class="float-right" @mouseenter="bme">
+            <button v-on:click="event.preventDefault(); changeMenu('about')" class="float-right" @mouseenter="bme()">
                 <i class="fa fa-question-circle"></i>
             </button>
         </div>
@@ -326,7 +326,7 @@ Vue.component('app-menu-building-selected', {
             let selectedEntity = game.getSelectedEntity();
             game.followEntity(!selectedEntity.following && selectedEntity ? selectedEntity : null);
         },
-        setColor: function () {
+        setColor: function() {
             let selectedEntity = game.getSelectedEntity();
             if (selectedEntity && selectedEntity.type === 'building') {
                 selectedEntity.sprite.rope.tint = parseInt(this.entity.color.slice(1), 16);
@@ -335,13 +335,13 @@ Vue.component('app-menu-building-selected', {
     },
     template: html`
     <div class="text-left">
-        <button type="button" class="title-button trash-button" v-on:click="destroyBuildings" title="Delete" @mouseenter="bme">
+        <button type="button" class="title-button trash-button" v-on:click="destroyBuildings()" title="Delete" @mouseenter="bme()">
             <div class="inner-button"><i class="fa fa-trash"></i></div>
         </button>
-        <button type="button" class="title-button clone-button" v-on:click="cloneBuildings" title="Clone" @mouseenter="bme">
+        <button type="button" class="title-button clone-button" v-on:click="cloneBuildings()" title="Clone" @mouseenter="bme()">
             <div class="inner-button"><i class="fa fa-clone"></i></div>
         </button>
-        <button type="button" class="title-button lock-button" v-on:click="lockBuildings" title="Lock" @mouseenter="bme">
+        <button type="button" class="title-button lock-button" v-on:click="lockBuildings()" title="Lock" @mouseenter="bme()">
             <div class="inner-button">
                 <span v-if="lockState === 1" class="locked"><i class="fa fa-lock"></i></span>
                 <span v-else-if="lockState === 0" class="partially-locked"><i class="fa fa-unlock"></i></span>
@@ -367,13 +367,13 @@ Vue.component('app-menu-building-selected', {
                 </label>
                 <label v-if="game.settings.enableExperimental && entity.subtype === 'power_line'" class="app-input-label">
                     <i class="fa fa-paint-brush" aria-hidden="true"></i> Color:
-                    <input type="color" v-model="entity.color" style="padding: 1px;" @input="setColor">
+                    <input type="color" v-model="entity.color" style="padding: 1px;" @input="setColor()">
                 </label>
             </div>
             <div v-if="entity.building?.vehicle?.engine" class="settings-option-wrapper">
                 <div class="settings-title">
                     Train Controls
-                    <button class="btn-small m-0" :class="{ 'btn-active': entity.following }" style="font-size: 0.9em; position: absolute; right: 6px;" title="Follow" @click="toggleFollow"><i class="fa fa-video-camera" aria-hidden="true"></i></button>
+                    <button class="btn-small m-0" :class="{ 'btn-active': entity.following }" style="font-size: 0.9em; position: absolute; right: 6px;" title="Follow" @click="toggleFollow()"><i class="fa fa-video-camera" aria-hidden="true"></i></button>
                 </div>
                 <label class="app-input-label">
                     <i class="fa fa-train" aria-hidden="true"></i> Speed
@@ -381,7 +381,7 @@ Vue.component('app-menu-building-selected', {
                 </label>
                 <label class="app-input-label">
                     <i class="fa fa-train" aria-hidden="true"></i> Throttle ({{Math.round(entity.userThrottle*100)}}%)
-                    <input type="range" class="slider w-50" v-model.number="entity.userThrottle" min="-1" max="1" step="0.1" @input="updateEntity(true)">
+                    <input type="range" class="slider w-50" v-model.number="entity.userThrottle" min="-1" max="1" step="0.1" @input="updateEntity()">
                 </label>
             </div>
             <div v-if="entity.type === 'text'" class="settings-option-wrapper">
@@ -393,15 +393,15 @@ Vue.component('app-menu-building-selected', {
                     <button class="btn-small ml-auto" :class="{ 'btn-active': entity.style.align === 'left' }" type="button" @click="entity.style.align = 'left'; updateEntity();"><i class="fa fa-align-left" aria-hidden="true"></i></button>
                     <button class="btn-small" :class="{ 'btn-active': entity.style.align === 'center' }" type="button" @click="entity.style.align = 'center'; updateEntity();"><i class="fa fa-align-center" aria-hidden="true"></i></button>
                     <button class="btn-small mr-auto" :class="{ 'btn-active': entity.style.align === 'right' }" type="button" @click="entity.style.align = 'right'; updateEntity();"><i class="fa fa-align-right" aria-hidden="true"></i></button>
-                    <input class="btn-small small-number-input" type="number" v-model.number="entity.style.fontSize" style="width: 40px;" @input="updateEntity" min="12" max="500">
-                    <input class="btn-small" type="color" v-model="entity.style.fill" style="padding: 1px;" @input="updateEntity">
+                    <input class="btn-small small-number-input" type="number" v-model.number="entity.style.fontSize" style="width: 40px;" @input="updateEntity()" min="12" max="500">
+                    <input class="btn-small" type="color" v-model="entity.style.fill" style="padding: 1px;" @input="updateEntity()">
                 </div>
-                <textarea ref="label" v-model.trim="entity.label" @input="updateEntity" maxlength="500" placeholder="Text Required"></textarea>
+                <textarea ref="label" v-model.trim="entity.label" @input="updateEntity()" maxlength="500" placeholder="Text Required"></textarea>
             </div>
             <div v-else-if="entity.type === 'shape'" class="settings-option-wrapper">
                 <div class="settings-title">Shape Options</div>
                 <div class="settings-option d-flex justify-content-center">
-                    <input class="btn-small small-number-input" type="number" v-model.number="entity.style.alpha" style="width: 40px;" @input="updateEntity" min="1" max="100">
+                    <input class="btn-small small-number-input" type="number" v-model.number="entity.style.alpha" style="width: 40px;" @input="updateEntity()" min="1" max="100">
 
                     <template v-if="entity.subtype === 'line'">
                         <button class="btn-small" :class="{ 'btn-active': entity.style.frontArrow }" type="button" @click="entity.style.frontArrow = !entity.style.frontArrow; updateEntity();"><i class="fa fa-caret-left" aria-hidden="true"></i></button>
@@ -409,11 +409,11 @@ Vue.component('app-menu-building-selected', {
                     </template>
                     
                     <!--<button v-if="entity.subtype !== 'line'" class="btn-small" :class="{ 'btn-active': entity.style.fill }" type="button" @click="entity.style.fill = !entity.style.fill; updateEntity();"><i class="fa fa-square" aria-hidden="true"></i></button>-->
-                    <input class="btn-small" type="color" v-model="entity.style.fillColor" style="padding: 1px;" @input="updateEntity">
+                    <input class="btn-small" type="color" v-model="entity.style.fillColor" style="padding: 1px;" @input="updateEntity()">
 
                     <button v-if="entity.subtype !== 'line'" class="btn-small" :class="{ 'btn-active': entity.style.border }" type="button" @click="entity.style.border = !entity.style.border; updateEntity();"><i class="fa fa-square-o" aria-hidden="true"></i></button>
-                    <input class="btn-small small-number-input" type="number" v-model.number="entity.style.lineWidth" style="width: 40px;" @input="updateEntity" min="6" max="64" :disabled="entity.subtype !== 'line' && !entity.style.border">
-                    <!--<input v-if="entity.subtype !== 'line'" class="btn-small" type="color" v-model="entity.style.lineColor" style="padding: 1px;" @input="updateEntity">-->
+                    <input class="btn-small small-number-input" type="number" v-model.number="entity.style.lineWidth" style="width: 40px;" @input="updateEntity()" min="6" max="64" :disabled="entity.subtype !== 'line' && !entity.style.border">
+                    <!--<input v-if="entity.subtype !== 'line'" class="btn-small" type="color" v-model="entity.style.lineColor" style="padding: 1px;" @input="updateEntity()">-->
                 </div>
             </div>
         </template>
@@ -426,7 +426,7 @@ Vue.component('app-menu-building-selected', {
                 Report issues to our GitHub or Discord.
             </label>
             <div class="text-button-wrapper">
-                <button class="text-button" type="button" v-on:click="game.downloadSave(true)" @mouseenter="bme">
+                <button class="text-button" type="button" v-on:click="game.downloadSave(true)" @mouseenter="bme()">
                     <i class="fa fa-save"></i> Export Selection
                 </button>
             </div>
@@ -435,13 +435,13 @@ Vue.component('app-menu-building-selected', {
             <div v-if="entity.building && entity.building.upgrades" class="settings-option-wrapper upgrade-list">
                 <div class="settings-title">{{hoverUpgradeName ?? (entity.building.upgradeName ?? 'No Upgrade Selected')}}</div>
                 <button class="upgrade-button" v-for="(upgrade, key) in entity.building.upgrades" :class="{'selected-upgrade': entity.building.parentKey && entity.building.key === entity.building.parentKey + '_' + key}"
-                    @mouseenter="showUpgradeHover(key, upgrade)" @mouseleave="showUpgradeHover" @click="changeUpgrade(key)">
+                    @mouseenter="showUpgradeHover(key, upgrade)" @mouseleave="showUpgradeHover()" @click="changeUpgrade(key)">
                     <div class="resource-icon" :title="upgrade.name" :style="{backgroundImage:'url(/assets/' + (upgrade.icon ?? entity.building.icon) + ')'}"></div>
                 </button>
             </div>
             <div v-if="productionData" class="settings-option-wrapper">
                 <div class="settings-title">
-                    <button type="button" class="title-button return-button" v-on:click="changeProduction(null)" title="Back" @mouseenter="bme" style="padding: 1px 2px;">
+                    <button type="button" class="title-button return-button" v-on:click="changeProduction(null)" title="Back" @mouseenter="bme()" style="padding: 1px 2px;">
                         <div class="btn-small m-1"><i class="fa fa-arrow-left"></i></div>
                     </button>
                     Production Stats
@@ -461,7 +461,7 @@ Vue.component('app-menu-building-selected', {
                                 <i class="fa fa-arrow-circle-down" aria-hidden="true"></i> Limiter: 
                                 <span v-if="productionData.time <= 3600">x{{entity.productionScale}} cycles/hr</span>
                                 <span v-else>x{{entity.productionScale}} cycles/day</span>
-                                <input type="range" class="slider w-100" v-model.number="entity.productionScale" min="0" :max="productionData.max" step="1" @input="updateProduction">
+                                <input type="range" class="slider w-100" v-model.number="entity.productionScale" min="0" :max="productionData.max" step="1" @input="updateProduction()">
                             </div>
                         </template>
                         <template v-if="entity.productionScale > 0">
@@ -543,16 +543,16 @@ Vue.component('app-menu-construction-list', {
     template: html`
     <div id="construction-page">
         <div v-if="game.settings.enableExperimental" class="construction-modes-wrapper row">
-            <button v-for="mode in game.constructionModes" class="construction-mode-button col" :class="[{ 'mode-selected': game.constructionMode.key === mode.key }, mode.key + '-mode-button']" :title="mode.title" @mouseenter="bme" @click="setConstructionMode(mode)">
+            <button v-for="mode in game.constructionModes" class="construction-mode-button col" :class="[{ 'mode-selected': game.constructionMode.key === mode.key }, mode.key + '-mode-button']" :title="mode.title" @mouseenter="bme()" @click="setConstructionMode(mode)">
                 <i v-if="mode.icon" :class="'fa ' + mode.icon" aria-hidden="true"></i>
                 <span v-else-if="mode.text">{{mode.text}}</span>
             </button>
         </div>
         <div class="construction-filter-wrapper">
             <button class="construction-settings-button" @click="game.sidebarMenuComponent?.changeMenu('settings')" title="Filter Settings"><i class="fa fa-sliders" aria-hidden="true"></i></button>
-            <button class="construction-tech-button" @click="incrementTier" title="Filter by Tier">{{'Tier ' + game.settings.selectedTier}}</button>
+            <button class="construction-tech-button" @click="incrementTier()" title="Filter by Tier">{{'Tier ' + game.settings.selectedTier}}</button>
             <div class="construction-category-wrapper">
-                <select class="app-input construction-category" @click="bmc" title="Filter by Category" v-model="game.selectedBuildingCategory" @change="refresh">
+                <select class="app-input construction-category" @click="bmc()" title="Filter by Category" v-model="game.selectedBuildingCategory" @change="refresh()">
                     <option value="all">All Buildings</option>
                     <template v-for="(category, key) in buildingCategories">
                         <option v-if="game.settings.enableExperimental || key !== 'vehicles'" :value="key">{{category.name}}</option>
@@ -748,7 +748,7 @@ Vue.component('app-menu-statistics', {
                 Total: {{powerTotal}} MW
             </div>
             <br>
-            <select class="app-input" v-model="time" @change="refresh">
+            <select class="app-input" v-model="time" @change="refresh()">
                 <option value="86400">Per 24 Hours</option>
                 <option value="43200">Per 12 Hours</option>
                 <option value="21600">Per 6 Hours</option>
@@ -783,7 +783,7 @@ Vue.component('app-menu-settings', {
             <div class="settings-title">General Settings</div>
             <label class="app-input-label">
                 <i class="fa fa-picture-o" aria-hidden="true"></i> Graphics
-                <select class="app-input" v-model="game.settings.quality" v-on:change="game.updateQuality">
+                <select class="app-input" v-model="game.settings.quality" v-on:change="game.updateQuality()">
                     <option value="auto">Auto</option>
                     <option value="high">High Quality</option>
                     <option value="low">Low Quality</option>
@@ -791,37 +791,39 @@ Vue.component('app-menu-settings', {
             </label>
             <label class="app-input-label">
                 <i class="fa fa-volume-up" aria-hidden="true"></i> Volume
-                <input type="range" v-model="game.settings.volume" min="0" max="1" step="0.1" class="slider" @input="game.updateSettings">
+                <input type="range" v-model="game.settings.volume" min="0" max="1" step="0.1" class="slider" @input="game.updateSettings()">
             </label>
             <label class="app-input-label">
                 <i class="fa fa-flag" aria-hidden="true"></i> Display Faction Colors
-                <input class="app-input" type="checkbox" v-model="game.settings.displayFactionTheme" @change="game.updateSettings">
+                <input class="app-input" type="checkbox" v-model="game.settings.displayFactionTheme" @change="game.updateSettings()">
             </label>
+            <!--
             <label class="app-input-label">
                 <i class="fa fa-flask" aria-hidden="true"></i> Enable Experimental Features
-                <input class="app-input" type="checkbox" v-model="game.settings.enableExperimental" @change="game.updateSettings">
+                <input class="app-input" type="checkbox" v-model="game.settings.enableExperimental" @change="game.updateSettings()">
             </label>
+            -->
         </div>
         <div class="settings-option-wrapper">
             <div class="settings-title">Board Settings</div>
             <label class="app-input-label">
                 <i class="fa fa-header" aria-hidden="true"></i> Display Facility Name
-                <input class="app-input" type="checkbox" v-model="game.settings.showFacilityName" @change="game.updateSettings">
+                <input class="app-input" type="checkbox" v-model="game.settings.showFacilityName" @change="game.updateSettings()">
             </label>
             <label class="app-input-label">
                 <i class="fa fa-th-large" aria-hidden="true"></i> Snap Grid Size
-                <input class="app-input" type="number" v-model="game.settings.gridSize" @input="game.updateSettings">
+                <input class="app-input" type="number" v-model="game.settings.gridSize" @input="game.updateSettings()">
             </label>
             <label class="app-input-label">
                 <i class="fa fa-repeat" aria-hidden="true"></i> Snap Rotation Degrees
-                <input class="app-input" type="number" v-model="game.settings.snapRotationDegrees" @input="game.updateSettings">
+                <input class="app-input" type="number" v-model="game.settings.snapRotationDegrees" @input="game.updateSettings()">
             </label>
         </div>
         <div class="settings-option-wrapper">
             <div class="settings-title">Construction Settings</div>
             <label class="app-input-label">
                 <i class="fa fa-folder-open" aria-hidden="true"></i> Default Category
-                <select class="app-input" v-model="game.settings.defaultBuildingCategory" @change="game.updateSettings">
+                <select class="app-input" v-model="game.settings.defaultBuildingCategory" @change="game.updateSettings()">
                     <option value="all">All Buildings</option>
                     <template v-for="(category, key) in buildingCategories">
                         <option v-if="game.settings.enableExperimental || key !== 'vehicles'" :value="key">{{category.name}}</option>
@@ -830,7 +832,7 @@ Vue.component('app-menu-settings', {
             </label>
             <label class="app-input-label">
                 <i class="fa fa-users" aria-hidden="true"></i> Selected Faction
-                <select class="app-input" v-model="game.settings.selectedFaction" @change="game.updateSettings">
+                <select class="app-input" v-model="game.settings.selectedFaction" @change="game.updateSettings()">
                     <option :value="null">Neutral</option>
                     <option value="c">Colonials</option>
                     <option value="w">Wardens</option>
@@ -838,7 +840,7 @@ Vue.component('app-menu-settings', {
             </label>
             <label class="app-input-label">
                 <i class="fa fa-sitemap" aria-hidden="true"></i> Selected Tech Tier
-                <select class="app-input" v-model.number="game.settings.selectedTier" @change="game.updateSettings">
+                <select class="app-input" v-model.number="game.settings.selectedTier" @change="game.updateSettings()">
                     <option value="1">Tier 1</option>
                     <option value="2">Tier 2</option>
                     <option value="3">Tier 3</option>
@@ -846,7 +848,7 @@ Vue.component('app-menu-settings', {
             </label>
             <label class="app-input-label">
                 <i class="fa fa-chevron-circle-up" aria-hidden="true"></i> Show Upgrades in Building List
-                <input class="app-input" type="checkbox" v-model="game.settings.showUpgradesAsBuildings" @change="game.updateSettings">
+                <input class="app-input" type="checkbox" v-model="game.settings.showUpgradesAsBuildings" @change="game.updateSettings()">
             </label>
         </div>
     </div>
@@ -913,18 +915,18 @@ Vue.component('app-menu-save-load', {
     },
     template: html`
     <div id="save-load-page">
-        <input id="fileUpload" @change="loadFile" type="file" ref="file" hidden>
+        <input id="fileUpload" @change="loadFile()" type="file" ref="file" hidden>
         <div class="settings-option-wrapper">
             <div class="settings-title">Facility Properties</div>
             <label class="app-input-label facility-name-input">
                 <i class="fa fa-pencil-square edit-icon" aria-hidden="true"></i>
-                <input class="app-input" type="text" v-model="game.facilityName" @change="updateName">
+                <input class="app-input" type="text" v-model="game.facilityName" @change="updateName()">
             </label>
             <div class="text-center">
-                <button class="app-btn app-btn-primary load-button" type="button" v-on:click="openFileBrowser()" @mouseenter="bme">
+                <button class="app-btn app-btn-primary load-button" type="button" v-on:click="openFileBrowser()" @mouseenter="bme()">
                     <i class="fa fa-upload"></i> Load
                 </button>
-                <button class="app-btn app-btn-primary save-button" type="button" v-on:click="game.downloadSave()" @mouseenter="bme">
+                <button class="app-btn app-btn-primary save-button" type="button" v-on:click="game.downloadSave()" @mouseenter="bme()">
                     <i class="fa fa-save"></i> Save
                 </button>
             </div>
@@ -940,7 +942,7 @@ Vue.component('app-menu-save-load', {
                         <option value="train_test">Train Testing</option>
                     </select>
                 </div>
-                <button class="preset-load-button" type="button" v-on:click="fetchPreset" @mouseenter="bme">
+                <button class="preset-load-button" type="button" v-on:click="fetchPreset()" @mouseenter="bme()">
                     <i class="fa fa-upload"></i> Load
                 </button>
             </div>
@@ -948,10 +950,10 @@ Vue.component('app-menu-save-load', {
         <div class="settings-option-wrapper">
             <div class="settings-title">Selection Options</div>
             <div class="text-button-wrapper">
-                <button class="text-button" type="button" v-on:click="openFileBrowser(true)" @mouseenter="bme">
+                <button class="text-button" type="button" v-on:click="openFileBrowser(true)" @mouseenter="bme()">
                     <i class="fa fa-upload"></i> Import Selection
                 </button>
-                <button v-if="game.getSelectedEntities().length > 1" class="text-button" type="button" v-on:click="game.downloadSave(true)" @mouseenter="bme">
+                <button v-if="game.getSelectedEntities().length > 1" class="text-button" type="button" v-on:click="game.downloadSave(true)" @mouseenter="bme()">
                     <i class="fa fa-save"></i> Export Selection
                 </button>
             </div>

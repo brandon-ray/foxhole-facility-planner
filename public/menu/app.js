@@ -63,32 +63,32 @@ if (isMobile && !isPhoneApp) {
 
                 <div class="footer">
                     <label class="checkbox-button align-middle">
-                        <input type="checkbox" name="snap-to-grid-toggle" v-model="settings.enableGrid" @change="game.updateSettings" />
+                        <input type="checkbox" name="snap-to-grid-toggle" v-model="settings.enableGrid" @change="game.updateSettings()" />
                         Snap to Grid
                     </label>
                     <label class="checkbox-button align-middle">
-                        <input type="checkbox" name="snap-rotation-toggle" v-model="settings.enableSnapRotation" @change="game.updateSettings" />
+                        <input type="checkbox" name="snap-rotation-toggle" v-model="settings.enableSnapRotation" @change="game.updateSettings()" />
                         Snap Rotation
                     </label>
                     <label class="checkbox-button align-middle">
-                        <input type="checkbox" name="stats-info-toggle" v-model="game.settings.enableStats" @change="game.updateSettings" />
+                        <input type="checkbox" name="stats-info-toggle" v-model="game.settings.enableStats" @change="game.updateSettings()" />
                         Show Stats
                     </label>
                     <label class="checkbox-button align-middle">
-                        <input type="checkbox" name="ranges-visible-toggle" v-model="game.settings.showRanges" @change="updateRangeSprites" />
+                        <input type="checkbox" name="ranges-visible-toggle" v-model="game.settings.showRanges" @change="updateRangeSprites()" />
                         Show Structure Ranges
                     </label>
                     <label class="checkbox-button align-middle">
-                        <input type="checkbox" name="production-visible-toggle" v-model="game.settings.showProductionIcons" @change="updateProductionIcons" />
+                        <input type="checkbox" name="production-visible-toggle" v-model="game.settings.showProductionIcons" @change="updateProductionIcons()" />
                         (P) Show Production Icons
                     </label>
-                    <button class="footer-button" @click="game.tryFullscreen">
+                    <button class="footer-button" @click="game.tryFullscreen()">
                         <i class="fa fa-arrows-alt" aria-hidden="true"></i>
                     </button>
-                    <button class="footer-button" @click="game.zoomToFacilityCenter">
+                    <button class="footer-button" @click="game.zoomToFacilityCenter()">
                         <i class="fa fa-expand" aria-hidden="true"></i>
                     </button>
-                    <button class="footer-button" @click="game.confirmDeletion">
+                    <button class="footer-button" @click="game.confirmDeletion()">
                         <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
                 </div>

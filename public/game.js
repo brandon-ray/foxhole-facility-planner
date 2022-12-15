@@ -2943,7 +2943,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                                     const entityConnections = Object.keys(entitySocket.connections).length;
                                                     if (entitySocket.connections[entity.id] === handleSocket.socketData.id || (!entity.hasConnectionToEntity(entity2, handleSocket) && (entityConnections === 0 || (entitySocket.socketData.connectionLimit && entityConnections < entitySocket.socketData.connectionLimit)))) {
                                                         nearestSocketPos = app.cstage.toLocal({x: entitySocket.x, y: entitySocket.y}, entity2, undefined, true);
-                                                        if (Math.distanceBetween(entity, nearestSocketPos) <= (entity.building?.maxLength * METER_PIXEL_SIZE)) {
+                                                        if (Math.floor(Math.distanceBetween(entity, nearestSocketPos)) <= (entity.building?.maxLength * METER_PIXEL_SIZE)) {
                                                             nearestSocket = entitySocket;
                                                             nearestSocketDist = socketDistance;
                                                         }
