@@ -2162,10 +2162,12 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 let connectedEntitySocket = null;
                                 if (isUpgrade) {
                                     const connectedEntity = game.getEntityById(connectedEntityId);
-                                    for (let j = 0; j < connectedEntity.sockets.children.length; j++) {
-                                        const connectedSocket = connectedEntity.sockets.children[j];
-                                        if (connectedSocket.socketData.id === connectedSocketId) {
-                                            connectedEntitySocket = connectedSocket;
+                                    if (connectedEntity) {
+                                        for (let j = 0; j < connectedEntity.sockets.children.length; j++) {
+                                            const connectedSocket = connectedEntity.sockets.children[j];
+                                            if (connectedSocket.socketData.id === connectedSocketId) {
+                                                connectedEntitySocket = connectedSocket;
+                                            }
                                         }
                                     }
                                 }
