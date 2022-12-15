@@ -1913,7 +1913,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 }
                                 if (!connectingSocket) {
                                     const socketPosition = connectingEntity.toLocal(socket, entity);
-                                    connectingSocket = socket.createConnection(connectingEntity, socketPosition.x, socketPosition.y, (entity.rotation + socket.rotation) + Math.PI);
+                                    connectingSocket = socket.createConnection(connectingEntity, socketPosition.x, socketPosition.y, ((entity.rotation + socket.rotation) - connectingEntity.rotation) + Math.PI, connectingSocketId);
                                 }
                             }
                         }
@@ -1923,7 +1923,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     }
                 }
                 // This works for rails, unsure about anything else. Could just use the position of the socket, but we already have positional and rotation data from snapping.
-                socket.createConnection = function(connectingEntity, x, y, rotation) {
+                socket.createConnection = function(connectingEntity, x, y, rotation, id) {
                     if (connectingEntity?.sockets) {
                         let connectingSocket = null;
                         for (let i = 0; i < connectingEntity.sockets.children.length; i++) {
@@ -1945,7 +1945,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
                         if (!connectingSocket) {
                             let socketData = {
-                                'id': connectingEntity.sockets.children.length,
+                                'id': id ?? connectingEntity.sockets.children.length,
                                 'type': socket.socketData.type,
                                 'temp': true,
                                 'switch': 'rail'
