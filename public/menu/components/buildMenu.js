@@ -332,10 +332,10 @@ Vue.component('app-menu-building-selected', {
                 selectedEntity.sprite.rope.tint = parseInt(this.entity.color.slice(1), 16);
             }
         },
-        detachConnections: function() {
+        detachConnections: function(socketId) {
             const selectedEntity = game.getSelectedEntity();
             if (selectedEntity && selectedEntity.sockets) {
-                selectedEntity.removeConnections();
+                selectedEntity.removeConnections(socketId);
             }
         },
         flipTrain: function() {
@@ -408,14 +408,16 @@ Vue.component('app-menu-building-selected', {
                     <i class="fa fa-paint-brush" aria-hidden="true"></i> Color:
                     <input type="color" v-model="entity.color" style="padding: 1px;" @input="setColor()">
                 </label>
-                <label v-if="entity.building?.vehicle" class="app-input-label">
-                    <i class="fa fa-chain-broken" aria-hidden="true"></i> Detach vehicle
-                    <button class="btn-small m-0" type="button" @click="detachConnections()"><i class="fa fa-chain-broken" aria-hidden="true"></i></button>
-                </label>
-                <label v-if="entity.building?.vehicle" class="app-input-label">
+                <div v-if="entity.building?.vehicle" class="settings-option-row">
+                    <i class="fa fa-chain-broken" aria-hidden="true"></i> Detach
+                    <button class="btn-small w-auto m-0 px-2" type="button" @click="detachConnections(1)">Back</button>&nbsp;
+                    <button class="btn-small w-auto m-0 mr-1 px-2" type="button" @click="detachConnections(0)">Front</button>&nbsp;
+                    <button class="btn-small w-auto m-0 mr-1 px-2" type="button" @click="detachConnections()">All</button>&nbsp;
+                </div>
+                <div v-if="entity.building?.vehicle" class="settings-option-row">
                     <i class="fa fa-exchange" aria-hidden="true"></i> Flip Train
                     <button class="btn-small m-0" type="button" @click="flipTrain()"><i class="fa fa-exchange" aria-hidden="true"></i></button>
-                </label>
+                </div>
             </div>
             <div v-if="entity.building?.vehicle?.engine" class="settings-option-wrapper">
                 <div class="settings-title">

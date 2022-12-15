@@ -50,6 +50,11 @@ p {
     margin: 0;
 }
 
+/* Remove if update Bootstrap. */
+.w-auto {
+    width: auto !important;
+}
+
 .app {
     height: 100%;
     width: 100%;
@@ -1264,18 +1269,18 @@ input[type=number].btn-small {
     text-align: center;
 }
 
-label.settings-option-wrapper, .settings-option-wrapper label {
+label.settings-option-wrapper, .settings-option-wrapper label, .settings-option-wrapper .settings-option-row {
     display: block;
     padding: 6px 6px 6px 12px;
     overflow: auto;
 }
 
-.settings-option-wrapper label {
+.settings-option-wrapper label, .settings-option-wrapper .settings-option-row {
     border-bottom: 1px solid #131313;
     margin: 0;
 }
 
-.settings-option-wrapper label:last-child {
+.settings-option-wrapper label:last-child, .settings-option-wrapper .settings-option-row:last-child {
     border-bottom: none;
 }
 
