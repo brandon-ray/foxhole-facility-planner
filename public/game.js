@@ -1345,7 +1345,12 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
     function createEntity(type, subtype, x, y, z, id, netData) {
         let entity = new PIXI.Container();
-        entity.id = _entityIds++;
+
+        if (typeof id === 'number' && id >= _entityIds) {
+            _entityIds = id + 1;
+        }
+
+        entity.id = id ?? _entityIds++;
         entity.subtype = subtype;
         entity.netData = netData;
 
@@ -1898,7 +1903,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 socket.setConnection = function(connectingEntityId, connectingSocket, connectingSocketId) {
                     if (!isNaN(connectingEntityId) && (typeof connectingSocketId === 'number' || connectingSocket?.socketData) && (isNaN(socket.connections[connectingEntityId]) || socket.connections[connectingEntityId] !== (connectingSocketId ?? connectingSocket.socketData.id))) {
                         if (connectingSocket) {
-                            connectingSocket.removeConnections();
+                            socket.removeConnections();
                             connectingSocket.connections[entity.id] = socket.socketData.id;
                             connectingSocket.setVisible(false);
                         } else if (typeof connectingSocketId === 'number') {
@@ -2152,7 +2157,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 }, 1);
             };
 
-            entity.afterLoad = function(entityData, entityIdMap, isUpgrade) {
+            entity.afterLoad = function(entityData, entityIdMap) {
                 if (entity.sockets && entityData.connections) {
                     for (let i = 0; i < entity.sockets.children.length; i++) {
                         const socket = entity.sockets.children[i];
@@ -2162,17 +2167,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 const remappedEntityId = (entityIdMap && typeof entityIdMap[connectedEntityId] === 'number') ? entityIdMap[connectedEntityId] : connectedEntityId;
                                 const connectedEntity = game.getEntityById(remappedEntityId);
                                 if (connectedEntity) {
-                                    let connectedEntitySocket = null;
-                                    if (isUpgrade) {
-                                        for (let j = 0; j < connectedEntity.sockets.children.length; j++) {
-                                            const connectedSocket = connectedEntity.sockets.children[j];
-                                            if (connectedSocket.socketData.id === connectedSocketId) {
-                                                connectedEntitySocket = connectedSocket;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    socket.setConnection(remappedEntityId, connectedEntitySocket, connectedSocketId);
+                                    socket.setConnection(remappedEntityId, undefined, connectedSocketId);
                                 }
                             }
                         }
@@ -3284,7 +3279,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 upgrade = bData.parentKey ? bData.parentKey + '_' + upgrade : bData.key + '_' + upgrade;
                 upgrade = bData.key === upgrade ? bData.parentKey || bData.key : upgrade;
             }
-            let clone = createSelectableEntity('building', upgrade ?? entity.building.key, entity.x, entity.y, 0);
+            let clone = createSelectableEntity('building', upgrade ?? entity.building.key, entity.x, entity.y, entity.z, entity.rotation, entity.id);
             if (upgrade) {
                 let position = { x: clone.x, y: clone.y };
                 if (entity.building?.positionOffset) {
@@ -3298,15 +3293,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 position = Math.rotateAround(clone, position, -entity.rotation);
                 clone.position.set(position.x, position.y);
             }
-            // TODO: Cleanup
-            clone.locked = entity.locked;
-            clone.selectionArea.tint = clone.locked ? COLOR_RED : COLOR_WHITE;
-            clone.rotation = entity.rotation;
             let entityData = {};
             entity.onSave(entityData);
             entityData.selectedProduction = null;
             clone.onLoad(entityData);
-            clone.afterLoad(entityData, null, true);
+            clone.afterLoad(entityData);
             game.selectEntity(clone);
             entity.sockets = null;
             entity.remove();
