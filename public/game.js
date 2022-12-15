@@ -3554,9 +3554,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 }
 
                                 // TODO: Wasn't sure which number was which so here's a neat little function to detach train cars from each other.
-                                if (distDiff > 1) {
-                                    entity.removeConnectionsToEntity(entity2);
-                                }
+                                // entity.removeConnectionsToEntity(entity2);
                             }
                         }
                     }
@@ -3671,7 +3669,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             const mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
                             const projection = entity.bezier?.project(mousePos);
                             if (!projection || projection.d <= (entity.building?.lineWidth ?? 25)) {
-                                if (pickupEntity.sockets && entity.sockets && (pickupEntity.building?.canSnapStructureType !== false || pickupEntity.subtype !== entity.subtype)) {
+                                if (pickupEntity.sockets && entity.sockets && pickupEntity.building?.canSnap && (pickupEntity.building?.canSnapStructureType !== false || pickupEntity.subtype !== entity.subtype)) {
                                     let frontSocket, nearestSocket, nearestSocketDist = null;
                                     for (let j = 0; j < entity.sockets.children.length; j++) {
                                         let entitySocket = entity.sockets.children[j];

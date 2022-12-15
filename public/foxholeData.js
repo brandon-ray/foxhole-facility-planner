@@ -4051,7 +4051,6 @@ const foxholeData = {
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeResourceCarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/smalltraindump.webp",
-			"canSnap": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -4082,7 +4081,6 @@ const foxholeData = {
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeEngineVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/smalltrainengine.webp",
-			"canSnap": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -4115,7 +4113,6 @@ const foxholeData = {
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeFlatbedCarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/smalltrainresourceplatform.webp",
-			"canSnap": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -4337,7 +4334,6 @@ const foxholeData = {
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/TrainCabooseItemIcon.webp",
 			"texture": "game/Textures/Vehicles/traincaboose.webp",
-			"canSnap": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -4369,7 +4365,6 @@ const foxholeData = {
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/TrainCoalCarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/traincoal.webp",
-			"canSnap": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -4401,7 +4396,6 @@ const foxholeData = {
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/TrainEngineVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/trainengine.webp",
-			"canSnap": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -4435,7 +4429,6 @@ const foxholeData = {
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/TrainCarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/trainflatbed.webp",
-			"canSnap": true,
 			"sockets": [
 				{
 					"id": 0,

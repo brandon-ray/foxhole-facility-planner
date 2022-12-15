@@ -343,7 +343,32 @@ Vue.component('app-menu-building-selected', {
             if (selectedEntity && selectedEntity.isTrain) {
                 selectedEntity.trackVelocity = 0;
                 selectedEntity.trackDirection *= -1;
-                // TODO: Flip sockets of train.
+                if (selectedEntity.sockets) {
+                    let entityConnections = {};
+                    for (let i = 0; i < selectedEntity.sockets.children.length; i++) {
+                        const entitySocket = selectedEntity.sockets.children[i];
+                        if (entitySocket.socketData.id === 0 || entitySocket.socketData.id === 1) {
+                            entityConnections[entitySocket.socketData.id] = Object.assign({}, entitySocket.connections);
+                        }
+                    }
+                    for (let i = 0; i < selectedEntity.sockets.children.length; i++) {
+                        const entitySocket = selectedEntity.sockets.children[i];
+                        if (entitySocket.socketData.id === 0 || entitySocket.socketData.id === 1) {
+                            const socketConnections = entityConnections[entitySocket.socketData.id ? 0 : 1];
+                            for (const [connectedEntityId, connectedSocketId] of Object.entries(socketConnections)) {
+                                const connectedEntity = game.getEntityById(connectedEntityId);
+                                if (connectedEntity.sockets) {
+                                    for (let j = 0; j < connectedEntity.sockets.children.length; j++) {
+                                        const connectedSocket = connectedEntity.sockets.children[j];
+                                        if (connectedSocket.socketData.id === connectedSocketId) {
+                                            connectedSocket.setConnection(selectedEntity.id, entitySocket);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     },
