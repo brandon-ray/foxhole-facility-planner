@@ -341,7 +341,9 @@ Vue.component('app-menu-building-selected', {
         flipTrain: function() {
             const selectedEntity = game.getSelectedEntity();
             if (selectedEntity && selectedEntity.isTrain) {
+                selectedEntity.trackVelocity = 0;
                 selectedEntity.trackDirection *= -1;
+                // TODO: Flip sockets of train.
             }
         }
     },

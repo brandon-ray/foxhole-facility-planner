@@ -804,7 +804,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 type: entity.type,
                 subtype: entity.subtype
             };
-            entity.onSave(entityData);
+            entity.onSave(entityData, isSelection);
             saveObject.entities.push(entityData);
         }
         return saveObject;
@@ -845,7 +845,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     case 'building':
                     case 'text':
                     case 'shape':
-                        entity = createSelectableEntity(entityData.type, entityData.subtype, parseFloat(entityData.x), parseFloat(entityData.y), parseInt(entityData.z), entityData.rotation, isNaN(entityData.id) ? undefined : _entityIds + parseInt(entityData.id));
+                        entity = createSelectableEntity(entityData.type, entityData.subtype, parseFloat(entityData.x), parseFloat(entityData.y), parseInt(entityData.z), entityData.rotation);
                         break;
                     default:
                         console.error('Attempted to load invalid entity:', entityData);
@@ -1345,10 +1345,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
     function createEntity(type, subtype, x, y, z, id, netData) {
         let entity = new PIXI.Container();
-        if (typeof id === 'number' && _entityIds <= id) {
-            _entityIds = id + 1;
-        }
-        entity.id = id ?? _entityIds++;
+        entity.id = _entityIds++;
         entity.subtype = subtype;
         entity.netData = netData;
 
@@ -1906,7 +1903,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             connectingSocket.setVisible(false);
                         } else if (typeof connectingSocketId === 'number') {
                             const connectingEntity = game.getEntityById(connectingEntityId);
-                            if (connectingEntity.sockets) {
+                            if (connectingEntity?.sockets) {
                                 for (let i = 0; i < connectingEntity.sockets.children.length; i++) {
                                     const connectingEntitySocket = connectingEntity.sockets.children[i];
                                     if (connectingEntitySocket.socketData.id === connectingSocketId) {
@@ -2094,7 +2091,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
             entity.hasConnectionToEntity = (connectingEntity, ignoredSocket) => entity.hasConnectionToEntityId(connectingEntity.id, ignoredSocket);
 
-            entity.removeConnections = function(socketId, ignoreSelected, ignoreSocket) {
+            entity.removeConnections = function(socketId, ignoreSelected, ignoreSocket, entityId) {
                 if (entity.sockets) {
                     // Iterate sockets to make sure we either remove the connections and update the socket or remove the entity altogether.
                     for (let i = 0; i < entity.sockets.children.length; i++) {
@@ -2102,6 +2099,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         if (typeof socketId !== 'number' || (ignoreSocket ? entitySocket.socketData.id !== socketId : entitySocket.socketData.id === socketId)) {
                             let connectionEstablished = false;
                             for (const [connectedEntityId, connectedSocketId] of Object.entries(entitySocket.connections)) {
+                                if (typeof entityId === 'number' && connectedEntityId === entityId) {
+                                    connectionEstablished = true;
+                                    continue;
+                                }
                                 const connectedEntity = game.getEntityById(connectedEntityId);
                                 if (connectedEntity) {
                                     if (ignoreSelected && connectedEntity.selected) {
@@ -2139,6 +2140,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 }
             }
 
+            entity.removeConnectionsToEntityId = (connectingEntityId) => entity.removeConnections(undefined, undefined, undefined, connectingEntityId);
+
+            entity.removeConnectionsToEntity = (connectingEntity) => entity.removeConnectionsToEntityId(connectingEntity.id);
+
             entity.afterRemove = function() {
                 setTimeout(() => {
                     if (game.statisticsMenuComponent) {
@@ -2170,7 +2175,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     }
                 }
 
-                if (entity.isTrain && entityData.currentTrackId) {
+                if (entity.isTrain && typeof entityData.currentTrackId === 'number') {
                     if (entityIdMap && typeof entityIdMap[entityData.currentTrackId] === 'number') {
                         entity.currentTrack = game.getEntityById(entityIdMap[entityData.currentTrackId]);
                     } else {
@@ -2281,7 +2286,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 return false;
             }
 
-            entity.onSave = function(entityData) {
+            entity.onSave = function(entityData, isSelection) {
                 if (entity.hasHandle) {
                     entityData.railPoints = [];
                     for (let i=0; i<points.length; i++) {
@@ -2320,14 +2325,24 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     }
                 }
 
-                if (entity.isTrain) {
-                    if (entity.currentTrack && entity.currentTrack.id) {
+                if (entity.isTrain && entity.currentTrack) {
+                    let trackFound = !isSelection;
+                    if (isSelection) {
+                        for (let i = 0; i < selectedEntities.length; i++) {
+                            const selectedEntity = selectedEntities[i];
+                            if (selectedEntity.id === entity.currentTrack.id) {
+                                trackFound = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (trackFound) {
                         entityData.currentTrackId = entity.currentTrack.id;
                         entityData.currentTrackT = entity.currentTrackT;
-                    }
 
-                    if (entity.trackDirection) {
-                        entityData.trackDirection = entity.trackDirection;
+                        if (typeof entity.trackDirection === 'number') {
+                            entityData.trackDirection = entity.trackDirection;
+                        }
                     }
                 }
             };
@@ -2356,7 +2371,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     entity.setShapeStyle(entity.shapeStyle);
                 }
 
-                if (entity.isTrain && entityData.trackDirection) {
+                if (entity.isTrain && typeof entityData.trackDirection === 'number') {
                     entity.trackDirection = entityData.trackDirection;
                 }
             };
@@ -3275,7 +3290,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             clone.selectionArea.tint = clone.locked ? COLOR_RED : COLOR_WHITE;
             clone.rotation = entity.rotation;
             let entityData = {};
-            entity.onSave(entityData);
+            entity.onSave(entityData, true);
             entityData.selectedProduction = null;
             clone.onLoad(entityData);
             clone.afterLoad(entityData, null, true);
@@ -3536,6 +3551,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 } else {
                                     entity.trackVelocity += distDiff/entity.mass;
                                     entity.moveAlongBezier(distDiffScaled/2);
+                                }
+
+                                // TODO: Wasn't sure which number was which so here's a neat little function to detach train cars from each other.
+                                if (distDiff > 1) {
+                                    entity.removeConnectionsToEntity(entity2);
                                 }
                             }
                         }
