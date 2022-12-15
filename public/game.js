@@ -2159,19 +2159,21 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         const socketConnectionData = entityData.connections[socket.socketData.id];
                         if (socketConnectionData) {
                             for (const [connectedEntityId, connectedSocketId] of Object.entries(socketConnectionData)) {
-                                let connectedEntitySocket = null;
-                                if (isUpgrade) {
-                                    const connectedEntity = game.getEntityById(connectedEntityId);
-                                    if (connectedEntity) {
+                                const remappedEntityId = (entityIdMap && typeof entityIdMap[connectedEntityId] === 'number') ? entityIdMap[connectedEntityId] : connectedEntityId;
+                                const connectedEntity = game.getEntityById(remappedEntityId);
+                                if (connectedEntity) {
+                                    let connectedEntitySocket = null;
+                                    if (isUpgrade) {
                                         for (let j = 0; j < connectedEntity.sockets.children.length; j++) {
                                             const connectedSocket = connectedEntity.sockets.children[j];
                                             if (connectedSocket.socketData.id === connectedSocketId) {
                                                 connectedEntitySocket = connectedSocket;
+                                                break;
                                             }
                                         }
                                     }
+                                    socket.setConnection(remappedEntityId, connectedEntitySocket, connectedSocketId);
                                 }
-                                socket.setConnection(entityIdMap && typeof entityIdMap[connectedEntityId] === 'number' ? entityIdMap[connectedEntityId] : connectedEntityId, connectedEntitySocket, connectedSocketId);
                             }
                         }
                     }
