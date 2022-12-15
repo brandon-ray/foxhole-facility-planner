@@ -2305,11 +2305,19 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 if (entity.sockets) {
                     for (let i = 0; i < entity.sockets.children.length; i++) {
                         let socket = entity.sockets.children[i];
-                        if (Object.keys(socket.connections).length) {
+                        let socketConnections = isSelection ? {} : socket.connections;
+                        if (isSelection) {
+                            for (const [connectedEntityId, connectedSocketId] of Object.entries(socket.connections)) {
+                                if (game.getEntityById(connectedEntityId).selected) {
+                                    socketConnections[connectedEntityId] = connectedSocketId;
+                                }
+                            }
+                        }
+                        if (Object.keys(socketConnections).length) {
                             if (!entityData.connections) {
                                 entityData.connections = {};
                             }
-                            entityData.connections[socket.socketData.id] = socket.connections;
+                            entityData.connections[socket.socketData.id] = socketConnections;
                         }
                     }
                 }
