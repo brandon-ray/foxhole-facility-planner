@@ -845,7 +845,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     case 'building':
                     case 'text':
                     case 'shape':
-                        entity = createSelectableEntity(entityData.type, entityData.subtype, parseFloat(entityData.x), parseFloat(entityData.y), parseInt(entityData.z), entityData.rotation);
+                        entity = createSelectableEntity(entityData.type, entityData.subtype, parseFloat(entityData.x ?? 0), parseFloat(entityData.y ?? 0), parseInt(entityData.z ?? 0), entityData.rotation ?? 0);
                         break;
                     default:
                         console.error('Attempted to load invalid entity:', entityData);

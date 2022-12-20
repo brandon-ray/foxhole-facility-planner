@@ -207,6 +207,9 @@ Vue.component('app-menu-building-selected', {
         },
         updateEntity: function(removeConnections) {
             if (this.entity) {
+                this.entity.x = this.entity.x ?? 0;
+                this.entity.y = this.entity.y ?? 0;
+                this.entity.rotation = this.entity.rotation ?? 0;
                 let selectedEntity = game.getSelectedEntity();
                 if (selectedEntity) {
                     if (!selectedEntity.building?.vehicle) {
