@@ -134,6 +134,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
     let pickupTime = null;
     let pickupPosition = null;
     let ignoreMousePickup = true;
+    let constructionCursor = null;
     let effects = [];
 
     game.facilityName = 'Unnamed Facility';
@@ -205,10 +206,28 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
     }
 
+    game.updateConstructionCursor = function(visible) {
+        if (constructionCursor) {
+            constructionCursor.visible = visible && game.constructionMode.key !== 'select';
+            if (constructionCursor.visible) {
+                constructionCursor.x = gmx;
+                constructionCursor.y = gmy;
+                if (document.body.style.cursor !== 'none') {
+                    document.body.style.cursor = 'none';
+                }
+            } else if (document.body.style.cursor !== 'unset') {
+                document.body.style.cursor = 'unset';
+            }
+        }
+    }
+
     game.setConstructionMode = function(mode) {
         mode = mode ?? game.constructionModes[game.constructionModes.length - 1];
         if (game.constructionMode !== mode) {
             game.constructionMode = mode;
+            if (mode.key === 'select') {
+                game.updateConstructionCursor(false);
+            }
             game.constructionMenuComponent?.refresh();
             return true;
         }
@@ -443,6 +462,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     }
                     break;
                 case 27: // Escape
+                    game.resetConstructionMode();
                     if (!selectionArea?.visible) {
                         game.deselectEntities();
                     }
@@ -515,7 +535,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
     let background = null;
     let selectionArea = null;
-    let constructionCursor = null;
 
     function onWindowResize() {
         if (isMobile) {
@@ -845,12 +864,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     case 'building':
                     case 'text':
                     case 'shape':
-                        entity = createSelectableEntity(entityData.type, entityData.subtype, parseFloat(entityData.x ?? 0), parseFloat(entityData.y ?? 0), parseInt(entityData.z ?? 0), entityData.rotation ?? 0);
+                        entity = createSelectableEntity(entityData.type, entityData.subtype, parseFloat(entityData.x || 0), parseFloat(entityData.y || 0), parseInt(entityData.z || 0), entityData.rotation || 0);
                         break;
                     default:
                         console.error('Attempted to load invalid entity:', entityData);
                         continue;
-
                 }
                 if (entity) {
                     entityData.createdEntity = entity;
@@ -1145,17 +1163,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
     });
 
     mouseEventListenerObject.addEventListener(eventPrefix + 'enter', (e) => {
-        if (game.constructionMode.key !== 'select') {
-            document.body.style.cursor = 'none';
-        }
+        game.updateConstructionCursor(true);
     });
     mouseEventListenerObject.addEventListener(eventPrefix + 'leave', (e) => {
-        if (constructionCursor) {
-            constructionCursor.visible = false;
-        }
-        if (document.body.style.cursor === 'none') {
-            document.body.style.cursor = 'unset';
-        }
+        game.updateConstructionCursor(false);
     });
 
     mouseEventListenerObject.addEventListener(eventPrefix + 'move', (e) => {
@@ -1176,13 +1187,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             camera.y += mdy;
         }
 
-        if (constructionCursor) {
-            constructionCursor.visible = game.constructionMode.key !== 'select';
-            if (constructionCursor.visible) {
-                constructionCursor.x = gmx;
-                constructionCursor.y = gmy;
-            }
-        }
+        game.updateConstructionCursor(true);
 
         if (selectionArea && selectionArea.origin) {
             selectionArea.clear();
@@ -1201,11 +1206,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
             entities.forEach(entity => {
                 let eX = entity.x, eY = entity.y;
                 if (entity.bezier) {
-                    // This should probably be stored somewhere.
-                    let bounds = entity.bezier.bbox();
-                    let rotatedPoint = Math.rotateAround(entity, { x: eX + bounds.x.mid, y: eY + bounds.y.mid }, -entity.rotation);
-                    eX = rotatedPoint.x;
-                    eY = rotatedPoint.y;
+                    const midPoint = app.cstage.toLocal({x: entity.bezier.mid.x, y: entity.bezier.mid.y}, entity, undefined, true);
+                    eX = midPoint.x;
+                    eY = midPoint.y;
                 }
                 if (eX > selectionArea.x && eX < selectionArea.x + selectionArea.width) {
                     if (eY > selectionArea.y && eY < selectionArea.y + selectionArea.height) {
@@ -2537,16 +2540,16 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             }
                             updateTextureCap(entity.frontCap, frontPoint, Math.PI);
                             updateTextureCap(entity.backCap, backPoint, Math.PI);
+                            entity.bezier.mid = entity.bezier.get(0.5);
                             if (entity.sockets) {
-                                let midPoint = entity.bezier.get(0.5);
-                                let midNormal = entity.bezier.normal(midPoint.t);
+                                let midNormal = entity.bezier.normal(entity.bezier.mid.t);
                                 let midAngle = Math.angleBetween({x: 0, y: 0}, midNormal) - Math.PI/2;
                                 for (let i = 0; i < entity.sockets.children.length; i++) {
                                     let socket = entity.sockets.children[i];
                                     let socketPosition, socketRotation;
                                     if (socket.socketData.cap === 'left' || socket.socketData.cap === 'right') {
                                         socketRotation = midAngle + Math.deg2rad(socket.socketData.rotation);
-                                        socketPosition = Math.extendPoint(midPoint, 8, socketRotation - Math.PI/2);
+                                        socketPosition = Math.extendPoint(entity.bezier.mid, 8, socketRotation - Math.PI/2);
                                     }
                                     switch (socket.socketData.cap) {
                                         case 'left':
@@ -2926,12 +2929,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                     selectedHandlePoint.y = 0;
                                 }
 
-                                if (!entity.building.isBezier) {
-                                    if (entity.building.minLength) {
-                                        const minLength = entity.building.minLength * METER_PIXEL_SIZE;
-                                        if (selectedHandlePoint.x < minLength) {
-                                            selectedHandlePoint.x = minLength;
-                                        }
+                                if (!entity.building.isBezier && entity.building.minLength) {
+                                    const minLength = entity.building.minLength * METER_PIXEL_SIZE;
+                                    if (selectedHandlePoint.x < minLength) {
+                                        selectedHandlePoint.x = minLength;
                                     }
                                 }
                             }
@@ -2982,8 +2983,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                                 entity.rotation = Math.angleBetween(entity, nearestSocketPos);
                                             }
                                             nearestSocketPos = entity.toLocal(nearestSocketPos, app.cstage, undefined, true);
-                                            let socketRotation = ((entity2.rotation + nearestSocket.rotation) - entity.rotation) - Math.deg2rad(handleSocket.socketData.rotation);
-                                            if (handleSocket.socketData.type === 'power' || selectedHandlePoint.rotation === socketRotation && Math.round(nearestSocketPos.y) === 0 || entity.building?.isBezier) {
+                                            const socketRotation = Math.normalizeAngleRadians(((entity2.rotation + nearestSocket.rotation) - entity.rotation) - Math.deg2rad(handleSocket.socketData.rotation));
+                                            // TODO: Only force rotate snap constraint whenever the first socket is connected, otherwise the entity should be able to rotate and attempt snapping.
+                                            if (handleSocket.socketData.type === 'power' || Math.abs(Math.differenceBetweenAngles(Math.normalizeAngleRadians(selectedHandlePoint.rotation), socketRotation)) === 0 && Math.round(nearestSocketPos.y) === 0 || entity.building?.isBezier) {
                                                 handleSocket.setConnection(entity2.id, nearestSocket);
                                                 selectedHandlePoint.x = nearestSocketPos.x;
                                                 if (entity.building?.isBezier) {
@@ -3592,19 +3594,14 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         y: selectedEntity.y,
                         rotation: selectedEntity.rotation
                     }
-                    let eX = selectedEntity.x, eY = selectedEntity.y;
+                    let midPoint = null;
                     if (selectedEntity.bezier) {
-                        let bounds = selectedEntity.bezier.bbox();
-                        let rotatedPoint = Math.rotateAround(selectedEntity, { x: eX + bounds.x.mid, y: eY + bounds.y.mid }, -selectedEntity.rotation);
-                        eX = rotatedPoint.x;
-                        eY = rotatedPoint.y;
+                        midPoint = app.cstage.toLocal({x: selectedEntity.bezier.mid.x, y: selectedEntity.bezier.mid.y}, selectedEntity, undefined, true);
                     } else if (selectedEntity.type === 'shape' && (selectedEntity.subtype === 'rectangle' || selectedEntity.subtype === 'line')) {
-                        let rotatedPoint = Math.rotateAround(selectedEntity, { x: eX + (selectedEntity.sprite.width/2), y: eY + (selectedEntity.sprite.height/2) }, -selectedEntity.rotation);
-                        eX = rotatedPoint.x;
-                        eY = rotatedPoint.y;
+                        midPoint = app.cstage.toLocal({x: selectedEntity.sprite.width/2, y: selectedEntity.subtype !== 'line' ? selectedEntity.sprite.height/2 : 0}, selectedEntity, undefined, true);
                     }
-                    cX += parseFloat(eX);
-                    cY += parseFloat(eY);
+                    cX += parseFloat(midPoint?.x ?? selectedEntity.x);
+                    cY += parseFloat(midPoint?.y ?? selectedEntity.y);
                 });
                 cX = Math.round(cX / selectedEntities.length);
                 cY = Math.round(cY / selectedEntities.length);
