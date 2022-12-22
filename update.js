@@ -168,6 +168,7 @@ function iterateStructures(dirPath) {
                                     'canSnapStructureType': structureData.canSnapStructureType,
                                     'canSnapAlongBezier': structureData.canSnapAlongBezier,
                                     'ignoreSnapSettings': structureData.ignoreSnapSettings,
+                                    'snapNearest': structureData.snapNearest,
                                     'requireConnection': structureData.requireConnection,
                                     'sockets': structureData.sockets,
                                     'vehicle': structureData.vehicle,
@@ -220,6 +221,7 @@ function iterateStructures(dirPath) {
                                         'cost': undefined,
                                         '_productionLength': storedModData?._productionLength,
                                         'production': storedModData?.production,
+                                        'productionScaling': storedModData?.productionScaling,
                                         'AssemblyItems': modificationData?.AssemblyItems,
                                         'ConversionEntries': modificationData?.ConversionEntries
                                         // There is a FuelCost variable which is never used here.

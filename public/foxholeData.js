@@ -1429,6 +1429,38 @@ const foxholeData = {
 				"disabled": true
 			},
 			"garrisonSupplyMultiplier": 2,
+			"canSnap": true,
+			"snapNearest": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "foundation",
+					"x": 0,
+					"y": 264,
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "foundation",
+					"x": 264,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 2,
+					"type": "foundation",
+					"x": 528,
+					"y": 264,
+					"rotation": 90
+				},
+				{
+					"id": 3,
+					"type": "foundation",
+					"x": 264,
+					"y": 528,
+					"rotation": 180
+				}
+			],
 			"cost": {
 				"groundmaterials": 75
 			}
@@ -1445,6 +1477,52 @@ const foxholeData = {
 				"disabled": true
 			},
 			"garrisonSupplyMultiplier": 2,
+			"canSnap": true,
+			"snapNearest": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "foundation",
+					"x": 0,
+					"y": 264,
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "foundation",
+					"x": 264,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 2,
+					"type": "foundation",
+					"x": 528,
+					"y": 264,
+					"rotation": 90
+				},
+				{
+					"id": 3,
+					"type": "foundation",
+					"x": 528,
+					"y": 792,
+					"rotation": 90
+				},
+				{
+					"id": 4,
+					"type": "foundation",
+					"x": 264,
+					"y": 1056,
+					"rotation": 180
+				},
+				{
+					"id": 5,
+					"type": "foundation",
+					"x": 0,
+					"y": 792,
+					"rotation": 270
+				}
+			],
 			"cost": {
 				"groundmaterials": 115
 			}
@@ -1461,6 +1539,66 @@ const foxholeData = {
 				"disabled": true
 			},
 			"garrisonSupplyMultiplier": 2,
+			"canSnap": true,
+			"snapNearest": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "foundation",
+					"x": 0,
+					"y": 264,
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "foundation",
+					"x": 264,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 2,
+					"type": "foundation",
+					"x": 792,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 3,
+					"type": "foundation",
+					"x": 1056,
+					"y": 264,
+					"rotation": 90
+				},
+				{
+					"id": 4,
+					"type": "foundation",
+					"x": 1056,
+					"y": 792,
+					"rotation": 90
+				},
+				{
+					"id": 5,
+					"type": "foundation",
+					"x": 792,
+					"y": 1056,
+					"rotation": 180
+				},
+				{
+					"id": 6,
+					"type": "foundation",
+					"x": 264,
+					"y": 1056,
+					"rotation": 180
+				},
+				{
+					"id": 7,
+					"type": "foundation",
+					"x": 0,
+					"y": 792,
+					"rotation": 270
+				}
+			],
 			"cost": {
 				"groundmaterials": 150
 			}
@@ -1470,13 +1608,37 @@ const foxholeData = {
 			"codeName": "Foundation02T1",
 			"description": "A foundation that provides a suitable surface for constructing Facilities.",
 			"category": "foundations",
+			"width": 5.28,
+			"length": 5.28,
 			"sortOffset": -1000,
 			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation02Icon.webp",
 			"texture": "game/Textures/Structures/foundation_corner.webp",
 			"textureIcon": {
 				"disabled": true
 			},
+			"textureOffset": {
+				"x": 288,
+				"y": 288
+			},
 			"garrisonSupplyMultiplier": 2,
+			"canSnap": true,
+			"snapNearest": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "foundation",
+					"x": 528,
+					"y": 264,
+					"rotation": 90
+				},
+				{
+					"id": 1,
+					"type": "foundation",
+					"x": 264,
+					"y": 528,
+					"rotation": 180
+				}
+			],
 			"cost": {
 				"groundmaterials": 75
 			}

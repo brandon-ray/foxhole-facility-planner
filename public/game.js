@@ -287,6 +287,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         bipointer: 'bipointer.webp',
         power: 'power.webp',
         power_x128: 'power_x128.webp',
+        foundation_border: 'foundation_border.webp',
         smoke_particles: 'smoke_particles.png'
     };
 
@@ -1895,6 +1896,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         socket.pointer = new PIXI.Sprite(resources.power.texture);
                         socket.pointer.anchor.set(0.5, 1.5);
                         socket.pointer.rotation = -(entity.rotation + socket.rotation);
+                    } else if (socket.socketData.type === 'foundation') {
+                        socket.pointer = new PIXI.Sprite(resources.foundation_border.texture);
+                        socket.pointer.width = resources.foundation_border.texture.width / METER_PIXEL_SCALE;
+                        socket.pointer.height = resources.foundation_border.texture.height / METER_PIXEL_SCALE;
+                        socket.pointer.anchor.set(0.5, 1.0);
                     } else if (socket.socketData.temp) {
                         socket.pointer = new PIXI.Sprite(resources.bipointer.texture);
                         socket.pointer.anchor.set(0.5, 1.5);
@@ -2983,9 +2989,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                                 entity.rotation = Math.angleBetween(entity, nearestSocketPos);
                                             }
                                             nearestSocketPos = entity.toLocal(nearestSocketPos, app.cstage, undefined, true);
-                                            const socketRotation = Math.normalizeAngleRadians(((entity2.rotation + nearestSocket.rotation) - entity.rotation) - Math.deg2rad(handleSocket.socketData.rotation));
+                                            const socketRotation = Math.angleNormalized(((entity2.rotation + nearestSocket.rotation) - entity.rotation) - Math.deg2rad(handleSocket.socketData.rotation));
                                             // TODO: Only force rotate snap constraint whenever the first socket is connected, otherwise the entity should be able to rotate and attempt snapping.
-                                            if (handleSocket.socketData.type === 'power' || Math.abs(Math.differenceBetweenAngles(Math.normalizeAngleRadians(selectedHandlePoint.rotation), socketRotation)) === 0 && Math.round(nearestSocketPos.y) === 0 || entity.building?.isBezier) {
+                                            if (handleSocket.socketData.type === 'power' || Math.angleDifference(Math.angleNormalized(selectedHandlePoint.rotation), socketRotation) === 0 && Math.round(nearestSocketPos.y) === 0 || entity.building?.isBezier) {
                                                 handleSocket.setConnection(entity2.id, nearestSocket);
                                                 selectedHandlePoint.x = nearestSocketPos.x;
                                                 if (entity.building?.isBezier) {
@@ -3012,8 +3018,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                         let currentRot = entity.rotation + selectedHandlePoint.rotation;
                                         let angleRight = entity2.rotation + (angle - Math.PI/2) - Math.PI/2;
                                         let angleLeft = entity2.rotation + (angle + Math.PI/2) - Math.PI/2;
-                                        let rightDiff = Math.atan2(Math.sin(angleRight-currentRot), Math.cos(angleRight-currentRot));
-                                        let leftDiff = Math.atan2(Math.sin(angleLeft-currentRot), Math.cos(angleLeft-currentRot));
+                                        let rightDiff = Math.angleNormalized(angleRight - currentRot);
+                                        let leftDiff = Math.angleNormalized(angleLeft - currentRot);
 
                                         // TODO: Handle saving previous rotations of snapped handles as well.
 
@@ -3292,7 +3298,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     position.x += ((clone.building.positionOffset.x ?? 0) / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
                     position.y += ((clone.building.positionOffset.y ?? 0) / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
                 }
-                position = Math.rotateAround(clone, position, -entity.rotation);
+                position = Math.rotateAround(clone, position, entity.rotation);
                 clone.position.set(position.x, position.y);
             }
             clone.locked = entity.locked;
@@ -3617,14 +3623,15 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
         let rotationAngle;
         if (selectionRotation) {
-            rotationAngle = selectionRotation.angle - Math.angleBetween(selectionRotation, { x: gmx, y: gmy }); // Get the angle of the mouse from center and subtract it from the angle of the selection.
+            rotationAngle = Math.angleBetween(selectionRotation, { x: gmx, y: gmy }) - selectionRotation.angle; // Get the angle of the mouse from the center and subtract the angle of the selection from it.
             if (game.settings.enableSnapRotation) {
                 let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ?? 15);
-                rotationAngle = Math.floor(rotationAngle / snapRotationDegrees) * snapRotationDegrees; // Snap the angle of the selection.
+                rotationAngle = Math.round(rotationAngle / snapRotationDegrees) * snapRotationDegrees; // Snap the angle of the selection.
                 if (typeof selectionRotation.offset === 'number') {
-                    rotationAngle -= (Math.floor(selectionRotation.offset / snapRotationDegrees) * snapRotationDegrees) - selectionRotation.offset; // Subtract the difference of the original offset.
+                    rotationAngle += (Math.round(selectionRotation.offset / snapRotationDegrees) * snapRotationDegrees) - selectionRotation.offset; // Subtract the difference to snap entities with the same rotation to grid.
                 }
             }
+            rotationAngle = Math.angleNormalized(rotationAngle);
         }
 
         if (pickupSelectedEntities) {
@@ -3660,12 +3667,13 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 }
 
                 let connectionEstablished = false;
-                if (pickupEntity && (pickupEntity.building?.canSnap || pickupEntity.isTrain)) {
+                if (!selectionRotation && pickupEntity && (pickupEntity.building?.canSnap || pickupEntity.isTrain)) {
                     for (let i = 0; i < entities.length; i++) {
                         let entity = entities[i];
                         if (!entity.visible || entity === pickupEntity || entity.type !== 'building' || !((pickupEntity.sockets && entity.sockets) || pickupEntity.isTrain) || Math.distanceBetween({x: gmx, y: gmy}, entity) > 1000) {
                             continue;
                         }
+                        // TODO: When a connection is established while snapping nearest, to connect further sockets, need to base connections on entity position instead of mouse, also, reduce the socket distance to something like 1. Really small.
                         if (pickupEntity.subtype === entity.subtype || (pickupEntity.sockets && entity.sockets) || pickupEntity.isTrain) {
                             const mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
                             const projection = entity.bezier?.project(mousePos);
@@ -3674,42 +3682,70 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                     let frontSocket, nearestSocket, nearestSocketDist = null;
                                     for (let j = 0; j < entity.sockets.children.length; j++) {
                                         let entitySocket = entity.sockets.children[j];
-                                        const socketDistance = Math.distanceBetween(mousePos, entitySocket);
-                                        if (!entitySocket.socketData.temp && ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || pickupEntity.subtype === 'power_line' && entity.canGrab())) {
-                                            for (let k = 0; k < pickupEntity.sockets.children.length; k++) {
-                                                let pickupSocket = pickupEntity.sockets.children[k];
-                                                if (typeof entitySocket.socketData.type === 'string' && entitySocket.socketData.type === pickupSocket.socketData.type) {
-                                                    if (Object.keys(entitySocket.connections).length === 0 || Object.keys(entitySocket.connections).length < entitySocket.socketData.connectionLimit || entitySocket.connections[pickupEntity.id] === pickupSocket.socketData.id) {
-                                                        if (entitySocket.socketData.flow && entitySocket.socketData.flow === pickupSocket.socketData.flow) {
-                                                            continue;
-                                                        }
-                                                        frontSocket = pickupSocket;
-                                                        nearestSocket = entitySocket;
-                                                        nearestSocketDist = socketDistance;
+                                        if (!entitySocket.socketData.temp) {
+                                            let socketDistance = Math.distanceBetween(mousePos, entitySocket);
+                                            // Checks socket distance is close, closer than previous socket distance, or hovering a building with a power socket.
+                                            if (pickupEntity.building?.snapNearest || ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || pickupEntity.subtype === 'power_line' && entity.canGrab())) {
+                                                for (let k = 0; k < pickupEntity.sockets.children.length; k++) {
+                                                    let pickupSocket = pickupEntity.sockets.children[k];
+                                                    if (typeof entitySocket.socketData.type === 'string' && entitySocket.socketData.type === pickupSocket.socketData.type) {
+                                                        if (Object.keys(entitySocket.connections).length === 0 || Object.keys(entitySocket.connections).length < entitySocket.socketData.connectionLimit || entitySocket.connections[pickupEntity.id] === pickupSocket.socketData.id) {
+                                                            if (entitySocket.socketData.flow && entitySocket.socketData.flow === pickupSocket.socketData.flow) {
+                                                                continue;
+                                                            }
+    
+                                                            if (pickupEntity.building?.snapNearest) {
+                                                                let pickupSocketPos = Math.rotateAround({x: 0, y: 0}, pickupSocket, pickupEntity.rotation);
+                                                                pickupSocketPos.x += gmx - pickupEntity.pickupOffset.x;
+                                                                pickupSocketPos.y += gmy - pickupEntity.pickupOffset.y;
+                                                                let entitySocketPos = app.cstage.toLocal({x: entitySocket.x, y: entitySocket.y}, entity, undefined, true);
+                                                                if (Math.distanceBetween(pickupSocketPos, entitySocketPos) > 35) {
+                                                                    continue;
+                                                                }
+                                                                let pickupSocketRot = Math.angleNormalized((pickupEntity.rotation + pickupSocket.rotation) - Math.PI);
+                                                                let entitySocketRot = Math.angleNormalized(entity.rotation + entitySocket.rotation);
+                                                                if (!Math.anglesWithinRange(entitySocketRot, pickupSocketRot, Math.PI / 8)) {
+                                                                    continue;
+                                                                }
+                                                                
+                                                                pickupSocket.setConnection(entity.id, entitySocket);
+                                                            }
 
-                                                        // TODO: Get proximity to the closest socket on pickup entity while it's being picked up instead. Will allow foundations to have their sockets snap based on their proximity to each other and foundation position will be fixed too.
-                                                        break;
+                                                            frontSocket = pickupSocket;
+                                                            nearestSocket = entitySocket;
+                                                            nearestSocketDist = socketDistance;
+
+                                                            break;
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
                                     }
                                     if (nearestSocket) {
-                                        if (isNaN(pickupEntity.prevRotation)) {
-                                            pickupEntity.prevRotation = pickupEntity.rotation;
+                                        if (!connectionEstablished) {
+                                            if (isNaN(pickupEntity.prevRotation)) {
+                                                pickupEntity.prevRotation = pickupEntity.rotation;
+                                            }
+    
+                                            let pickupEntityPosition = app.cstage.toLocal({x: nearestSocket.x, y: nearestSocket.y}, entity, undefined, true);
+                                            const pickupEntityRotation = Math.angleNormalized(-Math.angleDifference(entity.rotation + nearestSocket.rotation + Math.PI, frontSocket.rotation));
+                                            if (frontSocket.x !== 0 || frontSocket.y !== 0) {
+                                                const pickupSocketDist = Math.distanceBetween({ x: 0, y: 0 }, frontSocket);
+                                                const socketAngleDiff = Math.angleBetween({ x: 0, y: 0 }, frontSocket) + Math.PI;
+                                                pickupEntityPosition = Math.extendPoint(pickupEntityPosition, pickupSocketDist, pickupEntityRotation + socketAngleDiff);
+                                            }
+
+                                            pickupEntity.position.set(pickupEntityPosition.x, pickupEntityPosition.y);
+                                            pickupEntity.rotation = pickupEntityRotation;
+
+                                            connectionEstablished = true;
                                         }
-                                        frontSocket.setConnection(entity.id, nearestSocket);
-                                        let nearestSocketPosition = app.cstage.toLocal({x: nearestSocket.x, y: nearestSocket.y}, entity, undefined, true);
-                                        let nearestSocketRotation = entity.rotation + nearestSocket.rotation;
-                                        let frontSocketDist = Math.distanceBetween({ x: 0, y: 0 }, frontSocket);
-                                        let extendedPoint = Math.extendPoint(nearestSocketPosition, frontSocketDist, nearestSocketRotation - Math.PI/2);
-                                        pickupEntity.position.set(extendedPoint.x, extendedPoint.y);
-                                        pickupEntity.rotation = nearestSocketRotation + frontSocket.rotation;
-                                        if (frontSocket.socketData.flow) {
-                                            pickupEntity.rotation -= Math.PI;
+
+                                        if (!pickupEntity.building?.snapNearest) {
+                                            frontSocket.setConnection(entity.id, nearestSocket);
+                                            break;
                                         }
-                                        connectionEstablished = true;
-                                        break;
                                     }
                                 }
 
@@ -3722,8 +3758,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
                                     let angleRight = entity.rotation + (angle - Math.PI/2) - Math.PI/2;
                                     let angleLeft = entity.rotation + (angle + Math.PI/2) - Math.PI/2;
-                                    let rightDiff = Math.atan2(Math.sin(angleRight-pickupEntity.rotation), Math.cos(angleRight-pickupEntity.rotation));
-                                    let leftDiff = Math.atan2(Math.sin(angleLeft-pickupEntity.rotation), Math.cos(angleLeft-pickupEntity.rotation));
+                                    let rightDiff = Math.angleNormalized(angleRight - pickupEntity.rotation);
+                                    let leftDiff = Math.angleNormalized(angleLeft - pickupEntity.rotation);
 
                                     if (isNaN(pickupEntity.prevRotation)) {
                                         pickupEntity.prevRotation = pickupEntity.rotation;
@@ -3785,7 +3821,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 x: snappedMX - pickupEntity.x,
                                 y: snappedMY - pickupEntity.y
                             };
-                            pickupEntity.rotation = pickupEntity.rotationData.rotation - rotationAngle;
+                            pickupEntity.rotation = Math.angleNormalized(pickupEntity.rotationData.rotation + rotationAngle);
+                            if (!isNaN(pickupEntity.prevRotation)) {
+                                pickupEntity.prevRotation = pickupEntity.rotation;
+                            }
                         } else {
                             pickupEntity.x = snappedMX - pickupEntity.pickupOffset.x;
                             pickupEntity.y = snappedMY - pickupEntity.pickupOffset.y;
@@ -3888,7 +3927,17 @@ const fontFamily = ['Recursive', 'sans-serif'];
         let b = mod( ( target - current ), Math.PI2 );
 
         return a < b ? -a : b;
-    }
+    };
+    Math.angleNormalized = function(angle) {
+        return Math.atan2(Math.sin(angle), Math.cos(angle));
+    };
+    Math.angleDifference = function(angle1, angle2) {
+        return (angle2 - angle1) % Math.PI2;
+    };
+    Math.anglesWithinRange = function(angle1, angle2, diff) {
+        const angleDiff = Math.angleNormalized(Math.angleDifference(angle1, angle2));
+        return angleDiff <= diff && angleDiff >= -diff;
+    };
     Math.magnitude = function (p1) {
         return Math.hypot(p1.dx, p1.dy);
     };
@@ -3913,11 +3962,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
             y: Math.round(Math.sin(angle) * distance + point.y)
         };
     };
-    Math.rotateAround = function (center, point, radians) {
-        let cos = Math.cos(radians), sin = Math.sin(radians);
+    Math.rotateAround = function({x: cx, y: cy}, {x, y}, angle) {
+        const cos = Math.cos(angle), sin = Math.sin(angle);
         return {
-            x: (cos * (point.x - center.x)) + (sin * (point.y - center.y)) + center.x,
-            y: (cos * (point.y - center.y)) - (sin * (point.x - center.x)) + center.y
+            x: cx + (x - cx) * cos - (y - cy) * sin,
+            y: cy + (x - cx) * sin + (y - cy) * cos
         };
     };
     Math.isPointWithinBounds = function(point, bounds) {
