@@ -2444,7 +2444,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             for (let i=0; i<points.length; i++) {
                                 let point = points[i];
 
-                                if (subtype === 'pipeline' || subtype === 'pipeline_insulation') {
+                                if (subtype === 'pipeline' || subtype === 'pipeline_insulation' || subtype === 'barbedwirespline') {
                                     if (i < points.length - 1) {
                                         bezierPoints.push({
                                             x: point.x,
@@ -2924,7 +2924,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
                             if (entity.building) {
                                 if (!entity.building.isBezier || Math.abs(selectedHandlePoint.y) < 25) {
-                                    if (!entity.building.isBezier && (entity.subtype === 'power_line' || !entity.hasConnections())) {
+                                    if (!entity.building.isBezier && (entity.building.canSnapRotate || !entity.hasConnections())) {
                                         let angle = Math.angleBetween(entity, { x: gmx, y: gmy });
                                         if (!entity.building.ignoreSnapSettings && game.settings.enableSnapRotation) {
                                             let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ? game.settings.snapRotationDegrees : 15);
@@ -3057,7 +3057,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
                         entity.regenerate();
                         if (entity.building?.isBezier && entity.sprite?.rope) {
-                            if (entity.subtype === 'pipeline' || entity.subtype === 'pipeline_insulation') {
+                            if (entity.subtype === 'pipeline' || entity.subtype === 'pipeline_insulation' || subtype === 'barbedwirespline') {
                                 if (dist < 3*METER_PIXEL_SIZE) {
                                     entity.sprite.rope.tint = COLOR_RED;
                                 } else {
@@ -3847,21 +3847,23 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
         for (let i = 0; i < entities.length; i++) {
             const entity = entities[i];
-            if (entity.visible && entity.sockets) {
+            if (entity.visible) {
                 if (entity.sprite?.outline && entity.sprite.outline.visible !== entity.selected) {
                     entity.sprite.outline.visible = entity.selected;
                 }
                 if (entity.selected) {
-                    for (let i = 0; i < entity.sockets.children.length; i++) {
-                        let socket = entity.sockets.children[i];
-                        if (socket.pointer?.visible && socket.socketData.type === 'power') {
-                            socket.pointer.rotation = -(entity.rotation + socket.rotation);
+                    if (entity.productionIcons) {
+                        entity.productionIcons.rotation = -entity.rotation;
+                    }
+                    if (entity.sockets) {
+                        for (let i = 0; i < entity.sockets.children.length; i++) {
+                            let socket = entity.sockets.children[i];
+                            if (socket.pointer?.visible && socket.socketData.type === 'power') {
+                                socket.pointer.rotation = -(entity.rotation + socket.rotation);
+                            }
                         }
                     }
                 }
-            }
-            if (entity.visible && entity.selected && entity.productionIcons) {
-                entity.productionIcons.rotation = -entity.rotation;
             }
         }
 

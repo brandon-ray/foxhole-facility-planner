@@ -972,6 +972,35 @@ const foxholeData = {
 				}
 			}
 		},
+		"atpillbox": {
+			"name": "Anti-Tank Pillbox",
+			"codeName": "ATPillbox",
+			"description": "This heavily reinforced pillbox allows the garrisoned infantry with anti-tank rifles to fire on approaching enemy armour from a safe position.",
+			"category": "defenses",
+			"icon": "game/Textures/UI/StructureIcons/ATPillboxIcon.webp",
+			"texture": "game/Textures/Structures/atpillbox.webp",
+			"techId": "unlockatpillbox",
+			"cost": {
+				"cloth": 85
+			}
+		},
+		"barbedwirespline": {
+			"name": "Barbed Wire",
+			"codeName": "BarbedWireSpline",
+			"description": "Used to slow down enemy infantry movement. Can be dismantled with a Wrench.",
+			"category": "defenses",
+			"hasHandle": true,
+			"isBezier": true,
+			"minLength": 3,
+			"maxLength": 10,
+			"icon": "game/Textures/UI/StructureIcons/BarbedWireCornerStructureIcon.webp",
+			"texture": "game/Textures/Structures/barbedwirespline.webp",
+			"textureFrontCap": "game/Textures/Structures/barbedwirespline_front.webp",
+			"textureBackCap": "game/Textures/Structures/barbedwirespline_back.webp",
+			"cost": {
+				"barbedwirematerials": 3
+			}
+		},
 		"bms_foreman_stacker": {
 			"name": "BMS Foreman Stacker",
 			"codeName": "FacilityCrane",
@@ -1417,6 +1446,98 @@ const foxholeData = {
 				"facilitymaterials2": 250
 			}
 		},
+		"flatbedtruck": {
+			"name": "BMS - Packmule Flatbed",
+			"codeName": "FlatbedTruck",
+			"description": "A heavy duty shipping transport truck designed by Bassett Motor Society. It’s built for hauling the heaviest of equipment over long distances with ease. ",
+			"category": "vehicles",
+			"icon": "game/Textures/UI/VehicleIcons/FlatbedTruckVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/flatbedtruck.webp"
+		},
+		"fortcornert1": {
+			"name": "Bunker Corner (Tier 1)",
+			"codeName": "FortCornerT1",
+			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
+			"category": "defenses",
+			"icon": "game/Textures/UI/StructureIcons/FortT1CornerIcon.webp",
+			"texture": "game/Textures/Structures/fortcornert1.webp",
+			"canSnap": true,
+			"snapNearest": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "bunker",
+					"x": 320,
+					"y": 22,
+					"rotation": 0
+				},
+				{
+					"id": 1,
+					"type": "bunker",
+					"x": 432,
+					"y": 426,
+					"rotation": 135
+				},
+				{
+					"id": 2,
+					"type": "bunker",
+					"x": 32,
+					"y": 304,
+					"rotation": 270
+				}
+			]
+		},
+		"fortt1": {
+			"name": "Bunker (Tier 1)",
+			"codeName": "FortT1",
+			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
+			"category": "defenses",
+			"icon": "game/Textures/UI/StructureIcons/FortT1Icon.webp",
+			"texture": "game/Textures/Structures/fortt1.webp",
+			"canSnap": true,
+			"snapNearest": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "bunker",
+					"x": 290,
+					"y": 18,
+					"rotation": 0
+				},
+				{
+					"id": 1,
+					"type": "bunker",
+					"x": 578,
+					"y": 304,
+					"rotation": 90
+				},
+				{
+					"id": 2,
+					"type": "bunker",
+					"x": 290,
+					"y": 592,
+					"rotation": 180
+				},
+				{
+					"id": 3,
+					"type": "bunker",
+					"x": 2,
+					"y": 304,
+					"rotation": 270
+				}
+			]
+		},
+		"forwardbase1": {
+			"name": "Encampment",
+			"codeName": "ForwardBase1",
+			"description": "A temporary forward operating base. Players can spawn from here.",
+			"category": "defenses",
+			"icon": "game/Textures/UI/StructureIcons/EncampmentIcon.webp",
+			"texture": "game/Textures/Structures/forwardbase1.webp",
+			"cost": {
+				"cloth": 300
+			}
+		},
 		"foundation_1x1": {
 			"name": "Foundation (1x1)",
 			"codeName": "Foundation01T1",
@@ -1643,11 +1764,20 @@ const foxholeData = {
 				"groundmaterials": 75
 			}
 		},
+		"foxhole": {
+			"name": "Foxhole",
+			"codeName": "Foxhole",
+			"description": "A simple hole dug into the ground to provide infantry with makeshift cover from enemy fire.",
+			"category": "defenses",
+			"icon": "game/Textures/UI/StructureIcons/PvpFoxholeItemIcon.webp",
+			"texture": "game/Textures/Structures/foxhole.webp"
+		},
 		"fuel_container": {
 			"name": "Fuel Container",
 			"codeName": "FuelContainer",
 			"description": "A container for storing high volumes of fuel. Nearby structures and vehicles can refuel directly from this container. ",
 			"category": "misc",
+			"sortOffset": 150000,
 			"icon": "game/Textures/UI/StructureIcons/FuelTankIcon.webp",
 			"texture": "game/Textures/Structures/fuel_container.webp",
 			"garrisonSupplyMultiplier": 0,
@@ -1690,6 +1820,34 @@ const foxholeData = {
 			"liquidCapacity": 500,
 			"cost": {
 				"facilitymaterials1": 15
+			}
+		},
+		"gatet1": {
+			"name": "Gate (Tier 1)",
+			"codeName": "GateT1",
+			"description": "A gate that provides access to a walled off area.",
+			"category": "defenses",
+			"icon": "game/Textures/UI/StructureIcons/Gate-T1Icon.webp",
+			"texture": "game/Textures/Structures/gatet1.webp",
+			"canSnap": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "wall",
+					"x": 18,
+					"y": 42,
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "wall",
+					"x": 1552,
+					"y": 42,
+					"rotation": 90
+				}
+			],
+			"cost": {
+				"cloth": 25
 			}
 		},
 		"large_assembly_factory": {
@@ -3282,6 +3440,18 @@ const foxholeData = {
 				}
 			}
 		},
+		"mgpillbox": {
+			"name": "Machine Gun Pillbox",
+			"codeName": "MGPillbox",
+			"description": "A well-fortified bunker position fitted with a mounted machinegun. Garrisoned infantry will lay down heavy suppressive fire upon approaching enemies from a fixed angle.",
+			"category": "defenses",
+			"icon": "game/Textures/UI/StructureIcons/MGPillboxIcon.webp",
+			"texture": "game/Textures/Structures/mgpillbox.webp",
+			"techId": "unlockmgpillbox",
+			"cost": {
+				"cloth": 75
+			}
+		},
 		"oil_refinery": {
 			"name": "Oil Refinery",
 			"codeName": "FacilityRefineryOil",
@@ -3829,6 +3999,14 @@ const foxholeData = {
 				"pipematerials": 2
 			}
 		},
+		"playerc": {
+			"name": "Player (Colonial)",
+			"description": "The Colonials are described as a faction of ingenuity and practicality. They are sometimes referred to as \"The Colonial Legion\" or \"Little Green Men\".",
+			"category": "misc",
+			"sortOffset": 150000,
+			"icon": "game/Textures/UI/PlayerCIcon.webp",
+			"texture": "game/Textures/playerc.webp"
+		},
 		"power_box": {
 			"name": "Power Switch",
 			"codeName": "PowerBox",
@@ -3869,6 +4047,7 @@ const foxholeData = {
 			},
 			"garrisonSupplyMultiplier": 0,
 			"canSnap": true,
+			"canSnapRotate": true,
 			"canSnapStructureType": false,
 			"ignoreSnapSettings": true,
 			"requireConnection": true,
@@ -4205,6 +4384,41 @@ const foxholeData = {
 				"facilitymaterials1": 35
 			}
 		},
+		"resourcecontainer": {
+			"name": "Resource Container",
+			"codeName": "ResourceContainer",
+			"description": "A container that can carry large quantities of resources and can be transported by certain vehicles.",
+			"category": "misc",
+			"sortOffset": 150000,
+			"icon": "game/Textures/UI/StructureIcons/ResourceContainerIcon.webp",
+			"texture": "game/Textures/Structures/resourcecontainer.webp",
+			"cost": {
+				"cloth": 50
+			}
+		},
+		"riflepillbox": {
+			"name": "Rifle Pillbox",
+			"codeName": "RiflePillbox",
+			"description": "A reinforced dugout that gives the garrisoned rifle infantry a fortified defensive position to fire on approaching enemies from relative safety.",
+			"category": "defenses",
+			"icon": "game/Textures/UI/StructureIcons/RiflePillboxIcon.webp",
+			"texture": "game/Textures/Structures/riflepillbox.webp",
+			"cost": {
+				"cloth": 60
+			}
+		},
+		"shippingcontainer": {
+			"name": "Shipping Container",
+			"codeName": "ShippingContainer",
+			"description": "A container for shipping very large quantities of Crates using Crane loaded vehicles. This type of container can only be unloaded at Storage Depots and Seaports.",
+			"category": "misc",
+			"sortOffset": 150000,
+			"icon": "game/Textures/UI/StructureIcons/ShippingContainerStructureIcon.webp",
+			"texture": "game/Textures/Structures/shippingcontainer.webp",
+			"cost": {
+				"cloth": 100
+			}
+		},
 		"smalltraindump": {
 			"name": "BMS Railtruck",
 			"codeName": "SmallTrainDump",
@@ -4488,6 +4702,18 @@ const foxholeData = {
 				}
 			]
 		},
+		"tankstop": {
+			"name": "Tank Trap",
+			"codeName": "TankStop",
+			"description": "An anti-tank obstacle that prevents vehicle access to an area. Can be dismantled with a Wrench.",
+			"category": "defenses",
+			"icon": "game/Textures/UI/StructureIcons/TankStopIcon.webp",
+			"texture": "game/Textures/Structures/tankstop.webp",
+			"techId": "unlocktankstop",
+			"cost": {
+				"metalbeammaterials": 3
+			}
+		},
 		"traincaboose": {
 			"name": "BMS Roadhouse",
 			"codeName": "TrainCaboose",
@@ -4549,6 +4775,70 @@ const foxholeData = {
 				"mass": 25
 			},
 			"techId": "unlockfacilitytier2"
+		},
+		"traincombatcarc": {
+			"name": "Aegis Steelbreaker K5a",
+			"codeName": "TrainCombatCarC",
+			"description": "Known across the colonies as King of the Rails, this heavily armoured train car is designed to protect and exert dominance over contested rail lines, especially when transporting supplies into contested territory as well as safely transporting infantry. This armoured beast boasts a forward facing cannon, as well as heavy lateral guns.",
+			"category": "vehicles",
+			"faction": "c",
+			"sortOffset": 120000,
+			"icon": "game/Textures/UI/VehicleIcons/CombatCarCVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/traincombatcarc.webp",
+			"sockets": [
+				{
+					"id": 0,
+					"type": "traincar",
+					"x": 1020,
+					"y": 299,
+					"rotation": 90
+				},
+				{
+					"id": 1,
+					"type": "traincar",
+					"x": 0,
+					"y": 299,
+					"rotation": 270
+				}
+			],
+			"vehicle": {
+				"type": "train",
+				"track": "rail_large_gauge",
+				"mass": 25
+			},
+			"techId": "unlockfacilitytier3"
+		},
+		"traincombatcarw": {
+			"name": "O’Brien Warsmith v.215",
+			"codeName": "TrainCombatCarW",
+			"description": "In his later years, O’Brien nearly died in an attack on a military passenger train while travelling to Whedon’s Row. In response, he put his team to work designing not only an infantry car that offered powerful protection to any locomotive, but one that just the sight of it would run off all but the most committed of attackers—Namely its thick armour plating and powerful twin turrets. ",
+			"category": "vehicles",
+			"faction": "w",
+			"sortOffset": 120000,
+			"icon": "game/Textures/UI/VehicleIcons/CombatCarWVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/traincombatcarw.webp",
+			"sockets": [
+				{
+					"id": 0,
+					"type": "traincar",
+					"x": 1312,
+					"y": 208,
+					"rotation": 90
+				},
+				{
+					"id": 1,
+					"type": "traincar",
+					"x": 0,
+					"y": 208,
+					"rotation": 270
+				}
+			],
+			"vehicle": {
+				"type": "train",
+				"track": "rail_large_gauge",
+				"mass": 25
+			},
+			"techId": "unlockfacilitytier3"
 		},
 		"trainengine": {
 			"name": "BMS Black Bolt",
@@ -4613,6 +4903,203 @@ const foxholeData = {
 				"mass": 25
 			},
 			"techId": "unlockfacilitytier2"
+		},
+		"traininfantry": {
+			"name": "BMS Holdout",
+			"codeName": "TrainInfantry",
+			"description": "An armoured train car with a mounted machinegun position for transporting infantry safely over long distances.",
+			"category": "vehicles",
+			"sortOffset": 120000,
+			"icon": "game/Textures/UI/VehicleIcons/InfantryCarVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/traininfantry.webp",
+			"sockets": [
+				{
+					"id": 0,
+					"type": "traincar",
+					"x": 900,
+					"y": 193,
+					"rotation": 90
+				},
+				{
+					"id": 1,
+					"type": "traincar",
+					"x": 0,
+					"y": 193,
+					"rotation": 270
+				}
+			],
+			"vehicle": {
+				"type": "train",
+				"track": "rail_large_gauge",
+				"mass": 25
+			},
+			"techId": "unlocktrainengine"
+		},
+		"trainlrartillery": {
+			"name": "Tempest Cannon RA-2",
+			"codeName": "TrainLRArtillery",
+			"description": "All the power of a stationary Storm Cannon, but easily relocated via rails. This devastating cannon is capable of leveling enemy fortifications at very large distances.",
+			"category": "vehicles",
+			"length": 3.74,
+			"sortOffset": 120000,
+			"icon": "game/Textures/UI/VehicleIcons/TrainLRArtilleryVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/trainlrartillery.webp",
+			"textureOffset": {
+				"x": 1197,
+				"y": 187
+			},
+			"sockets": [
+				{
+					"id": 0,
+					"type": "traincar",
+					"x": 2394,
+					"y": 186,
+					"rotation": 90
+				},
+				{
+					"id": 1,
+					"type": "traincar",
+					"x": 0,
+					"y": 186,
+					"rotation": 270
+				}
+			],
+			"vehicle": {
+				"type": "train",
+				"track": "rail_large_gauge",
+				"mass": 25
+			},
+			"techId": "unlockfacilitytier3"
+		},
+		"trenchempt1": {
+			"name": "Trench Emplacement (Tier 1)",
+			"codeName": "TrenchEmpT1",
+			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches. This variant can also serve as an emplacement for mannable defenses.",
+			"category": "defenses",
+			"icon": "game/Textures/UI/StructureIcons/TrenchT1EmplacementIcon.webp",
+			"texture": "game/Textures/Structures/trenchempt1.webp",
+			"canSnap": true,
+			"snapNearest": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "bunker",
+					"x": 614,
+					"y": 6,
+					"rotation": 0
+				},
+				{
+					"id": 1,
+					"type": "bunker",
+					"x": 1044,
+					"y": 188,
+					"rotation": 45
+				},
+				{
+					"id": 2,
+					"type": "bunker",
+					"x": 1220,
+					"y": 618,
+					"rotation": 90
+				},
+				{
+					"id": 3,
+					"type": "bunker",
+					"x": 1040,
+					"y": 1046,
+					"rotation": 135
+				},
+				{
+					"id": 4,
+					"type": "bunker",
+					"x": 614,
+					"y": 1228,
+					"rotation": 180
+				},
+				{
+					"id": 5,
+					"type": "bunker",
+					"x": 186,
+					"y": 1048,
+					"rotation": 225
+				},
+				{
+					"id": 6,
+					"type": "bunker",
+					"x": 8,
+					"y": 618,
+					"rotation": 270
+				},
+				{
+					"id": 7,
+					"type": "bunker",
+					"x": 182,
+					"y": 186,
+					"rotation": 315
+				}
+			]
+		},
+		"truckc": {
+			"name": "R-1 Hauler",
+			"codeName": "TruckC",
+			"description": "A heavy-duty Colonial truck used to mobilize troops and supplies.",
+			"category": "vehicles",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/TruckVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/truckc.webp"
+		},
+		"truckw": {
+			"name": "Dunne Transport",
+			"codeName": "TruckW",
+			"description": "A heavy-duty Warden truck used to mobilize troops and supplies.",
+			"category": "vehicles",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/TruckWarVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/truckw.webp"
+		},
+		"wallsplinet1": {
+			"name": "Wall (Tier 1)",
+			"codeName": "WallSplineT1",
+			"description": "A basic barrier that is used to prevent passage through an area.",
+			"category": "defenses",
+			"sortOffset": 1400000,
+			"hasHandle": true,
+			"minLength": 3,
+			"maxLength": 10,
+			"icon": "game/Textures/UI/ItemIcons/Wall-T1Icon.webp",
+			"texture": "game/Textures/Structures/wallsplinet1.webp",
+			"textureFrontCap": "game/Textures/Structures/wallsplinet1_front.webp",
+			"textureBackCap": "game/Textures/Structures/wallsplinet1_back.webp",
+			"canSnap": true,
+			"canSnapRotate": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "wall",
+					"cap": "front",
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "wall",
+					"cap": "back",
+					"rotation": 90
+				}
+			],
+			"cost": {
+				"cloth": 15
+			}
+		},
+		"watchtower": {
+			"name": "Watch Tower",
+			"codeName": "WatchTower",
+			"description": "Reports nearby enemy movements to players with Radios equipped",
+			"category": "defenses",
+			"icon": "game/Textures/UI/StructureIcons/WatchTowerStructureIcon.webp",
+			"texture": "game/Textures/Structures/watchtower.webp",
+			"cost": {
+				"cloth": 60
+			}
 		},
 		"water_pump": {
 			"name": "Water Pump",

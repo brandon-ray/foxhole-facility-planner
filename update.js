@@ -140,6 +140,7 @@ function iterateStructures(dirPath) {
                                     'codeName': structure.CodeName,
                                     'description': structure.Description?.SourceString ?? baseData.description,
                                     'category': structureData.category,
+                                    'faction': structureData.faction,
                                     'color': structureData.color,
                                     'hideInList': structureData.hideInList,
                                     'hideProperties': structureData.hideProperties,
@@ -165,6 +166,7 @@ function iterateStructures(dirPath) {
                                     'garrisonSupplyMultiplier': structure.DecaySupplyDrain ?? baseData.garrisonSupplyMultiplier ?? structureData.garrisonSupplyMultiplier,
                                     'power': (structure.PowerGridInfo?.PowerDelta ?? baseData.power) / 1000 || undefined,
                                     'canSnap': structureData.canSnap,
+			                        'canSnapRotate': structureData.canSnapRotate,
                                     'canSnapStructureType': structureData.canSnapStructureType,
                                     'canSnapAlongBezier': structureData.canSnapAlongBezier,
                                     'ignoreSnapSettings': structureData.ignoreSnapSettings,
@@ -501,9 +503,15 @@ for (let [codeName, structure] of Object.entries(structureList)) {
     }
 }
 
-for (let [codeName, item] of Object.entries(itemList)) {
+for (const [codeName, item] of Object.entries(itemList)) {
     delete item.cost;
     delete item.faction;
+}
+
+for (const [codeName, techInfo] of Object.entries(techList)) {
+    if (!Object.keys(techInfo).length) {
+        delete techList[codeName];
+    }
 }
 
 structureList = Object.keys(structureList).reduce((structures, codeName) => {

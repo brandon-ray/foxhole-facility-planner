@@ -120,7 +120,7 @@ Vue.component('app-game-sidebar', {
             <div class="building-info-body">
                 <p class="building-info-description">{{hoverData.description}}</p>
                 <p class="building-tech-description" v-if="hoverData.techId">
-                    <span>Requires Tech:</span> {{window.objectData.tech[hoverData.techId]?.name}}
+                    <span>Requires Tech<template v-if="window.objectData.tech[hoverData.techId]">:</template></span> {{window.objectData.tech[hoverData.techId]?.name}}
                 </p>
                 <div class="building-info-production" v-if="hoverData.production && hoverData.production.length && hoverData.production.hasOutput">
                     <template v-for="(recipe, index) in hoverData.production">
@@ -607,14 +607,14 @@ Vue.component('app-menu-construction-list', {
                 <select class="app-input construction-category" @click="bmc()" title="Filter by Category" v-model="game.selectedBuildingCategory" @change="refresh()">
                     <option value="all">All Buildings</option>
                     <template v-for="(category, key) in buildingCategories">
-                        <option v-if="game.settings.enableExperimental || key !== 'vehicles'" :value="key">{{category.name}}</option>
+                        <option v-if="game.settings.enableExperimental || key !== 'defenses' && key !== 'vehicles'" :value="key">{{category.name}}</option>
                     </template>
                 </select>
             </div>
         </div>
         <div class="menu-page" :class="{ 'modes-disabled': !game.settings.enableExperimental }">
             <template v-for="building in buildings">
-                <div v-if="!building.hideInList && ((game.selectedBuildingCategory === 'all' && building.category !== 'vehicles') || building.category === game.selectedBuildingCategory) &&
+                <div v-if="!building.hideInList && ((game.selectedBuildingCategory === 'all' && building.category !== 'defenses' && building.category !== 'vehicles') || building.category === game.selectedBuildingCategory) &&
                     (!building.parent || game.settings.showUpgradesAsBuildings) &&
                     (!building.techId || (game.settings.selectedTier === 2 && building.techId === 'unlockfacilitytier2') || game.settings.selectedTier === 3)"
                     class="build-icon" :style="{backgroundImage:'url(/assets/' + (building.parent?.icon ?? building.icon) + ')'}"
@@ -991,6 +991,7 @@ Vue.component('app-menu-save-load', {
                         <option v-bind:value="null">Choose a Preset</option>
                         <option value="all_structures">All Buildings + Upgrades</option>
                         <option value="small_120mm_facility">Small 120mm Facility</option>
+                        <option value="bunker_test">Bunker Testing</option>
                         <option value="train_test">Train Testing</option>
                     </select>
                 </div>

@@ -4,28 +4,32 @@ const buildingCategories = {
         order: 0,
         color: 0x505050 // Dark Grey
     },
+    defenses: {
+        name: 'Defenses',
+        order: 1
+    },
     factories: {
         name: 'Factories',
-        order: 1,
+        order: 2,
         color: 0x8566bd // Indigo / Purple
     },
     harvesters: {
         name: 'Harvesters',
-        order: 2,
+        order: 3,
         color: 0x289665 // Forest Green
     },
     power: {
         name: 'Power',
-        order: 3,
+        order: 4,
         color: 0xf2ec7a // Yellow
     },
     vehicles: {
         name: 'Vehicles',
-        order: 4
+        order: 5
     },
     misc: {
         name: 'Miscellaneous',
-        order: 5,
+        order: 6,
         color: 0x7ce1ea // Blue
     }
 };
