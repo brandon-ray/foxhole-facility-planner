@@ -579,14 +579,6 @@ Vue.component('app-menu-construction-list', {
             }
             game.updateSettings();
         },
-        buildBuilding: function(building) {
-            this.bmc();
-            game.create('building', building.key);
-            game.sidebarMenuComponent.showHoverMenu(null);
-        },
-        buildingHover: function(building) {
-            game.sidebarMenuComponent.showHoverMenu(building);
-        },
         setConstructionMode: function(mode) {
             this.bmc();
             game.setConstructionMode(mode);
@@ -613,15 +605,46 @@ Vue.component('app-menu-construction-list', {
             </div>
         </div>
         <div class="menu-page" :class="{ 'modes-disabled': !game.settings.enableExperimental }">
-            <template v-for="building in buildings">
-                <div v-if="!building.hideInList && ((game.selectedBuildingCategory === 'all' && building.category !== 'defenses' && building.category !== 'vehicles') || building.category === game.selectedBuildingCategory) &&
-                    (!building.parent || game.settings.showUpgradesAsBuildings) &&
-                    (!building.techId || (game.settings.selectedTier === 2 && building.techId === 'unlockfacilitytier2') || game.settings.selectedTier === 3)"
-                    class="build-icon" :style="{backgroundImage:'url(/assets/' + (building.parent?.icon ?? building.icon) + ')'}"
-                    @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" @click="buildBuilding(building)">
-                </div>
+            <template v-if="game.selectedBuildingCategory !== 'all'">
+                <app-game-building-list-icon v-for="building in buildingCategories[game.selectedBuildingCategory].buildings" :building="building"/>
+            </template>
+            <template v-else>
+                <template v-for="(category, key) in buildingCategories">
+                    <template v-if="(game.settings.showCollapsibleBuildingList || key !== 'vehicles') && (game.settings.enableExperimental || (key !== 'defenses' && key !== 'vehicles'))">
+                        <div v-if="game.settings.showCollapsibleBuildingList" class="construction-item-category" @click="category.visible = !category.visible; refresh()">
+                            <!--<i class="fa" :class="{'fa-minus': category.visible, 'fa-plus': !category.visible}" aria-hidden="true"></i>-->
+                            {{category.name}}<i class="fa float-right" :class="{'fa-angle-down': category.visible, 'fa-angle-right': !category.visible}" style="margin-top: 2px;" aria-hidden="true"></i>
+                        </div>
+                        <div v-if="!game.settings.showCollapsibleBuildingList || category.visible">
+                            <app-game-building-list-icon v-for="building in category.buildings" :test="this" :building="building"/>
+                        </div>
+                    </template>
+                </template>
             </template>
         </div>
+    </div>
+    `
+});
+
+Vue.component('app-game-building-list-icon', {
+    props: ['building'],
+    methods: {
+        buildBuilding: function(building) {
+            this.bmc();
+            game.create('building', building.key);
+            game.sidebarMenuComponent.showHoverMenu(null);
+        },
+        buildingHover: function(building) {
+            game.sidebarMenuComponent.showHoverMenu(building);
+        }
+    },
+    template: html`
+    <div v-if="!building.hideInList &&
+        (!building.parent || game.settings.showUpgradesAsBuildings) &&
+        (!building.techId || (game.settings.selectedTier === 2 && building.techId === 'unlockfacilitytier2') || game.settings.selectedTier === 3) &&
+        (!game.settings.selectedFaction || (!building.faction || building.faction === game.settings.selectedFaction))"
+        class="build-icon" :title="building.name" :style="{backgroundImage:'url(/assets/' + (building.parent?.icon ?? building.icon) + ')'}"
+        @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" @click="buildBuilding(building)">
     </div>
     `
 });
@@ -897,6 +920,10 @@ Vue.component('app-menu-settings', {
                     <option value="2">Tier 2</option>
                     <option value="3">Tier 3</option>
                 </select>
+            </label>
+            <label class="app-input-label">
+                <i class="fa fa-compress" aria-hidden="true"></i> Show Collapsible Building List
+                <input class="app-input" type="checkbox" v-model="game.settings.showCollapsibleBuildingList" @change="game.updateSettings()">
             </label>
             <label class="app-input-label">
                 <i class="fa fa-chevron-circle-up" aria-hidden="true"></i> Show Upgrades in Building List

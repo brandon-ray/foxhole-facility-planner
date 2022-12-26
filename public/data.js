@@ -2,35 +2,42 @@ const buildingCategories = {
     foundations: {
         name: 'Foundations',
         order: 0,
-        color: 0x505050 // Dark Grey
+        color: 0x505050, // Dark Grey
+        buildings: []
     },
     defenses: {
         name: 'Defenses',
-        order: 1
+        order: 1,
+        buildings: []
     },
     factories: {
         name: 'Factories',
         order: 2,
-        color: 0x8566bd // Indigo / Purple
+        color: 0x8566bd, // Indigo / Purple
+        buildings: []
     },
     harvesters: {
         name: 'Harvesters',
         order: 3,
-        color: 0x289665 // Forest Green
+        color: 0x289665, // Forest Green
+        buildings: []
     },
     power: {
         name: 'Power',
         order: 4,
-        color: 0xf2ec7a // Yellow
+        color: 0xf2ec7a, // Yellow
+        buildings: []
     },
     vehicles: {
         name: 'Vehicles',
-        order: 5
+        order: 5,
+        buildings: []
     },
     misc: {
         name: 'Miscellaneous',
         order: 6,
-        color: 0x7ce1ea // Blue
+        color: 0x7ce1ea, // Blue
+        buildings: []
     }
 };
 
@@ -46,6 +53,9 @@ const buildingCategories = {
     for (let i=0; i<buildingKeys.length; i++) {
         let buildingKey = buildingKeys[i];
         let building = window.objectData.buildings[buildingKey];
+        if (building.category) {
+            buildingCategories[building.category].buildings.push(building);
+        }
         if (building.upgrades) {
             let upgradeKeys = Object.keys(building.upgrades);
             for (let j=0; j<upgradeKeys.length; j++) {
@@ -72,6 +82,10 @@ const buildingCategories = {
                 upgradeBuilding.cost = upgradeBuildingCost;
 
                 window.objectData.buildings[buildingKey + '_' + upgradeKey] = upgradeBuilding;
+
+                if (upgradeBuilding.category) {
+                    buildingCategories[upgradeBuilding.category].buildings.push(upgradeBuilding);
+                }
             }
         }
     }

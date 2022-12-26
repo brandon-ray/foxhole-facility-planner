@@ -14,6 +14,7 @@ const game = {
         selectedTier: 3,
         displayFactionTheme: true,
         defaultBuildingCategory: 'all',
+        showCollapsibleBuildingList: false,
         showUpgradesAsBuildings: false,
         showFacilityName: true,
         showRanges: false,
