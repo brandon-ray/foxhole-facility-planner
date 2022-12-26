@@ -3680,7 +3680,33 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             const projection = entity.bezier?.project(mousePos);
                             if (!projection || projection.d <= (entity.building?.lineWidth ?? 25)) {
                                 if (pickupEntity.sockets && entity.sockets && pickupEntity.building?.canSnap && (pickupEntity.building?.canSnapStructureType !== false || pickupEntity.subtype !== entity.subtype)) {
-                                    let frontSocket, nearestSocket, nearestSocketDist = null;
+                                    let frontSocket = null, nearestSocket = null, nearestSocketDist = null;
+                                    const connectEntitiesBySockets = function(fromSocket, toSocket) {
+                                        fromSocket.setConnection(entity.id, toSocket);
+                                        if (!connectionEstablished) {
+                                            if (pickupEntity.building?.snapNearest) {
+                                                pickupEntity.removeConnections(fromSocket.socketData.id, undefined, true);
+                                            }
+
+                                            if (isNaN(pickupEntity.prevRotation)) {
+                                                pickupEntity.prevRotation = pickupEntity.rotation;
+                                            }
+    
+                                            let pickupEntityPosition = app.cstage.toLocal({x: toSocket.x, y: toSocket.y}, entity, undefined, true);
+                                            const pickupEntityRotation = Math.angleNormalized(-Math.angleDifference(entity.rotation + toSocket.rotation + Math.PI, fromSocket.rotation));
+                                            if (fromSocket.x !== 0 || fromSocket.y !== 0) {
+                                                const fromSocketDist = Math.distanceBetween({ x: 0, y: 0 }, fromSocket);
+                                                const socketAngleDiff = Math.angleBetween({ x: 0, y: 0 }, fromSocket) + Math.PI;
+                                                pickupEntityPosition = Math.extendPoint(pickupEntityPosition, fromSocketDist, pickupEntityRotation + socketAngleDiff);
+                                            }
+
+                                            pickupEntity.position.set(pickupEntityPosition.x, pickupEntityPosition.y);
+                                            pickupEntity.rotation = pickupEntityRotation;
+
+                                            connectionEstablished = true;
+                                            return true;
+                                        }
+                                    }
                                     for (let j = 0; j < entity.sockets.children.length; j++) {
                                         let entitySocket = entity.sockets.children[j];
                                         if (!entitySocket.socketData.temp) {
@@ -3696,11 +3722,16 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                                             }
     
                                                             if (pickupEntity.building?.snapNearest) {
-                                                                let pickupSocketPos = Math.rotateAround({x: 0, y: 0}, pickupSocket, pickupEntity.rotation);
-                                                                pickupSocketPos.x += gmx - pickupEntity.pickupOffset.x;
-                                                                pickupSocketPos.y += gmy - pickupEntity.pickupOffset.y;
+                                                                let pickupSocketPos;
+                                                                if (connectionEstablished) {
+                                                                    pickupSocketPos = app.cstage.toLocal({x: pickupSocket.x, y: pickupSocket.y}, pickupEntity, undefined, true);
+                                                                } else {
+                                                                    pickupSocketPos = Math.rotateAround({x: 0, y: 0}, pickupSocket, (pickupEntity.prevRotation ?? pickupEntity.rotation));
+                                                                    pickupSocketPos.x += gmx - pickupEntity.pickupOffset.x;
+                                                                    pickupSocketPos.y += gmy - pickupEntity.pickupOffset.y;
+                                                                }
                                                                 let entitySocketPos = app.cstage.toLocal({x: entitySocket.x, y: entitySocket.y}, entity, undefined, true);
-                                                                if (Math.distanceBetween(pickupSocketPos, entitySocketPos) > 35) {
+                                                                if (Math.floor(Math.distanceBetween(pickupSocketPos, entitySocketPos)) >= (!connectionEstablished ? 35 : 2)) {
                                                                     continue;
                                                                 }
                                                                 let pickupSocketRot = Math.angleNormalized((pickupEntity.rotation + pickupSocket.rotation) - Math.PI);
@@ -3708,14 +3739,17 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                                                 if (!Math.anglesWithinRange(entitySocketRot, pickupSocketRot, Math.PI / 8)) {
                                                                     continue;
                                                                 }
-                                                                
-                                                                pickupSocket.setConnection(entity.id, entitySocket);
+
+                                                                if (connectEntitiesBySockets(pickupSocket, entitySocket)) {
+                                                                    i = -1;
+                                                                }
+                                                                break;
                                                             }
 
                                                             frontSocket = pickupSocket;
                                                             nearestSocket = entitySocket;
                                                             nearestSocketDist = socketDistance;
-
+                                                            
                                                             break;
                                                         }
                                                     }
@@ -3724,29 +3758,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                         }
                                     }
                                     if (nearestSocket) {
-                                        if (!connectionEstablished) {
-                                            if (isNaN(pickupEntity.prevRotation)) {
-                                                pickupEntity.prevRotation = pickupEntity.rotation;
-                                            }
-    
-                                            let pickupEntityPosition = app.cstage.toLocal({x: nearestSocket.x, y: nearestSocket.y}, entity, undefined, true);
-                                            const pickupEntityRotation = Math.angleNormalized(-Math.angleDifference(entity.rotation + nearestSocket.rotation + Math.PI, frontSocket.rotation));
-                                            if (frontSocket.x !== 0 || frontSocket.y !== 0) {
-                                                const pickupSocketDist = Math.distanceBetween({ x: 0, y: 0 }, frontSocket);
-                                                const socketAngleDiff = Math.angleBetween({ x: 0, y: 0 }, frontSocket) + Math.PI;
-                                                pickupEntityPosition = Math.extendPoint(pickupEntityPosition, pickupSocketDist, pickupEntityRotation + socketAngleDiff);
-                                            }
-
-                                            pickupEntity.position.set(pickupEntityPosition.x, pickupEntityPosition.y);
-                                            pickupEntity.rotation = pickupEntityRotation;
-
-                                            connectionEstablished = true;
-                                        }
-
-                                        if (!pickupEntity.building?.snapNearest) {
-                                            frontSocket.setConnection(entity.id, nearestSocket);
-                                            break;
-                                        }
+                                        connectEntitiesBySockets(frontSocket, nearestSocket);
+                                        break;
                                     }
                                 }
 
@@ -3802,10 +3815,12 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     if (!connectionEstablished && !isNaN(pickupEntity.prevRotation)) {
                         pickupEntity.rotation = pickupEntity.prevRotation;
                         delete pickupEntity.prevRotation;
-                        pickupEntity.pickupOffset = {
-                            x: 0,
-                            y: 0
-                        };
+                        if (!pickupEntity.building?.snapNearest) {
+                            pickupEntity.pickupOffset = {
+                                x: 0,
+                                y: 0
+                            };
+                        }
                     }
                 }
                 if (!connectionEstablished) {
