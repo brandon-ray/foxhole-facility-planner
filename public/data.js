@@ -70,12 +70,13 @@ const buildingCategories = {
                 upgradeBuilding.name = building.name + ' (' + upgrade.name + ')';
 
                 let upgradeBuildingCost = Object.assign({}, building.cost);
-                for (const [resource, amount] of Object.entries(upgradeBuilding.cost)) {
-                    let resourceAmt = building.cost[resource];
-                    if (resourceAmt) {
-                        upgradeBuildingCost[resource] = resourceAmt + amount;
-                    } else {
-                        upgradeBuildingCost[resource] = amount;
+                if (upgradeBuilding.cost) {
+                    for (const [resource, amount] of Object.entries(upgradeBuilding.cost)) {
+                        if (building.cost) {
+                            upgradeBuildingCost[resource] = (building.cost[resource] ?? 0) + amount;
+                        } else {
+                            upgradeBuildingCost[resource] = amount;
+                        }
                     }
                 }
                 upgradeBuilding.upgradeCost = upgradeBuilding.cost;

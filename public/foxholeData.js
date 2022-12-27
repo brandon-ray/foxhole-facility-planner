@@ -1584,6 +1584,19 @@ const foxholeData = {
 			],
 			"cost": {
 				"groundmaterials": 75
+			},
+			"upgrades": {
+				"foundation01t3": {
+					"name": "Concrete Foundation (1x1)",
+					"codeName": "Foundation01T3",
+					"description": "A foundation that provides a suitable surface for constructing Facilities.",
+					"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation01Icon.webp",
+					"texture": "game/Textures/Structures/concrete_foundation_1x1.webp",
+					"garrisonSupplyMultiplier": 2,
+					"cost": {
+						"concrete": 15
+					}
+				}
 			}
 		},
 		"foundation_1x2": {
@@ -1646,6 +1659,19 @@ const foxholeData = {
 			],
 			"cost": {
 				"groundmaterials": 115
+			},
+			"upgrades": {
+				"foundation011x2t3": {
+					"name": "Concrete Foundation (1x2)",
+					"codeName": "Foundation011x2T3",
+					"description": "A foundation that provides a suitable surface for constructing Facilities.",
+					"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation03Icon.webp",
+					"texture": "game/Textures/Structures/concrete_foundation_1x2.webp",
+					"garrisonSupplyMultiplier": 2,
+					"cost": {
+						"concrete": 20
+					}
+				}
 			}
 		},
 		"foundation_2x2": {
@@ -1722,6 +1748,19 @@ const foxholeData = {
 			],
 			"cost": {
 				"groundmaterials": 150
+			},
+			"upgrades": {
+				"foundation012x2t3": {
+					"name": "Concrete Foundation (2x2)",
+					"codeName": "Foundation012x2T3",
+					"description": "A foundation that provides a suitable surface for constructing Facilities.",
+					"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation04Icon.webp",
+					"texture": "game/Textures/Structures/concrete_foundation_2x2.webp",
+					"garrisonSupplyMultiplier": 2,
+					"cost": {
+						"concrete": 30
+					}
+				}
 			}
 		},
 		"foundation_corner": {
@@ -1762,6 +1801,19 @@ const foxholeData = {
 			],
 			"cost": {
 				"groundmaterials": 75
+			},
+			"upgrades": {
+				"foundation02t3": {
+					"name": "Concrete Foundation Corner (1x1)",
+					"codeName": "Foundation02T3",
+					"description": "A foundation that provides a suitable surface for constructing Facilities.",
+					"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation02Icon.webp",
+					"texture": "game/Textures/Structures/concrete_foundation_corner.webp",
+					"garrisonSupplyMultiplier": 2,
+					"cost": {
+						"concrete": 15
+					}
+				}
 			}
 		},
 		"foxhole": {

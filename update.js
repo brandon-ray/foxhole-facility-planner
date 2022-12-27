@@ -6,7 +6,10 @@ const foxholeDataDirectory = 'dev/';
 const foxholeDataVariable = 'const foxholeData = ';
 let foxholeData = JSON.parse(fs.readFileSync('./public/foxholeData.js').toString().substring(foxholeDataVariable.length));
 
+const stStructures = JSON.parse(fs.readFileSync(`${foxholeDataDirectory}War/Content/Blueprints/StringTables/STStructures.json`))[0].StringTable.KeysToMetaData;
+
 let structureList = foxholeData.buildings;
+let upgradeList = {};
 let techList = {};
 let itemList = {};
 
@@ -42,6 +45,12 @@ function getLocalIcon(component) {
     let iconPath = component?.Icon?.ObjectPath ?? component?.Icon?.ResourceObject?.ObjectPath ?? component?.BrushOverride?.ResourceObject?.ObjectPath;
     if (iconPath) {
         return `game/${iconPath.slice(12, -1)}webp`;
+    }
+}
+
+function getTableString(entry) {
+    if (entry.TableId === '/Game/Blueprints/StringTables/STStructures.STStructures') {
+        return stStructures[entry.Key];
     }
 }
 
@@ -105,6 +114,50 @@ function iterateBaseStructures(uProperty, baseData) {
 
 //let buildCategories = ['EBuildCategory::Foundation', 'EBuildCategory::Facility', 'EBuildCategory::Power', 'EBuildCategory::Mining'];
 
+function iterateUpgradeCodeNames(dirPath) {
+    dirPath = dirPath ?? `${foxholeDataDirectory}War/Content/Blueprints/`;
+    let files = fs.readdirSync(dirPath);
+    files.forEach(file => {
+        const filePath = path.join(dirPath, file);
+        const fileStats = fs.statSync(filePath);
+        if (fileStats.isFile() && path.extname(filePath) === '.json') {
+            const uAsset = JSON.parse(fs.readFileSync(filePath));
+            let className = null;
+            let baseData = {};
+            uAsset.forEach(uProperty => {
+                switch(uProperty.Type) {
+                    case 'BlueprintGeneratedClass':
+                        className = uProperty.Name ?? className;
+                        if (uProperty.Super) {
+                            iterateBaseStructures(uProperty, baseData);
+                        }
+                        break;
+                    case className:
+                        if (uProperty.Properties && uProperty.Properties.CodeName && uProperty.Properties.UpgradeStructureCodeName) {
+                            let upgradeCodeName = uProperty.Properties.CodeName.toLowerCase();
+                            let codeNameUpgrades = [];
+                            for (const [codeName, upgrades] of Object.entries(upgradeList)) {
+                                if (upgrades.includes(upgradeCodeName)) {
+                                    upgradeCodeName = codeName;
+                                    codeNameUpgrades = upgrades;
+                                    break;
+                                }
+                            }
+                            if (structureList[upgradeCodeName] && uProperty.Properties.UpgradeStructureCodeName !== 'None') {
+                                codeNameUpgrades.push(uProperty.Properties.UpgradeStructureCodeName.toLowerCase());
+                                upgradeList[upgradeCodeName] = codeNameUpgrades;
+                            }
+                        }
+                        break;
+                }
+            });
+        } else if (fileStats.isDirectory()) {
+            iterateUpgradeCodeNames(filePath);
+        }
+    });
+}
+iterateUpgradeCodeNames(`${foxholeDataDirectory}War/Content/Blueprints/`);
+
 function iterateStructures(dirPath) {
     dirPath = dirPath ?? `${foxholeDataDirectory}War/Content/Blueprints/`;
     let files = fs.readdirSync(dirPath);
@@ -128,13 +181,26 @@ function iterateStructures(dirPath) {
                         }
                         break;
                     case className:
-                        // if (uProperty.Properties && uProperty.Properties.CodeName && ((uProperty.Properties.BuildCategory && buildCategories.includes(uProperty.Properties.BuildCategory) || (baseData.BuildCategory && buildCategories.includes(baseData.BuildCategory))))) {
                         if (uProperty.Properties && uProperty.Properties.CodeName) {
-                            structureCodeName = uProperty.Properties.CodeName.toLowerCase();
-                            if (structureList[structureCodeName]) {
-                                structure = uProperty.Properties;
-                                structureData = structureList[structureCodeName];
-                                structureList[structureCodeName] = {
+                            structure = uProperty.Properties;
+                            let parentCodeName;
+                            structureCodeName = structure.CodeName.toLowerCase();
+                            structureData = structureList[structureCodeName];
+                            for (const [upgradingCodeName, upgradeCodeNames] of Object.entries(upgradeList)) {
+                                if (upgradingCodeName === structureCodeName) {
+                                    break;
+                                }
+                                if (upgradeCodeNames.includes(structureCodeName)) {
+                                    parentCodeName = upgradingCodeName;
+                                    if (!structureList[parentCodeName].upgrades) {
+                                        structureList[parentCodeName].upgrades = {};
+                                    }
+                                    structureData = structureList[parentCodeName].upgrades[structureCodeName] ?? { 'id': structureCodeName };
+                                    break;
+                                }
+                            }
+                            if (structureData) {
+                                structureData = {
                                     'id': structureData.id,
                                     'name': structure.DisplayName?.SourceString ?? (baseData.name ?? structure.CodeName),
                                     'codeName': structure.CodeName,
@@ -185,14 +251,19 @@ function iterateStructures(dirPath) {
                                     'upgrades': structureData.upgrades
                                 }
                                 initializeStructureItems(structure);
-                                if (structureList[structureCodeName].techId) {
-                                    techList[structureList[structureCodeName].techId] = {};
+                                if (structureData.techId) {
+                                    techList[structureData.techId] = {};
                                 }
                                 if (structure.Modifications) {
                                     for (const [id, modification] of Object.entries(structure.Modifications)) {
                                         initializeStructureItems(modification);
                                     }
                                     modificationsData = structure.Modifications;
+                                }
+                                if (parentCodeName) {
+                                    structureList[parentCodeName].upgrades[structureCodeName] = structureData;
+                                } else {
+                                    structureList[structureCodeName] = structureData;
                                 }
                             }
                         }
@@ -212,11 +283,13 @@ function iterateStructures(dirPath) {
                                     modifications = modifications ?? {};
                                     modifications[modificationCodeName] = {
                                         'id': storedModData?.id,
-                                        'name': modification.DisplayName?.SourceString ?? displayName,
+                                        'name': modification.DisplayName?.SourceString ?? getTableString(modification.DisplayName) ?? displayName,
                                         'codeName': displayName,
-                                        'description': modification.Description?.SourceString ?? 'No Description Provided.',
+                                        'description': modification.Description?.SourceString ?? getTableString(modification.Description) ?? 'No Description Provided.',
                                         'icon': getLocalIcon(modification),
-                                        'texture': storedModData?.texture ?? `game/Textures/Structures/${structureData.id}_${storedModData?.id}.webp`,
+                                        'texture': typeof storedModData?.texture === 'string' || storedModData?.texture === null ? storedModData.texture : `game/Textures/Structures/${structureData.id}_${storedModData?.id}.webp`,
+                                        'textureFrontCap': storedModData?.textureFrontCap,
+                                        'textureBackCap': storedModData?.textureBackCap,
                                         'positionOffset': storedModData?.positionOffset,
                                         'sockets': storedModData?.sockets,
                                         'techId': modification.TechID && (modification.TechID !== 'ETechID::None') ? modification.TechID.substring(9).toLowerCase() : undefined,
@@ -243,7 +316,7 @@ function iterateStructures(dirPath) {
                         }
                         break;
                     case 'CraneComponent':
-                        if (structure && uProperty.Properties?.Config) {
+                        if (structure && structureData && uProperty.Properties?.Config) {
                             structureList[structureCodeName]['range'] = {
                                 "min": uProperty.Properties.Config.MinHorizontalDistanceToTarget / METER_UNREAL_UNITS,
                                 "max": uProperty.Properties.Config.MaxHorizontalDistanceToTarget / METER_UNREAL_UNITS
@@ -282,7 +355,7 @@ function iterateBaseAssets(uProperty, baseData) {
 }
 
 function getResourceCosts(resources) {
-    if (resources && resources.Resource.CodeName !== 'None') {
+    if (resources && resources.Resource.CodeName !== 'None' && resources.Resource.CodeName !== 'Excavation') {
         let resourceCost = {};
         let resourceCodeName = resources.Resource.CodeName.toLowerCase();
         itemList[resourceCodeName] = {};
@@ -298,7 +371,7 @@ function getResourceCosts(resources) {
     }
 }
 
-function iterateData(filePath, list, isItem) {
+function iterateData(filePath, list, isItem, yep) {
     let rawdata = fs.readFileSync(filePath);
     let uAsset = JSON.parse(rawdata)[0];
     if (uAsset.Rows) {
@@ -328,6 +401,12 @@ function iterateData(filePath, list, isItem) {
 iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPVehicleDynamicData.json`, itemList, true);
 iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, itemList, true); // Check for items in the structure data... Yes, Material Pallet is stored here.
 iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, structureList);
+
+for (const [codeName, structureData] of Object.entries(structureList)) {
+    if (upgradeList[codeName] && structureData.upgrades) {
+        iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, structureData.upgrades, undefined, true);
+    }
+}
 
 function iterateAssets(dirPath) {
     let files = fs.readdirSync(dirPath);

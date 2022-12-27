@@ -289,6 +289,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         power: 'power.webp',
         power_x128: 'power_x128.webp',
         foundation_border: 'foundation_border.webp',
+        concrete_foundation_border: 'concrete_foundation_border.webp',
         smoke_particles: 'smoke_particles.png'
     };
 
@@ -1898,9 +1899,13 @@ const fontFamily = ['Recursive', 'sans-serif'];
                         socket.pointer.anchor.set(0.5, 1.5);
                         socket.pointer.rotation = -(entity.rotation + socket.rotation);
                     } else if (socket.socketData.type === 'foundation') {
-                        socket.pointer = new PIXI.Sprite(resources.foundation_border.texture);
-                        socket.pointer.width = resources.foundation_border.texture.width / METER_PIXEL_SCALE;
-                        socket.pointer.height = resources.foundation_border.texture.height / METER_PIXEL_SCALE;
+                        let foundationBorder = resources.foundation_border.texture;
+                        if (building.parent) {
+                            foundationBorder = resources.concrete_foundation_border.texture;
+                        }
+                        socket.pointer = new PIXI.Sprite(foundationBorder);
+                        socket.pointer.width = foundationBorder.width / METER_PIXEL_SCALE;
+                        socket.pointer.height = foundationBorder.height / METER_PIXEL_SCALE;
                         socket.pointer.anchor.set(0.5, 1.0);
                     } else if (socket.socketData.temp) {
                         socket.pointer = new PIXI.Sprite(resources.bipointer.texture);
