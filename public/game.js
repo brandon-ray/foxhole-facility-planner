@@ -3694,13 +3694,28 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 if (!selectionRotation && selectedEntities.length) {
                     for (let i = 0; i < selectedEntities.length; i++) {
                         let selectedEntity = selectedEntities[i];
+                        if (connectionEstablished && connectionEstablished !== true && connectionEstablished.building?.snapNearest && selectedEntity !== connectionEstablished) {
+                            if (!selectedEntity.prevPosition) {
+                                selectedEntity.prevPosition = {
+                                    x: selectedEntity.x,
+                                    y: selectedEntity.y
+                                }
+                            }
+                            if (isNaN(selectedEntity.prevRotation)) {
+                                selectedEntity.prevRotation = selectedEntity.rotation;
+                            }
+                            const offsetX = connectionEstablished.prevPosition.x - connectionEstablished.x;
+                            const offsetY = connectionEstablished.prevPosition.y - connectionEstablished.y;
+                            const rotatedPosition = Math.rotateAround(connectionEstablished.prevPosition, selectedEntity.prevPosition, Math.angleDifference(connectionEstablished.prevRotation, connectionEstablished.rotation));
+                            selectedEntity.position.set(rotatedPosition.x - offsetX, rotatedPosition.y - offsetY);
+                            selectedEntity.rotation = selectedEntity.prevRotation + Math.angleDifference(connectionEstablished.prevRotation, connectionEstablished.rotation);
+                        }
                         if (selectedEntity.building?.canSnap || selectedEntity.isTrain) {
                             for (let j = 0; j < entities.length; j++) {
                                 let entity = entities[j];
-                                if (!entity.visible || entity === selectedEntity || entity.type !== 'building' || entity.selected || !((selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain) || Math.distanceBetween({x: gmx, y: gmy}, entity) > 1000) {
+                                if (!entity.visible || entity === selectedEntity || entity.type !== 'building' || entity.selected || !((selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain) || Math.distanceBetween(selectedEntity, entity) > 1000) {
                                     continue;
                                 }
-                                // TODO: When a connection is established while snapping nearest, to connect further sockets, need to base connections on entity position instead of mouse, also, reduce the socket distance to something like 1. Really small.
                                 if (selectedEntity.subtype === entity.subtype || (selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain) {
                                     const mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
                                     const projection = entity.bezier?.project(mousePos);
@@ -3712,6 +3727,13 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                                 if (!connectionEstablished) {
                                                     if (selectedEntity.building?.snapNearest) {
                                                         selectedEntity.removeConnections(fromSocket.socketData.id, true, true);
+                                                    }
+
+                                                    if (!selectedEntity.prevPosition) {
+                                                        selectedEntity.prevPosition = {
+                                                            x: selectedEntity.x,
+                                                            y: selectedEntity.y
+                                                        }
                                                     }
 
                                                     if (isNaN(selectedEntity.prevRotation)) {
@@ -3729,7 +3751,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                                     selectedEntity.position.set(selectedEntityPosition.x, selectedEntityPosition.y);
                                                     selectedEntity.rotation = selectedEntityRotation;
 
-                                                    connectionEstablished = true;
+                                                    connectionEstablished = selectedEntity;
                                                     return true;
                                                 }
                                             }
@@ -3742,7 +3764,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                                         for (let l = 0; l < selectedEntity.sockets.children.length; l++) {
                                                             let selectedSocket = selectedEntity.sockets.children[l];
                                                             if (typeof entitySocket.socketData.type === 'string' && entitySocket.socketData.type === selectedSocket.socketData.type) {
-                                                                if (Object.keys(entitySocket.connections).length === 0 || Object.keys(entitySocket.connections).length < entitySocket.socketData.connectionLimit || entitySocket.connections[selectedEntity.id] === selectedSocket.socketData.id) {
+                                                                if ((Object.keys(selectedSocket.connections).length === 0 || selectedSocket.connections[entity.id] === entitySocket.socketData.id) && (Object.keys(entitySocket.connections).length === 0 || Object.keys(entitySocket.connections).length < entitySocket.socketData.connectionLimit || entitySocket.connections[selectedEntity.id] === selectedSocket.socketData.id)) {
                                                                     if (entitySocket.socketData.flow && entitySocket.socketData.flow === selectedSocket.socketData.flow) {
                                                                         continue;
                                                                     }
@@ -3757,7 +3779,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                                                             selectedSocketPos.y += gmy - selectedEntity.pickupOffset.y;
                                                                         }
                                                                         let entitySocketPos = app.cstage.toLocal({x: entitySocket.x, y: entitySocket.y}, entity, undefined, true);
-                                                                        if (Math.floor(Math.distanceBetween(selectedSocketPos, entitySocketPos)) >= (!connectionEstablished ? 35 : 2)) {
+                                                                        if (Math.floor(Math.distanceBetween(selectedSocketPos, entitySocketPos)) >= (!connectionEstablished ? 35 : 3)) {
                                                                             continue;
                                                                         }
                                                                         let selectedSocketRot = Math.angleNormalized((selectedEntity.rotation + selectedSocket.rotation) - Math.PI);
@@ -3767,7 +3789,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                                                         }
 
                                                                         if (connectEntitiesBySockets(selectedSocket, entitySocket)) {
-                                                                            j = -1;
+                                                                            i = -1;
                                                                         }
                                                                         break;
                                                                     }
@@ -3839,6 +3861,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             selectedEntity.removeConnections(undefined, true);
                         }
                         if (!connectionEstablished && !isNaN(selectedEntity.prevRotation)) {
+                            if (selectedEntity.prevPosition) {
+                                selectedEntity.x = selectedEntity.prevPosition.x;
+                                selectedEntity.y = selectedEntity.prevPosition.y;
+                                delete selectedEntity.prevPosition;
+                            }
                             selectedEntity.rotation = selectedEntity.prevRotation;
                             delete selectedEntity.prevRotation;
                             if (!selectedEntity.building?.snapNearest) {
