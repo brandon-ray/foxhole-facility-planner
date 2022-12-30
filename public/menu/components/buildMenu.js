@@ -1066,7 +1066,7 @@ Vue.component('app-menu-about', {
                 <hr>
                 <div class="left-mouse-button"></div> Select a single structure.<br>
                 <div class="left-mouse-button"></div> Drag to select multiple structures.<br>
-                <div class="right-mouse-button"></div> Rotate held structures.
+                <div class="right-mouse-button"></div> Rotate selected structures.
                 <hr>
                 <div class="keyboard-key">ctrl</div> + <div class="left-mouse-button"></div> Add structure to selection.<br>
                 <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">A</div> Select all structures.<br>

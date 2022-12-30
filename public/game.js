@@ -858,7 +858,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
             game.setFaction(saveObject.faction);
         }
         setTimeout(() => {
-            let xTotal = 0, yTotal = 0;
             let entityIdMap = {};
             for (let i = 0; i < saveObject.entities.length; i++) {
                 let entityData = saveObject.entities[i];
@@ -882,8 +881,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     entity.onLoad(entityData);
                     if (isSelection) {
                         game.addSelectedEntity(entity, true);
-                        xTotal += parseFloat(entity.x);
-                        yTotal += parseFloat(entity.y);
                     }
                 }
             }
@@ -895,10 +892,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }, 1);
 
             if (isSelection) {
-                let centerPos = {
-                    x: Math.round(xTotal/saveObject.entities.length),
-                    y: Math.round(yTotal/saveObject.entities.length)
-                }
+                let centerPos = game.getEntitiesCenter(selectedEntities, isSelection);
                 if (game.settings.enableGrid) {
                     let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
                     centerPos.x = Math.floor(centerPos.x / gridSize) * gridSize;
@@ -912,20 +906,55 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }, 1);
     };
 
+    game.getEntitiesCenter = function(ents, isSelection) {
+        const count = ents?.length ?? 1;
+        let getMidPoint = function(entity) {
+            let midPoint = null;
+            if (entity.bezier && (!isSelection || count > 1)) {
+                midPoint = {
+                    x: entity.bezier.mid.x,
+                    y: entity.bezier.mid.y
+                };
+            } else if (entity.type === 'shape' && (entity.subtype === 'rectangle' || entity.subtype === 'line')) {
+                midPoint = {
+                    x: entity.sprite.width/2,
+                    y: entity.subtype !== 'line' ? entity.sprite.height/2 : 0
+                };
+            }
+            if (midPoint) {
+                return Math.rotateAround(entity, {
+                    x: entity.x + midPoint.x,
+                    y: entity.y + midPoint.y
+                });
+            }
+            return {
+                x: entity.x,
+                y: entity.y
+            };
+        }
+        if (Array.isArray(ents)) {
+            let sumX = 0, sumY = 0;
+            for (const entity of ents) {
+                let midPoint = getMidPoint(entity);
+                sumX += midPoint.x;
+                sumY += midPoint.y;
+            }
+            return {
+                x: sumX / count,
+                y: sumY / count
+            };
+        }
+        return getMidPoint(ents);
+    };
+
     game.zoomToFacilityCenter = function() {
         if (followEntity) {
             game.followEntity(null);
         }
-        let xTotal = 0;
-        let yTotal = 0;
         if (entities?.length) {
-            for (let i=0; i < entities.length; i++) {
-                let entity = entities[i];
-                xTotal += parseFloat(entity.x);
-                yTotal += parseFloat(entity.y);
-            }
-            camera.x = Math.round(xTotal/entities.length) - WIDTH/2;
-            camera.y = Math.round(yTotal/entities.length) - HEIGHT/2;
+            const centerPos = game.getEntitiesCenter(entities);
+            camera.x = centerPos.x - WIDTH/2;
+            camera.y = centerPos.y - HEIGHT/2;
         } else {
             camera.x = (GRID_WIDTH/2) - WIDTH/2;
             camera.y = (GRID_HEIGHT/2) - HEIGHT/2;
@@ -1207,14 +1236,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
             let selectedChange = false;
             entities.forEach(entity => {
-                let eX = entity.x, eY = entity.y;
-                if (entity.bezier) {
-                    const midPoint = app.cstage.toLocal({x: entity.bezier.mid.x, y: entity.bezier.mid.y}, entity, undefined, true);
-                    eX = midPoint.x;
-                    eY = midPoint.y;
-                }
-                if (eX > selectionArea.x && eX < selectionArea.x + selectionArea.width) {
-                    if (eY > selectionArea.y && eY < selectionArea.y + selectionArea.height) {
+                const centerPos = game.getEntitiesCenter(entity);
+                if (centerPos.x > selectionArea.x && centerPos.x < selectionArea.x + selectionArea.width) {
+                    if (centerPos.y > selectionArea.y && centerPos.y < selectionArea.y + selectionArea.height) {
                         if (game.addSelectedEntity(entity, true)) {
                             selectedChange = true;
                         }
@@ -3304,7 +3328,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     position.x += ((clone.building.positionOffset.x ?? 0) / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
                     position.y += ((clone.building.positionOffset.y ?? 0) / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
                 }
-                position = Math.rotateAround(clone, position, entity.rotation);
+                position = Math.rotateAround(clone, position);
                 clone.position.set(position.x, position.y);
             }
             clone.locked = entity.locked;
@@ -3592,7 +3616,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
         if (mouseDown[2]) {
             if (!selectionRotation) {
-                let cX = 0, cY = 0, rotationOffset = null;
+                let rotationOffset = null;
                 selectedEntities.forEach(selectedEntity => {
                     if (rotationOffset !== false) {
                         if (rotationOffset === null) {
@@ -3601,28 +3625,18 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             rotationOffset = false;
                         }
                     }
+                    if (selectedEntity.sockets) {
+                        selectedEntity.removeConnections(undefined, true);
+                    }
                     selectedEntity.rotationData = {
                         x: selectedEntity.x,
                         y: selectedEntity.y,
                         rotation: selectedEntity.rotation
                     }
-                    let midPoint = null;
-                    if (selectedEntity.bezier) {
-                        midPoint = app.cstage.toLocal({x: selectedEntity.bezier.mid.x, y: selectedEntity.bezier.mid.y}, selectedEntity, undefined, true);
-                    } else if (selectedEntity.type === 'shape' && (selectedEntity.subtype === 'rectangle' || selectedEntity.subtype === 'line')) {
-                        midPoint = app.cstage.toLocal({x: selectedEntity.sprite.width/2, y: selectedEntity.subtype !== 'line' ? selectedEntity.sprite.height/2 : 0}, selectedEntity, undefined, true);
-                    }
-                    cX += parseFloat(midPoint?.x ?? selectedEntity.x);
-                    cY += parseFloat(midPoint?.y ?? selectedEntity.y);
                 });
-                cX = Math.round(cX / selectedEntities.length);
-                cY = Math.round(cY / selectedEntities.length);
-                selectionRotation = {
-                    x: cX, // X center of selection.
-                    y: cY, // Y center of selection.
-                    angle: Math.angleBetween({ x: cX, y: cY }, { x: gmx, y: gmy }), // Angle of mouse from the center of selection.
-                    offset: rotationOffset
-                }
+                selectionRotation = game.getEntitiesCenter(selectedEntities); // Get center of selection.
+                selectionRotation.angle = Math.angleBetween({ x: selectionRotation.x, y: selectionRotation.y }, { x: gmx, y: gmy }); // Angle of mouse from the center of selection.
+                selectionRotation.offset = rotationOffset;
             }
         } else if (selectionRotation) {
             selectionRotation = null;
@@ -3985,8 +3999,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
             y: Math.round(Math.sin(angle) * distance + point.y)
         };
     };
-    Math.rotateAround = function({x: cx, y: cy}, {x, y}, angle) {
-        const cos = Math.cos(angle), sin = Math.sin(angle);
+    Math.rotateAround = function({x: cx, y: cy, rotation: cr}, {x, y}, angle) {
+        const cos = Math.cos(angle ?? cr), sin = Math.sin(angle ?? cr);
         return {
             x: cx + (x - cx) * cos - (y - cy) * sin,
             y: cy + (x - cx) * sin + (y - cy) * cos
