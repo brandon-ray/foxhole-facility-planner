@@ -3268,7 +3268,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
             let locked = false;
             selectedEntities.forEach(entity => {
-                if (!ignoreLock && entity.locked) {
+                if (!pickup) {
+                    if (!isNaN(entity.prevRotation)) {
+                        delete entity.prevRotation;
+                    }
+                } else if (!ignoreLock && entity.locked) {
                     locked = true;
                 } else if (!locked) {
                     entity.pickupOffset = {
@@ -3687,158 +3691,162 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 }
 
                 let connectionEstablished = false;
-                if (!selectionRotation && pickupEntity && (pickupEntity.building?.canSnap || pickupEntity.isTrain)) {
-                    for (let i = 0; i < entities.length; i++) {
-                        let entity = entities[i];
-                        if (!entity.visible || entity === pickupEntity || entity.type !== 'building' || !((pickupEntity.sockets && entity.sockets) || pickupEntity.isTrain) || Math.distanceBetween({x: gmx, y: gmy}, entity) > 1000) {
-                            continue;
-                        }
-                        // TODO: When a connection is established while snapping nearest, to connect further sockets, need to base connections on entity position instead of mouse, also, reduce the socket distance to something like 1. Really small.
-                        if (pickupEntity.subtype === entity.subtype || (pickupEntity.sockets && entity.sockets) || pickupEntity.isTrain) {
-                            const mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
-                            const projection = entity.bezier?.project(mousePos);
-                            if (!projection || projection.d <= (entity.building?.lineWidth ?? 25)) {
-                                if (pickupEntity.sockets && entity.sockets && pickupEntity.building?.canSnap && (pickupEntity.building?.canSnapStructureType !== false || pickupEntity.subtype !== entity.subtype)) {
-                                    let frontSocket = null, nearestSocket = null, nearestSocketDist = null;
-                                    const connectEntitiesBySockets = function(fromSocket, toSocket) {
-                                        fromSocket.setConnection(entity.id, toSocket);
-                                        if (!connectionEstablished) {
-                                            if (pickupEntity.building?.snapNearest) {
-                                                pickupEntity.removeConnections(fromSocket.socketData.id, undefined, true);
-                                            }
+                if (!selectionRotation && selectedEntities.length) {
+                    for (let i = 0; i < selectedEntities.length; i++) {
+                        let selectedEntity = selectedEntities[i];
+                        if (selectedEntity.building?.canSnap || selectedEntity.isTrain) {
+                            for (let j = 0; j < entities.length; j++) {
+                                let entity = entities[j];
+                                if (!entity.visible || entity === selectedEntity || entity.type !== 'building' || entity.selected || !((selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain) || Math.distanceBetween({x: gmx, y: gmy}, entity) > 1000) {
+                                    continue;
+                                }
+                                // TODO: When a connection is established while snapping nearest, to connect further sockets, need to base connections on entity position instead of mouse, also, reduce the socket distance to something like 1. Really small.
+                                if (selectedEntity.subtype === entity.subtype || (selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain) {
+                                    const mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
+                                    const projection = entity.bezier?.project(mousePos);
+                                    if (!projection || projection.d <= (entity.building?.lineWidth ?? 25)) {
+                                        if (selectedEntity.sockets && entity.sockets && selectedEntity.building?.canSnap && (selectedEntity.building?.canSnapStructureType !== false || selectedEntity.subtype !== entity.subtype)) {
+                                            let frontSocket = null, nearestSocket = null, nearestSocketDist = null;
+                                            const connectEntitiesBySockets = function(fromSocket, toSocket) {
+                                                fromSocket.setConnection(entity.id, toSocket);
+                                                if (!connectionEstablished) {
+                                                    if (selectedEntity.building?.snapNearest) {
+                                                        selectedEntity.removeConnections(fromSocket.socketData.id, true, true);
+                                                    }
 
-                                            if (isNaN(pickupEntity.prevRotation)) {
-                                                pickupEntity.prevRotation = pickupEntity.rotation;
-                                            }
-    
-                                            let pickupEntityPosition = app.cstage.toLocal({x: toSocket.x, y: toSocket.y}, entity, undefined, true);
-                                            const pickupEntityRotation = Math.angleNormalized(-Math.angleDifference(entity.rotation + toSocket.rotation + Math.PI, fromSocket.rotation));
-                                            if (fromSocket.x !== 0 || fromSocket.y !== 0) {
-                                                const fromSocketDist = Math.distanceBetween({ x: 0, y: 0 }, fromSocket);
-                                                const socketAngleDiff = Math.angleBetween({ x: 0, y: 0 }, fromSocket) + Math.PI;
-                                                pickupEntityPosition = Math.extendPoint(pickupEntityPosition, fromSocketDist, pickupEntityRotation + socketAngleDiff);
-                                            }
+                                                    if (isNaN(selectedEntity.prevRotation)) {
+                                                        selectedEntity.prevRotation = selectedEntity.rotation;
+                                                    }
+            
+                                                    let selectedEntityPosition = app.cstage.toLocal({x: toSocket.x, y: toSocket.y}, entity, undefined, true);
+                                                    const selectedEntityRotation = Math.angleNormalized(-Math.angleDifference(entity.rotation + toSocket.rotation + Math.PI, fromSocket.rotation));
+                                                    if (fromSocket.x !== 0 || fromSocket.y !== 0) {
+                                                        const fromSocketDist = Math.distanceBetween({ x: 0, y: 0 }, fromSocket);
+                                                        const socketAngleDiff = Math.angleBetween({ x: 0, y: 0 }, fromSocket) + Math.PI;
+                                                        selectedEntityPosition = Math.extendPoint(selectedEntityPosition, fromSocketDist, selectedEntityRotation + socketAngleDiff);
+                                                    }
 
-                                            pickupEntity.position.set(pickupEntityPosition.x, pickupEntityPosition.y);
-                                            pickupEntity.rotation = pickupEntityRotation;
+                                                    selectedEntity.position.set(selectedEntityPosition.x, selectedEntityPosition.y);
+                                                    selectedEntity.rotation = selectedEntityRotation;
 
-                                            connectionEstablished = true;
-                                            return true;
-                                        }
-                                    }
-                                    for (let j = 0; j < entity.sockets.children.length; j++) {
-                                        let entitySocket = entity.sockets.children[j];
-                                        if (!entitySocket.socketData.temp) {
-                                            let socketDistance = Math.distanceBetween(mousePos, entitySocket);
-                                            // Checks socket distance is close, closer than previous socket distance, or hovering a building with a power socket.
-                                            if (pickupEntity.building?.snapNearest || ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || pickupEntity.subtype === 'power_line' && entity.canGrab())) {
-                                                for (let k = 0; k < pickupEntity.sockets.children.length; k++) {
-                                                    let pickupSocket = pickupEntity.sockets.children[k];
-                                                    if (typeof entitySocket.socketData.type === 'string' && entitySocket.socketData.type === pickupSocket.socketData.type) {
-                                                        if (Object.keys(entitySocket.connections).length === 0 || Object.keys(entitySocket.connections).length < entitySocket.socketData.connectionLimit || entitySocket.connections[pickupEntity.id] === pickupSocket.socketData.id) {
-                                                            if (entitySocket.socketData.flow && entitySocket.socketData.flow === pickupSocket.socketData.flow) {
-                                                                continue;
+                                                    connectionEstablished = true;
+                                                    return true;
+                                                }
+                                            }
+                                            for (let k = 0; k < entity.sockets.children.length; k++) {
+                                                let entitySocket = entity.sockets.children[k];
+                                                if (!entitySocket.socketData.temp) {
+                                                    let socketDistance = Math.distanceBetween(mousePos, entitySocket);
+                                                    // Checks socket distance is close, closer than previous socket distance, or hovering a building with a power socket.
+                                                    if (selectedEntity.building?.snapNearest || ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || selectedEntity.subtype === 'power_line' && entity.canGrab())) {
+                                                        for (let l = 0; l < selectedEntity.sockets.children.length; l++) {
+                                                            let selectedSocket = selectedEntity.sockets.children[l];
+                                                            if (typeof entitySocket.socketData.type === 'string' && entitySocket.socketData.type === selectedSocket.socketData.type) {
+                                                                if (Object.keys(entitySocket.connections).length === 0 || Object.keys(entitySocket.connections).length < entitySocket.socketData.connectionLimit || entitySocket.connections[selectedEntity.id] === selectedSocket.socketData.id) {
+                                                                    if (entitySocket.socketData.flow && entitySocket.socketData.flow === selectedSocket.socketData.flow) {
+                                                                        continue;
+                                                                    }
+            
+                                                                    if (selectedEntity.building?.snapNearest) {
+                                                                        let selectedSocketPos;
+                                                                        if (connectionEstablished) {
+                                                                            selectedSocketPos = app.cstage.toLocal({x: selectedSocket.x, y: selectedSocket.y}, selectedEntity, undefined, true);
+                                                                        } else {
+                                                                            selectedSocketPos = Math.rotateAround({x: 0, y: 0}, selectedSocket, (selectedEntity.prevRotation ?? selectedEntity.rotation));
+                                                                            selectedSocketPos.x += gmx - selectedEntity.pickupOffset.x;
+                                                                            selectedSocketPos.y += gmy - selectedEntity.pickupOffset.y;
+                                                                        }
+                                                                        let entitySocketPos = app.cstage.toLocal({x: entitySocket.x, y: entitySocket.y}, entity, undefined, true);
+                                                                        if (Math.floor(Math.distanceBetween(selectedSocketPos, entitySocketPos)) >= (!connectionEstablished ? 35 : 2)) {
+                                                                            continue;
+                                                                        }
+                                                                        let selectedSocketRot = Math.angleNormalized((selectedEntity.rotation + selectedSocket.rotation) - Math.PI);
+                                                                        let entitySocketRot = Math.angleNormalized(entity.rotation + entitySocket.rotation);
+                                                                        if (!Math.anglesWithinRange(entitySocketRot, selectedSocketRot, Math.PI / 8)) {
+                                                                            continue;
+                                                                        }
+
+                                                                        if (connectEntitiesBySockets(selectedSocket, entitySocket)) {
+                                                                            j = -1;
+                                                                        }
+                                                                        break;
+                                                                    }
+
+                                                                    frontSocket = selectedSocket;
+                                                                    nearestSocket = entitySocket;
+                                                                    nearestSocketDist = socketDistance;
+                                                                    
+                                                                    break;
+                                                                }
                                                             }
-    
-                                                            if (pickupEntity.building?.snapNearest) {
-                                                                let pickupSocketPos;
-                                                                if (connectionEstablished) {
-                                                                    pickupSocketPos = app.cstage.toLocal({x: pickupSocket.x, y: pickupSocket.y}, pickupEntity, undefined, true);
-                                                                } else {
-                                                                    pickupSocketPos = Math.rotateAround({x: 0, y: 0}, pickupSocket, (pickupEntity.prevRotation ?? pickupEntity.rotation));
-                                                                    pickupSocketPos.x += gmx - pickupEntity.pickupOffset.x;
-                                                                    pickupSocketPos.y += gmy - pickupEntity.pickupOffset.y;
-                                                                }
-                                                                let entitySocketPos = app.cstage.toLocal({x: entitySocket.x, y: entitySocket.y}, entity, undefined, true);
-                                                                if (Math.floor(Math.distanceBetween(pickupSocketPos, entitySocketPos)) >= (!connectionEstablished ? 35 : 2)) {
-                                                                    continue;
-                                                                }
-                                                                let pickupSocketRot = Math.angleNormalized((pickupEntity.rotation + pickupSocket.rotation) - Math.PI);
-                                                                let entitySocketRot = Math.angleNormalized(entity.rotation + entitySocket.rotation);
-                                                                if (!Math.anglesWithinRange(entitySocketRot, pickupSocketRot, Math.PI / 8)) {
-                                                                    continue;
-                                                                }
-
-                                                                if (connectEntitiesBySockets(pickupSocket, entitySocket)) {
-                                                                    i = -1;
-                                                                }
-                                                                break;
-                                                            }
-
-                                                            frontSocket = pickupSocket;
-                                                            nearestSocket = entitySocket;
-                                                            nearestSocketDist = socketDistance;
-                                                            
-                                                            break;
                                                         }
                                                     }
                                                 }
                                             }
-                                        }
-                                    }
-                                    if (nearestSocket) {
-                                        connectEntitiesBySockets(frontSocket, nearestSocket);
-                                        break;
-                                    }
-                                }
-
-                                if (projection && ((!connectionEstablished && entity.bezier && entity.building?.isBezier && entity.building?.canSnapAlongBezier && pickupEntity.subtype === entity.subtype) || (pickupEntity.isTrain && entity.subtype === pickupEntity.building.vehicle.track))) {
-                                    let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity, undefined, true);
-                                    let normal = entity.bezier.normal(projection.t);
-                                    let angle = Math.angleBetween({x: 0, y: 0}, normal);
-                                    pickupEntity.x = global.x;
-                                    pickupEntity.y = global.y;
-
-                                    let angleRight = entity.rotation + (angle - Math.PI/2) - Math.PI/2;
-                                    let angleLeft = entity.rotation + (angle + Math.PI/2) - Math.PI/2;
-                                    let rightDiff = Math.angleNormalized(angleRight - pickupEntity.rotation);
-                                    let leftDiff = Math.angleNormalized(angleLeft - pickupEntity.rotation);
-
-                                    if (isNaN(pickupEntity.prevRotation)) {
-                                        pickupEntity.prevRotation = pickupEntity.rotation;
-                                    }
-
-                                    if (pickupEntity.isTrain) {
-                                        pickupEntity.currentTrack = entity;
-                                        pickupEntity.currentTrackT = projection.t;
-                                    }
-
-                                    if (rightDiff < leftDiff) {
-                                        pickupEntity.rotation = angleRight + Math.PI/2;
-                                    } else {
-                                        pickupEntity.rotation = angleLeft + Math.PI/2;
-                                    }
-
-                                    if (!connectionEstablished && pickupEntity.sockets && (pickupEntity.subtype === 'rail_large_gauge' || pickupEntity.subtype === 'rail_small_gauge')) {
-                                        for (let k = 0; k < pickupEntity.sockets.children.length; k++) {
-                                            let pickupSocket = pickupEntity.sockets.children[k];
-                                            if (pickupSocket.socketData.cap === 'front') {
-                                                // TODO: Store this somewhere so we don't have to loop each time for sockets. There will only ever be one front and back socket for rails.
-                                                pickupSocket.createConnection(entity, projection.x, projection.y, angle);
+                                            if (nearestSocket) {
+                                                connectEntitiesBySockets(frontSocket, nearestSocket);
                                                 break;
                                             }
                                         }
-                                    } else {
-                                        pickupEntity.removeConnections();
+                                        if (pickupEntity && projection && ((!connectionEstablished && entity.bezier && entity.building?.isBezier && entity.building?.canSnapAlongBezier && selectedEntity.subtype === entity.subtype) || (selectedEntity.isTrain && entity.subtype === selectedEntity.building.vehicle.track))) {
+                                            let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity, undefined, true);
+                                            let normal = entity.bezier.normal(projection.t);
+                                            let angle = Math.angleBetween({x: 0, y: 0}, normal);
+                                            selectedEntity.x = global.x;
+                                            selectedEntity.y = global.y;
+            
+                                            let angleRight = entity.rotation + (angle - Math.PI/2) - Math.PI/2;
+                                            let angleLeft = entity.rotation + (angle + Math.PI/2) - Math.PI/2;
+                                            let rightDiff = Math.angleNormalized(angleRight - selectedEntity.rotation);
+                                            let leftDiff = Math.angleNormalized(angleLeft - selectedEntity.rotation);
+            
+                                            if (isNaN(selectedEntity.prevRotation)) {
+                                                selectedEntity.prevRotation = selectedEntity.rotation;
+                                            }
+            
+                                            if (selectedEntity.isTrain) {
+                                                selectedEntity.currentTrack = entity;
+                                                selectedEntity.currentTrackT = projection.t;
+                                            }
+            
+                                            if (rightDiff < leftDiff) {
+                                                selectedEntity.rotation = angleRight + Math.PI/2;
+                                            } else {
+                                                selectedEntity.rotation = angleLeft + Math.PI/2;
+                                            }
+            
+                                            if (!connectionEstablished && selectedEntity.sockets && (selectedEntity.subtype === 'rail_large_gauge' || selectedEntity.subtype === 'rail_small_gauge')) {
+                                                for (let k = 0; k < selectedEntity.sockets.children.length; k++) {
+                                                    let selectedSocket = selectedEntity.sockets.children[k];
+                                                    if (selectedSocket.socketData.cap === 'front') {
+                                                        // TODO: Store this somewhere so we don't have to loop each time for sockets. There will only ever be one front and back socket for rails.
+                                                        selectedSocket.createConnection(entity, projection.x, projection.y, angle);
+                                                        break;
+                                                    }
+                                                }
+                                            } else {
+                                                selectedEntity.removeConnections();
+                                            }
+            
+                                            connectionEstablished = true;
+                                            break;
+                                        }
                                     }
-
-                                    connectionEstablished = true;
-                                    break;
                                 }
                             }
                         }
-                    }
-                    if (!connectionEstablished) {
-                        pickupEntity.removeConnections();
-                    }
-                    if (!connectionEstablished && !isNaN(pickupEntity.prevRotation)) {
-                        pickupEntity.rotation = pickupEntity.prevRotation;
-                        delete pickupEntity.prevRotation;
-                        if (!pickupEntity.building?.snapNearest) {
-                            pickupEntity.pickupOffset = {
-                                x: 0,
-                                y: 0
-                            };
+                        if (!connectionEstablished) {
+                            selectedEntity.removeConnections(undefined, true);
+                        }
+                        if (!connectionEstablished && !isNaN(selectedEntity.prevRotation)) {
+                            selectedEntity.rotation = selectedEntity.prevRotation;
+                            delete selectedEntity.prevRotation;
+                            if (!selectedEntity.building?.snapNearest) {
+                                selectedEntity.pickupOffset = {
+                                    x: 0,
+                                    y: 0
+                                };
+                            }
                         }
                     }
                 }
