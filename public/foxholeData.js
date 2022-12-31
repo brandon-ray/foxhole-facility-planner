@@ -997,6 +997,21 @@ const foxholeData = {
 			"texture": "game/Textures/Structures/barbedwirespline.webp",
 			"textureFrontCap": "game/Textures/Structures/barbedwirespline_front.webp",
 			"textureBackCap": "game/Textures/Structures/barbedwirespline_back.webp",
+			"canSnap": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "barbedwirespline",
+					"cap": "front",
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "barbedwirespline",
+					"cap": "back",
+					"rotation": 90
+				}
+			],
 			"cost": {
 				"barbedwirematerials": 3
 			}
@@ -1815,14 +1830,6 @@ const foxholeData = {
 					}
 				}
 			}
-		},
-		"foxhole": {
-			"name": "Foxhole",
-			"codeName": "Foxhole",
-			"description": "A simple hole dug into the ground to provide infantry with makeshift cover from enemy fire.",
-			"category": "defenses",
-			"icon": "game/Textures/UI/StructureIcons/PvpFoxholeItemIcon.webp",
-			"texture": "game/Textures/Structures/foxhole.webp"
 		},
 		"fuel_container": {
 			"name": "Fuel Container",
@@ -4055,9 +4062,19 @@ const foxholeData = {
 			"name": "Player (Colonial)",
 			"description": "The Colonials are described as a faction of ingenuity and practicality. They are sometimes referred to as \"The Colonial Legion\" or \"Little Green Men\".",
 			"category": "misc",
+			"faction": "c",
 			"sortOffset": 150000,
 			"icon": "game/Textures/UI/PlayerCIcon.webp",
 			"texture": "game/Textures/playerc.webp"
+		},
+		"playerw": {
+			"name": "Player (Warden)",
+			"description": "The Wardens are described to be a nation of honor and tradition. They are the native inhabitants of the region where the game takes place.",
+			"category": "misc",
+			"faction": "w",
+			"sortOffset": 150000,
+			"icon": "game/Textures/UI/PlayerWIcon.webp",
+			"texture": "game/Textures/playerw.webp"
 		},
 		"power_box": {
 			"name": "Power Switch",
@@ -4296,7 +4313,7 @@ const foxholeData = {
 			"minLength": 9.01,
 			"maxLength": 30,
 			"icon": "game/Textures/UI/ItemIcons/FacilityRoadItemIcon.webp",
-			"texture": "provisional_road.png",
+			"texture": "game/Textures/Structures/facilityroad.webp",
 			"textureIcon": {
 				"disabled": true
 			},
@@ -4992,6 +5009,7 @@ const foxholeData = {
 			"codeName": "TrainLRArtillery",
 			"description": "All the power of a stationary Storm Cannon, but easily relocated via rails. This devastating cannon is capable of leveling enemy fortifications at very large distances.",
 			"category": "vehicles",
+			"hideInList": true,
 			"length": 3.74,
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/TrainLRArtilleryVehicleIcon.webp",

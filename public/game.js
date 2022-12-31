@@ -139,7 +139,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
     let effects = [];
 
     game.facilityName = 'Unnamed Facility';
-    game.selectedBuildingCategory = game.settings.defaultBuildingCategory;
 
     game.constructionModes = [
         {
@@ -3857,7 +3856,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 }
                             }
                         }
-                        if (!connectionEstablished) {
+                        if (!connectionEstablished && selectedEntity.sockets) {
                             selectedEntity.removeConnections(undefined, true);
                         }
                         if (!connectionEstablished && !isNaN(selectedEntity.prevRotation)) {

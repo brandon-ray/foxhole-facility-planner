@@ -473,10 +473,6 @@ Vue.component('app-menu-building-selected', {
             <div class="settings-title">
                 ({{game.getSelectedEntities().length}}) Buildings Selected
             </div>
-            <label class="app-input-label">
-                <span style="color: red">Notice:</span> This is an experimental feature.<br>
-                Report issues to our GitHub or Discord.
-            </label>
             <div class="text-button-wrapper">
                 <button class="text-button" type="button" v-on:click="game.downloadSave(true)" @mouseenter="bme()">
                     <i class="fa fa-save"></i> Export Selection
@@ -596,7 +592,7 @@ Vue.component('app-menu-construction-list', {
             <button class="construction-settings-button" @click="game.sidebarMenuComponent?.changeMenu('settings')" title="Filter Settings"><i class="fa fa-sliders" aria-hidden="true"></i></button>
             <button class="construction-tech-button" @click="incrementTier()" title="Filter by Tier">{{'Tier ' + game.settings.selectedTier}}</button>
             <div class="construction-category-wrapper">
-                <select class="app-input construction-category" @click="bmc()" title="Filter by Category" v-model="game.selectedBuildingCategory" @change="refresh()">
+                <select class="app-input construction-category" @click="bmc()" title="Filter by Category" v-model="game.settings.defaultBuildingCategory" @change="refresh()">
                     <option value="all">All Buildings</option>
                     <template v-for="(category, key) in buildingCategories">
                         <option v-if="game.settings.enableExperimental || key !== 'defenses' && key !== 'vehicles'" :value="key">{{category.name}}</option>
@@ -605,8 +601,8 @@ Vue.component('app-menu-construction-list', {
             </div>
         </div>
         <div class="menu-page" :class="{ 'modes-disabled': !game.settings.enableExperimental }">
-            <template v-if="game.selectedBuildingCategory !== 'all'">
-                <app-game-building-list-icon v-for="building in buildingCategories[game.selectedBuildingCategory].buildings" :building="building"/>
+            <template v-if="game.settings.defaultBuildingCategory !== 'all'">
+                <app-game-building-list-icon v-for="building in buildingCategories[game.settings.defaultBuildingCategory].buildings" :building="building"/>
             </template>
             <template v-else>
                 <template v-for="(category, key) in buildingCategories">
