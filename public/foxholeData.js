@@ -2157,6 +2157,236 @@ const foxholeData = {
 				}
 			}
 		},
+		"construction_vehicle": {
+			"name": "BMS - Universal Assembly Rig",
+			"codeName": "Construction",
+			"description": "A specialized vehicle designed by the Basset Motor Society used in the construction of large structures.",
+			"category": "vehicles",
+			"hitArea": [
+				{
+					"shape": [
+						-106.56,
+						19.52,
+						-121.28,
+						43.84,
+						-121.28,
+						20.16
+					]
+				},
+				{
+					"shape": [
+						31.04,
+						-19.52,
+						44.48,
+						-43.84,
+						45.12,
+						-19.52
+					]
+				},
+				{
+					"shape": [
+						91.84,
+						40.64,
+						84.8,
+						32.96,
+						84.8,
+						17.6,
+						91.84,
+						9.92,
+						120,
+						15.68,
+						120.64,
+						34.88
+					]
+				},
+				{
+					"shape": [
+						-121.28,
+						-43.84,
+						44.48,
+						-43.84,
+						-107.2,
+						-18.88,
+						-121.28,
+						-19.52
+					]
+				},
+				{
+					"shape": [
+						56,
+						32.96,
+						31.68,
+						18.24,
+						84.8,
+						17.6,
+						84.8,
+						32.96
+					]
+				},
+				{
+					"shape": [
+						45.12,
+						43.84,
+						-121.28,
+						43.84,
+						31.68,
+						18.24,
+						56,
+						32.96
+					]
+				},
+				{
+					"shape": [
+						-121.28,
+						43.84,
+						-106.56,
+						19.52,
+						31.04,
+						-19.52,
+						31.68,
+						18.24
+					]
+				},
+				{
+					"shape": [
+						44.48,
+						-43.84,
+						31.04,
+						-19.52,
+						-106.56,
+						19.52,
+						-107.2,
+						-18.88
+					]
+				}
+			],
+			"icon": "game/Textures/UI/VehicleIcons/ConstructionVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/construction_vehicle.webp",
+			"cost": {
+				"cloth": 100
+			}
+		},
+		"crane": {
+			"name": "BMS - Class 2 Mobile Auto-Crane",
+			"codeName": "Crane",
+			"description": "The Basset Motor Society’s Class 2 Mobile Auto-Crane is used to lift and reposition vehicles and very heavy equipment.",
+			"category": "vehicles",
+			"range": {
+				"min": null,
+				"max": null
+			},
+			"hitArea": [
+				{
+					"shape": [
+						-26.56,
+						77.76,
+						-61.76,
+						44.48,
+						-26.56,
+						45.12
+					]
+				},
+				{
+					"shape": [
+						-62.4,
+						-45.12,
+						-26.56,
+						-77.76,
+						-26.56,
+						-45.12
+					]
+				},
+				{
+					"shape": [
+						-249.92,
+						-77.76,
+						-26.56,
+						-77.76,
+						-62.4,
+						-45.12,
+						-233.92,
+						-38.72,
+						-249.92,
+						-45.12
+					]
+				},
+				{
+					"shape": [
+						-233.28,
+						36.8,
+						-26.56,
+						77.76,
+						-249.92,
+						77.76,
+						-249.92,
+						45.12
+					]
+				},
+				{
+					"shape": [
+						248.64,
+						9.92,
+						203.2,
+						20.8,
+						-69.44,
+						20.8,
+						-69.44,
+						-20.8,
+						202.56,
+						-20.8,
+						249.92,
+						-10.56
+					]
+				},
+				{
+					"shape": [
+						-233.92,
+						-38.72,
+						-61.76,
+						44.48,
+						-26.56,
+						77.76,
+						-233.28,
+						36.8
+					]
+				},
+				{
+					"shape": [
+						-69.44,
+						-20.8,
+						-233.92,
+						-38.72,
+						-62.4,
+						-45.12
+					]
+				},
+				{
+					"shape": [
+						-69.44,
+						20.8,
+						-233.92,
+						-38.72,
+						-69.44,
+						-20.8
+					]
+				},
+				{
+					"shape": [
+						-61.76,
+						44.48,
+						-233.92,
+						-38.72,
+						-69.44,
+						20.8
+					]
+				}
+			],
+			"icon": "game/Textures/UI/VehicleIcons/CraneVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/crane.webp",
+			"cost": {
+				"cloth": 125
+			}
+		},
 		"diesel_power_plant": {
 			"name": "Diesel Power Plant",
 			"codeName": "FacilityPowerDiesel",
@@ -2614,6 +2844,44 @@ const foxholeData = {
 			"description": "A garage that facilitates vehicle modifications and upgrades.",
 			"category": "factories",
 			"color": 8184298,
+			"hitArea": [
+				{
+					"shape": [
+						-115.84,
+						248,
+						-115.84,
+						198.72,
+						115.2,
+						198.72,
+						115.2,
+						248
+					]
+				},
+				{
+					"shape": [
+						115.2,
+						-248,
+						115.2,
+						-199.36,
+						-115.84,
+						-199.36,
+						-115.84,
+						-248
+					]
+				},
+				{
+					"shape": [
+						-159.36,
+						198.72,
+						-159.36,
+						-198.72,
+						159.36,
+						-198.72,
+						159.36,
+						198.72
+					]
+				}
+			],
 			"icon": "game/Textures/UI/StructureIcons/FacilityModificationCenterIcon.webp",
 			"texture": "game/Textures/Structures/field_modification_center.webp",
 			"textureIcon": {
@@ -3095,6 +3363,7 @@ const foxholeData = {
 			"icon": "game/Textures/UI/StructureIcons/Gate-T1Icon.webp",
 			"texture": "game/Textures/Structures/gatet1.webp",
 			"canSnap": true,
+			"canSnapRotate": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -3113,6 +3382,30 @@ const foxholeData = {
 			],
 			"cost": {
 				"cloth": 25
+			},
+			"upgrades": {
+				"gatet2": {
+					"name": "Gate (Tier 2)",
+					"codeName": "GateT2",
+					"description": "A gate that provides access to a walled off area.",
+					"icon": "game/Textures/UI/StructureIcons/Gate-T2Icon.webp",
+					"texture": "game/Textures/Structures/gatet2.webp",
+					"techId": "unlockgatetier2",
+					"cost": {
+						"cloth": 50
+					}
+				},
+				"gatet3": {
+					"name": "Gate (Tier 3)",
+					"codeName": "GateT3",
+					"description": "A gate that provides access to a walled off area.",
+					"icon": "game/Textures/UI/StructureIcons/Gate-T3Icon.webp",
+					"texture": "game/Textures/Structures/gatet3.webp",
+					"techId": "unlockgatetier3",
+					"cost": {
+						"wood": 30
+					}
+				}
 			}
 		},
 		"large_assembly_factory": {
@@ -7024,7 +7317,7 @@ const foxholeData = {
 			"category": "misc",
 			"faction": "c",
 			"sortOffset": 150000,
-			"icon": "game/Textures/UI/PlayerCIcon.webp",
+			"icon": "game/Textures/UI/ItemIcons/Uniforms/SoldierUniformCIcon.webp",
 			"texture": "game/Textures/playerc.webp"
 		},
 		"playerw": {
@@ -7033,7 +7326,7 @@ const foxholeData = {
 			"category": "misc",
 			"faction": "w",
 			"sortOffset": 150000,
-			"icon": "game/Textures/UI/PlayerWIcon.webp",
+			"icon": "game/Textures/UI/ItemIcons/Uniforms/SoldierUniformWIcon.webp",
 			"texture": "game/Textures/playerw.webp"
 		},
 		"power_box": {
@@ -8422,7 +8715,7 @@ const foxholeData = {
 					]
 				}
 			],
-			"icon": "game/Textures/UI/MapIcons/MapIconStaticBase1.webp",
+			"icon": "game/Textures/UI/StructureIcons/RelicBase1Icon.webp",
 			"texture": "game/Textures/Structures/relicbase1.webp",
 		},
 		"resource_transfer_station": {
@@ -9740,7 +10033,7 @@ const foxholeData = {
 					]
 				}
 			],
-			"icon": "game/Textures/UI/MapIcons/MapIconStaticBase3.webp",
+			"icon": "game/Textures/UI/StructureIcons/TownBase3Icon.webp",
 			"texture": "game/Textures/Structures/townbase3.webp",
 		},
 		"traincaboose": {
@@ -10120,8 +10413,8 @@ const foxholeData = {
 			"maxLength": 10,
 			"icon": "game/Textures/UI/ItemIcons/Wall-T1Icon.webp",
 			"texture": "game/Textures/Structures/wallsplinet1.webp",
-			"textureFrontCap": "game/Textures/Structures/wallsplinet1_front.webp",
-			"textureBackCap": "game/Textures/Structures/wallsplinet1_back.webp",
+			"textureFrontCap": "game/Textures/Structures/wallsplinet1_post.webp",
+			"textureBackCap": "game/Textures/Structures/wallsplinet1_post.webp",
 			"canSnap": true,
 			"canSnapRotate": true,
 			"sockets": [
@@ -10140,6 +10433,38 @@ const foxholeData = {
 			],
 			"cost": {
 				"cloth": 15
+			},
+			"upgrades": {
+				"wallsplinet2": {
+					"name": "Wall (Tier 2)",
+					"codeName": "WallSplineT2",
+					"description": "A barrier that is used to prevent passage through an area.",
+					"minLength": 3,
+					"maxLength": 10,
+					"icon": "game/Textures/UI/ItemIcons/Wall-T2Icon.webp",
+					"texture": "game/Textures/Structures/wallsplinet2.webp",
+					"textureFrontCap": "game/Textures/Structures/wallsplinet2_post.webp",
+					"textureBackCap": "game/Textures/Structures/wallsplinet2_post.webp",
+					"techId": "unlockwalltier2",
+					"cost": {
+						"cloth": 30
+					}
+				},
+				"wallsplinet3": {
+					"name": "Wall (Tier 3)",
+					"codeName": "WallSplineT3",
+					"description": "A barrier that is used to prevent passage through an area.",
+					"minLength": 3,
+					"maxLength": 10,
+					"icon": "game/Textures/UI/ItemIcons/Wall-T3Icon.webp",
+					"texture": "game/Textures/Structures/wallsplinet3.webp",
+					"textureFrontCap": "game/Textures/Structures/wallsplinet3_post.webp",
+					"textureBackCap": "game/Textures/Structures/wallsplinet3_post.webp",
+					"techId": "unlockwalltier3",
+					"cost": {
+						"concrete": 25
+					}
+				}
 			}
 		},
 		"watchtower": {

@@ -14,7 +14,7 @@ const game = {
         selectedTier: 3,
         displayFactionTheme: true,
         defaultBuildingCategory: 'all',
-        showCollapsibleBuildingList: false,
+        showCollapsibleBuildingList: true,
         showUpgradesAsBuildings: false,
         showFacilityName: true,
         showRanges: false,
@@ -210,6 +210,20 @@ const fontFamily = ['Recursive', 'sans-serif'];
         if (constructionCursor) {
             constructionCursor.visible = visible && game.constructionMode.key !== 'select';
             if (constructionCursor.visible) {
+                if (constructionCursor.type !== game.constructionMode.key) {
+                    constructionCursor.type = game.constructionMode.key;
+                    constructionCursor.clear();
+                    if (constructionCursor.type === 'text') {
+                        // Text
+                        constructionCursor.lineStyle(2, COLOR_WHITE).moveTo(0, 20).lineTo(0, -20);
+                        constructionCursor.lineStyle(4, COLOR_WHITE).moveTo(-4, -20).lineTo(4, -20);
+                        constructionCursor.lineStyle(4, COLOR_WHITE).moveTo(-4, 20).lineTo(4, 20);
+                    } else {
+                        // Crosshair
+                        constructionCursor.lineStyle(SELECTION_BORDER_WIDTH, COLOR_WHITE).moveTo(-20, 0).lineTo(20, 0);
+                        constructionCursor.lineStyle(SELECTION_BORDER_WIDTH, COLOR_WHITE).moveTo(0, 20).lineTo(0, -20);
+                    }
+                }
                 constructionCursor.x = gmx;
                 constructionCursor.y = gmy;
                 if (document.body.style.cursor !== 'none') {
@@ -656,8 +670,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
         constructionCursor = new PIXI.Graphics();
         constructionCursor.visible = false;
         constructionCursor.alpha = 0.75;
-        constructionCursor.lineStyle(SELECTION_BORDER_WIDTH, COLOR_WHITE).moveTo(-20, 0).lineTo(20, 0);
-        constructionCursor.lineStyle(SELECTION_BORDER_WIDTH, COLOR_WHITE).moveTo(0, 20).lineTo(0, -20);
         constructionCursor.getZIndex = function () {
             return -1000000000;
         };
@@ -1052,7 +1064,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             if (!buildingMenuSelected) {
                 game.sidebarMenuComponent.changeMenu({
                     key: 'building-selected',
-                    name: 'Building',
+                    name: 'Properties',
                     icon: 'fa-wrench'
                 });
             } else {
@@ -3628,7 +3640,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
         }
 
-        if (mouseDown[2]) {
+        if (mouseDown[2] && !selectedHandlePoint) {
             if (!selectionRotation) {
                 let rotationOffset = null;
                 selectedEntities.forEach(selectedEntity => {

@@ -256,8 +256,7 @@ function iterateStructures(dirPath) {
                                     'upgrades': structureData.upgrades
                                 }
                                 if (structureData.texture) {
-                                    const textureName = structureData.texture.substring(25, structureData.texture.length - 5);
-                                    structureData.hitArea = structurePolygons[textureName];
+                                    structureData.hitArea = structurePolygons[path.basename(structureData.texture, '.webp')];
                                 }
                                 initializeStructureItems(structure);
                                 if (structureData.techId) {
@@ -312,8 +311,7 @@ function iterateStructures(dirPath) {
                                         // There is a FuelCost variable which is never used here.
                                     }
                                     if (modificationData.texture) {
-                                        const textureName = modificationData.texture.substring(25, modificationData.texture.length - 5);
-                                        modificationData.hitArea = structurePolygons[textureName];
+                                        modificationData.hitArea = structurePolygons[path.basename(modificationData.texture, '.webp')];
                                     }
                                     if (modificationData.techId) {
                                         techList[modificationData.techId] = {};
@@ -583,22 +581,45 @@ function sortList(list) {
     }, {});
 }
 
+function findFile(directory, fileName) {
+    const files = fs.readdirSync(directory);
+    for (const file of files) {
+        const fullPath = path.join(directory, file);
+        if (fs.statSync(fullPath).isDirectory()) {
+            const fileInSubdir = findFile(fullPath, fileName);
+            if (fileInSubdir) {
+                return fileInSubdir;
+            }
+        }
+        if (file === fileName) {
+            return `.\\${fullPath}`;
+        }
+    }
+    return null;
+}
+
 async function updateData() {
     const METER_PIXEL_SCALE = 1.5625; // 50 / 32
     for (const [textureName, shapes] of Object.entries(structurePolygons)) {
-        const texture = await sharp(`./public/assets/game/Textures/Structures/${textureName}.webp`).metadata();
-        if (texture) {
-            let hitAreaPolygons = [];
-            for (let i = 0; i < shapes.length; i++) {
-                const shape = shapes[i].shape;
-                let adjustedShape = [], x = true;
-                for (let i = 0; i < shape.length; i++) {
-                    adjustedShape.push((shape[i] - (x ? texture.width / 2 : texture.height / 2)) / METER_PIXEL_SCALE);
-                    x = !x;
+        let textureFile = `./public/assets/game/Textures/Structures/${textureName}.webp`;
+        if (!fs.existsSync(textureFile)) {
+            textureFile = findFile('./public/assets/game/Textures/', `${textureName}.webp`);
+        }
+        if (textureFile) {
+            const texture = await sharp(textureFile).metadata();
+            if (texture) {
+                let hitAreaPolygons = [];
+                for (let i = 0; i < shapes.length; i++) {
+                    const shape = shapes[i].shape;
+                    let adjustedShape = [], x = true;
+                    for (let i = 0; i < shape.length; i++) {
+                        adjustedShape.push((shape[i] - (x ? texture.width / 2 : texture.height / 2)) / METER_PIXEL_SCALE);
+                        x = !x;
+                    }
+                    hitAreaPolygons.push({ 'shape': adjustedShape });
                 }
-                hitAreaPolygons.push({ 'shape': adjustedShape });
+                structurePolygons[textureName] = hitAreaPolygons;
             }
-            structurePolygons[textureName] = hitAreaPolygons;
         }
     }
 
