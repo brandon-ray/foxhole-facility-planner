@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const sharp = require('sharp');
 
 const METER_UNREAL_UNITS = 100;
 const foxholeDataDirectory = 'dev/';
@@ -7,27 +8,12 @@ const foxholeDataVariable = 'const foxholeData = ';
 let foxholeData = JSON.parse(fs.readFileSync('./public/foxholeData.js').toString().substring(foxholeDataVariable.length));
 
 const stStructures = JSON.parse(fs.readFileSync(`${foxholeDataDirectory}War/Content/Blueprints/StringTables/STStructures.json`))[0].StringTable.KeysToMetaData;
+const structurePolygons = JSON.parse(fs.readFileSync(`${foxholeDataDirectory}polygons.json`));
 
 let structureList = foxholeData.buildings;
 let upgradeList = {};
 let techList = {};
 let itemList = {};
-
-// Switch IDs for CodeNames so the parser has an easier time identifying entries as their Foxhole counterpart.
-structureList = Object.keys(structureList).reduce((structures, id) => {
-    let structure = structureList[id];
-    if (structure.upgrades) {
-        structure.upgrades = Object.keys(structure.upgrades).reduce((upgrades, id) => {
-            let upgrade = structure.upgrades[id];
-            upgrades[upgrade.codeName?.toLowerCase() ?? id] = structure.upgrades[id];
-            upgrade.id = id;
-            return upgrades;
-        }, {});
-    }
-    structures[structure.codeName?.toLowerCase() ?? id] = structureList[id];
-    structure.id = id;
-    return structures;
-}, {});
 
 const conversionEntriesMap = {
     'Input': 'input',
@@ -133,20 +119,39 @@ function iterateUpgradeCodeNames(dirPath) {
                         }
                         break;
                     case className:
-                        if (uProperty.Properties && uProperty.Properties.CodeName && uProperty.Properties.UpgradeStructureCodeName) {
-                            let upgradeCodeName = uProperty.Properties.CodeName.toLowerCase();
-                            let codeNameUpgrades = [];
-                            for (const [codeName, upgrades] of Object.entries(upgradeList)) {
-                                if (upgrades.includes(upgradeCodeName)) {
-                                    upgradeCodeName = codeName;
-                                    codeNameUpgrades = upgrades;
-                                    break;
+                        if (uProperty.Properties && uProperty.Properties.CodeName) {
+                            if (uProperty.Properties.ConversionCodeNames) {
+                                let upgradeCodeName = uProperty.Properties.CodeName.toLowerCase();
+                                if (structureList[upgradeCodeName]) {
+                                    let conversionList = [];
+                                    for (let i = 0; i < uProperty.Properties.ConversionCodeNames.length; i++) {
+                                        let string = uProperty.Properties.ConversionCodeNames[i];
+                                        if (!string.toLowerCase().endsWith('fill')) {
+                                            conversionList.push(string);
+                                        }
+                                    }
+                                    if (conversionList.length) {
+                                        upgradeList[upgradeCodeName] = conversionList;
+                                    }
                                 }
                             }
-                            if (structureList[upgradeCodeName] && uProperty.Properties.UpgradeStructureCodeName !== 'None') {
-                                codeNameUpgrades.push(uProperty.Properties.UpgradeStructureCodeName.toLowerCase());
-                                upgradeList[upgradeCodeName] = codeNameUpgrades;
+                            /*
+                            if (uProperty.Properties.UpgradeStructureCodeName) {
+                                let upgradeCodeName = uProperty.Properties.CodeName.toLowerCase();
+                                let codeNameUpgrades = [];
+                                for (const [codeName, upgrades] of Object.entries(upgradeList)) {
+                                    if (upgrades.includes(upgradeCodeName)) {
+                                        upgradeCodeName = codeName;
+                                        codeNameUpgrades = upgrades;
+                                        break;
+                                    }
+                                }
+                                if (structureList[upgradeCodeName] && uProperty.Properties.UpgradeStructureCodeName !== 'None') {
+                                    codeNameUpgrades.push(uProperty.Properties.UpgradeStructureCodeName.toLowerCase());
+                                    upgradeList[upgradeCodeName] = codeNameUpgrades;
+                                }
                             }
+                            */
                         }
                         break;
                 }
@@ -156,7 +161,6 @@ function iterateUpgradeCodeNames(dirPath) {
         }
     });
 }
-iterateUpgradeCodeNames(`${foxholeDataDirectory}War/Content/Blueprints/`);
 
 function iterateStructures(dirPath) {
     dirPath = dirPath ?? `${foxholeDataDirectory}War/Content/Blueprints/`;
@@ -190,7 +194,7 @@ function iterateStructures(dirPath) {
                                 if (upgradingCodeName === structureCodeName) {
                                     break;
                                 }
-                                if (upgradeCodeNames.includes(structureCodeName)) {
+                                if (upgradeCodeNames.includes(structure.CodeName)) {
                                     parentCodeName = upgradingCodeName;
                                     if (!structureList[parentCodeName].upgrades) {
                                         structureList[parentCodeName].upgrades = {};
@@ -217,6 +221,7 @@ function iterateStructures(dirPath) {
                                     //'overlapDist': structure.MinDistanceToSameStructure ? structure.MinDistanceToSameStructure / METER_UNREAL_UNITS : undefined,
                                     'overlapDist': structureData.overlapDist,
                                     'sortOffset': structureData.sortOffset,
+                                    'hitArea': undefined,
                                     'hasHandle': structureData.hasHandle,
                                     'hasOutline': structureData.hasOutline,
                                     'isBezier': structureData.isBezier,
@@ -250,6 +255,10 @@ function iterateStructures(dirPath) {
                                     'ConversionEntries': structure.ConversionEntries,
                                     'upgrades': structureData.upgrades
                                 }
+                                if (structureData.texture) {
+                                    const textureName = structureData.texture.substring(25, structureData.texture.length - 5);
+                                    structureData.hitArea = structurePolygons[textureName];
+                                }
                                 initializeStructureItems(structure);
                                 if (structureData.techId) {
                                     techList[structureData.techId] = {};
@@ -272,7 +281,7 @@ function iterateStructures(dirPath) {
                         if (structure) {
                             let modifications;
                             for (const [codeName, modification] of Object.entries(uProperty.Properties.Modifications)) {
-                                const modificationData = modificationsData[codeName];
+                                let modificationData = modificationsData[codeName];
                                 if (codeName !== 'EFortModificationType::Default') {
                                     const displayName = codeName.substring(23);
                                     const modificationCodeName = displayName.toLowerCase();
@@ -281,11 +290,12 @@ function iterateStructures(dirPath) {
                                         storedModData = structureData.upgrades[modificationCodeName];
                                     }
                                     modifications = modifications ?? {};
-                                    modifications[modificationCodeName] = {
+                                    modificationData = {
                                         'id': storedModData?.id,
                                         'name': modification.DisplayName?.SourceString ?? getTableString(modification.DisplayName) ?? displayName,
                                         'codeName': displayName,
                                         'description': modification.Description?.SourceString ?? getTableString(modification.Description) ?? 'No Description Provided.',
+                                        'hitArea': undefined,
                                         'icon': getLocalIcon(modification),
                                         'texture': typeof storedModData?.texture === 'string' || storedModData?.texture === null ? storedModData.texture : `game/Textures/Structures/${structureData.id}_${storedModData?.id}.webp`,
                                         'textureFrontCap': storedModData?.textureFrontCap,
@@ -301,15 +311,20 @@ function iterateStructures(dirPath) {
                                         'ConversionEntries': modificationData?.ConversionEntries
                                         // There is a FuelCost variable which is never used here.
                                     }
-                                    if (modifications[modificationCodeName].techId) {
-                                        techList[modifications[modificationCodeName].techId] = {};
+                                    if (modificationData.texture) {
+                                        const textureName = modificationData.texture.substring(25, modificationData.texture.length - 5);
+                                        modificationData.hitArea = structurePolygons[textureName];
+                                    }
+                                    if (modificationData.techId) {
+                                        techList[modificationData.techId] = {};
                                     }
                                     if (modification.Tiers) {
                                         const tierData = modification.Tiers['EFortTier::T1'];
                                         if (tierData) {
-                                            modifications[modificationCodeName].cost = getResourceCosts(tierData.ResourceAmounts);
+                                            modificationData.cost = getResourceCosts(tierData.ResourceAmounts);
                                         }
                                     }
+                                    modifications[modificationCodeName] = modificationData;
                                 }
                             }
                             structureList[structureCodeName].upgrades = modifications;
@@ -330,7 +345,6 @@ function iterateStructures(dirPath) {
         }
     });
 }
-iterateStructures(`${foxholeDataDirectory}War/Content/Blueprints/`);
 
 function iterateBaseAssets(uProperty, baseData) {
     let basePath = `${foxholeDataDirectory}${uProperty.SuperStruct.ObjectPath.slice(0, -1)}json`;
@@ -398,16 +412,6 @@ function iterateData(filePath, list, isItem, yep) {
     }
 }
 
-iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPVehicleDynamicData.json`, itemList, true);
-iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, itemList, true); // Check for items in the structure data... Yes, Material Pallet is stored here.
-iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, structureList);
-
-for (const [codeName, structureData] of Object.entries(structureList)) {
-    if (upgradeList[codeName] && structureData.upgrades) {
-        iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, structureData.upgrades, undefined, true);
-    }
-}
-
 function iterateAssets(dirPath) {
     let files = fs.readdirSync(dirPath);
     files.forEach(file => {
@@ -463,7 +467,6 @@ function iterateAssets(dirPath) {
         }
     });
 }
-iterateAssets(`${foxholeDataDirectory}War/Content/Blueprints/`);
 
 function compareItems(oldItems, newItems) {
     if (!oldItems || !newItems) {
@@ -573,41 +576,6 @@ function updateProductionRecipes(component) {
     }
 }
 
-for (let [codeName, structure] of Object.entries(structureList)) {
-    updateProductionRecipes(structure);
-    if (structure.upgrades) {
-        for (let [id, upgrade] of Object.entries(structure.upgrades)) {
-            updateProductionRecipes(upgrade);
-        }
-    }
-}
-
-for (const [codeName, item] of Object.entries(itemList)) {
-    delete item.cost;
-    delete item.faction;
-}
-
-for (const [codeName, techInfo] of Object.entries(techList)) {
-    if (!Object.keys(techInfo).length) {
-        delete techList[codeName];
-    }
-}
-
-structureList = Object.keys(structureList).reduce((structures, codeName) => {
-    let structure = structureList[codeName];
-    if (structure.upgrades) {
-        structure.upgrades = Object.keys(structure.upgrades).reduce((upgrades, codeName) => {
-            let upgrade = structure.upgrades[codeName];
-            upgrades[upgrade.id ?? codeName] = structure.upgrades[codeName];
-            delete upgrade.id;
-            return upgrades;
-        }, {});
-    }
-    structures[structure.id ?? codeName] = structureList[codeName];
-    delete structure.id;
-    return structures;
-}, {});
-
 function sortList(list) {
     return Object.keys(list).sort().reduce((data, codeName) => {
         data[codeName] = list[codeName];
@@ -615,12 +583,100 @@ function sortList(list) {
     }, {});
 }
 
-fs.writeFile('public/foxholeData.js', foxholeDataVariable + JSON.stringify({
-    'tech': sortList(techList),
-    'resources': sortList(itemList),
-    'buildings': sortList(structureList)
-}, null, '\t'), err => {
-    if (err) {
-        throw err;
+async function updateData() {
+    const METER_PIXEL_SCALE = 1.5625; // 50 / 32
+    for (const [textureName, shapes] of Object.entries(structurePolygons)) {
+        const texture = await sharp(`./public/assets/game/Textures/Structures/${textureName}.webp`).metadata();
+        if (texture) {
+            let hitAreaPolygons = [];
+            for (let i = 0; i < shapes.length; i++) {
+                const shape = shapes[i].shape;
+                let adjustedShape = [], x = true;
+                for (let i = 0; i < shape.length; i++) {
+                    adjustedShape.push((shape[i] - (x ? texture.width / 2 : texture.height / 2)) / METER_PIXEL_SCALE);
+                    x = !x;
+                }
+                hitAreaPolygons.push({ 'shape': adjustedShape });
+            }
+            structurePolygons[textureName] = hitAreaPolygons;
+        }
     }
-});
+
+    // Switch IDs for CodeNames so the parser has an easier time identifying entries as their Foxhole counterpart.
+    structureList = Object.keys(structureList).reduce((structures, id) => {
+        let structure = structureList[id];
+        if (structure.upgrades) {
+            structure.upgrades = Object.keys(structure.upgrades).reduce((upgrades, id) => {
+                let upgrade = structure.upgrades[id];
+                upgrades[upgrade.codeName?.toLowerCase() ?? id] = structure.upgrades[id];
+                upgrade.id = id;
+                return upgrades;
+            }, {});
+        }
+        structures[structure.codeName?.toLowerCase() ?? id] = structureList[id];
+        structure.id = id;
+        return structures;
+    }, {});
+
+    iterateUpgradeCodeNames(`${foxholeDataDirectory}War/Content/Blueprints/`);
+
+    iterateStructures(`${foxholeDataDirectory}War/Content/Blueprints/`);
+
+    iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPVehicleDynamicData.json`, itemList, true);
+    iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, itemList, true); // Check for items in the structure data... Yes, Material Pallet is stored here.
+    iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, structureList);
+
+    for (const [codeName, structureData] of Object.entries(structureList)) {
+        if (upgradeList[codeName] && structureData.upgrades) {
+            iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, structureData.upgrades, undefined, true);
+        }
+    }
+
+    iterateAssets(`${foxholeDataDirectory}War/Content/Blueprints/`);
+
+    for (let [codeName, structure] of Object.entries(structureList)) {
+        updateProductionRecipes(structure);
+        if (structure.upgrades) {
+            for (let [id, upgrade] of Object.entries(structure.upgrades)) {
+                updateProductionRecipes(upgrade);
+            }
+        }
+    }
+
+    for (const [codeName, item] of Object.entries(itemList)) {
+        delete item.cost;
+        delete item.faction;
+    }
+
+    for (const [codeName, techInfo] of Object.entries(techList)) {
+        if (!Object.keys(techInfo).length) {
+            delete techList[codeName];
+        }
+    }
+
+    structureList = Object.keys(structureList).reduce((structures, codeName) => {
+        let structure = structureList[codeName];
+        if (structure.upgrades) {
+            structure.upgrades = Object.keys(structure.upgrades).reduce((upgrades, codeName) => {
+                let upgrade = structure.upgrades[codeName];
+                upgrades[upgrade.id ?? codeName] = structure.upgrades[codeName];
+                delete upgrade.id;
+                return upgrades;
+            }, {});
+        }
+        structures[structure.id ?? codeName] = structureList[codeName];
+        delete structure.id;
+        return structures;
+    }, {});
+
+    fs.writeFile('public/foxholeData.js', foxholeDataVariable + JSON.stringify({
+        'tech': sortList(techList),
+        'resources': sortList(itemList),
+        'buildings': sortList(structureList)
+    }, null, '\t'), err => {
+        if (err) {
+            throw err;
+        }
+    });
+}
+updateData();

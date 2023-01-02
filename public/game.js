@@ -1807,6 +1807,13 @@ const fontFamily = ['Recursive', 'sans-serif'];
             if (!entity.sprite) {
                 entity.sprite = new PIXI.Container();
             }
+
+            if (building.hitArea) {
+                entity.sprite.hitArea = new HitAreaShapes({
+                    'polygon': building.hitArea
+                });
+            }
+
             entity.addChild(entity.sprite);
 
             if (entity.building.textureFrontCap) {
@@ -2454,13 +2461,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 return newPoint;
             };
 
-            function updateTextureCap(sprite, point, rotationOffset) {
-                if (sprite) {
-                    sprite.position.set(point.x, point.y);
-                    sprite.rotation = point.rotation + rotationOffset;
-                }
-            }
-
             entity.regenerate = function() {
                 if (entity.sprite) {
                     if (entity.sprite.rope) {
@@ -2468,6 +2468,12 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     }
                     if (points.length >= 2) {
                         const frontPoint = points[0], backPoint = points[points.length - 1];
+                        const updateTextureCap = function(sprite, point, rotationOffset) {
+                            if (sprite) {
+                                sprite.position.set(point.x, point.y);
+                                sprite.rotation = point.rotation + rotationOffset;
+                            }
+                        }
                         if (entity.building) {
                             let bezierPoints = [];
                             for (let i=0; i<points.length; i++) {
@@ -2786,6 +2792,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             return true;
                         }
                     } else {
+                        if (entity.building?.hitArea) {
+                            const mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
+                            return entity.sprite?.hitArea.contains(mousePos.x, mousePos.y);
+                        }
+
                         // https://stackoverflow.com/a/67732811 <3
                         let w = entity.selectionArea.width / 2;
                         let h = entity.selectionArea.height / 2;
@@ -3856,10 +3867,15 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 }
                             }
                         }
-                        if (!connectionEstablished && selectedEntity.sockets) {
-                            selectedEntity.removeConnections(undefined, true);
-                        }
-                        if (!connectionEstablished && !isNaN(selectedEntity.prevRotation)) {
+                    }
+                }
+                if (!connectionEstablished) {
+                    for (let i = 0; i < selectedEntities.length; i++) {
+                        let selectedEntity = selectedEntities[i];
+                        if (!isNaN(selectedEntity.prevRotation)) {
+                            if (selectedEntity.sockets) {
+                                selectedEntity.removeConnections(undefined, true);
+                            }
                             if (selectedEntity.prevPosition) {
                                 selectedEntity.x = selectedEntity.prevPosition.x;
                                 selectedEntity.y = selectedEntity.prevPosition.y;
@@ -3874,33 +3890,28 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                 };
                             }
                         }
-                    }
-                }
-                if (!connectionEstablished) {
-                    for (let i = 0; i < selectedEntities.length; i++) {
-                        let pickupEntity = selectedEntities[i];
-                        if (pickupEntity.building && !pickupEntity.hasHandle && pickupEntity.selectionArea.visible) {
-                            pickupEntity.selectionArea.visible = false;
+                        if (selectedEntity.building && !selectedEntity.hasHandle && selectedEntity.selectionArea.visible) {
+                            selectedEntity.selectionArea.visible = false;
                         }
                         if (selectionRotation) {
-                            let rotatedPosition = Math.rotateAround(selectionRotation, pickupEntity.rotationData, rotationAngle);
-                            pickupEntity.x = rotatedPosition.x;
-                            pickupEntity.y = rotatedPosition.y;
-                            pickupEntity.pickupOffset = {
-                                x: snappedMX - pickupEntity.x,
-                                y: snappedMY - pickupEntity.y
+                            let rotatedPosition = Math.rotateAround(selectionRotation, selectedEntity.rotationData, rotationAngle);
+                            selectedEntity.x = rotatedPosition.x;
+                            selectedEntity.y = rotatedPosition.y;
+                            selectedEntity.pickupOffset = {
+                                x: snappedMX - selectedEntity.x,
+                                y: snappedMY - selectedEntity.y
                             };
-                            pickupEntity.rotation = Math.angleNormalized(pickupEntity.rotationData.rotation + rotationAngle);
-                            if (!isNaN(pickupEntity.prevRotation)) {
-                                pickupEntity.prevRotation = pickupEntity.rotation;
+                            selectedEntity.rotation = Math.angleNormalized(selectedEntity.rotationData.rotation + rotationAngle);
+                            if (!isNaN(selectedEntity.prevRotation)) {
+                                selectedEntity.prevRotation = selectedEntity.rotation;
                             }
                         } else {
-                            pickupEntity.x = snappedMX - pickupEntity.pickupOffset.x;
-                            pickupEntity.y = snappedMY - pickupEntity.pickupOffset.y;
-                            if (selectedEntities.length === 1 && !pickupEntity.building?.ignoreSnapSettings && (game.settings.enableGrid || keys[16])) {
+                            selectedEntity.x = snappedMX - selectedEntity.pickupOffset.x;
+                            selectedEntity.y = snappedMY - selectedEntity.pickupOffset.y;
+                            if (selectedEntities.length === 1 && !selectedEntity.building?.ignoreSnapSettings && (game.settings.enableGrid || keys[16])) {
                                 let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
-                                pickupEntity.x = (Math.round(pickupEntity.x / gridSize) * gridSize);
-                                pickupEntity.y = (Math.round(pickupEntity.y / gridSize) * gridSize);
+                                selectedEntity.x = (Math.round(selectedEntity.x / gridSize) * gridSize);
+                                selectedEntity.y = (Math.round(selectedEntity.y / gridSize) * gridSize);
                             }
                         }
                     }

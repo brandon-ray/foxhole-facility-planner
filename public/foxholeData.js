@@ -720,6 +720,102 @@ const foxholeData = {
 			"codeName": "FacilityFactoryAmmo",
 			"description": "A factory for producing advanced ammo types such as large calibre shells, rockets, and flame ammo.",
 			"category": "factories",
+			"hitArea": [
+				{
+					"shape": [
+						84.16,
+						-153.28,
+						26.56,
+						-152,
+						27.2,
+						-203.2,
+						54.08,
+						-209.6,
+						83.52,
+						-203.2
+					]
+				},
+				{
+					"shape": [
+						-109.12,
+						180.16,
+						-121.28,
+						206.4,
+						-121.28,
+						180.16
+					]
+				},
+				{
+					"shape": [
+						-121.28,
+						206.4,
+						-109.12,
+						180.16,
+						84.8,
+						151.36,
+						84.8,
+						206.4
+					]
+				},
+				{
+					"shape": [
+						-76.48,
+						-135.36,
+						-121.28,
+						121.28,
+						-121.28,
+						-135.36
+					]
+				},
+				{
+					"shape": [
+						26.56,
+						-152,
+						-76.48,
+						-135.36,
+						-75.84,
+						-152
+					]
+				},
+				{
+					"shape": [
+						26.56,
+						-152,
+						84.16,
+						-153.28,
+						111.04,
+						-150.72,
+						-109.12,
+						121.28,
+						-121.28,
+						121.28,
+						-76.48,
+						-135.36
+					]
+				},
+				{
+					"shape": [
+						-109.12,
+						121.28,
+						111.04,
+						-150.72,
+						84.8,
+						151.36,
+						-109.12,
+						180.16
+					]
+				},
+				{
+					"shape": [
+						84.8,
+						151.36,
+						111.04,
+						-150.72,
+						112.32,
+						150.72
+					]
+				}
+			],
 			"icon": "game/Textures/UI/ItemIcons/AmmoFactoryBaseIcon.webp",
 			"texture": "game/Textures/Structures/ammunition_factory.webp",
 			"power": -4,
@@ -766,6 +862,102 @@ const foxholeData = {
 					"name": "Tripod Factory",
 					"codeName": "TripodFactory",
 					"description": "Produces various types of tripod weapons.",
+					"hitArea": [
+						{
+							"shape": [
+								84.16,
+								-153.28,
+								26.56,
+								-152,
+								27.2,
+								-203.2,
+								54.08,
+								-209.6,
+								83.52,
+								-203.2
+							]
+						},
+						{
+							"shape": [
+								-109.12,
+								180.16,
+								-121.28,
+								206.4,
+								-121.28,
+								180.16
+							]
+						},
+						{
+							"shape": [
+								-121.28,
+								206.4,
+								-109.12,
+								180.16,
+								84.8,
+								151.36,
+								84.8,
+								206.4
+							]
+						},
+						{
+							"shape": [
+								-76.48,
+								-135.36,
+								-121.28,
+								121.28,
+								-121.28,
+								-135.36
+							]
+						},
+						{
+							"shape": [
+								26.56,
+								-152,
+								-76.48,
+								-135.36,
+								-75.84,
+								-152
+							]
+						},
+						{
+							"shape": [
+								26.56,
+								-152,
+								84.16,
+								-153.28,
+								111.04,
+								-150.72,
+								-109.12,
+								121.28,
+								-121.28,
+								121.28,
+								-76.48,
+								-135.36
+							]
+						},
+						{
+							"shape": [
+								-109.12,
+								121.28,
+								111.04,
+								-150.72,
+								84.8,
+								151.36,
+								-109.12,
+								180.16
+							]
+						},
+						{
+							"shape": [
+								84.8,
+								151.36,
+								111.04,
+								-150.72,
+								112.32,
+								150.72
+							]
+						}
+					],
 					"icon": "game/Textures/UI/ItemIcons/FacilityFactoryAmmoTripod.webp",
 					"texture": "game/Textures/Structures/ammunition_factory_tripod_factory.webp",
 					"techId": "unlockfacilitytier2",
@@ -867,6 +1059,102 @@ const foxholeData = {
 					"name": "Rocket Factory",
 					"codeName": "RocketFactory",
 					"description": "Produces various types of Rockets.",
+					"hitArea": [
+						{
+							"shape": [
+								84.16,
+								-153.28,
+								26.56,
+								-152,
+								27.2,
+								-203.2,
+								54.08,
+								-209.6,
+								83.52,
+								-203.2
+							]
+						},
+						{
+							"shape": [
+								-109.12,
+								180.16,
+								-121.28,
+								206.4,
+								-121.28,
+								180.16
+							]
+						},
+						{
+							"shape": [
+								-121.28,
+								206.4,
+								-109.12,
+								180.16,
+								84.8,
+								151.36,
+								84.8,
+								206.4
+							]
+						},
+						{
+							"shape": [
+								-76.48,
+								-135.36,
+								-121.28,
+								121.28,
+								-121.28,
+								-135.36
+							]
+						},
+						{
+							"shape": [
+								26.56,
+								-152,
+								-76.48,
+								-135.36,
+								-75.84,
+								-152
+							]
+						},
+						{
+							"shape": [
+								26.56,
+								-152,
+								84.16,
+								-153.28,
+								111.04,
+								-150.72,
+								-109.12,
+								121.28,
+								-121.28,
+								121.28,
+								-76.48,
+								-135.36
+							]
+						},
+						{
+							"shape": [
+								-109.12,
+								121.28,
+								111.04,
+								-150.72,
+								84.8,
+								151.36,
+								-109.12,
+								180.16
+							]
+						},
+						{
+							"shape": [
+								84.8,
+								151.36,
+								111.04,
+								-150.72,
+								112.32,
+								150.72
+							]
+						}
+					],
 					"icon": "game/Textures/UI/ItemIcons/AmmoFactoryRocketFacilityModIcon.webp",
 					"texture": "game/Textures/Structures/ammunition_factory_rocket_factory.webp",
 					"techId": "unlockfacilitytier2",
@@ -904,6 +1192,102 @@ const foxholeData = {
 					"name": "Large Shell Factory",
 					"codeName": "LargeShellFactory",
 					"description": "Produces large calibre ordinance for use with tanks and artillery.",
+					"hitArea": [
+						{
+							"shape": [
+								84.16,
+								-153.28,
+								26.56,
+								-152,
+								27.2,
+								-203.2,
+								54.08,
+								-209.6,
+								83.52,
+								-203.2
+							]
+						},
+						{
+							"shape": [
+								-109.12,
+								180.16,
+								-121.28,
+								206.4,
+								-121.28,
+								180.16
+							]
+						},
+						{
+							"shape": [
+								-121.28,
+								206.4,
+								-109.12,
+								180.16,
+								84.8,
+								151.36,
+								84.8,
+								206.4
+							]
+						},
+						{
+							"shape": [
+								-76.48,
+								-135.36,
+								-121.28,
+								121.28,
+								-121.28,
+								-135.36
+							]
+						},
+						{
+							"shape": [
+								26.56,
+								-152,
+								-76.48,
+								-135.36,
+								-75.84,
+								-152
+							]
+						},
+						{
+							"shape": [
+								26.56,
+								-152,
+								84.16,
+								-153.28,
+								111.04,
+								-150.72,
+								-109.12,
+								121.28,
+								-121.28,
+								121.28,
+								-76.48,
+								-135.36
+							]
+						},
+						{
+							"shape": [
+								-109.12,
+								121.28,
+								111.04,
+								-150.72,
+								84.8,
+								151.36,
+								-109.12,
+								180.16
+							]
+						},
+						{
+							"shape": [
+								84.8,
+								151.36,
+								111.04,
+								-150.72,
+								112.32,
+								150.72
+							]
+						}
+					],
 					"icon": "game/Textures/UI/ItemIcons/AmmoFactoryLargeShellFactoryModIcon.webp",
 					"texture": "game/Textures/Structures/ammunition_factory_large_shell_factory.webp",
 					"techId": "unlockfacilitytier2",
@@ -977,6 +1361,24 @@ const foxholeData = {
 			"codeName": "ATPillbox",
 			"description": "This heavily reinforced pillbox allows the garrisoned infantry with anti-tank rifles to fire on approaching enemy armour from a safe position.",
 			"category": "defenses",
+			"hitArea": [
+				{
+					"shape": [
+						-57.92,
+						-90.24,
+						52.16,
+						-90.24,
+						105.28,
+						-3.2,
+						54.72,
+						90.24,
+						-50.88,
+						92.16,
+						-108.48,
+						3.84
+					]
+				}
+			],
 			"icon": "game/Textures/UI/StructureIcons/ATPillboxIcon.webp",
 			"texture": "game/Textures/Structures/atpillbox.webp",
 			"techId": "unlockatpillbox",
@@ -1183,6 +1585,106 @@ const foxholeData = {
 			"description": "A processing plant that refines Coal into useful materials used in facility production and power.",
 			"category": "factories",
 			"color": 4210752,
+			"hitArea": [
+				{
+					"shape": [
+						-73.28,
+						194.88,
+						-57.92,
+						111.04,
+						7.36,
+						111.04,
+						7.36,
+						194.88
+					]
+				},
+				{
+					"shape": [
+						19.52,
+						21.44,
+						69.44,
+						-40,
+						69.44,
+						21.44
+					]
+				},
+				{
+					"shape": [
+						-8,
+						42.56,
+						-57.92,
+						42.56,
+						19.52,
+						21.44,
+						19.52,
+						40.64
+					]
+				},
+				{
+					"shape": [
+						88.64,
+						-40,
+						69.44,
+						-40,
+						19.52,
+						-146.88,
+						88.64,
+						-146.24
+					]
+				},
+				{
+					"shape": [
+						-88.64,
+						0.96,
+						-88.64,
+						-155.84,
+						19.52,
+						-146.88,
+						69.44,
+						-40,
+						19.52,
+						21.44,
+						-57.92,
+						42.56,
+						-85.44,
+						42.56
+					]
+				},
+				{
+					"shape": [
+						19.52,
+						-146.88,
+						-88.64,
+						-155.84,
+						-85.44,
+						-194.24,
+						17.6,
+						-196.16
+					]
+				},
+				{
+					"shape": [
+						-57.92,
+						111.04,
+						-73.28,
+						194.88,
+						-73.28,
+						111.04
+					]
+				},
+				{
+					"shape": [
+						-8,
+						111.04,
+						-57.92,
+						111.04,
+						-57.92,
+						42.56,
+						-8,
+						42.56
+					]
+				}
+			],
 			"icon": "game/Textures/UI/ItemIcons/FacilitiesCoolRefineryBaseIcon.webp",
 			"texture": "game/Textures/Structures/coal_refinery.webp",
 			"power": -3,
@@ -1216,6 +1718,82 @@ const foxholeData = {
 					"name": "Coke Furnace",
 					"codeName": "CokeFurnace",
 					"description": "A high powered furnace that brings Coal to high temperatures to separate out non-volatile Coke.",
+					"hitArea": [
+						{
+							"shape": [
+								-66.56,
+								194.88,
+								-66.56,
+								111.04,
+								14.08,
+								111.04,
+								14.08,
+								194.88
+							]
+						},
+						{
+							"shape": [
+								26.24,
+								-168.64,
+								-78.72,
+								42.56,
+								-78.72,
+								-191.68,
+								-26.88,
+								-196.16,
+								26.24,
+								-191.68
+							]
+						},
+						{
+							"shape": [
+								81.28,
+								15.68,
+								-78.72,
+								42.56,
+								26.24,
+								-168.64,
+								81.92,
+								-160.32
+							]
+						},
+						{
+							"shape": [
+								39.04,
+								55.36,
+								0,
+								58.56,
+								-51.2,
+								42.56,
+								48,
+								21.44,
+								48,
+								43.84
+							]
+						},
+						{
+							"shape": [
+								-51.2,
+								111.04,
+								-51.2,
+								42.56,
+								0,
+								58.56,
+								-1.28,
+								111.04
+							]
+						},
+						{
+							"shape": [
+								-78.72,
+								42.56,
+								48,
+								21.44,
+								-51.2,
+								42.56
+							]
+						}
+					],
 					"icon": "game/Textures/UI/ItemIcons/FacilitiesCoolRefineryCokeFurnaceIcon.webp",
 					"texture": "game/Textures/Structures/coal_refinery_coke_furnace.webp",
 					"positionOffset": {
@@ -1243,6 +1821,108 @@ const foxholeData = {
 					"name": "Coal Liquefier",
 					"codeName": "CoalLiquefier",
 					"description": "Processing vats that refines Coal into Oil.",
+					"hitArea": [
+						{
+							"shape": [
+								-90.56,
+								194.88,
+								-90.56,
+								111.04,
+								-9.28,
+								111.04,
+								-9.28,
+								194.88
+							]
+						},
+						{
+							"shape": [
+								-24.64,
+								43.84,
+								69.44,
+								-9.28,
+								70.08,
+								41.28
+							]
+						},
+						{
+							"shape": [
+								2.88,
+								-168.64,
+								-102.72,
+								42.56,
+								-102.72,
+								-191.68,
+								-48.32,
+								-196.8,
+								2.88,
+								-191.68
+							]
+						},
+						{
+							"shape": [
+								77.76,
+								-37.44,
+								76.48,
+								-146.88,
+								90.56,
+								-140.48,
+								100.16,
+								-125.12,
+								104.64,
+								-39.36
+							]
+						},
+						{
+							"shape": [
+								76.48,
+								-146.88,
+								-102.72,
+								42.56,
+								2.88,
+								-168.64,
+								76.48,
+								-168.64
+							]
+						},
+						{
+							"shape": [
+								77.76,
+								-37.44,
+								-74.56,
+								42.56,
+								-102.72,
+								42.56,
+								76.48,
+								-146.88
+							]
+						},
+						{
+							"shape": [
+								69.44,
+								-9.28,
+								-24.64,
+								43.84,
+								-74.56,
+								42.56,
+								77.76,
+								-37.44,
+								76.48,
+								-13.76
+							]
+						},
+						{
+							"shape": [
+								-24.64,
+								43.84,
+								-25.28,
+								111.04,
+								-74.56,
+								111.04,
+								-74.56,
+								42.56
+							]
+						}
+					],
 					"icon": "game/Textures/UI/StructureIcons/FacilityCoalLiquefierIcon.webp",
 					"texture": "game/Textures/Structures/coal_refinery_liquifier.webp",
 					"positionOffset": {
@@ -1298,6 +1978,132 @@ const foxholeData = {
 					"name": "Advanced Coal Liquefier",
 					"codeName": "AdvCoalLiquefier",
 					"description": "Advanced processing vats that refine large amounts of coal into Heavy Oil.",
+					"hitArea": [
+						{
+							"shape": [
+								-89.92,
+								194.88,
+								-89.92,
+								111.04,
+								-9.28,
+								111.04,
+								-9.28,
+								194.88
+							]
+						},
+						{
+							"shape": [
+								43.84,
+								-13.76,
+								77.76,
+								-37.44,
+								76.48,
+								-13.76
+							]
+						},
+						{
+							"shape": [
+								77.76,
+								-37.44,
+								2.88,
+								-168.64,
+								76.48,
+								-146.88,
+								98.24,
+								-126.4,
+								102.08,
+								-92.48,
+								104,
+								-38.08
+							]
+						},
+						{
+							"shape": [
+								39.36,
+								97.6,
+								64.96,
+								12.48,
+								69.44,
+								109.76,
+								38.72,
+								110.4
+							]
+						},
+						{
+							"shape": [
+								2.88,
+								-168.64,
+								-102.72,
+								42.56,
+								-102.08,
+								-192.32,
+								-49.6,
+								-196.16,
+								2.88,
+								-191.68
+							]
+						},
+						{
+							"shape": [
+								-24.64,
+								98.88,
+								-74.56,
+								42.56,
+								43.84,
+								-13.76,
+								64.96,
+								12.48,
+								39.36,
+								97.6
+							]
+						},
+						{
+							"shape": [
+								98.24,
+								-126.4,
+								76.48,
+								-146.88,
+								90.56,
+								-140.48
+							]
+						},
+						{
+							"shape": [
+								76.48,
+								-146.88,
+								2.88,
+								-168.64,
+								76.48,
+								-168.64
+							]
+						},
+						{
+							"shape": [
+								77.76,
+								-37.44,
+								43.84,
+								-13.76,
+								-74.56,
+								42.56,
+								-102.72,
+								42.56,
+								2.88,
+								-168.64
+							]
+						},
+						{
+							"shape": [
+								-74.56,
+								42.56,
+								-24.64,
+								98.88,
+								-24.64,
+								111.04,
+								-74.56,
+								111.04
+							]
+						}
+					],
 					"icon": "game/Textures/UI/StructureIcons/FacilityAdvancedCoalLiquefierIcon.webp",
 					"texture": "game/Textures/Structures/coal_refinery_adv_liquifier.webp",
 					"positionOffset": {
@@ -1356,6 +2162,190 @@ const foxholeData = {
 			"codeName": "FacilityPowerDiesel",
 			"description": "A structure that generates power by burning Diesel.",
 			"category": "power",
+			"hitArea": [
+				{
+					"shape": [
+						-84.48,
+						-127.68,
+						49.28,
+						-125.76,
+						-44.8,
+						-95.04,
+						-83.2,
+						-96.32
+					]
+				},
+				{
+					"shape": [
+						-91.52,
+						-77.12,
+						-46.72,
+						-84.8,
+						-49.28,
+						45.12,
+						-90.24,
+						36.16,
+						-134.4,
+						-20.8
+					]
+				},
+				{
+					"shape": [
+						-125.44,
+						15.04,
+						-90.24,
+						36.16,
+						-126.72,
+						39.36,
+						-135.04,
+						27.84
+					]
+				},
+				{
+					"shape": [
+						-123.52,
+						-79.04,
+						-91.52,
+						-77.12,
+						-126.08,
+						-56,
+						-133.76,
+						-71.36
+					]
+				},
+				{
+					"shape": [
+						-48,
+						87.36,
+						-44.8,
+						76.48,
+						16,
+						119.36,
+						-48,
+						116.16
+					]
+				},
+				{
+					"shape": [
+						81.92,
+						118.08,
+						51.2,
+						-120.64,
+						95.36,
+						-107.2,
+						119.04,
+						17.6,
+						119.04,
+						98.88,
+						117.12,
+						115.52
+					]
+				},
+				{
+					"shape": [
+						-91.52,
+						-77.12,
+						-124.8,
+						-33.6,
+						-126.08,
+						-56
+					]
+				},
+				{
+					"shape": [
+						-125.44,
+						-8.64,
+						-90.24,
+						36.16,
+						-125.44,
+						15.04
+					]
+				},
+				{
+					"shape": [
+						95.36,
+						-107.2,
+						51.2,
+						-120.64,
+						89.6,
+						-120.64
+					]
+				},
+				{
+					"shape": [
+						-90.24,
+						36.16,
+						-49.28,
+						45.12,
+						-90.24,
+						45.12
+					]
+				},
+				{
+					"shape": [
+						134.4,
+						98.88,
+						119.04,
+						98.88,
+						119.04,
+						17.6,
+						134.4,
+						17.6
+					]
+				},
+				{
+					"shape": [
+						119.04,
+						17.6,
+						95.36,
+						-107.2,
+						118.4,
+						-105.28
+					]
+				},
+				{
+					"shape": [
+						-46.72,
+						-84.8,
+						-91.52,
+						-77.12,
+						-90.24,
+						-84.8
+					]
+				},
+				{
+					"shape": [
+						-49.28,
+						45.12,
+						-46.72,
+						-84.8,
+						-44.8,
+						-95.04,
+						49.28,
+						-125.76,
+						51.2,
+						-120.64,
+						16,
+						119.36,
+						-44.8,
+						76.48
+					]
+				},
+				{
+					"shape": [
+						17.28,
+						125.76,
+						16,
+						119.36,
+						51.2,
+						-120.64,
+						81.92,
+						118.08,
+						80,
+						127.68
+					]
+				}
+			],
 			"icon": "game/Textures/UI/ItemIcons/DiesePowerPlanetBaseIcon.webp",
 			"texture": "game/Textures/Structures/diesel_power_plant.webp",
 			"power": 5,
@@ -1395,6 +2385,190 @@ const foxholeData = {
 					"name": "Petrol Power Plant",
 					"codeName": "Petrol",
 					"description": "A generator that burns petrol to generate more power.",
+					"hitArea": [
+						{
+							"shape": [
+								-81.92,
+								-127.68,
+								-26.24,
+								-126.4,
+								-40.96,
+								-96.32,
+								-81.92,
+								-96.96
+							]
+						},
+						{
+							"shape": [
+								-129.92,
+								-84.8,
+								-41.6,
+								-84.8,
+								-113.92,
+								-54.72,
+								-129.92,
+								-55.36
+							]
+						},
+						{
+							"shape": [
+								84.48,
+								118.08,
+								19.2,
+								118.08,
+								-46.08,
+								27.84,
+								-41.6,
+								-84.8,
+								53.76,
+								-120.64,
+								121.6,
+								17.6,
+								121.6,
+								98.88,
+								119.68,
+								115.52
+							]
+						},
+						{
+							"shape": [
+								35.2,
+								-127.04,
+								53.76,
+								-120.64,
+								-41.6,
+								-84.8,
+								-40.96,
+								-96.32,
+								-26.24,
+								-126.4
+							]
+						},
+						{
+							"shape": [
+								-103.04,
+								51.52,
+								-136.32,
+								13.76,
+								-114.56,
+								-33.6,
+								-41.6,
+								-84.8,
+								-46.08,
+								27.84,
+								-71.04,
+								51.52
+							]
+						},
+						{
+							"shape": [
+								-114.56,
+								-33.6,
+								-136.32,
+								13.76,
+								-135.04,
+								-13.12
+							]
+						},
+						{
+							"shape": [
+								-48,
+								94.4,
+								-43.52,
+								86.08,
+								19.2,
+								118.08,
+								-44.8,
+								116.8
+							]
+						},
+						{
+							"shape": [
+								53.76,
+								-120.64,
+								35.2,
+								-127.04,
+								53.76,
+								-126.4
+							]
+						},
+						{
+							"shape": [
+								-136.32,
+								13.76,
+								-103.04,
+								51.52,
+								-128,
+								36.16
+							]
+						},
+						{
+							"shape": [
+								96.64,
+								-108.48,
+								121.6,
+								17.6,
+								53.76,
+								-120.64,
+								93.44,
+								-119.36
+							]
+						},
+						{
+							"shape": [
+								-41.6,
+								-84.8,
+								-114.56,
+								-33.6,
+								-113.92,
+								-54.72
+							]
+						},
+						{
+							"shape": [
+								136.96,
+								98.88,
+								121.6,
+								98.88,
+								121.6,
+								17.6,
+								136.96,
+								17.6
+							]
+						},
+						{
+							"shape": [
+								121.6,
+								17.6,
+								96.64,
+								-108.48,
+								119.68,
+								-104.64
+							]
+						},
+						{
+							"shape": [
+								19.2,
+								118.08,
+								84.48,
+								118.08,
+								81.92,
+								127.68,
+								19.84,
+								127.68
+							]
+						},
+						{
+							"shape": [
+								-46.08,
+								27.84,
+								19.2,
+								118.08,
+								-43.52,
+								86.08
+							]
+						}
+					],
 					"icon": "game/Textures/UI/ItemIcons/DiesePowerPlanetPetrolIcon.webp",
 					"texture": "game/Textures/Structures/diesel_power_plant_petrol_power.webp",
 					"positionOffset": {
@@ -1474,8 +2648,24 @@ const foxholeData = {
 			"codeName": "FortCornerT1",
 			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
 			"category": "defenses",
+			"hitArea": [
+				{
+					"shape": [
+						94.72,
+						-87.04,
+						90.88,
+						-11.52,
+						-13.44,
+						93.44,
+						-84.48,
+						91.52,
+						-89.6,
+						-85.76
+					]
+				}
+			],
 			"icon": "game/Textures/UI/StructureIcons/FortT1CornerIcon.webp",
-			"texture": "game/Textures/Structures/fortcornert1.webp",
+			"texture": "game/Textures/Structures/fortt1_corner.webp",
 			"canSnap": true,
 			"snapNearest": true,
 			"sockets": [
@@ -1786,6 +2976,22 @@ const foxholeData = {
 			"width": 5.28,
 			"length": 5.28,
 			"sortOffset": -1000,
+			"hitArea": [
+				{
+					"shape": [
+						-87.68,
+						97.28,
+						-88.32,
+						42.88,
+						42.88,
+						-88.32,
+						96,
+						-88.32,
+						96.64,
+						96.64
+					]
+				}
+			],
 			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation02Icon.webp",
 			"texture": "game/Textures/Structures/foundation_corner.webp",
 			"textureIcon": {
@@ -2973,6 +4179,108 @@ const foxholeData = {
 			"range": 40,
 			"overlapDist": 65,
 			"sortOffset": 1000000,
+			"hitArea": [
+				{
+					"shape": [
+						61.12,
+						13.76,
+						49.6,
+						13.76,
+						48.32,
+						-16.32,
+						61.12,
+						-15.04
+					]
+				},
+				{
+					"shape": [
+						-48.96,
+						-13.76,
+						-49.6,
+						15.04,
+						-61.12,
+						14.4,
+						-60.48,
+						-13.76
+					]
+				},
+				{
+					"shape": [
+						16.32,
+						-61.12,
+						16.96,
+						-48.96,
+						-16.32,
+						-48.32,
+						-16.32,
+						-60.48
+					]
+				},
+				{
+					"shape": [
+						-16.32,
+						48.96,
+						16.32,
+						48.96,
+						16.96,
+						60.48,
+						-15.68,
+						61.12
+					]
+				},
+				{
+					"shape": [
+						36.16,
+						36.16,
+						16.32,
+						48.96,
+						-48.96,
+						-13.76,
+						-38.72,
+						-33.6,
+						16.96,
+						-48.96,
+						48.32,
+						-16.32,
+						49.6,
+						13.76
+					]
+				},
+				{
+					"shape": [
+						-48.96,
+						-13.76,
+						16.32,
+						48.96,
+						-16.32,
+						48.96,
+						-36.8,
+						36.16,
+						-49.6,
+						15.04
+					]
+				},
+				{
+					"shape": [
+						16.96,
+						-48.96,
+						-38.72,
+						-33.6,
+						-16.32,
+						-48.32
+					]
+				},
+				{
+					"shape": [
+						48.32,
+						-16.32,
+						16.96,
+						-48.96,
+						37.44,
+						-36.16
+					]
+				}
+			],
 			"icon": "game/Textures/UI/StructureIcons/TunnelNetworkStructureIcon.webp",
 			"texture": "game/Textures/Structures/maintenance_tunnel.webp",
 			"textureIcon": {
@@ -3026,6 +4334,66 @@ const foxholeData = {
 			"codeName": "FacilityRefinery1",
 			"description": "A factory that refines raw resources into Construction Materials for advanced facilities. Additional modifications allow for the development of a variety of different materials.",
 			"category": "factories",
+			"hitArea": [
+				{
+					"shape": [
+						41.28,
+						192.32,
+						22.72,
+						-187.2,
+						93.76,
+						-117.44,
+						94.4,
+						143.04,
+						84.8,
+						192.32
+					]
+				},
+				{
+					"shape": [
+						122.56,
+						-163.52,
+						112.96,
+						-134.08,
+						93.76,
+						-117.44,
+						22.72,
+						-187.2,
+						44.48,
+						-210.24,
+						75.84,
+						-216,
+						111.68,
+						-197.44
+					]
+				},
+				{
+					"shape": [
+						12.48,
+						-196.16,
+						22.72,
+						-187.2,
+						-77.76,
+						192.32,
+						-121.28,
+						192.32,
+						-121.28,
+						-194.88
+					]
+				},
+				{
+					"shape": [
+						-77.12,
+						211.52,
+						-77.76,
+						192.32,
+						22.72,
+						-187.2,
+						41.92,
+						211.52
+					]
+				}
+			],
 			"icon": "game/Textures/UI/StructureIcons/MetalworksFactoryBase.webp",
 			"texture": "game/Textures/Structures/materials_factory.webp",
 			"power": -2,
@@ -3059,6 +4427,92 @@ const foxholeData = {
 					"name": "Forge",
 					"codeName": "Forge",
 					"description": "A unique factory for forging specialized machinery parts needed to construct vehicles. Requires Coke or Petrol.",
+					"hitArea": [
+						{
+							"shape": [
+								-99.2,
+								195.52,
+								116.48,
+								-121.28,
+								116.48,
+								146.24,
+								106.88,
+								195.52
+							]
+						},
+						{
+							"shape": [
+								48.64,
+								-215.36,
+								116.48,
+								-121.28,
+								-10.88,
+								-187.2,
+								-10.24,
+								-217.92
+							]
+						},
+						{
+							"shape": [
+								-127.36,
+								-172.48,
+								-118.4,
+								-191.04,
+								-99.2,
+								-201.92,
+								-77.44,
+								-200.64,
+								-57.6,
+								-185.92,
+								-99.2,
+								-131.52,
+								-120.96,
+								-145.6
+							]
+						},
+						{
+							"shape": [
+								-10.88,
+								-187.2,
+								116.48,
+								-121.28,
+								-99.2,
+								195.52,
+								-99.2,
+								-131.52,
+								-57.6,
+								-185.92
+							]
+						},
+						{
+							"shape": [
+								116.48,
+								-121.28,
+								48.64,
+								-215.36,
+								72.32,
+								-220.48,
+								98.56,
+								-214.08,
+								115.2,
+								-199.36,
+								128.64,
+								-169.28
+							]
+						},
+						{
+							"shape": [
+								-55.68,
+								195.52,
+								63.36,
+								195.52,
+								63.36,
+								213.44,
+								-55.04,
+								214.72
+							]
+						}
+					],
 					"icon": "game/Textures/UI/StructureIcons/FacilityForgeIcon.webp",
 					"texture": "game/Textures/Structures/materials_factory_forge.webp",
 					"positionOffset": {
@@ -3115,6 +4569,138 @@ const foxholeData = {
 					"name": "Metal Press",
 					"codeName": "MetalPress",
 					"description": "A heavy automatic press that refines materials into a denser form.",
+					"hitArea": [
+						{
+							"shape": [
+								122.24,
+								-127.36,
+								103.04,
+								-128.64,
+								44.8,
+								-184.32,
+								122.24,
+								-185.6
+							]
+						},
+						{
+							"shape": [
+								51.2,
+								174.72,
+								-111.36,
+								-77.44,
+								44.8,
+								-184.32,
+								103.04,
+								-128.64,
+								104.32,
+								125.44,
+								94.72,
+								174.72
+							]
+						},
+						{
+							"shape": [
+								-93.44,
+								-176.64,
+								-118.4,
+								-118.4,
+								-124.16,
+								-120.96,
+								-123.52,
+								-176.64
+							]
+						},
+						{
+							"shape": [
+								-58.88,
+								-197.12,
+								48,
+								-197.12,
+								41.6,
+								-195.84,
+								-64.64,
+								-195.84
+							]
+						},
+						{
+							"shape": [
+								-111.36,
+								-77.44,
+								-67.84,
+								174.72,
+								-111.36,
+								174.72
+							]
+						},
+						{
+							"shape": [
+								-67.84,
+								174.72,
+								51.2,
+								192.64,
+								-67.2,
+								193.92
+							]
+						},
+						{
+							"shape": [
+								-111.36,
+								-77.44,
+								51.2,
+								174.72,
+								51.2,
+								192.64,
+								-67.84,
+								174.72
+							]
+						},
+						{
+							"shape": [
+								-118.4,
+								-118.4,
+								-93.44,
+								-176.64,
+								-92.8,
+								-167.04,
+								-111.36,
+								-77.44,
+								-117.12,
+								-93.44
+							]
+						},
+						{
+							"shape": [
+								-111.36,
+								-77.44,
+								-62.08,
+								-167.04,
+								41.6,
+								-195.84,
+								44.8,
+								-184.32
+							]
+						},
+						{
+							"shape": [
+								-62.08,
+								-167.04,
+								-111.36,
+								-77.44,
+								-92.8,
+								-167.04
+							]
+						},
+						{
+							"shape": [
+								-58.24,
+								-195.84,
+								41.6,
+								-195.84,
+								-62.08,
+								-167.04
+							]
+						}
+					],
 					"icon": "game/Textures/UI/StructureIcons/FacilityMetalPressIcon.webp",
 					"texture": "game/Textures/Structures/materials_factory_metal_press.webp",
 					"positionOffset": {
@@ -3161,6 +4747,122 @@ const foxholeData = {
 					"name": "Assembly Bay",
 					"codeName": "Recycler",
 					"description": "An assembly bay with specialized equipment for quickly building and packing materials needed on the frontline.",
+					"hitArea": [
+						{
+							"shape": [
+								16.32,
+								-176.32,
+								0.96,
+								-163.52,
+								1.6,
+								-176.32
+							]
+						},
+						{
+							"shape": [
+								-64.96,
+								185.92,
+								0.96,
+								-163.52,
+								16.32,
+								-176.32,
+								107.84,
+								-130.88,
+								107.2,
+								136.64,
+								97.6,
+								185.92
+							]
+						},
+						{
+							"shape": [
+								-16.32,
+								-176.32,
+								-11.84,
+								-164.16,
+								-64.96,
+								185.92,
+								-96.96,
+								-155.2,
+								-96.96,
+								-176.32
+							]
+						},
+						{
+							"shape": [
+								107.84,
+								-130.88,
+								16.32,
+								-176.32,
+								72,
+								-176.32,
+								101.44,
+								-165.44
+							]
+						},
+						{
+							"shape": [
+								-32.32,
+								-200,
+								-26.56,
+								-176.32,
+								-82.24,
+								-176.32,
+								-75.84,
+								-198.72,
+								-56,
+								-210.88
+							]
+						},
+						{
+							"shape": [
+								64.32,
+								-200,
+								72,
+								-176.32,
+								16.32,
+								-176.32,
+								22.72,
+								-200,
+								43.2,
+								-210.24
+							]
+						},
+						{
+							"shape": [
+								-64.96,
+								185.92,
+								54.08,
+								185.92,
+								54.08,
+								204.48,
+								-64.32,
+								205.12
+							]
+						},
+						{
+							"shape": [
+								-108.48,
+								-155.2,
+								-96.96,
+								-155.2,
+								-64.96,
+								185.92,
+								-108.48,
+								185.92
+							]
+						},
+						{
+							"shape": [
+								-64.96,
+								185.92,
+								-11.84,
+								-164.16,
+								0.96,
+								-163.52
+							]
+						}
+					],
 					"icon": "game/Textures/UI/StructureIcons/FacilityRecyclerIcon.webp",
 					"texture": "game/Textures/Structures/materials_factory_recycler.webp",
 					"positionOffset": {
@@ -3209,6 +4911,50 @@ const foxholeData = {
 					"name": "Smelter",
 					"codeName": "Smelter",
 					"description": "An industrial smelter for melting down Salvage to remove impurities. Requires Coke.",
+					"hitArea": [
+						{
+							"shape": [
+								-108.48,
+								185.92,
+								92.48,
+								-170.56,
+								104,
+								-161.6,
+								107.84,
+								-130.88,
+								107.2,
+								136.64,
+								97.6,
+								185.92
+							]
+						},
+						{
+							"shape": [
+								90.56,
+								-207.04,
+								92.48,
+								-170.56,
+								-108.48,
+								185.92,
+								-106.56,
+								-154.56,
+								-98.24,
+								-206.4
+							]
+						},
+						{
+							"shape": [
+								-64.96,
+								185.92,
+								54.08,
+								185.92,
+								54.08,
+								204.48,
+								-64.32,
+								205.12
+							]
+						}
+					],
 					"icon": "game/Textures/UI/StructureIcons/FacilitySmelterIcon.webp",
 					"texture": "game/Textures/Structures/materials_factory_smelter.webp",
 					"positionOffset": {
@@ -3250,6 +4996,176 @@ const foxholeData = {
 			"codeName": "FacilityRefinery2",
 			"description": "A factory for refining raw resources into Processed Construction Materials. Additional modifications can allow for additional refined materials needed for advanced facility operations.",
 			"category": "factories",
+			"hitArea": [
+				{
+					"shape": [
+						-166.72,
+						41.28,
+						5.44,
+						101.44,
+						5.44,
+						201.28,
+						-166.72,
+						201.28
+					]
+				},
+				{
+					"shape": [
+						173.12,
+						13.76,
+						164.16,
+						32.96,
+						153.92,
+						34.24,
+						153.92,
+						3.52,
+						168.64,
+						2.88
+					]
+				},
+				{
+					"shape": [
+						86.08,
+						-101.44,
+						54.08,
+						-99.52,
+						54.08,
+						-160.32,
+						88,
+						-160.32
+					]
+				},
+				{
+					"shape": [
+						153.92,
+						3.52,
+						153.92,
+						34.24,
+						136,
+						88.64,
+						101.44,
+						89.92,
+						93.12,
+						-27.2,
+						104,
+						-36.16,
+						133.44,
+						-37.44,
+						151.36,
+						-27.2
+					]
+				},
+				{
+					"shape": [
+						5.44,
+						101.44,
+						-166.72,
+						41.28,
+						-143.68,
+						40.64,
+						54.08,
+						80.96,
+						54.08,
+						99.52
+					]
+				},
+				{
+					"shape": [
+						136,
+						88.64,
+						153.92,
+						34.24,
+						153.92,
+						81.6
+					]
+				},
+				{
+					"shape": [
+						-68.16,
+						-200.64,
+						-68.16,
+						-189.12,
+						-118.08,
+						-189.12,
+						-116.16,
+						-201.92
+					]
+				},
+				{
+					"shape": [
+						54.08,
+						-160.32,
+						54.08,
+						-27.2,
+						-143.68,
+						-15.04,
+						-150.08,
+						-22.72,
+						-118.08,
+						-189.12,
+						52.8,
+						-189.12
+					]
+				},
+				{
+					"shape": [
+						-118.08,
+						-189.12,
+						-150.08,
+						-22.72,
+						-143.68,
+						-189.12
+					]
+				},
+				{
+					"shape": [
+						101.44,
+						89.92,
+						93.12,
+						80.96,
+						54.08,
+						-27.2,
+						93.12,
+						-27.2
+					]
+				},
+				{
+					"shape": [
+						54.08,
+						-27.2,
+						93.12,
+						80.96,
+						54.08,
+						80.96,
+						-143.68,
+						40.64,
+						-143.68,
+						-15.04
+					]
+				},
+				{
+					"shape": [
+						-170.56,
+						-12.48,
+						-147.52,
+						-5.44,
+						-147.52,
+						36.16,
+						-171.2,
+						36.16
+					]
+				},
+				{
+					"shape": [
+						-147.52,
+						-5.44,
+						-170.56,
+						-12.48,
+						-147.52,
+						-15.04
+					]
+				}
+			],
 			"icon": "game/Textures/UI/StructureIcons/FacilityRefinery2Icon.webp",
 			"texture": "game/Textures/Structures/metalworks_factory.webp",
 			"textureIcon": {
@@ -3299,6 +5215,142 @@ const foxholeData = {
 					"name": "Recycler",
 					"codeName": "Recycler",
 					"description": "Advanced sorting machinery for sifting piles of scrap metal for useful materials.",
+					"hitArea": [
+						{
+							"shape": [
+								-162.24,
+								41.28,
+								9.92,
+								144.32,
+								9.92,
+								201.28,
+								-162.24,
+								201.28
+							]
+						},
+						{
+							"shape": [
+								120.64,
+								77.12,
+								118.08,
+								-32.32,
+								148.8,
+								-13.12,
+								165.44,
+								12.48,
+								159.04,
+								54.72
+							]
+						},
+						{
+							"shape": [
+								-141.12,
+								8,
+								-162.24,
+								41.28,
+								-168,
+								29.12,
+								-168,
+								16.32,
+								-156.48,
+								6.08
+							]
+						},
+						{
+							"shape": [
+								154.56,
+								-76.48,
+								121.28,
+								-59.84,
+								82.24,
+								-147.52,
+								107.2,
+								-160.32,
+								123.2,
+								-159.68,
+								159.04,
+								-139.84,
+								169.28,
+								-107.84
+							]
+						},
+						{
+							"shape": [
+								57.92,
+								-153.28,
+								-63.68,
+								-189.12,
+								57.28,
+								-189.12
+							]
+						},
+						{
+							"shape": [
+								-63.68,
+								-200.64,
+								-63.68,
+								-189.12,
+								-141.12,
+								8,
+								-114.24,
+								-189.12,
+								-108.48,
+								-203.2
+							]
+						},
+						{
+							"shape": [
+								96.96,
+								139.2,
+								9.92,
+								144.32,
+								-162.24,
+								41.28,
+								-141.12,
+								8,
+								118.08,
+								-32.32,
+								120.64,
+								77.12,
+								114.88,
+								126.4
+							]
+						},
+						{
+							"shape": [
+								121.28,
+								-59.84,
+								57.92,
+								-153.28,
+								82.24,
+								-147.52
+							]
+						},
+						{
+							"shape": [
+								121.28,
+								-59.84,
+								118.08,
+								-32.32,
+								-141.12,
+								8,
+								-63.68,
+								-189.12,
+								57.92,
+								-153.28
+							]
+						},
+						{
+							"shape": [
+								-114.24,
+								-189.12,
+								-141.12,
+								8,
+								-139.2,
+								-189.12
+							]
+						}
+					],
 					"icon": "game/Textures/UI/StructureIcons/FacilityRefinery2RecyclerIcon.webp",
 					"texture": "game/Textures/Structures/metalworks_factory_recycler.webp",
 					"positionOffset": {
@@ -3347,6 +5399,164 @@ const foxholeData = {
 					"name": "Blast Furnace",
 					"codeName": "BlastFurnace",
 					"description": "A large industrial cauldron for liquefying metals to remove impurities from advanced materials.",
+					"hitArea": [
+						{
+							"shape": [
+								-154.88,
+								48,
+								-129.92,
+								6.4,
+								19.2,
+								108.16,
+								19.2,
+								208,
+								-152.96,
+								208
+							]
+						},
+						{
+							"shape": [
+								106.88,
+								-156.16,
+								85.12,
+								-158.08,
+								85.12,
+								-170.24,
+								107.52,
+								-172.16
+							]
+						},
+						{
+							"shape": [
+								-129.92,
+								6.4,
+								-154.88,
+								48,
+								-168.32,
+								28.8,
+								-160,
+								5.76
+							]
+						},
+						{
+							"shape": [
+								31.36,
+								-182.4,
+								106.88,
+								-94.72,
+								-129.92,
+								6.4,
+								-136.3873681640625,
+								-17.85263671875,
+								-104.32,
+								-182.4,
+								-100.48,
+								-195.84
+							]
+						},
+						{
+							"shape": [
+								67.84,
+								-169.6,
+								31.36,
+								-182.4,
+								66.56,
+								-182.4
+							]
+						},
+						{
+							"shape": [
+								-24.32,
+								-210.56,
+								19.84,
+								-200.96,
+								31.36,
+								-182.4,
+								-80,
+								-193.92,
+								-77.44,
+								-211.2
+							]
+						},
+						{
+							"shape": [
+								19.2,
+								108.16,
+								155.52,
+								107.52,
+								129.28,
+								130.56,
+								98.56,
+								140.8,
+								55.68,
+								135.68
+							]
+						},
+						{
+							"shape": [
+								171.52,
+								40.32,
+								169.6,
+								79.36,
+								155.52,
+								107.52,
+								19.2,
+								108.16,
+								-129.92,
+								6.4,
+								105.6,
+								-32,
+								151.68,
+								-0.64
+							]
+						},
+						{
+							"shape": [
+								-129.92,
+								6.4,
+								106.88,
+								-94.72,
+								117.12,
+								-92.8,
+								105.6,
+								-32
+							]
+						},
+						{
+							"shape": [
+								106.88,
+								-94.72,
+								85.12,
+								-158.08,
+								106.88,
+								-156.16,
+								117.12,
+								-154.24
+							]
+						},
+						{
+							"shape": [
+								-104.32,
+								-182.4,
+								-136.3873681640625,
+								-17.85263671875,
+								-129.92,
+								-182.4
+							]
+						},
+						{
+							"shape": [
+								106.88,
+								-94.72,
+								31.36,
+								-182.4,
+								67.84,
+								-169.6,
+								85.12,
+								-158.08
+							]
+						}
+					],
 					"icon": "game/Textures/UI/StructureIcons/FacilityBlastFurnaceIcon.webp",
 					"texture": "game/Textures/Structures/metalworks_factory_blast_furnace.webp",
 					"positionOffset": {
@@ -3416,6 +5626,162 @@ const foxholeData = {
 					"name": "Engineering Station",
 					"codeName": "EngineeringStation",
 					"description": "An expanded workshop for manual process of delicate materials.",
+					"hitArea": [
+						{
+							"shape": [
+								-144,
+								53.12,
+								30.08,
+								151.68,
+								28.16,
+								210.56,
+								-144,
+								210.56
+							]
+						},
+						{
+							"shape": [
+								30.08,
+								151.68,
+								-144,
+								53.12,
+								88.96,
+								104.96,
+								88.96,
+								151.68
+							]
+						},
+						{
+							"shape": [
+								96,
+								-211.84,
+								97.28,
+								-161.28,
+								66.56,
+								-179.84,
+								69.12,
+								-211.2
+							]
+						},
+						{
+							"shape": [
+								149.76,
+								-195.84,
+								154.88,
+								-193.28,
+								154.24,
+								-140.16,
+								148.48,
+								-110.72,
+								122.24,
+								-146.56,
+								123.52,
+								-192
+							]
+						},
+						{
+							"shape": [
+								-120.96,
+								6.4,
+								-144,
+								53.12,
+								-158.72,
+								48,
+								-170.88,
+								23.68,
+								-161.28,
+								5.76,
+								-140.16,
+								-3.84
+							]
+						},
+						{
+							"shape": [
+								104.32,
+								-145.92,
+								97.28,
+								-161.28,
+								104.32,
+								-161.28
+							]
+						},
+						{
+							"shape": [
+								88.96,
+								104.96,
+								-144,
+								53.12,
+								-120.96,
+								6.4,
+								148.48,
+								-110.72,
+								170.88,
+								-109.44,
+								170.88,
+								104.96
+							]
+						},
+						{
+							"shape": [
+								-45.44,
+								-191.36,
+								-45.44,
+								-179.84,
+								-96,
+								-179.84,
+								-94.72,
+								-192
+							]
+						},
+						{
+							"shape": [
+								104.32,
+								-145.92,
+								-127.36,
+								-13.44,
+								-96,
+								-179.84,
+								66.56,
+								-179.84,
+								97.28,
+								-161.28
+							]
+						},
+						{
+							"shape": [
+								-96,
+								-179.84,
+								-127.36,
+								-13.44,
+								-120.96,
+								-179.84
+							]
+						},
+						{
+							"shape": [
+								148.48,
+								-110.72,
+								113.28,
+								-144.64,
+								122.24,
+								-146.56
+							]
+						},
+						{
+							"shape": [
+								148.48,
+								-110.72,
+								-120.96,
+								6.4,
+								-127.36,
+								-13.44,
+								104.32,
+								-145.92,
+								113.28,
+								-144.64
+							]
+						}
+					],
 					"icon": "game/Textures/UI/StructureIcons/FacilityEngineeringStationIcon.webp",
 					"texture": "game/Textures/Structures/metalworks_factory_engineering_station.webp",
 					"positionOffset": {
@@ -3504,6 +5870,32 @@ const foxholeData = {
 			"codeName": "MGPillbox",
 			"description": "A well-fortified bunker position fitted with a mounted machinegun. Garrisoned infantry will lay down heavy suppressive fire upon approaching enemies from a fixed angle.",
 			"category": "defenses",
+			"hitArea": [
+				{
+					"shape": [
+						45.44,
+						-81.28,
+						93.44,
+						-7.04,
+						-49.28,
+						78.72,
+						-94.08,
+						2.56,
+						-48.64,
+						-80
+					]
+				},
+				{
+					"shape": [
+						-49.28,
+						78.72,
+						93.44,
+						-7.04,
+						51.2,
+						76.8
+					]
+				}
+			],
 			"icon": "game/Textures/UI/StructureIcons/MGPillboxIcon.webp",
 			"texture": "game/Textures/Structures/mgpillbox.webp",
 			"techId": "unlockmgpillbox",
@@ -3517,6 +5909,108 @@ const foxholeData = {
 			"description": "A refinery that processes Oil into other useful materials for the purposes of production and power generation.",
 			"category": "factories",
 			"color": 2368548,
+			"hitArea": [
+				{
+					"shape": [
+						26.24,
+						-129.6,
+						64,
+						-0.32,
+						-41.6,
+						10.56,
+						-41.6,
+						-129.6
+					]
+				},
+				{
+					"shape": [
+						-35.84,
+						166.08,
+						-41.6,
+						10.56,
+						58.24,
+						103.36,
+						58.24,
+						166.08
+					]
+				},
+				{
+					"shape": [
+						-41.6,
+						-91.84,
+						-41.6,
+						10.56,
+						-46.08,
+						74.56,
+						-69.76,
+						173.76,
+						-62.08,
+						-104,
+						-51.2,
+						-109.76
+					]
+				},
+				{
+					"shape": [
+						26.24,
+						-129.6,
+						-4.48,
+						-129.6,
+						-4.48,
+						-173.12,
+						0.64,
+						-174.4,
+						26.88,
+						-174.4
+					]
+				},
+				{
+					"shape": [
+						-69.76,
+						173.76,
+						-43.52,
+						117.44,
+						-37.76,
+						119.36,
+						-38.4,
+						173.12
+					]
+				},
+				{
+					"shape": [
+						64,
+						-0.32,
+						26.24,
+						-129.6,
+						64,
+						-129.6
+					]
+				},
+				{
+					"shape": [
+						58.24,
+						103.36,
+						-41.6,
+						10.56,
+						64,
+						-0.32,
+						69.76,
+						79.04,
+						64,
+						103.36
+					]
+				},
+				{
+					"shape": [
+						-69.76,
+						173.76,
+						-46.08,
+						74.56,
+						-43.52,
+						117.44
+					]
+				}
+			],
 			"icon": "game/Textures/UI/ItemIcons/OilRefineryBaseIcon.webp",
 			"texture": "game/Textures/Structures/oil_refinery.webp",
 			"power": -1,
@@ -3566,6 +6060,94 @@ const foxholeData = {
 					"name": "Reformer",
 					"codeName": "Reformer",
 					"description": "A large processing drum that allows for the controlled introduction of hydrogen to yield a similar output of Petrol for less raw Oil. ",
+					"hitArea": [
+						{
+							"shape": [
+								-41.6,
+								-115.52,
+								-61.44,
+								0.96,
+								-64.64,
+								-115.52,
+								-54.4,
+								-134.08
+							]
+						},
+						{
+							"shape": [
+								-5.76,
+								-153.28,
+								-41.6,
+								-115.52,
+								-41.6,
+								-153.28
+							]
+						},
+						{
+							"shape": [
+								26.24,
+								-153.92,
+								-5.76,
+								-153.28,
+								0,
+								-200.64,
+								26.88,
+								-198.72
+							]
+						},
+						{
+							"shape": [
+								8.96,
+								152,
+								39.68,
+								152,
+								39.68,
+								197.44,
+								12.8,
+								200.64
+							]
+						},
+						{
+							"shape": [
+								-61.44,
+								0.96,
+								-41.6,
+								-115.52,
+								63.36,
+								-34.88,
+								69.76,
+								-3.52,
+								39.68,
+								152,
+								-69.76,
+								150.08
+							]
+						},
+						{
+							"shape": [
+								63.36,
+								-34.88,
+								-41.6,
+								-115.52,
+								-5.76,
+								-153.28,
+								26.24,
+								-153.92,
+								63.36,
+								-153.28
+							]
+						},
+						{
+							"shape": [
+								39.68,
+								152,
+								69.76,
+								-3.52,
+								63.36,
+								152.64
+							]
+						}
+					],
 					"icon": "game/Textures/UI/StructureIcons/OilRefineryMod3Icon.webp",
 					"texture": "game/Textures/Structures/oil_refinery_reformer.webp",
 					"positionOffset": {
@@ -3626,6 +6208,102 @@ const foxholeData = {
 					"name": "Cracking Unit",
 					"codeName": "CrackingUnit",
 					"description": "A high-heat furnace that catalyses raw oil into refined Heavy Oil.",
+					"hitArea": [
+						{
+							"shape": [
+								64,
+								-129.6,
+								-40.96,
+								10.56,
+								-40.96,
+								-129.6
+							]
+						},
+						{
+							"shape": [
+								-46.72,
+								-91.84,
+								-40.96,
+								10.56,
+								-60.8,
+								25.28,
+								-62.08,
+								-104,
+								-51.2,
+								-109.76
+							]
+						},
+						{
+							"shape": [
+								-36.48,
+								156.48,
+								-40.96,
+								10.56,
+								64,
+								-0.32,
+								69.76,
+								79.04,
+								59.52,
+								156.48
+							]
+						},
+						{
+							"shape": [
+								-40.96,
+								10.56,
+								64,
+								-129.6,
+								64,
+								-0.32
+							]
+						},
+						{
+							"shape": [
+								26.88,
+								-129.6,
+								-3.84,
+								-129.6,
+								-3.84,
+								-173.12,
+								5.12,
+								-176.96,
+								27.52,
+								-173.12
+							]
+						},
+						{
+							"shape": [
+								-69.76,
+								173.76,
+								-60.8,
+								25.28,
+								-46.08,
+								74.56,
+								-38.4,
+								172.48
+							]
+						},
+						{
+							"shape": [
+								-60.8,
+								25.28,
+								-40.96,
+								10.56,
+								-46.08,
+								74.56
+							]
+						},
+						{
+							"shape": [
+								-40.96,
+								-91.84,
+								-40.96,
+								10.56,
+								-46.72,
+								-91.84
+							]
+						}
+					],
 					"icon": "game/Textures/UI/StructureIcons/OilRefineryMod2Icon.webp",
 					"texture": "game/Textures/Structures/oil_refinery_cracking_unit.webp",
 					"positionOffset": {
@@ -3679,6 +6357,104 @@ const foxholeData = {
 					"name": "Petrochemical Plant",
 					"codeName": "PetrochemicalPlant",
 					"description": "A blast furnace that further refines Heavy Oil into an Enriched Oil needed for advanced processes.",
+					"hitArea": [
+						{
+							"shape": [
+								26.88,
+								-129.6,
+								64,
+								-0.32,
+								-26.88,
+								160.96,
+								-37.12,
+								155.2,
+								-40.96,
+								-129.6
+							]
+						},
+						{
+							"shape": [
+								-46.72,
+								-91.84,
+								-40.96,
+								10.56,
+								-60.8,
+								25.28,
+								-62.08,
+								-104,
+								-51.2,
+								-109.76
+							]
+						},
+						{
+							"shape": [
+								-26.88,
+								160.96,
+								64,
+								-0.32,
+								69.76,
+								79.04,
+								59.52,
+								155.2
+							]
+						},
+						{
+							"shape": [
+								26.88,
+								-129.6,
+								-3.84,
+								-129.6,
+								-3.84,
+								-173.12,
+								5.12,
+								-176.96,
+								27.52,
+								-173.12
+							]
+						},
+						{
+							"shape": [
+								-69.76,
+								173.76,
+								-60.8,
+								25.28,
+								-46.08,
+								74.56,
+								-38.4,
+								172.48
+							]
+						},
+						{
+							"shape": [
+								64,
+								-0.32,
+								26.88,
+								-129.6,
+								64,
+								-129.6
+							]
+						},
+						{
+							"shape": [
+								-60.8,
+								25.28,
+								-40.96,
+								10.56,
+								-46.08,
+								74.56
+							]
+						},
+						{
+							"shape": [
+								-40.96,
+								-91.84,
+								-40.96,
+								10.56,
+								-46.72,
+								-91.84
+							]
+						}
+					],
 					"icon": "game/Textures/UI/ItemIcons/OilRefineryPetrochemicalPlanetIcon.webp",
 					"texture": "game/Textures/Structures/oil_refinery_petro_plant.webp",
 					"positionOffset": {
@@ -3758,6 +6534,72 @@ const foxholeData = {
 					"name": "Electric Oil Well",
 					"codeName": "Electric",
 					"description": "A generator that leverages electricity to pump oil through attached pipes.",
+					"hitArea": [
+						{
+							"shape": [
+								-51.84,
+								-49.92,
+								-47.36,
+								60.8,
+								-65.92,
+								-49.92,
+								-59.52,
+								-62.08
+							]
+						},
+						{
+							"shape": [
+								31.36,
+								-76.8,
+								0.64,
+								-76.8,
+								0.64,
+								-124.16,
+								32,
+								-125.44
+							]
+						},
+						{
+							"shape": [
+								-44.8,
+								127.36,
+								-47.36,
+								60.8,
+								0.64,
+								-76.8,
+								31.36,
+								-76.8,
+								78.72,
+								-74.88,
+								78.72,
+								125.44
+							]
+						},
+						{
+							"shape": [
+								0.64,
+								-76.8,
+								-47.36,
+								60.8,
+								-51.84,
+								-49.92,
+								-47.36,
+								-73.6
+							]
+						},
+						{
+							"shape": [
+								-78.08,
+								-49.92,
+								-65.92,
+								-49.92,
+								-47.36,
+								60.8,
+								-78.08,
+								60.8
+							]
+						}
+					],
 					"icon": "game/Textures/UI/StructureIcons/FacilityElectricOilWellIcon.webp",
 					"texture": "game/Textures/Structures/oil_well_electric_oil.webp",
 					"positionOffset": {
@@ -3809,6 +6651,124 @@ const foxholeData = {
 					"name": "Fracker",
 					"codeName": "Fracker",
 					"description": "A machine that opens up cracks in the earth by injecting water at a high pressure to increase the output of Crude Oil.",
+					"hitArea": [
+						{
+							"shape": [
+								-60.16,
+								127.36,
+								-62.72,
+								78.08,
+								63.36,
+								-8.32,
+								63.36,
+								125.44
+							]
+						},
+						{
+							"shape": [
+								-62.72,
+								-52.48,
+								-72.32,
+								-52.48,
+								-74.88,
+								-56.96,
+								-63.36,
+								-58.88
+							]
+						},
+						{
+							"shape": [
+								16,
+								-76.8,
+								-14.72,
+								-76.8,
+								-10.24,
+								-127.36,
+								16.64,
+								-125.44
+							]
+						},
+						{
+							"shape": [
+								85.12,
+								-127.36,
+								85.12,
+								-10.24,
+								58.24,
+								-76.8,
+								58.24,
+								-123.52
+							]
+						},
+						{
+							"shape": [
+								-83.84,
+								66.56,
+								-74.24,
+								44.8,
+								-14.72,
+								-76.8,
+								16,
+								-76.8,
+								63.36,
+								-8.32,
+								-62.72,
+								78.08,
+								-74.88,
+								79.36
+							]
+						},
+						{
+							"shape": [
+								63.36,
+								-8.32,
+								16,
+								-76.8,
+								58.24,
+								-76.8,
+								85.12,
+								-10.24,
+								72.32,
+								-2.56
+							]
+						},
+						{
+							"shape": [
+								-72.32,
+								-52.48,
+								-62.72,
+								-52.48,
+								-74.24,
+								44.8,
+								-88.32,
+								28.16,
+								-88.32,
+								-41.6,
+								-83.84,
+								-50.56
+							]
+						},
+						{
+							"shape": [
+								-14.72,
+								-76.8,
+								-62.72,
+								-52.48,
+								-62.72,
+								-73.6
+							]
+						},
+						{
+							"shape": [
+								-74.24,
+								44.8,
+								-62.72,
+								-52.48,
+								-14.72,
+								-76.8
+							]
+						}
+					],
 					"icon": "game/Textures/UI/StructureIcons/FacilityFrackerIcon.webp",
 					"texture": "game/Textures/Structures/oil_well_fracking_oil.webp",
 					"positionOffset": {
@@ -4193,6 +7153,466 @@ const foxholeData = {
 			"codeName": "FacilityPowerOil",
 			"description": "A power plant that generates a large amount of electricity using Oil or Coal.",
 			"category": "power",
+			"hitArea": [
+				{
+					"shape": [
+						5.76,
+						-116.16,
+						14.08,
+						-117.44,
+						16.64,
+						-102.08,
+						5.76,
+						-96.96
+					]
+				},
+				{
+					"shape": [
+						-42.24,
+						-192.96,
+						5.12,
+						-207.68,
+						14.08,
+						-117.44,
+						5.76,
+						-116.16,
+						-47.36,
+						-111.68
+					]
+				},
+				{
+					"shape": [
+						92.8,
+						-116.8,
+						101.12,
+						-117.44,
+						102.4,
+						-99.52,
+						92.8,
+						-96.96
+					]
+				},
+				{
+					"shape": [
+						48,
+						-116.16,
+						55.68,
+						-117.44,
+						56.96,
+						-99.52,
+						48,
+						-96.96
+					]
+				},
+				{
+					"shape": [
+						100.48,
+						-212.16,
+						92.16,
+						-207.68,
+						92.8,
+						-230.08,
+						100.48,
+						-230.08
+					]
+				},
+				{
+					"shape": [
+						5.12,
+						-207.68,
+						-42.24,
+						-192.96,
+						-47.36,
+						-212.8
+					]
+				},
+				{
+					"shape": [
+						135.04,
+						-117.44,
+						144,
+						-207.68,
+						143.36,
+						-97.6,
+						135.04,
+						-96.96
+					]
+				},
+				{
+					"shape": [
+						144,
+						-207.68,
+						135.68,
+						-207.68,
+						135.68,
+						-228.8,
+						144,
+						-230.08
+					]
+				},
+				{
+					"shape": [
+						197.76,
+						-192.96,
+						144,
+						-207.68,
+						202.88,
+						-212.8
+					]
+				},
+				{
+					"shape": [
+						197.76,
+						-131.52,
+						144,
+						-117.44,
+						144,
+						-207.68,
+						197.76,
+						-192.96
+					]
+				},
+				{
+					"shape": [
+						144,
+						-117.44,
+						197.76,
+						-131.52,
+						202.88,
+						-111.68
+					]
+				},
+				{
+					"shape": [
+						12.16,
+						-208.96,
+						5.12,
+						-207.68,
+						4.48,
+						-230.08,
+						12.16,
+						-230.08
+					]
+				},
+				{
+					"shape": [
+						56.96,
+						-208.32,
+						47.36,
+						-207.68,
+						49.28,
+						-230.08,
+						56.96,
+						-230.08
+					]
+				},
+				{
+					"shape": [
+						135.68,
+						-207.68,
+						101.12,
+						-117.44,
+						92.16,
+						-207.68,
+						100.48,
+						-212.16
+					]
+				},
+				{
+					"shape": [
+						101.12,
+						-117.44,
+						135.68,
+						-207.68,
+						144,
+						-207.68,
+						135.04,
+						-117.44
+					]
+				},
+				{
+					"shape": [
+						5.12,
+						-207.68,
+						55.68,
+						-117.44,
+						48,
+						-116.16,
+						14.08,
+						-117.44
+					]
+				},
+				{
+					"shape": [
+						101.12,
+						-117.44,
+						47.36,
+						-207.68,
+						56.96,
+						-208.32,
+						92.16,
+						-207.68
+					]
+				},
+				{
+					"shape": [
+						101.12,
+						-117.44,
+						92.8,
+						-116.8,
+						55.68,
+						-117.44,
+						5.12,
+						-207.68,
+						12.16,
+						-208.96,
+						47.36,
+						-207.68
+					]
+				},
+				{
+					"shape": [
+						-31.36,
+						223.68,
+						-67.2,
+						171.84,
+						-67.2,
+						164.8,
+						-17.28,
+						173.12,
+						-18.56,
+						223.68,
+						-26.88,
+						229.44
+					]
+				},
+				{
+					"shape": [
+						-147.84,
+						217.92,
+						-238.72,
+						-3.52,
+						-108.16,
+						113.6,
+						-128,
+						215.36,
+						-139.52,
+						223.68
+					]
+				},
+				{
+					"shape": [
+						44.16,
+						173.12,
+						76.16,
+						171.2,
+						74.88,
+						185.28,
+						51.84,
+						189.12,
+						43.52,
+						186.56
+					]
+				},
+				{
+					"shape": [
+						-108.16,
+						9.92,
+						-220.8,
+						-3.52,
+						-224.64,
+						-48.32,
+						-110.08,
+						-47.68
+					]
+				},
+				{
+					"shape": [
+						194.56,
+						223.68,
+						209.28,
+						173.76,
+						210.56,
+						219.2,
+						199.04,
+						229.44
+					]
+				},
+				{
+					"shape": [
+						145.92,
+						223.68,
+						142.72,
+						175.68,
+						158.72,
+						223.68,
+						158.72,
+						229.44
+					]
+				},
+				{
+					"shape": [
+						-238.72,
+						-3.52,
+						-147.84,
+						217.92,
+						-237.44,
+						215.36
+					]
+				},
+				{
+					"shape": [
+						-46.08,
+						-40.64,
+						-108.16,
+						9.92,
+						-82.56,
+						-40.64,
+						-67.2,
+						-48.96,
+						-46.08,
+						-48.96
+					]
+				},
+				{
+					"shape": [
+						194.56,
+						164.8,
+						173.44,
+						-41.28,
+						173.44,
+						-48.96,
+						194.56,
+						-48.96
+					]
+				},
+				{
+					"shape": [
+						158.72,
+						223.68,
+						142.72,
+						175.68,
+						194.56,
+						171.84,
+						209.28,
+						173.76,
+						194.56,
+						223.68
+					]
+				},
+				{
+					"shape": [
+						-82.56,
+						219.84,
+						-82.56,
+						175.04,
+						-67.2,
+						171.84,
+						-67.2,
+						229.44
+					]
+				},
+				{
+					"shape": [
+						-67.2,
+						171.84,
+						-31.36,
+						223.68,
+						-67.2,
+						223.68
+					]
+				},
+				{
+					"shape": [
+						233.6,
+						6.72,
+						235.52,
+						114.24,
+						209.92,
+						164.8,
+						194.56,
+						164.8,
+						194.56,
+						-40.64,
+						211.2,
+						-39.36
+					]
+				},
+				{
+					"shape": [
+						-108.16,
+						113.6,
+						-67.2,
+						164.8,
+						-82.56,
+						164.8
+					]
+				},
+				{
+					"shape": [
+						-128,
+						215.36,
+						-108.16,
+						113.6,
+						-108.16,
+						215.36
+					]
+				},
+				{
+					"shape": [
+						173.44,
+						-41.28,
+						194.56,
+						164.8,
+						-108.16,
+						9.92,
+						-46.08,
+						-40.64
+					]
+				},
+				{
+					"shape": [
+						-108.16,
+						113.6,
+						44.16,
+						173.12,
+						-17.28,
+						173.12,
+						-67.2,
+						164.8
+					]
+				},
+				{
+					"shape": [
+						-238.72,
+						-3.52,
+						76.16,
+						171.2,
+						44.16,
+						173.12,
+						-108.16,
+						113.6
+					]
+				},
+				{
+					"shape": [
+						194.56,
+						164.8,
+						194.56,
+						171.84,
+						142.72,
+						175.68,
+						76.16,
+						171.2,
+						-238.72,
+						-3.52,
+						-220.8,
+						-3.52,
+						-108.16,
+						9.92
+					]
+				}
+			],
 			"icon": "game/Textures/UI/StructureIcons/FacilityPowerOilIcon.webp",
 			"texture": "game/Textures/Structures/power_station.webp",
 			"textureIcon": {
@@ -4247,6 +7667,460 @@ const foxholeData = {
 					"name": "Sulfuric Reactor",
 					"codeName": "SulfuricReactor",
 					"description": "A reactor that combines Water with Heavy Oil or refined Coke, resulting in a more pure natural gas, which in turn is more efficient at generating power. Chunks of raw Sulfur are created as a byproduct.",
+					"hitArea": [
+						{
+							"shape": [
+								203.52,
+								-143.36,
+								150.4,
+								-128,
+								150.4,
+								-218.24,
+								208.64,
+								-224
+							]
+						},
+						{
+							"shape": [
+								141.44,
+								-128,
+								150.4,
+								-128,
+								152.96,
+								-112.64,
+								141.44,
+								-107.52
+							]
+						},
+						{
+							"shape": [
+								99.2,
+								-126.72,
+								106.88,
+								-128,
+								109.44,
+								-112,
+								99.2,
+								-107.52
+							]
+						},
+						{
+							"shape": [
+								54.4,
+								-126.72,
+								62.08,
+								-128,
+								64,
+								-111.36,
+								54.4,
+								-107.52
+							]
+						},
+						{
+							"shape": [
+								12.16,
+								-126.72,
+								19.84,
+								-128,
+								21.76,
+								-110.08,
+								12.16,
+								-107.52
+							]
+						},
+						{
+							"shape": [
+								-35.84,
+								-142.72,
+								12.16,
+								-126.72,
+								-40.96,
+								-122.24
+							]
+						},
+						{
+							"shape": [
+								-35.84,
+								-204.16,
+								11.52,
+								-218.24,
+								19.84,
+								-128,
+								12.16,
+								-126.72,
+								-35.84,
+								-142.72
+							]
+						},
+						{
+							"shape": [
+								11.52,
+								-218.24,
+								-35.84,
+								-204.16,
+								-40.96,
+								-224
+							]
+						},
+						{
+							"shape": [
+								150.4,
+								-128,
+								203.52,
+								-143.36,
+								209.28,
+								-122.24
+							]
+						},
+						{
+							"shape": [
+								63.36,
+								-219.52,
+								53.76,
+								-218.24,
+								55.04,
+								-240.64,
+								63.36,
+								-240.64
+							]
+						},
+						{
+							"shape": [
+								18.56,
+								-219.52,
+								11.52,
+								-218.24,
+								10.88,
+								-240.64,
+								18.56,
+								-240.64
+							]
+						},
+						{
+							"shape": [
+								106.88,
+								-128,
+								98.56,
+								-218.24,
+								99.2,
+								-240.64,
+								106.88,
+								-240.64
+							]
+						},
+						{
+							"shape": [
+								149.76,
+								-240.64,
+								150.4,
+								-128,
+								141.44,
+								-218.24,
+								142.08,
+								-240.64
+							]
+						},
+						{
+							"shape": [
+								150.4,
+								-128,
+								106.88,
+								-128,
+								106.88,
+								-218.24,
+								141.44,
+								-218.24
+							]
+						},
+						{
+							"shape": [
+								11.52,
+								-218.24,
+								62.08,
+								-128,
+								54.4,
+								-126.72,
+								19.84,
+								-128
+							]
+						},
+						{
+							"shape": [
+								106.88,
+								-128,
+								53.76,
+								-218.24,
+								63.36,
+								-219.52,
+								98.56,
+								-218.24
+							]
+						},
+						{
+							"shape": [
+								106.88,
+								-128,
+								99.2,
+								-126.72,
+								62.08,
+								-128,
+								11.52,
+								-218.24,
+								18.56,
+								-219.52,
+								53.76,
+								-218.24
+							]
+						},
+						{
+							"shape": [
+								-141.44,
+								207.36,
+								-232.96,
+								-14.08,
+								-215.04,
+								-14.08,
+								-121.6,
+								204.8,
+								-133.12,
+								213.12
+							]
+						},
+						{
+							"shape": [
+								-232.96,
+								-14.08,
+								-141.44,
+								207.36,
+								-231.04,
+								204.8
+							]
+						},
+						{
+							"shape": [
+								-103.68,
+								-58.24,
+								-101.76,
+								-14.08,
+								-101.76,
+								204.16,
+								-121.6,
+								204.8,
+								-215.04,
+								-14.08,
+								-218.88,
+								-58.88
+							]
+						},
+						{
+							"shape": [
+								49.28,
+								177.28,
+								49.92,
+								154.88,
+								80.64,
+								154.88,
+								76.8,
+								179.2
+							]
+						},
+						{
+							"shape": [
+								224,
+								33.92,
+								221.44,
+								28.16,
+								232.32,
+								30.08
+							]
+						},
+						{
+							"shape": [
+								-44.16,
+								-54.4,
+								-88.96,
+								30.08,
+								-88.96,
+								-14.72,
+								-74.88,
+								-61.44
+							]
+						},
+						{
+							"shape": [
+								195.84,
+								154.88,
+								80.64,
+								154.88,
+								195.2,
+								137.6,
+								200.32,
+								145.92
+							]
+						},
+						{
+							"shape": [
+								222.08,
+								69.76,
+								224,
+								65.28,
+								232.32,
+								65.92
+							]
+						},
+						{
+							"shape": [
+								195.2,
+								137.6,
+								80.64,
+								154.88,
+								-88.96,
+								69.76,
+								-88.96,
+								30.08,
+								222.08,
+								69.76,
+								221.44,
+								114.56
+							]
+						},
+						{
+							"shape": [
+								-88.96,
+								65.92,
+								-88.96,
+								69.76,
+								-99.2,
+								69.76
+							]
+						},
+						{
+							"shape": [
+								-88.96,
+								30.08,
+								-88.96,
+								33.92,
+								-99.2,
+								33.92
+							]
+						},
+						{
+							"shape": [
+								221.44,
+								28.16,
+								194.56,
+								-40.32,
+								220.16,
+								-16
+							]
+						},
+						{
+							"shape": [
+								-75.52,
+								127.36,
+								10.24,
+								154.88,
+								22.4,
+								179.2,
+								-64.64,
+								155.52,
+								-74.88,
+								151.04
+							]
+						},
+						{
+							"shape": [
+								7.68,
+								-60.16,
+								193.92,
+								-56.96,
+								194.56,
+								-40.32,
+								-88.96,
+								30.08,
+								-44.16,
+								-54.4
+							]
+						},
+						{
+							"shape": [
+								-64.64,
+								155.52,
+								22.4,
+								179.2,
+								23.04,
+								200.32,
+								10.24,
+								223.36,
+								-47.36,
+								236.8,
+								-67.2,
+								221.44,
+								-78.08,
+								183.68
+							]
+						},
+						{
+							"shape": [
+								-47.36,
+								236.8,
+								10.24,
+								223.36,
+								-15.36,
+								239.36
+							]
+						},
+						{
+							"shape": [
+								-88.96,
+								69.76,
+								80.64,
+								154.88,
+								10.24,
+								154.88,
+								-75.52,
+								127.36,
+								-88.96,
+								114.56
+							]
+						},
+						{
+							"shape": [
+								224,
+								65.28,
+								224,
+								33.92,
+								230.4,
+								34.56,
+								230.4,
+								65.28
+							]
+						},
+						{
+							"shape": [
+								224,
+								65.28,
+								221.44,
+								28.16,
+								224,
+								33.92
+							]
+						},
+						{
+							"shape": [
+								224,
+								65.28,
+								222.08,
+								69.76,
+								-88.96,
+								30.08,
+								194.56,
+								-40.32,
+								221.44,
+								28.16
+							]
+						}
+					],
 					"icon": "game/Textures/UI/StructureIcons/FacilityPowerOilReactorIcon.webp",
 					"texture": "game/Textures/Structures/power_station_sulfuric_reactor.webp",
 					"positionOffset": {
@@ -4438,6 +8312,119 @@ const foxholeData = {
 				"facilitymaterials1": 25
 			}
 		},
+		"relicbase1": {
+			"name": "Relic Base",
+			"codeName": "RelicBase1",
+			"category": "misc",
+			"hitArea": [
+				{
+					"shape": [
+						-146.56,
+						215.04,
+						-103.68,
+						249.6,
+						-144.64,
+						248.32
+					]
+				},
+				{
+					"shape": [
+						-103.68,
+						-249.6,
+						103.68,
+						-250.24,
+						143.36,
+						-248.96,
+						146.56,
+						-218.88,
+						146.56,
+						215.04,
+						-146.56,
+						-215.04,
+						-143.36,
+						-247.68
+					]
+				},
+				{
+					"shape": [
+						103.04,
+						-314.24,
+						103.68,
+						-250.24,
+						-103.68,
+						-249.6,
+						-103.04,
+						-314.24
+					]
+				},
+				{
+					"shape": [
+						-103.68,
+						249.6,
+						103.68,
+						257.92,
+						103.68,
+						313.6,
+						-103.04,
+						314.24
+					]
+				},
+				{
+					"shape": [
+						137.6,
+						248.96,
+						115.2,
+						252.8,
+						146.56,
+						215.04,
+						146.56,
+						241.92
+					]
+				},
+				{
+					"shape": [
+						-146.56,
+						215.04,
+						-152.32,
+						-215.04,
+						-146.56,
+						-215.04,
+						146.56,
+						215.04,
+						115.2,
+						252.8,
+						103.68,
+						257.92,
+						-103.68,
+						249.6
+					]
+				},
+				{
+					"shape": [
+						-152.32,
+						-215.04,
+						-146.56,
+						215.04,
+						-152.32,
+						215.04
+					]
+				},
+				{
+					"shape": [
+						146.56,
+						215.04,
+						146.56,
+						-218.88,
+						152.32,
+						-216.32,
+						152.32,
+						215.04
+					]
+				}
+			],
+			"icon": "game/Textures/UI/MapIcons/MapIconStaticBase1.webp",
+			"texture": "game/Textures/Structures/relicbase1.webp",
+		},
 		"resource_transfer_station": {
 			"name": "Resource Transfer Station",
 			"codeName": "FacilityResourceTransfer1",
@@ -4470,6 +8457,24 @@ const foxholeData = {
 			"codeName": "RiflePillbox",
 			"description": "A reinforced dugout that gives the garrisoned rifle infantry a fortified defensive position to fire on approaching enemies from relative safety.",
 			"category": "defenses",
+			"hitArea": [
+				{
+					"shape": [
+						45.44,
+						-79.68,
+						93.44,
+						-5.44,
+						44.16,
+						79.04,
+						-45.44,
+						80.32,
+						-94.08,
+						6.08,
+						-49.28,
+						-77.76
+					]
+				}
+			],
 			"icon": "game/Textures/UI/StructureIcons/RiflePillboxIcon.webp",
 			"texture": "game/Textures/Structures/riflepillbox.webp",
 			"cost": {
@@ -4599,6 +8604,152 @@ const foxholeData = {
 			"codeName": "FacilityMineResource4",
 			"description": "A stationary harvester that automatically gathers Coal. Requires Petrol. ",
 			"category": "harvesters",
+			"hitArea": [
+				{
+					"shape": [
+						-24.96,
+						-60.16,
+						-51.84,
+						9.6,
+						-51.84,
+						-98.56,
+						-19.84,
+						-98.56
+					]
+				},
+				{
+					"shape": [
+						48,
+						-98.56,
+						47.36,
+						-93.44,
+						20.48,
+						-57.6,
+						16.64,
+						-98.56
+					]
+				},
+				{
+					"shape": [
+						-81.28,
+						9.6,
+						-51.84,
+						9.6,
+						47.36,
+						15.36,
+						51.2,
+						35.84,
+						18.56,
+						110.08,
+						-21.12,
+						112,
+						-81.28,
+						106.88
+					]
+				},
+				{
+					"shape": [
+						-21.12,
+						112,
+						18.56,
+						110.08,
+						12.16,
+						123.52,
+						-3.84,
+						131.84
+					]
+				},
+				{
+					"shape": [
+						48.64,
+						122.88,
+						74.88,
+						66.56,
+						80.64,
+						68.48,
+						80,
+						121.6
+					]
+				},
+				{
+					"shape": [
+						18.56,
+						110.08,
+						51.2,
+						35.84,
+						48,
+						110.08
+					]
+				},
+				{
+					"shape": [
+						12.16,
+						-131.84,
+						20.48,
+						-57.6,
+						-19.2,
+						-57.6,
+						-15.36,
+						-131.84
+					]
+				},
+				{
+					"shape": [
+						72.96,
+						33.92,
+						74.88,
+						66.56,
+						51.2,
+						35.84,
+						47.36,
+						15.36,
+						60.16,
+						17.92
+					]
+				},
+				{
+					"shape": [
+						51.2,
+						35.84,
+						74.88,
+						66.56,
+						48.64,
+						122.88
+					]
+				},
+				{
+					"shape": [
+						-19.2,
+						-57.6,
+						-51.84,
+						9.6,
+						-24.96,
+						-60.16
+					]
+				},
+				{
+					"shape": [
+						20.48,
+						-57.6,
+						47.36,
+						15.36,
+						-51.84,
+						9.6,
+						-19.2,
+						-57.6
+					]
+				},
+				{
+					"shape": [
+						47.36,
+						15.36,
+						20.48,
+						-57.6,
+						47.36,
+						-93.44
+					]
+				}
+			],
 			"icon": "game/Textures/UI/StructureIcons/FacilityMineResource4Icon.webp",
 			"texture": "game/Textures/Structures/stationary_harvester.webp",
 			"sockets": [
@@ -4634,6 +8785,152 @@ const foxholeData = {
 			"codeName": "FacilityMineResource2",
 			"description": "A stationary harvester that automatically gathers Components. Requires Petrol.",
 			"category": "harvesters",
+			"hitArea": [
+				{
+					"shape": [
+						-24.96,
+						-60.16,
+						-51.84,
+						9.6,
+						-51.84,
+						-98.56,
+						-19.84,
+						-98.56
+					]
+				},
+				{
+					"shape": [
+						48,
+						-98.56,
+						47.36,
+						-93.44,
+						20.48,
+						-57.6,
+						16.64,
+						-98.56
+					]
+				},
+				{
+					"shape": [
+						-81.28,
+						9.6,
+						-51.84,
+						9.6,
+						47.36,
+						15.36,
+						51.2,
+						35.84,
+						18.56,
+						110.08,
+						-21.12,
+						112,
+						-81.28,
+						106.88
+					]
+				},
+				{
+					"shape": [
+						-21.12,
+						112,
+						18.56,
+						110.08,
+						12.16,
+						123.52,
+						-3.84,
+						131.84
+					]
+				},
+				{
+					"shape": [
+						48.64,
+						122.88,
+						74.88,
+						66.56,
+						80.64,
+						68.48,
+						80,
+						121.6
+					]
+				},
+				{
+					"shape": [
+						18.56,
+						110.08,
+						51.2,
+						35.84,
+						48,
+						110.08
+					]
+				},
+				{
+					"shape": [
+						12.16,
+						-131.84,
+						20.48,
+						-57.6,
+						-19.2,
+						-57.6,
+						-15.36,
+						-131.84
+					]
+				},
+				{
+					"shape": [
+						72.96,
+						33.92,
+						74.88,
+						66.56,
+						51.2,
+						35.84,
+						47.36,
+						15.36,
+						60.16,
+						17.92
+					]
+				},
+				{
+					"shape": [
+						51.2,
+						35.84,
+						74.88,
+						66.56,
+						48.64,
+						122.88
+					]
+				},
+				{
+					"shape": [
+						-19.2,
+						-57.6,
+						-51.84,
+						9.6,
+						-24.96,
+						-60.16
+					]
+				},
+				{
+					"shape": [
+						20.48,
+						-57.6,
+						47.36,
+						15.36,
+						-51.84,
+						9.6,
+						-19.2,
+						-57.6
+					]
+				},
+				{
+					"shape": [
+						47.36,
+						15.36,
+						20.48,
+						-57.6,
+						47.36,
+						-93.44
+					]
+				}
+			],
 			"icon": "game/Textures/UI/StructureIcons/FacilityMineResource2Icon.webp",
 			"texture": "game/Textures/Structures/stationary_harvester.webp",
 			"sockets": [
@@ -4667,6 +8964,152 @@ const foxholeData = {
 					"name": "Excavator",
 					"codeName": "Excavator",
 					"description": "Improves component excavation.",
+					"hitArea": [
+						{
+							"shape": [
+								-21.76,
+								-60.16,
+								-48.64,
+								5.12,
+								-48.64,
+								-98.56,
+								-16.64,
+								-98.56
+							]
+						},
+						{
+							"shape": [
+								51.2,
+								-98.56,
+								50.56,
+								-93.44,
+								23.68,
+								-57.6,
+								19.84,
+								-98.56
+							]
+						},
+						{
+							"shape": [
+								-82.56,
+								5.76,
+								-48.64,
+								5.12,
+								50.56,
+								15.36,
+								54.4,
+								35.84,
+								21.76,
+								110.08,
+								-17.92,
+								112,
+								-82.56,
+								110.72
+							]
+						},
+						{
+							"shape": [
+								-17.92,
+								112,
+								21.76,
+								110.08,
+								15.36,
+								123.52,
+								-0.64,
+								131.84
+							]
+						},
+						{
+							"shape": [
+								51.84,
+								122.88,
+								78.08,
+								66.56,
+								83.84,
+								68.48,
+								83.2,
+								121.6
+							]
+						},
+						{
+							"shape": [
+								21.76,
+								110.08,
+								54.4,
+								35.84,
+								51.2,
+								110.08
+							]
+						},
+						{
+							"shape": [
+								15.36,
+								-131.84,
+								23.68,
+								-57.6,
+								-16,
+								-57.6,
+								-12.16,
+								-131.84
+							]
+						},
+						{
+							"shape": [
+								76.16,
+								33.92,
+								78.08,
+								66.56,
+								54.4,
+								35.84,
+								50.56,
+								15.36,
+								63.36,
+								17.92
+							]
+						},
+						{
+							"shape": [
+								54.4,
+								35.84,
+								78.08,
+								66.56,
+								51.84,
+								122.88
+							]
+						},
+						{
+							"shape": [
+								-16,
+								-57.6,
+								-48.64,
+								5.12,
+								-21.76,
+								-60.16
+							]
+						},
+						{
+							"shape": [
+								23.68,
+								-57.6,
+								50.56,
+								15.36,
+								-48.64,
+								5.12,
+								-16,
+								-57.6
+							]
+						},
+						{
+							"shape": [
+								50.56,
+								15.36,
+								23.68,
+								-57.6,
+								50.56,
+								-93.44
+							]
+						}
+					],
 					"icon": "game/Textures/UI/StructureIcons/FacilityExcavatorIcon.webp",
 					"texture": "game/Textures/Structures/stationary_harvester_components_excavator.webp",
 					"positionOffset": {
@@ -4707,6 +9150,152 @@ const foxholeData = {
 			"codeName": "FacilityMineResource1",
 			"description": "A stationary harvester that automatically gathers Salvage. Requires Petrol. ",
 			"category": "harvesters",
+			"hitArea": [
+				{
+					"shape": [
+						-24.96,
+						-60.16,
+						-51.84,
+						9.6,
+						-51.84,
+						-98.56,
+						-19.84,
+						-98.56
+					]
+				},
+				{
+					"shape": [
+						48,
+						-98.56,
+						47.36,
+						-93.44,
+						20.48,
+						-57.6,
+						16.64,
+						-98.56
+					]
+				},
+				{
+					"shape": [
+						-81.28,
+						9.6,
+						-51.84,
+						9.6,
+						47.36,
+						15.36,
+						51.2,
+						35.84,
+						18.56,
+						110.08,
+						-21.12,
+						112,
+						-81.28,
+						106.88
+					]
+				},
+				{
+					"shape": [
+						-21.12,
+						112,
+						18.56,
+						110.08,
+						12.16,
+						123.52,
+						-3.84,
+						131.84
+					]
+				},
+				{
+					"shape": [
+						48.64,
+						122.88,
+						74.88,
+						66.56,
+						80.64,
+						68.48,
+						80,
+						121.6
+					]
+				},
+				{
+					"shape": [
+						18.56,
+						110.08,
+						51.2,
+						35.84,
+						48,
+						110.08
+					]
+				},
+				{
+					"shape": [
+						12.16,
+						-131.84,
+						20.48,
+						-57.6,
+						-19.2,
+						-57.6,
+						-15.36,
+						-131.84
+					]
+				},
+				{
+					"shape": [
+						72.96,
+						33.92,
+						74.88,
+						66.56,
+						51.2,
+						35.84,
+						47.36,
+						15.36,
+						60.16,
+						17.92
+					]
+				},
+				{
+					"shape": [
+						51.2,
+						35.84,
+						74.88,
+						66.56,
+						48.64,
+						122.88
+					]
+				},
+				{
+					"shape": [
+						-19.2,
+						-57.6,
+						-51.84,
+						9.6,
+						-24.96,
+						-60.16
+					]
+				},
+				{
+					"shape": [
+						20.48,
+						-57.6,
+						47.36,
+						15.36,
+						-51.84,
+						9.6,
+						-19.2,
+						-57.6
+					]
+				},
+				{
+					"shape": [
+						47.36,
+						15.36,
+						20.48,
+						-57.6,
+						47.36,
+						-93.44
+					]
+				}
+			],
 			"icon": "game/Textures/UI/StructureIcons/FacilityMineResource1Icon.webp",
 			"texture": "game/Textures/Structures/stationary_harvester.webp",
 			"sockets": [
@@ -4741,6 +9330,152 @@ const foxholeData = {
 			"codeName": "FacilityMineResource3",
 			"description": "A stationary harvester that automatically gathers Sulfur using Heavy Oil as fuel.",
 			"category": "harvesters",
+			"hitArea": [
+				{
+					"shape": [
+						-24.96,
+						-60.16,
+						-51.84,
+						9.6,
+						-51.84,
+						-98.56,
+						-19.84,
+						-98.56
+					]
+				},
+				{
+					"shape": [
+						48,
+						-98.56,
+						47.36,
+						-93.44,
+						20.48,
+						-57.6,
+						16.64,
+						-98.56
+					]
+				},
+				{
+					"shape": [
+						-81.28,
+						9.6,
+						-51.84,
+						9.6,
+						47.36,
+						15.36,
+						51.2,
+						35.84,
+						18.56,
+						110.08,
+						-21.12,
+						112,
+						-81.28,
+						106.88
+					]
+				},
+				{
+					"shape": [
+						-21.12,
+						112,
+						18.56,
+						110.08,
+						12.16,
+						123.52,
+						-3.84,
+						131.84
+					]
+				},
+				{
+					"shape": [
+						48.64,
+						122.88,
+						74.88,
+						66.56,
+						80.64,
+						68.48,
+						80,
+						121.6
+					]
+				},
+				{
+					"shape": [
+						18.56,
+						110.08,
+						51.2,
+						35.84,
+						48,
+						110.08
+					]
+				},
+				{
+					"shape": [
+						12.16,
+						-131.84,
+						20.48,
+						-57.6,
+						-19.2,
+						-57.6,
+						-15.36,
+						-131.84
+					]
+				},
+				{
+					"shape": [
+						72.96,
+						33.92,
+						74.88,
+						66.56,
+						51.2,
+						35.84,
+						47.36,
+						15.36,
+						60.16,
+						17.92
+					]
+				},
+				{
+					"shape": [
+						51.2,
+						35.84,
+						74.88,
+						66.56,
+						48.64,
+						122.88
+					]
+				},
+				{
+					"shape": [
+						-19.2,
+						-57.6,
+						-51.84,
+						9.6,
+						-24.96,
+						-60.16
+					]
+				},
+				{
+					"shape": [
+						20.48,
+						-57.6,
+						47.36,
+						15.36,
+						-51.84,
+						9.6,
+						-19.2,
+						-57.6
+					]
+				},
+				{
+					"shape": [
+						47.36,
+						15.36,
+						20.48,
+						-57.6,
+						47.36,
+						-93.44
+					]
+				}
+			],
 			"icon": "game/Textures/UI/StructureIcons/FacilityMineResource3Icon.webp",
 			"texture": "game/Textures/Structures/stationary_harvester.webp",
 			"sockets": [
@@ -4782,6 +9517,231 @@ const foxholeData = {
 			"cost": {
 				"metalbeammaterials": 3
 			}
+		},
+		"townbase3": {
+			"name": "Town Base",
+			"codeName": "TownBase3",
+			"category": "misc",
+			"hitArea": [
+				{
+					"shape": [
+						-188.8,
+						-207.36,
+						-247.68,
+						-203.52,
+						-248.96,
+						-247.04,
+						-245.12,
+						-259.2,
+						-188.16,
+						-258.56
+					]
+				},
+				{
+					"shape": [
+						202.24,
+						66.56,
+						263.04,
+						65.28,
+						261.12,
+						117.76,
+						201.6,
+						117.76
+					]
+				},
+				{
+					"shape": [
+						-296.32,
+						-202.88,
+						-309.12,
+						-112.64,
+						-304.64,
+						-215.68,
+						-296.96,
+						-216.32
+					]
+				},
+				{
+					"shape": [
+						-38.4,
+						128.64,
+						-302.08,
+						-35.2,
+						-316.8,
+						-110.08,
+						184.96,
+						64.64,
+						184.96,
+						128
+					]
+				},
+				{
+					"shape": [
+						202.24,
+						66.56,
+						302.08,
+						-35.2,
+						302.08,
+						64
+					]
+				},
+				{
+					"shape": [
+						-149.76,
+						225.28,
+						-113.92,
+						128,
+						-113.92,
+						225.28
+					]
+				},
+				{
+					"shape": [
+						302.72,
+						-112,
+						37.12,
+						-202.88,
+						300.8,
+						-206.72
+					]
+				},
+				{
+					"shape": [
+						-253.44,
+						259.84,
+						-273.92,
+						225.28,
+						-302.08,
+						128,
+						-302.08,
+						-35.2,
+						-113.92,
+						128,
+						-149.76,
+						225.28,
+						-167.68,
+						259.84
+					]
+				},
+				{
+					"shape": [
+						-302.08,
+						128,
+						-273.92,
+						225.28,
+						-301.44,
+						225.28
+					]
+				},
+				{
+					"shape": [
+						37.12,
+						-202.88,
+						-38.4,
+						-202.88,
+						-39.04,
+						-216.96,
+						35.84,
+						-219.52
+					]
+				},
+				{
+					"shape": [
+						302.08,
+						-35.2,
+						316.8,
+						-111.36,
+						318.08,
+						-37.12
+					]
+				},
+				{
+					"shape": [
+						202.24,
+						66.56,
+						184.96,
+						64.64,
+						-316.8,
+						-110.08,
+						-309.12,
+						-112.64,
+						302.72,
+						-112,
+						316.8,
+						-111.36,
+						302.08,
+						-35.2
+					]
+				},
+				{
+					"shape": [
+						-37.76,
+						142.72,
+						-38.4,
+						128.64,
+						37.12,
+						128.64,
+						37.12,
+						142.72
+					]
+				},
+				{
+					"shape": [
+						-316.8,
+						-110.08,
+						-302.08,
+						-35.2,
+						-314.88,
+						-34.56
+					]
+				},
+				{
+					"shape": [
+						-302.08,
+						-35.2,
+						-38.4,
+						128.64,
+						-113.92,
+						128
+					]
+				},
+				{
+					"shape": [
+						-247.68,
+						-203.52,
+						-309.12,
+						-112.64,
+						-296.32,
+						-202.88
+					]
+				},
+				{
+					"shape": [
+						-188.8,
+						-207.36,
+						-38.4,
+						-202.88,
+						302.72,
+						-112,
+						-309.12,
+						-112.64,
+						-247.68,
+						-203.52
+					]
+				},
+				{
+					"shape": [
+						302.72,
+						-112,
+						-38.4,
+						-202.88,
+						37.12,
+						-202.88
+					]
+				}
+			],
+			"icon": "game/Textures/UI/MapIcons/MapIconStaticBase3.webp",
+			"texture": "game/Textures/Structures/townbase3.webp",
 		},
 		"traincaboose": {
 			"name": "BMS Roadhouse",
@@ -5046,6 +10006,28 @@ const foxholeData = {
 			"codeName": "TrenchEmpT1",
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches. This variant can also serve as an emplacement for mannable defenses.",
 			"category": "defenses",
+			"hitArea": [
+				{
+					"shape": [
+						195.84,
+						-76.48,
+						194.56,
+						80.96,
+						82.56,
+						194.24,
+						-80.64,
+						196.16,
+						-195.84,
+						77.12,
+						-194.56,
+						-82.24,
+						-81.92,
+						-194.24,
+						81.92,
+						-195.52
+					]
+				}
+			],
 			"icon": "game/Textures/UI/StructureIcons/TrenchT1EmplacementIcon.webp",
 			"texture": "game/Textures/Structures/trenchempt1.webp",
 			"canSnap": true,
@@ -5177,6 +10159,206 @@ const foxholeData = {
 			"description": "Pumps water through pipes. Must be built on bodies of water.",
 			"category": "harvesters",
 			"color": 2591968,
+			"hitArea": [
+				{
+					"shape": [
+						48.32,
+						-31.04,
+						58.56,
+						3.52,
+						41.28,
+						-31.04,
+						41.28,
+						-38.08
+					]
+				},
+				{
+					"shape": [
+						-55.36,
+						-29.12,
+						-55.36,
+						67.52,
+						-59.2,
+						77.12,
+						-68.16,
+						74.56,
+						-68.8,
+						-34.24,
+						-58.56,
+						-38.72
+					]
+				},
+				{
+					"shape": [
+						-32.32,
+						70.08,
+						-32.32,
+						-31.04,
+						-25.92,
+						-31.04,
+						-26.56,
+						70.08,
+						-31.68,
+						76.48
+					]
+				},
+				{
+					"shape": [
+						41.28,
+						70.08,
+						48.32,
+						70.08,
+						48.32,
+						76.48
+					]
+				},
+				{
+					"shape": [
+						-26.56,
+						-31.04,
+						-32.32,
+						-31.04,
+						-32.32,
+						-38.08
+					]
+				},
+				{
+					"shape": [
+						61.76,
+						10.56,
+						58.56,
+						3.52,
+						70.72,
+						8.64
+					]
+				},
+				{
+					"shape": [
+						28.48,
+						-61.76,
+						22.72,
+						-32.96,
+						-10.56,
+						-31.04,
+						-12.48,
+						-64.32,
+						10.56,
+						-77.76
+					]
+				},
+				{
+					"shape": [
+						58.56,
+						3.52,
+						48.32,
+						-31.04,
+						58.56,
+						-31.04
+					]
+				},
+				{
+					"shape": [
+						-26.56,
+						70.08,
+						-25.92,
+						-31.04,
+						61.76,
+						28.48,
+						61.76,
+						29.76,
+						58.56,
+						70.08
+					]
+				},
+				{
+					"shape": [
+						61.76,
+						29.76,
+						61.76,
+						28.48,
+						70.72,
+						28.48
+					]
+				},
+				{
+					"shape": [
+						61.76,
+						28.48,
+						-25.92,
+						-31.04,
+						-10.56,
+						-31.04,
+						58.56,
+						3.52,
+						61.76,
+						10.56
+					]
+				},
+				{
+					"shape": [
+						-55.36,
+						-29.12,
+						-42.56,
+						-29.12,
+						-32.32,
+						70.08,
+						-55.36,
+						67.52
+					]
+				},
+				{
+					"shape": [
+						-32.32,
+						-31.04,
+						-32.32,
+						70.08,
+						-42.56,
+						-29.12
+					]
+				},
+				{
+					"shape": [
+						-26.56,
+						70.08,
+						-25.92,
+						70.08,
+						-25.92,
+						76.48
+					]
+				},
+				{
+					"shape": [
+						-25.92,
+						-31.04,
+						-26.56,
+						-31.04,
+						-26.56,
+						-38.08
+					]
+				},
+				{
+					"shape": [
+						48.32,
+						-31.04,
+						47.68,
+						-31.68,
+						47.68,
+						-38.08
+					]
+				},
+				{
+					"shape": [
+						58.56,
+						3.52,
+						-10.56,
+						-31.04,
+						22.72,
+						-32.96,
+						41.28,
+						-31.04
+					]
+				}
+			],
 			"icon": "game/Textures/UI/StructureIcons/FacilityMineWaterIcon.webp",
 			"texture": "game/Textures/Structures/water_pump.webp",
 			"cost": {
@@ -5198,6 +10380,184 @@ const foxholeData = {
 					"name": "Electric Water Pump",
 					"codeName": "Electric",
 					"description": "A generator that pumps water more efficiently. Requires Power.",
+					"hitArea": [
+						{
+							"shape": [
+								26.56,
+								-40,
+								19.52,
+								-40,
+								19.52,
+								-47.04
+							]
+						},
+						{
+							"shape": [
+								-77.12,
+								-38.08,
+								-77.12,
+								58.56,
+								-80.96,
+								68.16,
+								-89.92,
+								65.6,
+								-90.56,
+								-43.2,
+								-80.32,
+								-47.68
+							]
+						},
+						{
+							"shape": [
+								-48.32,
+								-40,
+								-54.08,
+								-40,
+								-54.08,
+								-47.04
+							]
+						},
+						{
+							"shape": [
+								6.72,
+								-70.72,
+								0.96,
+								-41.92,
+								-32.32,
+								-40,
+								-34.24,
+								-73.28,
+								-11.2,
+								-86.72
+							]
+						},
+						{
+							"shape": [
+								40,
+								25.92,
+								36.8,
+								-5.44,
+								90.56,
+								-3.52,
+								90.56,
+								26.56
+							]
+						},
+						{
+							"shape": [
+								18.88,
+								86.08,
+								-47.04,
+								86.08,
+								-59.84,
+								73.92,
+								-54.08,
+								63.68,
+								26.56,
+								61.12,
+								31.68,
+								73.92
+							]
+						},
+						{
+							"shape": [
+								-54.08,
+								63.68,
+								-59.84,
+								73.92,
+								-59.84,
+								63.68
+							]
+						},
+						{
+							"shape": [
+								36.8,
+								-5.44,
+								-54.08,
+								63.68,
+								-77.12,
+								58.56,
+								-64.32,
+								-38.08,
+								-32.32,
+								-40,
+								36.8,
+								-40
+							]
+						},
+						{
+							"shape": [
+								26.56,
+								61.12,
+								40,
+								25.92,
+								36.8,
+								61.12
+							]
+						},
+						{
+							"shape": [
+								-54.08,
+								63.68,
+								36.8,
+								-5.44,
+								40,
+								25.92,
+								26.56,
+								61.12
+							]
+						},
+						{
+							"shape": [
+								-64.32,
+								-38.08,
+								-77.12,
+								58.56,
+								-77.12,
+								-38.08
+							]
+						},
+						{
+							"shape": [
+								-47.68,
+								-40,
+								-48.32,
+								-40,
+								-48.32,
+								-47.04
+							]
+						},
+						{
+							"shape": [
+								26.56,
+								-40,
+								25.92,
+								-40.64,
+								25.92,
+								-47.04
+							]
+						},
+						{
+							"shape": [
+								-32.32,
+								-40,
+								-64.32,
+								-38.08,
+								-54.08,
+								-40
+							]
+						},
+						{
+							"shape": [
+								19.52,
+								-40,
+								-32.32,
+								-40,
+								0.96,
+								-41.92
+							]
+						}
+					],
 					"icon": "game/Textures/UI/StructureIcons/FacilityElectricWaterPumpIcon.webp",
 					"texture": "game/Textures/Structures/water_pump_electric_water.webp",
 					"positionOffset": {
