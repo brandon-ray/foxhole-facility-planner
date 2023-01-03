@@ -1846,8 +1846,19 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 entity.rangeSprite.visible = game.settings.showRanges;
                 if (building.range) {
                     if (isNaN(building.range)) {
-                        entity.rangeSprite.lineStyle((building.range.max - building.range.min) * METER_PIXEL_SIZE, COLOR_RANGE, 1);
-                        entity.rangeSprite.drawCircle(0, 0, ((building.range.min + building.range.max) / 2) * METER_PIXEL_SIZE);
+                        const rangeColor = building.range.type === 'killbox' ? COLOR_RED : COLOR_RANGE;
+                        if (!isNaN(building.range.arc)) {
+                            entity.rangeSprite.beginFill(rangeColor);
+                            entity.rangeSprite.lineStyle(1, rangeColor);
+                            entity.rangeSprite.moveTo(0, 0);
+                            const rangeArc = Math.deg2rad(building.range.arc);
+                            entity.rangeSprite.arc(0, 0, building.range.max * METER_PIXEL_SIZE, Math.PI/2 - rangeArc, Math.PI/2 + rangeArc);
+                            entity.rangeSprite.lineTo(0, 0);
+                            entity.rangeSprite.endFill();
+                        } else {
+                            entity.rangeSprite.lineStyle((building.range.max - building.range.min) * METER_PIXEL_SIZE, rangeColor, 1);
+                            entity.rangeSprite.drawCircle(0, 0, ((building.range.min + building.range.max) / 2) * METER_PIXEL_SIZE);
+                        }
                     } else {
                         entity.rangeSprite.beginFill(COLOR_RANGE);
                         entity.rangeSprite.drawCircle(0, 0, building.range * METER_PIXEL_SIZE);

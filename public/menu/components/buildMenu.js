@@ -595,7 +595,7 @@ Vue.component('app-menu-construction-list', {
                 <select class="app-input construction-category" @click="bmc()" title="Filter by Category" v-model="game.settings.defaultBuildingCategory" @change="refresh()">
                     <option value="all">All Buildings</option>
                     <template v-for="(category, key) in buildingCategories">
-                        <option v-if="game.settings.enableExperimental || key !== 'defenses' && key !== 'vehicles'" :value="key">{{category.name}}</option>
+                        <option v-if="game.settings.enableExperimental || key !== 'entrenchments'" :value="key">{{category.name}}</option>
                     </template>
                 </select>
             </div>
@@ -606,7 +606,7 @@ Vue.component('app-menu-construction-list', {
             </template>
             <template v-else>
                 <template v-for="(category, key) in buildingCategories">
-                    <template v-if="(game.settings.showCollapsibleBuildingList || key !== 'vehicles') && (game.settings.enableExperimental || (key !== 'defenses' && key !== 'vehicles'))">
+                    <template v-if="(game.settings.showCollapsibleBuildingList || key !== 'vehicles') && (game.settings.enableExperimental || key !== 'entrenchments')">
                         <div v-if="game.settings.showCollapsibleBuildingList" class="construction-item-category" @click="category.visible = !category.visible; refresh()">
                             <!--<i class="fa" :class="{'fa-minus': category.visible, 'fa-plus': !category.visible}" aria-hidden="true"></i>-->
                             {{category.name}}<i class="fa float-right" :class="{'fa-angle-down': category.visible, 'fa-angle-right': !category.visible}" style="margin-top: 2px;" aria-hidden="true"></i>
@@ -897,7 +897,7 @@ Vue.component('app-menu-settings', {
                 <select class="app-input" v-model="game.settings.defaultBuildingCategory" @change="game.updateSettings()">
                     <option value="all">All Buildings</option>
                     <template v-for="(category, key) in buildingCategories">
-                        <option v-if="game.settings.enableExperimental || key !== 'vehicles'" :value="key">{{category.name}}</option>
+                        <option v-if="game.settings.enableExperimental || key !== 'entrenchments'" :value="key">{{category.name}}</option>
                     </template>
                 </select>
             </label>

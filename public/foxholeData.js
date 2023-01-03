@@ -93,7 +93,7 @@ const foxholeData = {
 			"icon": "game/Textures/UI/ItemIcons/ATRifleTCIcon.webp"
 		},
 		"atrpgtw": {
-			"name": "Bonesaw MK.3",
+			"name": "Mounted Bonesaw MK.3",
 			"description": "This variant of the Bonesaw MK.3 is specially designed for use with tripod mounts. This affords it with increased stability and maximum potential range.",
 			"icon": "game/Textures/UI/ItemIcons/ATMortarWTripodItemIcon.webp"
 		},
@@ -246,13 +246,13 @@ const foxholeData = {
 			"isLiquid": true
 		},
 		"fieldatc": {
-			"name": "AA-2 Battering Ram",
-			"description": "The Battering Ram is a mobile Anti-Tank field gun firing 68mm armour-piercing rounds.",
+			"name": "AA-2 \"Battering Ram\"",
+			"description": "The \"Battering Ram\" is a mobile Anti-Tank field gun firing 68mm armour-piercing rounds.",
 			"icon": "game/Textures/UI/VehicleIcons/FieldAntiTankColVehicleIcon.webp"
 		},
 		"fieldatdamagew": {
 			"name": "Balfour Rampart 68mm",
-			"description": "The Rampart is a high-velocity, anti-armour field cannon capable of dealing devastating damage to all but the heaviest armoured vehicles while providing its crew with comprehensive ballistic shielding.",
+			"description": "The Rampart is a powerful field cannon capable of dealing devastating damage to all but the heaviest of armoured vehicles while providing its crew with comprehensive ballistic shielding.",
 			"icon": "game/Textures/UI/VehicleIcons/FieldCannonOffensiveWIcon.webp"
 		},
 		"fieldatlargec": {
@@ -266,8 +266,8 @@ const foxholeData = {
 			"icon": "game/Textures/UI/VehicleIcons/FieldAntiTankWarVehicleIcon.webp"
 		},
 		"fieldcannondamagec": {
-			"name": "68-45 “Smelter” Heavy Field Gun",
-			"description": "Armed with heavy anti-tank rounds, the Smelter is perfect for engaging enemy armour. The frontal blast shielding providers operators with ample cover in heated skirmishes.",
+			"name": "40-45 “Smelter”",
+			"description": "Armed with explosive 40mm rounds, the Smelter is perfect for engaging enemy armour. The frontal blast shielding provides operators with ample cover during heated skirmishes.",
 			"icon": "game/Textures/UI/VehicleIcons/FieldATOffensiveCIcon.webp"
 		},
 		"fieldcannonlargew": {
@@ -322,7 +322,7 @@ const foxholeData = {
 		},
 		"halftrackdefensivec": {
 			"name": "HH-b “Hoplite”",
-			"description": "With reinforced armour at the expense of speed, the Hoplite is a formidable force in the heat of combat.",
+			"description": "With reinforced armour at the expense of speed, the \"Hoplite\" is a formidable force in the heat of combat.",
 			"icon": "game/Textures/UI/VehicleIcons/HalfTrackColHeavyArmorVehicleIcon.webp"
 		},
 		"halftrackmultiw": {
@@ -367,12 +367,12 @@ const foxholeData = {
 		},
 		"landingcraftc": {
 			"name": "AB-8 “Acheron”",
-			"description": "The Acheron is an armoured amphibious vehicle designed for carrying troops across large bodies of water to aid in coordinated beach landings and flanking assaults. ",
+			"description": "The \"Acheron\" is an armoured amphibious vehicle designed for carrying troops across large bodies of water to aid in coordinated beach landings and flanking assaults. ",
 			"icon": "game/Textures/UI/VehicleIcons/LandingCraftVehicleIcon.webp"
 		},
 		"landingcraftoffensivec": {
 			"name": "AB-11 “Doru”",
-			"description": "With its mounted machinegun, the Doru is the perfect addition to any shoreline assault. ",
+			"description": "With its mounted machinegun, the \"Doru\" is the perfect addition to any shoreline assault. ",
 			"icon": "game/Textures/UI/VehicleIcons/LandingCraftOffensiveVehicleIcon.webp"
 		},
 		"lightartilleryammo": {
@@ -432,7 +432,7 @@ const foxholeData = {
 		},
 		"mediumtank2c": {
 			"name": "86K-a “Bardiche”",
-			"description": "Unlike the 85-series, the Bardiche sports a heavier, more durable build and is fitted with a coaxial heavy machinegun along with a powerful, short-barrelled 68mm turret. Modern Kraunian engineering allows for a fast reload, making it an ideal tool to combat enemy armour.",
+			"description": "Unlike the 85-series, the \"Bardiche\" sports a heavier, more durable build and is fitted with a coaxial heavy machinegun along with a powerful, short-barrelled 68mm turret. Modern Kraunian engineering allows for a fast reload, making it an ideal tool to combat enemy armour.",
 			"icon": "game/Textures/UI/VehicleIcons/MediumTank2CIcon.webp"
 		},
 		"mediumtank2indirectw": {
@@ -528,7 +528,7 @@ const foxholeData = {
 		},
 		"petrol": {
 			"name": "Petrol",
-			"description": "High end fuel that's refined from Crude Oil. Vehicles and resource mines that run on Petrol are more effective.",
+			"description": "A medium grade fuel that's refined from Oil. Used as a higher end fuel for vehicles and in various applications at Facilities.",
 			"icon": "game/Textures/UI/ItemIcons/RefinedFuelIcon.webp",
 			"isLiquid": true
 		},
@@ -1088,6 +1088,11 @@ const foxholeData = {
 					"shape": [ -57.92,-90.24,52.16,-90.24,105.28,-3.2,54.72,90.24,-50.88,92.16,-108.48,3.84 ]
 				}
 			],
+			"range": {
+				"type": "killbox",
+				"min": 3.5,
+				"max": 28.0
+			},
 			"icon": "game/Textures/UI/StructureIcons/ATPillboxIcon.webp",
 			"texture": "game/Textures/Structures/atpillbox.webp",
 			"techId": "unlockatpillbox",
@@ -1967,6 +1972,7 @@ const foxholeData = {
 			"description": "A temporary forward operating base. Players can spawn from here.",
 			"category": "misc",
 			"categoryOrder": 1,
+			"hideInList": true,
 			"icon": "game/Textures/UI/StructureIcons/EncampmentIcon.webp",
 			"texture": "game/Textures/Structures/forwardbase1.webp",
 			"cost": {
@@ -4267,6 +4273,11 @@ const foxholeData = {
 					"shape": [ -49.28,78.72,93.44,-7.04,51.2,76.8 ]
 				}
 			],
+			"range": {
+				"type": "killbox",
+				"arc": 45.0,
+				"max": 30.0
+			},
 			"icon": "game/Textures/UI/StructureIcons/MGPillboxIcon.webp",
 			"texture": "game/Textures/Structures/mgpillbox.webp",
 			"techId": "unlockmgpillbox",
@@ -5597,6 +5608,7 @@ const foxholeData = {
 			"codeName": "RelicBase1",
 			"category": "misc",
 			"categoryOrder": 5,
+			"hideInList": true,
 			"hitArea": [
 				{
 					"shape": [ -146.56,215.04,-103.68,249.6,-144.64,248.32 ]
@@ -5625,6 +5637,7 @@ const foxholeData = {
 			],
 			"icon": "game/Textures/UI/StructureIcons/RelicBase1Icon.webp",
 			"texture": "game/Textures/Structures/relicbase1.webp",
+			"cost": null
 		},
 		"resource_transfer_station": {
 			"name": "Resource Transfer Station",
@@ -5666,6 +5679,11 @@ const foxholeData = {
 					"shape": [ 45.44,-79.68,93.44,-5.44,44.16,79.04,-45.44,80.32,-94.08,6.08,-49.28,-77.76 ]
 				}
 			],
+			"range": {
+				"type": "killbox",
+				"min": 3.5,
+				"max": 25.0
+			},
 			"icon": "game/Textures/UI/StructureIcons/RiflePillboxIcon.webp",
 			"texture": "game/Textures/Structures/riflepillbox.webp",
 			"cost": {
@@ -5690,6 +5708,7 @@ const foxholeData = {
 			"codeName": "SmallTrainDump",
 			"description": "A small gauge container car for transporting raw materials. ",
 			"category": "vehicles",
+			"hideInList": true,
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeResourceCarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/smalltraindump.webp",
@@ -5720,6 +5739,7 @@ const foxholeData = {
 			"codeName": "SmallTrainEngine",
 			"description": "The Mineseeker is the Bassett Motor Society’s mechanized mule. This small 0-4-0 locomotive can haul tonnes of weight over short distances with little overhead. Ideal for a mining operation or short-range supply chains. ",
 			"category": "vehicles",
+			"hideInList": true,
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeEngineVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/smalltrainengine.webp",
@@ -5752,6 +5772,7 @@ const foxholeData = {
 			"codeName": "SmallTrainResourcePlatform",
 			"description": "A low profile flatbed car for transporting large resources and munitions over short distances on small gauge tracks.",
 			"category": "vehicles",
+			"hideInList": true,
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeFlatbedCarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/smalltrainresourceplatform.webp",
@@ -6180,6 +6201,7 @@ const foxholeData = {
 			"codeName": "TownBase3",
 			"category": "misc",
 			"categoryOrder": 6,
+			"hideInList": true,
 			"hitArea": [
 				{
 					"shape": [ -188.8,-207.36,-247.68,-203.52,-248.96,-247.04,-245.12,-259.2,-188.16,-258.56 ]
@@ -6238,12 +6260,14 @@ const foxholeData = {
 			],
 			"icon": "game/Textures/UI/StructureIcons/TownBase3Icon.webp",
 			"texture": "game/Textures/Structures/townbase3.webp",
+			"cost": null
 		},
 		"traincaboose": {
 			"name": "BMS Roadhouse",
 			"codeName": "TrainCaboose",
 			"description": "A simple caboose that allows rail crews to maintain tracks more efficiently.",
 			"category": "vehicles",
+			"hideInList": true,
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/TrainCabooseItemIcon.webp",
 			"texture": "game/Textures/Vehicles/traincaboose.webp",
@@ -6275,6 +6299,7 @@ const foxholeData = {
 			"codeName": "TrainCoal",
 			"description": "A container car for transporting coal to refuel trains over long-distance trips. ",
 			"category": "vehicles",
+			"hideInList": true,
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/TrainCoalCarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/traincoal.webp",
@@ -6307,6 +6332,7 @@ const foxholeData = {
 			"description": "Known across the colonies as King of the Rails, this heavily armoured train car is designed to protect and exert dominance over contested rail lines, especially when transporting supplies into contested territory as well as safely transporting infantry. This armoured beast boasts a forward facing cannon, as well as heavy lateral guns.",
 			"category": "vehicles",
 			"faction": "c",
+			"hideInList": true,
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/CombatCarCVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/traincombatcarc.webp",
@@ -6339,6 +6365,7 @@ const foxholeData = {
 			"description": "In his later years, O’Brien nearly died in an attack on a military passenger train while travelling to Whedon’s Row. In response, he put his team to work designing not only an infantry car that offered powerful protection to any locomotive, but one that just the sight of it would run off all but the most committed of attackers—Namely its thick armour plating and powerful twin turrets. ",
 			"category": "vehicles",
 			"faction": "w",
+			"hideInList": true,
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/CombatCarWVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/traincombatcarw.webp",
@@ -6370,6 +6397,7 @@ const foxholeData = {
 			"codeName": "TrainEngine",
 			"description": "One of the most storied mass-market 0-6-2 locomotives engineered by the Bassett Motor Society, this coal-powered industrial train engine is reliable, tested, and incredibly durable. The Black Bolt’s legacy is unmatched having aided the Bassett Motor Society in supplying countries across the globe.",
 			"category": "vehicles",
+			"hideInList": true,
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/TrainEngineVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/trainengine.webp",
@@ -6403,6 +6431,7 @@ const foxholeData = {
 			"codeName": "TrainFlatbed",
 			"description": "A flatbed car for transporting large resources and munitions by train over long-distances. ",
 			"category": "vehicles",
+			"hideInList": true,
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/TrainCarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/trainflatbed.webp",
@@ -6434,6 +6463,7 @@ const foxholeData = {
 			"codeName": "TrainInfantry",
 			"description": "An armoured train car with a mounted machinegun position for transporting infantry safely over long distances.",
 			"category": "vehicles",
+			"hideInList": true,
 			"sortOffset": 120000,
 			"icon": "game/Textures/UI/VehicleIcons/InfantryCarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/traininfantry.webp",
