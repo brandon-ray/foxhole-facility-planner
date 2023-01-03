@@ -720,6 +720,7 @@ const foxholeData = {
 			"codeName": "FacilityFactoryAmmo",
 			"description": "A factory for producing advanced ammo types such as large calibre shells, rockets, and flame ammo.",
 			"category": "factories",
+			"categoryOrder": 10,
 			"hitArea": [
 				{
 					"shape": [
@@ -1361,6 +1362,7 @@ const foxholeData = {
 			"codeName": "ATPillbox",
 			"description": "This heavily reinforced pillbox allows the garrisoned infantry with anti-tank rifles to fire on approaching enemy armour from a safe position.",
 			"category": "defenses",
+			"categoryOrder": 8,
 			"hitArea": [
 				{
 					"shape": [
@@ -1391,6 +1393,7 @@ const foxholeData = {
 			"codeName": "BarbedWireSpline",
 			"description": "Used to slow down enemy infantry movement. Can be dismantled with a Wrench.",
 			"category": "defenses",
+			"categoryOrder": 1,
 			"hasHandle": true,
 			"isBezier": true,
 			"minLength": 3,
@@ -1422,7 +1425,8 @@ const foxholeData = {
 			"name": "BMS Foreman Stacker",
 			"codeName": "FacilityCrane",
 			"description": "The Foreman is an all-purpose, no-frills, easy to assemble crane. Perfect for hauling heavy loads in facilities where loading and offloading is commonplace.",
-			"category": "misc",
+			"category": "factories",
+			"categoryOrder": 100,
 			"color": 1052688,
 			"width": 3.74,
 			"length": 3.74,
@@ -1461,7 +1465,8 @@ const foxholeData = {
 			"name": "BMS Overseer Sky-Hauler",
 			"codeName": "LargeCrane",
 			"description": "The star of the BMS arsenal of military-grade construction equipment, the Overseer Sky-Hauler makes several tonnes look like a feather, and enjoys a high level of mobility while deployed along heavy-duty rail lines.",
-			"category": "misc",
+			"category": "factories",
+			"categoryOrder": 105,
 			"width": 6.86,
 			"length": 11.52,
 			"range": {
@@ -1484,7 +1489,8 @@ const foxholeData = {
 			"name": "Catwalk Bridge",
 			"codeName": "FacilityCatwalkBridge",
 			"description": "A raised walkway for creating paths above complex Facilities.",
-			"category": "misc",
+			"category": "factories",
+			"categoryOrder": 95,
 			"sortOffset": 500000,
 			"hasHandle": true,
 			"hasOutline": false,
@@ -1516,7 +1522,8 @@ const foxholeData = {
 			"name": "Catwalk Platform",
 			"codeName": "FacilityCatwalkPlatform",
 			"description": "A raised walkway for creating paths above complex Facilities.",
-			"category": "misc",
+			"category": "factories",
+			"categoryOrder": 90,
 			"sortOffset": 500000,
 			"icon": "game/Textures/UI/ItemIcons/FacilityCatwalkRampConnectorIcon.webp",
 			"texture": "game/Textures/Structures/catwalk_platform.webp",
@@ -1560,7 +1567,8 @@ const foxholeData = {
 			"name": "Catwalk Stairs",
 			"codeName": "FacilityCatwalkStairs",
 			"description": "Stairs that connect to raised Catwalks, which create paths above complex Facilities.",
-			"category": "misc",
+			"category": "factories",
+			"categoryOrder": 85,
 			"sortOffset": 500000,
 			"icon": "game/Textures/UI/ItemIcons/FacilityCatwalkRampIcon.webp",
 			"texture": "game/Textures/Structures/catwalk_stairs.webp",
@@ -1584,6 +1592,7 @@ const foxholeData = {
 			"codeName": "FacilityRefineryCoal",
 			"description": "A processing plant that refines Coal into useful materials used in facility production and power.",
 			"category": "factories",
+			"categoryOrder": 30,
 			"color": 4210752,
 			"hitArea": [
 				{
@@ -2162,6 +2171,7 @@ const foxholeData = {
 			"codeName": "Construction",
 			"description": "A specialized vehicle designed by the Basset Motor Society used in the construction of large structures.",
 			"category": "vehicles",
+			"categoryOrder": 3,
 			"hitArea": [
 				{
 					"shape": [
@@ -2271,6 +2281,7 @@ const foxholeData = {
 			"codeName": "Crane",
 			"description": "The Basset Motor Society’s Class 2 Mobile Auto-Crane is used to lift and reposition vehicles and very heavy equipment.",
 			"category": "vehicles",
+			"categoryOrder": 4,
 			"range": {
 				"min": null,
 				"max": null
@@ -2392,6 +2403,7 @@ const foxholeData = {
 			"codeName": "FacilityPowerDiesel",
 			"description": "A structure that generates power by burning Diesel.",
 			"category": "power",
+			"categoryOrder": 3,
 			"hitArea": [
 				{
 					"shape": [
@@ -2843,6 +2855,7 @@ const foxholeData = {
 			"codeName": "FacilityModificationCenter",
 			"description": "A garage that facilitates vehicle modifications and upgrades.",
 			"category": "factories",
+			"categoryOrder": 25,
 			"color": 8184298,
 			"hitArea": [
 				{
@@ -2915,7 +2928,8 @@ const foxholeData = {
 			"name": "Bunker Corner (Tier 1)",
 			"codeName": "FortCornerT1",
 			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
-			"category": "defenses",
+			"category": "entrenchments",
+			"categoryOrder": 4,
 			"hitArea": [
 				{
 					"shape": [
@@ -2964,7 +2978,8 @@ const foxholeData = {
 			"name": "Bunker (Tier 1)",
 			"codeName": "FortT1",
 			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
-			"category": "defenses",
+			"category": "entrenchments",
+			"categoryOrder": 3,
 			"icon": "game/Textures/UI/StructureIcons/FortT1Icon.webp",
 			"texture": "game/Textures/Structures/fortt1.webp",
 			"canSnap": true,
@@ -3004,7 +3019,8 @@ const foxholeData = {
 			"name": "Encampment",
 			"codeName": "ForwardBase1",
 			"description": "A temporary forward operating base. Players can spawn from here.",
-			"category": "defenses",
+			"category": "misc",
+			"categoryOrder": 1,
 			"icon": "game/Textures/UI/StructureIcons/EncampmentIcon.webp",
 			"texture": "game/Textures/Structures/forwardbase1.webp",
 			"cost": {
@@ -3016,6 +3032,7 @@ const foxholeData = {
 			"codeName": "Foundation01T1",
 			"description": "A foundation that provides a suitable surface for constructing Facilities.",
 			"category": "foundations",
+			"categoryOrder": 2,
 			"sortOffset": -1000,
 			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation01Icon.webp",
 			"texture": "game/Textures/Structures/foundation_1x1.webp",
@@ -3077,6 +3094,7 @@ const foxholeData = {
 			"codeName": "Foundation011x2T1",
 			"description": "A foundation that provides a suitable surface for constructing Facilities.",
 			"category": "foundations",
+			"categoryOrder": 1,
 			"sortOffset": -1000,
 			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation03Icon.webp",
 			"texture": "game/Textures/Structures/foundation_1x2.webp",
@@ -3241,6 +3259,7 @@ const foxholeData = {
 			"codeName": "Foundation02T1",
 			"description": "A foundation that provides a suitable surface for constructing Facilities.",
 			"category": "foundations",
+			"categoryOrder": 3,
 			"width": 5.28,
 			"length": 5.28,
 			"sortOffset": -1000,
@@ -3310,6 +3329,7 @@ const foxholeData = {
 			"codeName": "FuelContainer",
 			"description": "A container for storing high volumes of fuel. Nearby structures and vehicles can refuel directly from this container. ",
 			"category": "misc",
+			"categoryOrder": 4,
 			"sortOffset": 150000,
 			"icon": "game/Textures/UI/StructureIcons/FuelTankIcon.webp",
 			"texture": "game/Textures/Structures/fuel_container.webp",
@@ -3323,7 +3343,42 @@ const foxholeData = {
 			"codeName": "FacilitySiloOil",
 			"description": "An industrial silo for storing various types of Fuel.",
 			"category": "factories",
+			"categoryOrder": 80,
 			"color": 1052688,
+			"hitArea": [
+				{
+					"shape": [
+						21.45626953125,
+						-24.7972900390625,
+						30.72,
+						-1.28,
+						-21.12,
+						24.32,
+						-30.72,
+						0,
+						-20.957288208007814,
+						-24.7972900390625,
+						-10.24,
+						-42.24,
+						10.88,
+						-42.24
+					]
+				},
+				{
+					"shape": [
+						-21.12,
+						24.32,
+						30.72,
+						-1.28,
+						21.76,
+						24.96,
+						10.88,
+						41.6,
+						-10.24,
+						41.6
+					]
+				}
+			],
 			"icon": "game/Textures/UI/StructureIcons/OilSiloIcon.webp",
 			"texture": "game/Textures/Structures/fuel_silo.webp",
 			"textureIcon": {
@@ -3360,6 +3415,7 @@ const foxholeData = {
 			"codeName": "GateT1",
 			"description": "A gate that provides access to a walled off area.",
 			"category": "defenses",
+			"categoryOrder": 4,
 			"icon": "game/Textures/UI/StructureIcons/Gate-T1Icon.webp",
 			"texture": "game/Textures/Structures/gatet1.webp",
 			"canSnap": true,
@@ -3413,6 +3469,7 @@ const foxholeData = {
 			"codeName": "FacilityVehicleFactory2",
 			"description": "A large Assembly Station for production of advanced vehicles and equipment, such as tanks and trains. Construction will take time and may be halted if resources are depleted.",
 			"category": "factories",
+			"categoryOrder": 20,
 			"color": 8184298,
 			"icon": "game/Textures/UI/ItemIcons/LargeAssemblyStationIcon.webp",
 			"texture": "game/Textures/Structures/large_assembly_factory.webp",
@@ -3656,6 +3713,7 @@ const foxholeData = {
 			"codeName": "FacilityVehicleFactory1",
 			"description": "A standard Assembly Station for production of essential vehicles and equipment. Construction will take time and may be halted if resources are depleted. Some projects require a base vehicle to be present on the Assembly Station before production can begin.",
 			"category": "factories",
+			"categoryOrder": 15,
 			"color": 8184298,
 			"icon": "game/Textures/UI/ItemIcons/AssemblyStationIcon.webp",
 			"texture": "game/Textures/Structures/light_vehicle_assembly_station.webp",
@@ -4435,6 +4493,7 @@ const foxholeData = {
 			"codeName": "FacilityResourceTransfer3",
 			"description": "Metal drums for storing various fuels that can be transferred into and out of Facilities. Stockpiles may be public or reserved.",
 			"category": "factories",
+			"categoryOrder": 55,
 			"color": 8186514,
 			"icon": "game/Textures/UI/ItemIcons/MaterialTransferStationLiquidIcon.webp",
 			"texture": "game/Textures/Structures/liquid_transfer_station.webp",
@@ -4467,7 +4526,8 @@ const foxholeData = {
 			"name": "Maintenance Tunnel",
 			"codeName": "FacilitySupplyStation",
 			"description": "A supply tunnel that provides Garrison Supplies to nearby Facilities and Railway Tracks. Garrison Supplies may also be produced on-site using Construction Materials. The rate of consumption is 2 Garrison Supplies per-hour per-structure once decay begins. Some structures have additional consumption requirements.",
-			"category": "misc",
+			"category": "factories",
+			"categoryOrder": 40,
 			"color": 1052688,
 			"range": 40,
 			"overlapDist": 65,
@@ -4612,6 +4672,7 @@ const foxholeData = {
 			"codeName": "FacilityResourceTransfer2",
 			"description": "A space marked for storing refined materials that can be transferred into and out of Facilities. Stockpiles may be public or reserved.",
 			"category": "factories",
+			"categoryOrder": 50,
 			"color": 8186514,
 			"icon": "game/Textures/UI/ItemIcons/FacilityResourceTransfer3Icon.webp",
 			"texture": "game/Textures/Structures/material_transfer_station.webp",
@@ -5289,6 +5350,7 @@ const foxholeData = {
 			"codeName": "FacilityRefinery2",
 			"description": "A factory for refining raw resources into Processed Construction Materials. Additional modifications can allow for additional refined materials needed for advanced facility operations.",
 			"category": "factories",
+			"categoryOrder": 5,
 			"hitArea": [
 				{
 					"shape": [
@@ -6163,6 +6225,7 @@ const foxholeData = {
 			"codeName": "MGPillbox",
 			"description": "A well-fortified bunker position fitted with a mounted machinegun. Garrisoned infantry will lay down heavy suppressive fire upon approaching enemies from a fixed angle.",
 			"category": "defenses",
+			"categoryOrder": 7,
 			"hitArea": [
 				{
 					"shape": [
@@ -6201,6 +6264,7 @@ const foxholeData = {
 			"codeName": "FacilityRefineryOil",
 			"description": "A refinery that processes Oil into other useful materials for the purposes of production and power generation.",
 			"category": "factories",
+			"categoryOrder": 35,
 			"color": 2368548,
 			"hitArea": [
 				{
@@ -6805,6 +6869,7 @@ const foxholeData = {
 			"codeName": "FacilityMineOil",
 			"description": "Extracts fuel from Crude Oil Fields. Must be constructed nearby.",
 			"category": "harvesters",
+			"categoryOrder": 1,
 			"color": 2368548,
 			"icon": "game/Textures/UI/StructureIcons/OilWellMineIcon.webp",
 			"texture": "game/Textures/Structures/oil_well.webp",
@@ -7131,9 +7196,11 @@ const foxholeData = {
 			"codeName": "FacilityPipe",
 			"description": "Industrial piping that allows for automatic transport of various liquids and fuels into a network of pipes that connect to various facility structures.",
 			"category": "factories",
+			"categoryOrder": 60,
 			"sortOffset": -500,
 			"hasHandle": true,
 			"isBezier": true,
+			"lineWidth": 10,
 			"minLength": 3,
 			"maxLength": 20,
 			"icon": "game/Textures/UI/StructureIcons/PipelineSegmentIcon.webp",
@@ -7190,8 +7257,10 @@ const foxholeData = {
 			"codeName": "FacilityPipeOverhead",
 			"description": "Industrial piping that allows for automatic transport of various liquids and fuels. These specialized pipes can be built overhead to connect to pipe networks across areas with high traffic.",
 			"category": "factories",
+			"categoryOrder": 70,
 			"sortOffset": 1400000,
 			"hasHandle": true,
+			"lineWidth": 10,
 			"minLength": 8,
 			"maxLength": 20,
 			"icon": "game/Textures/UI/ItemIcons/OverheadPowelineIcon.webp",
@@ -7236,9 +7305,11 @@ const foxholeData = {
 			"codeName": "FacilityPipeUnderground",
 			"description": "Industrial piping that allows for automatic transport of various liquids and fuels. These specialized pipes can be built underground to connect to pipe networks across areas with high traffic.",
 			"category": "factories",
+			"categoryOrder": 65,
 			"sortOffset": -500,
 			"hasHandle": true,
 			"isBezier": true,
+			"lineWidth": 10,
 			"minLength": 5,
 			"maxLength": 20,
 			"icon": "game/Textures/UI/StructureIcons/PipeIntersectionIcon.webp",
@@ -7286,6 +7357,7 @@ const foxholeData = {
 			"codeName": "FacilityPipeValve",
 			"description": "A weighted valve that controls the rate of flow through a pipeline. Requires a Wrench.",
 			"category": "factories",
+			"categoryOrder": 75,
 			"sortOffset": 1000,
 			"icon": "game/Textures/UI/ItemIcons/FacilityPipeValveIcon.webp",
 			"texture": "game/Textures/Structures/pipeline_valve.webp",
@@ -7315,6 +7387,7 @@ const foxholeData = {
 			"name": "Player (Colonial)",
 			"description": "The Colonials are described as a faction of ingenuity and practicality. They are sometimes referred to as \"The Colonial Legion\" or \"Little Green Men\".",
 			"category": "misc",
+			"categoryOrder": 7,
 			"faction": "c",
 			"sortOffset": 150000,
 			"icon": "game/Textures/UI/ItemIcons/Uniforms/SoldierUniformCIcon.webp",
@@ -7324,6 +7397,7 @@ const foxholeData = {
 			"name": "Player (Warden)",
 			"description": "The Wardens are described to be a nation of honor and tradition. They are the native inhabitants of the region where the game takes place.",
 			"category": "misc",
+			"categoryOrder": 8,
 			"faction": "w",
 			"sortOffset": 150000,
 			"icon": "game/Textures/UI/ItemIcons/Uniforms/SoldierUniformWIcon.webp",
@@ -7334,6 +7408,7 @@ const foxholeData = {
 			"codeName": "PowerBox",
 			"description": "A power interface for manually disabling power in a circuit.",
 			"category": "power",
+			"categoryOrder": 1,
 			"icon": "game/Textures/UI/StructureIcons/FacilityPowerBoxIcon.webp",
 			"texture": "game/Textures/Structures/power_box.webp",
 			"sockets": [
@@ -7355,6 +7430,7 @@ const foxholeData = {
 			"codeName": "PowerLine",
 			"description": "Conducts power between two Power Poles.",
 			"category": "power",
+			"categoryOrder": 2,
 			"color": 0,
 			"sortOffset": 1500000,
 			"hasHandle": true,
@@ -7446,6 +7522,7 @@ const foxholeData = {
 			"codeName": "FacilityPowerOil",
 			"description": "A power plant that generates a large amount of electricity using Oil or Coal.",
 			"category": "power",
+			"categoryOrder": 4,
 			"hitArea": [
 				{
 					"shape": [
@@ -8475,6 +8552,7 @@ const foxholeData = {
 			"codeName": "FacilityRoad",
 			"description": "A temporary road used to enable vehicle access between main roads and remote bases.",
 			"category": "foundations",
+			"categoryOrder": 6,
 			"hasHandle": true,
 			"isBezier": true,
 			"minLength": 9.01,
@@ -8510,6 +8588,7 @@ const foxholeData = {
 			"codeName": "CraneRailTrackSpline",
 			"description": "A segment of railway for heavy cranes. This type of railway can only be built on Foundations.",
 			"category": "foundations",
+			"categoryOrder": 11,
 			"hasHandle": true,
 			"minLength": 5,
 			"maxLength": 30,
@@ -8540,6 +8619,7 @@ const foxholeData = {
 			"codeName": "RailTrackSplineBiarc",
 			"description": "A segment of railway for train cars. Tracks can attach to or fork from existing railways to form complex networks.",
 			"category": "foundations",
+			"categoryOrder": 10,
 			"sortOffset": 100000,
 			"hasHandle": true,
 			"isBezier": true,
@@ -8575,6 +8655,7 @@ const foxholeData = {
 			"codeName": "SmallRailTrackSplineBiarc",
 			"description": "A segment of railway for small gauge train cars. Tracks can attach to or fork from existing railways to form complex networks.",
 			"category": "foundations",
+			"categoryOrder": 8,
 			"sortOffset": 100000,
 			"hasHandle": true,
 			"isBezier": true,
@@ -8609,6 +8690,7 @@ const foxholeData = {
 			"name": "Relic Base",
 			"codeName": "RelicBase1",
 			"category": "misc",
+			"categoryOrder": 5,
 			"hitArea": [
 				{
 					"shape": [
@@ -8723,6 +8805,7 @@ const foxholeData = {
 			"codeName": "FacilityResourceTransfer1",
 			"description": "An open container marked for storing raw resources that can be transferred into and out of Facilities. Stockpiles may be public or reserved.",
 			"category": "factories",
+			"categoryOrder": 45,
 			"color": 8186514,
 			"icon": "game/Textures/UI/ItemIcons/MaterialTransferStationIcon.webp",
 			"texture": "game/Textures/Structures/resource_transfer_station.webp",
@@ -8738,6 +8821,7 @@ const foxholeData = {
 			"codeName": "ResourceContainer",
 			"description": "A container that can carry large quantities of resources and can be transported by certain vehicles.",
 			"category": "misc",
+			"categoryOrder": 2,
 			"sortOffset": 150000,
 			"icon": "game/Textures/UI/StructureIcons/ResourceContainerIcon.webp",
 			"texture": "game/Textures/Structures/resourcecontainer.webp",
@@ -8750,6 +8834,7 @@ const foxholeData = {
 			"codeName": "RiflePillbox",
 			"description": "A reinforced dugout that gives the garrisoned rifle infantry a fortified defensive position to fire on approaching enemies from relative safety.",
 			"category": "defenses",
+			"categoryOrder": 6,
 			"hitArea": [
 				{
 					"shape": [
@@ -8779,6 +8864,7 @@ const foxholeData = {
 			"codeName": "ShippingContainer",
 			"description": "A container for shipping very large quantities of Crates using Crane loaded vehicles. This type of container can only be unloaded at Storage Depots and Seaports.",
 			"category": "misc",
+			"categoryOrder": 3,
 			"sortOffset": 150000,
 			"icon": "game/Textures/UI/StructureIcons/ShippingContainerStructureIcon.webp",
 			"texture": "game/Textures/Structures/shippingcontainer.webp",
@@ -8897,6 +8983,7 @@ const foxholeData = {
 			"codeName": "FacilityMineResource4",
 			"description": "A stationary harvester that automatically gathers Coal. Requires Petrol. ",
 			"category": "harvesters",
+			"categoryOrder": 4,
 			"hitArea": [
 				{
 					"shape": [
@@ -9078,6 +9165,7 @@ const foxholeData = {
 			"codeName": "FacilityMineResource2",
 			"description": "A stationary harvester that automatically gathers Components. Requires Petrol.",
 			"category": "harvesters",
+			"categoryOrder": 3,
 			"hitArea": [
 				{
 					"shape": [
@@ -9443,6 +9531,7 @@ const foxholeData = {
 			"codeName": "FacilityMineResource1",
 			"description": "A stationary harvester that automatically gathers Salvage. Requires Petrol. ",
 			"category": "harvesters",
+			"categoryOrder": 2,
 			"hitArea": [
 				{
 					"shape": [
@@ -9623,6 +9712,7 @@ const foxholeData = {
 			"codeName": "FacilityMineResource3",
 			"description": "A stationary harvester that automatically gathers Sulfur using Heavy Oil as fuel.",
 			"category": "harvesters",
+			"categoryOrder": 5,
 			"hitArea": [
 				{
 					"shape": [
@@ -9804,6 +9894,7 @@ const foxholeData = {
 			"codeName": "TankStop",
 			"description": "An anti-tank obstacle that prevents vehicle access to an area. Can be dismantled with a Wrench.",
 			"category": "defenses",
+			"categoryOrder": 9,
 			"icon": "game/Textures/UI/StructureIcons/TankStopIcon.webp",
 			"texture": "game/Textures/Structures/tankstop.webp",
 			"techId": "unlocktankstop",
@@ -9815,6 +9906,7 @@ const foxholeData = {
 			"name": "Town Base",
 			"codeName": "TownBase3",
 			"category": "misc",
+			"categoryOrder": 6,
 			"hitArea": [
 				{
 					"shape": [
@@ -10298,7 +10390,8 @@ const foxholeData = {
 			"name": "Trench Emplacement (Tier 1)",
 			"codeName": "TrenchEmpT1",
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches. This variant can also serve as an emplacement for mannable defenses.",
-			"category": "defenses",
+			"category": "entrenchments",
+			"categoryOrder": 5,
 			"hitArea": [
 				{
 					"shape": [
@@ -10407,6 +10500,7 @@ const foxholeData = {
 			"codeName": "WallSplineT1",
 			"description": "A basic barrier that is used to prevent passage through an area.",
 			"category": "defenses",
+			"categoryOrder": 3,
 			"sortOffset": 1400000,
 			"hasHandle": true,
 			"minLength": 3,
@@ -10472,6 +10566,7 @@ const foxholeData = {
 			"codeName": "WatchTower",
 			"description": "Reports nearby enemy movements to players with Radios equipped",
 			"category": "defenses",
+			"categoryOrder": 5,
 			"icon": "game/Textures/UI/StructureIcons/WatchTowerStructureIcon.webp",
 			"texture": "game/Textures/Structures/watchtower.webp",
 			"cost": {

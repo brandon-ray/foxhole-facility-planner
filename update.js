@@ -87,6 +87,7 @@ function iterateBaseStructures(uProperty, baseData) {
                     baseData.name = structure.DisplayName?.SourceString ?? baseData.name;
                     baseData.description = structure.Description?.SourceString ?? baseData.description;
                     baseData.BuildCategory = structure.BuildCategory ?? baseData.BuildCategory;
+                    baseData.BuildOrder = structure.BuildOrder ?? baseData.BuildOrder;
                     baseData.minLength = structure.ConnectorMinLength ? structure.ConnectorMinLength / METER_UNREAL_UNITS : undefined ?? baseData.minLength;
                     baseData.maxLength = structure.ConnectorMaxLength ? structure.ConnectorMaxLength / METER_UNREAL_UNITS : undefined ?? baseData.maxLength;
                     baseData.icon = getLocalIcon(structure) ?? baseData.icon;
@@ -210,6 +211,7 @@ function iterateStructures(dirPath) {
                                     'codeName': structure.CodeName,
                                     'description': structure.Description?.SourceString ?? baseData.description,
                                     'category': structureData.category,
+                                    'categoryOrder': structureData.categoryOrder ?? structure.BuildOrder ?? baseData.BuildOrder,
                                     'faction': structureData.faction,
                                     'color': structureData.color,
                                     'hideInList': structureData.hideInList,

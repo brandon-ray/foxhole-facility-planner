@@ -10,32 +10,37 @@ const buildingCategories = {
         order: 1,
         buildings: []
     },
+    entrenchments: {
+        name: 'Entrenchments',
+        order: 2,
+        buildings: []
+    },
     factories: {
         name: 'Factories',
-        order: 2,
+        order: 3,
         color: 0x8566bd, // Indigo / Purple
         buildings: []
     },
     harvesters: {
         name: 'Harvesters',
-        order: 3,
+        order: 4,
         color: 0x289665, // Forest Green
         buildings: []
     },
     power: {
         name: 'Power',
-        order: 4,
+        order: 5,
         color: 0xf2ec7a, // Yellow
         buildings: []
     },
     vehicles: {
         name: 'Vehicles',
-        order: 5,
+        order: 6,
         buildings: []
     },
     misc: {
         name: 'Miscellaneous',
-        order: 6,
+        order: 7,
         color: 0x7ce1ea, // Blue
         buildings: []
     }
@@ -88,6 +93,14 @@ const buildingCategories = {
                     buildingCategories[upgradeBuilding.category].buildings.push(upgradeBuilding);
                 }
             }
+        }
+    }
+
+    for (const [category, data] of Object.entries(buildingCategories)) {
+        if (data.buildings.length) {
+            buildingCategories[category].buildings.sort((a, b) => {
+                return a.categoryOrder > (b.categoryOrder ?? 0);
+            });
         }
     }
 
