@@ -111,7 +111,7 @@ Vue.component('app-game-sidebar', {
         </div>
         <div id="hover-building-info" v-if="hoverData">
             <div class="building-info-name">
-                <img v-bind:src="'/assets/' + hoverData.icon" />
+                <img v-bind:src="'/assets/' + (hoverData.icon ?? 'default_icon.webp')" />
                 <h4>{{hoverData.parentName ? hoverData.parentName : hoverData.name}}</h4>
             </div>
             <div v-if="hoverData.parentName" class="building-info-upgrade">
@@ -578,15 +578,27 @@ Vue.component('app-menu-construction-list', {
         setConstructionMode: function(mode) {
             this.bmc();
             game.setConstructionMode(mode);
+        },
+        toggleConstructionLayer: function(layer) {
+            this.bmc();
+            game.toggleConstructionLayer(layer);
         }
     },
     template: html`
     <div id="construction-page">
-        <div v-if="game.settings.enableExperimental" class="construction-modes-wrapper row">
-            <button v-for="mode in game.constructionModes" class="construction-mode-button col" :class="[{ 'mode-selected': game.constructionMode.key === mode.key }, mode.key + '-mode-button']" :title="mode.title" @mouseenter="bme()" @click="setConstructionMode(mode)">
-                <i v-if="mode.icon" :class="'fa ' + mode.icon" aria-hidden="true"></i>
-                <span v-else-if="mode.text">{{mode.text}}</span>
-            </button>
+        <div class="construction-modes-wrapper">
+            <div class="construction-mode-switcher row">
+                <button v-for="mode in game.constructionModes" class="construction-mode-button col" :class="[{ 'mode-selected': game.constructionMode.key === mode.key }, mode.key + '-mode-button']" :title="mode.title" @mouseenter="bme()" @click="setConstructionMode(mode)">
+                    <i v-if="mode.icon" :class="'fa ' + mode.icon" aria-hidden="true"></i>
+                    <span v-else-if="mode.text">{{mode.text}}</span>
+                </button>
+            </div>
+            <div v-if="game.constructionMode.key === 'select'" class="construction-layer-switcher row">
+                <div v-for="layer in game.constructionLayers" class="col" :class="{ 'layer-active': game.constructionLayer?.key === layer.key }" :style="{backgroundImage: 'url(/assets/game/Textures/UI/StructureIcons/' + layer.icon + ')'}" :title="layer.title" @mouseenter="bme()" @click="toggleConstructionLayer(layer)"></div>
+            </div>
+            <div v-else class="row">
+                <!-- TO-DO -->
+            </div>
         </div>
         <div class="construction-filter-wrapper">
             <button class="construction-settings-button" @click="game.sidebarMenuComponent?.changeMenu('settings')" title="Filter Settings"><i class="fa fa-sliders" aria-hidden="true"></i></button>
@@ -600,7 +612,7 @@ Vue.component('app-menu-construction-list', {
                 </select>
             </div>
         </div>
-        <div class="menu-page" :class="{ 'modes-disabled': !game.settings.enableExperimental }">
+        <div class="menu-page">
             <template v-if="game.settings.defaultBuildingCategory !== 'all'">
                 <app-game-building-list-icon v-for="building in buildingCategories[game.settings.defaultBuildingCategory].buildings" :building="building"/>
             </template>
@@ -635,11 +647,11 @@ Vue.component('app-game-building-list-icon', {
         }
     },
     template: html`
-    <div v-if="!building.hideInList &&
+    <div v-if="(!building.hideInList || game.settings.enableExperimental) &&
         (!building.parent || game.settings.showUpgradesAsBuildings) &&
         (!building.techId || (game.settings.selectedTier === 2 && building.techId === 'unlockfacilitytier2') || game.settings.selectedTier === 3) &&
         (!game.settings.selectedFaction || (!building.faction || building.faction === game.settings.selectedFaction))"
-        class="build-icon" :title="building.name" :style="{backgroundImage:'url(/assets/' + (building.parent?.icon ?? building.icon) + ')'}"
+        class="build-icon" :title="building.name" :style="{backgroundImage:'url(/assets/' + (building.parent?.icon ?? building.icon ?? 'default_icon.webp') + ')'}"
         @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" @click="buildBuilding(building)">
     </div>
     `

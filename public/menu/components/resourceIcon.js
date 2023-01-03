@@ -23,7 +23,7 @@ Vue.component('app-game-resource-icon', {
             }
             this.resourceData = resourceData;
             this.style = {
-                backgroundImage: 'url(/assets/' + resourceData.icon + ')'
+                backgroundImage: 'url(/assets/' + (resourceData.icon ?? 'default_icon.webp') + ')'
             };
         }
     },
@@ -54,7 +54,7 @@ Vue.component('app-game-recipe', {
             <span v-for="(amount, resourceId) in recipe.output">{{objectData.resources[resourceId].name}}</span><span v-if="building.power > 0">Power</span>
         </div>
         <div class="production-recipe">
-            <div v-if="!recipe.input" class="resource-icon building-icon"><img v-bind:src="'/assets/' + building.icon" /></div>
+            <div v-if="!recipe.input" class="resource-icon building-icon"><img v-bind:src="'/assets/' + (building.icon ?? 'default_icon.webp')" /></div>
             <app-game-resource-icon class="produced-resource-input" v-for="(value, key) in recipe.input" :resource="key" :amount="value" :column="true" />
             <div class="production-pointer">
                 <i class="fa fa-play"></i>

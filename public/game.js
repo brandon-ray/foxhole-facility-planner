@@ -175,6 +175,34 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
     ];
 
+    game.constructionLayers = [
+        {
+            key: 'foundations',
+            title: 'Edit Foundations',
+            icon: 'ConcreteFoundation04Icon.webp'
+        },
+        {
+            key: 'defenses',
+            title: 'Edit Defenses',
+            icon: 'FortT1Icon.webp'
+        },
+        {
+            key: 'rails',
+            title: 'Edit Rails',
+            icon: 'BiarcRailTrackIcon.webp'
+        },
+        {
+            key: 'pipes',
+            title: 'Edit Pipes',
+            icon: 'PipelineSegmentIcon.webp'
+        },
+        {
+            key: 'power',
+            title: 'Edit Power',
+            icon: 'PowelineIcon.webp'
+        }
+    ];
+
     game.getEntities = () => {
         return entities;
     };
@@ -264,6 +292,22 @@ const fontFamily = ['Recursive', 'sans-serif'];
         return game.setConstructionMode(null);
     }
     game.resetConstructionMode();
+
+    game.toggleConstructionLayer = function(layer) {
+        if (selectedEntities.length) {
+            game.deselectEntities();
+        }
+        game.constructionLayer = game.constructionLayer !== layer ? layer : null;
+        for (let i = 0; i < entities.length; i++) {
+            const entity = entities[i];
+            entity.alpha = (!game.constructionLayer || entity.building?.layer === layer.key) ? 1 : 0.25;
+        }
+        game.constructionMenuComponent?.refresh();
+    }
+
+    game.resetConstructionLayer = function() {
+        return game.toggleConstructionLayer(null);
+    }
 
     let timeScale = 1;
 
@@ -478,6 +522,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     }
                     break;
                 case 27: // Escape
+                    game.resetConstructionLayer();
                     game.resetConstructionMode();
                     if (!selectionArea?.visible) {
                         game.deselectEntities();
@@ -1247,17 +1292,19 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
             let selectedChange = false;
             entities.forEach(entity => {
-                const centerPos = game.getEntitiesCenter(entity);
-                if (centerPos.x > selectionArea.x && centerPos.x < selectionArea.x + selectionArea.width) {
-                    if (centerPos.y > selectionArea.y && centerPos.y < selectionArea.y + selectionArea.height) {
-                        if (game.addSelectedEntity(entity, true)) {
-                            selectedChange = true;
+                if (!game.constructionLayer || entity.building?.layer === game.constructionLayer.key) {
+                    const centerPos = game.getEntitiesCenter(entity);
+                    if (centerPos.x > selectionArea.x && centerPos.x < selectionArea.x + selectionArea.width) {
+                        if (centerPos.y > selectionArea.y && centerPos.y < selectionArea.y + selectionArea.height) {
+                            if (game.addSelectedEntity(entity, true)) {
+                                selectedChange = true;
+                            }
+                            return;
                         }
-                        return;
                     }
-                }
-                if (game.removeSelectedEntity(entity, true)) {
-                    selectedChange = true;
+                    if (game.removeSelectedEntity(entity, true)) {
+                        selectedChange = true;
+                    }
                 }
             });
             if (selectedChange) {
@@ -1734,6 +1781,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             entity.building = building;
         }
 
+        //entity.alpha = (!game.constructionLayer || entity.building?.layer === layer.key) ? 1 : 0.25;
         entity.selected = false;
         entity.selectable = true;
         entity.hasHandle = (type === 'shape' || entity.building?.hasHandle) ?? false;
@@ -1845,23 +1893,21 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 entity.rangeSprite.alpha = 0.25;
                 entity.rangeSprite.visible = game.settings.showRanges;
                 if (building.range) {
-                    if (isNaN(building.range)) {
-                        const rangeColor = building.range.type === 'killbox' ? COLOR_RED : COLOR_RANGE;
-                        if (!isNaN(building.range.arc)) {
-                            entity.rangeSprite.beginFill(rangeColor);
-                            entity.rangeSprite.lineStyle(1, rangeColor);
-                            entity.rangeSprite.moveTo(0, 0);
-                            const rangeArc = Math.deg2rad(building.range.arc);
-                            entity.rangeSprite.arc(0, 0, building.range.max * METER_PIXEL_SIZE, Math.PI/2 - rangeArc, Math.PI/2 + rangeArc);
-                            entity.rangeSprite.lineTo(0, 0);
-                            entity.rangeSprite.endFill();
-                        } else {
-                            entity.rangeSprite.lineStyle((building.range.max - building.range.min) * METER_PIXEL_SIZE, rangeColor, 1);
-                            entity.rangeSprite.drawCircle(0, 0, ((building.range.min + building.range.max) / 2) * METER_PIXEL_SIZE);
-                        }
+                    const rangeColor = building.range.type === 'killbox' ? COLOR_RED : COLOR_RANGE;
+                    if (!isNaN(building.range.arc)) {
+                        entity.rangeSprite.beginFill(rangeColor);
+                        entity.rangeSprite.lineStyle(1, rangeColor);
+                        entity.rangeSprite.moveTo(0, 0);
+                        const rangeArc = Math.deg2rad(building.range.arc);
+                        entity.rangeSprite.arc(0, 0, building.range.max * METER_PIXEL_SIZE, Math.PI/2 - rangeArc, Math.PI/2 + rangeArc);
+                        entity.rangeSprite.lineTo(0, 0);
+                        entity.rangeSprite.endFill();
+                    } else if (!isNaN(building.range.min)) {
+                        entity.rangeSprite.lineStyle((building.range.max - building.range.min) * METER_PIXEL_SIZE, rangeColor, 1);
+                        entity.rangeSprite.drawCircle(0, 0, ((building.range.min + building.range.max) / 2) * METER_PIXEL_SIZE);
                     } else {
-                        entity.rangeSprite.beginFill(COLOR_RANGE);
-                        entity.rangeSprite.drawCircle(0, 0, building.range * METER_PIXEL_SIZE);
+                        entity.rangeSprite.beginFill(rangeColor);
+                        entity.rangeSprite.drawCircle(0, 0, building.range.max * METER_PIXEL_SIZE);
                         entity.rangeSprite.endFill();
                     }
                 }
@@ -2791,51 +2837,53 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
         let boundsBuffer = 15;
         entity.canGrab = function() {
-            if (entity.type === 'shape' && entity.subtype === 'circle') {
-                if (Math.distanceBetween(entity, { x: gmx, y: gmy }) < ((entity.sprite.width/2) + (boundsBuffer/2))) {
-                    return true;
-                }
-            } else {
-                let bounds = entity.getBounds(true);
-                let boundsAdjustedPos = app.cstage.toLocal({x: bounds.x, y: bounds.y}, app.stage, undefined, true);
-                bounds.x = boundsAdjustedPos.x - boundsBuffer;
-                bounds.y = boundsAdjustedPos.y - boundsBuffer;
-                bounds.width = bounds.width/game.camera.zoom;
-                bounds.height = bounds.height/game.camera.zoom;
-                bounds.bufferWidth = bounds.width + (boundsBuffer * 2);
-                bounds.bufferHeight = bounds.height + (boundsBuffer * 2);
-
-                if (gmx >= bounds.x && gmx <= bounds.x + bounds.bufferWidth && gmy >= bounds.y && gmy <= bounds.y + bounds.bufferHeight) {
-                    // TODO: Add padding around sprite so that it's easier to select.
-                    // Will need to check for entity.building?.isBezier and entity.bezier when that happens.
-                    if (entity.bezier) {
-                        let mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
-                        let projection = entity.bezier.project(mousePos);
-                        if (projection.d <= (entity.building?.lineWidth ?? 25)) {
-                            return true;
-                        }
-                    } else {
-                        if (entity.building?.hitArea) {
-                            const mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
-                            return entity.sprite?.hitArea.contains(mousePos.x, mousePos.y);
-                        }
-
-                        // https://stackoverflow.com/a/67732811 <3
-                        let w = entity.selectionArea.width / 2;
-                        let h = entity.selectionArea.height / 2;
-                        const r = entity.rotation;
-
-                        const [ax, ay] = [Math.cos(r), Math.sin(r)];
-                        const t = (x, y) => ({x: x * ax - y * ay + entity.x, y: x * ay + y * ax + entity.y});
-                        let bBounds;
-                        if (entity.hasHandle) {
-                            w = entity.sprite.width;
-                            h = entity.subtype === 'rectangle' ? entity.sprite.height : entity.sprite.height / 2;
-                            bBounds = [t(w, h), t(0, h), t(0, entity.subtype !== 'rectangle' ? -h : 0), t(w, entity.subtype !== 'rectangle' ? -h : 0)];
+            if (!game.constructionLayer || entity.building?.layer === game.constructionLayer.key) {
+                if (entity.type === 'shape' && entity.subtype === 'circle') {
+                    if (Math.distanceBetween(entity, { x: gmx, y: gmy }) < ((entity.sprite.width/2) + (boundsBuffer/2))) {
+                        return true;
+                    }
+                } else {
+                    let bounds = entity.getBounds(true);
+                    let boundsAdjustedPos = app.cstage.toLocal({x: bounds.x, y: bounds.y}, app.stage, undefined, true);
+                    bounds.x = boundsAdjustedPos.x - boundsBuffer;
+                    bounds.y = boundsAdjustedPos.y - boundsBuffer;
+                    bounds.width = bounds.width/game.camera.zoom;
+                    bounds.height = bounds.height/game.camera.zoom;
+                    bounds.bufferWidth = bounds.width + (boundsBuffer * 2);
+                    bounds.bufferHeight = bounds.height + (boundsBuffer * 2);
+    
+                    if (gmx >= bounds.x && gmx <= bounds.x + bounds.bufferWidth && gmy >= bounds.y && gmy <= bounds.y + bounds.bufferHeight) {
+                        // TODO: Add padding around sprite so that it's easier to select.
+                        // Will need to check for entity.building?.isBezier and entity.bezier when that happens.
+                        if (entity.bezier) {
+                            let mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
+                            let projection = entity.bezier.project(mousePos);
+                            if (projection.d <= (entity.building?.lineWidth ?? 25)) {
+                                return true;
+                            }
                         } else {
-                            bBounds = [t(w, h), t(-w, h), t(-w, -h), t(w, -h)];
+                            if (entity.building?.hitArea) {
+                                const mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
+                                return entity.sprite?.hitArea.contains(mousePos.x, mousePos.y);
+                            }
+    
+                            // https://stackoverflow.com/a/67732811 <3
+                            let w = entity.selectionArea.width / 2;
+                            let h = entity.selectionArea.height / 2;
+                            const r = entity.rotation;
+    
+                            const [ax, ay] = [Math.cos(r), Math.sin(r)];
+                            const t = (x, y) => ({x: x * ax - y * ay + entity.x, y: x * ay + y * ax + entity.y});
+                            let bBounds;
+                            if (entity.hasHandle) {
+                                w = entity.sprite.width;
+                                h = entity.subtype === 'rectangle' ? entity.sprite.height : entity.sprite.height / 2;
+                                bBounds = [t(w, h), t(0, h), t(0, entity.subtype !== 'rectangle' ? -h : 0), t(w, entity.subtype !== 'rectangle' ? -h : 0)];
+                            } else {
+                                bBounds = [t(w, h), t(-w, h), t(-w, -h), t(w, -h)];
+                            }
+                            return Math.isPointWithinBounds({ x: gmx, y: gmy }, bBounds);
                         }
-                        return Math.isPointWithinBounds({ x: gmx, y: gmy }, bBounds);
                     }
                 }
             }
@@ -3328,6 +3376,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
     game.create = function(type, subtype, x, y, z) {
         game.updateConstructionMode(type, subtype);
         let entity = createSelectableEntity(type, subtype, x ?? 0, y ?? 0, z ?? 0);
+        if (game.constructionLayer && entity.building?.layer !== game.constructionLayer.key) {
+            game.resetConstructionLayer();
+        }
         game.selectEntity(entity);
         game.setPickupEntities(true, true);
         if (entity.hasHandle) {

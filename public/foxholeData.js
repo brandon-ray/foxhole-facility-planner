@@ -1083,16 +1083,16 @@ const foxholeData = {
 			"description": "This heavily reinforced pillbox allows the garrisoned infantry with anti-tank rifles to fire on approaching enemy armour from a safe position.",
 			"category": "defenses",
 			"categoryOrder": 8,
+			"range": {
+				"type": "killbox",
+				"min": 3.5,
+				"max": 28
+			},
 			"hitArea": [
 				{
 					"shape": [ -57.92,-90.24,52.16,-90.24,105.28,-3.2,54.72,90.24,-50.88,92.16,-108.48,3.84 ]
 				}
 			],
-			"range": {
-				"type": "killbox",
-				"min": 3.5,
-				"max": 28.0
-			},
 			"icon": "game/Textures/UI/StructureIcons/ATPillboxIcon.webp",
 			"texture": "game/Textures/Structures/atpillbox.webp",
 			"techId": "unlockatpillbox",
@@ -1106,6 +1106,7 @@ const foxholeData = {
 			"description": "Used to slow down enemy infantry movement. Can be dismantled with a Wrench.",
 			"category": "defenses",
 			"categoryOrder": 1,
+			"hideInList": true,
 			"hasHandle": true,
 			"isBezier": true,
 			"minLength": 3,
@@ -1133,6 +1134,21 @@ const foxholeData = {
 				"barbedwirematerials": 3
 			}
 		},
+		"barbedwirewallspline": {
+			"name": "Barbed Wire Fence",
+			"codeName": "BarbedWireWallSpline",
+			"description": "Used to prevent enemy infantry movement through an area. This structure is difficult to destroy with conventional weapons and must be dismantled with a Wrench.",
+			"category": "defenses",
+			"categoryOrder": 2,
+			"hideInList": true,
+			"minLength": 4,
+			"maxLength": 10,
+			"icon": "game/Textures/UI/ItemIcons/BarbedWireFenceStructureIcon.webp",
+			"texture": "game/Textures/Structures/barbedwirewallspline.webp",
+			"cost": {
+				"barbedwirematerials": 3
+			}
+		},
 		"bms_foreman_stacker": {
 			"name": "BMS Foreman Stacker",
 			"codeName": "FacilityCrane",
@@ -1143,10 +1159,10 @@ const foxholeData = {
 			"width": 3.74,
 			"length": 3.74,
 			"range": {
+				"type": "crane",
 				"min": 4.5,
 				"max": 22.5
 			},
-			"rangeColor": 3003829,
 			"sortOffset": 2000000,
 			"icon": "game/Textures/UI/FacilityCraneIcon.webp",
 			"texture": "game/Textures/Structures/bms_foreman_stacker.webp",
@@ -1182,6 +1198,7 @@ const foxholeData = {
 			"width": 6.86,
 			"length": 11.52,
 			"range": {
+				"type": "crane",
 				"min": 13.75,
 				"max": 33.75
 			},
@@ -1623,6 +1640,7 @@ const foxholeData = {
 			"category": "vehicles",
 			"categoryOrder": 4,
 			"range": {
+				"type": "crane",
 				"min": null,
 				"max": null
 			},
@@ -1923,7 +1941,29 @@ const foxholeData = {
 					"y": 304,
 					"rotation": 270
 				}
-			]
+			],
+			"upgrades": {
+				"fortcornert2": {
+					"name": "Bunker Corner (Tier 2)",
+					"codeName": "FortCornerT2",
+					"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
+					"icon": "game/Textures/UI/StructureIcons/FortT2CornerIcon.webp",
+					"texture": "game/Textures/Structures/fortt2_corner.webp",
+					"cost": {
+						"cloth": 75
+					}
+				},
+				"fortcornert3": {
+					"name": "Bunker Corner (Tier 3)",
+					"codeName": "FortCornerT3",
+					"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
+					"icon": "game/Textures/UI/StructureIcons/FortT3CornerIcon.webp",
+					"texture": "game/Textures/Structures/fortt3_corner.webp",
+					"cost": {
+						"concrete": 30
+					}
+				}
+			}
 		},
 		"fortt1": {
 			"name": "Bunker (Tier 1)",
@@ -1964,7 +2004,285 @@ const foxholeData = {
 					"y": 304,
 					"rotation": 270
 				}
-			]
+			],
+			"upgrades": {
+				"fortt2": {
+					"name": "Bunker (Tier 2)",
+					"codeName": "FortT2",
+					"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
+					"icon": "game/Textures/UI/StructureIcons/FortT2Icon.webp",
+					"texture": "game/Textures/Structures/fortt2.webp",
+					"cost": {
+						"cloth": 75
+					}
+				},
+				"fortbaset1": {
+					"name": "Bunker Base",
+					"codeName": "FortBaseT1",
+					"description": "A large forward operating base. Players can spawn and stockpile items here.",
+					"icon": "game/Textures/UI/StructureIcons/FortT1BaseIcon.webp",
+					"texture": "game/Textures/Structures/fortt1_base.webp",
+					"cost": {
+						"cloth": 300
+					}
+				},
+				"fortcornert2": {
+					"name": "Bunker Corner (Tier 2)",
+					"codeName": "FortCornerT2",
+					"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
+					"icon": "game/Textures/UI/StructureIcons/FortT2CornerIcon.webp",
+					"texture": "game/Textures/Structures/fortt2_corner.webp",
+					"cost": {
+						"cloth": 75
+					}
+				},
+				"mgait1": {
+					"name": "Machine Gun Garrison (Tier 1)",
+					"codeName": "MGAIT1",
+					"description": "An entrenched machine gun manned by stationed troops.",
+					"icon": "game/Textures/UI/StructureIcons/FortT1MGunAIIcon.webp",
+					"texture": "game/Textures/Structures/fortt1_mgai.webp",
+					"cost": {
+						"cloth": 75
+					}
+				},
+				"fortrampt1": {
+					"name": "Bunker Ramp (Tier 1)",
+					"codeName": "FortRampT1",
+					"description": "A ramp that enables access to underground Bunkers.",
+					"icon": "game/Textures/UI/StructureIcons/FortT1RampIcon.webp",
+					"texture": "game/Textures/Structures/fortt1_ramp.webp",
+					"cost": {
+						"cloth": 50
+					}
+				},
+				"rifleait1": {
+					"name": "Rifle Garrison (Tier 1)",
+					"codeName": "RifleAIT1",
+					"description": "An entrenched bunker manned by stationed troops armed with Rifles.",
+					"icon": "game/Textures/UI/StructureIcons/FortT1GunAIIcon.webp",
+					"texture": "game/Textures/Structures/fortt1_rifleai.webp",
+					"cost": {
+						"cloth": 50
+					}
+				}
+			}
+		},
+		"fortt2": {
+			"name": "Bunker (Tier 2)",
+			"codeName": "FortT2",
+			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
+			"category": "entrenchments",
+			"hideInList": true,
+			"icon": "game/Textures/UI/StructureIcons/FortT2Icon.webp",
+			"texture": "game/Textures/Structures/fortt2.webp",
+			"cost": {
+				"cloth": 75
+			},
+			"upgrades": {
+				"fortt3": {
+					"name": "Bunker (Tier 3)",
+					"codeName": "FortT3",
+					"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
+					"icon": "game/Textures/UI/StructureIcons/FortT3Icon.webp",
+					"texture": "game/Textures/Structures/fortt3.webp",
+					"cost": {
+						"concrete": 30
+					}
+				},
+				"atgunait2": {
+					"name": "AT Gun Garrison (Tier 2)",
+					"codeName": "ATGunAIT2",
+					"description": "An entrenched AT gun manned by stationed troops.",
+					"icon": "game/Textures/UI/StructureIcons/FortT2ATGunAIIcon.webp",
+					"texture": "game/Textures/Structures/fortt2_atgunai.webp",
+					"cost": {
+						"cloth": 150
+					}
+				},
+				"fortcornert3": {
+					"name": "Bunker Corner (Tier 3)",
+					"codeName": "FortCornerT3",
+					"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
+					"icon": "game/Textures/UI/StructureIcons/FortT3CornerIcon.webp",
+					"texture": "game/Textures/Structures/fortt3_corner.webp",
+					"cost": {
+						"concrete": 30
+					}
+				},
+				"engineroomt2": {
+					"name": "Engine Room (Tier 2)",
+					"codeName": "EngineRoomT2",
+					"description": "A engineering facility that provides power to Bunker structures using pipe connections.",
+					"icon": "game/Textures/UI/StructureIcons/EngineRoomIcon.webp",
+					"texture": "game/Textures/Structures/fortt2_engineroom.webp",
+					"cost": {
+						"cloth": 150
+					}
+				},
+				"mgait2": {
+					"name": "Machine Gun Garrison (Tier 2)",
+					"codeName": "MGAIT2",
+					"description": "An entrenched machine gun manned by stationed troops.",
+					"icon": "game/Textures/UI/StructureIcons/FortT2MGunAIIcon.webp",
+					"texture": "game/Textures/Structures/fortt2_mgai.webp",
+					"cost": {
+						"cloth": 100
+					}
+				},
+				"observationbunkert2": {
+					"name": "Observation Bunker (Tier 2)",
+					"codeName": "ObservationBunkerT2",
+					"description": "A radio bunker that provides intel to friendly units about the surrounding area. Reinforced with wood, it can withstand more punishment than a standard radio tower, and therefore is capable of increased effectiveness.",
+					"range": {
+						"type": "radio",
+						"max": 130
+					},
+					"icon": "game/Textures/UI/StructureIcons/ObservationBunkerT2ItemIcon.webp",
+					"texture": "game/Textures/Structures/fortt2_observationbunker.webp",
+					"cost": {
+						"cloth": 125
+					}
+				},
+				"fortrampt2": {
+					"name": "Bunker Ramp (Tier 2)",
+					"codeName": "FortRampT2",
+					"description": "A ramp that enables access to underground Bunkers.",
+					"icon": "game/Textures/UI/StructureIcons/FortT2RampIcon.webp",
+					"texture": "game/Textures/Structures/fortt2_ramp.webp",
+					"cost": {
+						"cloth": 50
+					}
+				},
+				"rifleait2": {
+					"name": "Rifle Garrison (Tier 2)",
+					"codeName": "RifleAIT2",
+					"description": "An entrenched bunker manned by stationed troops armed with Rifles.",
+					"icon": "game/Textures/UI/StructureIcons/FortT2GunAIIcon.webp",
+					"texture": "game/Textures/Structures/fortt2_rifleai.webp",
+					"cost": {
+						"cloth": 75
+					}
+				}
+			}
+		},
+		"fortt3": {
+			"name": "Bunker (Tier 3)",
+			"codeName": "FortT3",
+			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
+			"category": "entrenchments",
+			"hideInList": true,
+			"icon": "game/Textures/UI/StructureIcons/FortT3Icon.webp",
+			"texture": "game/Textures/Structures/fortt3.webp",
+			"cost": {
+				"concrete": 30
+			},
+			"upgrades": {
+				"intelcenter": {
+					"name": "Intelligence Center",
+					"codeName": "IntelCenter",
+					"description": "A high-tech listening post designed to intercept and decode enemy transmissions. The intelligence Center can target distant locations and will continue to decipher sensitive transmissions over a sustained period.",
+					"icon": "game/Textures/UI/StructureIcons/IntelligenceCenterIcon.webp",
+					"texture": "game/Textures/Structures/fortt3_intelcenter.webp",
+					"cost": {
+						"concrete": 250
+					}
+				},
+				"lrartillery": {
+					"name": "Storm Cannon",
+					"codeName": "LRArtillery",
+					"description": "A heavy fixed position artillery that can release devastating firepower on distant enemy targets.",
+					"icon": "game/Textures/UI/StructureIcons/LongRangedArtilleryIcon.webp",
+					"texture": "game/Textures/Structures/fortt3_lrartillery.webp",
+					"cost": {
+						"concrete": 400
+					}
+				},
+				"ammoroomt3": {
+					"name": "Storage Room",
+					"codeName": "AmmoRoomT3",
+					"description": "A facility that stores equipment and ammunition for artillery. Retrieval is very quick for this structure.. ",
+					"icon": "game/Textures/UI/StructureIcons/AmmoRoomIcon.webp",
+					"texture": "game/Textures/Structures/fortt3_ammoroom.webp",
+					"cost": {
+						"concrete": 10
+					}
+				},
+				"artilleryait3": {
+					"name": "Howitzer Garrison",
+					"codeName": "ArtilleryAIT3",
+					"description": "An entrenched Howitzer manned by stationed troops.",
+					"icon": "game/Textures/UI/StructureIcons/FortT3HowitzerAIIcon.webp",
+					"texture": "game/Textures/Structures/fortt3_artilleryai.webp",
+					"cost": {
+						"concrete": 40
+					}
+				},
+				"atgunait3": {
+					"name": "AT Gun Garrison (Tier 3)",
+					"codeName": "ATGunAIT3",
+					"description": "An entrenched AT gun manned by stationed troops.",
+					"icon": "game/Textures/UI/StructureIcons/FortT3ATGunAIIcon.webp",
+					"texture": "game/Textures/Structures/fortt3_atgunai.webp",
+					"cost": {
+						"concrete": 40
+					}
+				},
+				"engineroomt3": {
+					"name": "Engine Room (Tier 3)",
+					"codeName": "EngineRoomT3",
+					"description": "A engineering facility that provides power to Bunker structures using pipe connections.",
+					"icon": "game/Textures/UI/StructureIcons/EngineRoomIcon.webp",
+					"texture": "game/Textures/Structures/fortt3_engineroom.webp",
+					"cost": {
+						"concrete": 50
+					}
+				},
+				"mgait3": {
+					"name": "Machine Gun Garrison (Tier 3)",
+					"codeName": "MGAIT3",
+					"description": "An entrenched machine gun manned by stationed troops.",
+					"icon": "game/Textures/UI/StructureIcons/FortT3MGunAIIcon.webp",
+					"texture": "game/Textures/Structures/fortt3_mgai.webp",
+					"cost": {
+						"concrete": 30
+					}
+				},
+				"observationbunkert3": {
+					"name": "Observation Bunker (Tier 3)",
+					"codeName": "ObservationBunkerT3",
+					"description": "A radio bunker that provides intel to friendly units about the surrounding area. Built from solid concrete, this reliable structure can push its effective range beyond lesser fortified radio structures.",
+					"range": {
+						"type": "radio",
+						"max": 180
+					},
+					"icon": "game/Textures/UI/StructureIcons/ObservationBunkerT3ItemIcon.webp",
+					"texture": "game/Textures/Structures/fortt3_observationbunker.webp",
+					"cost": {
+						"concrete": 20
+					}
+				},
+				"fortrampt3": {
+					"name": "Bunker Ramp (Tier 3)",
+					"codeName": "FortRampT3",
+					"description": "A ramp that enables access to underground Bunkers.",
+					"icon": "game/Textures/UI/StructureIcons/FortT3RampIcon.webp",
+					"texture": "game/Textures/Structures/fortt3_ramp.webp",
+					"cost": {
+						"concrete": 20
+					}
+				},
+				"rifleait3": {
+					"name": "Rifle Garrison (Tier 3)",
+					"codeName": "RifleAIT3",
+					"description": "An entrenched bunker manned by stationed troops armed with Rifles.",
+					"icon": "game/Textures/UI/StructureIcons/FortT3GunAIIcon.webp",
+					"texture": "game/Textures/Structures/fortt3_rifleai.webp",
+					"cost": {
+						"concrete": 30
+					}
+				}
+			}
 		},
 		"forwardbase1": {
 			"name": "Encampment",
@@ -1985,6 +2303,7 @@ const foxholeData = {
 			"description": "A foundation that provides a suitable surface for constructing Facilities.",
 			"category": "foundations",
 			"categoryOrder": 2,
+			"layer": "foundations",
 			"sortOffset": -1000,
 			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation01Icon.webp",
 			"texture": "game/Textures/Structures/foundation_1x1.webp",
@@ -2047,6 +2366,7 @@ const foxholeData = {
 			"description": "A foundation that provides a suitable surface for constructing Facilities.",
 			"category": "foundations",
 			"categoryOrder": 1,
+			"layer": "foundations",
 			"sortOffset": -1000,
 			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation03Icon.webp",
 			"texture": "game/Textures/Structures/foundation_1x2.webp",
@@ -2122,6 +2442,7 @@ const foxholeData = {
 			"codeName": "Foundation012x2T1",
 			"description": "A foundation that provides a suitable surface for constructing Facilities.",
 			"category": "foundations",
+			"layer": "foundations",
 			"sortOffset": -1000,
 			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation04Icon.webp",
 			"texture": "game/Textures/Structures/foundation_2x2.webp",
@@ -2212,6 +2533,7 @@ const foxholeData = {
 			"description": "A foundation that provides a suitable surface for constructing Facilities.",
 			"category": "foundations",
 			"categoryOrder": 3,
+			"layer": "foundations",
 			"width": 5.28,
 			"length": 5.28,
 			"sortOffset": -1000,
@@ -2285,6 +2607,7 @@ const foxholeData = {
 			"description": "An industrial silo for storing various types of Fuel.",
 			"category": "factories",
 			"categoryOrder": 80,
+			"layer": "pipes",
 			"color": 1052688,
 			"hitArea": [
 				{
@@ -2331,6 +2654,7 @@ const foxholeData = {
 			"description": "A gate that provides access to a walled off area.",
 			"category": "defenses",
 			"categoryOrder": 4,
+			"hideInList": true,
 			"icon": "game/Textures/UI/StructureIcons/Gate-T1Icon.webp",
 			"texture": "game/Textures/Structures/gatet1.webp",
 			"canSnap": true,
@@ -3444,7 +3768,10 @@ const foxholeData = {
 			"category": "factories",
 			"categoryOrder": 40,
 			"color": 1052688,
-			"range": 40,
+			"range": {
+				"type": "preventDecay",
+				"max": 40
+			},
 			"overlapDist": 65,
 			"sortOffset": 1000000,
 			"hitArea": [
@@ -4265,6 +4592,11 @@ const foxholeData = {
 			"description": "A well-fortified bunker position fitted with a mounted machinegun. Garrisoned infantry will lay down heavy suppressive fire upon approaching enemies from a fixed angle.",
 			"category": "defenses",
 			"categoryOrder": 7,
+			"range": {
+				"type": "killbox",
+				"arc": 45,
+				"max": 30
+			},
 			"hitArea": [
 				{
 					"shape": [ 45.44,-81.28,93.44,-7.04,-49.28,78.72,-94.08,2.56,-48.64,-80 ]
@@ -4273,11 +4605,6 @@ const foxholeData = {
 					"shape": [ -49.28,78.72,93.44,-7.04,51.2,76.8 ]
 				}
 			],
-			"range": {
-				"type": "killbox",
-				"arc": 45.0,
-				"max": 30.0
-			},
 			"icon": "game/Textures/UI/StructureIcons/MGPillboxIcon.webp",
 			"texture": "game/Textures/Structures/mgpillbox.webp",
 			"techId": "unlockmgpillbox",
@@ -4802,6 +5129,7 @@ const foxholeData = {
 			"description": "Industrial piping that allows for automatic transport of various liquids and fuels into a network of pipes that connect to various facility structures.",
 			"category": "factories",
 			"categoryOrder": 60,
+			"layer": "pipes",
 			"sortOffset": -500,
 			"hasHandle": true,
 			"isBezier": true,
@@ -4863,6 +5191,7 @@ const foxholeData = {
 			"description": "Industrial piping that allows for automatic transport of various liquids and fuels. These specialized pipes can be built overhead to connect to pipe networks across areas with high traffic.",
 			"category": "factories",
 			"categoryOrder": 70,
+			"layer": "pipes",
 			"sortOffset": 1400000,
 			"hasHandle": true,
 			"lineWidth": 10,
@@ -4911,6 +5240,7 @@ const foxholeData = {
 			"description": "Industrial piping that allows for automatic transport of various liquids and fuels. These specialized pipes can be built underground to connect to pipe networks across areas with high traffic.",
 			"category": "factories",
 			"categoryOrder": 65,
+			"layer": "pipes",
 			"sortOffset": -500,
 			"hasHandle": true,
 			"isBezier": true,
@@ -4963,6 +5293,7 @@ const foxholeData = {
 			"description": "A weighted valve that controls the rate of flow through a pipeline. Requires a Wrench.",
 			"category": "factories",
 			"categoryOrder": 75,
+			"layer": "pipes",
 			"sortOffset": 1000,
 			"icon": "game/Textures/UI/ItemIcons/FacilityPipeValveIcon.webp",
 			"texture": "game/Textures/Structures/pipeline_valve.webp",
@@ -5506,6 +5837,7 @@ const foxholeData = {
 			"description": "A segment of railway for heavy cranes. This type of railway can only be built on Foundations.",
 			"category": "foundations",
 			"categoryOrder": 11,
+			"layer": "rails",
 			"hasHandle": true,
 			"minLength": 5,
 			"maxLength": 30,
@@ -5537,6 +5869,7 @@ const foxholeData = {
 			"description": "A segment of railway for train cars. Tracks can attach to or fork from existing railways to form complex networks.",
 			"category": "foundations",
 			"categoryOrder": 10,
+			"layer": "rails",
 			"sortOffset": 100000,
 			"hasHandle": true,
 			"isBezier": true,
@@ -5573,6 +5906,7 @@ const foxholeData = {
 			"description": "A segment of railway for small gauge train cars. Tracks can attach to or fork from existing railways to form complex networks.",
 			"category": "foundations",
 			"categoryOrder": 8,
+			"layer": "rails",
 			"sortOffset": 100000,
 			"hasHandle": true,
 			"isBezier": true,
@@ -5637,7 +5971,9 @@ const foxholeData = {
 			],
 			"icon": "game/Textures/UI/StructureIcons/RelicBase1Icon.webp",
 			"texture": "game/Textures/Structures/relicbase1.webp",
-			"cost": null
+			"cost": {
+				"cloth": 200
+			}
 		},
 		"resource_transfer_station": {
 			"name": "Resource Transfer Station",
@@ -5674,20 +6010,47 @@ const foxholeData = {
 			"description": "A reinforced dugout that gives the garrisoned rifle infantry a fortified defensive position to fire on approaching enemies from relative safety.",
 			"category": "defenses",
 			"categoryOrder": 6,
+			"range": {
+				"type": "killbox",
+				"min": 3.5,
+				"max": 25
+			},
 			"hitArea": [
 				{
 					"shape": [ 45.44,-79.68,93.44,-5.44,44.16,79.04,-45.44,80.32,-94.08,6.08,-49.28,-77.76 ]
 				}
 			],
-			"range": {
-				"type": "killbox",
-				"min": 3.5,
-				"max": 25.0
-			},
 			"icon": "game/Textures/UI/StructureIcons/RiflePillboxIcon.webp",
 			"texture": "game/Textures/Structures/riflepillbox.webp",
 			"cost": {
 				"cloth": 60
+			}
+		},
+		"sandbaghalfspline": {
+			"name": "Sandbag Cover",
+			"codeName": "SandbagHalfSpline",
+			"description": "A defensive wall that hinders enemy movement and provides cover during combat.",
+			"category": "defenses",
+			"hideInList": true,
+			"minLength": 4.2,
+			"maxLength": 10,
+			"icon": "game/Textures/UI/StructureIcons/SandbagsStructureIcon.webp",
+			"texture": "game/Textures/Structures/sandbaghalfspline.webp",
+			"cost": {
+				"sandbagmaterials": 3
+			},
+			"upgrades": {
+				"sandbagfullspline": {
+					"name": "Sandbag Wall",
+					"codeName": "SandbagFullSpline",
+					"description": "A defensive wall that hinders enemy movement and provides cover during combat.",
+					"minLength": 4.2,
+					"maxLength": 10,
+					"texture": "game/Textures/Structures/sandbagfullspline.webp",
+					"cost": {
+						"sandbagmaterials": 3
+					}
+				}
 			}
 		},
 		"shippingcontainer": {
@@ -6260,7 +6623,9 @@ const foxholeData = {
 			],
 			"icon": "game/Textures/UI/StructureIcons/TownBase3Icon.webp",
 			"texture": "game/Textures/Structures/townbase3.webp",
-			"cost": null
+			"cost": {
+				"cloth": 200
+			}
 		},
 		"traincaboose": {
 			"name": "BMS Roadhouse",
@@ -6527,6 +6892,66 @@ const foxholeData = {
 			},
 			"techId": "unlockfacilitytier3"
 		},
+		"trenchconnectort1": {
+			"name": "Trench Connector (Tier 1)",
+			"codeName": "TrenchConnectorT1",
+			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers. This is a special Trench variant that can resize dynamically and can be built underneath roads.",
+			"category": "entrenchments",
+			"categoryOrder": 2,
+			"hasHandle": true,
+			"isBezier": true,
+			"icon": "game/Textures/UI/StructureIcons/TrenchT1ConnectorIcon.webp",
+			"texture": "game/Textures/Structures/trencht1.webp",
+			"canSnap": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "bunker",
+					"cap": "front",
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "bunker",
+					"cap": "left",
+					"rotation": 180
+				},
+				{
+					"id": 2,
+					"type": "bunker",
+					"cap": "right",
+					"rotation": 0
+				},
+				{
+					"id": 3,
+					"type": "bunker",
+					"cap": "back",
+					"rotation": 90
+				}
+			],
+			"upgrades": {
+				"trenchconnectort2": {
+					"name": "Trench Connector (Tier 2)",
+					"codeName": "TrenchConnectorT2",
+					"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers. This is a special Trench variant that can resize dynamically and can be built underneath roads.",
+					"icon": "game/Textures/UI/StructureIcons/TrenchT2ConnectorIcon.webp",
+					"texture": "game/Textures/Structures/trenchconnectort2.webp",
+					"cost": {
+						"cloth": 75
+					}
+				},
+				"trenchconnectort3": {
+					"name": "Trench Connector (Tier 3)",
+					"codeName": "TrenchConnectorT3",
+					"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers. This is a special Trench variant that can resize dynamically and can be built underneath roads.",
+					"icon": "game/Textures/UI/StructureIcons/TrenchT3ConnectorIcon.webp",
+					"texture": "game/Textures/Structures/trenchconnectort3.webp",
+					"cost": {
+						"concrete": 30
+					}
+				}
+			}
+		},
 		"trenchempt1": {
 			"name": "Trench Emplacement (Tier 1)",
 			"codeName": "TrenchEmpT1",
@@ -6599,7 +7024,106 @@ const foxholeData = {
 					"y": 186,
 					"rotation": 315
 				}
-			]
+			],
+			"upgrades": {
+				"trenchempt2": {
+					"name": "Trench Emplacement (Tier 2)",
+					"codeName": "TrenchEmpT2",
+					"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches. This variant can also serve as an emplacement for mannable defenses.",
+					"icon": "game/Textures/UI/StructureIcons/TrenchT2EmplacementIcon.webp",
+					"texture": "game/Textures/Structures/trenchempt2.webp",
+					"cost": {
+						"cloth": 50
+					}
+				},
+				"trenchempt3": {
+					"name": "Trench Emplacement (Tier 3)",
+					"codeName": "TrenchEmpT3",
+					"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches. This variant can also serve as an emplacement for mannable defenses.",
+					"icon": "game/Textures/UI/StructureIcons/TrenchT3EmplacementIcon.webp",
+					"texture": "game/Textures/Structures/trenchempt3.webp",
+					"cost": {
+						"concrete": 20
+					}
+				}
+			}
+		},
+		"trencht1": {
+			"name": "Trench (Tier 1)",
+			"codeName": "TrenchT1",
+			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers.",
+			"category": "entrenchments",
+			"categoryOrder": 1,
+			"icon": "game/Textures/UI/StructureIcons/TrenchT1Icon.webp",
+			"texture": "game/Textures/Structures/trencht1.webp",
+			"canSnap": true,
+			"snapNearest": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "bunker",
+					"x": 2,
+					"y": 166,
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "bunker",
+					"x": 289,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 2,
+					"type": "bunker",
+					"x": 867,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 3,
+					"type": "bunker",
+					"x": 1154,
+					"y": 166,
+					"rotation": 90
+				},
+				{
+					"id": 4,
+					"type": "bunker",
+					"x": 289,
+					"y": 334,
+					"rotation": 180
+				},
+				{
+					"id": 5,
+					"type": "bunker",
+					"x": 867,
+					"y": 334,
+					"rotation": 180
+				}
+			],
+			"upgrades": {
+				"trencht2": {
+					"name": "Trench (Tier 2)",
+					"codeName": "TrenchT2",
+					"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers.",
+					"icon": "game/Textures/UI/StructureIcons/TrenchT2Icon.webp",
+					"texture": "game/Textures/Structures/trencht2.webp",
+					"cost": {
+						"cloth": 50
+					}
+				},
+				"trencht3": {
+					"name": "Trench (Tier 3)",
+					"codeName": "TrenchT3",
+					"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers.",
+					"icon": "game/Textures/UI/StructureIcons/TrenchT3Icon.webp",
+					"texture": "game/Textures/Structures/trencht3.webp",
+					"cost": {
+						"concrete": 20
+					}
+				}
+			}
 		},
 		"truckc": {
 			"name": "R-1 Hauler",
@@ -6625,6 +7149,7 @@ const foxholeData = {
 			"description": "A basic barrier that is used to prevent passage through an area.",
 			"category": "defenses",
 			"categoryOrder": 3,
+			"hideInList": true,
 			"sortOffset": 1400000,
 			"hasHandle": true,
 			"minLength": 3,

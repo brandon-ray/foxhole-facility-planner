@@ -212,6 +212,7 @@ function iterateStructures(dirPath) {
                                     'description': structure.Description?.SourceString ?? baseData.description,
                                     'category': structureData.category,
                                     'categoryOrder': structureData.categoryOrder ?? structure.BuildOrder ?? baseData.BuildOrder,
+                                    'layer': structureData.layer,
                                     'faction': structureData.faction,
                                     'color': structureData.color,
                                     'hideInList': structureData.hideInList,
@@ -219,7 +220,6 @@ function iterateStructures(dirPath) {
                                     'width': structureData.width,
                                     'length': structureData.length,
                                     'range': structureData.range,
-                                    'rangeColor': structureData.rangeColor,
                                     //'overlapDist': structure.MinDistanceToSameStructure ? structure.MinDistanceToSameStructure / METER_UNREAL_UNITS : undefined,
                                     'overlapDist': structureData.overlapDist,
                                     'sortOffset': structureData.sortOffset,
@@ -296,6 +296,7 @@ function iterateStructures(dirPath) {
                                         'name': modification.DisplayName?.SourceString ?? getTableString(modification.DisplayName) ?? displayName,
                                         'codeName': displayName,
                                         'description': modification.Description?.SourceString ?? getTableString(modification.Description) ?? 'No Description Provided.',
+                                        'range': storedModData?.range,
                                         'hitArea': undefined,
                                         'icon': getLocalIcon(modification),
                                         'texture': typeof storedModData?.texture === 'string' || storedModData?.texture === null ? storedModData.texture : `game/Textures/Structures/${structureData.id}_${storedModData?.id}.webp`,
@@ -333,6 +334,7 @@ function iterateStructures(dirPath) {
                     case 'CraneComponent':
                         if (structure && structureData && uProperty.Properties?.Config) {
                             structureList[structureCodeName]['range'] = {
+                                "type": "crane",
                                 "min": uProperty.Properties.Config.MinHorizontalDistanceToTarget / METER_UNREAL_UNITS,
                                 "max": uProperty.Properties.Config.MaxHorizontalDistanceToTarget / METER_UNREAL_UNITS
                             };
