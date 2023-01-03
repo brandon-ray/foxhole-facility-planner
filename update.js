@@ -230,10 +230,10 @@ function iterateStructures(dirPath) {
                                     'lineWidth': structureData.lineWidth,
                                     'minLength': structure.ConnectorMinLength ? structure.ConnectorMinLength / METER_UNREAL_UNITS : undefined ?? baseData.minLength,
                                     'maxLength': structure.ConnectorMaxLength ? structure.ConnectorMaxLength / METER_UNREAL_UNITS : undefined ?? baseData.maxLength,
-                                    'icon': getLocalIcon(structure) ?? baseData.icon,
-                                    'texture': typeof structureData.texture === 'string' || structureData.texture === null ? structureData.texture : `game/Textures/Structures/${structureData.id}.webp`,
-                                    'textureFrontCap': structureData.textureFrontCap, // `game/Textures/Structures/${structureData.id}_front.webp`
-                                    'textureBackCap': structureData.textureBackCap, // `game/Textures/Structures/${structureData.id}_back.webp`
+                                    'icon': structureData.icon ?? getLocalIcon(structure) ?? baseData.icon,
+                                    'texture': (typeof structureData.texture === 'string' || structureData.texture === null) ? structureData.texture : `game/Textures/Structures/${structureData.id}.webp`,
+                                    'textureFrontCap': structureData.textureFrontCap,
+                                    'textureBackCap': structureData.textureBackCap,
                                     'textureIcon': structureData.textureIcon,
                                     'textureOffset': structureData.textureOffset,
                                     'garrisonSupplyMultiplier': structure.DecaySupplyDrain ?? baseData.garrisonSupplyMultiplier ?? structureData.garrisonSupplyMultiplier,
@@ -618,7 +618,7 @@ async function updateData() {
                         adjustedShape.push((shape[i] - (x ? texture.width / 2 : texture.height / 2)) / METER_PIXEL_SCALE);
                         x = !x;
                     }
-                    hitAreaPolygons.push({ 'shape': adjustedShape });
+                    hitAreaPolygons.push({ 'shape': `[ ${adjustedShape.join()} ]` });
                 }
                 structurePolygons[textureName] = hitAreaPolygons;
             }
@@ -692,11 +692,13 @@ async function updateData() {
         return structures;
     }, {});
 
-    fs.writeFile('public/foxholeData.js', foxholeDataVariable + JSON.stringify({
+    let foxholeDataStr = JSON.stringify({
         'tech': sortList(techList),
         'resources': sortList(itemList),
         'buildings': sortList(structureList)
-    }, null, '\t'), err => {
+    }, null, '\t');
+    foxholeDataStr = foxholeDataStr.replaceAll('"[ ', '[ ').replaceAll(' ]"', ' ]');
+    fs.writeFile('public/foxholeData.js', foxholeDataVariable + foxholeDataStr, err => {
         if (err) {
             throw err;
         }
