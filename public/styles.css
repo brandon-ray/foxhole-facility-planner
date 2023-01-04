@@ -487,6 +487,16 @@ input[type=number].btn-small {
     background: #222;
 }
 
+/*
+.colonial-faction #construction-page .construction-layer-switcher {
+    background-color: rgb(73, 106, 25);
+}
+
+.warden-faction #construction-page .construction-layer-switcher {
+    background-color: rgb(25, 81, 132);
+}
+*/
+
 #construction-page .construction-layer-switcher > div {
     background-color: #141414;
     background-position: center;

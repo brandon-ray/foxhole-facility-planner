@@ -16,7 +16,7 @@ const buildingCategories = {
         buildings: []
     },
     factories: {
-        name: 'Factories',
+        name: 'Facilities',
         order: 3,
         color: 0x8566bd, // Indigo / Purple
         buildings: []

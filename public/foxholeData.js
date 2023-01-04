@@ -1106,9 +1106,9 @@ const foxholeData = {
 			"description": "Used to slow down enemy infantry movement. Can be dismantled with a Wrench.",
 			"category": "defenses",
 			"categoryOrder": 1,
-			"hideInList": true,
 			"hasHandle": true,
 			"isBezier": true,
+			"simpleBezier": true,
 			"minLength": 3,
 			"maxLength": 10,
 			"icon": "game/Textures/UI/StructureIcons/BarbedWireCornerStructureIcon.webp",
@@ -1141,10 +1141,26 @@ const foxholeData = {
 			"category": "defenses",
 			"categoryOrder": 2,
 			"hideInList": true,
+			"simpleBezier": true,
 			"minLength": 4,
 			"maxLength": 10,
 			"icon": "game/Textures/UI/ItemIcons/BarbedWireFenceStructureIcon.webp",
 			"texture": "game/Textures/Structures/barbedwirewallspline.webp",
+			"canSnap": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "barbedwirefence",
+					"cap": "front",
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "barbedwirefence",
+					"cap": "back",
+					"rotation": 90
+				}
+			],
 			"cost": {
 				"barbedwirematerials": 3
 			}
@@ -2624,6 +2640,7 @@ const foxholeData = {
 				"height": 96
 			},
 			"canSnap": true,
+			"snapNearest": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -5133,6 +5150,7 @@ const foxholeData = {
 			"sortOffset": -500,
 			"hasHandle": true,
 			"isBezier": true,
+			"simpleBezier": true,
 			"lineWidth": 10,
 			"minLength": 3,
 			"maxLength": 20,
@@ -6031,11 +6049,28 @@ const foxholeData = {
 			"codeName": "SandbagHalfSpline",
 			"description": "A defensive wall that hinders enemy movement and provides cover during combat.",
 			"category": "defenses",
-			"hideInList": true,
+			"hasHandle": true,
+			"isBezier": true,
+			"simpleBezier": true,
 			"minLength": 4.2,
 			"maxLength": 10,
 			"icon": "game/Textures/UI/StructureIcons/SandbagsStructureIcon.webp",
 			"texture": "game/Textures/Structures/sandbaghalfspline.webp",
+			"canSnap": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "sandbag",
+					"cap": "front",
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "sandbag",
+					"cap": "back",
+					"rotation": 90
+				}
+			],
 			"cost": {
 				"sandbagmaterials": 3
 			},

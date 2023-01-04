@@ -182,6 +182,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
             icon: 'ConcreteFoundation04Icon.webp'
         },
         {
+            key: 'buildings',
+            title: 'Edit Buildings',
+            icon: 'MetalworksFactoryBase.webp'
+        },
+        {
             key: 'defenses',
             title: 'Edit Defenses',
             icon: 'FortT1Icon.webp'
@@ -2548,7 +2553,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             for (let i=0; i<points.length; i++) {
                                 let point = points[i];
 
-                                if (subtype === 'pipeline' || subtype === 'pipeline_insulation' || subtype === 'barbedwirespline') {
+                                if (entity.building?.simpleBezier) {
                                     if (i < points.length - 1) {
                                         bezierPoints.push({
                                             x: point.x,
@@ -2785,6 +2790,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         entity.onDeselect = function() {
             entity.selected = false;
             entity.selectionArea.visible = false;
+            delete entity.prevPosition;
             delete entity.prevRotation;
 
             if (entity.rangeSprite && !game.settings.showRanges) {
@@ -3168,7 +3174,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
                         entity.regenerate();
                         if (entity.building?.isBezier && entity.sprite?.rope) {
-                            if (entity.subtype === 'pipeline' || entity.subtype === 'pipeline_insulation' || subtype === 'barbedwirespline') {
+                            if (entity.building.simpleBezier) {
                                 if (dist < 3*METER_PIXEL_SIZE) {
                                     entity.sprite.rope.tint = COLOR_RED;
                                 } else {
@@ -3350,9 +3356,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
             let locked = false;
             selectedEntities.forEach(entity => {
                 if (!pickup) {
-                    if (!isNaN(entity.prevRotation)) {
-                        delete entity.prevRotation;
-                    }
+                    delete entity.prevPosition;
+                    delete entity.prevRotation;
                 } else if (!ignoreLock && entity.locked) {
                     locked = true;
                 } else if (!locked) {
@@ -3742,7 +3747,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
             rotationAngle = Math.angleNormalized(rotationAngle);
         }
 
-        if (pickupSelectedEntities) {
+        // TODO: Check for mouse pickup but for right click instead.
+        if (selectionRotation || pickupSelectedEntities) {
             game.buildingSelectedMenuComponent?.refresh(true);
             if (!selectedHandlePoint && (!ignoreMousePickup || (Date.now()-pickupTime > 250 || Math.distanceBetween(pickupPosition, {x: gmx, y: gmy}) > 20))) {
                 if (ignoreMousePickup) {
@@ -3778,7 +3784,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 if (!selectionRotation && selectedEntities.length) {
                     for (let i = 0; i < selectedEntities.length; i++) {
                         let selectedEntity = selectedEntities[i];
-                        if (connectionEstablished && connectionEstablished !== true && connectionEstablished.building?.snapNearest && selectedEntity !== connectionEstablished) {
+                        if (connectionEstablished && connectionEstablished !== true && selectedEntity !== connectionEstablished) {
                             if (!selectedEntity.prevPosition) {
                                 selectedEntity.prevPosition = {
                                     x: selectedEntity.x,
@@ -3790,9 +3796,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             }
                             const offsetX = connectionEstablished.prevPosition.x - connectionEstablished.x;
                             const offsetY = connectionEstablished.prevPosition.y - connectionEstablished.y;
-                            const rotatedPosition = Math.rotateAround(connectionEstablished.prevPosition, selectedEntity.prevPosition, Math.angleDifference(connectionEstablished.prevRotation, connectionEstablished.rotation));
+                            const offsetRotation = Math.angleDifference(connectionEstablished.prevRotation, connectionEstablished.rotation);
+                            const rotatedPosition = Math.rotateAround(connectionEstablished.prevPosition, selectedEntity.prevPosition, offsetRotation);
                             selectedEntity.position.set(rotatedPosition.x - offsetX, rotatedPosition.y - offsetY);
-                            selectedEntity.rotation = selectedEntity.prevRotation + Math.angleDifference(connectionEstablished.prevRotation, connectionEstablished.rotation);
+                            selectedEntity.rotation = selectedEntity.prevRotation + offsetRotation;
                         }
                         if (selectedEntity.building?.canSnap || selectedEntity.isTrain) {
                             for (let j = 0; j < entities.length; j++) {
@@ -3853,7 +3860,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                                                         continue;
                                                                     }
             
-                                                                    if (selectedEntity.building?.snapNearest) {
+                                                                    if (selectedEntity.building?.snapNearest || selectedEntities.length > 1) {
                                                                         let selectedSocketPos;
                                                                         if (connectionEstablished) {
                                                                             selectedSocketPos = app.cstage.toLocal({x: selectedSocket.x, y: selectedSocket.y}, selectedEntity, undefined, true);
@@ -3889,9 +3896,8 @@ const fontFamily = ['Recursive', 'sans-serif'];
                                                     }
                                                 }
                                             }
-                                            if (nearestSocket) {
-                                                connectEntitiesBySockets(frontSocket, nearestSocket);
-                                                break;
+                                            if (nearestSocket && connectEntitiesBySockets(frontSocket, nearestSocket)) {
+                                                i = -1;
                                             }
                                         }
                                         if (pickupEntity && projection && ((!connectionEstablished && entity.bezier && entity.building?.isBezier && entity.building?.canSnapAlongBezier && selectedEntity.subtype === entity.subtype) || (selectedEntity.isTrain && entity.subtype === selectedEntity.building.vehicle.track))) {
@@ -3957,7 +3963,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             }
                             selectedEntity.rotation = selectedEntity.prevRotation;
                             delete selectedEntity.prevRotation;
-                            if (!selectedEntity.building?.snapNearest) {
+                            if (selectedEntities.length === 1 && selectedEntity.building?.isBezier) {
                                 selectedEntity.pickupOffset = {
                                     x: 0,
                                     y: 0
