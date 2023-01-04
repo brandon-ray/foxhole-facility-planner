@@ -2302,11 +2302,42 @@ const foxholeData = {
 			"description": "A temporary forward operating base. Players can spawn from here.",
 			"category": "misc",
 			"categoryOrder": 1,
-			"hideInList": true,
 			"icon": "game/Textures/UI/StructureIcons/EncampmentIcon.webp",
 			"texture": "game/Textures/Structures/forwardbase1.webp",
+			"range": {
+				"type": "garrison",
+				"max": 80
+			},
 			"cost": {
 				"cloth": 300
+			},
+			"upgrades": {
+				"provisional_garrison": {
+					"name": "Provisional Garrison",
+					"description": "A Provisional Garrison connects this base to nearby defensive structures. Defensive structures will deactivate if player activity is too low. This also allows Towns to be claimed towards the victory condition.",
+					"icon": "game/Textures/UI/Menus/IconFacilitiesProvisionalGarrison.webp",
+					"range": {
+						"type": "garrisonDecay",
+						"max": 80
+					},
+					"cost": false
+				},
+				"small_garrison": {
+					"name": "Small Garrison",
+					"description": "A Small Garrison permanently connects this base to nearby defensive structures. In addition, structure decay for surrounding structures can be prevented when Garrison Supplies exist in the stockpile. The rate of Garrison Supplies consumption is 2 per hour per structure once decay has begun.",
+					"icon": "game/Textures/UI/Menus/IconFacilitiesSmallGarrison.webp",
+					"cost": false
+				},
+				"large_garrison": {
+					"name": "Large Garrison",
+					"description": "A Large Garrison permanently connects this base to nearby defensive structures. The cost of Garrison Supplies for preventing structure decay is further reduced. The rate of Garrison Supplies consumption is 1 per hour per structure once decay has begun.",
+					"icon": "game/Textures/UI/Menus/IconFacilitiesLargeGarrison.webp",
+					"range": {
+						"type": "garrisonReduceDecay",
+						"max": 80
+					},
+					"cost": false
+				}
 			}
 		},
 		"foundation_1x1": {
@@ -2608,7 +2639,6 @@ const foxholeData = {
 			"sortOffset": 150000,
 			"icon": "game/Textures/UI/StructureIcons/FuelTankIcon.webp",
 			"texture": "game/Textures/Structures/fuel_container.webp",
-			"garrisonSupplyMultiplier": 0,
 			"cost": {
 				"cloth": 100
 			}

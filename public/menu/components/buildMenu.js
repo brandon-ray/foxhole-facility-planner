@@ -694,7 +694,8 @@ Vue.component('app-menu-statistics', {
             let garrisonConsumptionRate = Math.floor(this.time / 3600);
             for (let i=0; i<game.getEntities().length; i++) {
                 let entity = game.getEntities()[i];
-                if (entity.type === 'building') {
+                // TODO: Need to actually get whether a structure decays or not from foxhole data.
+                if (entity.type === 'building' && (entity.building?.category !== 'vehicles' && entity.building?.category !== 'misc')) {
                     garrisonSupplies += (2 * (entity.building?.garrisonSupplyMultiplier ?? 1)) * garrisonConsumptionRate;
                 }
             }
