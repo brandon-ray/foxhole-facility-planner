@@ -306,7 +306,7 @@ function iterateStructures(dirPath) {
                                         'positionOffset': storedModData?.positionOffset,
                                         'sockets': storedModData?.sockets,
                                         'techId': modification.TechID && (modification.TechID !== 'ETechID::None') ? modification.TechID.substring(9).toLowerCase() : undefined,
-                                        'cost': undefined,
+                                        'cost': storedModData?.cost,
                                         '_productionLength': storedModData?._productionLength,
                                         'production': storedModData?.production,
                                         'productionScaling': storedModData?.productionScaling,
@@ -320,7 +320,7 @@ function iterateStructures(dirPath) {
                                     if (modificationData.techId) {
                                         techList[modificationData.techId] = {};
                                     }
-                                    if (modification.Tiers) {
+                                    if (modificationData.cost !== false && modification.Tiers) {
                                         const tierData = modification.Tiers['EFortTier::T1'];
                                         if (tierData) {
                                             modificationData.cost = getResourceCosts(tierData.ResourceAmounts);
@@ -394,10 +394,11 @@ function iterateData(filePath, list, isItem, yep) {
     if (uAsset.Rows) {
         for (let [codeName, data] of Object.entries(uAsset.Rows)) {
             codeName = codeName.toLowerCase();
-            if (list[codeName]) {
+            const listItem = list[codeName];
+            if (listItem && listItem.cost !== false) {
                 if (isItem) {
                     if (data.AltResourceAmounts && data.AltResourceAmounts.Resource.CodeName !== 'None') {
-                        list[codeName].cost = getResourceCosts(data.AltResourceAmounts);
+                        listItem.cost = getResourceCosts(data.AltResourceAmounts);
                     }
                     /*
                     This seems to be where Field Modification Center pulls its data from.
@@ -408,7 +409,7 @@ function iterateData(filePath, list, isItem, yep) {
                     }
                     */
                 } else if (data.ResourceAmounts && data.ResourceAmounts.Resource.CodeName !== 'None') {
-                    list[codeName].cost = getResourceCosts(data.ResourceAmounts);
+                    listItem.cost = getResourceCosts(data.ResourceAmounts);
                 }
             }
         }

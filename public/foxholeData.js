@@ -1645,9 +1645,7 @@ const foxholeData = {
 			],
 			"icon": "game/Textures/UI/VehicleIcons/ConstructionVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/construction_vehicle.webp",
-			"cost": {
-				"cloth": 100
-			}
+			"cost": false
 		},
 		"crane": {
 			"name": "BMS - Class 2 Mobile Auto-Crane",
@@ -1691,9 +1689,7 @@ const foxholeData = {
 			],
 			"icon": "game/Textures/UI/VehicleIcons/CraneVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/crane.webp",
-			"cost": {
-				"cloth": 125
-			}
+			"cost": false
 		},
 		"diesel_power_plant": {
 			"name": "Diesel Power Plant",
@@ -5989,9 +5985,7 @@ const foxholeData = {
 			],
 			"icon": "game/Textures/UI/StructureIcons/RelicBase1Icon.webp",
 			"texture": "game/Textures/Structures/relicbase1.webp",
-			"cost": {
-				"cloth": 200
-			}
+			"cost": false
 		},
 		"resource_transfer_station": {
 			"name": "Resource Transfer Station",
@@ -6658,9 +6652,7 @@ const foxholeData = {
 			],
 			"icon": "game/Textures/UI/StructureIcons/TownBase3Icon.webp",
 			"texture": "game/Textures/Structures/townbase3.webp",
-			"cost": {
-				"cloth": 200
-			}
+			"cost": false
 		},
 		"traincaboose": {
 			"name": "BMS Roadhouse",
