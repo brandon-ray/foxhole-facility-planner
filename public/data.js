@@ -96,14 +96,6 @@ const buildingCategories = {
         }
     }
 
-    for (const [category, data] of Object.entries(buildingCategories)) {
-        if (data.buildings.length) {
-            buildingCategories[category].buildings.sort((a, b) => {
-                return a.categoryOrder > (b.categoryOrder ?? 0);
-            });
-        }
-    }
-
     let objectDataKeys = Object.keys(window.objectData);
     for (let i = 0; i < objectDataKeys.length; i++) {
         let objectDataKey = objectDataKeys[i];
@@ -134,17 +126,14 @@ const buildingCategories = {
         }
 
         window.objectData[objectDataKey + '_list'] = objectList;
+    }
 
-        /*
-        Not sure this is needed anymore...
-        
-        objectList.sort((a, b) => {
-            return a.name.localeCompare(b.name);
-        });
-        */
-        
-        if (objectDataKey === 'buildings') {
-            objectList.sort((a, b) => buildingCategories[a.category].order - buildingCategories[b.category].order);
+    for (const [category, data] of Object.entries(buildingCategories)) {
+        if (data.buildings.length) {
+            data.buildings.sort((a, b) => {
+                const aOrder = a.categoryOrder ?? 0, bOrder = b.categoryOrder ?? 0;
+                return aOrder > bOrder ? 1 : (aOrder < bOrder ? -1 : 0);
+            });
         }
     }
 })();

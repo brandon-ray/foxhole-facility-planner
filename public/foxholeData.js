@@ -2316,16 +2316,16 @@ const foxholeData = {
 					"name": "Provisional Garrison",
 					"description": "A Provisional Garrison connects this base to nearby defensive structures. Defensive structures will deactivate if player activity is too low. This also allows Towns to be claimed towards the victory condition.",
 					"icon": "game/Textures/UI/Menus/IconFacilitiesProvisionalGarrison.webp",
-					"range": {
-						"type": "garrisonDecay",
-						"max": 80
-					},
 					"cost": false
 				},
 				"small_garrison": {
 					"name": "Small Garrison",
 					"description": "A Small Garrison permanently connects this base to nearby defensive structures. In addition, structure decay for surrounding structures can be prevented when Garrison Supplies exist in the stockpile. The rate of Garrison Supplies consumption is 2 per hour per structure once decay has begun.",
 					"icon": "game/Textures/UI/Menus/IconFacilitiesSmallGarrison.webp",
+					"range": {
+						"type": "garrisonDecay",
+						"max": 80
+					},
 					"cost": false
 				},
 				"large_garrison": {
