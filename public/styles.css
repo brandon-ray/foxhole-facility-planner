@@ -379,7 +379,7 @@ input[type=number].btn-small {
 #sidebar-body .menu-body {
     position: absolute;
     top: 0px;
-    bottom: 70px;
+    bottom: 68px;
     left: 0;
     right: 0;
     overflow: auto;
@@ -388,9 +388,9 @@ input[type=number].btn-small {
 #sidebar-body .menu-footer-buttons {
     height: 50px;
     position: absolute;
-    bottom: 12px;
-    left: 12px;
-    right: 12px;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
 }
 
 #sidebar-body .menu-footer-buttons > .app-btn.app-btn-primary {
@@ -408,7 +408,7 @@ input[type=number].btn-small {
 }
 
 #sidebar-body .menu-page {
-    padding: 12px;
+    padding: 10px;
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -417,16 +417,16 @@ input[type=number].btn-small {
 
 #construction-page {
     position: absolute;
-    top: 12px;
+    top: 10px;
     bottom: 0;
-    left: 12px;
-    right: 12px;
+    left: 10px;
+    right: 10px;
 }
 
 #construction-page > .menu-page {
     background: black;
     position: absolute;
-    top: 147px;
+    top: 92px;
     bottom: 0;
     left: 0;
     right: 0;
@@ -446,7 +446,7 @@ input[type=number].btn-small {
     margin: 0 0 5px 0;
 }
 
-#construction-page .construction-mode-switcher, #construction-page .construction-layer-switcher {
+#construction-page .construction-mode-switcher, #construction-page .construction-mode-options {
     width: 100%;
     height: 45px;
     margin: 0;
@@ -487,32 +487,121 @@ input[type=number].btn-small {
     background: #222;
 }
 
+#construction-page .construction-mode-options {
+    height: 40px;
+}
+
 /*
-.colonial-faction #construction-page .construction-layer-switcher {
+.colonial-faction #construction-page .construction-mode-options {
     background-color: rgb(73, 106, 25);
 }
 
-.warden-faction #construction-page .construction-layer-switcher {
+.warden-faction #construction-page .construction-mode-options {
     background-color: rgb(25, 81, 132);
 }
 */
 
-#construction-page .construction-layer-switcher > div {
-    background-color: #141414;
+#construction-page .construction-mode-options .btn-small {
+    line-height: 34px;
+    height: 100%;
+    background-color: #0B0B0B;
+    margin: 0;
+    border: 1px solid black;
+    color: #a2a2a2;
+    overflow: hidden;
+}
+
+#construction-page .construction-mode-options .btn-small input[type=color] {
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    inset: 0;
+    border: none;
+}
+
+#construction-page .construction-mode-options .btn-small i.icon-shadow {
+    filter: drop-shadow(0 0px 1px white);
+}
+
+#construction-page .construction-mode-options .btn-small.small-number-input {
+    width: 100%;
+    height: 36px;
+    font-size: 0.95em;
+    border: none;
+}
+
+#construction-page .construction-mode-options .btn-small > i,
+#construction-page .construction-mode-options .btn-small > label {
+    pointer-events: none;
+}
+
+#construction-page .construction-mode-options .btn-small > label {
+    opacity: 0.75;
+    font-size: 0.5em;
+    line-height: 12px;
+    margin: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#construction-page .construction-mode-options .btn-small > i.sub-icon {
+    color: #aaa;
+    font-size: 0.6em;
+    position: absolute;
+    bottom: 1px;
+    right: 1px;
+    pointer-events: none;
+}
+
+#construction-page .construction-mode-options .btn-small > div {
+    width: 100%;
+    height: 100%;
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
-    border: 1px solid black;
-    cursor: pointer;
 }
 
-#construction-page .construction-layer-switcher > div:hover {
-    background-color: #181818;
+#construction-page .construction-mode-options .btn-small:hover {
+    color: white;
     border-color: white;
 }
 
-#construction-page .construction-layer-switcher > div.layer-active {
-    background-color: #404040;
+#construction-page .construction-mode-options .btn-small.btn-active {
+    color: #ff8034;
+}
+
+/*
+#construction-page .construction-mode-options .btn-small > i.abs-icon,
+#construction-page .construction-mode-options .btn-small.layer-active > i {
+    line-height: 40px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+}
+
+#construction-page .construction-mode-options .btn-small.layer-active > i {
+    color: white;
+    font-size: 1.1em;
+}
+
+#construction-page .construction-mode-options .btn-small.layer-inactive:hover > i:not(.layer-inactive) {
+    color: #777;
+}
+
+#construction-page .construction-mode-options .btn-small > i.layer-inactive {
+    color: #aaa;
+    font-size: 0.6em;
+    bottom: 1px;
+    right: 1px;
+}
+
+#construction-page .construction-mode-options .btn-small.layer-inactive > div {
+    opacity: 0.25;
 }
 
 #construction-page .construction-filter-wrapper {
@@ -522,24 +611,27 @@ input[type=number].btn-small {
     position: relative;
     border: 2px solid #090909;
 }
+*/
 
 #construction-page .construction-settings-button, #construction-page .construction-tech-button {
-    width: 69px;
+    width: 70px;
+    /*
     height: 100%;
     background: #141414;
     color: white;
-    border: 1px solid transparent;
+    border: 1px solid black;
     padding: 0;
+    */
+    font-size: 1em;
     position: absolute;
     top: 0;
-    left: 42px;
-    cursor: pointer;
+    left: 40px;
 }
 
 #construction-page .construction-settings-button {
     width: 40px;
     left: 0;
-    line-height: 40px;
+    /*line-height: 40px;*/
     font-size: 1.4em;
 }
 
@@ -552,7 +644,7 @@ input[type=number].btn-small {
     height: 100%;
     position: absolute;
     top: 0;
-    left: 112px;
+    left: 110px;
     right: 0;
 }
 
@@ -560,11 +652,12 @@ input[type=number].btn-small {
     background: #141414;
     width: 100%;
     height: 100%;
-    border: 1px solid transparent;
+    border: 1px solid black;
     border-radius: 0;
     font-size: 1.1em;
     padding: 0 10px;
     cursor: pointer;
+    text-align: left;
 }
 
 #construction-page .construction-category:hover, #construction-page .construction-category:focus {
@@ -696,7 +789,7 @@ input[type=number].btn-small {
     padding-top: 25%;
     border: 1px solid black;
     background-color: #282828;
-    background-size: contain;
+    background-size: 94%;
     background-repeat: no-repeat;
     background-position: center;
     float: left;
@@ -725,7 +818,7 @@ input[type=number].btn-small {
     width: 48px;
     height: 48px;
     background-color: #0B0B0B;
-    background-size: contain;
+    background-size: 94%;
     background-repeat: no-repeat;
     background-position: center;
     border: 2px solid black;
@@ -1451,4 +1544,25 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
 
 #save-load-page .preset-load-button:hover {
     background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
+}
+
+*::-webkit-scrollbar {
+    width: 0.85em;
+    height: 0.85em;
+}
+
+*::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background-color: #e4672d;
+}
+
+::-webkit-scrollbar-corner {
+    background-color: rgba(0, 0, 0, 0.15);
 }

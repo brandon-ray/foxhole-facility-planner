@@ -1,3 +1,30 @@
+const COLOR_WHITE = 0xFFFFFF; // Also resets tint.
+const COLOR_DARKGREY = 0x505050;
+const COLOR_CHARCOAL = 0x0B0B0B;
+const COLOR_BLACK = 0x000000;
+const COLOR_ORANGE = 0xFF8F00;
+const COLOR_RED = 0xFF0000;
+const COLOR_GREEN = 0x00FF00;
+const COLOR_BLUE = 0x0000FF;
+const COLOR_YELLOW = 0xFFFF00;
+
+const COLOR_SELECTION = 0xE16931; // Orange
+const COLOR_SELECTION_BORDER = 0xFF8248; // Lighter Orange
+
+const COLOR_RANGE = 0x72FF5A; // Green
+const COLOR_RANGE_BORDER = 0xED2323; // Red
+
+const FONT_FAMILY = ['Recursive', 'sans-serif'];
+
+const DEFAULT_SHAPE_STYLE = {
+    alpha: 0.75,
+    fill: true,
+    fillColor: COLOR_WHITE,
+    border: false,
+    lineWidth: 6,
+    lineColor: COLOR_WHITE
+};
+
 const game = {
     services: {},
     settings: {
@@ -19,10 +46,29 @@ const game = {
         showFacilityName: true,
         showRanges: false,
         showProductionIcons: false,
+        styles: {
+            label: {
+                fontFamily: 'Arial',
+                fontSize: 64,
+                fontStyle: 'normal',
+                fontWeight: 'normal',
+                fill: '#ffffff',
+                align: 'center'
+            },
+            rectangle: DEFAULT_SHAPE_STYLE,
+            circle: Object.assign({}, DEFAULT_SHAPE_STYLE),
+            line: Object.assign({}, DEFAULT_SHAPE_STYLE, {
+                lineWidth: 8,
+                frontArrow: true,
+                backArrow: true
+            })
+        },
         volume: 0.2
     },
     isPlayScreen: false
 };
+
+game.defaultSettings = JSON.parse(JSON.stringify(game.settings));
 
 function escapeHtml(str) {
     if (str && str.replace) {
@@ -57,24 +103,6 @@ try {
 } catch(e) {
     console.error('Failed to parse settings.');
 }
-
-const COLOR_WHITE = 0xFFFFFF; // Also resets tint.
-const COLOR_DARKGREY = 0x505050;
-const COLOR_CHARCOAL = 0x0B0B0B;
-const COLOR_BLACK = 0x000000;
-const COLOR_ORANGE = 0xFF8F00;
-const COLOR_RED = 0xFF0000;
-const COLOR_GREEN = 0x00FF00;
-const COLOR_BLUE = 0x0000FF;
-const COLOR_YELLOW = 0xFFFF00;
-
-const COLOR_SELECTION = 0xE16931; // Orange
-const COLOR_SELECTION_BORDER = 0xFF8248; // Lighter Orange
-
-const COLOR_RANGE = 0x72FF5A; // Green
-const COLOR_RANGE_BORDER = 0xED2323; // Red
-
-const fontFamily = ['Recursive', 'sans-serif'];
 
 (function() {
     let ENABLE_DEBUG = false;
@@ -135,21 +163,23 @@ const fontFamily = ['Recursive', 'sans-serif'];
     let pickupTime = null;
     let pickupPosition = null;
     let ignoreMousePickup = true;
-    let constructionCursor = null;
     let effects = [];
 
     game.facilityName = 'Unnamed Facility';
+    game.selectedBuildingCategory = game.settings.defaultBuildingCategory;
 
     game.constructionModes = [
         {
-            key: 'text',
+            key: 'label',
             title: 'Text Tool',
+            cursor: 'text',
             icon: 'fa-font',
             eType: 'text'
         },
         {
             key: 'rectangle',
             title: 'Rectangle Tool',
+            cursor: 'crosshair',
             icon: 'fa-square-o',
             eType: 'shape',
             eSubType: 'rectangle'
@@ -157,6 +187,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         {
             key: 'circle',
             title: 'Circle Tool',
+            cursor: 'crosshair',
             icon: 'fa-circle-thin',
             eType: 'shape',
             eSubType: 'circle'
@@ -164,6 +195,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         {
             key: 'line',
             title: 'Line Tool',
+            cursor: 'crosshair',
             text: '/',
             eType: 'shape',
             eSubType: 'line'
@@ -175,38 +207,61 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
     ];
 
-    game.constructionLayers = [
-        {
+    /*
+    game.constructionLayers = {
+        foundations: {
             key: 'foundations',
-            title: 'Edit Foundations',
-            icon: 'ConcreteFoundation04Icon.webp'
+            title: 'Toggle Foundations Layer',
+            //img: 'StructureIcons/ConcreteFoundation04Icon.webp',
+            icon: 'fa-th-large'
         },
-        {
-            key: 'buildings',
-            title: 'Edit Buildings',
-            icon: 'MetalworksFactoryBase.webp'
-        },
-        {
+        *
+        defenses: {
             key: 'defenses',
-            title: 'Edit Defenses',
-            icon: 'FortT1Icon.webp'
+            title: 'Toggle Defenses Layer',
+            img: 'StructureIcons/BarbedWireCornerStructureIcon.webp'
         },
-        {
+        *
+        buildings: {
+            key: 'buildings',
+            title: 'Toggle Facilities Layer',
+            //img: 'StructureIcons/MetalworksFactoryBase.webp',
+            icon: 'fa-building'
+        },
+        bezier: {
+            key: 'bezier',
+            title: 'Toggle Network Layer',
+            icon: 'fa-code-fork'
+        },
+        hand: {
+            key: 'hand',
+            title: 'Hand Tool',
+            icon: 'fa-hand-pointer-o'
+        },
+        *
+        rails: {
             key: 'rails',
-            title: 'Edit Rails',
-            icon: 'BiarcRailTrackIcon.webp'
+            title: 'Toggle Rails Layer',
+            img: 'StructureIcons/BiarcRailTrackIcon.webp'
         },
-        {
+        pipes: {
             key: 'pipes',
-            title: 'Edit Pipes',
-            icon: 'PipelineSegmentIcon.webp'
+            title: 'Toggle Pipes Layer',
+            img: 'StructureIcons/PipelineSegmentIcon.webp',
         },
-        {
+        power: {
             key: 'power',
-            title: 'Edit Power',
-            icon: 'PowelineIcon.webp'
+            title: 'Toggle Power Layer',
+            img: 'StructureIcons/PowelineIcon.webp'
+        },
+        *
+        locked: {
+            key: 'locked',
+            title: 'Toggle Locked Layer',
+            icon: 'fa-lock'
         }
-    ];
+    };
+    */
 
     game.getEntities = () => {
         return entities;
@@ -239,42 +294,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
     }
 
-    game.updateConstructionCursor = function(visible) {
-        if (constructionCursor) {
-            constructionCursor.visible = visible && game.constructionMode.key !== 'select';
-            if (constructionCursor.visible) {
-                if (constructionCursor.type !== game.constructionMode.key) {
-                    constructionCursor.type = game.constructionMode.key;
-                    constructionCursor.clear();
-                    if (constructionCursor.type === 'text') {
-                        // Text
-                        constructionCursor.lineStyle(2, COLOR_WHITE).moveTo(0, 20).lineTo(0, -20);
-                        constructionCursor.lineStyle(4, COLOR_WHITE).moveTo(-4, -20).lineTo(4, -20);
-                        constructionCursor.lineStyle(4, COLOR_WHITE).moveTo(-4, 20).lineTo(4, 20);
-                    } else {
-                        // Crosshair
-                        constructionCursor.lineStyle(SELECTION_BORDER_WIDTH, COLOR_WHITE).moveTo(-20, 0).lineTo(20, 0);
-                        constructionCursor.lineStyle(SELECTION_BORDER_WIDTH, COLOR_WHITE).moveTo(0, 20).lineTo(0, -20);
-                    }
-                }
-                constructionCursor.x = gmx;
-                constructionCursor.y = gmy;
-                if (document.body.style.cursor !== 'none') {
-                    document.body.style.cursor = 'none';
-                }
-            } else if (document.body.style.cursor !== 'unset') {
-                document.body.style.cursor = 'unset';
-            }
-        }
-    }
-
     game.setConstructionMode = function(mode) {
         mode = mode ?? game.constructionModes[game.constructionModes.length - 1];
         if (game.constructionMode !== mode) {
             game.constructionMode = mode;
-            if (mode.key === 'select') {
-                game.updateConstructionCursor(false);
-            }
+            app.view.style.cursor = mode.cursor ? `url(/assets/${mode.cursor}.webp) 16 16, auto` : 'unset';
             game.constructionMenuComponent?.refresh();
             return true;
         }
@@ -298,21 +322,31 @@ const fontFamily = ['Recursive', 'sans-serif'];
     }
     game.resetConstructionMode();
 
-    game.toggleConstructionLayer = function(layer) {
-        if (selectedEntities.length) {
-            game.deselectEntities();
+    /*
+    game.toggleConstructionLayer = function(layer, active) {
+        if (layer) {
+            const inactive = typeof active === 'boolean' ? !active : !layer.inactive;
+            if (layer.inactive !== inactive) {
+                if (selectedEntities.length) {
+                    game.deselectEntities();
+                }
+                layer.inactive = inactive;
+                for (let i = 0; i < entities.length; i++) {
+                    const entity = entities[i];
+                    entity.alpha = entity.building?.layer && game.constructionLayers[entity.building.layer].inactive ? 0.25 : 1;
+                }
+                game.constructionMenuComponent?.refresh();
+            }
         }
-        game.constructionLayer = game.constructionLayer !== layer ? layer : null;
-        for (let i = 0; i < entities.length; i++) {
-            const entity = entities[i];
-            entity.alpha = (!game.constructionLayer || entity.building?.layer === layer.key) ? 1 : 0.25;
-        }
-        game.constructionMenuComponent?.refresh();
     }
 
-    game.resetConstructionLayer = function() {
-        return game.toggleConstructionLayer(null);
+    game.resetConstructionLayer = function(layer) {
+        if (layer) {
+            layer = typeof layer === 'string' ? game.constructionLayers[layer] : layer;
+            return game.toggleConstructionLayer(layer, true);
+        }
     }
+    */
 
     let timeScale = 1;
 
@@ -527,7 +561,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     }
                     break;
                 case 27: // Escape
-                    game.resetConstructionLayer();
                     game.resetConstructionMode();
                     if (!selectionArea?.visible) {
                         game.deselectEntities();
@@ -647,6 +680,9 @@ const fontFamily = ['Recursive', 'sans-serif'];
         resources = res;
         console.info('Asset loading completed.');
 
+        background = new PIXI.TilingSprite(resources['background'].texture);
+        app.stage.addChild(background);
+
         app.cstage = new PIXI.Container();
         app.stage.addChild(app.cstage);
         app.stage.filterArea = app.renderer.screen;
@@ -679,18 +715,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
         };
         app.cstage.addChild(ambientLight);
 
-        background = new PIXI.TilingSprite(resources['background'].texture);
-        background.getZIndex = function () {
-            return 100000;
-        };
-        background.width = GRID_WIDTH;
-        background.height = GRID_HEIGHT;
-        background.anchor.x = 0;
-        background.anchor.y = 0;
-        background.position.x = 0;
-        background.position.y = 0;
-        app.cstage.addChild(background);
-
         app.cstage.updateLayersOrder = function () {
             app.cstage.children.sort(function (a, b) {
                 return b.getZIndex() - a.getZIndex()
@@ -700,7 +724,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
         debugText = new PIXI.Text();
         debugText.visible = ENABLE_DEBUG;
         debugText.style.fill = COLOR_WHITE;
-        debugText.style.fontFamily = fontFamily;
+        debugText.style.fontFamily = FONT_FAMILY;
         debugText.anchor.x = 0;
         debugText.x = WIDTH*0.22;
         debugText.y = 12;
@@ -716,14 +740,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
             return -1000000000;
         };
         app.cstage.addChild(selectionArea);
-
-        constructionCursor = new PIXI.Graphics();
-        constructionCursor.visible = false;
-        constructionCursor.alpha = 0.75;
-        constructionCursor.getZIndex = function () {
-            return -1000000000;
-        };
-        app.cstage.addChild(constructionCursor);
 
         game.loadVueApp();
         document.getElementById('loading').remove();
@@ -969,34 +985,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
     game.getEntitiesCenter = function(ents, isSelection) {
         const count = ents?.length ?? 1;
-        let getMidPoint = function(entity) {
-            let midPoint = null;
-            if (entity.bezier && (!isSelection || count > 1)) {
-                midPoint = {
-                    x: entity.bezier.mid.x,
-                    y: entity.bezier.mid.y
-                };
-            } else if (entity.type === 'shape' && (entity.subtype === 'rectangle' || entity.subtype === 'line')) {
-                midPoint = {
-                    x: entity.sprite.width/2,
-                    y: entity.subtype !== 'line' ? entity.sprite.height/2 : 0
-                };
-            }
-            if (midPoint) {
-                return Math.rotateAround(entity, {
-                    x: entity.x + midPoint.x,
-                    y: entity.y + midPoint.y
-                });
-            }
-            return {
-                x: entity.x,
-                y: entity.y
-            };
-        }
         if (Array.isArray(ents)) {
             let sumX = 0, sumY = 0;
             for (const entity of ents) {
-                let midPoint = getMidPoint(entity);
+                let midPoint = entity.getMidPoint(isSelection);
                 sumX += midPoint.x;
                 sumY += midPoint.y;
             }
@@ -1005,7 +997,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 y: sumY / count
             };
         }
-        return getMidPoint(ents);
+        return ents.getMidPoint();
     };
 
     game.zoomToFacilityCenter = function() {
@@ -1196,6 +1188,18 @@ const fontFamily = ['Recursive', 'sans-serif'];
                     if (selectedEntity?.hasHandle && selectedEntity.shouldSelectLastHandlePoint) {
                         selectedEntity.grabHandlePoint();
                     }
+                } else if (game.constructionMode.key !== 'select') {
+                    let gmxGrid = gmx;
+                    let gmyGrid = gmy;
+                    if (game.settings.enableGrid || keys[16]) {
+                        let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
+                        gmxGrid = Math.round(gmxGrid / gridSize) * gridSize;
+                        gmyGrid = Math.round(gmyGrid / gridSize) * gridSize;
+                    }
+                    const entity = game.create(game.constructionMode.eType, game.constructionMode.eSubType, gmxGrid, gmyGrid);
+                    if (entity.hasHandle) {
+                        entity.grabHandlePoint();
+                    }
                 } else {
                     entities.sort(function (a, b) {
                         return a.getZIndex() - b.getZIndex()
@@ -1228,38 +1232,17 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             return;
                         }
                     }
-                    if (game.constructionMode.key !== 'select' || !(e.ctrlKey || e.shiftKey)) {
+                    if (!(e.ctrlKey || e.shiftKey)) {
                         game.deselectEntities();
                     }
-                    if (game.constructionMode.key === 'select') {
-                        if (selectionArea) {
-                            selectionArea.origin = { x: gmx, y: gmy };
-                        }
-                    } else if (constructionCursor) {
-                        let gmxGrid = gmx;
-                        let gmyGrid = gmy;
-                        if (game.settings.enableGrid || keys[16]) {
-                            let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
-                            gmxGrid = Math.round(gmxGrid / gridSize) * gridSize;
-                            gmyGrid = Math.round(gmyGrid / gridSize) * gridSize;
-                        }
-                        const entity = game.create(game.constructionMode.eType, game.constructionMode.eSubType, gmxGrid, gmyGrid);
-                        if (entity.hasHandle) {
-                            entity.grabHandlePoint();
-                        }
+                    if (selectionArea) {
+                        selectionArea.origin = { x: gmx, y: gmy };
                     }
                 }
             }
         } else if (mouseButton === 1 || mouseButton === 4) {
             dragCamera = true;
         }
-    });
-
-    mouseEventListenerObject.addEventListener(eventPrefix + 'enter', (e) => {
-        game.updateConstructionCursor(true);
-    });
-    mouseEventListenerObject.addEventListener(eventPrefix + 'leave', (e) => {
-        game.updateConstructionCursor(false);
     });
 
     mouseEventListenerObject.addEventListener(eventPrefix + 'move', (e) => {
@@ -1280,8 +1263,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
             camera.y += mdy;
         }
 
-        game.updateConstructionCursor(true);
-
         if (selectionArea && selectionArea.origin) {
             selectionArea.clear();
             selectionArea.x = selectionArea.origin.x > gmx ? gmx : selectionArea.origin.x;
@@ -1297,19 +1278,18 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
             let selectedChange = false;
             entities.forEach(entity => {
-                if (!game.constructionLayer || entity.building?.layer === game.constructionLayer.key) {
-                    const centerPos = game.getEntitiesCenter(entity);
-                    if (centerPos.x > selectionArea.x && centerPos.x < selectionArea.x + selectionArea.width) {
-                        if (centerPos.y > selectionArea.y && centerPos.y < selectionArea.y + selectionArea.height) {
-                            if (game.addSelectedEntity(entity, true)) {
-                                selectedChange = true;
-                            }
-                            return;
+                //if (!entity.building?.layer || !game.constructionLayers[entity.building.layer].inactive) {
+                const centerPos = game.getEntitiesCenter(entity);
+                if (centerPos.x > selectionArea.x && centerPos.x < selectionArea.x + selectionArea.width) {
+                    if (centerPos.y > selectionArea.y && centerPos.y < selectionArea.y + selectionArea.height) {
+                        if (game.addSelectedEntity(entity, true)) {
+                            selectedChange = true;
                         }
+                        return;
                     }
-                    if (game.removeSelectedEntity(entity, true)) {
-                        selectedChange = true;
-                    }
+                }
+                if (game.removeSelectedEntity(entity, true)) {
+                    selectedChange = true;
                 }
             });
             if (selectedChange) {
@@ -1337,6 +1317,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
             if (game.constructionMode.key !== 'select' && selectedHandlePoint) {
                 selectedHandlePoint = null;
+                game.resetConstructionMode();
             }
         } else if (mouseButton === 1 || mouseButton === 4) {
             dragCamera = false;
@@ -1739,36 +1720,6 @@ const fontFamily = ['Recursive', 'sans-serif'];
     const METER_PIXEL_SCALE = METER_PIXEL_UNIT / METER_PIXEL_SIZE;
     const SELECTION_BORDER_WIDTH = 6, TRACK_SEGMENT_LENGTH = 16;
 
-    const DEFAULT_LABEL_STYLE = {
-        fontFamily: 'Arial',
-        fontSize: 64,
-        fontStyle: 'normal',
-        fontWeight: 'normal',
-        fill: '#ffffff',
-        align: 'center',
-        dropShadow: true,
-        dropShadowAlpha: 0.25,
-        dropShadowBlur: 6,
-        dropShadowDistance: 0,
-        padding: 12
-    };
-
-    const DEFAULT_SHAPE_STYLE = {
-        alpha: 0.75,
-        fill: true,
-        fillColor: COLOR_WHITE,
-        border: false,
-        lineWidth: 4,
-        lineColor: COLOR_WHITE,
-        //zOffset: 0 // Would be cool to have buttons like bring to front or send to back. So people could position it exactly where it needs to be layer-wise.
-    }
-
-    const DEFAULT_LINE_STYLE = Object.assign({}, DEFAULT_SHAPE_STYLE, {
-        lineWidth: 8,
-        frontArrow: true,
-        backArrow: true
-    });
-
     function createSelectableEntity(type, subtype, x, y, z, rotation, id, netData) {
         let entity = createEntity(type, subtype, x, y, z, id, netData);
         
@@ -1786,7 +1737,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             entity.building = building;
         }
 
-        //entity.alpha = (!game.constructionLayer || entity.building?.layer === layer.key) ? 1 : 0.25;
+        //entity.alpha = (!entity.building?.layer || !game.constructionLayers[entity.building.layer].inactive) ? 1 : 0.25;
         entity.selected = false;
         entity.selectable = true;
         entity.hasHandle = (type === 'shape' || entity.building?.hasHandle) ?? false;
@@ -1804,7 +1755,13 @@ const fontFamily = ['Recursive', 'sans-serif'];
         }
 
         if (type === 'text') {
-            entity.labelStyle = Object.assign({}, DEFAULT_LABEL_STYLE);
+            entity.labelStyle = Object.assign({
+                dropShadow: true,
+                dropShadowAlpha: 0.25,
+                dropShadowBlur: 6,
+                dropShadowDistance: 0,
+                padding: 12
+            }, game.settings.styles.label);
             entity.label = new PIXI.Text('', entity.labelStyle);
             entity.label.anchor.set(0.5);
             entity.setSelectionSize(entity.label.width, entity.label.height);
@@ -1826,7 +1783,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             entity.onSave = function(entityData) {
                 entityData.label = entity.label.text;
                 for (const[key, value] of Object.entries(entity.labelStyle)) {
-                    if (value !== DEFAULT_LABEL_STYLE[key]) {
+                    if (value !== game.defaultSettings.styles.label[key]) {
                         if (!entityData.labelStyle) {
                             entityData.labelStyle = {};
                         }
@@ -2370,14 +2327,17 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
         }
 
+        let points;
         if (entity.type === 'building' || entity.type === 'shape') {
-            let points = [];
+            points = [];
             entity.updateHandles = function() {
                 for (let i = 0; i < points.length; i++) {
                     let point = points[i];
                     if (point.handle) {
-                        point.handle.tint = entity.locked ? COLOR_RED : (point.index === 0 ? COLOR_ORANGE : COLOR_WHITE);
                         point.handle.visible = entity.selected;
+                        if (point.handle.visible) {
+                            point.handle.tint = entity.locked ? COLOR_RED : (point.index === 0 ? COLOR_ORANGE : COLOR_WHITE);
+                        }
                     }
                 }
             };
@@ -2443,7 +2403,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
                 if (entity.type === 'shape') {
                     for (const[key, value] of Object.entries(entity.shapeStyle)) {
-                        if (value !== DEFAULT_SHAPE_STYLE[key]) {
+                        if (value !== game.defaultSettings.styles.rectangle[key]) {
                             if (!entityData.shapeStyle) {
                                 entityData.shapeStyle = {};
                             }
@@ -2727,7 +2687,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
             if (entity.type ==='shape') {
                 entity.sprite = new PIXI.Graphics();
                 entity.addChild(entity.sprite);
-                entity.shapeStyle = Object.assign({}, entity.subtype === 'line' ? DEFAULT_LINE_STYLE : DEFAULT_SHAPE_STYLE);
+                entity.shapeStyle = Object.assign({}, entity.subtype === 'line' ? game.settings.styles.line : (entity.subtype === 'circle' ? game.settings.styles.circle : game.settings.styles.rectangle));
 
                 function updateArrow(sprite, visible) {
                     if (visible) {
@@ -2748,8 +2708,11 @@ const fontFamily = ['Recursive', 'sans-serif'];
 
                 entity.setShapeStyle = function(style) {
                     entity.shapeStyle = style;
-                    entity.frontCap = updateArrow(entity.frontCap, entity.shapeStyle.frontArrow);
-                    entity.backCap = updateArrow(entity.backCap, entity.shapeStyle.backArrow);
+                    if (entity.subtype === 'line') {
+                        entity.frontCap = updateArrow(entity.frontCap, entity.shapeStyle.frontArrow);
+                        entity.backCap = updateArrow(entity.backCap, entity.shapeStyle.backArrow);
+                        entity.updateHandles();
+                    }
                     entity.regenerate();
                 }
 
@@ -2811,8 +2774,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             }
                         }
                     }
-                } else if (entity.type === 'shape' && (entity.sprite.width < 16 || (entity.subtype !== 'line' && entity.sprite.height < 16))) {
-                    // TODO: Need to adjust this better for lines. They can still be really short.
+                } else if (entity.type === 'shape' && points && Math.distanceBetween(points[0], points[points.length - 1]) < (entity.subtype === 'circle' ? 16 : 32)) {
                     entity.remove();
                     return;
                 }
@@ -2840,56 +2802,107 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 sound = null;
             }
         };
+        
+        entity.getMidPoint = function(isSelection) {
+            let midPoint = null;
+            if (entity.bezier && (!isSelection || game.selectedEntities.length > 1)) {
+                midPoint = {
+                    x: entity.bezier.mid.x,
+                    y: entity.bezier.mid.y
+                };
+            } else if (entity.type === 'shape' && points && (entity.subtype === 'rectangle' || entity.subtype === 'line')) {
+                midPoint = {
+                    x: (points[0].x + points[1].x) / 2,
+                    y: (points[0].y + points[1].y) / 2
+                };
+            }
+            if (midPoint) {
+                return Math.rotateAround(entity, {
+                    x: entity.x + midPoint.x,
+                    y: entity.y + midPoint.y
+                });
+            }
+            return {
+                x: entity.x,
+                y: entity.y
+            };
+        }
 
-        let boundsBuffer = 15;
+        const boundsBuffer = 16, boundsPadding = boundsBuffer / 2;
         entity.canGrab = function() {
-            if (!game.constructionLayer || entity.building?.layer === game.constructionLayer.key) {
-                if (entity.type === 'shape' && entity.subtype === 'circle') {
-                    if (Math.distanceBetween(entity, { x: gmx, y: gmy }) < ((entity.sprite.width/2) + (boundsBuffer/2))) {
-                        return true;
-                    }
-                } else {
-                    let bounds = entity.getBounds(true);
-                    let boundsAdjustedPos = app.cstage.toLocal({x: bounds.x, y: bounds.y}, app.stage, undefined, true);
-                    bounds.x = boundsAdjustedPos.x - boundsBuffer;
-                    bounds.y = boundsAdjustedPos.y - boundsBuffer;
-                    bounds.width = bounds.width/game.camera.zoom;
-                    bounds.height = bounds.height/game.camera.zoom;
-                    bounds.bufferWidth = bounds.width + (boundsBuffer * 2);
-                    bounds.bufferHeight = bounds.height + (boundsBuffer * 2);
-    
-                    if (gmx >= bounds.x && gmx <= bounds.x + bounds.bufferWidth && gmy >= bounds.y && gmy <= bounds.y + bounds.bufferHeight) {
-                        // TODO: Add padding around sprite so that it's easier to select.
-                        // Will need to check for entity.building?.isBezier and entity.bezier when that happens.
-                        if (entity.bezier) {
-                            let mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
-                            let projection = entity.bezier.project(mousePos);
-                            if (projection.d <= (entity.building?.lineWidth ?? 25)) {
-                                return true;
-                            }
-                        } else {
-                            if (entity.building?.hitArea) {
-                                const mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
-                                return entity.sprite?.hitArea.contains(mousePos.x, mousePos.y);
-                            }
-    
-                            // https://stackoverflow.com/a/67732811 <3
-                            let w = entity.selectionArea.width / 2;
-                            let h = entity.selectionArea.height / 2;
-                            const r = entity.rotation;
-    
-                            const [ax, ay] = [Math.cos(r), Math.sin(r)];
-                            const t = (x, y) => ({x: x * ax - y * ay + entity.x, y: x * ay + y * ax + entity.y});
-                            let bBounds;
-                            if (entity.hasHandle) {
-                                w = entity.sprite.width;
-                                h = entity.subtype === 'rectangle' ? entity.sprite.height : entity.sprite.height / 2;
-                                bBounds = [t(w, h), t(0, h), t(0, entity.subtype !== 'rectangle' ? -h : 0), t(w, entity.subtype !== 'rectangle' ? -h : 0)];
-                            } else {
-                                bBounds = [t(w, h), t(-w, h), t(-w, -h), t(w, -h)];
-                            }
-                            return Math.isPointWithinBounds({ x: gmx, y: gmy }, bBounds);
+            //if (!entity.building?.layer || !game.constructionLayers[entity.building.layer].inactive) {
+            if (entity.type === 'shape' && entity.subtype === 'circle') {
+                if (Math.distanceBetween(entity, { x: gmx, y: gmy }) < ((entity.sprite.width/2) + (boundsPadding))) {
+                    return true;
+                }
+            } else {
+                let bounds = entity.getBounds(true);
+                let boundsAdjustedPos = app.cstage.toLocal({x: bounds.x, y: bounds.y}, app.stage, undefined, true);
+                bounds.x = boundsAdjustedPos.x - boundsBuffer;
+                bounds.y = boundsAdjustedPos.y - boundsBuffer;
+                bounds.width /= game.camera.zoom;
+                bounds.height /= game.camera.zoom;
+                bounds.bufferWidth = bounds.width + (boundsBuffer * 2);
+                bounds.bufferHeight = bounds.height + (boundsBuffer * 2);
+
+                if (gmx >= bounds.x && gmx <= bounds.x + bounds.bufferWidth && gmy >= bounds.y && gmy <= bounds.y + bounds.bufferHeight) {
+                    // TODO: Add padding around sprite so that it's easier to select.
+                    // Will need to check for entity.building?.isBezier and entity.bezier when that happens.
+                    if (entity.bezier) {
+                        let mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
+                        let projection = entity.bezier.project(mousePos);
+                        if (projection.d <= (entity.building?.lineWidth ?? 25)) {
+                            return true;
                         }
+                    } else {
+                        if (entity.building?.hitArea) {
+                            const mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
+                            return entity.sprite?.hitArea.contains(mousePos.x, mousePos.y);
+                        }
+
+                        // https://stackoverflow.com/a/67732811 <3
+                        let w = entity.selectionArea.width / 2;
+                        let h = entity.selectionArea.height / 2;
+                        const r = entity.rotation;
+
+                        const [ax, ay] = [Math.cos(r), Math.sin(r)];
+                        const t = (x, y) => ({x: x * ax - y * ay + entity.x, y: x * ay + y * ax + entity.y});
+                        let bBounds;
+                        if (entity.hasHandle && points) {
+                            let p1, p2, m1, m2;
+                            for (let i = 0; i < points.length; i++) {
+                                let point = points[i];
+                                if (point.index === 0) {
+                                    p1 = point;
+                                } else if (point.index === 1) {
+                                    p2 = point;
+                                }
+                            }
+                            if (entity.subtype === 'line') {
+                                const lineThickness = entity.shapeStyle?.lineWidth ? entity.shapeStyle.lineWidth / 2 : 0;
+                                m1 = {
+                                    x: p1.x - lineThickness - boundsPadding,
+                                    y: p1.y - lineThickness - boundsPadding
+                                };
+                                m2 = {
+                                    x: p2.x + lineThickness + boundsPadding,
+                                    y: p2.y + lineThickness + boundsPadding
+                                };
+                            } else {
+                                m1 = {
+                                    x: p1.x + (p2.x < p1.x ? boundsPadding : -boundsPadding),
+                                    y: p1.y + (p2.y < p1.y ? boundsPadding : -boundsPadding)
+                                };
+                                m2 = {
+                                    x: p2.x + (p1.x < p2.x ? boundsPadding : -boundsPadding),
+                                    y: p2.y + (p1.y < p2.y ? boundsPadding : -boundsPadding)
+                                };
+                            }
+                            bBounds = [t(m2.x, m2.y), t(m1.x, m2.y), t(m1.x, m1.y), t(m2.x, m1.y)];
+                        } else {
+                            bBounds = [t(w, h), t(-w, h), t(-w, -h), t(w, -h)];
+                        }
+                        return Math.isPointWithinBounds({ x: gmx, y: gmy }, bBounds);
                     }
                 }
             }
@@ -2998,6 +3011,7 @@ const fontFamily = ['Recursive', 'sans-serif'];
                 }
 
                 if (entity.selected && !entity.locked && mouseDown[0]) {
+                    const lastRotation = entity.rotation;
                     let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
                     let gmxGrid = gmx;
                     let gmyGrid = gmy;
@@ -3196,6 +3210,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
                             selectedHandlePoint.handle.position.x = selectedHandlePoint.x;
                             selectedHandlePoint.handle.position.y = selectedHandlePoint.y;
                         }
+
+                        if (entity.rotation !== lastRotation) {
+                            game.updateSelectedBuildingMenu();
+                        }
                     }
                 }
             }
@@ -3381,9 +3399,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
     game.create = function(type, subtype, x, y, z) {
         game.updateConstructionMode(type, subtype);
         let entity = createSelectableEntity(type, subtype, x ?? 0, y ?? 0, z ?? 0);
-        if (game.constructionLayer && entity.building?.layer !== game.constructionLayer.key) {
-            game.resetConstructionLayer();
+        if (type === 'text') {
+            game.resetConstructionMode();
         }
+        //game.resetConstructionLayer(entity.building?.layer);
         game.selectEntity(entity);
         game.setPickupEntities(true, true);
         if (entity.hasHandle) {
@@ -3531,6 +3550,12 @@ const fontFamily = ['Recursive', 'sans-serif'];
         lastTick = Date.now();
 
         game.tryGameFocus();
+
+        background.width = WIDTH / camera.zoom;
+        background.height = HEIGHT / camera.zoom;
+        background.scale.set(camera.zoom);
+        background.tilePosition.x = -camera.x / camera.zoom;
+        background.tilePosition.y = -camera.y / camera.zoom;
 
         /*
         if (game.settings.quality === 'auto') {
@@ -4027,14 +4052,10 @@ const fontFamily = ['Recursive', 'sans-serif'];
             }
         }
 
-        if (constructionCursor) {
-            constructionCursor.width = 32 / camera.zoom;
-            constructionCursor.height = 32 / camera.zoom;
-        }
-
         if (ENABLE_DEBUG) {
             debugText.text = 'Press F2 to disable debug\n';
             debugText.text += 'Press F8 to spawn 1k buildings\n';
+            debugText.text += `x: ${gmx}, y: ${gmy}\n`;
             debugText.text += 'FPS: ' + Math.round(1000/delta) + '\n';
         }
 
@@ -4132,14 +4153,34 @@ const fontFamily = ['Recursive', 'sans-serif'];
         };
     };
     Math.isPointWithinBounds = function(point, bounds) {
-        let i = 0, l = {p1: bounds[3]};
-        while (i < bounds.length) {
-            l.p2 = bounds[i++];
-            if (!(0 < (l.p2.x - l.p1.x) * (point.y - l.p1.y) - (l.p2.y - l.p1.y) * (point.x - l.p1.x))) {
-                return false;
+        let intersects = 0;
+        for (let i = 0; i < bounds.length; i++) {
+            const a = bounds[i], b = bounds[(i + 1) % bounds.length];
+            let pX = point.x, pY = point.y;
+            let aX = a.x, aY = a.y;
+            let bX = b.x, bY = b.y;
+
+            if (aY > bY) {
+                [aX, aY, bX, bY] = [bX, bY, aX, aY];
             }
-            l.p1 = l.p2;
+
+            if (pY === aY || pY === bY) {
+                pY += 0.00001;
+            }
+
+            if (pY > bY || pY < aY || pX > Math.max(aX, bX)) {
+                continue;
+            }
+
+            if (pX < Math.min(aX, bX)) {
+                intersects++;
+                continue;
+            }
+
+            if (((pY - aY) / (pX - aX)) >= ((bY - aY) / (bX - aX))) {
+                intersects++;
+            }
         }
-        return true;
+        return intersects % 2 === 1;
     };
 })();

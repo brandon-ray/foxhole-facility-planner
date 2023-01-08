@@ -212,7 +212,6 @@ function iterateStructures(dirPath) {
                                     'description': structure.Description?.SourceString ?? baseData.description,
                                     'category': structureData.category,
                                     'categoryOrder': structureData.categoryOrder ?? structure.BuildOrder ?? baseData.BuildOrder,
-                                    'layer': structureData.layer,
                                     'faction': structureData.faction,
                                     'color': structureData.color,
                                     'hideInList': structureData.hideInList,

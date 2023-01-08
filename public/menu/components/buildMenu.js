@@ -498,8 +498,10 @@ Vue.component('app-menu-building-selected', {
                     <div class="select-production m-2" v-if="!productionData.faction || !game.settings.selectedFaction || productionData.faction == game.settings.selectedFaction">
                         <app-game-recipe :building="entity.building" :recipe="productionData"></app-game-recipe>
                         <h6 class="production-requirements">
-                            <span v-if="productionData.power || entity.building.power" title="Power"><i class="fa fa-bolt"></i> {{productionData.power || entity.building.power}} MW</span>
-                            &nbsp;&nbsp;&nbsp;
+                            <template v-if="productionData.power || entity.building.power">
+                                <span title="Power"><i class="fa fa-bolt"></i> {{productionData.power || entity.building.power}} MW</span>
+                                &nbsp;&nbsp;&nbsp;
+                            </template>
                             <span title="Time"><i class="fa fa-clock-o"></i> {{productionData.time}}s</span>
                         </h6>
                     </div>
@@ -538,8 +540,10 @@ Vue.component('app-menu-building-selected', {
                         <div class="select-production" v-if="!production.faction || !game.settings.selectedFaction || production.faction == game.settings.selectedFaction" :class="{'selected-production': entity.selectedProduction === production.id}" @click="changeProduction(production.id)">
                             <app-game-recipe :building="entity.building" :recipe="production"></app-game-recipe>
                             <h6 class="production-requirements">
-                                <span v-if="production.power || entity.building.power" title="Power"><i class="fa fa-bolt"></i> {{production.power || entity.building.power}} MW</span>
-                                &nbsp;&nbsp;&nbsp;
+                                <template v-if="production.power || entity.building.power">
+                                    <span title="Power"><i class="fa fa-bolt"></i> {{production.power || entity.building.power}} MW</span>
+                                    &nbsp;&nbsp;&nbsp;
+                                </template>
                                 <span title="Time"><i class="fa fa-clock-o"></i> {{production.time}}s</span>
                             </h6>
                             <div class="production-enabled"><i class="fa fa-power-off " aria-hidden="true"></i></div>
@@ -556,7 +560,8 @@ Vue.component('app-menu-construction-list', {
     props: ['menuData'],
     data: function() {
         return {
-            buildings: window.objectData.buildings_list
+            buildings: window.objectData.buildings_list,
+            modeOptions: null
         };
     },
     mounted: function() {
@@ -565,6 +570,21 @@ Vue.component('app-menu-construction-list', {
     },
     methods: {
         refresh: function() {
+            const modeSettings = game.settings.styles[game.constructionMode.key];
+            if (game.constructionMode.key !== 'select' && modeSettings) {
+                this.modeOptions = Object.assign({}, modeSettings);
+                if (game.constructionMode.key !== 'label') {
+                    this.modeOptions.alpha = this.modeOptions.alpha * 100;
+                    if (typeof this.modeOptions.fillColor === 'number') {
+                        this.modeOptions.fillColor = `#${this.modeOptions.fillColor.toString(16)}`;
+                    }
+                    if (typeof this.modeOptions.lineColor === 'number') {
+                        this.modeOptions.lineColor = `#${this.modeOptions.lineColor.toString(16)}`;
+                    }
+                }
+            } else {
+                this.modeOptions = null;
+            }
             this.$forceUpdate();
         },
         incrementTier: function() {
@@ -579,9 +599,43 @@ Vue.component('app-menu-construction-list', {
             this.bmc();
             game.setConstructionMode(mode);
         },
+        /*
         toggleConstructionLayer: function(layer) {
             this.bmc();
             game.toggleConstructionLayer(layer);
+        },
+        */
+        updateMenuOptions: function() {
+            if (game.constructionMode.key !== 'select') {
+                const modeSettings = game.settings.styles[game.constructionMode.key];
+                if (modeSettings) {
+                    let optionsCopy;
+                    if (game.constructionMode.key === 'label') {
+                        this.modeOptions.fontSize = this.modeOptions.fontSize > 500 ? 500 : this.modeOptions.fontSize < 12 ? 12 : this.modeOptions.fontSize;
+                    } else {
+                        optionsCopy = Object.assign({}, this.modeOptions);
+                        optionsCopy.alpha = optionsCopy.alpha / 100;
+                        optionsCopy.alpha = optionsCopy.alpha > 1 ? 1 : optionsCopy.alpha < 0 ? 0 : optionsCopy.alpha;
+                        if (typeof optionsCopy.fillColor === 'string') {
+                            optionsCopy.fillColor = parseInt(optionsCopy.fillColor.slice(1), 16);
+                        }
+                        optionsCopy.lineWidth = optionsCopy.lineWidth > 64 ? 64 : optionsCopy.lineWidth < 6 ? 6 : optionsCopy.lineWidth;
+                        if (typeof optionsCopy.lineColor === 'string') {
+                            optionsCopy.lineColor = parseInt(optionsCopy.lineColor.slice(1), 16);
+                        }
+                    }
+                    game.settings.styles[game.constructionMode.key] = optionsCopy ?? this.modeOptions;
+                    game.updateSettings();
+                    this.refresh();
+                }
+            }
+        },
+        resetModeOptions: function() {
+            if (game.constructionMode.key !== 'select') {
+                game.settings.styles[game.constructionMode.key] = Object.assign({}, game.defaultSettings.styles[game.constructionMode.key]);
+                game.updateSettings();
+                this.refresh();
+            }
         }
     },
     template: html`
@@ -593,34 +647,106 @@ Vue.component('app-menu-construction-list', {
                     <span v-else-if="mode.text">{{mode.text}}</span>
                 </button>
             </div>
-            <div v-if="game.constructionMode.key === 'select'" class="construction-layer-switcher row">
-                <div v-for="layer in game.constructionLayers" class="col" :class="{ 'layer-active': game.constructionLayer?.key === layer.key }" :style="{backgroundImage: 'url(/assets/game/Textures/UI/StructureIcons/' + layer.icon + ')'}" :title="layer.title" @mouseenter="bme()" @click="toggleConstructionLayer(layer)"></div>
-            </div>
-            <div v-else class="row">
-                <!-- TO-DO -->
-            </div>
-        </div>
-        <div class="construction-filter-wrapper">
-            <button class="construction-settings-button" @click="game.sidebarMenuComponent?.changeMenu('settings')" title="Filter Settings"><i class="fa fa-sliders" aria-hidden="true"></i></button>
-            <button class="construction-tech-button" @click="incrementTier()" title="Filter by Tier">{{'Tier ' + game.settings.selectedTier}}</button>
-            <div class="construction-category-wrapper">
-                <select class="app-input construction-category" @click="bmc()" title="Filter by Category" v-model="game.settings.defaultBuildingCategory" @change="refresh()">
-                    <option value="all">All Buildings</option>
-                    <template v-for="(category, key) in buildingCategories">
-                        <option v-if="game.settings.enableExperimental || key !== 'entrenchments'" :value="key">{{category.name}}</option>
+            <div class="construction-mode-options row d-flex justify-content-center position-relative">
+                <template v-if="modeOptions && game.constructionMode.key === 'label'">
+                    <div class="btn-small col" title="Bold" :class="{ 'btn-active': modeOptions.fontWeight === 'bold' }" @click="modeOptions.fontWeight = modeOptions.fontWeight === 'bold' ? 'normal' : 'bold'; updateMenuOptions()">
+                        <i class="fa fa-bold" aria-hidden="true"></i>
+                        <label>bold</label>
+                    </div>
+                    <div class="btn-small col" title="Italic" :class="{ 'btn-active': modeOptions.fontStyle === 'italic' }" @click="modeOptions.fontStyle = modeOptions.fontStyle === 'italic' ? 'normal' : 'italic'; updateMenuOptions()">
+                        <i class="fa fa-italic" aria-hidden="true"></i>
+                        <label>italic</label>
+                    </div>
+                    <div class="btn-small col" title="Align Left" :class="{ 'btn-active': modeOptions.align === 'left' }" @click="modeOptions.align = 'left'; updateMenuOptions()">
+                        <i class="fa fa-align-left" aria-hidden="true"></i>
+                        <label>align</label>
+                    </div>
+                    <div class="btn-small col" title="Align Middle" :class="{ 'btn-active': modeOptions.align === 'center' }" @click="modeOptions.align = 'center'; updateMenuOptions()">
+                        <i class="fa fa-align-center" aria-hidden="true"></i>
+                        <label>align</label>
+                    </div>
+                    <div class="btn-small col" title="Align Right" :class="{ 'btn-active': modeOptions.align === 'right' }" @click="modeOptions.align = 'right'; updateMenuOptions()">
+                        <i class="fa fa-align-right" aria-hidden="true"></i>
+                        <label>align</label>
+                    </div>
+                    <div class="btn-small col">
+                        <input class="btn-small small-number-input" title="Font Size" type="number" v-model.number="modeOptions.fontSize" min="12" max="500" @input="updateMenuOptions()">
+                        <label>px</label>
+                    </div>
+                    <div class="btn-small col" title="Color">
+                        <input class="btn-small color-input" type="color" v-model="modeOptions.fill" @input="updateMenuOptions()">
+                        <i class="fa fa-tint icon-shadow" :style="{color: modeOptions.fill}" aria-hidden="true"></i>
+                        <label>color</label>
+                    </div>
+                    <div class="btn-small col" title="Reset Defaults" @click="resetModeOptions()">
+                        <i class="fa fa-undo" aria-hidden="true"></i>
+                        <label>reset</label>
+                    </div>
+                </template>
+                <template v-else-if="modeOptions && game.constructionMode.key === 'rectangle' || game.constructionMode.key === 'circle' || game.constructionMode.key === 'line'">
+                    <div class="btn-small col">
+                        <input class="btn-small small-number-input" title="Opacity" type="number" v-model.number="modeOptions.alpha" min="1" max="100" @input="updateMenuOptions()">
+                        <label>opacity</label>
+                    </div>
+                    <template v-if="game.constructionMode.key === 'line'">
+                        <div class="btn-small col" title="Front Arrow" :class="{ 'btn-active': modeOptions.frontArrow }" @click="modeOptions.frontArrow = !modeOptions.frontArrow; updateMenuOptions()">
+                            <i class="fa fa-caret-left" aria-hidden="true"></i>
+                            <label>arrow</label>
+                        </div>
+                        <div class="btn-small col" title="Back Arrow" :class="{ 'btn-active': modeOptions.backArrow }" @click="modeOptions.backArrow = !modeOptions.backArrow; updateMenuOptions()">
+                            <i class="fa fa-caret-right" aria-hidden="true"></i>
+                            <label>arrow</label>
+                        </div>
                     </template>
-                </select>
+                    <div v-if="game.constructionMode.key !== 'line'" title="Border" class="btn-small col" :class="{ 'btn-active': modeOptions.border }" @click="modeOptions.border = !modeOptions.border; updateMenuOptions()">
+                        <i class="fa" :class="{ 'fa-square-o': game.constructionMode.key === 'rectangle', 'fa-circle-thin': game.constructionMode.key === 'circle' }" aria-hidden="true"></i>
+                        <label>border</label>
+                    </div>
+                    <div v-if="game.constructionMode.key === 'line' || modeOptions.border" class="btn-small col">
+                        <input class="btn-small small-number-input" title="Line Thickness" type="number" v-model.number="modeOptions.lineWidth" min="6" max="64" @input="updateMenuOptions()">
+                        <label>thickness</label>
+                    </div>
+                    <div class="btn-small col" title="Color">
+                        <input class="btn-small color-input" type="color" v-model="modeOptions.fillColor" @input="updateMenuOptions()">
+                        <i class="fa fa-tint icon-shadow" :style="{color: modeOptions.fillColor}" aria-hidden="true"></i>
+                        <label>color</label>
+                    </div>
+                    <div class="btn-small col" title="Reset Defaults" @click="resetModeOptions()">
+                        <i class="fa fa-undo" aria-hidden="true"></i>
+                        <label>reset</label>
+                    </div>
+                </template>
+                <!--
+                <template v-else>
+                    <button v-for="layer in game.constructionLayers" class="btn-small col" :title="layer.title" type="button" :class="{ 'layer-active': !layer.inactive, 'layer-inactive': layer.inactive }" @mouseenter="bme()" @click="toggleConstructionLayer(layer)">
+                        <div v-if="layer.img" :style="{backgroundImage: 'url(/assets/game/Textures/UI/' + layer.img + ')'}"></div>
+                        <i v-if="layer.icon" class="fa" :class="layer.icon" aria-hidden="true"></i>
+                        <i v-if="layer.inactive" class="fa fa-ban position-absolute layer-inactive" aria-hidden="true"></i>
+                    </button>
+                </template>
+                -->
+                <template v-else>
+                    <button class="btn-small construction-settings-button" @click="game.sidebarMenuComponent?.changeMenu('settings')" title="Filter Settings"><i class="fa fa-sliders" aria-hidden="true"></i></button>
+                    <button class="btn-small construction-tech-button" @click="incrementTier()" title="Filter by Tier">{{'Tier ' + game.settings.selectedTier}}</button>
+                    <div class="construction-category-wrapper">
+                        <select class="btn-small app-input construction-category" @click="bmc()" title="Filter by Category" v-model="game.selectedBuildingCategory" @change="refresh()">
+                            <option value="all">All Buildings</option>
+                            <template v-for="(category, key) in buildingCategories">
+                                <option v-if="game.settings.enableExperimental || key !== 'entrenchments'" :value="key">{{category.name}}</option>
+                            </template>
+                        </select>
+                    </div>
+                </template>
             </div>
         </div>
         <div class="menu-page">
-            <template v-if="game.settings.defaultBuildingCategory !== 'all'">
-                <app-game-building-list-icon v-for="building in buildingCategories[game.settings.defaultBuildingCategory].buildings" :building="building"/>
+            <template v-if="game.selectedBuildingCategory !== 'all'">
+                <app-game-building-list-icon v-for="building in buildingCategories[game.selectedBuildingCategory].buildings" :building="building"/>
             </template>
             <template v-else>
                 <template v-for="(category, key) in buildingCategories">
                     <template v-if="(game.settings.showCollapsibleBuildingList || key !== 'vehicles') && (game.settings.enableExperimental || key !== 'entrenchments')">
                         <div v-if="game.settings.showCollapsibleBuildingList" class="construction-item-category" @click="category.visible = !category.visible; refresh()">
-                            <!--<i class="fa" :class="{'fa-minus': category.visible, 'fa-plus': !category.visible}" aria-hidden="true"></i>-->
                             {{category.name}}<i class="fa float-right" :class="{'fa-angle-down': category.visible, 'fa-angle-right': !category.visible}" style="margin-top: 2px;" aria-hidden="true"></i>
                         </div>
                         <div v-if="!game.settings.showCollapsibleBuildingList || category.visible">
@@ -825,7 +951,7 @@ Vue.component('app-menu-statistics', {
                 <app-game-resource-icon v-for="(value, key) in cost" :resource="key" :amount="value"/>
             </div>
             <br>
-            <h4><i class="fa fa-bolt"></i> Power</h4>
+            <h4><i class="fa fa-bolt"></i> Facility Power</h4>
             <div style="color:#d0d004; width:250px; margin:auto;">
                 <span style="color:#03b003;">Produced: {{powerProduced}} MW</span><br>
                 <span style="color:#d50101;">Consumed: {{powerConsumed}} MW</span><br>
