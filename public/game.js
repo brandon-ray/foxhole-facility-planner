@@ -597,11 +597,13 @@ try {
                             let y = 0;
                             for (let i=0; i<1000; i++) {
                                 let buildingData = window.objectData.buildings_list[Math.floor(Math.random()*window.objectData.buildings_list.length)];
-                                createSelectableEntity('building', buildingData.key, x, y, 0);
-                                x += 500;
-                                if (x >= 10000) {
-                                    x = 0;
-                                    y += 500;
+                                if (!buildingData.hideInList && (!buildingData.parent || !buildingData.parent.hideInList) && buildingData.category !== 'entrenchments') {
+                                    createSelectableEntity('building', buildingData.key, x, y, 0);
+                                    x += 500;
+                                    if (x >= 10000) {
+                                        x = 0;
+                                        y += 500;
+                                    }
                                 }
                             }
                         }, 1000);
@@ -2871,10 +2873,12 @@ try {
                         let h = entity.selectionArea.height / 2;
                         const r = entity.rotation;
 
+                        const lineThickness = entity.shapeStyle?.lineWidth ? entity.shapeStyle.lineWidth / 2 : 0;
+
                         const [ax, ay] = [Math.cos(r), Math.sin(r)];
                         const t = (x, y) => ({x: x * ax - y * ay + entity.x, y: x * ay + y * ax + entity.y});
                         let bBounds;
-                        if (entity.hasHandle && points) {
+                        if (entity.type === 'shape' && points) {
                             let p1, p2, m1, m2;
                             for (let i = 0; i < points.length; i++) {
                                 let point = points[i];
@@ -2885,7 +2889,6 @@ try {
                                 }
                             }
                             if (entity.subtype === 'line') {
-                                const lineThickness = entity.shapeStyle?.lineWidth ? entity.shapeStyle.lineWidth / 2 : 0;
                                 m1 = {
                                     x: p1.x - lineThickness - boundsPadding,
                                     y: p1.y - lineThickness - boundsPadding
@@ -2895,20 +2898,21 @@ try {
                                     y: p2.y + lineThickness + boundsPadding
                                 };
                             } else {
+                                const borderPadding = (entity.shapeStyle.border ? lineThickness : 0) + boundsPadding;
                                 m1 = {
-                                    x: p1.x + (p2.x < p1.x ? boundsPadding : -boundsPadding),
-                                    y: p1.y + (p2.y < p1.y ? boundsPadding : -boundsPadding)
+                                    x: p1.x + (p2.x < p1.x ? borderPadding : -borderPadding),
+                                    y: p1.y + (p2.y < p1.y ? borderPadding : -borderPadding)
                                 };
                                 m2 = {
-                                    x: p2.x + (p1.x < p2.x ? boundsPadding : -boundsPadding),
-                                    y: p2.y + (p1.y < p2.y ? boundsPadding : -boundsPadding)
+                                    x: p2.x + (p1.x < p2.x ? borderPadding : -borderPadding),
+                                    y: p2.y + (p1.y < p2.y ? borderPadding : -borderPadding)
                                 };
                             }
                             bBounds = [t(m2.x, m2.y), t(m1.x, m2.y), t(m1.x, m1.y), t(m2.x, m1.y)];
                         } else {
                             bBounds = [t(w, h), t(-w, h), t(-w, -h), t(w, -h)];
                         }
-                        return Math.isPointWithinBounds({ x: gmx, y: gmy }, bBounds);
+                        return Math.isPointWithinBounds({ x: gmx, y: gmy }, bBounds, (entity.subtype === 'rectangle' && entity.shapeStyle.border ? (lineThickness + boundsPadding) * 2 : undefined));
                     }
                 }
             }
@@ -4158,7 +4162,7 @@ try {
             y: cy + (x - cx) * sin + (y - cy) * cos
         };
     };
-    Math.isPointWithinBounds = function(point, bounds) {
+    Math.isPointWithinBounds = function(point, bounds, distance) {
         let intersects = 0;
         for (let i = 0; i < bounds.length; i++) {
             const a = bounds[i], b = bounds[(i + 1) % bounds.length];
@@ -4187,6 +4191,21 @@ try {
                 intersects++;
             }
         }
-        return intersects % 2 === 1;
+
+        if (intersects % 2 === 1) {
+            if (!distance) {
+                return true;
+            }
+            
+            for (let i = 0; i < bounds.length; i++) {
+                const a = bounds[i], b = bounds[(i + 1) % bounds.length];
+                const dist = Math.abs((b.x - a.x) * (a.y - point.y) - (a.x - point.x) * (b.y - a.y)) / Math.sqrt((b.x - a.x) ** 2 + (b.y - a.y) ** 2);
+                if (dist < distance) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     };
 })();
