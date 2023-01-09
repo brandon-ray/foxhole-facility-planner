@@ -39,6 +39,7 @@ const game = {
         snapRotationDegrees: 15,
         selectedFaction: null,
         selectedTier: 3,
+        disableLockedMouseEvents: false,
         displayFactionTheme: true,
         defaultBuildingCategory: 'all',
         showCollapsibleBuildingList: true,
@@ -972,8 +973,8 @@ try {
                 let centerPos = game.getEntitiesCenter(selectedEntities, isSelection);
                 if (game.settings.enableGrid) {
                     let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
-                    centerPos.x = Math.floor(centerPos.x / gridSize) * gridSize;
-                    centerPos.y = Math.floor(centerPos.y / gridSize) * gridSize;
+                    centerPos.x = Math.round(centerPos.x / gridSize) * gridSize;
+                    centerPos.y = Math.round(centerPos.y / gridSize) * gridSize;
                 }
                 game.setPickupEntities(true, false, centerPos, true);
                 game.updateSelectedBuildingMenu();
@@ -1278,17 +1279,18 @@ try {
 
             let selectedChange = false;
             entities.forEach(entity => {
-                //if (!entity.building?.layer || !game.constructionLayers[entity.building.layer].inactive) {
-                const centerPos = game.getEntitiesCenter(entity);
-                if (centerPos.x > selectionArea.x && centerPos.x < selectionArea.x + selectionArea.width) {
-                    if (centerPos.y > selectionArea.y && centerPos.y < selectionArea.y + selectionArea.height) {
-                        if (game.addSelectedEntity(entity, true)) {
-                            selectedChange = true;
+                if (entity.canGrab(true)) {
+                    const centerPos = entity.getMidPoint();
+                    if (centerPos.x > selectionArea.x && centerPos.x < selectionArea.x + selectionArea.width) {
+                        if (centerPos.y > selectionArea.y && centerPos.y < selectionArea.y + selectionArea.height) {
+                            if (game.addSelectedEntity(entity, true)) {
+                                selectedChange = true;
+                            }
+                            return;
                         }
-                        return;
                     }
                 }
-                if (game.removeSelectedEntity(entity, true)) {
+                if (!e.ctrlKey && game.removeSelectedEntity(entity, true)) {
                     selectedChange = true;
                 }
             });
@@ -1737,7 +1739,6 @@ try {
             entity.building = building;
         }
 
-        //entity.alpha = (!entity.building?.layer || !game.constructionLayers[entity.building.layer].inactive) ? 1 : 0.25;
         entity.selected = false;
         entity.selectable = true;
         entity.hasHandle = (type === 'shape' || entity.building?.hasHandle) ?? false;
@@ -1794,7 +1795,7 @@ try {
 
             entity.onLoad = function(entityData) {
                 entity.label.text = entityData.label;
-                Object.assign(entity.labelStyle, entityData.labelStyle);
+                Object.assign(entity.labelStyle, game.defaultSettings.styles.label, entityData.labelStyle);
                 entity.setLabelStyle(entity.labelStyle);
             };
         }
@@ -2402,8 +2403,9 @@ try {
                 }
 
                 if (entity.type === 'shape') {
+                    const defaultSettings = game.defaultSettings.styles[entity.subtype];
                     for (const[key, value] of Object.entries(entity.shapeStyle)) {
-                        if (value !== game.defaultSettings.styles.rectangle[key]) {
+                        if (!defaultSettings || value !== defaultSettings[key]) {
                             if (!entityData.shapeStyle) {
                                 entityData.shapeStyle = {};
                             }
@@ -2454,7 +2456,7 @@ try {
                 }
 
                 if (entity.type === 'shape') {
-                    Object.assign(entity.shapeStyle, entityData.shapeStyle);
+                    Object.assign(entity.shapeStyle, game.defaultSettings.styles[entity.subtype], entityData.shapeStyle);
                     entity.setShapeStyle(entity.shapeStyle);
                 }
 
@@ -2805,7 +2807,7 @@ try {
         
         entity.getMidPoint = function(isSelection) {
             let midPoint = null;
-            if (entity.bezier && (!isSelection || game.selectedEntities.length > 1)) {
+            if (entity.bezier && (!isSelection || selectedEntities.length > 1)) {
                 midPoint = {
                     x: entity.bezier.mid.x,
                     y: entity.bezier.mid.y
@@ -2829,10 +2831,14 @@ try {
         }
 
         const boundsBuffer = 16, boundsPadding = boundsBuffer / 2;
-        entity.canGrab = function() {
-            //if (!entity.building?.layer || !game.constructionLayers[entity.building.layer].inactive) {
+        entity.canGrab = function(ignoreMouse) {
+            const immovable = game.settings.disableLockedMouseEvents && entity.locked;
+            if (ignoreMouse || immovable) {
+                return !immovable;
+            }
             if (entity.type === 'shape' && entity.subtype === 'circle') {
-                if (Math.distanceBetween(entity, { x: gmx, y: gmy }) < ((entity.sprite.width/2) + (boundsPadding))) {
+                const centerDist = Math.distanceBetween(entity, { x: gmx, y: gmy });
+                if ((centerDist < ((entity.sprite.width/2) + boundsPadding)) && (!entity.shapeStyle?.border || (centerDist > (((entity.sprite.width/2) - entity.shapeStyle?.lineWidth) - boundsPadding)))) {
                     return true;
                 }
             } else {
@@ -2910,7 +2916,7 @@ try {
         };
 
         entity.getZIndex = function() {
-            return -entity.y - ((entity.building ?? entity.metaData)?.sortOffset ?? 0) - (entity.type === 'text' ? 10000000 : (entity.selected && !entity.following ? 5000000 : 0));
+            return -entity.y - (entity.building?.sortOffset ?? 0) - (entity.type === 'text' ? 10000000 : (entity.selected && !entity.following ? 5000000 : 0));
         };
 
         if (entity.building && entity.building.isBezier) {
@@ -3016,8 +3022,8 @@ try {
                     let gmxGrid = gmx;
                     let gmyGrid = gmy;
                     if (!entity.building?.ignoreSnapSettings && (game.settings.enableGrid || keys[16])) {
-                        gmxGrid = Math.floor(gmxGrid / gridSize) * gridSize;
-                        gmyGrid = Math.floor(gmyGrid / gridSize) * gridSize;
+                        gmxGrid = Math.round(gmxGrid / gridSize) * gridSize;
+                        gmyGrid = Math.round(gmyGrid / gridSize) * gridSize;
                     }
                     let mousePos = entity.toLocal({x: gmxGrid, y: gmyGrid}, app.cstage, undefined, true);
                     if (selectedHandlePoint) {
@@ -3027,8 +3033,8 @@ try {
                             entity.y = gmy;
 
                             if (!entity.building?.ignoreSnapSettings && (game.settings.enableGrid || keys[16])) {
-                                entity.x = Math.floor(entity.x / gridSize) * gridSize;
-                                entity.y = Math.floor(entity.y / gridSize) * gridSize;
+                                entity.x = Math.round(entity.x / gridSize) * gridSize;
+                                entity.y = Math.round(entity.y / gridSize) * gridSize;
                             }
                         } else if (entity.type === 'shape' || entity.building) {
                             if (mouseDown[2] && entity.building?.isBezier) {

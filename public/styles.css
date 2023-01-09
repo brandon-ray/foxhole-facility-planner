@@ -446,7 +446,7 @@ input[type=number].btn-small {
     margin: 0 0 5px 0;
 }
 
-#construction-page .construction-mode-switcher, #construction-page .construction-mode-options {
+#construction-page .construction-mode-switcher, .construction-options {
     width: 100%;
     height: 45px;
     margin: 0;
@@ -487,21 +487,22 @@ input[type=number].btn-small {
     background: #222;
 }
 
-#construction-page .construction-mode-options {
+.construction-options {
     height: 40px;
+    position: relative;
 }
 
 /*
-.colonial-faction #construction-page .construction-mode-options {
+.colonial-faction .construction-options {
     background-color: rgb(73, 106, 25);
 }
 
-.warden-faction #construction-page .construction-mode-options {
+.warden-faction .construction-options {
     background-color: rgb(25, 81, 132);
 }
 */
 
-#construction-page .construction-mode-options .btn-small {
+.construction-options .btn-small {
     line-height: 34px;
     height: 100%;
     background-color: #0B0B0B;
@@ -511,7 +512,7 @@ input[type=number].btn-small {
     overflow: hidden;
 }
 
-#construction-page .construction-mode-options .btn-small input[type=color] {
+.construction-options .btn-small input[type=color] {
     opacity: 0;
     width: 100%;
     height: 100%;
@@ -520,23 +521,23 @@ input[type=number].btn-small {
     border: none;
 }
 
-#construction-page .construction-mode-options .btn-small i.icon-shadow {
+.construction-options .btn-small i.icon-shadow {
     filter: drop-shadow(0 0px 1px white);
 }
 
-#construction-page .construction-mode-options .btn-small.small-number-input {
+.construction-options .btn-small.small-number-input {
     width: 100%;
     height: 36px;
     font-size: 0.95em;
     border: none;
 }
 
-#construction-page .construction-mode-options .btn-small > i,
-#construction-page .construction-mode-options .btn-small > label {
+.construction-options .btn-small > i,
+.construction-options .btn-small > span.label {
     pointer-events: none;
 }
 
-#construction-page .construction-mode-options .btn-small > label {
+.construction-options .btn-small > span.label {
     opacity: 0.75;
     font-size: 0.5em;
     line-height: 12px;
@@ -547,16 +548,15 @@ input[type=number].btn-small {
     right: 0;
 }
 
-#construction-page .construction-mode-options .btn-small > i.sub-icon {
-    color: #aaa;
-    font-size: 0.6em;
+.construction-options .btn-small > i.sub-icon {
+    font-size: 0.5em;
     position: absolute;
     bottom: 1px;
     right: 1px;
     pointer-events: none;
 }
 
-#construction-page .construction-mode-options .btn-small > div {
+.construction-options .btn-small > div {
     width: 100%;
     height: 100%;
     background-position: center;
@@ -564,80 +564,55 @@ input[type=number].btn-small {
     background-repeat: no-repeat;
 }
 
-#construction-page .construction-mode-options .btn-small:hover {
+.construction-options .btn-small:hover,
+.construction-options .btn-small:focus {
     color: white;
     border-color: white;
 }
 
-#construction-page .construction-mode-options .btn-small.btn-active {
-    color: #ff8034;
+.construction-options .btn-small.layer-inactive > i:not(.sub-icon) {
+    color: #555;
 }
 
-/*
-#construction-page .construction-mode-options .btn-small > i.abs-icon,
-#construction-page .construction-mode-options .btn-small.layer-active > i {
-    line-height: 40px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    pointer-events: none;
-}
-
-#construction-page .construction-mode-options .btn-small.layer-active > i {
-    color: white;
-    font-size: 1.1em;
-}
-
-#construction-page .construction-mode-options .btn-small.layer-inactive:hover > i:not(.layer-inactive) {
-    color: #777;
-}
-
-#construction-page .construction-mode-options .btn-small > i.layer-inactive {
-    color: #aaa;
-    font-size: 0.6em;
-    bottom: 1px;
-    right: 1px;
-}
-
-#construction-page .construction-mode-options .btn-small.layer-inactive > div {
+.construction-options .btn-small.layer-inactive > div {
     opacity: 0.25;
 }
 
-#construction-page .construction-filter-wrapper {
-    width: 100%;
-    height: 45px;
-    background: #090909;
-    position: relative;
-    border: 2px solid #090909;
+.construction-options .btn-small.layer-inactive > span.slash-icon {
+    /*color: #ff9b9b;*/
+    line-height: 38px;
+    font-size: 1.5em;
+    position: absolute;
+    inset: 0;
+    transform: rotate(15deg);
 }
-*/
 
-#construction-page .construction-settings-button, #construction-page .construction-tech-button {
-    width: 70px;
-    /*
-    height: 100%;
-    background: #141414;
-    color: white;
-    border: 1px solid black;
-    padding: 0;
-    */
-    font-size: 1em;
+.construction-options .btn-small.layer-inactive > span.slash-icon::after {
+    content: '/';
+}
+
+.construction-options .btn-small.btn-active {
+    color: #ff8034;
+}
+
+#construction-page .construction-settings-button,
+#construction-page .construction-tech-button,
+#construction-page .construction-mouse-lock-button {
     position: absolute;
     top: 0;
-    left: 40px;
 }
 
-#construction-page .construction-settings-button {
+#construction-page .construction-settings-button,
+#construction-page .construction-mouse-lock-button {
     width: 40px;
-    left: 0;
-    /*line-height: 40px;*/
     font-size: 1.4em;
+    left: 0;
 }
 
-#construction-page .construction-settings-button:hover, #construction-page .construction-tech-button:hover {
-    background: #222;
-    border-color: white;
+#construction-page .construction-tech-button {
+    width: 70px;
+    font-size: 1em;
+    left: 40px;
 }
 
 #construction-page .construction-category-wrapper {
@@ -645,29 +620,31 @@ input[type=number].btn-small {
     position: absolute;
     top: 0;
     left: 110px;
-    right: 0;
+    right: 40px;
 }
 
 #construction-page .construction-category {
-    background: #141414;
     width: 100%;
     height: 100%;
     border: 1px solid black;
     border-radius: 0;
-    font-size: 1.1em;
+    font-size: 1em;
     padding: 0 10px;
     cursor: pointer;
     text-align: left;
 }
 
-#construction-page .construction-category:hover, #construction-page .construction-category:focus {
+#construction-page .construction-category:hover,
+#construction-page .construction-category:focus {
     border-color: white;
 }
 
+#construction-page .construction-mouse-lock-button {
+    left: unset;
+    right: 0;
+}
+
 #construction-page .construction-item-category {
-    background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
-    background: linear-gradient(to right, #242424, #0000);
-    background: linear-gradient(to right, rgb(233, 109, 52), #0000);
     background: #0f0f0f;
     padding: 4px 8px;
     border: 1px solid black;
@@ -1384,6 +1361,10 @@ input[type=number].btn-small {
 
 .menu-body .settings-option-wrapper:last-child {
     margin-bottom: 0;
+}
+
+.settings-option-wrapper .settings-title::first-letter {
+    text-transform: capitalize;
 }
 
 .settings-option-wrapper .settings-title {

@@ -195,9 +195,13 @@ Vue.component('app-menu-building-selected', {
                 };
                 this.updateProduction();
                 if (this.entity.type === 'shape') {
-                    this.entity.style.alpha = this.entity.style.alpha * 100;
-                    this.entity.style.fillColor = `#${this.entity.style.fillColor.toString(16)}`;
-                    this.entity.style.lineColor = `#${this.entity.style.lineColor.toString(16)}`;
+                    this.entity.style.opacity = Math.round(this.entity.style.alpha * 100);
+                    if (typeof this.entity.style.fillColor === 'number') {
+                        this.entity.style.fillColor = `#${this.entity.style.fillColor.toString(16)}`;
+                    }
+                    if (typeof this.entity.style.lineColor === 'number') {
+                        this.entity.style.lineColor = `#${this.entity.style.lineColor.toString(16)}`;
+                    }
                 }
             } else if (this.entity || this.productionData) {
                 this.entity = null;
@@ -227,20 +231,6 @@ Vue.component('app-menu-building-selected', {
                             selectedEntity.userThrottle = this.entity.userThrottle;
                         }
                     }
-                    if (selectedEntity.type === 'text') {
-                        selectedEntity.setLabel(this.entity.label);
-                        this.entity.style.fontSize = this.entity.style.fontSize > 500 ? 500 : this.entity.style.fontSize < 12 ? 12 : this.entity.style.fontSize;
-                        selectedEntity.setLabelStyle(this.entity.style);
-                    } else if (selectedEntity.type === 'shape') {
-                        let style = Object.assign({}, this.entity.style);
-                        style.alpha = style.alpha / 100;
-                        style.alpha = style.alpha > 1 ? 1 : style.alpha < 0 ? 0 : style.alpha;
-                        style.fillColor = parseInt(style.fillColor.slice(1), 16);
-                        style.lineWidth = style.lineWidth > 64 ? 64 : style.lineWidth < 6 ? 6 : style.lineWidth;
-                        style.lineColor = parseInt(style.lineColor.slice(1), 16);
-                        selectedEntity.setShapeStyle(style);
-                    }
-
                     if (game.statisticsMenuComponent) {
                         game.statisticsMenuComponent.refresh();
                     }
@@ -249,6 +239,39 @@ Vue.component('app-menu-building-selected', {
                     this.refresh();
                 }
             }
+        },
+        updateStyleOptions: function(reset) {
+            let selectedEntity = game.getSelectedEntity();
+            if (selectedEntity) {
+                if (selectedEntity.type === 'text') {
+                    if (!reset) {
+                        selectedEntity.setLabel(this.entity.label);
+                    }
+                    this.entity.style.fontSize = Math.min(Math.max(this.entity.style.fontSize, 12), 500);
+                    selectedEntity.setLabelStyle(this.entity.style);
+                } else if (selectedEntity.type === 'shape') {
+                    let styleCopy;
+                    if (!reset) {
+                        this.entity.style.opacity = Math.min(Math.max(this.entity.style.opacity, 1), 100);
+                        this.entity.style.lineWidth = Math.min(Math.max(this.entity.style.lineWidth, 6), 64);
+                        styleCopy = Object.assign({}, this.entity.style);
+                        styleCopy.alpha = styleCopy.opacity / 100;
+                        delete styleCopy.opacity;
+                        if (typeof styleCopy.fillColor === 'string') {
+                            styleCopy.fillColor = parseInt(styleCopy.fillColor.slice(1), 16);
+                        }
+                        if (typeof styleCopy.lineColor === 'string') {
+                            styleCopy.lineColor = parseInt(styleCopy.lineColor.slice(1), 16);
+                        }
+                    }
+                    selectedEntity.setShapeStyle(styleCopy ?? this.entity.style);
+                }
+                this.refresh();
+            }
+        },
+        resetStyleOptions: function() {
+            this.entity.style = Object.assign({}, game.defaultSettings.styles[this.entity.type === 'text' ? 'label' : this.entity.subtype]);
+            this.updateStyleOptions(true);
         },
         /*
         addRail: function() {
@@ -391,9 +414,17 @@ Vue.component('app-menu-building-selected', {
             </div>
         </button>
         <template v-if="game.getSelectedEntities().length === 1">
+            <div v-if="!entity.building" class="settings-option-wrapper">
+                <div class="settings-title">{{(entity.subtype ?? entity.type) + ' Options'}}</div>
+                <template v-if="entity.type === 'text'">
+                    <app-game-text-options :container="this" :textOptions="entity.style"></app-game-text-options>
+                    <textarea ref="label" v-model.trim="entity.label" @input="updateStyleOptions()" maxlength="500" placeholder="Text Required"></textarea>
+                </template>
+                <app-game-shape-options v-else-if="entity.type === 'shape'" :container="this" :shapeOptions="entity.style" :subtype="entity.subtype"></app-game-shape-options>
+            </div>
             <div class="settings-option-wrapper">
-                <div v-if="entity.building" class="settings-title">
-                    {{entity.building.parentName ? entity.building.parentName : entity.building.name}}
+                <div class="settings-title">
+                    {{entity.building?.parentName ?? (entity.building?.name ?? 'Other Options')}}
                 </div>
                 <label class="app-input-label">
                     <i class="fa fa-arrows" aria-hidden="true"></i> Position X:
@@ -435,38 +466,6 @@ Vue.component('app-menu-building-selected', {
                     <i class="fa fa-train" aria-hidden="true"></i> Throttle ({{Math.round(entity.userThrottle*100)}}%)
                     <input type="range" class="slider w-50" v-model.number="entity.userThrottle" min="-1" max="1" step="0.1" @input="updateEntity()">
                 </label>
-            </div>
-            <div v-if="entity.type === 'text'" class="settings-option-wrapper">
-                <div class="settings-title">Text Options</div>
-                <!--<i class="fa fa-text-height" aria-hidden="true"></i>-->
-                <div class="settings-option d-flex justify-content-center">
-                    <button class="btn-small" :class="{ 'btn-active': entity.style.fontWeight === 'bold' }" type="button" @click="entity.style.fontWeight = entity.style.fontWeight === 'bold' ? 'normal' : 'bold'; updateEntity();"><i class="fa fa-bold" aria-hidden="true"></i></button>
-                    <button class="btn-small" :class="{ 'btn-active': entity.style.fontStyle === 'italic' }" type="button" @click="entity.style.fontStyle = entity.style.fontStyle === 'italic' ? 'normal' : 'italic'; updateEntity();"><i class="fa fa-italic" aria-hidden="true"></i></button>
-                    <button class="btn-small ml-auto" :class="{ 'btn-active': entity.style.align === 'left' }" type="button" @click="entity.style.align = 'left'; updateEntity();"><i class="fa fa-align-left" aria-hidden="true"></i></button>
-                    <button class="btn-small" :class="{ 'btn-active': entity.style.align === 'center' }" type="button" @click="entity.style.align = 'center'; updateEntity();"><i class="fa fa-align-center" aria-hidden="true"></i></button>
-                    <button class="btn-small mr-auto" :class="{ 'btn-active': entity.style.align === 'right' }" type="button" @click="entity.style.align = 'right'; updateEntity();"><i class="fa fa-align-right" aria-hidden="true"></i></button>
-                    <input class="btn-small small-number-input" type="number" v-model.number="entity.style.fontSize" style="width: 40px;" @input="updateEntity()" min="12" max="500">
-                    <input class="btn-small" type="color" v-model="entity.style.fill" style="padding: 1px;" @input="updateEntity()">
-                </div>
-                <textarea ref="label" v-model.trim="entity.label" @input="updateEntity()" maxlength="500" placeholder="Text Required"></textarea>
-            </div>
-            <div v-else-if="entity.type === 'shape'" class="settings-option-wrapper">
-                <div class="settings-title">Shape Options</div>
-                <div class="settings-option d-flex justify-content-center">
-                    <input class="btn-small small-number-input" type="number" v-model.number="entity.style.alpha" style="width: 40px;" @input="updateEntity()" min="1" max="100">
-
-                    <template v-if="entity.subtype === 'line'">
-                        <button class="btn-small" :class="{ 'btn-active': entity.style.frontArrow }" type="button" @click="entity.style.frontArrow = !entity.style.frontArrow; updateEntity();"><i class="fa fa-caret-left" aria-hidden="true"></i></button>
-                        <button class="btn-small" :class="{ 'btn-active': entity.style.backArrow }" type="button" @click="entity.style.backArrow = !entity.style.backArrow; updateEntity();"><i class="fa fa-caret-right" aria-hidden="true"></i></button>
-                    </template>
-                    
-                    <!--<button v-if="entity.subtype !== 'line'" class="btn-small" :class="{ 'btn-active': entity.style.fill }" type="button" @click="entity.style.fill = !entity.style.fill; updateEntity();"><i class="fa fa-square" aria-hidden="true"></i></button>-->
-                    <input class="btn-small" type="color" v-model="entity.style.fillColor" style="padding: 1px;" @input="updateEntity()">
-
-                    <button v-if="entity.subtype !== 'line'" class="btn-small" :class="{ 'btn-active': entity.style.border }" type="button" @click="entity.style.border = !entity.style.border; updateEntity();"><i class="fa fa-square-o" aria-hidden="true"></i></button>
-                    <input class="btn-small small-number-input" type="number" v-model.number="entity.style.lineWidth" style="width: 40px;" @input="updateEntity()" min="6" max="64" :disabled="entity.subtype !== 'line' && !entity.style.border">
-                    <!--<input v-if="entity.subtype !== 'line'" class="btn-small" type="color" v-model="entity.style.lineColor" style="padding: 1px;" @input="updateEntity()">-->
-                </div>
             </div>
         </template>
         <div v-else class="settings-option-wrapper text-center">
@@ -574,7 +573,7 @@ Vue.component('app-menu-construction-list', {
             if (game.constructionMode.key !== 'select' && modeSettings) {
                 this.modeOptions = Object.assign({}, modeSettings);
                 if (game.constructionMode.key !== 'label') {
-                    this.modeOptions.alpha = this.modeOptions.alpha * 100;
+                    this.modeOptions.opacity = Math.round(this.modeOptions.alpha * 100);
                     if (typeof this.modeOptions.fillColor === 'number') {
                         this.modeOptions.fillColor = `#${this.modeOptions.fillColor.toString(16)}`;
                     }
@@ -599,27 +598,28 @@ Vue.component('app-menu-construction-list', {
             this.bmc();
             game.setConstructionMode(mode);
         },
-        /*
-        toggleConstructionLayer: function(layer) {
+        toggleLockedLayer: function() {
             this.bmc();
-            game.toggleConstructionLayer(layer);
+            game.settings.disableLockedMouseEvents = !game.settings.disableLockedMouseEvents;
+            game.updateSettings();
+            this.refresh();
         },
-        */
-        updateMenuOptions: function() {
+        updateStyleOptions: function() {
             if (game.constructionMode.key !== 'select') {
                 const modeSettings = game.settings.styles[game.constructionMode.key];
                 if (modeSettings) {
                     let optionsCopy;
                     if (game.constructionMode.key === 'label') {
-                        this.modeOptions.fontSize = this.modeOptions.fontSize > 500 ? 500 : this.modeOptions.fontSize < 12 ? 12 : this.modeOptions.fontSize;
+                        this.modeOptions.fontSize = Math.min(Math.max(this.modeOptions.fontSize, 12), 500);
                     } else {
+                        this.modeOptions.opacity = Math.min(Math.max(this.modeOptions.opacity, 1), 100);
+                        this.modeOptions.lineWidth = Math.min(Math.max(this.modeOptions.lineWidth, 6), 64);
                         optionsCopy = Object.assign({}, this.modeOptions);
-                        optionsCopy.alpha = optionsCopy.alpha / 100;
-                        optionsCopy.alpha = optionsCopy.alpha > 1 ? 1 : optionsCopy.alpha < 0 ? 0 : optionsCopy.alpha;
+                        optionsCopy.alpha = optionsCopy.opacity / 100;
+                        delete optionsCopy.opacity;
                         if (typeof optionsCopy.fillColor === 'string') {
                             optionsCopy.fillColor = parseInt(optionsCopy.fillColor.slice(1), 16);
                         }
-                        optionsCopy.lineWidth = optionsCopy.lineWidth > 64 ? 64 : optionsCopy.lineWidth < 6 ? 6 : optionsCopy.lineWidth;
                         if (typeof optionsCopy.lineColor === 'string') {
                             optionsCopy.lineColor = parseInt(optionsCopy.lineColor.slice(1), 16);
                         }
@@ -630,7 +630,7 @@ Vue.component('app-menu-construction-list', {
                 }
             }
         },
-        resetModeOptions: function() {
+        resetStyleOptions: function() {
             if (game.constructionMode.key !== 'select') {
                 game.settings.styles[game.constructionMode.key] = Object.assign({}, game.defaultSettings.styles[game.constructionMode.key]);
                 game.updateSettings();
@@ -647,75 +647,11 @@ Vue.component('app-menu-construction-list', {
                     <span v-else-if="mode.text">{{mode.text}}</span>
                 </button>
             </div>
-            <div class="construction-mode-options row d-flex justify-content-center position-relative">
-                <template v-if="modeOptions && game.constructionMode.key === 'label'">
-                    <div class="btn-small col" title="Bold" :class="{ 'btn-active': modeOptions.fontWeight === 'bold' }" @click="modeOptions.fontWeight = modeOptions.fontWeight === 'bold' ? 'normal' : 'bold'; updateMenuOptions()">
-                        <i class="fa fa-bold" aria-hidden="true"></i>
-                        <label>bold</label>
-                    </div>
-                    <div class="btn-small col" title="Italic" :class="{ 'btn-active': modeOptions.fontStyle === 'italic' }" @click="modeOptions.fontStyle = modeOptions.fontStyle === 'italic' ? 'normal' : 'italic'; updateMenuOptions()">
-                        <i class="fa fa-italic" aria-hidden="true"></i>
-                        <label>italic</label>
-                    </div>
-                    <div class="btn-small col" title="Align Left" :class="{ 'btn-active': modeOptions.align === 'left' }" @click="modeOptions.align = 'left'; updateMenuOptions()">
-                        <i class="fa fa-align-left" aria-hidden="true"></i>
-                        <label>align</label>
-                    </div>
-                    <div class="btn-small col" title="Align Middle" :class="{ 'btn-active': modeOptions.align === 'center' }" @click="modeOptions.align = 'center'; updateMenuOptions()">
-                        <i class="fa fa-align-center" aria-hidden="true"></i>
-                        <label>align</label>
-                    </div>
-                    <div class="btn-small col" title="Align Right" :class="{ 'btn-active': modeOptions.align === 'right' }" @click="modeOptions.align = 'right'; updateMenuOptions()">
-                        <i class="fa fa-align-right" aria-hidden="true"></i>
-                        <label>align</label>
-                    </div>
-                    <div class="btn-small col">
-                        <input class="btn-small small-number-input" title="Font Size" type="number" v-model.number="modeOptions.fontSize" min="12" max="500" @input="updateMenuOptions()">
-                        <label>px</label>
-                    </div>
-                    <div class="btn-small col" title="Color">
-                        <input class="btn-small color-input" type="color" v-model="modeOptions.fill" @input="updateMenuOptions()">
-                        <i class="fa fa-tint icon-shadow" :style="{color: modeOptions.fill}" aria-hidden="true"></i>
-                        <label>color</label>
-                    </div>
-                    <div class="btn-small col" title="Reset Defaults" @click="resetModeOptions()">
-                        <i class="fa fa-undo" aria-hidden="true"></i>
-                        <label>reset</label>
-                    </div>
-                </template>
-                <template v-else-if="modeOptions && game.constructionMode.key === 'rectangle' || game.constructionMode.key === 'circle' || game.constructionMode.key === 'line'">
-                    <div class="btn-small col">
-                        <input class="btn-small small-number-input" title="Opacity" type="number" v-model.number="modeOptions.alpha" min="1" max="100" @input="updateMenuOptions()">
-                        <label>opacity</label>
-                    </div>
-                    <template v-if="game.constructionMode.key === 'line'">
-                        <div class="btn-small col" title="Front Arrow" :class="{ 'btn-active': modeOptions.frontArrow }" @click="modeOptions.frontArrow = !modeOptions.frontArrow; updateMenuOptions()">
-                            <i class="fa fa-caret-left" aria-hidden="true"></i>
-                            <label>arrow</label>
-                        </div>
-                        <div class="btn-small col" title="Back Arrow" :class="{ 'btn-active': modeOptions.backArrow }" @click="modeOptions.backArrow = !modeOptions.backArrow; updateMenuOptions()">
-                            <i class="fa fa-caret-right" aria-hidden="true"></i>
-                            <label>arrow</label>
-                        </div>
-                    </template>
-                    <div v-if="game.constructionMode.key !== 'line'" title="Border" class="btn-small col" :class="{ 'btn-active': modeOptions.border }" @click="modeOptions.border = !modeOptions.border; updateMenuOptions()">
-                        <i class="fa" :class="{ 'fa-square-o': game.constructionMode.key === 'rectangle', 'fa-circle-thin': game.constructionMode.key === 'circle' }" aria-hidden="true"></i>
-                        <label>border</label>
-                    </div>
-                    <div v-if="game.constructionMode.key === 'line' || modeOptions.border" class="btn-small col">
-                        <input class="btn-small small-number-input" title="Line Thickness" type="number" v-model.number="modeOptions.lineWidth" min="6" max="64" @input="updateMenuOptions()">
-                        <label>thickness</label>
-                    </div>
-                    <div class="btn-small col" title="Color">
-                        <input class="btn-small color-input" type="color" v-model="modeOptions.fillColor" @input="updateMenuOptions()">
-                        <i class="fa fa-tint icon-shadow" :style="{color: modeOptions.fillColor}" aria-hidden="true"></i>
-                        <label>color</label>
-                    </div>
-                    <div class="btn-small col" title="Reset Defaults" @click="resetModeOptions()">
-                        <i class="fa fa-undo" aria-hidden="true"></i>
-                        <label>reset</label>
-                    </div>
-                </template>
+            <template v-if="modeOptions">
+                <app-game-text-options v-if="game.constructionMode.key === 'label'" :container="this" :textOptions="modeOptions"></app-game-text-options>
+                <app-game-shape-options v-else-if="game.constructionMode.key === 'rectangle' || game.constructionMode.key === 'circle' || game.constructionMode.key === 'line'" :container="this" :shapeOptions="modeOptions" :subtype="game.constructionMode.key"></app-game-shape-options>
+            </template>
+            <div v-else class="construction-options row d-flex justify-content-center">
                 <!--
                 <template v-else>
                     <button v-for="layer in game.constructionLayers" class="btn-small col" :title="layer.title" type="button" :class="{ 'layer-active': !layer.inactive, 'layer-inactive': layer.inactive }" @mouseenter="bme()" @click="toggleConstructionLayer(layer)">
@@ -725,18 +661,23 @@ Vue.component('app-menu-construction-list', {
                     </button>
                 </template>
                 -->
-                <template v-else>
-                    <button class="btn-small construction-settings-button" @click="game.sidebarMenuComponent?.changeMenu('settings')" title="Filter Settings"><i class="fa fa-sliders" aria-hidden="true"></i></button>
-                    <button class="btn-small construction-tech-button" @click="incrementTier()" title="Filter by Tier">{{'Tier ' + game.settings.selectedTier}}</button>
-                    <div class="construction-category-wrapper">
-                        <select class="btn-small app-input construction-category" @click="bmc()" title="Filter by Category" v-model="game.selectedBuildingCategory" @change="refresh()">
-                            <option value="all">All Buildings</option>
-                            <template v-for="(category, key) in buildingCategories">
-                                <option v-if="game.settings.enableExperimental || key !== 'entrenchments'" :value="key">{{category.name}}</option>
-                            </template>
-                        </select>
-                    </div>
-                </template>
+                <button class="btn-small construction-settings-button" @click="game.sidebarMenuComponent?.changeMenu('settings')" title="Filter Settings">
+                    <i class="fa fa-sliders" aria-hidden="true"></i>
+                </button>
+                <button class="btn-small construction-tech-button" @click="incrementTier()" title="Filter by Tier">{{'Tier ' + game.settings.selectedTier}}</button>
+                <div class="construction-category-wrapper">
+                    <select class="btn-small app-input construction-category" @click="bmc()" title="Filter by Category" v-model="game.selectedBuildingCategory" @change="refresh()">
+                        <option value="all">All Buildings</option>
+                        <template v-for="(category, key) in buildingCategories">
+                            <option v-if="game.settings.enableExperimental || key !== 'entrenchments'" :value="key">{{category.name}}</option>
+                        </template>
+                    </select>
+                </div>
+                <button class="btn-small construction-mouse-lock-button" type="button" :class="{'layer-inactive': game.settings.disableLockedMouseEvents}" title="Toggle Locked Selection"  @click="toggleLockedLayer()">
+                    <i class="fa fa-lock" aria-hidden="true"></i>
+                    <!--<i v-if="game.settings.disableLockedMouseEvents" class="fa fa-ban sub-icon" aria-hidden="true"></i>-->
+                    <span v-if="game.settings.disableLockedMouseEvents" class="slash-icon"></span>
+                </button>
             </div>
         </div>
         <div class="menu-page">
@@ -755,6 +696,86 @@ Vue.component('app-menu-construction-list', {
                     </template>
                 </template>
             </template>
+        </div>
+    </div>
+    `
+});
+
+Vue.component('app-game-text-options', {
+    props: ['container', 'textOptions'],
+    template: html`
+    <div class="construction-options row d-flex justify-content-center">
+        <div class="btn-small col" title="Bold" :class="{ 'btn-active': textOptions.fontWeight === 'bold' }" @click="textOptions.fontWeight = textOptions.fontWeight === 'bold' ? 'normal' : 'bold'; container.updateStyleOptions()">
+            <i class="fa fa-bold" aria-hidden="true"></i>
+            <span class="label">bold</span>
+        </div>
+        <div class="btn-small col" title="Italic" :class="{ 'btn-active': textOptions.fontStyle === 'italic' }" @click="textOptions.fontStyle = textOptions.fontStyle === 'italic' ? 'normal' : 'italic'; container.updateStyleOptions()">
+            <i class="fa fa-italic" aria-hidden="true"></i>
+            <span class="label">italic</span>
+        </div>
+        <div class="btn-small col" title="Align Left" :class="{ 'btn-active': textOptions.align === 'left' }" @click="textOptions.align = 'left'; container.updateStyleOptions()">
+            <i class="fa fa-align-left" aria-hidden="true"></i>
+            <span class="label">align</span>
+        </div>
+        <div class="btn-small col" title="Align Middle" :class="{ 'btn-active': textOptions.align === 'center' }" @click="textOptions.align = 'center'; container.updateStyleOptions()">
+            <i class="fa fa-align-center" aria-hidden="true"></i>
+            <span class="label">align</span>
+        </div>
+        <div class="btn-small col" title="Align Right" :class="{ 'btn-active': textOptions.align === 'right' }" @click="textOptions.align = 'right'; container.updateStyleOptions()">
+            <i class="fa fa-align-right" aria-hidden="true"></i>
+            <span class="label">align</span>
+        </div>
+        <div class="btn-small col">
+            <input class="btn-small small-number-input" title="Font Size" type="number" v-model.number="textOptions.fontSize" min="12" max="500" @input="container.updateStyleOptions()">
+            <span class="label">px</span>
+        </div>
+        <div class="btn-small col" title="Color">
+            <input class="btn-small color-input" type="color" v-model="textOptions.fill" @input="container.updateStyleOptions()">
+            <i class="fa fa-tint icon-shadow" :style="{color: textOptions.fill}" aria-hidden="true"></i>
+            <span class="label">color</span>
+        </div>
+        <div class="btn-small col" title="Reset Defaults" @click="container.resetStyleOptions()">
+            <i class="fa fa-undo" aria-hidden="true"></i>
+            <span class="label">reset</span>
+        </div>
+    </div>
+    `
+});
+
+Vue.component('app-game-shape-options', {
+    props: ['container', 'shapeOptions', 'subtype'],
+    template: html`
+    <div class="construction-options row d-flex justify-content-center">
+        <div class="btn-small col">
+            <input class="btn-small small-number-input" title="Opacity" type="number" v-model.number="shapeOptions.opacity" min="1" max="100" @input="container.updateStyleOptions()">
+            <span class="label">opacity</span>
+        </div>
+        <template v-if="subtype === 'line'">
+            <div class="btn-small col" title="Front Arrow" :class="{ 'btn-active': shapeOptions.frontArrow }" @click="shapeOptions.frontArrow = !shapeOptions.frontArrow; container.updateStyleOptions()">
+                <i class="fa fa-caret-left" aria-hidden="true"></i>
+                <span class="label">arrow</span>
+            </div>
+            <div class="btn-small col" title="Back Arrow" :class="{ 'btn-active': shapeOptions.backArrow }" @click="shapeOptions.backArrow = !shapeOptions.backArrow; container.updateStyleOptions()">
+                <i class="fa fa-caret-right" aria-hidden="true"></i>
+                <span class="label">arrow</span>
+            </div>
+        </template>
+        <div v-if="subtype !== 'line'" title="Border" class="btn-small col" :class="{ 'btn-active': shapeOptions.border }" @click="shapeOptions.border = !shapeOptions.border; container.updateStyleOptions()">
+            <i class="fa" :class="{ 'fa-square-o': subtype === 'rectangle', 'fa-circle-thin': subtype === 'circle' }" aria-hidden="true"></i>
+            <span class="label">border</span>
+        </div>
+        <div v-if="subtype === 'line' || shapeOptions.border" class="btn-small col">
+            <input class="btn-small small-number-input" title="Line Thickness" type="number" v-model.number="shapeOptions.lineWidth" min="6" max="64" @input="container.updateStyleOptions()">
+            <span class="label">thickness</span>
+        </div>
+        <div class="btn-small col" title="Color">
+            <input class="btn-small color-input" type="color" v-model="shapeOptions.fillColor" @input="container.updateStyleOptions()">
+            <i class="fa fa-tint icon-shadow" :style="{color: shapeOptions.fillColor}" aria-hidden="true"></i>
+            <span class="label">color</span>
+        </div>
+        <div class="btn-small col" title="Reset Defaults" @click="container.resetStyleOptions()">
+            <i class="fa fa-undo" aria-hidden="true"></i>
+            <span class="label">reset</span>
         </div>
     </div>
     `
@@ -1019,6 +1040,10 @@ Vue.component('app-menu-settings', {
             <label class="app-input-label">
                 <i class="fa fa-header" aria-hidden="true"></i> Display Facility Name
                 <input class="app-input" type="checkbox" v-model="game.settings.showFacilityName" @change="game.updateSettings()">
+            </label>
+            <label class="app-input-label">
+                <i class="fa fa-mouse-pointer" aria-hidden="true"></i> Disable Locked Selection
+                <input class="app-input" type="checkbox" v-model="game.settings.disableLockedMouseEvents" @input="game.updateSettings()">
             </label>
             <label class="app-input-label">
                 <i class="fa fa-th-large" aria-hidden="true"></i> Snap Grid Size

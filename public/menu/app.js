@@ -82,13 +82,13 @@ if (isMobile && !isPhoneApp) {
                         <input type="checkbox" name="production-visible-toggle" v-model="game.settings.showProductionIcons" @change="updateProductionIcons()" />
                         (P) Show Production Icons
                     </label>
-                    <button class="footer-button" @click="game.tryFullscreen()">
+                    <button class="footer-button" title="Toggle Fullscreen" @click="game.tryFullscreen()">
                         <i class="fa fa-arrows-alt" aria-hidden="true"></i>
                     </button>
-                    <button class="footer-button" @click="game.zoomToFacilityCenter()">
-                        <i class="fa fa-expand" aria-hidden="true"></i>
+                    <button class="footer-button" title="Center Board" @click="game.zoomToFacilityCenter()">
+                        <i class="fa fa-crosshairs" aria-hidden="true"></i>
                     </button>
-                    <button class="footer-button" @click="game.confirmDeletion()">
+                    <button class="footer-button" title="Clear Board" @click="game.confirmDeletion()">
                         <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
                 </div>
