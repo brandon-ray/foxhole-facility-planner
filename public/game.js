@@ -2064,6 +2064,16 @@ try {
                 return socket;
             }
 
+            entity.getSocketById = function(id) {
+                for (let i = 0; i < entity.sockets.children.length; i++) {
+                    const socket = entity.sockets.children[i];
+                    if (socket.socketData?.id === id) {
+                        return socket;
+                    }
+                }
+                return null;
+            }
+
             if (building.sockets) {
                 for (let i = 0; i < building.sockets.length; i++) {
                     entity.createSocket(Object.assign({}, building.sockets[i]));
@@ -3891,42 +3901,50 @@ try {
                                                     if (selectedEntity.building?.snapNearest || ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || selectedEntity.subtype === 'power_line' && entity.canGrab())) {
                                                         for (let l = 0; l < selectedEntity.sockets.children.length; l++) {
                                                             let selectedSocket = selectedEntity.sockets.children[l];
+                                                            if (selectedEntities.length === 1 && selectedEntity.building?.isBezier && selectedSocket.socketData.id !== 0) {
+                                                                continue;
+                                                            }
                                                             if (typeof entitySocket.socketData.type === 'string' && entitySocket.socketData.type === selectedSocket.socketData.type) {
-                                                                if ((Object.keys(selectedSocket.connections).length === 0 || selectedSocket.connections[entity.id] === entitySocket.socketData.id) && (Object.keys(entitySocket.connections).length === 0 || Object.keys(entitySocket.connections).length < entitySocket.socketData.connectionLimit || entitySocket.connections[selectedEntity.id] === selectedSocket.socketData.id)) {
-                                                                    if (entitySocket.socketData.flow && entitySocket.socketData.flow === selectedSocket.socketData.flow) {
-                                                                        continue;
-                                                                    }
-            
-                                                                    if (selectedEntity.building?.snapNearest || selectedEntities.length > 1) {
-                                                                        let selectedSocketPos;
-                                                                        if (connectionEstablished) {
-                                                                            selectedSocketPos = app.cstage.toLocal({x: selectedSocket.x, y: selectedSocket.y}, selectedEntity, undefined, true);
-                                                                        } else {
-                                                                            selectedSocketPos = Math.rotateAround({x: 0, y: 0}, selectedSocket, (selectedEntity.prevRotation ?? selectedEntity.rotation));
-                                                                            selectedSocketPos.x += gmx - selectedEntity.pickupOffset.x;
-                                                                            selectedSocketPos.y += gmy - selectedEntity.pickupOffset.y;
-                                                                        }
-                                                                        let entitySocketPos = app.cstage.toLocal({x: entitySocket.x, y: entitySocket.y}, entity, undefined, true);
-                                                                        if (Math.floor(Math.distanceBetween(selectedSocketPos, entitySocketPos)) >= (!connectionEstablished ? 35 : 3)) {
+                                                                const sSocketConnections = Object.keys(selectedSocket.connections).length;
+                                                                const eSocketConnections = Object.keys(entitySocket.connections).length;
+                                                                const connectedSocket = sSocketConnections ? entity.getSocketById(selectedSocket.connections[entity.id]) : null;
+                                                                if (!sSocketConnections || selectedSocket.connections[entity.id] === entitySocket.socketData.id || connectedSocket?.socketData.temp) {
+                                                                    if (!eSocketConnections || (eSocketConnections < (entitySocket.socketData.connectionLimit ?? 1)) || entitySocket.connections[selectedEntity.id] === selectedSocket.socketData.id) {
+                                                                        if (entitySocket.socketData.flow && entitySocket.socketData.flow === selectedSocket.socketData.flow) {
                                                                             continue;
                                                                         }
-                                                                        let selectedSocketRot = Math.angleNormalized((selectedEntity.rotation + selectedSocket.rotation) - Math.PI);
-                                                                        let entitySocketRot = Math.angleNormalized(entity.rotation + entitySocket.rotation);
-                                                                        if (!Math.anglesWithinRange(entitySocketRot, selectedSocketRot, Math.PI / 8)) {
-                                                                            continue;
-                                                                        }
+                
+                                                                        if (selectedEntity.building?.snapNearest || selectedEntities.length > 1) {
+                                                                            let selectedSocketPos;
+                                                                            if (connectionEstablished) {
+                                                                                selectedSocketPos = app.cstage.toLocal({x: selectedSocket.x, y: selectedSocket.y}, selectedEntity, undefined, true);
+                                                                            } else {
+                                                                                selectedSocketPos = Math.rotateAround({x: 0, y: 0}, selectedSocket, (selectedEntity.prevRotation ?? selectedEntity.rotation));
+                                                                                selectedSocketPos.x += gmx - selectedEntity.pickupOffset.x;
+                                                                                selectedSocketPos.y += gmy - selectedEntity.pickupOffset.y;
+                                                                            }
+                                                                            let entitySocketPos = app.cstage.toLocal({x: entitySocket.x, y: entitySocket.y}, entity, undefined, true);
+                                                                            if (Math.floor(Math.distanceBetween(selectedSocketPos, entitySocketPos)) >= (!connectionEstablished ? 35 : 3)) {
+                                                                                continue;
+                                                                            }
+                                                                            let selectedSocketRot = Math.angleNormalized((selectedEntity.rotation + selectedSocket.rotation) - Math.PI);
+                                                                            let entitySocketRot = Math.angleNormalized(entity.rotation + entitySocket.rotation);
+                                                                            if (!Math.anglesWithinRange(entitySocketRot, selectedSocketRot, Math.PI / 8)) {
+                                                                                continue;
+                                                                            }
 
-                                                                        if (connectEntitiesBySockets(selectedSocket, entitySocket)) {
-                                                                            i = -1;
+                                                                            if (connectEntitiesBySockets(selectedSocket, entitySocket)) {
+                                                                                i = -1;
+                                                                            }
+                                                                            break;
                                                                         }
+                                                                        
+                                                                        frontSocket = selectedSocket;
+                                                                        nearestSocket = entitySocket;
+                                                                        nearestSocketDist = socketDistance;
+                                                                        
                                                                         break;
                                                                     }
-
-                                                                    frontSocket = selectedSocket;
-                                                                    nearestSocket = entitySocket;
-                                                                    nearestSocketDist = socketDistance;
-                                                                    
-                                                                    break;
                                                                 }
                                                             }
                                                         }
