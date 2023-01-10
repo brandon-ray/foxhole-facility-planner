@@ -516,25 +516,46 @@ try {
 
     let keys = {};
     document.addEventListener('keydown', function (event) {
+        event = event || window.event;
+        let key = event.keyCode;
+        switch (key) {
+            case 27: // Escape
+                game.resetConstructionMode();
+                if (!selectionArea?.visible) {
+                    game.deselectEntities();
+                }
+                break;
+            case 46: // Delete
+                game.deselectEntities(true);
+                break;
+            case 113: // F2
+                ENABLE_DEBUG = !ENABLE_DEBUG;
+                if (debugText) {
+                    debugText.visible = ENABLE_DEBUG;
+                }
+                break;
+            case 119: // F8
+                if (ENABLE_DEBUG) {
+                    setTimeout(() => {
+                        let x = 0;
+                        let y = 0;
+                        for (let i=0; i<1000; i++) {
+                            let buildingData = window.objectData.buildings_list[Math.floor(Math.random()*window.objectData.buildings_list.length)];
+                            if (!buildingData.hideInList && (!buildingData.parent || !buildingData.parent.hideInList) && buildingData.category !== 'entrenchments') {
+                                createSelectableEntity('building', buildingData.key, x, y, 0);
+                                x += 500;
+                                if (x >= 10000) {
+                                    x = 0;
+                                    y += 500;
+                                }
+                            }
+                        }
+                    }, 1000);
+                }
+                break;
+        }
         if (!(document.activeElement && (document.activeElement.type === 'text' || document.activeElement.type === 'number' || document.activeElement.type === 'textarea'))) {
-            event = event || window.event;
-            let key = event.keyCode;
             switch (key) {
-                case 113: // F2
-                    ENABLE_DEBUG = !ENABLE_DEBUG;
-                    if (debugText) {
-                        debugText.visible = ENABLE_DEBUG;
-                    }
-                    break;
-                case 27: // Escape
-                    game.resetConstructionMode();
-                    if (!selectionArea?.visible) {
-                        game.deselectEntities();
-                    }
-                    break;
-                case 46: // Delete
-                    game.deselectEntities(true);
-                    break;
                 case 65: // A
                     if (event.ctrlKey) {
                         entities.forEach(entity => {
@@ -555,29 +576,10 @@ try {
                     game.settings.showProductionIcons = !game.settings.showProductionIcons;
                     game.updateProductionIcons();
                     break;
-                case 119: // F8
-                    if (ENABLE_DEBUG) {
-                        setTimeout(() => {
-                            let x = 0;
-                            let y = 0;
-                            for (let i=0; i<1000; i++) {
-                                let buildingData = window.objectData.buildings_list[Math.floor(Math.random()*window.objectData.buildings_list.length)];
-                                if (!buildingData.hideInList && (!buildingData.parent || !buildingData.parent.hideInList) && buildingData.category !== 'entrenchments') {
-                                    createSelectableEntity('building', buildingData.key, x, y, 0);
-                                    x += 500;
-                                    if (x >= 10000) {
-                                        x = 0;
-                                        y += 500;
-                                    }
-                                }
-                            }
-                        }, 1000);
-                    }
-                    break;
             }
-            if (!keys[key]) {
-                keys[key] = true;
-            }
+        }
+        if (!keys[key]) {
+            keys[key] = true;
         }
     });
 
