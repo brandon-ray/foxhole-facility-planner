@@ -1014,7 +1014,7 @@ Vue.component('app-menu-settings', {
             <div class="settings-title">General Settings</div>
             <label class="app-input-label">
                 <i class="fa fa-picture-o" aria-hidden="true"></i> Graphics
-                <select class="app-input" v-model="game.settings.quality" v-on:change="game.updateQuality()">
+                <select class="app-input" v-model="game.settings.quality" @change="game.updateQuality()">
                     <option value="auto">Auto</option>
                     <option value="high">High Quality</option>
                     <option value="low">Low Quality</option>
@@ -1042,16 +1042,20 @@ Vue.component('app-menu-settings', {
                 <input class="app-input" type="checkbox" v-model="game.settings.showFacilityName" @change="game.updateSettings()">
             </label>
             <label class="app-input-label">
+                <i class="fa fa-arrow-circle-up" aria-hidden="true"></i> Bring Selected to Front
+                <input class="app-input" type="checkbox" v-model="game.settings.bringSelectedToFront" @change="game.updateSettings()">
+            </label>
+            <label class="app-input-label">
                 <i class="fa fa-mouse-pointer" aria-hidden="true"></i> Disable Locked Selection
-                <input class="app-input" type="checkbox" v-model="game.settings.disableLockedMouseEvents" @input="game.updateSettings()">
+                <input class="app-input" type="checkbox" v-model="game.settings.disableLockedMouseEvents" @change="game.updateSettings()">
             </label>
             <label class="app-input-label">
                 <i class="fa fa-th-large" aria-hidden="true"></i> Snap Grid Size
-                <input class="app-input" type="number" v-model="game.settings.gridSize" @input="game.updateSettings()">
+                <input class="app-input" type="number" v-model.number="game.settings.gridSize" @input="game.updateSettings()">
             </label>
             <label class="app-input-label">
                 <i class="fa fa-repeat" aria-hidden="true"></i> Snap Rotation Degrees
-                <input class="app-input" type="number" v-model="game.settings.snapRotationDegrees" @input="game.updateSettings()">
+                <input class="app-input" type="number" v-model.number="game.settings.snapRotationDegrees" @input="game.updateSettings()">
             </label>
         </div>
         <div class="settings-option-wrapper">

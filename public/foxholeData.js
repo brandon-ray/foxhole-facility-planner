@@ -1145,7 +1145,7 @@ const foxholeData = {
 			"minLength": 4,
 			"maxLength": 10,
 			"icon": "game/Textures/UI/ItemIcons/BarbedWireFenceStructureIcon.webp",
-			"texture": "game/Textures/Structures/barbedwirewallspline.webp",
+			"texture": null,
 			"canSnap": true,
 			"sockets": [
 				{
@@ -1179,7 +1179,7 @@ const foxholeData = {
 				"min": 4.5,
 				"max": 22.5
 			},
-			"sortOffset": 2000000,
+			"sortLayer": "crane",
 			"icon": "game/Textures/UI/FacilityCraneIcon.webp",
 			"texture": "game/Textures/Structures/bms_foreman_stacker.webp",
 			"textureIcon": {
@@ -1218,7 +1218,7 @@ const foxholeData = {
 				"min": 13.75,
 				"max": 33.75
 			},
-			"sortOffset": 2000000,
+			"sortLayer": "crane",
 			"icon": "game/Textures/UI/LargeCraneItemIcon.webp",
 			"texture": "game/Textures/Structures/large_crane.webp",
 			"textureOffset": {
@@ -1236,7 +1236,7 @@ const foxholeData = {
 			"description": "A raised walkway for creating paths above complex Facilities.",
 			"category": "factories",
 			"categoryOrder": 95,
-			"sortOffset": 500000,
+			"sortLayer": "overhead",
 			"hasHandle": true,
 			"hasOutline": false,
 			"minLength": 8,
@@ -1269,7 +1269,7 @@ const foxholeData = {
 			"description": "A raised walkway for creating paths above complex Facilities.",
 			"category": "factories",
 			"categoryOrder": 90,
-			"sortOffset": 500000,
+			"sortLayer": "overhead",
 			"icon": "game/Textures/UI/ItemIcons/FacilityCatwalkRampConnectorIcon.webp",
 			"texture": "game/Textures/Structures/catwalk_platform.webp",
 			"canSnap": true,
@@ -1314,7 +1314,7 @@ const foxholeData = {
 			"description": "Stairs that connect to raised Catwalks, which create paths above complex Facilities.",
 			"category": "factories",
 			"categoryOrder": 85,
-			"sortOffset": 500000,
+			"sortLayer": "overhead",
 			"icon": "game/Textures/UI/ItemIcons/FacilityCatwalkRampIcon.webp",
 			"texture": "game/Textures/Structures/catwalk_stairs.webp",
 			"canSnap": true,
@@ -2127,7 +2127,7 @@ const foxholeData = {
 					"codeName": "EngineRoomT2",
 					"description": "A engineering facility that provides power to Bunker structures using pipe connections.",
 					"icon": "game/Textures/UI/StructureIcons/EngineRoomIcon.webp",
-					"texture": "game/Textures/Structures/fortt2_engineroom.webp",
+					"texture": null,
 					"cost": {
 						"cloth": 150
 					}
@@ -2215,7 +2215,7 @@ const foxholeData = {
 					"codeName": "AmmoRoomT3",
 					"description": "A facility that stores equipment and ammunition for artillery. Retrieval is very quick for this structure.. ",
 					"icon": "game/Textures/UI/StructureIcons/AmmoRoomIcon.webp",
-					"texture": "game/Textures/Structures/fortt3_ammoroom.webp",
+					"texture": null,
 					"cost": {
 						"concrete": 10
 					}
@@ -2245,7 +2245,7 @@ const foxholeData = {
 					"codeName": "EngineRoomT3",
 					"description": "A engineering facility that provides power to Bunker structures using pipe connections.",
 					"icon": "game/Textures/UI/StructureIcons/EngineRoomIcon.webp",
-					"texture": "game/Textures/Structures/fortt3_engineroom.webp",
+					"texture": null,
 					"cost": {
 						"concrete": 50
 					}
@@ -2306,6 +2306,7 @@ const foxholeData = {
 				"type": "garrison",
 				"max": 80
 			},
+			"sortLayer": "range",
 			"icon": "game/Textures/UI/StructureIcons/EncampmentIcon.webp",
 			"texture": "game/Textures/Structures/forwardbase1.webp",
 			"cost": {
@@ -2346,7 +2347,7 @@ const foxholeData = {
 			"description": "A foundation that provides a suitable surface for constructing Facilities.",
 			"category": "foundations",
 			"categoryOrder": 2,
-			"sortOffset": -1000,
+			"sortLayer": "foundation",
 			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation01Icon.webp",
 			"texture": "game/Textures/Structures/foundation_1x1.webp",
 			"textureIcon": {
@@ -2408,7 +2409,7 @@ const foxholeData = {
 			"description": "A foundation that provides a suitable surface for constructing Facilities.",
 			"category": "foundations",
 			"categoryOrder": 1,
-			"sortOffset": -1000,
+			"sortLayer": "foundation",
 			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation03Icon.webp",
 			"texture": "game/Textures/Structures/foundation_1x2.webp",
 			"textureIcon": {
@@ -2483,7 +2484,7 @@ const foxholeData = {
 			"codeName": "Foundation012x2T1",
 			"description": "A foundation that provides a suitable surface for constructing Facilities.",
 			"category": "foundations",
-			"sortOffset": -1000,
+			"sortLayer": "foundation",
 			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation04Icon.webp",
 			"texture": "game/Textures/Structures/foundation_2x2.webp",
 			"textureIcon": {
@@ -2575,7 +2576,7 @@ const foxholeData = {
 			"categoryOrder": 3,
 			"width": 5.28,
 			"length": 5.28,
-			"sortOffset": -1000,
+			"sortLayer": "foundation",
 			"hitArea": [
 				{
 					"shape": [ -87.68,97.28,-88.32,42.88,42.88,-88.32,96,-88.32,96.64,96.64 ]
@@ -2632,7 +2633,7 @@ const foxholeData = {
 			"description": "A container for storing high volumes of fuel. Nearby structures and vehicles can refuel directly from this container. ",
 			"category": "misc",
 			"categoryOrder": 4,
-			"sortOffset": 150000,
+			"sortLayer": "container",
 			"icon": "game/Textures/UI/StructureIcons/FuelTankIcon.webp",
 			"texture": "game/Textures/Structures/fuel_container.webp",
 			"cost": {
@@ -2693,6 +2694,7 @@ const foxholeData = {
 			"category": "defenses",
 			"categoryOrder": 4,
 			"hideInList": true,
+			"sortLayer": "wall",
 			"icon": "game/Textures/UI/StructureIcons/Gate-T1Icon.webp",
 			"texture": "game/Textures/Structures/gatet1.webp",
 			"canSnap": true,
@@ -3811,7 +3813,7 @@ const foxholeData = {
 				"max": 40
 			},
 			"overlapDist": 65,
-			"sortOffset": 1000000,
+			"sortLayer": "range",
 			"hitArea": [
 				{
 					"shape": [ 61.12,13.76,49.6,13.76,48.32,-16.32,61.12,-15.04 ]
@@ -5167,7 +5169,7 @@ const foxholeData = {
 			"description": "Industrial piping that allows for automatic transport of various liquids and fuels into a network of pipes that connect to various facility structures.",
 			"category": "factories",
 			"categoryOrder": 60,
-			"sortOffset": -500,
+			"sortLayer": "pipe",
 			"hasHandle": true,
 			"isBezier": true,
 			"simpleBezier": true,
@@ -5229,7 +5231,7 @@ const foxholeData = {
 			"description": "Industrial piping that allows for automatic transport of various liquids and fuels. These specialized pipes can be built overhead to connect to pipe networks across areas with high traffic.",
 			"category": "factories",
 			"categoryOrder": 70,
-			"sortOffset": 1400000,
+			"sortLayer": "overhead",
 			"hasHandle": true,
 			"lineWidth": 10,
 			"minLength": 8,
@@ -5277,7 +5279,7 @@ const foxholeData = {
 			"description": "Industrial piping that allows for automatic transport of various liquids and fuels. These specialized pipes can be built underground to connect to pipe networks across areas with high traffic.",
 			"category": "factories",
 			"categoryOrder": 65,
-			"sortOffset": -500,
+			"sortLayer": "pipe",
 			"hasHandle": true,
 			"isBezier": true,
 			"lineWidth": 10,
@@ -5329,7 +5331,7 @@ const foxholeData = {
 			"description": "A weighted valve that controls the rate of flow through a pipeline. Requires a Wrench.",
 			"category": "factories",
 			"categoryOrder": 75,
-			"sortOffset": 1000,
+			"sortLayer": "pipe",
 			"icon": "game/Textures/UI/ItemIcons/FacilityPipeValveIcon.webp",
 			"texture": "game/Textures/Structures/pipeline_valve.webp",
 			"canSnap": true,
@@ -5360,7 +5362,7 @@ const foxholeData = {
 			"category": "misc",
 			"categoryOrder": 7,
 			"faction": "c",
-			"sortOffset": 150000,
+			"sortLayer": "player",
 			"icon": "game/Textures/UI/ItemIcons/Uniforms/SoldierUniformCIcon.webp",
 			"texture": "game/Textures/playerc.webp"
 		},
@@ -5370,7 +5372,7 @@ const foxholeData = {
 			"category": "misc",
 			"categoryOrder": 8,
 			"faction": "w",
-			"sortOffset": 150000,
+			"sortLayer": "player",
 			"icon": "game/Textures/UI/ItemIcons/Uniforms/SoldierUniformWIcon.webp",
 			"texture": "game/Textures/playerw.webp"
 		},
@@ -5380,6 +5382,7 @@ const foxholeData = {
 			"description": "A power interface for manually disabling power in a circuit.",
 			"category": "power",
 			"categoryOrder": 1,
+			"sortLayer": "power_pole",
 			"icon": "game/Textures/UI/StructureIcons/FacilityPowerBoxIcon.webp",
 			"texture": "game/Textures/Structures/power_box.webp",
 			"sockets": [
@@ -5403,7 +5406,7 @@ const foxholeData = {
 			"category": "power",
 			"categoryOrder": 2,
 			"color": 0,
-			"sortOffset": 1500000,
+			"sortLayer": "power_line",
 			"hasHandle": true,
 			"hasOutline": false,
 			"lineWidth": 5,
@@ -5443,7 +5446,7 @@ const foxholeData = {
 			"codeName": "PowerPole",
 			"description": "Used to connect Power Lines. Up to 4 Power Lines can be attached to a singe pole.",
 			"category": "power",
-			"sortOffset": 1400000,
+			"sortLayer": "power_pole",
 			"icon": "game/Textures/UI/StructureIcons/PowerLineB.webp",
 			"texture": "game/Textures/Structures/power_pole.webp",
 			"textureIcon": {
@@ -5836,6 +5839,7 @@ const foxholeData = {
 			"description": "A temporary road used to enable vehicle access between main roads and remote bases.",
 			"category": "foundations",
 			"categoryOrder": 6,
+			"sortLayer": "road",
 			"hasHandle": true,
 			"isBezier": true,
 			"minLength": 9.01,
@@ -5872,6 +5876,7 @@ const foxholeData = {
 			"description": "A segment of railway for heavy cranes. This type of railway can only be built on Foundations.",
 			"category": "foundations",
 			"categoryOrder": 11,
+			"sortLayer": "rail",
 			"hasHandle": true,
 			"minLength": 5,
 			"maxLength": 30,
@@ -5903,7 +5908,7 @@ const foxholeData = {
 			"description": "A segment of railway for train cars. Tracks can attach to or fork from existing railways to form complex networks.",
 			"category": "foundations",
 			"categoryOrder": 10,
-			"sortOffset": 100000,
+			"sortLayer": "rail",
 			"hasHandle": true,
 			"isBezier": true,
 			"minLength": 5,
@@ -5939,7 +5944,7 @@ const foxholeData = {
 			"description": "A segment of railway for small gauge train cars. Tracks can attach to or fork from existing railways to form complex networks.",
 			"category": "foundations",
 			"categoryOrder": 8,
-			"sortOffset": 100000,
+			"sortLayer": "rail",
 			"hasHandle": true,
 			"isBezier": true,
 			"minLength": 5,
@@ -6027,7 +6032,7 @@ const foxholeData = {
 			"description": "A container that can carry large quantities of resources and can be transported by certain vehicles.",
 			"category": "misc",
 			"categoryOrder": 2,
-			"sortOffset": 150000,
+			"sortLayer": "container",
 			"icon": "game/Textures/UI/StructureIcons/ResourceContainerIcon.webp",
 			"texture": "game/Textures/Structures/resourcecontainer.webp",
 			"cost": {
@@ -6106,7 +6111,7 @@ const foxholeData = {
 			"description": "A container for shipping very large quantities of Crates using Crane loaded vehicles. This type of container can only be unloaded at Storage Depots and Seaports.",
 			"category": "misc",
 			"categoryOrder": 3,
-			"sortOffset": 150000,
+			"sortLayer": "container",
 			"icon": "game/Textures/UI/StructureIcons/ShippingContainerStructureIcon.webp",
 			"texture": "game/Textures/Structures/shippingcontainer.webp",
 			"cost": {
@@ -6119,7 +6124,7 @@ const foxholeData = {
 			"description": "A small gauge container car for transporting raw materials. ",
 			"category": "vehicles",
 			"hideInList": true,
-			"sortOffset": 120000,
+			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeResourceCarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/smalltraindump.webp",
 			"sockets": [
@@ -6150,7 +6155,7 @@ const foxholeData = {
 			"description": "The Mineseeker is the Bassett Motor Society’s mechanized mule. This small 0-4-0 locomotive can haul tonnes of weight over short distances with little overhead. Ideal for a mining operation or short-range supply chains. ",
 			"category": "vehicles",
 			"hideInList": true,
-			"sortOffset": 120000,
+			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeEngineVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/smalltrainengine.webp",
 			"sockets": [
@@ -6183,7 +6188,7 @@ const foxholeData = {
 			"description": "A low profile flatbed car for transporting large resources and munitions over short distances on small gauge tracks.",
 			"category": "vehicles",
 			"hideInList": true,
-			"sortOffset": 120000,
+			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeFlatbedCarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/smalltrainresourceplatform.webp",
 			"sockets": [
@@ -6678,7 +6683,7 @@ const foxholeData = {
 			"description": "A simple caboose that allows rail crews to maintain tracks more efficiently.",
 			"category": "vehicles",
 			"hideInList": true,
-			"sortOffset": 120000,
+			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/TrainCabooseItemIcon.webp",
 			"texture": "game/Textures/Vehicles/traincaboose.webp",
 			"sockets": [
@@ -6710,7 +6715,7 @@ const foxholeData = {
 			"description": "A container car for transporting coal to refuel trains over long-distance trips. ",
 			"category": "vehicles",
 			"hideInList": true,
-			"sortOffset": 120000,
+			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/TrainCoalCarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/traincoal.webp",
 			"sockets": [
@@ -6743,7 +6748,7 @@ const foxholeData = {
 			"category": "vehicles",
 			"faction": "c",
 			"hideInList": true,
-			"sortOffset": 120000,
+			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/CombatCarCVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/traincombatcarc.webp",
 			"sockets": [
@@ -6776,7 +6781,7 @@ const foxholeData = {
 			"category": "vehicles",
 			"faction": "w",
 			"hideInList": true,
-			"sortOffset": 120000,
+			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/CombatCarWVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/traincombatcarw.webp",
 			"sockets": [
@@ -6808,7 +6813,7 @@ const foxholeData = {
 			"description": "One of the most storied mass-market 0-6-2 locomotives engineered by the Bassett Motor Society, this coal-powered industrial train engine is reliable, tested, and incredibly durable. The Black Bolt’s legacy is unmatched having aided the Bassett Motor Society in supplying countries across the globe.",
 			"category": "vehicles",
 			"hideInList": true,
-			"sortOffset": 120000,
+			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/TrainEngineVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/trainengine.webp",
 			"sockets": [
@@ -6842,7 +6847,7 @@ const foxholeData = {
 			"description": "A flatbed car for transporting large resources and munitions by train over long-distances. ",
 			"category": "vehicles",
 			"hideInList": true,
-			"sortOffset": 120000,
+			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/TrainCarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/trainflatbed.webp",
 			"sockets": [
@@ -6874,7 +6879,7 @@ const foxholeData = {
 			"description": "An armoured train car with a mounted machinegun position for transporting infantry safely over long distances.",
 			"category": "vehicles",
 			"hideInList": true,
-			"sortOffset": 120000,
+			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/InfantryCarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/traininfantry.webp",
 			"sockets": [
@@ -6907,7 +6912,7 @@ const foxholeData = {
 			"category": "vehicles",
 			"hideInList": true,
 			"length": 3.74,
-			"sortOffset": 120000,
+			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/TrainLRArtilleryVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/trainlrartillery.webp",
 			"textureOffset": {
@@ -6980,7 +6985,7 @@ const foxholeData = {
 					"codeName": "TrenchConnectorT2",
 					"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers. This is a special Trench variant that can resize dynamically and can be built underneath roads.",
 					"icon": "game/Textures/UI/StructureIcons/TrenchT2ConnectorIcon.webp",
-					"texture": "game/Textures/Structures/trenchconnectort2.webp",
+					"texture": null,
 					"cost": {
 						"cloth": 75
 					}
@@ -6990,7 +6995,7 @@ const foxholeData = {
 					"codeName": "TrenchConnectorT3",
 					"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers. This is a special Trench variant that can resize dynamically and can be built underneath roads.",
 					"icon": "game/Textures/UI/StructureIcons/TrenchT3ConnectorIcon.webp",
-					"texture": "game/Textures/Structures/trenchconnectort3.webp",
+					"texture": null,
 					"cost": {
 						"concrete": 30
 					}
@@ -7153,7 +7158,7 @@ const foxholeData = {
 					"codeName": "TrenchT2",
 					"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers.",
 					"icon": "game/Textures/UI/StructureIcons/TrenchT2Icon.webp",
-					"texture": "game/Textures/Structures/trencht2.webp",
+					"texture": null,
 					"cost": {
 						"cloth": 50
 					}
@@ -7163,7 +7168,7 @@ const foxholeData = {
 					"codeName": "TrenchT3",
 					"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers.",
 					"icon": "game/Textures/UI/StructureIcons/TrenchT3Icon.webp",
-					"texture": "game/Textures/Structures/trencht3.webp",
+					"texture": null,
 					"cost": {
 						"concrete": 20
 					}
@@ -7195,7 +7200,7 @@ const foxholeData = {
 			"category": "defenses",
 			"categoryOrder": 3,
 			"hideInList": true,
-			"sortOffset": 1400000,
+			"sortLayer": "wall",
 			"hasHandle": true,
 			"minLength": 3,
 			"maxLength": 10,

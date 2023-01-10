@@ -17,11 +17,11 @@ const COLOR_RANGE_BORDER = 0xED2323; // Red
 const FONT_FAMILY = ['Recursive', 'sans-serif'];
 
 const DEFAULT_SHAPE_STYLE = {
-    alpha: 0.75,
+    alpha: 1,
     fill: true,
     fillColor: COLOR_WHITE,
     border: false,
-    lineWidth: 6,
+    lineWidth: 8,
     lineColor: COLOR_WHITE
 };
 
@@ -40,6 +40,7 @@ const game = {
         selectedFaction: null,
         selectedTier: 3,
         disableLockedMouseEvents: false,
+        bringSelectedToFront: true,
         displayFactionTheme: true,
         defaultBuildingCategory: 'all',
         showCollapsibleBuildingList: true,
@@ -59,7 +60,7 @@ const game = {
             rectangle: DEFAULT_SHAPE_STYLE,
             circle: Object.assign({}, DEFAULT_SHAPE_STYLE),
             line: Object.assign({}, DEFAULT_SHAPE_STYLE, {
-                lineWidth: 8,
+                lineWidth: 14,
                 frontArrow: true,
                 backArrow: true
             })
@@ -208,61 +209,25 @@ try {
         }
     ];
 
-    /*
     game.constructionLayers = {
-        foundations: {
-            key: 'foundations',
-            title: 'Toggle Foundations Layer',
-            //img: 'StructureIcons/ConcreteFoundation04Icon.webp',
-            icon: 'fa-th-large'
-        },
-        *
-        defenses: {
-            key: 'defenses',
-            title: 'Toggle Defenses Layer',
-            img: 'StructureIcons/BarbedWireCornerStructureIcon.webp'
-        },
-        *
-        buildings: {
-            key: 'buildings',
-            title: 'Toggle Facilities Layer',
-            //img: 'StructureIcons/MetalworksFactoryBase.webp',
-            icon: 'fa-building'
-        },
-        bezier: {
-            key: 'bezier',
-            title: 'Toggle Network Layer',
-            icon: 'fa-code-fork'
-        },
-        hand: {
-            key: 'hand',
-            title: 'Hand Tool',
-            icon: 'fa-hand-pointer-o'
-        },
-        *
-        rails: {
-            key: 'rails',
-            title: 'Toggle Rails Layer',
-            img: 'StructureIcons/BiarcRailTrackIcon.webp'
-        },
-        pipes: {
-            key: 'pipes',
-            title: 'Toggle Pipes Layer',
-            img: 'StructureIcons/PipelineSegmentIcon.webp',
-        },
-        power: {
-            key: 'power',
-            title: 'Toggle Power Layer',
-            img: 'StructureIcons/PowelineIcon.webp'
-        },
-        *
-        locked: {
-            key: 'locked',
-            title: 'Toggle Locked Layer',
-            icon: 'fa-lock'
-        }
+        foundation: 1000,
+        road: 10000,
+        rail: 15000,
+        pipe: 20000,
+        unspecified: 50000,
+        vehicle: 120000,
+        container: 150000,
+        wall: 200000,
+        overhead: 500000,
+        power_pole: 750000,
+        power_line: 100000,
+        player: 1500000,
+        crane: 2000000,
+        range: 3000000,
+        shape: 4000000,
+        text: 4500000,
+        selected: 5000000
     };
-    */
 
     game.getEntities = () => {
         return entities;
@@ -720,7 +685,7 @@ try {
 
         app.cstage.updateLayersOrder = function () {
             app.cstage.children.sort(function (a, b) {
-                return b.getZIndex() - a.getZIndex()
+                return b.getZIndex() - a.getZIndex();
             });
         };
 
@@ -1741,6 +1706,9 @@ try {
             entity.building = building;
         }
 
+        entity.sortLayer = building ? (building?.sortLayer ?? 'unspecified') : entity.type;
+        entity.sortOffset = game.constructionLayers[entity.sortLayer];
+
         entity.selected = false;
         entity.selectable = true;
         entity.hasHandle = (type === 'shape' || entity.building?.hasHandle) ?? false;
@@ -1784,6 +1752,7 @@ try {
             }
 
             entity.onSave = function(entityData) {
+                entityData.sortOffset = entity.sortOffset - game.constructionLayers[entity.sortLayer];
                 entityData.label = entity.label.text;
                 for (const[key, value] of Object.entries(entity.labelStyle)) {
                     if (value !== game.defaultSettings.styles.label[key]) {
@@ -1796,6 +1765,9 @@ try {
             };
 
             entity.onLoad = function(entityData) {
+                if (typeof entityData.sortOffset === 'number') {
+                    entity.sortOffset += entityData.sortOffset;
+                }
                 entity.label.text = entityData.label;
                 Object.assign(entity.labelStyle, game.defaultSettings.styles.label, entityData.labelStyle);
                 entity.setLabelStyle(entity.labelStyle);
@@ -2368,6 +2340,8 @@ try {
             }
 
             entity.onSave = function(entityData, isSelection) {
+                entityData.sortOffset = entity.sortOffset - game.constructionLayers[entity.sortLayer];
+
                 if (entity.hasHandle) {
                     entityData.railPoints = [];
                     for (let i=0; i<points.length; i++) {
@@ -2379,7 +2353,9 @@ try {
                         });
                     }
                 } else {
-                    entityData.productionScale = entity.productionScale;
+                    if (typeof entity.productionScale === 'number') {
+                        entityData.productionScale = entity.productionScale;
+                    }
                     entityData.selectedProduction = entity.selectedProduction;
                 }
 
@@ -2439,8 +2415,14 @@ try {
             };
 
             entity.onLoad = function(entityData) {
+                if (typeof entityData.sortOffset === 'number') {
+                    entity.sortOffset += entityData.sortOffset;
+                }
+
                 if (entity.building && typeof entityData.selectedProduction === 'number') {
-                    entity.productionScale = entityData.productionScale;
+                    if (typeof entityData.productionScale === 'number') {
+                        entity.productionScale = entityData.productionScale;
+                    }
                     entity.setProductionId(entityData.selectedProduction);
                 }
 
@@ -2919,8 +2901,21 @@ try {
             return false;
         };
 
+        entity.bringToFront = function() {
+            let maxOffset = 0;
+            for (let i = 0; i < entities.length; i++) {
+                const ent = entities[i];
+                if (!ent.selected && ent !== entity && ent.sortLayer === entity.sortLayer) {
+                    maxOffset = Math.max(maxOffset, ent.sortOffset);
+                }
+            }
+            if (maxOffset) {
+                entity.sortOffset = maxOffset + 1;
+            }
+        };
+
         entity.getZIndex = function() {
-            return -entity.y - (entity.building?.sortOffset ?? 0) - (entity.type === 'text' ? 10000000 : (entity.selected && !entity.following ? 5000000 : 0));
+            return -entity.sortOffset - ((game.settings.bringSelectedToFront && entity.selected && !entity.following) ? game.constructionLayers.selected : 0);
         };
 
         if (entity.building && entity.building.isBezier) {
@@ -3792,9 +3787,14 @@ try {
                     }
                     for (let i = 0; i < selectedEntities.length; i++) {
                         // Destroying any connections with entities that aren't selected, it might be worth checking if the mouse / selection position has changed before doing so or checking for rotation.
-                        let pickupEntity = selectedEntities[i];
-                        if (pickupEntity.building) {
-                            pickupEntity.removeConnections(undefined, true);
+                        const pickupEntity = selectedEntities[i];
+                        if (pickupEntity) {
+                            if (game.settings.bringSelectedToFront) {
+                                pickupEntity.bringToFront();
+                            }
+                            if (pickupEntity.building) {
+                                pickupEntity.removeConnections(undefined, true);
+                            }
                         }
                     }
                 }

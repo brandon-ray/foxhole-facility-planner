@@ -221,6 +221,7 @@ function iterateStructures(dirPath) {
                                     'range': structureData.range,
                                     //'overlapDist': structure.MinDistanceToSameStructure ? structure.MinDistanceToSameStructure / METER_UNREAL_UNITS : undefined,
                                     'overlapDist': structureData.overlapDist,
+                                    'sortLayer': structureData.sortLayer,
                                     'sortOffset': structureData.sortOffset,
                                     'hitArea': undefined,
                                     'hasHandle': structureData.hasHandle,
