@@ -837,13 +837,12 @@ Vue.component('app-menu-statistics', {
             let powerProduced = 0;
             let powerConsumed = 0;
             let garrisonSupplies = 0;
-
             let garrisonConsumptionRate = Math.floor(this.time / 3600);
+            let garrisonConsumptionReducers = [];
             for (let i=0; i<game.getEntities().length; i++) {
                 let entity = game.getEntities()[i];
-                // TODO: Need to actually get whether a structure decays or not from foxhole data.
-                if (entity.type === 'building' && (entity.building?.category !== 'vehicles' && entity.building?.category !== 'misc')) {
-                    garrisonSupplies += (2 * (entity.building?.garrisonSupplyMultiplier ?? 1)) * garrisonConsumptionRate;
+                if (entity.building && entity.building.range?.type === 'garrisonReduceDecay') {
+                    garrisonConsumptionReducers.push(entity);
                 }
             }
 
@@ -853,6 +852,18 @@ Vue.component('app-menu-statistics', {
                     let buildingData = window.objectData.buildings[entity.subtype];
                     if (!buildingData) {
                         continue;
+                    }
+
+                    // TODO: Need to actually get whether a structure decays or not from foxhole data.
+                    if (entity.building?.category !== 'vehicles' && entity.building?.category !== 'misc') {
+                        let consumptionRate = (2 * (entity.building?.garrisonSupplyMultiplier ?? 1)) * garrisonConsumptionRate;
+                        for (let j = 0; j < garrisonConsumptionReducers.length; j++) {
+                            const garrison = garrisonConsumptionReducers[j];
+                            if (Math.distanceBetween(entity.getMidPoint(), garrison) < garrison.building.range.max * 32) {
+                                consumptionRate /= 2;
+                            }
+                        }
+                        garrisonSupplies += consumptionRate;
                     }
 
                     let productionSelected = typeof entity.selectedProduction === 'number';

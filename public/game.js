@@ -2930,7 +2930,7 @@ try {
             return -entity.sortOffset - ((game.settings.bringSelectedToFront && entity.selected && !entity.following) ? game.constructionLayers.selected : 0);
         };
 
-        if (entity.building && entity.building.isBezier) {
+        if (!entity.building || entity.building.isBezier) {
             entity.isVisible = function () {
                 return true;
             };
