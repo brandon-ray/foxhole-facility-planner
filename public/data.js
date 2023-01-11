@@ -1,76 +1,80 @@
-const buildingCategories = {
-    foundations: {
-        name: 'Foundations',
-        order: 0,
-        color: 0x505050, // Dark Grey
-        buildings: []
-    },
-    defenses: {
-        name: 'Defenses',
-        order: 1,
-        buildings: []
-    },
-    entrenchments: {
-        name: 'Entrenchments',
-        order: 2,
-        buildings: []
-    },
-    factories: {
-        name: 'Facilities',
-        order: 3,
-        color: 0x8566bd, // Indigo / Purple
-        buildings: []
-    },
-    harvesters: {
-        name: 'Harvesters',
-        order: 4,
-        color: 0x289665, // Forest Green
-        buildings: []
-    },
-    power: {
-        name: 'Power',
-        order: 5,
-        color: 0xf2ec7a, // Yellow
-        buildings: []
-    },
-    vehicles: {
-        name: 'Vehicles',
-        order: 6,
-        buildings: []
-    },
-    misc: {
-        name: 'Miscellaneous',
-        order: 7,
-        color: 0x7ce1ea, // Blue
-        buildings: []
-    }
-};
+const game_asset_keys = ['icon', 'texture', 'textureBorder', 'textureFrontCap', 'textureBackCap'];
+const game_asset_list = {};
 
-//https://foxhole.fandom.com/wiki/Category:Icons
+function assetDir(str) {
+    return str ? '/games/foxhole/assets/' + str : str;
+}
+
 (function() {
     window.objectData = {
+        "categories": foxholeData.categories,
         "tech": foxholeData.tech,
         "resources": foxholeData.resources,
         "buildings": foxholeData.buildings
     };
 
+    const appendGameAssets = function(data) {
+        for (const key of game_asset_keys) {
+            let asset = data[key];
+            if (asset) {
+                if (typeof asset === 'object' && !Array.isArray(asset)) {
+                    asset = assetDir(asset.sheet);
+                    data[key].sheet = asset;
+                } else {
+                    asset = assetDir(asset);
+                    data[key] = asset;
+                }
+                game_asset_list[asset] = asset;
+            }
+        }
+    };
+
+    const appendBuildingData = function(key, building) {
+        building.key = key;
+        if (building.production) {
+            if (building.power > 0) {
+                building.production.hasOutput = true;
+            } else {
+                for (let i = 0; i < building.production.length; i++) {
+                    let recipe = building.production[i];
+                    if (recipe.output) {
+                        building.production.hasOutput = true;
+                        break;
+                    }
+                }
+            }
+        }
+        if (building.category) {
+            const buildingCategory = window.objectData.categories[building.category];
+            if (buildingCategory) {
+                if (!buildingCategory.buildings) {
+                    buildingCategory.buildings = [];
+                }
+                buildingCategory.buildings.push(building);
+            }
+        }
+    };
+
     let buildingKeys = Object.keys(window.objectData.buildings);
-    for (let i=0; i<buildingKeys.length; i++) {
+    for (let i = 0; i < buildingKeys.length; i++) {
         let buildingKey = buildingKeys[i];
         let building = window.objectData.buildings[buildingKey];
-        if (building.category) {
-            buildingCategories[building.category].buildings.push(building);
-        }
+
+        appendGameAssets(building);
+        
+        appendBuildingData(buildingKey, building);
+
         if (building.upgrades) {
             let upgradeKeys = Object.keys(building.upgrades);
-            for (let j=0; j<upgradeKeys.length; j++) {
+            for (let j = 0; j < upgradeKeys.length; j++) {
                 let upgradeKey = upgradeKeys[j];
                 let upgrade = building.upgrades[upgradeKey];
-                let upgradeBuilding = Object.assign({}, building, upgrade);
 
+                appendGameAssets(upgrade);
+
+                let upgradeBuilding = Object.assign({}, building, upgrade);
                 upgradeBuilding.parent = building;
                 upgradeBuilding.parentKey = buildingKey;
-                upgradeBuilding.parentName = building.name;
                 upgradeBuilding.upgradeName = upgrade.name;
                 upgradeBuilding.name = building.name + ' (' + upgrade.name + ')';
 
@@ -87,48 +91,22 @@ const buildingCategories = {
                 upgradeBuilding.upgradeCost = upgradeBuilding.cost;
                 upgradeBuilding.cost = upgradeBuildingCost;
 
-                window.objectData.buildings[buildingKey + '_' + upgradeKey] = upgradeBuilding;
+                upgradeKey = buildingKey + '_' + upgradeKey;
+                window.objectData.buildings[upgradeKey] = upgradeBuilding;
 
-                if (upgradeBuilding.category) {
-                    buildingCategories[upgradeBuilding.category].buildings.push(upgradeBuilding);
-                }
+                appendBuildingData(upgradeKey, upgradeBuilding);
             }
         }
     }
 
-    let objectDataKeys = Object.keys(window.objectData);
-    for (let i = 0; i < objectDataKeys.length; i++) {
-        let objectDataKey = objectDataKeys[i];
-        let objectData = window.objectData[objectDataKey];
-
-        let objectList = [];
-        let keys = Object.keys(objectData);
-        for (let j = 0; j < keys.length; j++) {
-            let key = keys[j];
-            let data = objectData[key];
-            data.key = key;
-
-            if (objectDataKey === 'buildings' && data.production) {
-                if (data.power > 0) {
-                    data.production.hasOutput = true;
-                } else {
-                    for (let i = 0; i < data.production.length; i++) {
-                        let recipe = data.production[i];
-                        if (recipe.output) {
-                            data.production.hasOutput = true;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            objectList.push(data);
+    for (const resource of Object.values(window.objectData.resources)) {
+        if (resource.icon) {
+            resource.icon = assetDir(resource.icon);
+            game_asset_list[resource.icon] = resource.icon;
         }
-
-        window.objectData[objectDataKey + '_list'] = objectList;
     }
 
-    for (const [category, data] of Object.entries(buildingCategories)) {
+    for (const [category, data] of Object.entries(window.objectData.categories)) {
         if (data.buildings.length) {
             data.buildings.sort((a, b) => {
                 const aOrder = a.categoryOrder ?? 0, bOrder = b.categoryOrder ?? 0;

@@ -341,49 +341,15 @@ try {
     let resources = null;
     let sounds = null;
     let asset_list = {
-        icon_background: 'icon_background.jpg',
         white: 'white.png',
         background: 'grid_32.webp',
-        building_background: 'building_background.png',
         point: 'point.webp',
         pointer: 'pointer.webp',
         bipointer: 'bipointer.webp',
         power: 'power.webp',
         power_x128: 'power_x128.webp',
-        foundation_border: 'foundation_border.webp',
-        concrete_foundation_border: 'concrete_foundation_border.webp',
         smoke_particles: 'smoke_particles.png'
     };
-
-    for (let i=0; i<window.objectData.buildings_list.length; i++) {
-        let building = window.objectData.buildings_list[i];
-        if (building.icon) {
-            asset_list[building.icon] = building.icon;
-        }
-
-        if (building.texture) {
-            if (typeof building.texture === 'object' && !Array.isArray(building.texture)) {
-                asset_list[building.texture.sheet] = building.texture.sheet;
-            } else {
-                asset_list[building.texture] = building.texture;
-            }
-        }
-        
-        if (building.textureFrontCap) {
-            asset_list[building.textureFrontCap] = building.textureFrontCap;
-        }
-        
-        if (building.textureBackCap) {
-            asset_list[building.textureBackCap] = building.textureBackCap;
-        }
-    }
-
-    for (let i=0; i<window.objectData.resources_list.length; i++) {
-        let resource = window.objectData.resources_list[i];
-        if (resource.icon) {
-            asset_list[resource.icon] = resource.icon;
-        }
-    }
 
     let soundsLoaded = false;
     function loadSounds() {
@@ -539,14 +505,35 @@ try {
                     setTimeout(() => {
                         let x = 0;
                         let y = 0;
+                        const buildings = Object.values(window.objectData.buildings);
                         for (let i=0; i<1000; i++) {
-                            let buildingData = window.objectData.buildings_list[Math.floor(Math.random()*window.objectData.buildings_list.length)];
+                            let buildingData = buildings[Math.floor(Math.random() * buildings.length)];
                             if (!buildingData.hideInList && (!buildingData.parent || !buildingData.parent.hideInList) && buildingData.category !== 'entrenchments') {
                                 createSelectableEntity('building', buildingData.key, x, y, 0);
                                 x += 500;
                                 if (x >= 10000) {
                                     x = 0;
                                     y += 500;
+                                }
+                            }
+                        }
+                    }, 1000);
+                }
+                break;
+            case 120: // F9
+                if (ENABLE_DEBUG) {
+                    setTimeout(() => {
+                        let x = 0, y = 0;
+                        for (const category of Object.values(window.objectData.categories)) {
+                            for (let i = 0; i < category.buildings.length; i++) {
+                                const building = category.buildings[i];
+                                if (game.settings.enableExperimental || (!building.hideInList && (!building.parent || !building.parent.hideInList) && building.category !== 'entrenchments')) {
+                                    createSelectableEntity('building', building.key, x * 600, y * 600, 0);
+                                    x++;
+                                    if (x >= 10) {
+                                        x = 0;
+                                        y++;
+                                    }
                                 }
                             }
                         }
@@ -595,6 +582,10 @@ try {
     function loadAssets() {
         for (let key in asset_list) {
             PIXI.Loader.shared.add(key, 'assets/' + asset_list[key]);
+        }
+
+        for (let key in game_asset_list) {
+            PIXI.Loader.shared.add(key, game_asset_list[key]);
         }
 
         loadSounds();
@@ -1937,10 +1928,7 @@ try {
                         socket.pointer.anchor.set(0.5, 1.5);
                         socket.pointer.rotation = -(entity.rotation + socket.rotation);
                     } else if (socket.socketData.type === 'foundation') {
-                        let foundationBorder = resources.foundation_border.texture;
-                        if (building.parent) {
-                            foundationBorder = resources.concrete_foundation_border.texture;
-                        }
+                        let foundationBorder = resources[entity.building.textureBorder].texture;
                         socket.pointer = new PIXI.Sprite(foundationBorder);
                         socket.pointer.width = foundationBorder.width / METER_PIXEL_SCALE;
                         socket.pointer.height = foundationBorder.height / METER_PIXEL_SCALE;
@@ -3108,7 +3096,7 @@ try {
                             }
                             for (let i = 0; i < entities.length; i++) {
                                 let entity2 = entities[i];
-                                if (!entity2.visible || entity2 === entity || entity2.type !== 'building' || !(entity.sockets && entity2.sockets) || Math.distanceBetween({x: gmx, y: gmy}, entity2) > 1000) {
+                                if (!entity2.visible || entity2 === entity || entity2.type !== 'building' || !(entity.sockets && entity2.sockets) || Math.distanceBetween({x: gmx, y: gmy}, entity2.getMidPoint()) > 1000) {
                                     continue;
                                 }
 
@@ -3851,7 +3839,7 @@ try {
                         if (selectedEntity.building?.canSnap || selectedEntity.isTrain) {
                             for (let j = 0; j < entities.length; j++) {
                                 let entity = entities[j];
-                                if (!entity.visible || entity === selectedEntity || entity.type !== 'building' || entity.selected || !((selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain) || Math.distanceBetween(selectedEntity, entity) > 1000) {
+                                if (!entity.visible || entity === selectedEntity || entity.type !== 'building' || entity.selected || !((selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain) || Math.distanceBetween(selectedEntity, entity.getMidPoint()) > 1000) {
                                     continue;
                                 }
                                 if (selectedEntity.subtype === entity.subtype || (selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain) {
@@ -4085,6 +4073,7 @@ try {
         if (ENABLE_DEBUG) {
             debugText.text = 'Press F2 to disable debug\n';
             debugText.text += 'Press F8 to spawn 1k buildings\n';
+            debugText.text += 'Press F9 to spawn all building types\n';
             debugText.text += `x: ${gmx}, y: ${gmy}\n`;
             debugText.text += 'FPS: ' + Math.round(1000/delta) + '\n';
         }

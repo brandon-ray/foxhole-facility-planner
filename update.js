@@ -5,7 +5,7 @@ const sharp = require('sharp');
 const METER_UNREAL_UNITS = 100;
 const foxholeDataDirectory = 'dev/';
 const foxholeDataVariable = 'const foxholeData = ';
-let foxholeData = JSON.parse(fs.readFileSync('./public/foxholeData.js').toString().substring(foxholeDataVariable.length));
+let foxholeData = JSON.parse(fs.readFileSync('./public/games/foxhole/data.js').toString().substring(foxholeDataVariable.length));
 
 const stStructures = JSON.parse(fs.readFileSync(`${foxholeDataDirectory}War/Content/Blueprints/StringTables/STStructures.json`))[0].StringTable.KeysToMetaData;
 const structurePolygons = JSON.parse(fs.readFileSync(`${foxholeDataDirectory}polygons.json`));
@@ -233,6 +233,7 @@ function iterateStructures(dirPath) {
                                     'maxLength': structure.ConnectorMaxLength ? structure.ConnectorMaxLength / METER_UNREAL_UNITS : undefined ?? baseData.maxLength,
                                     'icon': structureData.icon ?? getLocalIcon(structure) ?? baseData.icon,
                                     'texture': (typeof structureData.texture === 'string' || structureData.texture === null) ? structureData.texture : `game/Textures/Structures/${structureData.id}.webp`,
+                                    'textureBorder': structureData.textureBorder,
                                     'textureFrontCap': structureData.textureFrontCap,
                                     'textureBackCap': structureData.textureBackCap,
                                     'textureIcon': structureData.textureIcon,
@@ -301,6 +302,7 @@ function iterateStructures(dirPath) {
                                         'hitArea': undefined,
                                         'icon': getLocalIcon(modification),
                                         'texture': typeof storedModData?.texture === 'string' || storedModData?.texture === null ? storedModData.texture : `game/Textures/Structures/${structureData.id}_${storedModData?.id}.webp`,
+                                        'textureBorder': storedModData?.textureBorder,
                                         'textureFrontCap': storedModData?.textureFrontCap,
                                         'textureBackCap': storedModData?.textureBackCap,
                                         'positionOffset': storedModData?.positionOffset,
@@ -607,9 +609,9 @@ function findFile(directory, fileName) {
 async function updateData() {
     const METER_PIXEL_SCALE = 1.5625; // 50 / 32
     for (const [textureName, shapes] of Object.entries(structurePolygons)) {
-        let textureFile = `./public/assets/game/Textures/Structures/${textureName}.webp`;
+        let textureFile = `./public/games/foxhole/assets/game/Textures/Structures/${textureName}.webp`;
         if (!fs.existsSync(textureFile)) {
-            textureFile = findFile('./public/assets/game/Textures/', `${textureName}.webp`);
+            textureFile = findFile('./public/games/foxhole/assets/game/Textures/', `${textureName}.webp`);
         }
         if (textureFile) {
             const texture = await sharp(textureFile).metadata();
@@ -697,12 +699,13 @@ async function updateData() {
     }, {});
 
     let foxholeDataStr = JSON.stringify({
+        'categories': foxholeData.categories,
         'tech': sortList(techList),
         'resources': sortList(itemList),
         'buildings': sortList(structureList)
     }, null, '\t');
     foxholeDataStr = foxholeDataStr.replaceAll('"[ ', '[ ').replaceAll(' ]"', ' ]');
-    fs.writeFile('public/foxholeData.js', foxholeDataVariable + foxholeDataStr, err => {
+    fs.writeFile('public/games/foxhole/data.js', foxholeDataVariable + foxholeDataStr, err => {
         if (err) {
             throw err;
         }

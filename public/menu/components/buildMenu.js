@@ -111,10 +111,10 @@ Vue.component('app-game-sidebar', {
         </div>
         <div id="hover-building-info" v-if="hoverData">
             <div class="building-info-name">
-                <img v-bind:src="'/assets/' + (hoverData.icon ?? 'default_icon.webp')" />
-                <h4>{{hoverData.parentName ? hoverData.parentName : hoverData.name}}</h4>
+                <img v-bind:src="hoverData.icon ?? '/assets/default_icon.webp'" />
+                <h4>{{hoverData.parent?.name ?? hoverData.name}}</h4>
             </div>
-            <div v-if="hoverData.parentName" class="building-info-upgrade">
+            <div v-if="hoverData.parent?.name" class="building-info-upgrade">
                 <i class="fa fa-check-circle" aria-hidden="true"></i> {{hoverData.upgradeName}} Upgrade
             </div>
             <div class="building-info-body">
@@ -424,7 +424,7 @@ Vue.component('app-menu-building-selected', {
             </div>
             <div class="settings-option-wrapper">
                 <div class="settings-title">
-                    {{entity.building?.parentName ?? (entity.building?.name ?? 'Other Options')}}
+                    {{entity.building?.parent?.name ?? (entity.building?.name ?? 'Other Options')}}
                 </div>
                 <label class="app-input-label">
                     <i class="fa fa-arrows" aria-hidden="true"></i> Position X:
@@ -483,7 +483,7 @@ Vue.component('app-menu-building-selected', {
                 <div class="settings-title">{{hoverUpgradeName ?? (entity.building.upgradeName ?? 'No Upgrade Selected')}}</div>
                 <button class="upgrade-button" v-for="(upgrade, key) in entity.building.upgrades" :class="{'selected-upgrade': entity.building.parentKey && entity.building.key === entity.building.parentKey + '_' + key}"
                     @mouseenter="showUpgradeHover(key, upgrade)" @mouseleave="showUpgradeHover()" @click="changeUpgrade(key)">
-                    <div class="resource-icon" :title="upgrade.name" :style="{backgroundImage:'url(/assets/' + (upgrade.icon ?? entity.building.icon) + ')'}"></div>
+                    <div class="resource-icon" :title="upgrade.name" :style="{backgroundImage:'url(' + (upgrade.icon ?? entity.building.icon) + ')'}"></div>
                 </button>
             </div>
             <div v-if="productionData" class="settings-option-wrapper">
@@ -655,7 +655,7 @@ Vue.component('app-menu-construction-list', {
                 <!--
                 <template v-else>
                     <button v-for="layer in game.constructionLayers" class="btn-small col" :title="layer.title" type="button" :class="{ 'layer-active': !layer.inactive, 'layer-inactive': layer.inactive }" @mouseenter="bme()" @click="toggleConstructionLayer(layer)">
-                        <div v-if="layer.img" :style="{backgroundImage: 'url(/assets/game/Textures/UI/' + layer.img + ')'}"></div>
+                        <div v-if="layer.img" :style="{backgroundImage: 'url(' + assetDir('game/Textures/UI/' + layer.img) + ')'}"></div>
                         <i v-if="layer.icon" class="fa" :class="layer.icon" aria-hidden="true"></i>
                         <i v-if="layer.inactive" class="fa fa-ban position-absolute layer-inactive" aria-hidden="true"></i>
                     </button>
@@ -668,7 +668,7 @@ Vue.component('app-menu-construction-list', {
                 <div class="construction-category-wrapper">
                     <select class="btn-small app-input construction-category" @click="bmc()" title="Filter by Category" v-model="game.selectedBuildingCategory" @change="refresh()">
                         <option value="all">All Buildings</option>
-                        <template v-for="(category, key) in buildingCategories">
+                        <template v-for="(category, key) in window.objectData.categories">
                             <option v-if="game.settings.enableExperimental || key !== 'entrenchments'" :value="key">{{category.name}}</option>
                         </template>
                     </select>
@@ -682,10 +682,10 @@ Vue.component('app-menu-construction-list', {
         </div>
         <div class="menu-page">
             <template v-if="game.selectedBuildingCategory !== 'all'">
-                <app-game-building-list-icon v-for="building in buildingCategories[game.selectedBuildingCategory].buildings" :building="building"/>
+                <app-game-building-list-icon v-for="building in window.objectData.categories[game.selectedBuildingCategory].buildings" :building="building"/>
             </template>
             <template v-else>
-                <template v-for="(category, key) in buildingCategories">
+                <template v-for="(category, key) in window.objectData.categories">
                     <template v-if="(game.settings.showCollapsibleBuildingList || key !== 'vehicles') && (game.settings.enableExperimental || key !== 'entrenchments')">
                         <div v-if="game.settings.showCollapsibleBuildingList" class="construction-item-category" @click="category.visible = !category.visible; refresh()">
                             {{category.name}}<i class="fa float-right" :class="{'fa-angle-down': category.visible, 'fa-angle-right': !category.visible}" style="margin-top: 2px;" aria-hidden="true"></i>
@@ -798,221 +798,8 @@ Vue.component('app-game-building-list-icon', {
         (!building.parent || game.settings.showUpgradesAsBuildings) &&
         (!building.techId || (game.settings.selectedTier === 2 && building.techId === 'unlockfacilitytier2') || game.settings.selectedTier === 3) &&
         (!game.settings.selectedFaction || (!building.faction || building.faction === game.settings.selectedFaction))"
-        class="build-icon" :title="building.name" :style="{backgroundImage:'url(/assets/' + (building.parent?.icon ?? building.icon ?? 'default_icon.webp') + ')'}"
+        class="build-icon" :title="building.name" :style="{backgroundImage:'url(' + ((building.parent?.icon ?? building.icon) ?? '/assets/default_icon.webp') + ')'}"
         @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" @click="buildBuilding(building)">
-    </div>
-    `
-});
-
-Vue.component('app-menu-statistics', {
-    props: ['menuData'],
-    data() {
-        return {
-            cost: {},
-            input: {},
-            output: {},
-            time: 3600,
-            powerTotal: 0,
-            powerProduced: 0,
-            powerConsumed: 0,
-            garrisonSupplies: 0,
-        };
-    },
-    mounted() {
-        this.refresh();
-        game.statisticsMenuComponent = this;
-    },
-    methods: {
-        sortKeys: function(list) {
-            return Object.keys(list).sort().reduce((data, key) => {
-                data[key] = list[key];
-                return data;
-            }, {});
-        },
-        refresh: function() {
-            let cost = {};
-            let input = {};
-            let output = {};
-            let powerTotal = 0;
-            let powerProduced = 0;
-            let powerConsumed = 0;
-            let garrisonSupplies = 0;
-            let garrisonConsumptionRate = Math.floor(this.time / 3600);
-            let garrisonConsumptionReducers = [];
-            for (let i=0; i<game.getEntities().length; i++) {
-                let entity = game.getEntities()[i];
-                if (entity.building && entity.building.range?.type === 'garrisonReduceDecay') {
-                    garrisonConsumptionReducers.push(entity);
-                }
-            }
-
-            for (let i=0; i<game.getEntities().length; i++) {
-                let entity = game.getEntities()[i];
-                if (entity.type === 'building') {
-                    let buildingData = window.objectData.buildings[entity.subtype];
-                    if (!buildingData) {
-                        continue;
-                    }
-
-                    // TODO: Need to actually get whether a structure decays or not from foxhole data.
-                    if (entity.building?.category !== 'vehicles' && entity.building?.category !== 'misc') {
-                        let consumptionRate = (2 * (entity.building?.garrisonSupplyMultiplier ?? 1)) * garrisonConsumptionRate;
-                        for (let j = 0; j < garrisonConsumptionReducers.length; j++) {
-                            const garrison = garrisonConsumptionReducers[j];
-                            if (Math.distanceBetween(entity.getMidPoint(), garrison) < garrison.building.range.max * 32) {
-                                consumptionRate /= 2;
-                            }
-                        }
-                        garrisonSupplies += consumptionRate;
-                    }
-
-                    let productionSelected = typeof entity.selectedProduction === 'number';
-                    // Always show power for buildings that have no production, but still should show in power for stats.
-                    if (buildingData.key === 'field_modification_center' || buildingData.key === 'bms_foreman_stacker') {
-                        productionSelected = true;
-                    }
-
-                    let power = productionSelected && buildingData.power ? buildingData.power : 0;
-                    if (buildingData.cost) {
-                        let costKeys = Object.keys(buildingData.cost);
-                        for (let j = 0; j < costKeys.length; j++) {
-                            let key = costKeys[j];
-                            let value = buildingData.cost[key];
-                            if (!cost[key]) {
-                                cost[key] = 0;
-                            }
-                            cost[key] += value;
-                        }
-                    }
-
-                    if (productionSelected && buildingData.production && buildingData.production.length) {
-                        let selectedProduction;
-                        buildingData.production.forEach(production => {
-                            if (production.id === entity.selectedProduction) {
-                                selectedProduction = production;
-                            }
-                        });
-                        if (selectedProduction) {
-                            if (selectedProduction.power) {
-                                power = selectedProduction.power;
-                            }
-
-                            let productionCycles = ~~(this.time / selectedProduction.time);
-                            if (typeof entity.productionScale === 'number') {
-                                const productionTime = this.time / (selectedProduction.time > 3600 ? 86400 : 3600);
-                                const productionLimit = productionTime < 1 ? entity.productionScale : ~~(entity.productionScale * productionTime);
-                                productionCycles = Math.min(productionCycles, productionLimit);
-                            }
-
-                            if (productionCycles > 0) {
-                                if (selectedProduction.input) {
-                                    let inputKeys = Object.keys(selectedProduction.input);
-                                    for (let j = 0; j < inputKeys.length; j++) {
-                                        let key = inputKeys[j];
-                                        let value = selectedProduction.input[key];
-                                        if (!input[key]) {
-                                            input[key] = 0;
-                                        }
-                                        input[key] += productionCycles * value;
-                                    }
-                                }
-
-                                if (selectedProduction.output) {
-                                    let outputKeys = Object.keys(selectedProduction.output);
-                                    for (let j = 0; j < outputKeys.length; j++) {
-                                        let key = outputKeys[j];
-                                        let value = selectedProduction.output[key];
-                                        if (!output[key]) {
-                                            output[key] = 0;
-                                        }
-                                        output[key] += productionCycles * value;
-                                    }
-                                }
-
-                                let inputKeys = Object.keys(input);
-                                for (let j = 0; j < inputKeys.length; j++) {
-                                    let key = inputKeys[j];
-                                    if (output[key]) {
-                                        let outputAmount = output[key];
-                                        output[key] -= input[key];
-                                        input[key] -= outputAmount;
-                                        if (output[key] <= 0) {
-                                            delete output[key];
-                                        }
-                                        if (input[key] <= 0) {
-                                            delete input[key];
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    // TODO: Sort resources by actual display name. Probably not worth doing. This is fine
-                    input = this.sortKeys(input);
-                    output = this.sortKeys(output);
-
-                    powerTotal += power;
-                    if (power > 0) {
-                        powerProduced += power;
-                    } else {
-                        powerConsumed += power;
-                    }
-                }
-            }
-
-            this.cost = cost;
-            this.input = input;
-            this.output = output;
-            this.powerTotal = powerTotal;
-            this.powerProduced = powerProduced;
-            this.powerConsumed = powerConsumed;
-            this.garrisonSupplies = garrisonSupplies;
-
-            this.$forceUpdate();
-        },
-    },
-    template: html`
-    <div style="text-align:left;">
-        <div class="statistics-panel-header">
-            <h3><i class="fa fa-bar-chart"></i> Statistics</h3><button class="close-statistics-button" @click="game.settings.enableStats = false; game.updateSettings()"><i class="fa fa-times"></i></button>
-        </div>
-        <div class="statistics-panel-body">
-            <h4><i class="fa fa-wrench"></i> Construction Cost</h4>
-            <div>
-                <app-game-resource-icon v-for="(value, key) in cost" :resource="key" :amount="value"/>
-            </div>
-            <br>
-            <h4><i class="fa fa-bolt"></i> Facility Power</h4>
-            <div style="color:#d0d004; width:250px; margin:auto;">
-                <span style="color:#03b003;">Produced: {{powerProduced}} MW</span><br>
-                <span style="color:#d50101;">Consumed: {{powerConsumed}} MW</span><br>
-                Total: {{powerTotal}} MW
-            </div>
-            <br>
-            <select class="app-input" v-model="time" @change="refresh()">
-                <option value="86400">Per 24 Hours</option>
-                <option value="43200">Per 12 Hours</option>
-                <option value="21600">Per 6 Hours</option>
-                <option value="10800">Per 3 Hours</option>
-                <option value="3600">Per 1 Hour</option>
-                <option value="1800">Per 30 Minutes</option>
-                <option value="900">Per 15 Minutes</option>
-                <option value="60">Per 1 Minute</option>
-            </select>
-            <br><br>
-            <app-game-resource-icon :resource="'garrisonsupplies'" :amount="garrisonSupplies"/>
-            <br>
-            <h4><i class="fa fa-sign-in"></i> Facility Input</h4>
-            <div class="statistics-panel-fac-input">
-                <app-game-resource-icon v-for="(value, key) in input" :resource="key" :amount="value"/>
-            </div>
-            <br>
-            <h4><i class="fa fa-sign-out"></i> Facility Output</h4>
-            <div class="statistics-panel-fac-output">
-                <app-game-resource-icon v-for="(value, key) in output" :resource="key" :amount="value"/>
-            </div>
-        </div>
     </div>
     `
 });
@@ -1075,7 +862,7 @@ Vue.component('app-menu-settings', {
                 <i class="fa fa-folder-open" aria-hidden="true"></i> Default Category
                 <select class="app-input" v-model="game.settings.defaultBuildingCategory" @change="game.updateSettings()">
                     <option value="all">All Buildings</option>
-                    <template v-for="(category, key) in buildingCategories">
+                    <template v-for="(category, key) in window.objectData.categories">
                         <option v-if="game.settings.enableExperimental || key !== 'entrenchments'" :value="key">{{category.name}}</option>
                     </template>
                 </select>
@@ -1141,7 +928,7 @@ Vue.component('app-menu-save-load', {
         fetchPreset: function() {
             if (this.presetName !== null) {
                 this.importAsSelection = false;
-                fetch(`./assets/presets/${this.presetName}.json`).then(response => {
+                fetch(`/games/foxhole/assets/presets/${this.presetName}.json`).then(response => {
                     return response.json();
                 }).then(saveObject => this.loadSave(saveObject)).catch(e => {
                     console.error('Failed to load preset:', e);

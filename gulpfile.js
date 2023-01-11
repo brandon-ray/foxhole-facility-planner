@@ -32,7 +32,7 @@ gulp.task('copyDistNew', function () {
 });
 
 gulp.task('css', function(){
-    return gulp.src(['public/vendor/*.css', 'public/*.css', 'public/menu/**/*.css'])
+    return gulp.src(['public/vendor/*.css', 'public/*.css', 'public/menu/**/*.css', 'public/games/**/*.css'])
         .pipe(concat('styles.css'))
         .pipe(minifyCSS())
         .pipe(gulp.dest('distNew/css'))
@@ -52,7 +52,7 @@ gulp.task('vendor', function(){
 });
 
 gulp.task('js', function(){
-    return gulp.src(['public/foxholeData.js', 'public/data.js', 'public/*.js', 'public/menu/services/**/*.js', 'public/menu/components/**/*.js', 'public/menu/states/**/*.js', 'public/menu/app.js'])
+    return gulp.src(['public/games/**/*.js', 'public/data.js', 'public/*.js', 'public/menu/services/**/*.js', 'public/menu/components/**/*.js', 'public/menu/states/**/*.js', 'public/menu/app.js'])
         .pipe(sourcemaps.init())
         .pipe(concat('app.js'))
         .pipe(babel({
@@ -107,6 +107,11 @@ gulp.task('assets', function() {
         .pipe(gulp.dest('distNew/assets'));
 });
 
-gulp.task('build', gulp.series('clean', 'css', 'vendor', 'js', 'assets', 'copy', 'index', 'html', 'cleanDist', 'copyDistNew', 'clean'));
+gulp.task('games', function() {
+    return gulp.src(['public/games/**/assets/**/*'])
+        .pipe(gulp.dest('distNew/games'));
+});
+
+gulp.task('build', gulp.series('clean', 'css', 'vendor', 'js', 'assets', 'games', 'copy', 'index', 'html', 'cleanDist', 'copyDistNew', 'clean'));
 
 gulp.task('default', gulp.series('build'));

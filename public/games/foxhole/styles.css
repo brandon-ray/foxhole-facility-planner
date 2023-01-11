@@ -1,0 +1,69 @@
+.colonial-faction #sidebar-header {
+    background: linear-gradient(rgb(24, 24, 24), rgb(5, 26, 6));
+}
+
+.warden-faction #sidebar-header {
+    /*background: linear-gradient(rgb(24, 24, 24), rgb(11, 34, 53));*/
+    background: linear-gradient(rgb(24, 24, 24), rgb(5, 16, 26));
+}
+
+#sidebar-header > .colonial-button, #sidebar-header > .warden-button {
+    width: 54px;
+    height: 54px;
+    background-color: transparent;
+    background-size: 48px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    cursor: pointer;
+    transition-duration: 0.1s;
+    filter: grayscale(100%);
+}
+
+#sidebar-header > .colonial-button.selected, #sidebar-header > .warden-button.selected,
+#sidebar-header > .colonial-button:hover, #sidebar-header > .warden-button:hover {
+    background-size: 54px;
+    filter: none;
+}
+
+#sidebar-header > .colonial-button:not(.selected):hover, #sidebar-header > .warden-button:not(.selected):hover {
+    background-size: 50px;
+}
+
+#sidebar-header > .colonial-button {
+    background-image: url('/games/foxhole/assets/colonial_logo.webp');
+    float: left;
+}
+
+#sidebar-header > .warden-button {
+    background-image: url('/games/foxhole/assets/warden_logo.webp');
+    float: right;
+}
+
+.colonial-faction #sidebar-body.construction-page {
+    background: linear-gradient(rgb(54, 79, 18), rgb(38, 51, 32));
+}
+
+.warden-faction #sidebar-body.construction-page {
+    background: linear-gradient(rgb(18, 50, 79), rgb(32, 42, 51));
+}
+
+/*
+.colonial-faction #construction-page .construction-mode-button.mode-selected {
+    background: #619b12;
+}
+
+.warden-faction #construction-page .construction-mode-button.mode-selected {
+    background: #1a92ff;
+}
+*/
+
+/*
+.colonial-faction .construction-options {
+    background-color: rgb(73, 106, 25);
+}
+
+.warden-faction .construction-options {
+    background-color: rgb(25, 81, 132);
+}
+*/
