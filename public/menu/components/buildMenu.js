@@ -726,7 +726,7 @@ Vue.component('app-game-text-options', {
             <span class="label">align</span>
         </div>
         <div class="btn-small col">
-            <input class="btn-small small-number-input" title="Font Size" type="number" v-model.number="textOptions.fontSize" min="12" max="500" @input="container.updateStyleOptions()">
+            <input class="btn-small small-number-input" title="Font Size" type="number" v-model.number="textOptions.fontSize" min="12" max="500" @change="container.updateStyleOptions()">
             <span class="label">px</span>
         </div>
         <div class="btn-small col" title="Color">
@@ -747,7 +747,7 @@ Vue.component('app-game-shape-options', {
     template: html`
     <div class="construction-options row d-flex justify-content-center">
         <div class="btn-small col">
-            <input class="btn-small small-number-input" title="Opacity" type="number" v-model.number="shapeOptions.opacity" min="1" max="100" @input="container.updateStyleOptions()">
+            <input class="btn-small small-number-input" title="Opacity" type="number" v-model.number="shapeOptions.opacity" min="1" max="100" @change="container.updateStyleOptions()">
             <span class="label">opacity</span>
         </div>
         <template v-if="subtype === 'line'">
@@ -765,7 +765,7 @@ Vue.component('app-game-shape-options', {
             <span class="label">border</span>
         </div>
         <div v-if="subtype === 'line' || shapeOptions.border" class="btn-small col">
-            <input class="btn-small small-number-input" title="Line Thickness" type="number" v-model.number="shapeOptions.lineWidth" min="6" max="64" @input="container.updateStyleOptions()">
+            <input class="btn-small small-number-input" title="Line Thickness" type="number" v-model.number="shapeOptions.lineWidth" min="6" max="64" @change="container.updateStyleOptions()">
             <span class="label">thickness</span>
         </div>
         <div class="btn-small col" title="Color">

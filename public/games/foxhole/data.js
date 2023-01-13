@@ -1256,6 +1256,27 @@ const foxholeData = {
 				"facilitymaterials3": 35
 			}
 		},
+		"busc": {
+			"name": "R-15 - “Chariot”",
+			"codeName": "BusC",
+			"description": "The “Chariot” is a transport vehicle used to shuttle personnel to the front line.",
+			"category": "vehicles",
+			"categoryOrder": 5,
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/BusIcon.webp",
+			"texture": "game/Textures/Vehicles/busc.webp",
+			"techId": "unlockbus"
+		},
+		"busw": {
+			"name": "Dunne Caravaner 2f",
+			"codeName": "BusW",
+			"description": "The Caravaner is a transport vehicle used to shuttle personnel to the front line.",
+			"category": "vehicles",
+			"categoryOrder": 6,
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/BusWarIcon.webp",
+			"texture": "game/Textures/Vehicles/busw.webp"
+		},
 		"catwalk_bridge": {
 			"name": "Catwalk Bridge",
 			"codeName": "FacilityCatwalkBridge",
@@ -1642,7 +1663,7 @@ const foxholeData = {
 			"codeName": "Construction",
 			"description": "A specialized vehicle designed by the Basset Motor Society used in the construction of large structures.",
 			"category": "vehicles",
-			"categoryOrder": 3,
+			"categoryOrder": 9,
 			"hitArea": [
 				{
 					"shape": [ -106.56,19.52,-121.28,43.84,-121.28,20.16 ]
@@ -1678,7 +1699,7 @@ const foxholeData = {
 			"codeName": "Crane",
 			"description": "The Basset Motor Society’s Class 2 Mobile Auto-Crane is used to lift and reposition vehicles and very heavy equipment.",
 			"category": "vehicles",
-			"categoryOrder": 4,
+			"categoryOrder": 10,
 			"range": {
 				"type": "crane",
 				"min": null,
@@ -1939,6 +1960,7 @@ const foxholeData = {
 			"codeName": "FlatbedTruck",
 			"description": "A heavy duty shipping transport truck designed by Bassett Motor Society. It’s built for hauling the heaviest of equipment over long distances with ease. ",
 			"category": "vehicles",
+			"categoryOrder": 7,
 			"icon": "game/Textures/UI/VehicleIcons/FlatbedTruckVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/flatbedtruck.webp"
 		},
@@ -2853,52 +2875,15 @@ const foxholeData = {
 				}
 			}
 		},
-		"world_road": {
-			"name": "Public Road",
-			"description": "A public road featured throughout the world of Foxhole. This structure cannot be placed by a player, and is entirely for your reference.",
-			"category": "misc",
-			"categoryOrder": 7,
-			"sortLayer": "road",
-			"hasHandle": true,
-			"isBezier": true,
-			"minLength": 12,
-			"maxLength": 48,
-			"icon": "game/Textures/UI/ItemIcons/FacilityRoadItemIcon.webp",
-			"texture": "game/Textures/Structures/road_dirt.webp",
-			"garrisonSupplyMultiplier": 0,
-			"canSnap": true,
-			"canSnapAlongBezier": true,
-			"sockets": [
-				{
-					"id": 0,
-					"type": "worldroad",
-					"cap": "front",
-					"rotation": 270
-				},
-				{
-					"id": 1,
-					"type": "worldroad",
-					"cap": "back",
-					"rotation": 90
-				}
-			],
-			"upgrades": {
-				"packed_dirt": {
-					"name": "Packed Dirt",
-					"icon": "game/Textures/UI/ItemIcons/FacilityRoadItemIcon.webp",
-					"texture": "game/Textures/Structures/road_packed_dirt.webp",
-				},
-				"gravel": {
-					"name": "Gravel",
-					"icon": "game/Textures/UI/ItemIcons/FacilityRoadItemIcon.webp",
-					"texture": "game/Textures/Structures/road_gravel.webp",
-				},
-				"great_march": {
-					"name": "Great March",
-					"icon": "game/Textures/UI/ItemIcons/FacilityRoadItemIcon.webp",
-					"texture": "game/Textures/Structures/road_great_march.webp",
-				}
-			}
+		"harvester": {
+			"name": "BMS - Scrap Hauler",
+			"codeName": "Harvester",
+			"description": "The Scrap Hauler, designed by the Bassett Motor Society is a heavy-duty piece of machinery designed to reduce scrap metal and other materials into usable, raw resources. Scrap Haulers are often used to extract battlefield resources following skirmishes.",
+			"category": "vehicles",
+			"categoryOrder": 8,
+			"icon": "game/Textures/UI/VehicleIcons/Harvester.webp",
+			"texture": "game/Textures/Vehicles/harvester.webp",
+			"techId": "unlockharvester"
 		},
 		"large_assembly_factory": {
 			"name": "Large Assembly Factory",
@@ -5320,6 +5305,26 @@ const foxholeData = {
 				}
 			}
 		},
+		"oiltankerc": {
+			"name": "RR-3 “Stolon” Tanker.",
+			"codeName": "OilTankerC",
+			"description": "The “Stolon” Tanker is a heavier R-series rig designed to transport and distribute large quantities of Fuel.",
+			"category": "vehicles",
+			"categoryOrder": 3,
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/OilTankerIcon.webp",
+			"texture": "game/Textures/Vehicles/oiltankerc.webp"
+		},
+		"oiltankerw": {
+			"name": "Dunne Fuelrunner 2d",
+			"codeName": "OilTankerW",
+			"description": "The Fuelrunner is a heavy Dunne rig designed to transport and distribute large quantities of Fuel.",
+			"category": "vehicles",
+			"categoryOrder": 4,
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/OilTankerWarIcon.webp",
+			"texture": "game/Textures/Vehicles/oiltankerw.webp"
+		},
 		"pipeline": {
 			"name": "Pipeline",
 			"codeName": "FacilityPipe",
@@ -7337,6 +7342,7 @@ const foxholeData = {
 			"codeName": "TruckC",
 			"description": "A heavy-duty Colonial truck used to mobilize troops and supplies.",
 			"category": "vehicles",
+			"categoryOrder": 1,
 			"faction": "c",
 			"icon": "game/Textures/UI/VehicleIcons/TruckVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/truckc.webp"
@@ -7346,6 +7352,7 @@ const foxholeData = {
 			"codeName": "TruckW",
 			"description": "A heavy-duty Warden truck used to mobilize troops and supplies.",
 			"category": "vehicles",
+			"categoryOrder": 2,
 			"faction": "w",
 			"icon": "game/Textures/UI/VehicleIcons/TruckWarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/truckw.webp"
@@ -7600,6 +7607,53 @@ const foxholeData = {
 							"time": 40
 						}
 					]
+				}
+			}
+		},
+		"world_road": {
+			"name": "Public Road",
+			"description": "A public road featured throughout the world of Foxhole. This structure cannot be placed by a player, and is entirely for your reference.",
+			"category": "misc",
+			"categoryOrder": 7,
+			"sortLayer": "road",
+			"hasHandle": true,
+			"isBezier": true,
+			"minLength": 12,
+			"maxLength": 48,
+			"icon": "game/Textures/UI/ItemIcons/FacilityRoadItemIcon.webp",
+			"texture": "game/Textures/Structures/road_dirt.webp",
+			"garrisonSupplyMultiplier": 0,
+			"canSnap": true,
+			"canSnapAlongBezier": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "worldroad",
+					"cap": "front",
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": "worldroad",
+					"cap": "back",
+					"rotation": 90
+				}
+			],
+			"upgrades": {
+				"packed_dirt": {
+					"name": "Packed Dirt",
+					"icon": "game/Textures/UI/ItemIcons/FacilityRoadItemIcon.webp",
+					"texture": "game/Textures/Structures/road_packed_dirt.webp"
+				},
+				"gravel": {
+					"name": "Gravel",
+					"icon": "game/Textures/UI/ItemIcons/FacilityRoadItemIcon.webp",
+					"texture": "game/Textures/Structures/road_gravel.webp"
+				},
+				"great_march": {
+					"name": "Great March",
+					"icon": "game/Textures/UI/ItemIcons/FacilityRoadItemIcon.webp",
+					"texture": "game/Textures/Structures/road_great_march.webp"
 				}
 			}
 		}
