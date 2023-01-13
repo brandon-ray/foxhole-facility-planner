@@ -2853,9 +2853,9 @@ const foxholeData = {
 				}
 			}
 		},
-		"great_march_road": {
-			"name": "Road (Great March)",
-			"description": "A main road featured throughout the world of Foxhole. This structure cannot be placed by a player, and is entirely for your reference.",
+		"world_road": {
+			"name": "Public Road",
+			"description": "A public road featured throughout the world of Foxhole. This structure cannot be placed by a player, and is entirely for your reference.",
 			"category": "misc",
 			"categoryOrder": 7,
 			"sortLayer": "road",
@@ -2864,23 +2864,41 @@ const foxholeData = {
 			"minLength": 12,
 			"maxLength": 48,
 			"icon": "game/Textures/UI/ItemIcons/FacilityRoadItemIcon.webp",
-			"texture": "game/Textures/Structures/roadgreatmarch.webp",
+			"texture": "game/Textures/Structures/road_dirt.webp",
 			"garrisonSupplyMultiplier": 0,
 			"canSnap": true,
+			"canSnapAlongBezier": true,
 			"sockets": [
 				{
 					"id": 0,
-					"type": "roadgreatmarch",
+					"type": "worldroad",
 					"cap": "front",
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": "roadgreatmarch",
+					"type": "worldroad",
 					"cap": "back",
 					"rotation": 90
 				}
-			]
+			],
+			"upgrades": {
+				"packed_dirt": {
+					"name": "Packed Dirt",
+					"icon": "game/Textures/UI/ItemIcons/FacilityRoadItemIcon.webp",
+					"texture": "game/Textures/Structures/road_packed_dirt.webp",
+				},
+				"gravel": {
+					"name": "Gravel",
+					"icon": "game/Textures/UI/ItemIcons/FacilityRoadItemIcon.webp",
+					"texture": "game/Textures/Structures/road_gravel.webp",
+				},
+				"great_march": {
+					"name": "Great March",
+					"icon": "game/Textures/UI/ItemIcons/FacilityRoadItemIcon.webp",
+					"texture": "game/Textures/Structures/road_great_march.webp",
+				}
+			}
 		},
 		"large_assembly_factory": {
 			"name": "Large Assembly Factory",
