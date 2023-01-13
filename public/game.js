@@ -542,27 +542,52 @@ try {
                 break;
         }
         if (!(document.activeElement && (document.activeElement.type === 'text' || document.activeElement.type === 'number' || document.activeElement.type === 'textarea'))) {
-            switch (key) {
-                case 65: // A
-                    if (event.ctrlKey) {
+            if (event.ctrlKey) {
+                switch (key) {
+                    case 37: // Left Arrow
+                        game.moveSelected(-1, 0, true);
+                        break;
+                    case 38: // Up Arrow
+                        game.moveSelected(0, -1, true);
+                        break;
+                    case 39: // Right Arrow
+                        game.moveSelected(1, 0, true);
+                        break;
+                    case 40: // Down Arrow
+                        game.moveSelected(0, 1, true);
+                        break;
+                    case 65: // A
                         entities.forEach(entity => {
                             game.addSelectedEntity(entity, false);
                         });
                         game.updateSelectedBuildingMenu();
-                    }
-                    break;
-                case 67: // C
-                    if (event.ctrlKey) {
+                        break;
+                    case 67: // C
                         game.cloneSelected();
-                    }
-                    break;
-                case 76: // L
-                    game.lockSelected();
-                    break;
-                case 80: // P
-                    game.settings.showProductionIcons = !game.settings.showProductionIcons;
-                    game.updateProductionIcons();
-                    break;
+                        break;
+                }
+            } else {
+                switch (key) {
+                    case 37: // Left Arrow
+                        game.moveSelected(-1, 0);
+                        break;
+                    case 38: // Up Arrow
+                        game.moveSelected(0, -1);
+                        break;
+                    case 39: // Right Arrow
+                        game.moveSelected(1, 0);
+                        break;
+                    case 40: // Down Arrow
+                        game.moveSelected(0, 1);
+                        break;
+                    case 76: // L
+                        game.lockSelected();
+                        break;
+                    case 80: // P
+                        game.settings.showProductionIcons = !game.settings.showProductionIcons;
+                        game.updateProductionIcons();
+                        break;
+                }
             }
         }
         if (!keys[key]) {
@@ -2628,6 +2653,7 @@ try {
                             if (entity.building.hasOutline !== false) {
                                 entity.sprite.removeChild(entity.sprite.outline);
                                 entity.sprite.outline = new PIXI.SimpleRope(resources.white.texture, lut, 1);
+                                entity.sprite.outline.visible = false;
                                 entity.sprite.outline.tint = entity.locked ? COLOR_RED : COLOR_ORANGE;
                                 entity.sprite.addChild(entity.sprite.outline);
                             }
@@ -3494,19 +3520,44 @@ try {
         if (locked && pickupSelectedEntities) {
             game.setPickupEntities(false);
         }
+        game.buildingSelectedMenuComponent?.refresh(true);
+    }
+
+    game.moveSelected = function(x, y, snapped) {
+        if (selectedEntities.length) {
+            const gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
+            if (snapped) {
+                x *= gridSize;
+                y *= gridSize;
+            }
+            const selectedEntity = game.getSelectedEntity();
+            if (selectedEntity) {
+                const eX = selectedEntity.x + x, eY = selectedEntity.y + y;
+                selectedEntity.x = snapped ? Math.round(eX / gridSize) * gridSize : eX;
+                selectedEntity.y = snapped ? Math.round(eY / gridSize) * gridSize : eY;
+            } else {
+                selectedEntities.forEach(selectedEntity => {
+                    selectedEntity.x += x;
+                    selectedEntity.y += y;
+                });
+            }
+            game.buildingSelectedMenuComponent?.refresh(true);
+        }
     }
 
     game.removeEntities = function() {
-        game.deselectEntities();
-        game.setPickupEntities(false);
-        for (let i = 0; i < entities.length; i++) {
-            let entity = entities[i];
-            entity.remove();
-        }
-        entities = [];
-        _entityIds = 0;
-        if (game.statisticsMenuComponent) {
-            game.statisticsMenuComponent.refresh();
+        if (entities.length) {
+            game.deselectEntities();
+            game.setPickupEntities(false);
+            for (let i = 0; i < entities.length; i++) {
+                let entity = entities[i];
+                entity.remove();
+            }
+            entities = [];
+            _entityIds = 0;
+            if (game.statisticsMenuComponent) {
+                game.statisticsMenuComponent.refresh();
+            }
         }
     }
 
