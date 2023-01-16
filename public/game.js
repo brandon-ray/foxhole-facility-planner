@@ -158,6 +158,7 @@ try {
 
     let _entityIds = 0;
     let entities = [];
+    let entityMap = {};
     let selectedEntities = [];
     let selectedHandlePoint = null;
     let followEntity = null;
@@ -235,12 +236,20 @@ try {
 
     game.getEntityById = (id) => {
         const entityId = typeof id !== 'number' ? Number(id) : id;
+
+        const mappedEntity = entityMap[id];
+        if (mappedEntity) {
+            return mappedEntity;
+        }
+
         for (let i = 0; i < entities.length; i++) {
             const entity = entities[i];
             if (entity.id === entityId) {
                 return entity;
             }
         }
+
+        console.error(`Failed to find entity with id: ${id}`);
     }
 
     game.getSelectedEntities = () => {
@@ -974,7 +983,13 @@ try {
         if (Array.isArray(ents)) {
             let sumX = 0, sumY = 0;
             for (const entity of ents) {
-                let midPoint = entity.getMidPoint(isSelection);
+                let midPoint = entity.mid;
+                if (entity.bezier && (isSelection && selectedEntities.length === 1)) {
+                    midPoint = {
+                        x: entity.x,
+                        y: entity.y
+                    }
+                }
                 sumX += midPoint.x;
                 sumY += midPoint.y;
             }
@@ -983,7 +998,7 @@ try {
                 y: sumY / count
             };
         }
-        return ents.getMidPoint();
+        return ents.mid;
     };
 
     game.zoomToFacilityCenter = function() {
@@ -1265,9 +1280,8 @@ try {
             let selectedChange = false;
             entities.forEach(entity => {
                 if (entity.canGrab(true)) {
-                    const centerPos = entity.getMidPoint();
-                    if (centerPos.x > selectionArea.x && centerPos.x < selectionArea.x + selectionArea.width) {
-                        if (centerPos.y > selectionArea.y && centerPos.y < selectionArea.y + selectionArea.height) {
+                    if (entity.mid.x > selectionArea.x && entity.mid.x < selectionArea.x + selectionArea.width) {
+                        if (entity.mid.y > selectionArea.y && entity.mid.y < selectionArea.y + selectionArea.height) {
                             if (game.addSelectedEntity(entity, true)) {
                                 selectedChange = true;
                             }
@@ -1493,6 +1507,9 @@ try {
 
         app.cstage.addChild(entity);
         entities.push(entity);
+
+        entityMap[entity.id] = entity;
+
         return entity;
     }
 
@@ -1710,6 +1727,11 @@ try {
     function createSelectableEntity(type, subtype, x, y, z, rotation, id, netData) {
         let entity = createEntity(type, subtype, x, y, z, id, netData);
         
+        entity.mid = {
+            x: entity.x,
+            y: entity.y
+        };
+
         entity.rotation = rotation ?? 0;
 
         // TODO: Change building to metaData.
@@ -2692,6 +2714,7 @@ try {
                             }
                             entity.sprite.endFill();
                         }
+                        entity.handleTick = true;
                     }
                 }
             };
@@ -2814,31 +2837,6 @@ try {
                 sound = null;
             }
         };
-        
-        entity.getMidPoint = function(isSelection) {
-            let midPoint = null;
-            if (entity.bezier && (!isSelection || selectedEntities.length > 1)) {
-                midPoint = {
-                    x: entity.bezier.mid.x,
-                    y: entity.bezier.mid.y
-                };
-            } else if (entity.type === 'shape' && points && (entity.subtype === 'rectangle' || entity.subtype === 'line')) {
-                midPoint = {
-                    x: (points[0].x + points[1].x) / 2,
-                    y: (points[0].y + points[1].y) / 2
-                };
-            }
-            if (midPoint) {
-                return Math.rotateAround(entity, {
-                    x: entity.x + midPoint.x,
-                    y: entity.y + midPoint.y
-                });
-            }
-            return {
-                x: entity.x,
-                y: entity.y
-            };
-        }
 
         const boundsBuffer = 16, boundsPadding = boundsBuffer / 2;
         entity.canGrab = function(ignoreMouse) {
@@ -2957,101 +2955,21 @@ try {
                 entity.visible = entity.isVisible();
             }
 
-            if (entity.visible && !pickupSelectedEntities && entity.selected && !entity.selectionArea.visible) {
-                entity.selectionArea.visible = true;
-            }
-
-            if (entity.building) {
-                if (sheet && entity.visible) {
-                    frameX += entity.building.texture.speed ? entity.building.texture.speed : 0.1;
-                    if (frameX >= frameWidth) {
-                        frameX -= frameWidth;
-                    }
-                    if (frameY >= frameHeight) {
-                        frameY -= frameHeight;
-                    }
-                    entity.sprite.texture = sheet[Math.floor(frameX)][Math.floor(frameY)];
+            if (entity.visible) {
+                if (entity.sprite?.outline && entity.sprite.outline.visible !== entity.selected) {
+                    entity.sprite.outline.visible = entity.selected;
                 }
 
-                if (entity.building.sound) {
-                    if (!sound && entity.building.sound && sounds[entity.building.sound]) {
-                        sound = soundPlay(sounds[entity.building.sound], entity, 0.4);
-                    }
-
-                    if (sound) {
-                        soundUpdate(sound);
-                        if (sound.stopped) {
-                            sound = null;
+                if (entity.selected) {
+                    if (selectedHandlePoint && entity.selected && !entity.locked && entity.hasHandle && mouseDown[0]) {
+                        let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
+                        let gmxGrid = gmx;
+                        let gmyGrid = gmy;
+                        if (!entity.building?.ignoreSnapSettings && (game.settings.enableGrid || keys[16])) {
+                            gmxGrid = Math.round(gmxGrid / gridSize) * gridSize;
+                            gmyGrid = Math.round(gmyGrid / gridSize) * gridSize;
                         }
-                    }
-                } else if (entity.isTrain) {
-                    let rate = Math.abs(entity.trackVelocity)/6;
-                    if (rate < 0) {
-                        rate = 0;
-                    }
-                    if (rate > 1) {
-                        rate = 1;
-                    }
-
-                    if (entity.subtype === 'trainengine' && entity.currentTrack && Math.abs(entity.userThrottle) > 0) {
-                        if (game.settings.quality === 'auto' || game.settings.quality === 'high') {
-                            if (!entity.smokeTime || entity.smokeTime <= 0) {
-                                entity.smokeTime = 6 - Math.floor(Math.abs(entity.trackVelocity)*0.5);
-                                let angle = (Math.PI * 2) * Math.random();
-                                let size = 70 + Math.round(Math.random() * 10);
-                                let speed = 0.25 + (Math.random() * 0.2);
-                                createEffect('smoke', entity.x + Math.cos(entity.rotation) * 90, entity.y + Math.sin(entity.rotation) * 90, entity.z, size, size, {
-                                    dx: Math.cos(angle) * (speed * Math.random()),
-                                    dy: Math.sin(angle) * (speed * Math.random()),
-                                    tint: 0xCCCCCC
-                                });
-                            }
-                            entity.smokeTime--;
-                        }
-                    }
-
-                    if (rate > 0.15) {
-                        if (!sound) {
-                            let soundKey = 'train_wheel_loop';
-                            if (entity.subtype === 'trainengine' && Math.abs(entity.userThrottle) >= 0.05) {
-                                soundKey = 'train_engine';
-                            }
-                            sound = soundPlay(sounds[soundKey], entity, 0.4);
-                        }
-
-                        if (sound) {
-                            soundUpdate(sound);
-
-                            sound.sound.rate(rate, sound.id);
-                            if (sound.stopped) {
-                                sound = null;
-                            }
-                        }
-                    } else {
-                        if (sound) {
-                            soundStop(sound);
-                            sound = null;
-                        }
-                    }
-                }
-            }
-
-            if (entity.visible && entity.hasHandle) {
-                if (selectedHandlePoint && !mouseDown[0]) {
-                    selectedHandlePoint = null;
-                }
-
-                if (entity.selected && !entity.locked && mouseDown[0]) {
-                    const lastRotation = entity.rotation;
-                    let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
-                    let gmxGrid = gmx;
-                    let gmyGrid = gmy;
-                    if (!entity.building?.ignoreSnapSettings && (game.settings.enableGrid || keys[16])) {
-                        gmxGrid = Math.round(gmxGrid / gridSize) * gridSize;
-                        gmyGrid = Math.round(gmyGrid / gridSize) * gridSize;
-                    }
-                    let mousePos = entity.toLocal({x: gmxGrid, y: gmyGrid}, app.cstage, undefined, true);
-                    if (selectedHandlePoint) {
+                        let mousePos = entity.toLocal({x: gmxGrid, y: gmyGrid}, app.cstage, undefined, true);
                         game.setPickupEntities(false);
                         if (selectedHandlePoint.index === 0) {
                             entity.x = gmx;
@@ -3122,7 +3040,7 @@ try {
                             }
                             for (let i = 0; i < entities.length; i++) {
                                 let entity2 = entities[i];
-                                if (!entity2.visible || entity2 === entity || entity2.type !== 'building' || !(entity.sockets && entity2.sockets) || Math.distanceBetween({x: gmx, y: gmy}, entity2.getMidPoint()) > 1000) {
+                                if (!entity2.visible || entity2 === entity || entity2.type !== 'building' || !(entity.sockets && entity2.sockets) || Math.distanceBetween({x: gmx, y: gmy}, entity2.mid) > 1000) {
                                     continue;
                                 }
 
@@ -3241,9 +3159,132 @@ try {
                             selectedHandlePoint.handle.position.x = selectedHandlePoint.x;
                             selectedHandlePoint.handle.position.y = selectedHandlePoint.y;
                         }
+                    }
 
-                        if (entity.rotation !== lastRotation) {
+                    if (entity.lastRotation !== entity.rotation) {
+                        if (entity.productionIcons) {
+                            entity.productionIcons.rotation = -entity.rotation;
+                        }
+
+                        if (entity.sockets) {
+                            for (let i = 0; i < entity.sockets.children.length; i++) {
+                                let socket = entity.sockets.children[i];
+                                if (socket.pointer?.visible && socket.socketData.type === 'power') {
+                                    socket.pointer.rotation = -(entity.rotation + socket.rotation);
+                                }
+                            }
+                        }
+
+                        if (selectedEntities.length === 1) {
                             game.updateSelectedBuildingMenu();
+                        }
+                    }
+                }
+
+                if (!pickupSelectedEntities && entity.selected && !entity.selectionArea.visible) {
+                    entity.selectionArea.visible = true;
+                }
+            }
+
+            if (entity.handleTick || entity.lastX !== entity.x || entity.lastY !== entity.y || entity.lastRotation !== entity.rotation) {
+                entity.lastX = entity.x;
+                entity.lastY = entity.y;
+                entity.lastRotation = entity.rotation;
+                entity.handleTick = false;
+
+                let mid;
+                if (entity.bezier) {
+                    mid = entity.bezier.mid;
+                } else if (entity.type === 'shape' && points && (entity.subtype === 'rectangle' || entity.subtype === 'line')) {
+                    mid = {
+                        x: (points[0].x + points[1].x) / 2,
+                        y: (points[0].y + points[1].y) / 2
+                    };
+                }
+
+                if (mid) {
+                    entity.mid = Math.rotateAround(entity, {
+                        x: entity.x + mid.x,
+                        y: entity.y + mid.y
+                    });
+                } else {
+                    entity.mid = {
+                        x: entity.x,
+                        y: entity.y
+                    };
+                }
+            }
+
+            if (entity.building) {
+                if (sheet && entity.visible) {
+                    frameX += entity.building.texture.speed ? entity.building.texture.speed : 0.1;
+                    if (frameX >= frameWidth) {
+                        frameX -= frameWidth;
+                    }
+                    if (frameY >= frameHeight) {
+                        frameY -= frameHeight;
+                    }
+                    entity.sprite.texture = sheet[Math.floor(frameX)][Math.floor(frameY)];
+                }
+
+                if (entity.building.sound) {
+                    if (!sound && entity.building.sound && sounds[entity.building.sound]) {
+                        sound = soundPlay(sounds[entity.building.sound], entity, 0.4);
+                    }
+
+                    if (sound) {
+                        soundUpdate(sound);
+                        if (sound.stopped) {
+                            sound = null;
+                        }
+                    }
+                } else if (entity.isTrain) {
+                    let rate = Math.abs(entity.trackVelocity)/6;
+                    if (rate < 0) {
+                        rate = 0;
+                    }
+                    if (rate > 1) {
+                        rate = 1;
+                    }
+
+                    if (entity.subtype === 'trainengine' && entity.currentTrack && Math.abs(entity.userThrottle) > 0) {
+                        if (game.settings.quality === 'auto' || game.settings.quality === 'high') {
+                            if (!entity.smokeTime || entity.smokeTime <= 0) {
+                                entity.smokeTime = 6 - Math.floor(Math.abs(entity.trackVelocity)*0.5);
+                                let angle = (Math.PI * 2) * Math.random();
+                                let size = 70 + Math.round(Math.random() * 10);
+                                let speed = 0.25 + (Math.random() * 0.2);
+                                createEffect('smoke', entity.x + Math.cos(entity.rotation) * 90, entity.y + Math.sin(entity.rotation) * 90, entity.z, size, size, {
+                                    dx: Math.cos(angle) * (speed * Math.random()),
+                                    dy: Math.sin(angle) * (speed * Math.random()),
+                                    tint: 0xCCCCCC
+                                });
+                            }
+                            entity.smokeTime--;
+                        }
+                    }
+
+                    if (rate > 0.15) {
+                        if (!sound) {
+                            let soundKey = 'train_wheel_loop';
+                            if (entity.subtype === 'trainengine' && Math.abs(entity.userThrottle) >= 0.05) {
+                                soundKey = 'train_engine';
+                            }
+                            sound = soundPlay(sounds[soundKey], entity, 0.4);
+                        }
+
+                        if (sound) {
+                            soundUpdate(sound);
+
+                            sound.sound.rate(rate, sound.id);
+                            if (sound.stopped) {
+                                sound = null;
+                            }
+                        }
+                    } else {
+                        if (sound) {
+                            soundStop(sound);
+                            sound = null;
                         }
                     }
                 }
@@ -3555,6 +3596,7 @@ try {
             }
             entities = [];
             _entityIds = 0;
+            entityMap = {};
             if (game.statisticsMenuComponent) {
                 game.statisticsMenuComponent.refresh();
             }
@@ -3653,6 +3695,10 @@ try {
             }
         }
 
+        if (selectedHandlePoint && !mouseDown[0]) {
+            selectedHandlePoint = null;
+        }
+
         let vehicles = [];
         for (let i=0; i<entities.length; i++) {
             let entity = entities[i];
@@ -3663,6 +3709,7 @@ try {
                     vehicles.push(entity);
                 }
             } else {
+                delete entityMap[entity.id];
                 entities.splice(i, 1);
                 if (entities.length === 0) {
                     _entityIds = 0;
@@ -3890,7 +3937,7 @@ try {
                         if (selectedEntity.building?.canSnap || selectedEntity.isTrain) {
                             for (let j = 0; j < entities.length; j++) {
                                 let entity = entities[j];
-                                if (!entity.visible || entity === selectedEntity || entity.type !== 'building' || entity.selected || !((selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain) || Math.distanceBetween(selectedEntity, entity.getMidPoint()) > 1000) {
+                                if (!entity.visible || entity === selectedEntity || entity.type !== 'building' || entity.selected || !((selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain) || Math.distanceBetween(selectedEntity, entity.mid) > 1000) {
                                     continue;
                                 }
                                 if (selectedEntity.subtype === entity.subtype || (selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain) {
@@ -4097,28 +4144,6 @@ try {
             }
             camera.x = (followEntity.x * camera.zoom) - WIDTH/2;
             camera.y = (followEntity.y * camera.zoom) - HEIGHT/2;
-        }
-
-        for (let i = 0; i < entities.length; i++) {
-            const entity = entities[i];
-            if (entity.visible) {
-                if (entity.sprite?.outline && entity.sprite.outline.visible !== entity.selected) {
-                    entity.sprite.outline.visible = entity.selected;
-                }
-                if (entity.selected) {
-                    if (entity.productionIcons) {
-                        entity.productionIcons.rotation = -entity.rotation;
-                    }
-                    if (entity.sockets) {
-                        for (let i = 0; i < entity.sockets.children.length; i++) {
-                            let socket = entity.sockets.children[i];
-                            if (socket.pointer?.visible && socket.socketData.type === 'power') {
-                                socket.pointer.rotation = -(entity.rotation + socket.rotation);
-                            }
-                        }
-                    }
-                }
-            }
         }
 
         if (ENABLE_DEBUG) {

@@ -124,7 +124,7 @@ Vue.component('app-menu-statistics', {
                         let consumptionRate = (2 * (entity.building?.garrisonSupplyMultiplier ?? 1)) * garrisonConsumptionRate;
                         for (let j = 0; j < garrisonConsumptionReducers.length; j++) {
                             const garrison = garrisonConsumptionReducers[j];
-                            if (Math.distanceBetween(entity.getMidPoint(), garrison) < garrison.building.range.max * 32) {
+                            if (Math.distanceBetween(entity.mid, garrison) < garrison.building.range.max * 32) {
                                 consumptionRate /= 2;
                             }
                         }
