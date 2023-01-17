@@ -1294,13 +1294,19 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "catwalk",
+					"type": {
+						"mask": 33554432,
+						"category": 67108864
+					},
 					"cap": "front",
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": "catwalk",
+					"type": {
+						"mask": 33554432,
+						"category": 67108864
+					},
 					"cap": "back",
 					"rotation": 90
 				}
@@ -1323,28 +1329,40 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "catwalk",
+					"type": {
+						"mask": 67108864,
+						"category": 100663296
+					},
 					"x": 3,
 					"y": 138,
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": "catwalk",
+					"type": {
+						"mask": 67108864,
+						"category": 100663296
+					},
 					"x": 139,
 					"y": 2,
 					"rotation": 0
 				},
 				{
 					"id": 2,
-					"type": "catwalk",
+					"type": {
+						"mask": 67108864,
+						"category": 100663296
+					},
 					"x": 276,
 					"y": 138,
 					"rotation": 90
 				},
 				{
 					"id": 3,
-					"type": "catwalk",
+					"type": {
+						"mask": 67108864,
+						"category": 100663296
+					},
 					"x": 139,
 					"y": 275,
 					"rotation": 180
@@ -1368,7 +1386,10 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "catwalk",
+					"type": {
+						"mask": 67108864,
+						"category": 100663296
+					},
 					"x": 1235,
 					"y": 141,
 					"rotation": 90
@@ -1533,7 +1554,10 @@ const foxholeData = {
 						},
 						{
 							"id": 1,
-							"type": "pipe",
+							"type": {
+								"mask": 16779264,
+								"category": 16384
+							},
 							"flow": "out",
 							"x": 611,
 							"y": 494,
@@ -1541,7 +1565,10 @@ const foxholeData = {
 						},
 						{
 							"id": 2,
-							"type": "pipe",
+							"type": {
+								"mask": 16779264,
+								"category": 16384
+							},
 							"flow": "in",
 							"x": 502,
 							"y": 747,
@@ -1620,7 +1647,10 @@ const foxholeData = {
 						},
 						{
 							"id": 1,
-							"type": "pipe",
+							"type": {
+								"mask": 16779264,
+								"category": 16384
+							},
 							"flow": "out",
 							"x": 611,
 							"y": 494,
@@ -1628,7 +1658,10 @@ const foxholeData = {
 						},
 						{
 							"id": 3,
-							"type": "pipe",
+							"type": {
+								"mask": 16779264,
+								"category": 16384
+							},
 							"flow": "in",
 							"x": 503,
 							"y": 963,
@@ -1797,7 +1830,10 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "pipe",
+					"type": {
+						"mask": 2048,
+						"category": 16384
+					},
 					"flow": "in",
 					"x": 152,
 					"y": 57,
@@ -1885,7 +1921,10 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": "pipe",
+							"type": {
+								"mask": 2048,
+								"category": 16384
+							},
 							"flow": "in",
 							"x": 167,
 							"y": 57,
@@ -2798,7 +2837,10 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "pipe",
+					"type": {
+						"mask": 16779264,
+						"category": 16384
+					},
 					"flow": "in",
 					"x": 98,
 					"y": 264,
@@ -2806,7 +2848,10 @@ const foxholeData = {
 				},
 				{
 					"id": 1,
-					"type": "pipe",
+					"type": {
+						"mask": 16779264,
+						"category": 16384
+					},
 					"flow": "out",
 					"x": 98,
 					"y": 0,
@@ -3924,7 +3969,10 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "pipe",
+					"type": {
+						"mask": 16779264,
+						"category": 16384
+					},
 					"flow": "in",
 					"x": 13,
 					"y": 431,
@@ -3932,7 +3980,10 @@ const foxholeData = {
 				},
 				{
 					"id": 1,
-					"type": "pipe",
+					"type": {
+						"mask": 16779264,
+						"category": 16384
+					},
 					"flow": "out",
 					"x": 13,
 					"y": 154,
@@ -4119,7 +4170,10 @@ const foxholeData = {
 						},
 						{
 							"id": 1,
-							"type": "pipe",
+							"type": {
+								"mask": 16779264,
+								"category": 16384
+							},
 							"flow": "in",
 							"x": 360,
 							"y": 54,
@@ -4210,7 +4264,10 @@ const foxholeData = {
 						},
 						{
 							"id": 2,
-							"type": "pipe",
+							"type": {
+								"mask": 16779264,
+								"category": 16384
+							},
 							"flow": "in",
 							"x": 51,
 							"y": 66,
@@ -4594,7 +4651,10 @@ const foxholeData = {
 						},
 						{
 							"id": 1,
-							"type": "pipe",
+							"type": {
+								"mask": 16779264,
+								"category": 16384
+							},
 							"flow": "in",
 							"x": 293,
 							"y": 52,
@@ -4701,7 +4761,10 @@ const foxholeData = {
 						},
 						{
 							"id": 2,
-							"type": "pipe",
+							"type": {
+								"mask": 16779264,
+								"category": 16384
+							},
 							"flow": "in",
 							"x": 791,
 							"y": 2,
@@ -4709,7 +4772,10 @@ const foxholeData = {
 						},
 						{
 							"id": 3,
-							"type": "pipe",
+							"type": {
+								"mask": 16779264,
+								"category": 16384
+							},
 							"flow": "in",
 							"x": 968,
 							"y": 58,
@@ -4840,7 +4906,10 @@ const foxholeData = {
 				},
 				{
 					"id": 1,
-					"type": "pipe",
+					"type": {
+						"mask": 16779264,
+						"category": 16384
+					},
 					"flow": "in",
 					"x": 53,
 					"y": 1104,
@@ -4848,7 +4917,10 @@ const foxholeData = {
 				},
 				{
 					"id": 2,
-					"type": "pipe",
+					"type": {
+						"mask": 16779264,
+						"category": 16384
+					},
 					"flow": "out",
 					"x": 255,
 					"y": 2,
@@ -4914,7 +4986,10 @@ const foxholeData = {
 						},
 						{
 							"id": 1,
-							"type": "pipe",
+							"type": {
+								"mask": 16779264,
+								"category": 16384
+							},
 							"flow": "in",
 							"x": 52,
 							"y": 1104,
@@ -4922,7 +4997,10 @@ const foxholeData = {
 						},
 						{
 							"id": 2,
-							"type": "pipe",
+							"type": {
+								"mask": 16779264,
+								"category": 16384
+							},
 							"flow": "out",
 							"x": 255,
 							"y": 2,
@@ -4930,7 +5008,10 @@ const foxholeData = {
 						},
 						{
 							"id": 3,
-							"type": "pipe",
+							"type": {
+								"mask": 16779264,
+								"category": 16384
+							},
 							"flow": "in",
 							"x": 298,
 							"y": 1255,
@@ -5000,7 +5081,10 @@ const foxholeData = {
 						},
 						{
 							"id": 1,
-							"type": "pipe",
+							"type": {
+								"mask": 16779264,
+								"category": 16384
+							},
 							"flow": "in",
 							"x": 53,
 							"y": 1104,
@@ -5008,7 +5092,10 @@ const foxholeData = {
 						},
 						{
 							"id": 2,
-							"type": "pipe",
+							"type": {
+								"mask": 16779264,
+								"category": 16384
+							},
 							"flow": "out",
 							"x": 255,
 							"y": 2,
@@ -5079,7 +5166,10 @@ const foxholeData = {
 						},
 						{
 							"id": 1,
-							"type": "pipe",
+							"type": {
+								"mask": 16779264,
+								"category": 16384
+							},
 							"flow": "in",
 							"x": 53,
 							"y": 1104,
@@ -5087,7 +5177,10 @@ const foxholeData = {
 						},
 						{
 							"id": 2,
-							"type": "pipe",
+							"type": {
+								"mask": 16779264,
+								"category": 16384
+							},
 							"flow": "out",
 							"x": 255,
 							"y": 2,
@@ -5177,7 +5270,10 @@ const foxholeData = {
 						},
 						{
 							"id": 1,
-							"type": "pipe",
+							"type": {
+								"mask": 16779264,
+								"category": 16384
+							},
 							"flow": "out",
 							"x": 297,
 							"y": 2,
@@ -5257,7 +5353,10 @@ const foxholeData = {
 						},
 						{
 							"id": 1,
-							"type": "pipe",
+							"type": {
+								"mask": 16779264,
+								"category": 16384
+							},
 							"flow": "out",
 							"x": 283,
 							"y": 2,
@@ -5265,7 +5364,10 @@ const foxholeData = {
 						},
 						{
 							"id": 2,
-							"type": "pipe",
+							"type": {
+								"mask": 16779264,
+								"category": 16384
+							},
 							"flow": "in",
 							"x": 512,
 							"y": 3,
@@ -5346,25 +5448,41 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "pipe",
+					"type": {
+						"mask": 16795648,
+						"category": 2048
+					},
+					"flow": "bi",
 					"cap": "front",
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": "pipe",
+					"type": {
+						"mask": 16779264,
+						"category": 16384
+					},
+					"flow": "bi",
 					"cap": "left",
 					"rotation": 180
 				},
 				{
 					"id": 2,
-					"type": "pipe",
+					"type": {
+						"mask": 16779264,
+						"category": 16384
+					},
+					"flow": "bi",
 					"cap": "right",
 					"rotation": 0
 				},
 				{
 					"id": 3,
-					"type": "pipe",
+					"type": {
+						"mask": 16795648,
+						"category": 2048
+					},
+					"flow": "bi",
 					"cap": "back",
 					"rotation": 90
 				}
@@ -5406,13 +5524,21 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "pipe",
+					"type": {
+						"mask": 16795648,
+						"category": 2048
+					},
+					"flow": "bi",
 					"cap": "front",
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": "pipe",
+					"type": {
+						"mask": 16795648,
+						"category": 2048
+					},
+					"flow": "bi",
 					"cap": "back",
 					"rotation": 90
 				}
@@ -5456,13 +5582,21 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "pipe",
+					"type": {
+						"mask": 16795648,
+						"category": 2048
+					},
+					"flow": "bi",
 					"cap": "front",
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": "pipe",
+					"type": {
+						"mask": 16795648,
+						"category": 2048
+					},
+					"flow": "bi",
 					"cap": "back",
 					"rotation": 90
 				}
@@ -5500,14 +5634,22 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "pipe",
+					"type": {
+						"mask": 18432,
+						"category": 16777216
+					},
+					"flow": "bi",
 					"x": 2,
 					"y": 51,
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": "pipe",
+					"type": {
+						"mask": 18432,
+						"category": 16777216
+					},
+					"flow": "bi",
 					"x": 185,
 					"y": 51,
 					"rotation": 90
@@ -5782,7 +5924,10 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "pipe",
+					"type": {
+						"mask": 16779264,
+						"category": 16384
+					},
 					"flow": "in",
 					"x": 933,
 					"y": 1309,
@@ -5948,7 +6093,10 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": "pipe",
+							"type": {
+								"mask": 16779264,
+								"category": 16384
+							},
 							"flow": "in",
 							"x": 936,
 							"y": 1313,
@@ -6438,7 +6586,10 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "pipe",
+					"type": {
+						"mask": 16779264,
+						"category": 16384
+					},
 					"flow": "in",
 					"x": 457,
 					"y": 805,
@@ -6512,7 +6663,10 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "pipe",
+					"type": {
+						"mask": 16779264,
+						"category": 16384
+					},
 					"flow": "in",
 					"x": 457,
 					"y": 805,
@@ -6586,7 +6740,10 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": "pipe",
+							"type": {
+								"mask": 16779264,
+								"category": 16384
+							},
 							"flow": "in",
 							"x": 476,
 							"y": 805,
@@ -6662,7 +6819,10 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "pipe",
+					"type": {
+						"mask": 16779264,
+						"category": 16384
+					},
 					"flow": "in",
 					"x": 457,
 					"y": 805,
@@ -6735,7 +6895,10 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "pipe",
+					"type": {
+						"mask": 16779264,
+						"category": 16384
+					},
 					"flow": "in",
 					"x": 457,
 					"y": 805,
@@ -7572,7 +7735,10 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": "pipe",
+							"type": {
+								"mask": 16779264,
+								"category": 16384
+							},
 							"flow": "out",
 							"x": 580,
 							"y": 304,
