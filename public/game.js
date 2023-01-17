@@ -3187,7 +3187,7 @@ try {
                     if (entity.sockets) {
                         for (let i = 0; i < entity.sockets.children.length; i++) {
                             let socket = entity.sockets.children[i];
-                            if (socket.pointer?.visible && socket.socketData.type === 'power') {
+                            if (socket.socketData.type === 'power') {
                                 socket.pointer.rotation = -(entity.rotation + socket.rotation);
                             }
                         }
