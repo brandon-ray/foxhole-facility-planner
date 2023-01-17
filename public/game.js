@@ -2068,16 +2068,59 @@ try {
                     if (connectingSocket?.socketData?.type) {
                         const socketType = socket.socketData.type, connectingSocketType = connectingSocket.socketData.type;
                         if (typeof socketType === typeof connectingSocketType) {
-                            if (typeof connectingSocketType === 'object') {
-                                return (socketType.category & connectingSocketType.mask) !== 0 && (connectingSocketType.category & socketType.mask) !== 0;
-                            } else {
-                                return socketType === connectingSocketType;
+                            if (!socket.socketData.flow || (socket.socketData.flow === 'bi' || (socket.socketData.flow !== connectingSocket.socketData.flow))) {
+                                if (typeof connectingSocketType === 'object') {
+                                    return (socketType.category & connectingSocketType.mask) !== 0 && (connectingSocketType.category & socketType.mask) !== 0;
+                                } else {
+                                    return socketType === connectingSocketType;
+                                }
                             }
                         }
                     }
                     return false;
                 }
-                socket.removeConnections = () => entity.removeConnections(socket.socketData.id);
+                socket.removeConnections = function(entityId, ignoreSelected) {
+                    if (Object.keys(socket.connections).length) {
+                        let connectionEstablished = false;
+                        for (const [connectedEntityId, connectedSocketId] of Object.entries(socket.connections)) {
+                            if (typeof entityId === 'number' && connectedEntityId === entityId) {
+                                connectionEstablished = true;
+                                continue;
+                            }
+                            const connectedEntity = game.getEntityById(connectedEntityId);
+                            if (connectedEntity) {
+                                if (ignoreSelected && connectedEntity.selected) {
+                                    connectionEstablished = true;
+                                    continue;
+                                }
+                                for (let k = 0; k < connectedEntity.sockets.children.length; k++) {
+                                    const connectedSocket = connectedEntity.sockets.children[k];
+                                    if (connectedSocket.socketData.id === connectedSocketId) {
+                                        delete connectedSocket.connections[entity.id];
+                                        if (Object.keys(connectedSocket.connections).length === 0) {
+                                            if (connectedEntity.building?.requireConnection) {
+                                                connectedEntity.remove();
+                                            } else if (connectedSocket.socketData.temp) {
+                                                connectedEntity.sockets.removeChild(connectedSocket);
+                                            } else {
+                                                connectedSocket.setVisible(true);
+                                            }
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                            delete socket.connections[connectedEntityId];
+                        }
+                        if (!connectionEstablished) {
+                            if (socket.socketData.temp) {
+                                entity.sockets.removeChild(socket);
+                            } else {
+                                socket.setVisible(true);
+                            }
+                        }
+                    }
+                }
                 socket.setVisible = function(visible) {
                     if (!ENABLE_DEBUG) {
                         if (socket.socketData.type !== 'power') {
@@ -2213,44 +2256,7 @@ try {
                     for (let i = 0; i < entity.sockets.children.length; i++) {
                         const entitySocket = entity.sockets.children[i];
                         if (typeof socketId !== 'number' || (ignoreSocket ? entitySocket.socketData.id !== socketId : entitySocket.socketData.id === socketId)) {
-                            let connectionEstablished = false;
-                            for (const [connectedEntityId, connectedSocketId] of Object.entries(entitySocket.connections)) {
-                                if (typeof entityId === 'number' && connectedEntityId === entityId) {
-                                    connectionEstablished = true;
-                                    continue;
-                                }
-                                const connectedEntity = game.getEntityById(connectedEntityId);
-                                if (connectedEntity) {
-                                    if (ignoreSelected && connectedEntity.selected) {
-                                        connectionEstablished = true;
-                                        continue;
-                                    }
-                                    for (let k = 0; k < connectedEntity.sockets.children.length; k++) {
-                                        const connectedSocket = connectedEntity.sockets.children[k];
-                                        if (connectedSocket.socketData.id === connectedSocketId) {
-                                            delete connectedSocket.connections[entity.id];
-                                            if (Object.keys(connectedSocket.connections).length === 0) {
-                                                if (connectedEntity.building?.requireConnection) {
-                                                    connectedEntity.remove();
-                                                } else if (connectedSocket.socketData.temp) {
-                                                    connectedEntity.sockets.removeChild(connectedSocket);
-                                                } else {
-                                                    connectedSocket.setVisible(true);
-                                                }
-                                            }
-                                            break;
-                                        }
-                                    }
-                                }
-                                delete entitySocket.connections[connectedEntityId];
-                            }
-                            if (!connectionEstablished) {
-                                if (entitySocket.socketData.temp) {
-                                    entity.sockets.removeChild(entitySocket);
-                                } else {
-                                    entitySocket.setVisible(true);
-                                }
-                            }
+                            entitySocket.removeConnections(entityId, ignoreSelected);
                         }
                     }
                 }
@@ -3998,7 +4004,7 @@ try {
                                                     if (selectedEntity.building?.snapNearest || ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || selectedEntity.subtype === 'power_line' && entity.canGrab())) {
                                                         for (let l = 0; l < selectedEntity.sockets.children.length; l++) {
                                                             let selectedSocket = selectedEntity.sockets.children[l];
-                                                            if (selectedEntities.length === 1 && selectedEntity.building?.isBezier && selectedSocket.socketData.id !== 0) {
+                                                            if (selectedEntities.length === 1 && selectedEntity.building?.hasHandle && selectedSocket.socketData.id !== 0) {
                                                                 continue;
                                                             }
                                                             if (entitySocket.canConnect(selectedSocket)) {
@@ -4007,10 +4013,6 @@ try {
                                                                 const connectedSocket = sSocketConnections ? entity.getSocketById(selectedSocket.connections[entity.id]) : null;
                                                                 if (!sSocketConnections || selectedSocket.connections[entity.id] === entitySocket.socketData.id || connectedSocket?.socketData.temp) {
                                                                     if (!eSocketConnections || (eSocketConnections < (entitySocket.socketData.connectionLimit ?? 1)) || entitySocket.connections[selectedEntity.id] === selectedSocket.socketData.id) {
-                                                                        if (entitySocket.socketData.flow && entitySocket.socketData.flow !== 'bi' && entitySocket.socketData.flow === selectedSocket.socketData.flow) {
-                                                                            continue;
-                                                                        }
-                
                                                                         if (selectedEntity.building?.snapNearest || selectedEntities.length > 1) {
                                                                             let selectedSocketPos;
                                                                             if (connectionEstablished) {

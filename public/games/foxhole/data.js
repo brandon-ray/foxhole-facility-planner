@@ -1326,6 +1326,7 @@ const foxholeData = {
 			"icon": "game/Textures/UI/ItemIcons/FacilityCatwalkRampConnectorIcon.webp",
 			"texture": "game/Textures/Structures/catwalk_platform.webp",
 			"canSnap": true,
+			"snapNearest": true,
 			"sockets": [
 				{
 					"id": 0,
