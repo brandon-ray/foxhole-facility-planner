@@ -163,6 +163,25 @@ function iterateUpgradeCodeNames(dirPath) {
     });
 }
 
+const socketDataKeys = ['id', 'name', 'type', 'texture', 'textureAlt', 'flow', 'cap', 'x', 'y', 'rotation', 'connectionLimit'];
+
+// TODO: sortUpdateData(keys, data, base)
+function iterateSocketData(data) {
+    if (data.sockets) {
+        const socketsCopy = [];
+        for (const socket of data.sockets) {
+            const socketCopy = {};
+            for (const key of socketDataKeys) {
+                if (socket[key] !== undefined) {
+                    socketCopy[key] = socket[key];
+                }
+            }
+            socketsCopy.push(socketCopy);
+        }
+        data.sockets = socketsCopy;
+    }
+}
+
 function iterateStructures(dirPath) {
     dirPath = dirPath ?? `${foxholeDataDirectory}War/Content/Blueprints/`;
     let files = fs.readdirSync(dirPath);
@@ -196,26 +215,28 @@ function iterateStructures(dirPath) {
                                     break;
                                 }
                                 if (upgradeCodeNames.includes(structure.CodeName)) {
-                                    parentCodeName = upgradingCodeName;
-                                    if (!structureList[parentCodeName].upgrades) {
-                                        structureList[parentCodeName].upgrades = {};
+                                    if (!structureList[upgradingCodeName].upgrades) {
+                                        structureList[upgradingCodeName].upgrades = {};
                                     }
-                                    structureData = structureList[parentCodeName].upgrades[structureCodeName] ?? { 'id': structureCodeName };
+                                    if (!structureList[upgradingCodeName].upgrades[structureCodeName].reference) {
+                                        parentCodeName = upgradingCodeName;
+                                        structureData = structureList[parentCodeName].upgrades[structureCodeName] ?? { 'id': structureCodeName };
+                                    }
                                     break;
                                 }
                             }
-                            if (structureData) {
+                            if (structureData && !structureData.reference) {
                                 structureData = {
                                     'id': structureData.id,
                                     'name': structure.DisplayName?.SourceString ?? (baseData.name ?? structure.CodeName),
                                     'codeName': structure.CodeName,
+                                    'parentKey': structureData.parentKey,
                                     'description': structure.Description?.SourceString ?? baseData.description,
                                     'category': structureData.category,
                                     'categoryOrder': structureData.categoryOrder ?? structure.BuildOrder ?? baseData.BuildOrder,
                                     'faction': structureData.faction,
                                     'color': structureData.color,
                                     'hideInList': structureData.hideInList,
-                                    'hideProperties': structureData.hideProperties,
                                     'width': structureData.width,
                                     'length': structureData.length,
                                     'range': structureData.range,
@@ -251,7 +272,10 @@ function iterateStructures(dirPath) {
                                     'vehicle': structureData.vehicle,
                                     'techId': structureData.techId ?? (structure.TechID && (structure.TechID !== 'ETechID::None') ? structure.TechID.substring(9).toLowerCase() : undefined),
                                     'liquidCapacity': structure.LiquidTank?.MaxAmount ?? structureData.liquidCapacity,
+                                    'maxHealth': structureData.maxHealth ?? baseData.maxHealth,
+                                    'structuralIntegrity': structureData.structuralIntegrity ?? baseData.structuralIntegrity,
                                     'cost': structureData.cost ?? baseData.cost,
+                                    'repairCost': structureData.repairCost ?? baseData.repairCost,
                                     '_productionLength': structureData._productionLength,
                                     'production': structureData.production,
                                     'productionScaling': structureData.productionScaling,
@@ -262,6 +286,7 @@ function iterateStructures(dirPath) {
                                 if (structureData.texture) {
                                     structureData.hitArea = structurePolygons[path.basename(structureData.texture, '.webp')];
                                 }
+                                iterateSocketData(structureData);
                                 initializeStructureItems(structure);
                                 if (structureData.techId) {
                                     techList[structureData.techId] = {};
@@ -292,43 +317,51 @@ function iterateStructures(dirPath) {
                                     if (structureData?.upgrades) {
                                         storedModData = structureData.upgrades[modificationCodeName];
                                     }
-                                    modifications = modifications ?? {};
-                                    modificationData = {
-                                        'id': storedModData?.id,
-                                        'name': modification.DisplayName?.SourceString ?? getTableString(modification.DisplayName) ?? displayName,
-                                        'codeName': displayName,
-                                        'description': modification.Description?.SourceString ?? getTableString(modification.Description) ?? 'No Description Provided.',
-                                        'range': storedModData?.range,
-                                        'hitArea': undefined,
-                                        'icon': getLocalIcon(modification),
-                                        'texture': typeof storedModData?.texture === 'string' || storedModData?.texture === null ? storedModData.texture : `game/Textures/Structures/${structureData.id}_${storedModData?.id}.webp`,
-                                        'textureBorder': storedModData?.textureBorder,
-                                        'textureFrontCap': storedModData?.textureFrontCap,
-                                        'textureBackCap': storedModData?.textureBackCap,
-                                        'positionOffset': storedModData?.positionOffset,
-                                        'sockets': storedModData?.sockets,
-                                        'techId': modification.TechID && (modification.TechID !== 'ETechID::None') ? modification.TechID.substring(9).toLowerCase() : undefined,
-                                        'cost': storedModData?.cost,
-                                        '_productionLength': storedModData?._productionLength,
-                                        'production': storedModData?.production,
-                                        'productionScaling': storedModData?.productionScaling,
-                                        'AssemblyItems': modificationData?.AssemblyItems,
-                                        'ConversionEntries': modificationData?.ConversionEntries
-                                        // There is a FuelCost variable which is never used here.
-                                    }
-                                    if (modificationData.texture) {
-                                        modificationData.hitArea = structurePolygons[path.basename(modificationData.texture, '.webp')];
-                                    }
-                                    if (modificationData.techId) {
-                                        techList[modificationData.techId] = {};
-                                    }
-                                    if (modificationData.cost !== false && modification.Tiers) {
-                                        const tierData = modification.Tiers['EFortTier::T1'];
-                                        if (tierData) {
-                                            modificationData.cost = getResourceCosts(tierData.ResourceAmounts);
+                                    if (!storedModData.reference) {
+                                        modifications = modifications ?? {};
+                                        modificationData = {
+                                            'id': storedModData?.id,
+                                            'name': modification.DisplayName?.SourceString ?? getTableString(modification.DisplayName) ?? displayName,
+                                            'codeName': displayName,
+                                            'description': modification.Description?.SourceString ?? getTableString(modification.Description) ?? 'No Description Provided.',
+                                            'range': storedModData?.range,
+                                            'hitArea': undefined,
+                                            'icon': getLocalIcon(modification),
+                                            'texture': typeof storedModData?.texture === 'string' || storedModData?.texture === null ? storedModData.texture : `game/Textures/Structures/${structureData.id}_${storedModData?.id}.webp`,
+                                            'textureBorder': storedModData?.textureBorder,
+                                            'textureFrontCap': storedModData?.textureFrontCap,
+                                            'textureBackCap': storedModData?.textureBackCap,
+                                            'positionOffset': storedModData?.positionOffset,
+                                            'sockets': storedModData?.sockets,
+                                            'techId': modification.TechID && (modification.TechID !== 'ETechID::None') ? modification.TechID.substring(9).toLowerCase() : undefined,
+                                            'maxHealth': storedModData?.maxHealth,
+                                            'structuralIntegrity': storedModData?.structuralIntegrity,
+                                            'cost': storedModData?.cost,
+                                            'repairCost': storedModData?.repairCost,
+                                            '_productionLength': storedModData?._productionLength,
+                                            'production': storedModData?.production,
+                                            'productionScaling': storedModData?.productionScaling,
+                                            'AssemblyItems': modificationData?.AssemblyItems,
+                                            'ConversionEntries': modificationData?.ConversionEntries
+                                            // There is a FuelCost variable which is never used here.
                                         }
+                                        iterateSocketData(modificationData);
+                                        if (modificationData.texture) {
+                                            modificationData.hitArea = structurePolygons[path.basename(modificationData.texture, '.webp')];
+                                        }
+                                        if (modificationData.techId) {
+                                            techList[modificationData.techId] = {};
+                                        }
+                                        if (modificationData.cost !== false && modification.Tiers) {
+                                            const tierData = modification.Tiers['EFortTier::T1'];
+                                            if (tierData) {
+                                                modificationData.cost = getResourceCosts(tierData.ResourceAmounts);
+                                            }
+                                        }
+                                        modifications[modificationCodeName] = modificationData;
+                                    } else {
+                                        modifications[modificationCodeName] = storedModData;
                                     }
-                                    modifications[modificationCodeName] = modificationData;
                                 }
                             }
                             structureList[structureCodeName].upgrades = modifications;
@@ -390,28 +423,39 @@ function getResourceCosts(resources) {
     }
 }
 
-function iterateData(filePath, list, isItem, yep) {
+function iterateData(filePath, list, isItem) {
     let rawdata = fs.readFileSync(filePath);
     let uAsset = JSON.parse(rawdata)[0];
     if (uAsset.Rows) {
         for (let [codeName, data] of Object.entries(uAsset.Rows)) {
             codeName = codeName.toLowerCase();
             const listItem = list[codeName];
-            if (listItem && listItem.cost !== false) {
+            if (listItem && listItem.cost !== false && !listItem.reference) {
+                /*
+                This seems to be where Field Modification Center pulls its data from.
+                if (data.bHasTierUpgrades) {
+                    if (data.UpgradeResourceAmounts && data.UpgradeResourceAmounts.Resource.CodeName !== 'None') {
+                        list[codeName].UpgradeResourceAmounts = data.UpgradeResourceAmounts;
+                    }
+                }
+                */
                 if (isItem) {
                     if (data.AltResourceAmounts && data.AltResourceAmounts.Resource.CodeName !== 'None') {
                         listItem.cost = getResourceCosts(data.AltResourceAmounts);
                     }
-                    /*
-                    This seems to be where Field Modification Center pulls its data from.
-                    if (data.bHasTierUpgrades) {
-                        if (data.UpgradeResourceAmounts && data.UpgradeResourceAmounts.Resource.CodeName !== 'None') {
-                            list[codeName].UpgradeResourceAmounts = data.UpgradeResourceAmounts;
-                        }
+                } else {
+                    if (data.MaxHealth !== 0) {
+                        listItem.maxHealth = data.MaxHealth;
                     }
-                    */
-                } else if (data.ResourceAmounts && data.ResourceAmounts.Resource.CodeName !== 'None') {
-                    listItem.cost = getResourceCosts(data.ResourceAmounts);
+                    if (data.StructuralIntegrity !== 1) {
+                        listItem.structuralIntegrity = data.StructuralIntegrity;
+                    }
+                    if (data.RepairCost !== 0) {
+                        listItem.repairCost = data.RepairCost;
+                    }
+                    if (data.ResourceAmounts && data.ResourceAmounts.Resource.CodeName !== 'None') {
+                        listItem.cost = getResourceCosts(data.ResourceAmounts);
+                    }
                 }
             }
         }

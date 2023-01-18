@@ -9,6 +9,8 @@ Made with ❤️ by the PEG Regiment using Vue.js and Pixi.js
 - **Facility Blueprint Editor**
     - Saving and Loading
     - Multi-Building Selection
+    - Label, Rectangle, Circle, & Line Tool
+    - Redo & Undo Actions
     - Building Placement
     - Pipe and Power Line Construction
     - Rail and Road Construction
@@ -46,7 +48,6 @@ https://foxholeplanner.com
 
 - **Facility Image Export:** Save an image of your facility locally.
 - **Statistics CSV Export:** Save your Facility stats to a spreadsheet.
-- **Redo & Undo:** Revert mistakes and boo-boos.
 
 ## Run Locally
 

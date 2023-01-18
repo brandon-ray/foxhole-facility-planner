@@ -206,6 +206,42 @@ p {
     color: #777777;
 }
 
+/* Buttons */
+
+.btn-small {
+    display: inline-block;
+    background: #050505;
+    border: 2px solid rgba(255, 255, 255, 0.075);
+    cursor: pointer;
+    font-size: 2.25em;
+    color: #777;
+    width: 48px;
+    height: 48px;
+    margin: 0 2px;
+    padding: 0;
+    line-height: 42px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.btn-small:focus, .btn-small:hover {
+    border-color: white;
+    color: white;
+    outline: none;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input.btn-small::-webkit-outer-spin-button,
+input.btn-small::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number].btn-small {
+    -moz-appearance: textfield;
+}
+
 /* Sidebar */
 
 #sidebar {
@@ -257,38 +293,12 @@ p {
     text-align: left;
 }
 
-#sidebar-footer a, #sidebar-footer button, .close-statistics-button, .footer-button, .btn-small {
-    display: inline-block;
-    background: #050505;
-    border: 2px solid #202020;
-    cursor: pointer;
+#sidebar-footer a, #sidebar-footer button {
     font-size: 2.25em;
-    color: #777;
     width: 48px;
     height: 48px;
     margin: 0 2px;
-    padding: 0;
     line-height: 42px;
-    vertical-align: middle;
-    text-align: center;
-}
-
-.btn-small:focus {
-    border-color: white;
-    color: white;
-    outline: none;
-}
-
-/* Chrome, Safari, Edge, Opera */
-input.btn-small::-webkit-outer-spin-button,
-input.btn-small::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-/* Firefox */
-input[type=number].btn-small {
-    -moz-appearance: textfield;
 }
 
 #sidebar-footer a.github-button {
@@ -307,11 +317,6 @@ input[type=number].btn-small {
 
 #sidebar-footer a.discord-button:hover svg path {
     fill: #fff;
-}
-
-#sidebar-footer a:hover, #sidebar-footer button:hover, .close-statistics-button:hover, .footer-button:hover, .btn-small:hover, .title-button:hover .btn-small {
-    border: 2px solid white;
-    color: white;
 }
 
 /* Inner Contents of Sidebar */
@@ -425,6 +430,14 @@ input[type=number].btn-small {
 
 #construction-page .construction-mode-button:not(.mode-selected):hover {
     background: #222;
+}
+
+.construction-options-header {
+    background: #121212;
+    margin: 0;
+    padding: 5px 10px;
+    border: 1px solid black;
+    color: #eee;
 }
 
 .construction-options {
@@ -877,102 +890,13 @@ input[type=number].btn-small {
     pointer-events: none;
 }
 
-.close-statistics-button, .footer-button, .btn-small {
+.btn-small {
     width: 30px;
     height: 30px;
     line-height: 25px;
     margin: 6px 6px 6px 0;
     font-size: 1.15em;
     float: right;
-}
-
-.close-statistics-button {
-    margin: 3px;
-}
-
-#confirmation-dialog {
-    width: 400px;
-    height: 200px;
-    background-color: #1a1a1a;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin-top: -100px;
-    margin-left: -200px;
-}
-
-#confirmation-dialog .confirmation-header {
-    background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
-    padding: 4px 4px 4px 9px;
-    position: relative;
-    text-align: left;
-}
-
-#confirmation-dialog .confirmation-header > h3 {
-    display: inline-block;
-    margin: 0;
-}
-
-#confirmation-dialog .confirmation-header > button {
-    margin: 2px;
-}
-
-#confirmation-dialog .confirmation-body {
-    padding: 20px;
-}
-
-#confirmation-dialog .confirmation-body > button {
-    width: 100%;
-    background: linear-gradient(rgb(255, 0, 0), rgb(168, 0, 0));
-    margin-top: 14px;
-    padding: 4px 4px 4px 9px;
-    position: relative;
-    font-size: 2em;
-    color: white;
-    border: 2px solid black;
-    box-shadow: 0 0 3px #000;
-    cursor: pointer;
-}
-
-#confirmation-dialog .confirmation-body > button:hover {
-    border: 2px solid white;
-}
-
-.statistics-panel {
-    position: fixed;
-    top: 15px;
-    right: 15px;
-    width: 300px;
-    padding: 0;
-    background-color: #1a1a1a;
-}
-
-.statistics-panel-header {
-    background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
-    padding: 4px 4px 4px 9px;
-    position: relative;
-}
-
-.statistics-panel-header h3 {
-    display: inline-block;
-    margin: 0;
-}
-
-.statistics-panel-header button {
-    background: #1a1a1a;
-    float: right;
-    margin: 2px;
-}
-
-.statistics-panel-body {
-    min-height: 400px;
-    max-height: 890px;
-    padding: 12px;
-    overflow: auto;
-}
-
-.statistics-panel-fac-output .resource-amount {
-    color: #03b003;
 }
 
 #hover-building-info {
@@ -1456,6 +1380,8 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
 #save-load-page .preset-load-button:hover {
     background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
 }
+
+/* Scrollbars */
 
 *::-webkit-scrollbar {
     width: 0.85em;

@@ -2,7 +2,7 @@ const game_asset_keys = ['icon', 'texture', 'textureBorder', 'textureFrontCap', 
 const game_asset_list = {};
 
 function assetDir(str) {
-    return str ? '/games/foxhole/assets/' + str : str;
+    return !str.startsWith('/games/foxhole/assets/') ? '/games/foxhole/assets/' + str : str;
 }
 
 (function() {
@@ -13,7 +13,33 @@ function assetDir(str) {
         "buildings": foxholeData.buildings
     };
 
+    for (const building of Object.values(window.objectData.buildings)) {
+        if (building.parentKey) {
+            let currParent = window.objectData.buildings[building.parentKey];
+            const parentData = [currParent];
+            while (currParent?.parentKey) {
+                currParent = window.objectData.buildings[currParent.parentKey];
+                parentData.push(currParent);
+            }
+            parentData.push(Object.assign({}, building));
+            Object.assign(building, ...parentData);
+            building.parent = window.objectData.buildings[building.parentKey];
+        }
+    }
+
     const appendGameAssets = function(data) {
+        if (data.sockets) {
+            for (const socket of data.sockets) {
+                if (socket.texture) {
+                    socket.texture = assetDir(socket.texture);
+                    game_asset_list[socket.texture] = socket.texture;
+                }
+                if (socket.textureAlt) {
+                    socket.textureAlt = assetDir(socket.textureAlt);
+                    game_asset_list[socket.textureAlt] = socket.textureAlt;
+                }
+            }
+        }
         for (const key of game_asset_keys) {
             let asset = data[key];
             if (asset) {
@@ -55,11 +81,7 @@ function assetDir(str) {
         }
     };
 
-    let buildingKeys = Object.keys(window.objectData.buildings);
-    for (let i = 0; i < buildingKeys.length; i++) {
-        let buildingKey = buildingKeys[i];
-        let building = window.objectData.buildings[buildingKey];
-
+    for (const [buildingKey, building] of Object.entries(window.objectData.buildings)) {
         appendGameAssets(building);
         
         appendBuildingData(buildingKey, building);
@@ -70,31 +92,44 @@ function assetDir(str) {
                 let upgradeKey = upgradeKeys[j];
                 let upgrade = building.upgrades[upgradeKey];
 
-                appendGameAssets(upgrade);
+                if (!upgrade.reference) {
+                    appendGameAssets(upgrade);
 
-                let upgradeBuilding = Object.assign({}, building, upgrade);
-                upgradeBuilding.parent = building;
-                upgradeBuilding.parentKey = buildingKey;
-                upgradeBuilding.upgradeName = upgrade.name;
-                upgradeBuilding.name = building.name + ' (' + upgrade.name + ')';
+                    let upgradeBuilding = Object.assign({}, building, upgrade);
+                    upgradeBuilding.parent = building;
+                    upgradeBuilding.upgradeName = upgrade.name;
+                    upgradeBuilding.name = building.name + ' (' + upgrade.name + ')';
 
-                let upgradeBuildingCost = Object.assign({}, building.cost);
-                if (upgradeBuilding.cost) {
-                    for (const [resource, amount] of Object.entries(upgradeBuilding.cost)) {
-                        if (building.cost) {
-                            upgradeBuildingCost[resource] = (building.cost[resource] ?? 0) + amount;
-                        } else {
-                            upgradeBuildingCost[resource] = amount;
+                    let upgradeBuildingCost = Object.assign({}, building.cost);
+                    if (upgradeBuilding.cost) {
+                        for (const [resource, amount] of Object.entries(upgradeBuilding.cost)) {
+                            if (building.cost) {
+                                upgradeBuildingCost[resource] = (building.cost[resource] ?? 0) + amount;
+                            } else {
+                                upgradeBuildingCost[resource] = amount;
+                            }
                         }
                     }
+                    upgradeBuilding.upgradeCost = upgradeBuilding.cost;
+                    upgradeBuilding.cost = upgradeBuildingCost;
+
+                    building.upgrades[upgradeKey] = upgradeBuilding;
+
+                    upgradeKey = buildingKey + '_' + upgradeKey;
+                    window.objectData.buildings[upgradeKey] = upgradeBuilding;
+
+                    appendBuildingData(upgradeKey, upgradeBuilding);
                 }
-                upgradeBuilding.upgradeCost = upgradeBuilding.cost;
-                upgradeBuilding.cost = upgradeBuildingCost;
+            }
+        }
+    }
 
-                upgradeKey = buildingKey + '_' + upgradeKey;
-                window.objectData.buildings[upgradeKey] = upgradeBuilding;
-
-                appendBuildingData(upgradeKey, upgradeBuilding);
+    for (const building of Object.values(window.objectData.buildings)) {
+        if (building.upgrades) {
+            for (const [upgradeKey, upgradeData] of Object.entries(building.upgrades)) {
+                if (upgradeData.reference) {
+                    building.upgrades[upgradeKey] = window.objectData.buildings[upgradeData.reference];
+                }
             }
         }
     }
@@ -106,9 +141,9 @@ function assetDir(str) {
         }
     }
 
-    for (const [category, data] of Object.entries(window.objectData.categories)) {
-        if (data.buildings.length) {
-            data.buildings.sort((a, b) => {
+    for (const category of Object.values(window.objectData.categories)) {
+        if (category.buildings.length) {
+            category.buildings.sort((a, b) => {
                 const aOrder = a.categoryOrder ?? 0, bOrder = b.categoryOrder ?? 0;
                 return aOrder > bOrder ? 1 : (aOrder < bOrder ? -1 : 0);
             });

@@ -779,16 +779,24 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "power",
+					"name": "power",
+					"type": [
+						{
+							"mask": 131072,
+							"category": 1048576
+						}
+					],
 					"x": 60,
 					"y": 974,
 					"rotation": 270
 				}
 			],
 			"techId": "unlockfacilitytier2",
+			"maxHealth": 3000,
 			"cost": {
 				"facilitymaterials2": 25
 			},
+			"repairCost": 100,
 			"_productionLength": 2,
 			"production": [
 				{
@@ -1122,9 +1130,11 @@ const foxholeData = {
 			"icon": "game/Textures/UI/StructureIcons/ATPillboxIcon.webp",
 			"texture": "game/Textures/Structures/atpillbox.webp",
 			"techId": "unlockatpillbox",
+			"maxHealth": 950,
 			"cost": {
 				"cloth": 85
-			}
+			},
+			"repairCost": 85
 		},
 		"barbedwirespline": {
 			"name": "Barbed Wire",
@@ -1145,20 +1155,40 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "barbedwirespline",
+					"type": [
+						{
+							"mask": 4608,
+							"category": 4096
+						},
+						{
+							"mask": 1,
+							"category": 4096
+						}
+					],
 					"cap": "front",
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": "barbedwirespline",
+					"type": [
+						{
+							"mask": 4608,
+							"category": 4096
+						},
+						{
+							"mask": 1,
+							"category": 4096
+						}
+					],
 					"cap": "back",
 					"rotation": 90
 				}
 			],
+			"maxHealth": 600,
 			"cost": {
 				"barbedwirematerials": 3
-			}
+			},
+			"repairCost": 20
 		},
 		"barbedwirewallspline": {
 			"name": "Barbed Wire Fence",
@@ -1176,20 +1206,32 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "barbedwirefence",
+					"type": [
+						{
+							"mask": 4609,
+							"category": 4608
+						}
+					],
 					"cap": "front",
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": "barbedwirefence",
+					"type": [
+						{
+							"mask": 4609,
+							"category": 4608
+						}
+					],
 					"cap": "back",
 					"rotation": 90
 				}
 			],
+			"maxHealth": 10000,
 			"cost": {
 				"barbedwirematerials": 3
-			}
+			},
+			"repairCost": 20
 		},
 		"bms_foreman_stacker": {
 			"name": "BMS Foreman Stacker",
@@ -1220,16 +1262,24 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "power",
+					"name": "power",
+					"type": [
+						{
+							"mask": 131072,
+							"category": 1048576
+						}
+					],
 					"x": -22,
 					"y": 330,
 					"rotation": 270
 				}
 			],
 			"techId": "unlockfacilitytier2",
+			"maxHealth": 1000,
 			"cost": {
 				"facilitymaterials2": 10
-			}
+			},
+			"repairCost": 100
 		},
 		"bms_overseer_skyhauler": {
 			"name": "BMS Overseer Sky-Hauler",
@@ -1252,9 +1302,11 @@ const foxholeData = {
 				"y": 578
 			},
 			"techId": "unlockfacilitytier3",
+			"maxHealth": 1000,
 			"cost": {
 				"facilitymaterials3": 35
-			}
+			},
+			"repairCost": 100
 		},
 		"busc": {
 			"name": "R-15 - “Chariot”",
@@ -1294,27 +1346,41 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": {
-						"mask": 33554432,
-						"category": 67108864
-					},
+					"type": [
+						{
+							"mask": 33554432,
+							"category": 33554432
+						},
+						{
+							"mask": 33554432,
+							"category": 67108864
+						}
+					],
 					"cap": "front",
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": {
-						"mask": 33554432,
-						"category": 67108864
-					},
+					"type": [
+						{
+							"mask": 33554432,
+							"category": 33554432
+						},
+						{
+							"mask": 33554432,
+							"category": 67108864
+						}
+					],
 					"cap": "back",
 					"rotation": 90
 				}
 			],
 			"techId": "unlockfacilitytier2",
+			"maxHealth": 150,
 			"cost": {
 				"facilitymaterials2": 10
-			}
+			},
+			"repairCost": 100
 		},
 		"catwalk_platform": {
 			"name": "Catwalk Platform",
@@ -1330,49 +1396,59 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": {
-						"mask": 67108864,
-						"category": 100663296
-					},
+					"type": [
+						{
+							"mask": 67108864,
+							"category": 100663296
+						}
+					],
 					"x": 3,
 					"y": 138,
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": {
-						"mask": 67108864,
-						"category": 100663296
-					},
+					"type": [
+						{
+							"mask": 67108864,
+							"category": 100663296
+						}
+					],
 					"x": 139,
 					"y": 2,
 					"rotation": 0
 				},
 				{
 					"id": 2,
-					"type": {
-						"mask": 67108864,
-						"category": 100663296
-					},
+					"type": [
+						{
+							"mask": 67108864,
+							"category": 100663296
+						}
+					],
 					"x": 276,
 					"y": 138,
 					"rotation": 90
 				},
 				{
 					"id": 3,
-					"type": {
-						"mask": 67108864,
-						"category": 100663296
-					},
+					"type": [
+						{
+							"mask": 67108864,
+							"category": 100663296
+						}
+					],
 					"x": 139,
 					"y": 275,
 					"rotation": 180
 				}
 			],
 			"techId": "unlockfacilitytier2",
+			"maxHealth": 150,
 			"cost": {
 				"facilitymaterials2": 10
-			}
+			},
+			"repairCost": 100
 		},
 		"catwalk_stairs": {
 			"name": "Catwalk Stairs",
@@ -1387,19 +1463,23 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": {
-						"mask": 67108864,
-						"category": 100663296
-					},
+					"type": [
+						{
+							"mask": 67108864,
+							"category": 100663296
+						}
+					],
 					"x": 1235,
 					"y": 141,
 					"rotation": 90
 				}
 			],
 			"techId": "unlockfacilitytier2",
+			"maxHealth": 150,
 			"cost": {
 				"facilitymaterials2": 10
-			}
+			},
+			"repairCost": 100
 		},
 		"coal_refinery": {
 			"name": "Coal Refinery",
@@ -1440,15 +1520,23 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "power",
+					"name": "power",
+					"type": [
+						{
+							"mask": 131072,
+							"category": 1048576
+						}
+					],
 					"x": 0,
 					"y": 273,
 					"rotation": 270
 				}
 			],
+			"maxHealth": 3000,
 			"cost": {
 				"facilitymaterials1": 50
 			},
+			"repairCost": 150,
 			"_productionLength": 1,
 			"production": [
 				{
@@ -1548,17 +1636,26 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": "power",
+							"name": "power",
+							"type": [
+								{
+									"mask": 131072,
+									"category": 1048576
+								}
+							],
 							"x": 0,
 							"y": 273,
 							"rotation": 270
 						},
 						{
 							"id": 1,
-							"type": {
-								"mask": 16779264,
-								"category": 16384
-							},
+							"name": "pipeout",
+							"type": [
+								{
+									"mask": 16779264,
+									"category": 16384
+								}
+							],
 							"flow": "out",
 							"x": 611,
 							"y": 494,
@@ -1566,10 +1663,13 @@ const foxholeData = {
 						},
 						{
 							"id": 2,
-							"type": {
-								"mask": 16779264,
-								"category": 16384
-							},
+							"name": "pipein",
+							"type": [
+								{
+									"mask": 16779264,
+									"category": 16384
+								}
+							],
 							"flow": "in",
 							"x": 502,
 							"y": 747,
@@ -1641,17 +1741,26 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": "power",
+							"name": "power",
+							"type": [
+								{
+									"mask": 131072,
+									"category": 1048576
+								}
+							],
 							"x": 0,
 							"y": 273,
 							"rotation": 270
 						},
 						{
 							"id": 1,
-							"type": {
-								"mask": 16779264,
-								"category": 16384
-							},
+							"name": "pipeout",
+							"type": [
+								{
+									"mask": 16779264,
+									"category": 16384
+								}
+							],
 							"flow": "out",
 							"x": 611,
 							"y": 494,
@@ -1659,10 +1768,13 @@ const foxholeData = {
 						},
 						{
 							"id": 3,
-							"type": {
-								"mask": 16779264,
-								"category": 16384
-							},
+							"name": "pipein",
+							"type": [
+								{
+									"mask": 16779264,
+									"category": 16384
+								}
+							],
 							"flow": "in",
 							"x": 503,
 							"y": 963,
@@ -1831,10 +1943,13 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": {
-						"mask": 2048,
-						"category": 16384
-					},
+					"name": "pipein",
+					"type": [
+						{
+							"mask": 2048,
+							"category": 16384
+						}
+					],
 					"flow": "in",
 					"x": 152,
 					"y": 57,
@@ -1842,15 +1957,23 @@ const foxholeData = {
 				},
 				{
 					"id": 1,
-					"type": "power",
+					"name": "power",
+					"type": [
+						{
+							"mask": 131072,
+							"category": 1048576
+						}
+					],
 					"x": 548,
 					"y": 770,
 					"rotation": 180
 				}
 			],
+			"maxHealth": 1500,
 			"cost": {
 				"cloth": 150
 			},
+			"repairCost": 100,
 			"_productionLength": 1,
 			"production": [
 				{
@@ -1922,10 +2045,13 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": {
-								"mask": 2048,
-								"category": 16384
-							},
+							"name": "pipein",
+							"type": [
+								{
+									"mask": 2048,
+									"category": 16384
+								}
+							],
 							"flow": "in",
 							"x": 167,
 							"y": 57,
@@ -1933,7 +2059,13 @@ const foxholeData = {
 						},
 						{
 							"id": 1,
-							"type": "power",
+							"name": "power",
+							"type": [
+								{
+									"mask": 131072,
+									"category": 1048576
+								}
+							],
 							"x": 563,
 							"y": 770,
 							"rotation": 180
@@ -1984,16 +2116,24 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "power",
+					"name": "power",
+					"type": [
+						{
+							"mask": 131072,
+							"category": 1048576
+						}
+					],
 					"x": 104,
 					"y": 142,
 					"rotation": 0
 				}
 			],
 			"techId": "unlockfacilitytier2",
+			"maxHealth": 2000,
 			"cost": {
 				"facilitymaterials2": 250
-			}
+			},
+			"repairCost": 100
 		},
 		"flatbedtruck": {
 			"name": "BMS - Packmule Flatbed",
@@ -2004,139 +2144,528 @@ const foxholeData = {
 			"icon": "game/Textures/UI/VehicleIcons/FlatbedTruckVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/flatbedtruck.webp"
 		},
+		"fortbaset1": {
+			"name": "Bunker Base",
+			"codeName": "FortBaseT1",
+			"parentKey": "fortt1",
+			"description": "A large forward operating base. Players can spawn and stockpile items here.",
+			"category": "entrenchments",
+			"hideInList": true,
+			"width": 5.76,
+			"length": 5.76,
+			"icon": "game/Textures/UI/StructureIcons/FortT1BaseIcon.webp",
+			"texture": "game/Textures/Structures/fortt1_base.webp",
+			"textureOffset": {
+				"x": 306,
+				"y": 312
+			},
+			"canSnap": true,
+			"snapNearest": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 288,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 1,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 576,
+					"y": 288,
+					"rotation": 90
+				},
+				{
+					"id": 3,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 0,
+					"y": 288,
+					"rotation": 270
+				}
+			],
+			"maxHealth": 1750,
+			"structuralIntegrity": 0.65,
+			"cost": {
+				"cloth": 300
+			},
+			"repairCost": 300,
+			"upgrades": {
+				"fortbaset1": {
+					"reference": "fortbaset1"
+				},
+				"fortbaset2": {
+					"reference": "fortbaset2"
+				},
+				"fortbaset3": {
+					"reference": "fortbaset3"
+				}
+			}
+		},
+		"fortbaset2": {
+			"name": "Bunker Base",
+			"codeName": "FortBaseT2",
+			"parentKey": "fortbaset1",
+			"description": "A large forward operating base. Players can spawn and stockpile items here.",
+			"category": "entrenchments",
+			"hideInList": true,
+			"width": 5.76,
+			"length": 5.76,
+			"icon": "game/Textures/UI/StructureIcons/FortT2BaseIcon.webp",
+			"texture": "game/Textures/Structures/fortt2_base.webp",
+			"textureOffset": {
+				"x": 306,
+				"y": 312
+			},
+			"canSnap": true,
+			"snapNearest": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 288,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 1,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 576,
+					"y": 288,
+					"rotation": 90
+				},
+				{
+					"id": 3,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 0,
+					"y": 288,
+					"rotation": 270
+				}
+			],
+			"maxHealth": 2000,
+			"structuralIntegrity": 0.7,
+			"cost": {
+				"cloth": 100
+			},
+			"repairCost": 100,
+			"upgrades": {
+				"fortbaset1": {
+					"reference": "fortbaset1"
+				},
+				"fortbaset2": {
+					"reference": "fortbaset2"
+				},
+				"fortbaset3": {
+					"reference": "fortbaset3"
+				}
+			}
+		},
+		"fortbaset3": {
+			"name": "Bunker Base",
+			"codeName": "FortBaseT3",
+			"parentKey": "fortbaset2",
+			"description": "A large forward operating base. Players can spawn and stockpile items here.",
+			"category": "entrenchments",
+			"hideInList": true,
+			"width": 5.76,
+			"length": 5.76,
+			"icon": "game/Textures/UI/StructureIcons/FortT3BaseIcon.webp",
+			"texture": "game/Textures/Structures/fortt3_base.webp",
+			"textureOffset": {
+				"x": 306,
+				"y": 312
+			},
+			"canSnap": true,
+			"snapNearest": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 288,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 1,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 576,
+					"y": 288,
+					"rotation": 90
+				},
+				{
+					"id": 3,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 0,
+					"y": 288,
+					"rotation": 270
+				}
+			],
+			"maxHealth": 3500,
+			"structuralIntegrity": 0.75,
+			"cost": {
+				"concrete": 50
+			},
+			"repairCost": 200,
+			"upgrades": {
+				"fortbaset1": {
+					"reference": "fortbaset1"
+				},
+				"fortbaset2": {
+					"reference": "fortbaset2"
+				},
+				"fortbaset3": {
+					"reference": "fortbaset3"
+				}
+			}
+		},
 		"fortcornert1": {
 			"name": "Bunker Corner (Tier 1)",
 			"codeName": "FortCornerT1",
 			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
 			"category": "entrenchments",
 			"categoryOrder": 4,
+			"width": 5.76,
+			"length": 5.76,
 			"hitArea": [
 				{
-					"shape": [ 94.72,-87.04,90.88,-11.52,-13.44,93.44,-84.48,91.52,-89.6,-85.76 ]
+					"shape": [ 92.8,-86.4,92.8,-15.36,-14.08,92.8,-83.84,93.44,-88.96,-85.76 ]
 				}
 			],
 			"icon": "game/Textures/UI/StructureIcons/FortT1CornerIcon.webp",
 			"texture": "game/Textures/Structures/fortt1_corner.webp",
+			"textureOffset": {
+				"x": 320,
+				"y": 310
+			},
 			"canSnap": true,
 			"snapNearest": true,
 			"sockets": [
 				{
 					"id": 0,
-					"type": "bunker",
-					"x": 320,
-					"y": 22,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 288,
+					"y": 0,
 					"rotation": 0
 				},
 				{
 					"id": 1,
-					"type": "bunker",
-					"x": 432,
-					"y": 426,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 395,
+					"y": 395,
 					"rotation": 135
 				},
 				{
 					"id": 2,
-					"type": "bunker",
-					"x": 32,
-					"y": 304,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 0,
+					"y": 288,
 					"rotation": 270
 				}
 			],
+			"maxHealth": 1500,
+			"structuralIntegrity": 0.85,
+			"repairCost": 75,
 			"upgrades": {
+				"fortcornert1": {
+					"reference": "fortcornert1"
+				},
 				"fortcornert2": {
-					"name": "Bunker Corner (Tier 2)",
-					"codeName": "FortCornerT2",
-					"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
-					"icon": "game/Textures/UI/StructureIcons/FortT2CornerIcon.webp",
-					"texture": "game/Textures/Structures/fortt2_corner.webp",
-					"cost": {
-						"cloth": 75
-					}
+					"reference": "fortcornert2"
 				},
 				"fortcornert3": {
-					"name": "Bunker Corner (Tier 3)",
-					"codeName": "FortCornerT3",
-					"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
-					"icon": "game/Textures/UI/StructureIcons/FortT3CornerIcon.webp",
-					"texture": "game/Textures/Structures/fortt3_corner.webp",
-					"cost": {
-						"concrete": 30
-					}
+					"reference": "fortcornert3"
 				}
 			}
 		},
 		"fortcornert2": {
 			"name": "Bunker Corner (Tier 2)",
 			"codeName": "FortCornerT2",
+			"parentKey": "fortcornert1",
 			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
 			"category": "entrenchments",
 			"categoryOrder": 4,
+			"width": 5.76,
+			"length": 5.76,
+			"hitArea": [
+				{
+					"shape": [ 87.68,-89.6,86.4,-14.08,-24.96,99.2,-89.6,96.64,-88.96,-89.6 ]
+				}
+			],
 			"icon": "game/Textures/UI/StructureIcons/FortT2CornerIcon.webp",
 			"texture": "game/Textures/Structures/fortt2_corner.webp",
+			"textureOffset": {
+				"x": 336,
+				"y": 360
+			},
 			"canSnap": true,
 			"snapNearest": true,
 			"sockets": [
 				{
 					"id": 0,
-					"type": "bunker",
-					"x": 320,
-					"y": 22,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 288,
+					"y": 0,
 					"rotation": 0
 				},
 				{
 					"id": 1,
-					"type": "bunker",
-					"x": 432,
-					"y": 426,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 395,
+					"y": 395,
 					"rotation": 135
 				},
 				{
 					"id": 2,
-					"type": "bunker",
-					"x": 32,
-					"y": 304,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 0,
+					"y": 288,
 					"rotation": 270
 				}
 			],
+			"maxHealth": 1850,
+			"structuralIntegrity": 0.95,
 			"cost": {
 				"cloth": 75
+			},
+			"repairCost": 75,
+			"upgrades": {
+				"fortcornert1": {
+					"reference": "fortcornert1"
+				},
+				"fortcornert2": {
+					"reference": "fortcornert2"
+				},
+				"fortcornert3": {
+					"reference": "fortcornert3"
+				}
 			}
 		},
 		"fortcornert3": {
 			"name": "Bunker Corner (Tier 3)",
 			"codeName": "FortCornerT3",
+			"parentKey": "fortcornert2",
 			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
 			"category": "entrenchments",
 			"categoryOrder": 4,
+			"width": 5.76,
+			"length": 5.76,
+			"hitArea": [
+				{
+					"shape": [ 88.64,-96.32,88.64,-48.32,-48.96,89.00571411132813,-96.32,88.64,-96.32,-96.32 ]
+				},
+				{
+					"shape": [ -38.08,97.6,-48.96,89.00571411132813,88.64,-48.32,98.24,-38.08 ]
+				}
+			],
 			"icon": "game/Textures/UI/StructureIcons/FortT3CornerIcon.webp",
 			"texture": "game/Textures/Structures/fortt3_corner.webp",
+			"textureOffset": {
+				"x": 290,
+				"y": 290
+			},
 			"canSnap": true,
 			"snapNearest": true,
 			"sockets": [
 				{
 					"id": 0,
-					"type": "bunker",
-					"x": 320,
-					"y": 22,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 288,
+					"y": 0,
 					"rotation": 0
 				},
 				{
 					"id": 1,
-					"type": "bunker",
-					"x": 432,
-					"y": 426,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 395,
+					"y": 395,
 					"rotation": 135
 				},
 				{
 					"id": 2,
-					"type": "bunker",
-					"x": 32,
-					"y": 304,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 0,
+					"y": 288,
 					"rotation": 270
 				}
 			],
+			"maxHealth": 2000,
+			"structuralIntegrity": 0.99,
 			"cost": {
 				"concrete": 30
+			},
+			"repairCost": 120,
+			"upgrades": {
+				"fortcornert1": {
+					"reference": "fortcornert1"
+				},
+				"fortcornert2": {
+					"reference": "fortcornert2"
+				},
+				"fortcornert3": {
+					"reference": "fortcornert3"
+				}
 			}
 		},
 		"fortt1": {
@@ -2145,80 +2674,112 @@ const foxholeData = {
 			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
 			"category": "entrenchments",
 			"categoryOrder": 3,
+			"width": 5.76,
+			"length": 5.76,
 			"icon": "game/Textures/UI/StructureIcons/FortT1Icon.webp",
 			"texture": "game/Textures/Structures/fortt1.webp",
+			"textureOffset": {
+				"x": 290,
+				"y": 304
+			},
 			"canSnap": true,
 			"snapNearest": true,
 			"sockets": [
 				{
 					"id": 0,
-					"type": "bunker",
-					"x": 290,
-					"y": 18,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 288,
+					"y": 0,
 					"rotation": 0
 				},
 				{
 					"id": 1,
-					"type": "bunker",
-					"x": 578,
-					"y": 304,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 576,
+					"y": 288,
 					"rotation": 90
 				},
 				{
 					"id": 2,
-					"type": "bunker",
-					"x": 290,
-					"y": 592,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 288,
+					"y": 576,
 					"rotation": 180
 				},
 				{
 					"id": 3,
-					"type": "bunker",
-					"x": 2,
-					"y": 304,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 0,
+					"y": 288,
 					"rotation": 270
 				}
 			],
+			"maxHealth": 1500,
+			"structuralIntegrity": 0.85,
+			"repairCost": 75,
 			"upgrades": {
 				"fortt2": {
-					"name": "Bunker (Tier 2)",
-					"codeName": "FortT2",
-					"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
-					"icon": "game/Textures/UI/StructureIcons/FortT2Icon.webp",
-					"texture": "game/Textures/Structures/fortt2.webp",
-					"cost": {
-						"cloth": 75
-					}
+					"reference": "fortt2"
 				},
 				"fortbaset1": {
-					"name": "Bunker Base",
-					"codeName": "FortBaseT1",
-					"description": "A large forward operating base. Players can spawn and stockpile items here.",
-					"icon": "game/Textures/UI/StructureIcons/FortT1BaseIcon.webp",
-					"texture": "game/Textures/Structures/fortt1_base.webp",
-					"cost": {
-						"cloth": 300
-					}
+					"reference": "fortbaset1"
 				},
 				"fortcornert2": {
-					"name": "Bunker Corner (Tier 2)",
-					"codeName": "FortCornerT2",
-					"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
-					"icon": "game/Textures/UI/StructureIcons/FortT2CornerIcon.webp",
-					"texture": "game/Textures/Structures/fortt2_corner.webp",
-					"cost": {
-						"cloth": 75
-					}
+					"reference": "fortcornert2"
 				},
 				"mgait1": {
 					"name": "Machine Gun Garrison (Tier 1)",
 					"codeName": "MGAIT1",
 					"description": "An entrenched machine gun manned by stationed troops.",
+					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/FortT1MGunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt1_mgai.webp",
+					"textureOffset": {
+						"x": 323,
+						"y": 312
+					},
+					"maxHealth": 1650,
+					"structuralIntegrity": 0.65,
 					"cost": {
 						"cloth": 75
-					}
+					},
+					"repairCost": 75
 				},
 				"fortrampt1": {
 					"name": "Bunker Ramp (Tier 1)",
@@ -2226,44 +2787,180 @@ const foxholeData = {
 					"description": "A ramp that enables access to underground Bunkers.",
 					"icon": "game/Textures/UI/StructureIcons/FortT1RampIcon.webp",
 					"texture": "game/Textures/Structures/fortt1_ramp.webp",
+					"textureOffset": {
+						"x": 300,
+						"y": 324
+					},
+					"sockets": [
+						{
+							"id": 0,
+							"type": [
+								{
+									"mask": 2,
+									"category": 4
+								},
+								{
+									"mask": 4,
+									"category": 4
+								}
+							],
+							"x": 288,
+							"y": 0,
+							"rotation": 0
+						},
+						{
+							"id": 1,
+							"type": [
+								{
+									"mask": 2,
+									"category": 4
+								},
+								{
+									"mask": 4,
+									"category": 4
+								}
+							],
+							"x": 576,
+							"y": 288,
+							"rotation": 90
+						},
+						{
+							"id": 3,
+							"type": [
+								{
+									"mask": 2,
+									"category": 4
+								},
+								{
+									"mask": 4,
+									"category": 4
+								}
+							],
+							"x": 0,
+							"y": 288,
+							"rotation": 270
+						}
+					],
+					"maxHealth": 1500,
+					"structuralIntegrity": 0.85,
 					"cost": {
 						"cloth": 50
-					}
+					},
+					"repairCost": 75
 				},
 				"rifleait1": {
 					"name": "Rifle Garrison (Tier 1)",
 					"codeName": "RifleAIT1",
 					"description": "An entrenched bunker manned by stationed troops armed with Rifles.",
+					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/FortT1GunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt1_rifleai.webp",
+					"textureOffset": {
+						"x": 342,
+						"y": 328
+					},
+					"maxHealth": 1500,
+					"structuralIntegrity": 0.65,
 					"cost": {
 						"cloth": 50
-					}
+					},
+					"repairCost": 50
 				}
 			}
 		},
 		"fortt2": {
 			"name": "Bunker (Tier 2)",
 			"codeName": "FortT2",
+			"parentKey": "fortt1",
 			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
 			"category": "entrenchments",
 			"categoryOrder": 3,
-			"hideInList": true,
+			"width": 5.76,
+			"length": 5.76,
 			"icon": "game/Textures/UI/StructureIcons/FortT2Icon.webp",
 			"texture": "game/Textures/Structures/fortt2.webp",
+			"textureBorder": "game/Textures/Structures/fortt2_border.webp",
+			"textureOffset": {
+				"x": 340,
+				"y": 372
+			},
+			"canSnap": true,
+			"snapNearest": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 288,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 1,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 576,
+					"y": 288,
+					"rotation": 90
+				},
+				{
+					"id": 2,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 288,
+					"y": 576,
+					"rotation": 180
+				},
+				{
+					"id": 3,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 0,
+					"y": 288,
+					"rotation": 270
+				}
+			],
+			"maxHealth": 1850,
+			"structuralIntegrity": 0.95,
 			"cost": {
 				"cloth": 75
 			},
+			"repairCost": 75,
 			"upgrades": {
 				"fortt3": {
-					"name": "Bunker (Tier 3)",
-					"codeName": "FortT3",
-					"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
-					"icon": "game/Textures/UI/StructureIcons/FortT3Icon.webp",
-					"texture": "game/Textures/Structures/fortt3.webp",
-					"cost": {
-						"concrete": 30
-					}
+					"reference": "fortt3"
 				},
 				"atgunait2": {
 					"name": "AT Gun Garrison (Tier 2)",
@@ -2271,19 +2968,15 @@ const foxholeData = {
 					"description": "An entrenched AT gun manned by stationed troops.",
 					"icon": "game/Textures/UI/StructureIcons/FortT2ATGunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt2_atgunai.webp",
+					"maxHealth": 1650,
+					"structuralIntegrity": 0.82,
 					"cost": {
 						"cloth": 150
-					}
+					},
+					"repairCost": 150
 				},
 				"fortcornert3": {
-					"name": "Bunker Corner (Tier 3)",
-					"codeName": "FortCornerT3",
-					"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
-					"icon": "game/Textures/UI/StructureIcons/FortT3CornerIcon.webp",
-					"texture": "game/Textures/Structures/fortt3_corner.webp",
-					"cost": {
-						"concrete": 30
-					}
+					"reference": "fortcornert3"
 				},
 				"engineroomt2": {
 					"name": "Engine Room (Tier 2)",
@@ -2291,9 +2984,12 @@ const foxholeData = {
 					"description": "A engineering facility that provides power to Bunker structures using pipe connections.",
 					"icon": "game/Textures/UI/StructureIcons/EngineRoomIcon.webp",
 					"texture": null,
+					"maxHealth": 1350,
+					"structuralIntegrity": 0.75,
 					"cost": {
 						"cloth": 150
-					}
+					},
+					"repairCost": 120
 				},
 				"mgait2": {
 					"name": "Machine Gun Garrison (Tier 2)",
@@ -2301,9 +2997,12 @@ const foxholeData = {
 					"description": "An entrenched machine gun manned by stationed troops.",
 					"icon": "game/Textures/UI/StructureIcons/FortT2MGunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt2_mgai.webp",
+					"maxHealth": 2150,
+					"structuralIntegrity": 0.85,
 					"cost": {
 						"cloth": 100
-					}
+					},
+					"repairCost": 100
 				},
 				"observationbunkert2": {
 					"name": "Observation Bunker (Tier 2)",
@@ -2315,9 +3014,12 @@ const foxholeData = {
 					},
 					"icon": "game/Textures/UI/StructureIcons/ObservationBunkerT2ItemIcon.webp",
 					"texture": "game/Textures/Structures/fortt2_observationbunker.webp",
+					"maxHealth": 1650,
+					"structuralIntegrity": 0.82,
 					"cost": {
 						"cloth": 125
-					}
+					},
+					"repairCost": 150
 				},
 				"fortrampt2": {
 					"name": "Bunker Ramp (Tier 2)",
@@ -2325,9 +3027,12 @@ const foxholeData = {
 					"description": "A ramp that enables access to underground Bunkers.",
 					"icon": "game/Textures/UI/StructureIcons/FortT2RampIcon.webp",
 					"texture": "game/Textures/Structures/fortt2_ramp.webp",
+					"maxHealth": 1850,
+					"structuralIntegrity": 0.95,
 					"cost": {
 						"cloth": 50
-					}
+					},
+					"repairCost": 75
 				},
 				"rifleait2": {
 					"name": "Rifle Garrison (Tier 2)",
@@ -2335,24 +3040,105 @@ const foxholeData = {
 					"description": "An entrenched bunker manned by stationed troops armed with Rifles.",
 					"icon": "game/Textures/UI/StructureIcons/FortT2GunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt2_rifleai.webp",
+					"maxHealth": 1850,
+					"structuralIntegrity": 0.85,
 					"cost": {
 						"cloth": 75
-					}
+					},
+					"repairCost": 75
 				}
 			}
 		},
 		"fortt3": {
 			"name": "Bunker (Tier 3)",
 			"codeName": "FortT3",
+			"parentKey": "fortt2",
 			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
 			"category": "entrenchments",
 			"categoryOrder": 3,
-			"hideInList": true,
+			"width": 5.76,
+			"length": 5.76,
 			"icon": "game/Textures/UI/StructureIcons/FortT3Icon.webp",
 			"texture": "game/Textures/Structures/fortt3.webp",
+			"textureBorder": "game/Textures/Structures/fortt3_border.webp",
+			"textureOffset": {
+				"x": 288,
+				"y": 288
+			},
+			"canSnap": true,
+			"snapNearest": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 288,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 1,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 576,
+					"y": 288,
+					"rotation": 90
+				},
+				{
+					"id": 2,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 288,
+					"y": 576,
+					"rotation": 180
+				},
+				{
+					"id": 3,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 0,
+					"y": 288,
+					"rotation": 270
+				}
+			],
+			"maxHealth": 2000,
+			"structuralIntegrity": 0.99,
 			"cost": {
 				"concrete": 30
 			},
+			"repairCost": 120,
 			"upgrades": {
 				"intelcenter": {
 					"name": "Intelligence Center",
@@ -2360,9 +3146,12 @@ const foxholeData = {
 					"description": "A high-tech listening post designed to intercept and decode enemy transmissions. The intelligence Center can target distant locations and will continue to decipher sensitive transmissions over a sustained period.",
 					"icon": "game/Textures/UI/StructureIcons/IntelligenceCenterIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_intelcenter.webp",
+					"maxHealth": 2550,
+					"structuralIntegrity": 0.65,
 					"cost": {
 						"concrete": 250
-					}
+					},
+					"repairCost": 1200
 				},
 				"lrartillery": {
 					"name": "Storm Cannon",
@@ -2370,9 +3159,12 @@ const foxholeData = {
 					"description": "A heavy fixed position artillery that can release devastating firepower on distant enemy targets.",
 					"icon": "game/Textures/UI/StructureIcons/LongRangedArtilleryIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_lrartillery.webp",
+					"maxHealth": 2550,
+					"structuralIntegrity": 0.65,
 					"cost": {
 						"concrete": 400
-					}
+					},
+					"repairCost": 1600
 				},
 				"ammoroomt3": {
 					"name": "Storage Room",
@@ -2380,9 +3172,12 @@ const foxholeData = {
 					"description": "A facility that stores equipment and ammunition for artillery. Retrieval is very quick for this structure.. ",
 					"icon": "game/Textures/UI/StructureIcons/AmmoRoomIcon.webp",
 					"texture": null,
+					"maxHealth": 2000,
+					"structuralIntegrity": 0.95,
 					"cost": {
 						"concrete": 10
-					}
+					},
+					"repairCost": 200
 				},
 				"artilleryait3": {
 					"name": "Howitzer Garrison",
@@ -2390,9 +3185,12 @@ const foxholeData = {
 					"description": "An entrenched Howitzer manned by stationed troops.",
 					"icon": "game/Textures/UI/StructureIcons/FortT3HowitzerAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_artilleryai.webp",
+					"maxHealth": 1750,
+					"structuralIntegrity": 0.93,
 					"cost": {
 						"concrete": 40
-					}
+					},
+					"repairCost": 160
 				},
 				"atgunait3": {
 					"name": "AT Gun Garrison (Tier 3)",
@@ -2400,9 +3198,12 @@ const foxholeData = {
 					"description": "An entrenched AT gun manned by stationed troops.",
 					"icon": "game/Textures/UI/StructureIcons/FortT3ATGunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_atgunai.webp",
+					"maxHealth": 1750,
+					"structuralIntegrity": 0.93,
 					"cost": {
 						"concrete": 40
-					}
+					},
+					"repairCost": 160
 				},
 				"engineroomt3": {
 					"name": "Engine Room (Tier 3)",
@@ -2410,9 +3211,12 @@ const foxholeData = {
 					"description": "A engineering facility that provides power to Bunker structures using pipe connections.",
 					"icon": "game/Textures/UI/StructureIcons/EngineRoomIcon.webp",
 					"texture": null,
+					"maxHealth": 1500,
+					"structuralIntegrity": 0.85,
 					"cost": {
 						"concrete": 50
-					}
+					},
+					"repairCost": 120
 				},
 				"mgait3": {
 					"name": "Machine Gun Garrison (Tier 3)",
@@ -2420,9 +3224,12 @@ const foxholeData = {
 					"description": "An entrenched machine gun manned by stationed troops.",
 					"icon": "game/Textures/UI/StructureIcons/FortT3MGunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_mgai.webp",
+					"maxHealth": 3000,
+					"structuralIntegrity": 0.96,
 					"cost": {
 						"concrete": 30
-					}
+					},
+					"repairCost": 120
 				},
 				"observationbunkert3": {
 					"name": "Observation Bunker (Tier 3)",
@@ -2434,9 +3241,12 @@ const foxholeData = {
 					},
 					"icon": "game/Textures/UI/StructureIcons/ObservationBunkerT3ItemIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_observationbunker.webp",
+					"maxHealth": 1750,
+					"structuralIntegrity": 0.93,
 					"cost": {
 						"concrete": 20
-					}
+					},
+					"repairCost": 160
 				},
 				"fortrampt3": {
 					"name": "Bunker Ramp (Tier 3)",
@@ -2444,9 +3254,12 @@ const foxholeData = {
 					"description": "A ramp that enables access to underground Bunkers.",
 					"icon": "game/Textures/UI/StructureIcons/FortT3RampIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_ramp.webp",
+					"maxHealth": 2000,
+					"structuralIntegrity": 0.99,
 					"cost": {
 						"concrete": 20
-					}
+					},
+					"repairCost": 120
 				},
 				"rifleait3": {
 					"name": "Rifle Garrison (Tier 3)",
@@ -2454,9 +3267,12 @@ const foxholeData = {
 					"description": "An entrenched bunker manned by stationed troops armed with Rifles.",
 					"icon": "game/Textures/UI/StructureIcons/FortT3GunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_rifleai.webp",
+					"maxHealth": 2250,
+					"structuralIntegrity": 0.96,
 					"cost": {
 						"concrete": 30
-					}
+					},
+					"repairCost": 120
 				}
 			}
 		},
@@ -2473,9 +3289,11 @@ const foxholeData = {
 			"sortLayer": "range",
 			"icon": "game/Textures/UI/StructureIcons/EncampmentIcon.webp",
 			"texture": "game/Textures/Structures/forwardbase1.webp",
+			"maxHealth": 1725,
 			"cost": {
 				"cloth": 300
 			},
+			"repairCost": 300,
 			"upgrades": {
 				"provisional_garrison": {
 					"name": "Provisional Garrison",
@@ -2524,36 +3342,58 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "foundation",
+					"type": [
+						{
+							"mask": 65536,
+							"category": 65536
+						}
+					],
 					"x": 0,
 					"y": 264,
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": "foundation",
+					"type": [
+						{
+							"mask": 65536,
+							"category": 65536
+						}
+					],
 					"x": 264,
 					"y": 0,
 					"rotation": 0
 				},
 				{
 					"id": 2,
-					"type": "foundation",
+					"type": [
+						{
+							"mask": 65536,
+							"category": 65536
+						}
+					],
 					"x": 528,
 					"y": 264,
 					"rotation": 90
 				},
 				{
 					"id": 3,
-					"type": "foundation",
+					"type": [
+						{
+							"mask": 65536,
+							"category": 65536
+						}
+					],
 					"x": 264,
 					"y": 528,
 					"rotation": 180
 				}
 			],
+			"maxHealth": 2000,
 			"cost": {
 				"groundmaterials": 75
 			},
+			"repairCost": 100,
 			"upgrades": {
 				"foundation01t3": {
 					"name": "Concrete Foundation (1x1)",
@@ -2588,50 +3428,82 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "foundation",
+					"type": [
+						{
+							"mask": 65536,
+							"category": 65536
+						}
+					],
 					"x": 0,
 					"y": 264,
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": "foundation",
+					"type": [
+						{
+							"mask": 65536,
+							"category": 65536
+						}
+					],
 					"x": 264,
 					"y": 0,
 					"rotation": 0
 				},
 				{
 					"id": 2,
-					"type": "foundation",
+					"type": [
+						{
+							"mask": 65536,
+							"category": 65536
+						}
+					],
 					"x": 528,
 					"y": 264,
 					"rotation": 90
 				},
 				{
 					"id": 3,
-					"type": "foundation",
+					"type": [
+						{
+							"mask": 65536,
+							"category": 65536
+						}
+					],
 					"x": 528,
 					"y": 792,
 					"rotation": 90
 				},
 				{
 					"id": 4,
-					"type": "foundation",
+					"type": [
+						{
+							"mask": 65536,
+							"category": 65536
+						}
+					],
 					"x": 264,
 					"y": 1056,
 					"rotation": 180
 				},
 				{
 					"id": 5,
-					"type": "foundation",
+					"type": [
+						{
+							"mask": 65536,
+							"category": 65536
+						}
+					],
 					"x": 0,
 					"y": 792,
 					"rotation": 270
 				}
 			],
+			"maxHealth": 2000,
 			"cost": {
 				"groundmaterials": 115
 			},
+			"repairCost": 100,
 			"upgrades": {
 				"foundation011x2t3": {
 					"name": "Concrete Foundation (1x2)",
@@ -2665,64 +3537,106 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "foundation",
+					"type": [
+						{
+							"mask": 65536,
+							"category": 65536
+						}
+					],
 					"x": 0,
 					"y": 264,
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": "foundation",
+					"type": [
+						{
+							"mask": 65536,
+							"category": 65536
+						}
+					],
 					"x": 264,
 					"y": 0,
 					"rotation": 0
 				},
 				{
 					"id": 2,
-					"type": "foundation",
+					"type": [
+						{
+							"mask": 65536,
+							"category": 65536
+						}
+					],
 					"x": 792,
 					"y": 0,
 					"rotation": 0
 				},
 				{
 					"id": 3,
-					"type": "foundation",
+					"type": [
+						{
+							"mask": 65536,
+							"category": 65536
+						}
+					],
 					"x": 1056,
 					"y": 264,
 					"rotation": 90
 				},
 				{
 					"id": 4,
-					"type": "foundation",
+					"type": [
+						{
+							"mask": 65536,
+							"category": 65536
+						}
+					],
 					"x": 1056,
 					"y": 792,
 					"rotation": 90
 				},
 				{
 					"id": 5,
-					"type": "foundation",
+					"type": [
+						{
+							"mask": 65536,
+							"category": 65536
+						}
+					],
 					"x": 792,
 					"y": 1056,
 					"rotation": 180
 				},
 				{
 					"id": 6,
-					"type": "foundation",
+					"type": [
+						{
+							"mask": 65536,
+							"category": 65536
+						}
+					],
 					"x": 264,
 					"y": 1056,
 					"rotation": 180
 				},
 				{
 					"id": 7,
-					"type": "foundation",
+					"type": [
+						{
+							"mask": 65536,
+							"category": 65536
+						}
+					],
 					"x": 0,
 					"y": 792,
 					"rotation": 270
 				}
 			],
+			"maxHealth": 2000,
 			"cost": {
 				"groundmaterials": 150
 			},
+			"repairCost": 100,
 			"upgrades": {
 				"foundation012x2t3": {
 					"name": "Concrete Foundation (2x2)",
@@ -2768,22 +3682,34 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "foundation",
+					"type": [
+						{
+							"mask": 65536,
+							"category": 65536
+						}
+					],
 					"x": 528,
 					"y": 264,
 					"rotation": 90
 				},
 				{
 					"id": 1,
-					"type": "foundation",
+					"type": [
+						{
+							"mask": 65536,
+							"category": 65536
+						}
+					],
 					"x": 264,
 					"y": 528,
 					"rotation": 180
 				}
 			],
+			"maxHealth": 2000,
 			"cost": {
 				"groundmaterials": 75
 			},
+			"repairCost": 100,
 			"upgrades": {
 				"foundation02t3": {
 					"name": "Concrete Foundation Corner (1x1)",
@@ -2808,9 +3734,11 @@ const foxholeData = {
 			"sortLayer": "container",
 			"icon": "game/Textures/UI/StructureIcons/FuelTankIcon.webp",
 			"texture": "game/Textures/Structures/fuel_container.webp",
+			"maxHealth": 1000,
 			"cost": {
 				"cloth": 100
-			}
+			},
+			"repairCost": 100
 		},
 		"fuel_silo": {
 			"name": "Fuel Silo",
@@ -2838,10 +3766,13 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": {
-						"mask": 16779264,
-						"category": 16384
-					},
+					"name": "pipein",
+					"type": [
+						{
+							"mask": 16779264,
+							"category": 16384
+						}
+					],
 					"flow": "in",
 					"x": 98,
 					"y": 264,
@@ -2849,10 +3780,13 @@ const foxholeData = {
 				},
 				{
 					"id": 1,
-					"type": {
-						"mask": 16779264,
-						"category": 16384
-					},
+					"name": "pipeout",
+					"type": [
+						{
+							"mask": 16779264,
+							"category": 16384
+						}
+					],
 					"flow": "out",
 					"x": 98,
 					"y": 0,
@@ -2861,9 +3795,11 @@ const foxholeData = {
 			],
 			"techId": "unlockfacilitytier2",
 			"liquidCapacity": 500,
+			"maxHealth": 900,
 			"cost": {
 				"facilitymaterials1": 15
-			}
+			},
+			"repairCost": 100
 		},
 		"gatet1": {
 			"name": "Gate (Tier 1)",
@@ -2880,22 +3816,34 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "wall",
+					"type": [
+						{
+							"mask": 512,
+							"category": 512
+						}
+					],
 					"x": 18,
 					"y": 42,
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": "wall",
+					"type": [
+						{
+							"mask": 512,
+							"category": 512
+						}
+					],
 					"x": 1552,
 					"y": 42,
 					"rotation": 90
 				}
 			],
+			"maxHealth": 500,
 			"cost": {
 				"cloth": 25
 			},
+			"repairCost": 25,
 			"upgrades": {
 				"gatet2": {
 					"name": "Gate (Tier 2)",
@@ -2948,16 +3896,24 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "power",
+					"name": "power",
+					"type": [
+						{
+							"mask": 131072,
+							"category": 1048576
+						}
+					],
 					"x": 69,
 					"y": 108,
 					"rotation": 0
 				}
 			],
 			"techId": "unlockfacilitytier2",
+			"maxHealth": 2700,
 			"cost": {
 				"facilitymaterials2": 250
 			},
+			"repairCost": 150,
 			"_productionLength": 5,
 			"production": [
 				{
@@ -3192,15 +4148,23 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "power",
+					"name": "power",
+					"type": [
+						{
+							"mask": 131072,
+							"category": 1048576
+						}
+					],
 					"x": 108,
 					"y": 41,
 					"rotation": 0
 				}
 			],
+			"maxHealth": 3600,
 			"cost": {
 				"facilitymaterials1": 75
 			},
+			"repairCost": 150,
 			"_productionLength": 12,
 			"production": [
 				{
@@ -3970,10 +4934,13 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": {
-						"mask": 16779264,
-						"category": 16384
-					},
+					"name": "pipein",
+					"type": [
+						{
+							"mask": 16779264,
+							"category": 16384
+						}
+					],
 					"flow": "in",
 					"x": 13,
 					"y": 431,
@@ -3981,19 +4948,24 @@ const foxholeData = {
 				},
 				{
 					"id": 1,
-					"type": {
-						"mask": 16779264,
-						"category": 16384
-					},
+					"name": "pipeout",
+					"type": [
+						{
+							"mask": 16779264,
+							"category": 16384
+						}
+					],
 					"flow": "out",
 					"x": 13,
 					"y": 154,
 					"rotation": 270
 				}
 			],
+			"maxHealth": 2200,
 			"cost": {
 				"facilitymaterials1": 35
-			}
+			},
+			"repairCost": 100
 		},
 		"maintenance_tunnel": {
 			"name": "Maintenance Tunnel",
@@ -4022,13 +4994,10 @@ const foxholeData = {
 					"shape": [ -16.32,48.96,16.32,48.96,16.96,60.48,-15.68,61.12 ]
 				},
 				{
-					"shape": [ 36.16,36.16,16.32,48.96,-48.96,-13.76,-38.72,-33.6,16.96,-48.96,48.32,-16.32,49.6,13.76 ]
+					"shape": [ 36.16,36.16,16.32,48.96,-16.32,48.96,-36.8,36.16,16.96,-48.96,48.32,-16.32,49.6,13.76 ]
 				},
 				{
-					"shape": [ -48.96,-13.76,16.32,48.96,-16.32,48.96,-36.8,36.16,-49.6,15.04 ]
-				},
-				{
-					"shape": [ 16.96,-48.96,-38.72,-33.6,-16.32,-48.32 ]
+					"shape": [ -48.96,-13.76,-37.44,-34.88,-16.32,-48.32,16.96,-48.96,-36.8,36.16,-49.6,15.04 ]
 				},
 				{
 					"shape": [ 48.32,-16.32,16.96,-48.96,37.44,-36.16 ]
@@ -4044,15 +5013,23 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "power",
+					"name": "power",
+					"type": [
+						{
+							"mask": 131072,
+							"category": 1048576
+						}
+					],
 					"x": 310,
 					"y": 191,
 					"rotation": 90
 				}
 			],
+			"maxHealth": 3000,
 			"cost": {
 				"facilitymaterials1": 200
 			},
+			"repairCost": 100,
 			"_productionLength": 1,
 			"production": [
 				{
@@ -4079,9 +5056,11 @@ const foxholeData = {
 			"textureIcon": {
 				"y": -52
 			},
+			"maxHealth": 2200,
 			"cost": {
 				"facilitymaterials1": 35
-			}
+			},
+			"repairCost": 100
 		},
 		"materials_factory": {
 			"name": "Materials Factory",
@@ -4108,15 +5087,23 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "power",
+					"name": "power",
+					"type": [
+						{
+							"mask": 131072,
+							"category": 1048576
+						}
+					],
 					"x": 324,
 					"y": 1287,
 					"rotation": 180
 				}
 			],
+			"maxHealth": 3000,
 			"cost": {
 				"cloth": 200
 			},
+			"repairCost": 150,
 			"_productionLength": 1,
 			"production": [
 				{
@@ -4164,17 +5151,26 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": "power",
+							"name": "power",
+							"type": [
+								{
+									"mask": 131072,
+									"category": 1048576
+								}
+							],
 							"x": 412,
 							"y": 1306,
 							"rotation": 180
 						},
 						{
 							"id": 1,
-							"type": {
-								"mask": 16779264,
-								"category": 16384
-							},
+							"name": "pipein",
+							"type": [
+								{
+									"mask": 16779264,
+									"category": 16384
+								}
+							],
 							"flow": "in",
 							"x": 360,
 							"y": 54,
@@ -4258,17 +5254,26 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": "power",
+							"name": "power",
+							"type": [
+								{
+									"mask": 131072,
+									"category": 1048576
+								}
+							],
 							"x": 363,
 							"y": 1177,
 							"rotation": 180
 						},
 						{
 							"id": 2,
-							"type": {
-								"mask": 16779264,
-								"category": 16384
-							},
+							"name": "pipein",
+							"type": [
+								{
+									"mask": 16779264,
+									"category": 16384
+								}
+							],
 							"flow": "in",
 							"x": 51,
 							"y": 66,
@@ -4336,7 +5341,13 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": "power",
+							"name": "power",
+							"type": [
+								{
+									"mask": 131072,
+									"category": 1048576
+								}
+							],
 							"x": 324,
 							"y": 1246,
 							"rotation": 180
@@ -4395,7 +5406,13 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": "power",
+							"name": "power",
+							"type": [
+								{
+									"mask": 131072,
+									"category": 1048576
+								}
+							],
 							"x": 324,
 							"y": 1246,
 							"rotation": 180
@@ -4479,16 +5496,24 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "power",
+					"name": "power",
+					"type": [
+						{
+							"mask": 131072,
+							"category": 1048576
+						}
+					],
 					"x": 295,
 					"y": 1277,
 					"rotation": 180
 				}
 			],
 			"techId": "unlockfacilitytier2",
+			"maxHealth": 3000,
 			"cost": {
 				"facilitymaterials1": 125
 			},
+			"repairCost": 150,
 			"_productionLength": 2,
 			"production": [
 				{
@@ -4558,7 +5583,13 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": "power",
+							"name": "power",
+							"type": [
+								{
+									"mask": 131072,
+									"category": 1048576
+								}
+							],
 							"x": 296,
 							"y": 1277,
 							"rotation": 180
@@ -4645,17 +5676,26 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": "power",
+							"name": "power",
+							"type": [
+								{
+									"mask": 131072,
+									"category": 1048576
+								}
+							],
 							"x": 336,
 							"y": 1320,
 							"rotation": 180
 						},
 						{
 							"id": 1,
-							"type": {
-								"mask": 16779264,
-								"category": 16384
-							},
+							"name": "pipein",
+							"type": [
+								{
+									"mask": 16779264,
+									"category": 16384
+								}
+							],
 							"flow": "in",
 							"x": 293,
 							"y": 52,
@@ -4755,17 +5795,26 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": "power",
+							"name": "power",
+							"type": [
+								{
+									"mask": 131072,
+									"category": 1048576
+								}
+							],
 							"x": 357,
 							"y": 1336,
 							"rotation": 180
 						},
 						{
 							"id": 2,
-							"type": {
-								"mask": 16779264,
-								"category": 16384
-							},
+							"name": "pipein",
+							"type": [
+								{
+									"mask": 16779264,
+									"category": 16384
+								}
+							],
 							"flow": "in",
 							"x": 791,
 							"y": 2,
@@ -4773,10 +5822,13 @@ const foxholeData = {
 						},
 						{
 							"id": 3,
-							"type": {
-								"mask": 16779264,
-								"category": 16384
-							},
+							"name": "pipein",
+							"type": [
+								{
+									"mask": 16779264,
+									"category": 16384
+								}
+							],
 							"flow": "in",
 							"x": 968,
 							"y": 58,
@@ -4857,9 +5909,11 @@ const foxholeData = {
 			"icon": "game/Textures/UI/StructureIcons/MGPillboxIcon.webp",
 			"texture": "game/Textures/Structures/mgpillbox.webp",
 			"techId": "unlockmgpillbox",
+			"maxHealth": 650,
 			"cost": {
 				"cloth": 75
-			}
+			},
+			"repairCost": 75
 		},
 		"oil_refinery": {
 			"name": "Oil Refinery",
@@ -4870,28 +5924,22 @@ const foxholeData = {
 			"color": 2368548,
 			"hitArea": [
 				{
-					"shape": [ 26.24,-129.6,64,-0.32,-41.6,10.56,-41.6,-129.6 ]
+					"shape": [ 64,-129.6,69.76,77.12,58.24,103.36,-37.76,166.08,-41.6,-129.6 ]
 				},
 				{
-					"shape": [ -35.84,166.08,-41.6,10.56,58.24,103.36,58.24,166.08 ]
+					"shape": [ -45.44,-104.64,-41.6,-91.84,-37.76,166.08,-65.82857147216797,118.2628564453125,-62.72,-103.36,-53.76,-111.04 ]
 				},
 				{
-					"shape": [ -41.6,-91.84,-41.6,10.56,-46.08,74.56,-69.76,173.76,-62.08,-104,-51.2,-109.76 ]
+					"shape": [ 26.24,-129.6,-4.48,-129.6,-4.48,-174.4,26.88,-174.4 ]
 				},
 				{
-					"shape": [ 26.24,-129.6,-4.48,-129.6,-4.48,-173.12,0.64,-174.4,26.88,-174.4 ]
+					"shape": [ -37.76,166.08,58.24,103.36,58.24,166.08 ]
 				},
 				{
-					"shape": [ -69.76,173.76,-43.52,117.44,-37.76,119.36,-38.4,173.12 ]
+					"shape": [ -69.302857131958,119.725712890625,-65.82857147216797,118.2628564453125,-37.76,166.08,-39.04,173.76,-69.12,173.76 ]
 				},
 				{
-					"shape": [ 64,-0.32,26.24,-129.6,64,-129.6 ]
-				},
-				{
-					"shape": [ 58.24,103.36,-41.6,10.56,64,-0.32,69.76,79.04,64,103.36 ]
-				},
-				{
-					"shape": [ -69.76,173.76,-46.08,74.56,-43.52,117.44 ]
+					"shape": [ 58.24,103.36,69.76,77.12,64,103.36 ]
 				}
 			],
 			"icon": "game/Textures/UI/ItemIcons/OilRefineryBaseIcon.webp",
@@ -4900,17 +5948,26 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "power",
+					"name": "power",
+					"type": [
+						{
+							"mask": 131072,
+							"category": 1048576
+						}
+					],
 					"x": 255,
 					"y": 149,
 					"rotation": 0
 				},
 				{
 					"id": 1,
-					"type": {
-						"mask": 16779264,
-						"category": 16384
-					},
+					"name": "pipein",
+					"type": [
+						{
+							"mask": 16779264,
+							"category": 16384
+						}
+					],
 					"flow": "in",
 					"x": 53,
 					"y": 1104,
@@ -4918,19 +5975,24 @@ const foxholeData = {
 				},
 				{
 					"id": 2,
-					"type": {
-						"mask": 16779264,
-						"category": 16384
-					},
+					"name": "pipeout",
+					"type": [
+						{
+							"mask": 16779264,
+							"category": 16384
+						}
+					],
 					"flow": "out",
 					"x": 255,
 					"y": 2,
 					"rotation": 0
 				}
 			],
+			"maxHealth": 3000,
 			"cost": {
 				"facilitymaterials1": 50
 			},
+			"repairCost": 150,
 			"_productionLength": 1,
 			"production": [
 				{
@@ -4951,25 +6013,25 @@ const foxholeData = {
 					"description": "A large processing drum that allows for the controlled introduction of hydrogen to yield a similar output of Petrol for less raw Oil. ",
 					"hitArea": [
 						{
-							"shape": [ -41.6,-115.52,-61.44,0.96,-64.64,-115.52,-54.4,-134.08 ]
-						},
-						{
 							"shape": [ -5.76,-153.28,-41.6,-115.52,-41.6,-153.28 ]
 						},
 						{
-							"shape": [ 26.24,-153.92,-5.76,-153.28,0,-200.64,26.88,-198.72 ]
+							"shape": [ 26.24,-153.92,-5.76,-153.28,-4.48,-198.72,26.88,-198.72 ]
 						},
 						{
-							"shape": [ 8.96,152,39.68,152,39.68,197.44,12.8,200.64 ]
+							"shape": [ -46.72,-130.24,-41.6,-115.52,-64.64,-115.52,-61.44,-129.6,-53.76,-135.36 ]
 						},
 						{
-							"shape": [ -61.44,0.96,-41.6,-115.52,63.36,-34.88,69.76,-3.52,39.68,152,-69.76,150.08 ]
+							"shape": [ 8.96,152,39.68,152,39.04,198.72,9.6,200 ]
 						},
 						{
-							"shape": [ 63.36,-34.88,-41.6,-115.52,-5.76,-153.28,26.24,-153.92,63.36,-153.28 ]
+							"shape": [ 39.68,152,67.84,101.44,63.36,152.64 ]
 						},
 						{
-							"shape": [ 39.68,152,69.76,-3.52,63.36,152.64 ]
+							"shape": [ -69.12,150.72,-64.64,-115.52,-41.6,-115.52,67.84,101.44,39.68,152 ]
+						},
+						{
+							"shape": [ 26.24,-153.92,63.36,-153.28,67.84,101.44,-41.6,-115.52,-5.76,-153.28 ]
 						}
 					],
 					"icon": "game/Textures/UI/StructureIcons/OilRefineryMod3Icon.webp",
@@ -4980,17 +6042,26 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": "power",
+							"name": "power",
+							"type": [
+								{
+									"mask": 131072,
+									"category": 1048576
+								}
+							],
 							"x": 255,
 							"y": 149,
 							"rotation": 0
 						},
 						{
 							"id": 1,
-							"type": {
-								"mask": 16779264,
-								"category": 16384
-							},
+							"name": "pipein",
+							"type": [
+								{
+									"mask": 16779264,
+									"category": 16384
+								}
+							],
 							"flow": "in",
 							"x": 52,
 							"y": 1104,
@@ -4998,10 +6069,13 @@ const foxholeData = {
 						},
 						{
 							"id": 2,
-							"type": {
-								"mask": 16779264,
-								"category": 16384
-							},
+							"name": "pipeout",
+							"type": [
+								{
+									"mask": 16779264,
+									"category": 16384
+								}
+							],
 							"flow": "out",
 							"x": 255,
 							"y": 2,
@@ -5009,10 +6083,13 @@ const foxholeData = {
 						},
 						{
 							"id": 3,
-							"type": {
-								"mask": 16779264,
-								"category": 16384
-							},
+							"name": "pipein",
+							"type": [
+								{
+									"mask": 16779264,
+									"category": 16384
+								}
+							],
 							"flow": "in",
 							"x": 298,
 							"y": 1255,
@@ -5043,28 +6120,22 @@ const foxholeData = {
 					"description": "A high-heat furnace that catalyses raw oil into refined Heavy Oil.",
 					"hitArea": [
 						{
-							"shape": [ 64,-129.6,-40.96,10.56,-40.96,-129.6 ]
+							"shape": [ 64,-129.6,67.84,77.76,-37.76,157.12,-40.96,-129.6 ]
 						},
 						{
-							"shape": [ -46.72,-91.84,-40.96,10.56,-60.8,25.28,-62.08,-104,-51.2,-109.76 ]
+							"shape": [ -37.76,157.12,67.84,77.76,59.52,156.48 ]
 						},
 						{
-							"shape": [ -36.48,156.48,-40.96,10.56,64,-0.32,69.76,79.04,59.52,156.48 ]
+							"shape": [ -45.44,-104.64,-46.72,-91.84,-62.08,-104,-53.76,-110.4 ]
 						},
 						{
-							"shape": [ -40.96,10.56,64,-129.6,64,-0.32 ]
+							"shape": [ 26.88,-174.4,26.88,-129.6,-3.84,-129.6,-3.84,-175.04 ]
 						},
 						{
-							"shape": [ 26.88,-129.6,-3.84,-129.6,-3.84,-173.12,5.12,-176.96,27.52,-173.12 ]
+							"shape": [ -69.76,173.76,-46.72,-91.84,-40.96,-91.84,-37.76,157.12,-38.4,172.48 ]
 						},
 						{
-							"shape": [ -69.76,173.76,-60.8,25.28,-46.08,74.56,-38.4,172.48 ]
-						},
-						{
-							"shape": [ -60.8,25.28,-40.96,10.56,-46.08,74.56 ]
-						},
-						{
-							"shape": [ -40.96,-91.84,-40.96,10.56,-46.72,-91.84 ]
+							"shape": [ -46.72,-91.84,-69.76,173.76,-62.08,-104 ]
 						}
 					],
 					"icon": "game/Textures/UI/StructureIcons/OilRefineryMod2Icon.webp",
@@ -5075,17 +6146,26 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": "power",
+							"name": "power",
+							"type": [
+								{
+									"mask": 131072,
+									"category": 1048576
+								}
+							],
 							"x": 255,
 							"y": 149,
 							"rotation": 0
 						},
 						{
 							"id": 1,
-							"type": {
-								"mask": 16779264,
-								"category": 16384
-							},
+							"name": "pipein",
+							"type": [
+								{
+									"mask": 16779264,
+									"category": 16384
+								}
+							],
 							"flow": "in",
 							"x": 53,
 							"y": 1104,
@@ -5093,10 +6173,13 @@ const foxholeData = {
 						},
 						{
 							"id": 2,
-							"type": {
-								"mask": 16779264,
-								"category": 16384
-							},
+							"name": "pipeout",
+							"type": [
+								{
+									"mask": 16779264,
+									"category": 16384
+								}
+							],
 							"flow": "out",
 							"x": 255,
 							"y": 2,
@@ -5128,28 +6211,22 @@ const foxholeData = {
 					"description": "A blast furnace that further refines Heavy Oil into an Enriched Oil needed for advanced processes.",
 					"hitArea": [
 						{
-							"shape": [ 26.88,-129.6,64,-0.32,-26.88,160.96,-37.12,155.2,-40.96,-129.6 ]
+							"shape": [ 64,-129.6,68.48,78.4,59.52,155.2,28.660869140625,155.8121728515625,-40.96,-91.84,-40.96,-129.6 ]
 						},
 						{
-							"shape": [ -46.72,-91.84,-40.96,10.56,-60.8,25.28,-62.08,-104,-51.2,-109.76 ]
+							"shape": [ 26.88,-129.6,-3.84,-129.6,-3.84,-174.4,27.52,-174.4 ]
 						},
 						{
-							"shape": [ -26.88,160.96,64,-0.32,69.76,79.04,59.52,155.2 ]
+							"shape": [ -69.76,173.76,-62.08,-105.92,-37.12,155.2,-38.4,172.48 ]
 						},
 						{
-							"shape": [ 26.88,-129.6,-3.84,-129.6,-3.84,-173.12,5.12,-176.96,27.52,-173.12 ]
+							"shape": [ -45.44,-105.92,-46.72,-91.84,-62.08,-105.92,-53.12,-110.4 ]
 						},
 						{
-							"shape": [ -69.76,173.76,-60.8,25.28,-46.08,74.56,-38.4,172.48 ]
+							"shape": [ -37.12,155.2,-62.08,-105.92,-46.72,-91.84,28.660869140625,155.8121728515625,26.713046875,160.820869140625,-29.44,161.6 ]
 						},
 						{
-							"shape": [ 64,-0.32,26.88,-129.6,64,-129.6 ]
-						},
-						{
-							"shape": [ -60.8,25.28,-40.96,10.56,-46.08,74.56 ]
-						},
-						{
-							"shape": [ -40.96,-91.84,-40.96,10.56,-46.72,-91.84 ]
+							"shape": [ 28.660869140625,155.8121728515625,-46.72,-91.84,-40.96,-91.84 ]
 						}
 					],
 					"icon": "game/Textures/UI/ItemIcons/OilRefineryPetrochemicalPlanetIcon.webp",
@@ -5160,17 +6237,26 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": "power",
+							"name": "power",
+							"type": [
+								{
+									"mask": 131072,
+									"category": 1048576
+								}
+							],
 							"x": 255,
 							"y": 149,
 							"rotation": 0
 						},
 						{
 							"id": 1,
-							"type": {
-								"mask": 16779264,
-								"category": 16384
-							},
+							"name": "pipein",
+							"type": [
+								{
+									"mask": 16779264,
+									"category": 16384
+								}
+							],
 							"flow": "in",
 							"x": 53,
 							"y": 1104,
@@ -5178,10 +6264,13 @@ const foxholeData = {
 						},
 						{
 							"id": 2,
-							"type": {
-								"mask": 16779264,
-								"category": 16384
-							},
+							"name": "pipeout",
+							"type": [
+								{
+									"mask": 16779264,
+									"category": 16384
+								}
+							],
 							"flow": "out",
 							"x": 255,
 							"y": 2,
@@ -5219,9 +6308,11 @@ const foxholeData = {
 			"color": 2368548,
 			"icon": "game/Textures/UI/StructureIcons/OilWellMineIcon.webp",
 			"texture": "game/Textures/Structures/oil_well.webp",
+			"maxHealth": 1850,
 			"cost": {
 				"facilitymaterials1": 35
 			},
+			"repairCost": 100,
 			"_productionLength": 1,
 			"production": [
 				{
@@ -5240,16 +6331,16 @@ const foxholeData = {
 					"description": "A generator that leverages electricity to pump oil through attached pipes.",
 					"hitArea": [
 						{
-							"shape": [ -51.84,-49.92,-47.36,60.8,-65.92,-49.92,-59.52,-62.08 ]
+							"shape": [ -53.76,-58.1565234375,-51.84,-49.92,-47.36,60.8,-65.92,-49.92,-65.28,-57.6,-59.52,-62.08 ]
 						},
 						{
-							"shape": [ 31.36,-76.8,0.64,-76.8,0.64,-124.16,32,-125.44 ]
+							"shape": [ 31.36,-76.8,0.64,-76.8,0.64,-124.16,32,-124.16 ]
 						},
 						{
-							"shape": [ -44.8,127.36,-47.36,60.8,0.64,-76.8,31.36,-76.8,78.72,-74.88,78.72,125.44 ]
+							"shape": [ -47.36,127.36,-47.36,60.8,0.64,-76.8,78.72,-76.8,78.72,127.36 ]
 						},
 						{
-							"shape": [ 0.64,-76.8,-47.36,60.8,-51.84,-49.92,-47.36,-73.6 ]
+							"shape": [ 0.64,-76.8,-47.36,60.8,-51.84,-49.92,-46.08,-76.8 ]
 						},
 						{
 							"shape": [ -78.08,-49.92,-65.92,-49.92,-47.36,60.8,-78.08,60.8 ]
@@ -5264,17 +6355,26 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": "power",
+							"name": "power",
+							"type": [
+								{
+									"mask": 131072,
+									"category": 1048576
+								}
+							],
 							"x": 297,
 							"y": 218,
 							"rotation": 0
 						},
 						{
 							"id": 1,
-							"type": {
-								"mask": 16779264,
-								"category": 16384
-							},
+							"name": "pipeout",
+							"type": [
+								{
+									"mask": 16779264,
+									"category": 16384
+								}
+							],
 							"flow": "out",
 							"x": 297,
 							"y": 2,
@@ -5311,31 +6411,31 @@ const foxholeData = {
 					"description": "A machine that opens up cracks in the earth by injecting water at a high pressure to increase the output of Crude Oil.",
 					"hitArea": [
 						{
-							"shape": [ -60.16,127.36,-62.72,78.08,63.36,-8.32,63.36,125.44 ]
+							"shape": [ -62.08,127.36,-62.72,78.08,-14.72,-76.8,16,-76.8,63.36,-7.68,62.72,126.72 ]
 						},
 						{
-							"shape": [ -62.72,-52.48,-72.32,-52.48,-74.88,-56.96,-63.36,-58.88 ]
+							"shape": [ 16,-125.44,16,-76.8,-14.72,-76.8,-15.36,-125.44 ]
 						},
 						{
-							"shape": [ 16,-76.8,-14.72,-76.8,-10.24,-127.36,16.64,-125.44 ]
+							"shape": [ 88.32,-124.8,85.76,-9.6,58.24,-76.8,58.24,-124.16 ]
 						},
 						{
-							"shape": [ 85.12,-127.36,85.12,-10.24,58.24,-76.8,58.24,-123.52 ]
+							"shape": [ 63.36,-7.68,16,-76.8,58.24,-76.8,85.76,-9.6,74.88,-1.92 ]
 						},
 						{
-							"shape": [ -83.84,66.56,-74.24,44.8,-14.72,-76.8,16,-76.8,63.36,-8.32,-62.72,78.08,-74.88,79.36 ]
+							"shape": [ -82.1704345703125,74.017392578125,-83.84,62.72,-74.88,50.56,-62.72,78.08,-73.6,80.64 ]
 						},
 						{
-							"shape": [ 63.36,-8.32,16,-76.8,58.24,-76.8,85.12,-10.24,72.32,-2.56 ]
+							"shape": [ -63.36,-59.52,-89.4052173614502,28.660869140625,-88.32,-41.6,-76.16,-58.88 ]
 						},
 						{
-							"shape": [ -72.32,-52.48,-62.72,-52.48,-74.24,44.8,-88.32,28.16,-88.32,-41.6,-83.84,-50.56 ]
+							"shape": [ -14.72,-76.8,-63.36,-59.52,-61.44,-75.52 ]
 						},
 						{
-							"shape": [ -14.72,-76.8,-62.72,-52.48,-62.72,-73.6 ]
+							"shape": [ -89.4052173614502,28.660869140625,-63.36,-59.52,-14.72,-76.8,-74.88,42.24,-83.56173889160156,38.4 ]
 						},
 						{
-							"shape": [ -74.24,44.8,-62.72,-52.48,-14.72,-76.8 ]
+							"shape": [ -62.72,78.08,-74.88,50.56,-74.88,42.24,-14.72,-76.8 ]
 						}
 					],
 					"icon": "game/Textures/UI/StructureIcons/FacilityFrackerIcon.webp",
@@ -5347,17 +6447,26 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": "power",
+							"name": "power",
+							"type": [
+								{
+									"mask": 131072,
+									"category": 1048576
+								}
+							],
 							"x": 284,
 							"y": 218,
 							"rotation": 0
 						},
 						{
 							"id": 1,
-							"type": {
-								"mask": 16779264,
-								"category": 16384
-							},
+							"name": "pipeout",
+							"type": [
+								{
+									"mask": 16779264,
+									"category": 16384
+								}
+							],
 							"flow": "out",
 							"x": 283,
 							"y": 2,
@@ -5365,10 +6474,13 @@ const foxholeData = {
 						},
 						{
 							"id": 2,
-							"type": {
-								"mask": 16779264,
-								"category": 16384
-							},
+							"name": "pipein",
+							"type": [
+								{
+									"mask": 16779264,
+									"category": 16384
+								}
+							],
 							"flow": "in",
 							"x": 512,
 							"y": 3,
@@ -5449,40 +6561,48 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": {
-						"mask": 16795648,
-						"category": 2048
-					},
+					"type": [
+						{
+							"mask": 16795648,
+							"category": 2048
+						}
+					],
 					"flow": "bi",
 					"cap": "front",
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": {
-						"mask": 16779264,
-						"category": 16384
-					},
+					"type": [
+						{
+							"mask": 16779264,
+							"category": 16384
+						}
+					],
 					"flow": "bi",
 					"cap": "left",
 					"rotation": 180
 				},
 				{
 					"id": 2,
-					"type": {
-						"mask": 16779264,
-						"category": 16384
-					},
+					"type": [
+						{
+							"mask": 16779264,
+							"category": 16384
+						}
+					],
 					"flow": "bi",
 					"cap": "right",
 					"rotation": 0
 				},
 				{
 					"id": 3,
-					"type": {
-						"mask": 16795648,
-						"category": 2048
-					},
+					"type": [
+						{
+							"mask": 16795648,
+							"category": 2048
+						}
+					],
 					"flow": "bi",
 					"cap": "back",
 					"rotation": 90
@@ -5490,9 +6610,11 @@ const foxholeData = {
 			],
 			"techId": "unlockfacilitytier2",
 			"liquidCapacity": 100,
+			"maxHealth": 350,
 			"cost": {
 				"pipematerials": 1
 			},
+			"repairCost": 15,
 			"upgrades": {
 				"insulation": {
 					"name": "Insulated Pipe",
@@ -5525,20 +6647,32 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": {
-						"mask": 16795648,
-						"category": 2048
-					},
+					"type": [
+						{
+							"mask": 268435456,
+							"category": 268435456
+						},
+						{
+							"mask": 16795648,
+							"category": 2048
+						}
+					],
 					"flow": "bi",
 					"cap": "front",
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": {
-						"mask": 16795648,
-						"category": 2048
-					},
+					"type": [
+						{
+							"mask": 268435456,
+							"category": 268435456
+						},
+						{
+							"mask": 16795648,
+							"category": 2048
+						}
+					],
 					"flow": "bi",
 					"cap": "back",
 					"rotation": 90
@@ -5546,9 +6680,11 @@ const foxholeData = {
 			],
 			"techId": "unlockfacilitytier2",
 			"liquidCapacity": 100,
+			"maxHealth": 350,
 			"cost": {
 				"pipematerials": 2
 			},
+			"repairCost": 15,
 			"upgrades": {
 				"insulation": {
 					"name": "Insulated Pipe",
@@ -5583,20 +6719,24 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": {
-						"mask": 16795648,
-						"category": 2048
-					},
+					"type": [
+						{
+							"mask": 16795648,
+							"category": 2048
+						}
+					],
 					"flow": "bi",
 					"cap": "front",
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": {
-						"mask": 16795648,
-						"category": 2048
-					},
+					"type": [
+						{
+							"mask": 16795648,
+							"category": 2048
+						}
+					],
 					"flow": "bi",
 					"cap": "back",
 					"rotation": 90
@@ -5604,9 +6744,11 @@ const foxholeData = {
 			],
 			"techId": "unlockfacilitytier2",
 			"liquidCapacity": 100,
+			"maxHealth": 350,
 			"cost": {
 				"pipematerials": 6
 			},
+			"repairCost": 15,
 			"upgrades": {
 				"insulation": {
 					"name": "Insulated Pipe",
@@ -5635,10 +6777,12 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": {
-						"mask": 18432,
-						"category": 16777216
-					},
+					"type": [
+						{
+							"mask": 18432,
+							"category": 16777216
+						}
+					],
 					"flow": "bi",
 					"x": 2,
 					"y": 51,
@@ -5646,10 +6790,12 @@ const foxholeData = {
 				},
 				{
 					"id": 1,
-					"type": {
-						"mask": 18432,
-						"category": 16777216
-					},
+					"type": [
+						{
+							"mask": 18432,
+							"category": 16777216
+						}
+					],
 					"flow": "bi",
 					"x": 185,
 					"y": 51,
@@ -5657,9 +6803,11 @@ const foxholeData = {
 				}
 			],
 			"techId": "unlockfacilitytier2",
+			"maxHealth": 350,
 			"cost": {
 				"pipematerials": 2
-			}
+			},
+			"repairCost": 15
 		},
 		"playerc": {
 			"name": "Player (Colonial)",
@@ -5693,16 +6841,24 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "power",
+					"name": "power",
+					"type": [
+						{
+							"mask": 131072,
+							"category": 262144
+						}
+					],
 					"x": 223,
 					"y": 41,
 					"rotation": 90,
 					"connectionLimit": 4
 				}
 			],
+			"maxHealth": 500,
 			"cost": {
 				"facilitymaterials1": 25
-			}
+			},
+			"repairCost": 5
 		},
 		"power_line": {
 			"name": "Power Line",
@@ -5731,13 +6887,25 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "power",
+					"name": "power",
+					"type": [
+						{
+							"mask": 1441792,
+							"category": 131072
+						}
+					],
 					"cap": "front",
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": "power",
+					"name": "power",
+					"type": [
+						{
+							"mask": 1441792,
+							"category": 131072
+						}
+					],
 					"cap": "back",
 					"rotation": 270
 				}
@@ -5760,16 +6928,24 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "power",
+					"name": "power",
+					"type": [
+						{
+							"mask": 131072,
+							"category": 262144
+						}
+					],
 					"x": 14,
 					"y": 14,
 					"rotation": 270,
 					"connectionLimit": 4
 				}
 			],
+			"maxHealth": 250,
 			"cost": {
 				"cloth": 20
 			},
+			"repairCost": 5,
 			"upgrades": {
 				"lamp": {
 					"name": "Lamp",
@@ -5783,7 +6959,12 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": "power",
+							"type": [
+								{
+									"mask": 131072,
+									"category": 1048576
+								}
+							],
 							"x": 14,
 							"y": 21,
 							"rotation": 270,
@@ -5925,10 +7106,13 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": {
-						"mask": 16779264,
-						"category": 16384
-					},
+					"name": "pipein",
+					"type": [
+						{
+							"mask": 2048,
+							"category": 16384
+						}
+					],
 					"flow": "in",
 					"x": 933,
 					"y": 1309,
@@ -5936,16 +7120,24 @@ const foxholeData = {
 				},
 				{
 					"id": 1,
-					"type": "power",
+					"name": "power",
+					"type": [
+						{
+							"mask": 131072,
+							"category": 1048576
+						}
+					],
 					"x": 576,
 					"y": 78,
 					"rotation": 270
 				}
 			],
 			"techId": "unlockfacilitytier2",
+			"maxHealth": 2400,
 			"cost": {
 				"facilitymaterials2": 25
 			},
+			"repairCost": 100,
 			"_productionLength": 2,
 			"production": [
 				{
@@ -6094,10 +7286,13 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": {
-								"mask": 16779264,
-								"category": 16384
-							},
+							"name": "pipein",
+							"type": [
+								{
+									"mask": 16779264,
+									"category": 16384
+								}
+							],
 							"flow": "in",
 							"x": 936,
 							"y": 1313,
@@ -6105,7 +7300,13 @@ const foxholeData = {
 						},
 						{
 							"id": 1,
-							"type": "power",
+							"name": "power",
+							"type": [
+								{
+									"mask": 131072,
+									"category": 1048576
+								}
+							],
 							"x": 576,
 							"y": 78,
 							"rotation": 270
@@ -6166,20 +7367,40 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "road",
+					"type": [
+						{
+							"mask": 536870912,
+							"category": 536870912
+						},
+						{
+							"mask": 1073741824,
+							"category": 536870912
+						}
+					],
 					"cap": "front",
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": "road",
+					"type": [
+						{
+							"mask": 536870912,
+							"category": 536870912
+						},
+						{
+							"mask": 1073741824,
+							"category": 536870912
+						}
+					],
 					"cap": "back",
 					"rotation": 90
 				}
 			],
+			"maxHealth": 750,
 			"cost": {
 				"groundmaterials": 150
-			}
+			},
+			"repairCost": 50
 		},
 		"rail_large_crane": {
 			"name": "Crane Railway Track",
@@ -6197,21 +7418,33 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "cranerail",
+					"type": [
+						{
+							"mask": 8388608,
+							"category": 8388608
+						}
+					],
 					"cap": "front",
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": "cranerail",
+					"type": [
+						{
+							"mask": 8388608,
+							"category": 8388608
+						}
+					],
 					"cap": "back",
 					"rotation": 90
 				}
 			],
 			"techId": "unlockfacilitytier3",
+			"maxHealth": 750,
 			"cost": {
 				"facilitymaterials3": 3
-			}
+			},
+			"repairCost": 50
 		},
 		"rail_large_gauge": {
 			"name": "Railway Track (Biarc)",
@@ -6234,20 +7467,42 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "largerail",
+					"name": "front",
+					"type": [
+						{
+							"mask": 32768,
+							"category": 32768
+						},
+						{
+							"mask": 524288,
+							"category": 32768
+						}
+					],
 					"cap": "front",
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": "largerail",
+					"name": "back",
+					"type": [
+						{
+							"mask": 32768,
+							"category": 32768
+						},
+						{
+							"mask": 524288,
+							"category": 32768
+						}
+					],
 					"cap": "back",
 					"rotation": 90
 				}
 			],
+			"maxHealth": 750,
 			"cost": {
 				"facilitymaterials2": 5
-			}
+			},
+			"repairCost": 50
 		},
 		"rail_small_gauge": {
 			"name": "Small Gauge Railway Track (Biarc)",
@@ -6270,20 +7525,40 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "smallrail",
+					"type": [
+						{
+							"mask": 2097152,
+							"category": 2097152
+						},
+						{
+							"mask": 4194304,
+							"category": 2097152
+						}
+					],
 					"cap": "front",
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": "smallrail",
+					"type": [
+						{
+							"mask": 2097152,
+							"category": 2097152
+						},
+						{
+							"mask": 4194304,
+							"category": 2097152
+						}
+					],
 					"cap": "back",
 					"rotation": 90
 				}
 			],
+			"maxHealth": 750,
 			"cost": {
 				"facilitymaterials1": 25
-			}
+			},
+			"repairCost": 50
 		},
 		"relicbase1": {
 			"name": "Relic Base",
@@ -6333,9 +7608,11 @@ const foxholeData = {
 			"textureIcon": {
 				"y": -52
 			},
+			"maxHealth": 2200,
 			"cost": {
 				"facilitymaterials1": 35
-			}
+			},
+			"repairCost": 100
 		},
 		"resourcecontainer": {
 			"name": "Resource Container",
@@ -6346,9 +7623,11 @@ const foxholeData = {
 			"sortLayer": "container",
 			"icon": "game/Textures/UI/StructureIcons/ResourceContainerIcon.webp",
 			"texture": "game/Textures/Structures/resourcecontainer.webp",
+			"maxHealth": 600,
 			"cost": {
 				"cloth": 50
-			}
+			},
+			"repairCost": 50
 		},
 		"riflepillbox": {
 			"name": "Rifle Pillbox",
@@ -6368,9 +7647,11 @@ const foxholeData = {
 			],
 			"icon": "game/Textures/UI/StructureIcons/RiflePillboxIcon.webp",
 			"texture": "game/Textures/Structures/riflepillbox.webp",
+			"maxHealth": 400,
 			"cost": {
 				"cloth": 60
-			}
+			},
+			"repairCost": 60
 		},
 		"sandbaghalfspline": {
 			"name": "Sandbag Cover",
@@ -6388,20 +7669,32 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "sandbag",
+					"type": [
+						{
+							"mask": 4609,
+							"category": 1
+						}
+					],
 					"cap": "front",
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": "sandbag",
+					"type": [
+						{
+							"mask": 4609,
+							"category": 1
+						}
+					],
 					"cap": "back",
 					"rotation": 90
 				}
 			],
+			"maxHealth": 700,
 			"cost": {
 				"sandbagmaterials": 3
 			},
+			"repairCost": 10,
 			"upgrades": {
 				"sandbagfullspline": {
 					"name": "Sandbag Wall",
@@ -6425,9 +7718,11 @@ const foxholeData = {
 			"sortLayer": "container",
 			"icon": "game/Textures/UI/StructureIcons/ShippingContainerStructureIcon.webp",
 			"texture": "game/Textures/Structures/shippingcontainer.webp",
+			"maxHealth": 1000,
 			"cost": {
 				"cloth": 100
-			}
+			},
+			"repairCost": 100
 		},
 		"smalltraindump": {
 			"name": "BMS Railtruck",
@@ -6546,40 +7841,28 @@ const foxholeData = {
 			"categoryOrder": 4,
 			"hitArea": [
 				{
-					"shape": [ -24.96,-60.16,-51.84,9.6,-51.84,-98.56,-19.84,-98.56 ]
+					"shape": [ 12.16,-131.84,16.64,-98.56,-19.84,-98.56,-15.36,-131.84 ]
 				},
 				{
-					"shape": [ 48,-98.56,47.36,-93.44,20.48,-57.6,16.64,-98.56 ]
+					"shape": [ -16.4452197265625,123.01913024902343,-22.4,110.08,18.56,110.08,12.8,122.88,-1.92,131.84 ]
 				},
 				{
-					"shape": [ -81.28,9.6,-51.84,9.6,47.36,15.36,51.2,35.84,18.56,110.08,-21.12,112,-81.28,106.88 ]
+					"shape": [ -81.28,9.6,-51.84,9.6,18.56,110.08,-22.4,110.08,-81.28,106.88 ]
 				},
 				{
-					"shape": [ -21.12,112,18.56,110.08,12.16,123.52,-3.84,131.84 ]
+					"shape": [ 48.64,122.88,48,110.08,80,68.48,80,123.52 ]
 				},
 				{
-					"shape": [ 48.64,122.88,74.88,66.56,80.64,68.48,80,121.6 ]
+					"shape": [ 48,-98.56,18.56,110.08,-51.84,9.6,-51.84,-98.56 ]
 				},
 				{
-					"shape": [ 18.56,110.08,51.2,35.84,48,110.08 ]
+					"shape": [ 69.12,25.6,74.88,38.4,74.88,67.84,18.56,110.08,47.36,15.36,60.8,17.92 ]
 				},
 				{
-					"shape": [ 12.16,-131.84,20.48,-57.6,-19.2,-57.6,-15.36,-131.84 ]
+					"shape": [ 18.56,110.08,74.88,67.84,80,68.48,48,110.08 ]
 				},
 				{
-					"shape": [ 72.96,33.92,74.88,66.56,51.2,35.84,47.36,15.36,60.16,17.92 ]
-				},
-				{
-					"shape": [ 51.2,35.84,74.88,66.56,48.64,122.88 ]
-				},
-				{
-					"shape": [ -19.2,-57.6,-51.84,9.6,-24.96,-60.16 ]
-				},
-				{
-					"shape": [ 20.48,-57.6,47.36,15.36,-51.84,9.6,-19.2,-57.6 ]
-				},
-				{
-					"shape": [ 47.36,15.36,20.48,-57.6,47.36,-93.44 ]
+					"shape": [ 18.56,110.08,47.36,-93.44,47.36,15.36 ]
 				}
 			],
 			"icon": "game/Textures/UI/StructureIcons/FacilityMineResource4Icon.webp",
@@ -6587,10 +7870,13 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": {
-						"mask": 16779264,
-						"category": 16384
-					},
+					"name": "pipein",
+					"type": [
+						{
+							"mask": 2048,
+							"category": 16384
+						}
+					],
 					"flow": "in",
 					"x": 457,
 					"y": 805,
@@ -6598,9 +7884,11 @@ const foxholeData = {
 				}
 			],
 			"techId": "unlockfacilitytier2",
+			"maxHealth": 1850,
 			"cost": {
 				"facilitymaterials2": 25
 			},
+			"repairCost": 100,
 			"_productionLength": 1,
 			"production": [
 				{
@@ -6623,40 +7911,28 @@ const foxholeData = {
 			"categoryOrder": 3,
 			"hitArea": [
 				{
-					"shape": [ -24.96,-60.16,-51.84,9.6,-51.84,-98.56,-19.84,-98.56 ]
+					"shape": [ 12.16,-131.84,16.64,-98.56,-19.84,-98.56,-15.36,-131.84 ]
 				},
 				{
-					"shape": [ 48,-98.56,47.36,-93.44,20.48,-57.6,16.64,-98.56 ]
+					"shape": [ -16.4452197265625,123.01913024902343,-22.4,110.08,18.56,110.08,12.8,122.88,-1.92,131.84 ]
 				},
 				{
-					"shape": [ -81.28,9.6,-51.84,9.6,47.36,15.36,51.2,35.84,18.56,110.08,-21.12,112,-81.28,106.88 ]
+					"shape": [ -81.28,9.6,-51.84,9.6,18.56,110.08,-22.4,110.08,-81.28,106.88 ]
 				},
 				{
-					"shape": [ -21.12,112,18.56,110.08,12.16,123.52,-3.84,131.84 ]
+					"shape": [ 48.64,122.88,48,110.08,80,68.48,80,123.52 ]
 				},
 				{
-					"shape": [ 48.64,122.88,74.88,66.56,80.64,68.48,80,121.6 ]
+					"shape": [ 48,-98.56,18.56,110.08,-51.84,9.6,-51.84,-98.56 ]
 				},
 				{
-					"shape": [ 18.56,110.08,51.2,35.84,48,110.08 ]
+					"shape": [ 69.12,25.6,74.88,38.4,74.88,67.84,18.56,110.08,47.36,15.36,60.8,17.92 ]
 				},
 				{
-					"shape": [ 12.16,-131.84,20.48,-57.6,-19.2,-57.6,-15.36,-131.84 ]
+					"shape": [ 18.56,110.08,74.88,67.84,80,68.48,48,110.08 ]
 				},
 				{
-					"shape": [ 72.96,33.92,74.88,66.56,51.2,35.84,47.36,15.36,60.16,17.92 ]
-				},
-				{
-					"shape": [ 51.2,35.84,74.88,66.56,48.64,122.88 ]
-				},
-				{
-					"shape": [ -19.2,-57.6,-51.84,9.6,-24.96,-60.16 ]
-				},
-				{
-					"shape": [ 20.48,-57.6,47.36,15.36,-51.84,9.6,-19.2,-57.6 ]
-				},
-				{
-					"shape": [ 47.36,15.36,20.48,-57.6,47.36,-93.44 ]
+					"shape": [ 18.56,110.08,47.36,-93.44,47.36,15.36 ]
 				}
 			],
 			"icon": "game/Textures/UI/StructureIcons/FacilityMineResource2Icon.webp",
@@ -6664,19 +7940,24 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": {
-						"mask": 16779264,
-						"category": 16384
-					},
+					"name": "pipein",
+					"type": [
+						{
+							"mask": 2048,
+							"category": 16384
+						}
+					],
 					"flow": "in",
 					"x": 457,
 					"y": 805,
 					"rotation": 180
 				}
 			],
+			"maxHealth": 1850,
 			"cost": {
 				"facilitymaterials1": 175
 			},
+			"repairCost": 100,
 			"_productionLength": 1,
 			"production": [
 				{
@@ -6697,40 +7978,28 @@ const foxholeData = {
 					"description": "Improves component excavation.",
 					"hitArea": [
 						{
-							"shape": [ -21.76,-60.16,-48.64,5.12,-48.64,-98.56,-16.64,-98.56 ]
+							"shape": [ 15.36,-131.84,19.84,-98.56,-16.64,-98.56,-12.16,-131.84 ]
 						},
 						{
-							"shape": [ 51.2,-98.56,50.56,-93.44,23.68,-57.6,19.84,-98.56 ]
+							"shape": [ -82.56,5.76,-48.64,5.12,-19.2,110.72,-82.56,110.72 ]
 						},
 						{
-							"shape": [ -82.56,5.76,-48.64,5.12,50.56,15.36,54.4,35.84,21.76,110.08,-17.92,112,-82.56,110.72 ]
+							"shape": [ 51.84,122.88,51.2,110.08,78.08,67.84,83.84,68.48,83.2,123.52 ]
 						},
 						{
-							"shape": [ -17.92,112,21.76,110.08,15.36,123.52,-0.64,131.84 ]
+							"shape": [ 1.28,129.92,-11.52,124.8,-19.2,110.72,-48.64,5.12,19.84,-98.56,50.56,15.36,21.76,110.08,15.36,124.16 ]
 						},
 						{
-							"shape": [ 51.84,122.88,78.08,66.56,83.84,68.48,83.2,121.6 ]
+							"shape": [ 19.84,-98.56,-48.64,5.12,-48.64,-98.56 ]
 						},
 						{
-							"shape": [ 21.76,110.08,54.4,35.84,51.2,110.08 ]
+							"shape": [ 77.189560546875,38.427822265625,78.08,67.84,51.2,110.08,21.76,110.08,50.56,15.36,64,17.92,74.88,27.52 ]
 						},
 						{
-							"shape": [ 15.36,-131.84,23.68,-57.6,-16,-57.6,-12.16,-131.84 ]
+							"shape": [ 50.56,-93.44,19.84,-98.56,51.2,-98.56 ]
 						},
 						{
-							"shape": [ 76.16,33.92,78.08,66.56,54.4,35.84,50.56,15.36,63.36,17.92 ]
-						},
-						{
-							"shape": [ 54.4,35.84,78.08,66.56,51.84,122.88 ]
-						},
-						{
-							"shape": [ -16,-57.6,-48.64,5.12,-21.76,-60.16 ]
-						},
-						{
-							"shape": [ 23.68,-57.6,50.56,15.36,-48.64,5.12,-16,-57.6 ]
-						},
-						{
-							"shape": [ 50.56,15.36,23.68,-57.6,50.56,-93.44 ]
+							"shape": [ 50.56,15.36,19.84,-98.56,50.56,-93.44 ]
 						}
 					],
 					"icon": "game/Textures/UI/StructureIcons/FacilityExcavatorIcon.webp",
@@ -6741,10 +8010,13 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": {
-								"mask": 16779264,
-								"category": 16384
-							},
+							"name": "pipein",
+							"type": [
+								{
+									"mask": 16779264,
+									"category": 16384
+								}
+							],
 							"flow": "in",
 							"x": 476,
 							"y": 805,
@@ -6779,40 +8051,28 @@ const foxholeData = {
 			"categoryOrder": 2,
 			"hitArea": [
 				{
-					"shape": [ -24.96,-60.16,-51.84,9.6,-51.84,-98.56,-19.84,-98.56 ]
+					"shape": [ 12.16,-131.84,16.64,-98.56,-19.84,-98.56,-15.36,-131.84 ]
 				},
 				{
-					"shape": [ 48,-98.56,47.36,-93.44,20.48,-57.6,16.64,-98.56 ]
+					"shape": [ -16.4452197265625,123.01913024902343,-22.4,110.08,18.56,110.08,12.8,122.88,-1.92,131.84 ]
 				},
 				{
-					"shape": [ -81.28,9.6,-51.84,9.6,47.36,15.36,51.2,35.84,18.56,110.08,-21.12,112,-81.28,106.88 ]
+					"shape": [ -81.28,9.6,-51.84,9.6,18.56,110.08,-22.4,110.08,-81.28,106.88 ]
 				},
 				{
-					"shape": [ -21.12,112,18.56,110.08,12.16,123.52,-3.84,131.84 ]
+					"shape": [ 48.64,122.88,48,110.08,80,68.48,80,123.52 ]
 				},
 				{
-					"shape": [ 48.64,122.88,74.88,66.56,80.64,68.48,80,121.6 ]
+					"shape": [ 48,-98.56,18.56,110.08,-51.84,9.6,-51.84,-98.56 ]
 				},
 				{
-					"shape": [ 18.56,110.08,51.2,35.84,48,110.08 ]
+					"shape": [ 69.12,25.6,74.88,38.4,74.88,67.84,18.56,110.08,47.36,15.36,60.8,17.92 ]
 				},
 				{
-					"shape": [ 12.16,-131.84,20.48,-57.6,-19.2,-57.6,-15.36,-131.84 ]
+					"shape": [ 18.56,110.08,74.88,67.84,80,68.48,48,110.08 ]
 				},
 				{
-					"shape": [ 72.96,33.92,74.88,66.56,51.2,35.84,47.36,15.36,60.16,17.92 ]
-				},
-				{
-					"shape": [ 51.2,35.84,74.88,66.56,48.64,122.88 ]
-				},
-				{
-					"shape": [ -19.2,-57.6,-51.84,9.6,-24.96,-60.16 ]
-				},
-				{
-					"shape": [ 20.48,-57.6,47.36,15.36,-51.84,9.6,-19.2,-57.6 ]
-				},
-				{
-					"shape": [ 47.36,15.36,20.48,-57.6,47.36,-93.44 ]
+					"shape": [ 18.56,110.08,47.36,-93.44,47.36,15.36 ]
 				}
 			],
 			"icon": "game/Textures/UI/StructureIcons/FacilityMineResource1Icon.webp",
@@ -6820,19 +8080,24 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": {
-						"mask": 16779264,
-						"category": 16384
-					},
+					"name": "pipein",
+					"type": [
+						{
+							"mask": 2048,
+							"category": 16384
+						}
+					],
 					"flow": "in",
 					"x": 457,
 					"y": 805,
 					"rotation": 180
 				}
 			],
+			"maxHealth": 1850,
 			"cost": {
 				"facilitymaterials1": 150
 			},
+			"repairCost": 100,
 			"_productionLength": 1,
 			"production": [
 				{
@@ -6855,40 +8120,28 @@ const foxholeData = {
 			"categoryOrder": 5,
 			"hitArea": [
 				{
-					"shape": [ -24.96,-60.16,-51.84,9.6,-51.84,-98.56,-19.84,-98.56 ]
+					"shape": [ 12.16,-131.84,16.64,-98.56,-19.84,-98.56,-15.36,-131.84 ]
 				},
 				{
-					"shape": [ 48,-98.56,47.36,-93.44,20.48,-57.6,16.64,-98.56 ]
+					"shape": [ -16.4452197265625,123.01913024902343,-22.4,110.08,18.56,110.08,12.8,122.88,-1.92,131.84 ]
 				},
 				{
-					"shape": [ -81.28,9.6,-51.84,9.6,47.36,15.36,51.2,35.84,18.56,110.08,-21.12,112,-81.28,106.88 ]
+					"shape": [ -81.28,9.6,-51.84,9.6,18.56,110.08,-22.4,110.08,-81.28,106.88 ]
 				},
 				{
-					"shape": [ -21.12,112,18.56,110.08,12.16,123.52,-3.84,131.84 ]
+					"shape": [ 48.64,122.88,48,110.08,80,68.48,80,123.52 ]
 				},
 				{
-					"shape": [ 48.64,122.88,74.88,66.56,80.64,68.48,80,121.6 ]
+					"shape": [ 48,-98.56,18.56,110.08,-51.84,9.6,-51.84,-98.56 ]
 				},
 				{
-					"shape": [ 18.56,110.08,51.2,35.84,48,110.08 ]
+					"shape": [ 69.12,25.6,74.88,38.4,74.88,67.84,18.56,110.08,47.36,15.36,60.8,17.92 ]
 				},
 				{
-					"shape": [ 12.16,-131.84,20.48,-57.6,-19.2,-57.6,-15.36,-131.84 ]
+					"shape": [ 18.56,110.08,74.88,67.84,80,68.48,48,110.08 ]
 				},
 				{
-					"shape": [ 72.96,33.92,74.88,66.56,51.2,35.84,47.36,15.36,60.16,17.92 ]
-				},
-				{
-					"shape": [ 51.2,35.84,74.88,66.56,48.64,122.88 ]
-				},
-				{
-					"shape": [ -19.2,-57.6,-51.84,9.6,-24.96,-60.16 ]
-				},
-				{
-					"shape": [ 20.48,-57.6,47.36,15.36,-51.84,9.6,-19.2,-57.6 ]
-				},
-				{
-					"shape": [ 47.36,15.36,20.48,-57.6,47.36,-93.44 ]
+					"shape": [ 18.56,110.08,47.36,-93.44,47.36,15.36 ]
 				}
 			],
 			"icon": "game/Textures/UI/StructureIcons/FacilityMineResource3Icon.webp",
@@ -6896,10 +8149,13 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": {
-						"mask": 16779264,
-						"category": 16384
-					},
+					"name": "pipein",
+					"type": [
+						{
+							"mask": 2048,
+							"category": 16384
+						}
+					],
 					"flow": "in",
 					"x": 457,
 					"y": 805,
@@ -6907,9 +8163,11 @@ const foxholeData = {
 				}
 			],
 			"techId": "unlockfacilitytier3",
+			"maxHealth": 1850,
 			"cost": {
 				"facilitymaterials3": 20
 			},
+			"repairCost": 100,
 			"_productionLength": 1,
 			"production": [
 				{
@@ -6933,9 +8191,11 @@ const foxholeData = {
 			"icon": "game/Textures/UI/StructureIcons/TankStopIcon.webp",
 			"texture": "game/Textures/Structures/tankstop.webp",
 			"techId": "unlocktankstop",
+			"maxHealth": 2000,
 			"cost": {
 				"metalbeammaterials": 3
-			}
+			},
+			"repairCost": 25
 		},
 		"townbase3": {
 			"name": "Town Base",
@@ -7274,6 +8534,7 @@ const foxholeData = {
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers. This is a special Trench variant that can resize dynamically and can be built underneath roads.",
 			"category": "entrenchments",
 			"categoryOrder": 2,
+			"sortLayer": "foundation",
 			"hasHandle": true,
 			"isBezier": true,
 			"icon": "game/Textures/UI/StructureIcons/TrenchT1ConnectorIcon.webp",
@@ -7282,29 +8543,29 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "bunker",
+					"type": [
+						{
+							"mask": 1094,
+							"category": 1026
+						}
+					],
 					"cap": "front",
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": "bunker",
-					"cap": "left",
-					"rotation": 180
-				},
-				{
-					"id": 2,
-					"type": "bunker",
-					"cap": "right",
-					"rotation": 0
-				},
-				{
-					"id": 3,
-					"type": "bunker",
+					"type": [
+						{
+							"mask": 1094,
+							"category": 1026
+						}
+					],
 					"cap": "back",
 					"rotation": 90
 				}
 			],
+			"maxHealth": 1500,
+			"repairCost": 115,
 			"upgrades": {
 				"trenchconnectort2": {
 					"name": "Trench Connector (Tier 2)",
@@ -7334,6 +8595,7 @@ const foxholeData = {
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches. This variant can also serve as an emplacement for mannable defenses.",
 			"category": "entrenchments",
 			"categoryOrder": 5,
+			"sortLayer": "foundation",
 			"hitArea": [
 				{
 					"shape": [ 195.84,-76.48,194.56,80.96,82.56,194.24,-80.64,196.16,-195.84,77.12,-194.56,-82.24,-81.92,-194.24,81.92,-195.52 ]
@@ -7346,83 +8608,140 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "bunker",
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
 					"x": 614,
 					"y": 6,
 					"rotation": 0
 				},
 				{
 					"id": 1,
-					"type": "bunker",
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
 					"x": 1044,
 					"y": 188,
 					"rotation": 45
 				},
 				{
 					"id": 2,
-					"type": "bunker",
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
 					"x": 1220,
 					"y": 618,
 					"rotation": 90
 				},
 				{
 					"id": 3,
-					"type": "bunker",
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
 					"x": 1040,
 					"y": 1046,
 					"rotation": 135
 				},
 				{
 					"id": 4,
-					"type": "bunker",
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
 					"x": 614,
 					"y": 1228,
 					"rotation": 180
 				},
 				{
 					"id": 5,
-					"type": "bunker",
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
 					"x": 186,
 					"y": 1048,
 					"rotation": 225
 				},
 				{
 					"id": 6,
-					"type": "bunker",
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
 					"x": 8,
 					"y": 618,
 					"rotation": 270
 				},
 				{
 					"id": 7,
-					"type": "bunker",
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
 					"x": 182,
 					"y": 186,
 					"rotation": 315
 				}
 			],
+			"maxHealth": 1500,
+			"repairCost": 75,
 			"upgrades": {
+				"trenchempt1": {
+					"reference": "trenchempt1"
+				},
 				"trenchempt2": {
-					"name": "Trench Emplacement (Tier 2)",
-					"codeName": "TrenchEmpT2",
-					"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches. This variant can also serve as an emplacement for mannable defenses.",
-					"icon": "game/Textures/UI/StructureIcons/TrenchT2EmplacementIcon.webp",
-					"texture": "game/Textures/Structures/trenchempt2.webp",
-					"cost": {
-						"cloth": 50
-					}
+					"reference": "trenchempt2"
 				},
 				"trenchempt3": {
-					"name": "Trench Emplacement (Tier 3)",
-					"codeName": "TrenchEmpT3",
-					"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches. This variant can also serve as an emplacement for mannable defenses.",
-					"icon": "game/Textures/UI/StructureIcons/TrenchT3EmplacementIcon.webp",
-					"texture": "game/Textures/Structures/trenchempt3.webp",
-					"cost": {
-						"concrete": 20
-					}
+					"reference": "trenchempt3"
 				}
 			}
+		},
+		"trenchempt2": {
+			"name": "Trench Emplacement (Tier 2)",
+			"codeName": "TrenchEmpT2",
+			"parentKey": "trenchempt1",
+			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches. This variant can also serve as an emplacement for mannable defenses.",
+			"icon": "game/Textures/UI/StructureIcons/TrenchT2EmplacementIcon.webp",
+			"texture": "game/Textures/Structures/trenchempt2.webp",
+			"maxHealth": 1850,
+			"cost": {
+				"cloth": 50
+			},
+			"repairCost": 50
+		},
+		"trenchempt3": {
+			"name": "Trench Emplacement (Tier 3)",
+			"codeName": "TrenchEmpT3",
+			"parentKey": "trenchempt2",
+			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches. This variant can also serve as an emplacement for mannable defenses.",
+			"icon": "game/Textures/UI/StructureIcons/TrenchT3EmplacementIcon.webp",
+			"texture": "game/Textures/Structures/trenchempt3.webp",
+			"maxHealth": 3500,
+			"cost": {
+				"concrete": 20
+			},
+			"repairCost": 80
 		},
 		"trencht1": {
 			"name": "Trench (Tier 1)",
@@ -7430,6 +8749,9 @@ const foxholeData = {
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers.",
 			"category": "entrenchments",
 			"categoryOrder": 1,
+			"width": 10,
+			"length": 3,
+			"sortLayer": "foundation",
 			"icon": "game/Textures/UI/StructureIcons/TrenchT1Icon.webp",
 			"texture": "game/Textures/Structures/trencht1.webp",
 			"canSnap": true,
@@ -7437,67 +8759,118 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "bunker",
-					"x": 2,
-					"y": 166,
+					"type": [
+						{
+							"mask": 70,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trencht1_end.webp",
+					"x": 0,
+					"y": 150,
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": "bunker",
-					"x": 289,
+					"type": [
+						{
+							"mask": 2,
+							"category": 64
+						}
+					],
+					"texture": "game/Textures/Structures/trencht1_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trencht1_side_open.webp",
+					"x": 500,
 					"y": 0,
 					"rotation": 0
 				},
 				{
 					"id": 2,
-					"type": "bunker",
-					"x": 867,
-					"y": 0,
-					"rotation": 0
-				},
-				{
-					"id": 3,
-					"type": "bunker",
-					"x": 1154,
-					"y": 166,
+					"type": [
+						{
+							"mask": 70,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trencht1_end.webp",
+					"x": 1000,
+					"y": 150,
 					"rotation": 90
 				},
 				{
-					"id": 4,
-					"type": "bunker",
-					"x": 289,
-					"y": 334,
-					"rotation": 180
-				},
-				{
-					"id": 5,
-					"type": "bunker",
-					"x": 867,
-					"y": 334,
+					"id": 3,
+					"type": [
+						{
+							"mask": 2,
+							"category": 64
+						}
+					],
+					"texture": "game/Textures/Structures/trencht1_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trencht1_side_open.webp",
+					"x": 500,
+					"y": 300,
 					"rotation": 180
 				}
 			],
+			"maxHealth": 1500,
+			"repairCost": 75,
 			"upgrades": {
+				"trencht1": {
+					"reference": "trencht1"
+				},
 				"trencht2": {
-					"name": "Trench (Tier 2)",
-					"codeName": "TrenchT2",
-					"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers.",
-					"icon": "game/Textures/UI/StructureIcons/TrenchT2Icon.webp",
-					"texture": null,
-					"cost": {
-						"cloth": 50
-					}
+					"reference": "trencht2"
 				},
 				"trencht3": {
-					"name": "Trench (Tier 3)",
-					"codeName": "TrenchT3",
-					"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers.",
-					"icon": "game/Textures/UI/StructureIcons/TrenchT3Icon.webp",
-					"texture": null,
-					"cost": {
-						"concrete": 20
-					}
+					"reference": "trencht3"
+				}
+			}
+		},
+		"trencht2": {
+			"name": "Trench (Tier 2)",
+			"codeName": "TrenchT2",
+			"parentKey": "trencht1",
+			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers.",
+			"icon": "game/Textures/UI/StructureIcons/TrenchT2Icon.webp",
+			"texture": null,
+			"maxHealth": 1850,
+			"cost": {
+				"cloth": 50
+			},
+			"repairCost": 50,
+			"upgrades": {
+				"trencht1": {
+					"reference": "trencht1"
+				},
+				"trencht2": {
+					"reference": "trencht2"
+				},
+				"trencht3": {
+					"reference": "trencht3"
+				}
+			}
+		},
+		"trencht3": {
+			"name": "Trench (Tier 3)",
+			"codeName": "TrenchT3",
+			"parentKey": "trencht2",
+			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers.",
+			"icon": "game/Textures/UI/StructureIcons/TrenchT3Icon.webp",
+			"texture": null,
+			"maxHealth": 3500,
+			"cost": {
+				"concrete": 20
+			},
+			"repairCost": 80,
+			"upgrades": {
+				"trencht1": {
+					"reference": "trencht1"
+				},
+				"trencht2": {
+					"reference": "trencht2"
+				},
+				"trencht3": {
+					"reference": "trencht3"
 				}
 			}
 		},
@@ -7541,20 +8914,32 @@ const foxholeData = {
 			"sockets": [
 				{
 					"id": 0,
-					"type": "wall",
+					"type": [
+						{
+							"mask": 4608,
+							"category": 512
+						}
+					],
 					"cap": "front",
 					"rotation": 270
 				},
 				{
 					"id": 1,
-					"type": "wall",
+					"type": [
+						{
+							"mask": 4608,
+							"category": 512
+						}
+					],
 					"cap": "back",
 					"rotation": 90
 				}
 			],
+			"maxHealth": 500,
 			"cost": {
 				"cloth": 15
 			},
+			"repairCost": 15,
 			"upgrades": {
 				"wallsplinet2": {
 					"name": "Wall (Tier 2)",
@@ -7596,9 +8981,11 @@ const foxholeData = {
 			"categoryOrder": 5,
 			"icon": "game/Textures/UI/StructureIcons/WatchTowerStructureIcon.webp",
 			"texture": "game/Textures/Structures/watchtower.webp",
+			"maxHealth": 350,
 			"cost": {
 				"cloth": 60
-			}
+			},
+			"repairCost": 60
 		},
 		"water_pump": {
 			"name": "Water Pump",
@@ -7608,62 +8995,28 @@ const foxholeData = {
 			"color": 2591968,
 			"hitArea": [
 				{
-					"shape": [ 48.32,-31.04,58.56,3.52,41.28,-31.04,41.28,-38.08 ]
+					"shape": [ 64.32,18.88,-54.72,68.8,-68.8,73.92,-54.72,-29.76,22.72,-32.96,58.56,-31.04 ]
 				},
 				{
-					"shape": [ -55.36,-29.12,-55.36,67.52,-59.2,77.12,-68.16,74.56,-68.8,-34.24,-58.56,-38.72 ]
+					"shape": [ -68.8,73.92,-54.72,68.8,-55.36,73.92,-62.4,77.76 ]
 				},
 				{
-					"shape": [ -32.32,70.08,-32.32,-31.04,-25.92,-31.04,-26.56,70.08,-31.68,76.48 ]
+					"shape": [ -54.72,-29.76,-68.8,73.92,-68.16,-36.8,-62.76571411132812,-39.542861328125,-56.64,-36.8 ]
 				},
 				{
-					"shape": [ 41.28,70.08,48.32,70.08,48.32,76.48 ]
+					"shape": [ -54.72,68.8,64.32,18.88,58.56,70.08 ]
 				},
 				{
-					"shape": [ -26.56,-31.04,-32.32,-31.04,-32.32,-38.08 ]
-				},
-				{
-					"shape": [ 61.76,10.56,58.56,3.52,70.72,8.64 ]
-				},
-				{
-					"shape": [ 28.48,-61.76,22.72,-32.96,-10.56,-31.04,-12.48,-64.32,10.56,-77.76 ]
-				},
-				{
-					"shape": [ 58.56,3.52,48.32,-31.04,58.56,-31.04 ]
-				},
-				{
-					"shape": [ -26.56,70.08,-25.92,-31.04,61.76,28.48,61.76,29.76,58.56,70.08 ]
-				},
-				{
-					"shape": [ 61.76,29.76,61.76,28.48,70.72,28.48 ]
-				},
-				{
-					"shape": [ 61.76,28.48,-25.92,-31.04,-10.56,-31.04,58.56,3.52,61.76,10.56 ]
-				},
-				{
-					"shape": [ -55.36,-29.12,-42.56,-29.12,-32.32,70.08,-55.36,67.52 ]
-				},
-				{
-					"shape": [ -32.32,-31.04,-32.32,70.08,-42.56,-29.12 ]
-				},
-				{
-					"shape": [ -26.56,70.08,-25.92,70.08,-25.92,76.48 ]
-				},
-				{
-					"shape": [ -25.92,-31.04,-26.56,-31.04,-26.56,-38.08 ]
-				},
-				{
-					"shape": [ 48.32,-31.04,47.68,-31.68,47.68,-38.08 ]
-				},
-				{
-					"shape": [ 58.56,3.52,-10.56,-31.04,22.72,-32.96,41.28,-31.04 ]
+					"shape": [ 28.845712890625,-53.074287109375,22.72,-32.96,-8.64,-31.68,-13.76,-53.44,-9.28,-69.44,0.8685693359375,-77.21142578125,16.32,-76.48,26.56,-68.16 ]
 				}
 			],
 			"icon": "game/Textures/UI/StructureIcons/FacilityMineWaterIcon.webp",
 			"texture": "game/Textures/Structures/water_pump.webp",
+			"maxHealth": 850,
 			"cost": {
 				"facilitymaterials1": 35
 			},
+			"repairCost": 100,
 			"_productionLength": 1,
 			"production": [
 				{
@@ -7682,49 +9035,37 @@ const foxholeData = {
 					"description": "A generator that pumps water more efficiently. Requires Power.",
 					"hitArea": [
 						{
-							"shape": [ 26.56,-40,19.52,-40,19.52,-47.04 ]
+							"shape": [ 36.8,-5.44,1.6,-40,36.8,-40 ]
 						},
 						{
-							"shape": [ -77.12,-38.08,-77.12,58.56,-80.96,68.16,-89.92,65.6,-90.56,-43.2,-80.32,-47.68 ]
+							"shape": [ 37.44,25.92,36.8,-5.44,90.56,-4.8,90.56,25.92 ]
 						},
 						{
-							"shape": [ -48.32,-40,-54.08,-40,-54.08,-47.04 ]
+							"shape": [ -77.12,-38.08,-77.12,58.56,-83.97714294433594,68.70857177734375,-89.92,65.6,-90.56,-45.12,-83.97714294433594,-48.137138671875,-77.76,-45.76 ]
 						},
 						{
-							"shape": [ 6.72,-70.72,0.96,-41.92,-32.32,-40,-34.24,-73.28,-11.2,-86.72 ]
+							"shape": [ -83.97714294433594,68.70857177734375,-77.12,58.56,-77.76,66.24 ]
 						},
 						{
-							"shape": [ 40,25.92,36.8,-5.44,90.56,-3.52,90.56,26.56 ]
+							"shape": [ -59.84,61.12,31.58857421875,61.39428466796875,31.68,74.56,-54.5371435546875,74.56,-59.84,73.92 ]
 						},
 						{
-							"shape": [ 18.88,86.08,-47.04,86.08,-59.84,73.92,-54.08,63.68,26.56,61.12,31.68,73.92 ]
+							"shape": [ 37.44,25.92,36.8,61.12,31.58857421875,61.39428466796875,-77.12,58.56,-77.12,-38.08,-29.12,-41.28,1.6,-40,36.8,-5.44 ]
 						},
 						{
-							"shape": [ -54.08,63.68,-59.84,73.92,-59.84,63.68 ]
+							"shape": [ -11.2,-86.72,-0.594287109375,-81.96572265625,6.72,-70.72,6.902861328125,-58.742861328125,0.96,-48.32,-35.52,-62.034287109375,-34.24,-73.28,-25.8285693359375,-83.24572265625 ]
 						},
 						{
-							"shape": [ 36.8,-5.44,-54.08,63.68,-77.12,58.56,-64.32,-38.08,-32.32,-40,36.8,-40 ]
+							"shape": [ 0.96,-48.32,1.6,-40,-29.12,-48.96,-35.52,-62.034287109375 ]
 						},
 						{
-							"shape": [ 26.56,61.12,40,25.92,36.8,61.12 ]
+							"shape": [ 1.6,-40,-29.12,-41.28,-29.12,-48.96 ]
 						},
 						{
-							"shape": [ -54.08,63.68,36.8,-5.44,40,25.92,26.56,61.12 ]
+							"shape": [ -54.5371435546875,74.56,26.56,74.56,22.72,86.72,-51.52,86.72 ]
 						},
 						{
-							"shape": [ -64.32,-38.08,-77.12,58.56,-77.12,-38.08 ]
-						},
-						{
-							"shape": [ -47.68,-40,-48.32,-40,-48.32,-47.04 ]
-						},
-						{
-							"shape": [ 26.56,-40,25.92,-40.64,25.92,-47.04 ]
-						},
-						{
-							"shape": [ -32.32,-40,-64.32,-38.08,-54.08,-40 ]
-						},
-						{
-							"shape": [ 19.52,-40,-32.32,-40,0.96,-41.92 ]
+							"shape": [ -77.12,58.56,31.58857421875,61.39428466796875,-59.84,61.12 ]
 						}
 					],
 					"icon": "game/Textures/UI/StructureIcons/FacilityElectricWaterPumpIcon.webp",
@@ -7736,10 +9077,13 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
-							"type": {
-								"mask": 16779264,
-								"category": 16384
-							},
+							"name": "pipeout",
+							"type": [
+								{
+									"mask": 16779264,
+									"category": 16384
+								}
+							],
 							"flow": "out",
 							"x": 580,
 							"y": 304,
@@ -7747,7 +9091,13 @@ const foxholeData = {
 						},
 						{
 							"id": 1,
-							"type": "power",
+							"name": "power",
+							"type": [
+								{
+									"mask": 131072,
+									"category": 1048576
+								}
+							],
 							"x": 395,
 							"y": 304,
 							"rotation": 90

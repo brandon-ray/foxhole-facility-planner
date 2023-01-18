@@ -82,14 +82,20 @@ if (isMobile && !isPhoneApp) {
                         <input type="checkbox" name="production-visible-toggle" v-model="game.settings.showProductionIcons" @change="updateProductionIcons()" />
                         (P) Show Production Icons
                     </label>
-                    <button class="footer-button" title="Toggle Fullscreen" @click="game.tryFullscreen()">
+                    <button class="btn-small" title="Toggle Fullscreen" @click="game.tryFullscreen()">
                         <i class="fa fa-arrows-alt" aria-hidden="true"></i>
                     </button>
-                    <button class="footer-button" title="Center Board" @click="game.zoomToFacilityCenter()">
+                    <button class="btn-small" title="Center Board" @click="game.zoomToFacilityCenter()">
                         <i class="fa fa-crosshairs" aria-hidden="true"></i>
                     </button>
-                    <button class="footer-button" title="Clear Board" @click="game.confirmDeletion()">
+                    <button class="btn-small" title="Clear Board" @click="game.confirmDeletion()">
                         <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
+                    <button v-if="game.settings.enableHistory" class="btn-small" @click="game.redo()">
+                        <i class="fa fa-repeat" aria-hidden="true"></i>
+                    </button>
+                    <button v-if="game.settings.enableHistory" class="btn-small" @click="game.undo()">
+                        <i class="fa fa-undo" aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
@@ -133,7 +139,7 @@ Vue.component('app-game-confirmation-popup', {
     <div v-if="confirmationVisible" id="confirmation-dialog">
         <template v-if="type === 'delete'">
             <div class="confirmation-header">
-                <h3><i class="fa fa-trash" aria-hidden="true"></i> Confirm Deletion</h3><button class="footer-button" @click="closePopup(false)"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <h3><i class="fa fa-trash" aria-hidden="true"></i> Confirm Deletion</h3><button class="btn-small" @click="closePopup(false)"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
             <p class="confirmation-body">
                 This will delete all objects you have placed.<br>
@@ -143,7 +149,7 @@ Vue.component('app-game-confirmation-popup', {
         </template>
         <template v-else-if="type === 'save-work'">
             <div class="confirmation-header">
-                <h3><i class="fa fa-upload" aria-hidden="true"></i> Confirm Load</h3><button class="footer-button" @click="closePopup(false)"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <h3><i class="fa fa-upload" aria-hidden="true"></i> Confirm Load</h3><button class="btn-small" @click="closePopup(false)"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
             <p class="confirmation-body">
                 Your current work will be lost if you don't save.<br>

@@ -120,8 +120,8 @@ Vue.component('app-menu-statistics', {
                     }
 
                     // TODO: Need to actually get whether a structure decays or not from foxhole data.
-                    if (entity.building?.category !== 'vehicles' && entity.building?.category !== 'misc') {
-                        let consumptionRate = (2 * (entity.building?.garrisonSupplyMultiplier ?? 1)) * garrisonConsumptionRate;
+                    if (buildingData.category !== 'vehicles' && buildingData.category !== 'misc') {
+                        let consumptionRate = (2 * (buildingData.garrisonSupplyMultiplier ?? 1)) * garrisonConsumptionRate;
                         for (let j = 0; j < garrisonConsumptionReducers.length; j++) {
                             const garrison = garrisonConsumptionReducers[j];
                             if (Math.distanceBetween(entity.mid, garrison) < garrison.building.range.max * 32) {
@@ -240,7 +240,9 @@ Vue.component('app-menu-statistics', {
     template: html`
     <div style="text-align:left;">
         <div class="statistics-panel-header">
-            <h3><i class="fa fa-bar-chart"></i> Statistics</h3><button class="close-statistics-button" @click="game.settings.enableStats = false; game.updateSettings()"><i class="fa fa-times"></i></button>
+            <h4 class="float-left m-0" style="color: #eee"><i class="fa fa-bar-chart"></i> Statistics</h4>
+            <!--<button class="btn-small m-0 float-right" title="Maximize Stats"><i class="fa fa-window-maximize"></i></button>-->
+            <button class="btn-small m-0 mr-1 float-right" title="Minimize Stats" @click="game.settings.enableStats = false; game.updateSettings()"><i class="fa fa-window-minimize"></i></button>
         </div>
         <div class="statistics-panel-body">
             <h4><i class="fa fa-wrench"></i> Construction Cost</h4>

@@ -32,6 +32,8 @@ const game = {
         disableSound: false,
         disableHUD: false,
         enableExperimental: false,
+        enableHistory: false,
+        historySize: 50,
         enableGrid: true,
         enableStats: true,
         gridSize: 16,
@@ -48,6 +50,7 @@ const game = {
         showFacilityName: true,
         showRanges: false,
         showProductionIcons: false,
+        showSelectionStats: true,
         styles: {
             label: {
                 fontFamily: 'Arial',
@@ -216,6 +219,7 @@ try {
         rail: 15000,
         pipe: 20000,
         unspecified: 50000,
+        upgrade: 75000,
         vehicle: 120000,
         container: 150000,
         wall: 200000,
@@ -232,6 +236,10 @@ try {
 
     game.getEntities = () => {
         return entities;
+    };
+
+    game.getSelectedEntities = () => {
+        return selectedEntities;
     };
 
     game.getEntityById = (id) => {
@@ -517,7 +525,7 @@ try {
                         const buildings = Object.values(window.objectData.buildings);
                         for (let i=0; i<1000; i++) {
                             let buildingData = buildings[Math.floor(Math.random() * buildings.length)];
-                            if (!buildingData.hideInList && (!buildingData.parent || !buildingData.parent.hideInList) && buildingData.category !== 'entrenchments') {
+                            if (!buildingData.hideInList && (!buildingData.parent || !buildingData.parent.hideInList)) {
                                 createSelectableEntity('building', buildingData.key, x, y, 0);
                                 x += 500;
                                 if (x >= 10000) {
@@ -526,7 +534,7 @@ try {
                                 }
                             }
                         }
-                    }, 1000);
+                    }, 1);
                 }
                 break;
             case 120: // F9
@@ -536,7 +544,7 @@ try {
                         for (const category of Object.values(window.objectData.categories)) {
                             for (let i = 0; i < category.buildings.length; i++) {
                                 const building = category.buildings[i];
-                                if (game.settings.enableExperimental || (!building.hideInList && (!building.parent || !building.parent.hideInList) && building.category !== 'entrenchments')) {
+                                if (game.settings.enableExperimental || (!building.hideInList && (!building.parent || !building.parent.hideInList))) {
                                     createSelectableEntity('building', building.key, x * 600, y * 600, 0);
                                     x++;
                                     if (x >= 10) {
@@ -546,7 +554,7 @@ try {
                                 }
                             }
                         }
-                    }, 1000);
+                    }, 1);
                 }
                 break;
         }
@@ -573,6 +581,12 @@ try {
                         break;
                     case 67: // C
                         game.cloneSelected();
+                        break;
+                    case 89: // Y
+                        game.redo();
+                        break;
+                    case 90: // Z
+                        game.undo();
                         break;
                 }
             } else {
@@ -915,17 +929,19 @@ try {
         download(JSON.stringify(game.getSaveData(isSelection)), fileName, 'application/json');
     };
 
-    game.loadSave = function(saveObject, isSelection) {
+    game.loadSave = function(saveObject, isSelection, ignoreConfirmation) {
         if (isSelection) {
             game.deselectEntities(false, true);
         } else {
-            if (entities.length > 0) {
+            if (!ignoreConfirmation && entities.length > 0) {
                 game.confirmDeletion(confirmed => {
                     if (confirmed) {
                         game.loadSave(saveObject, isSelection);
                     }
                 }, true);
                 return;
+            } else {
+                game.removeEntities();
             }
             game.setFaction(saveObject.faction);
         }
@@ -972,7 +988,7 @@ try {
                 }
                 game.setPickupEntities(true, false, centerPos, true);
                 game.updateSelectedBuildingMenu();
-            } else {
+            } else if (!ignoreConfirmation) {
                 game.zoomToFacilityCenter();
             }
         }, 1);
@@ -1032,16 +1048,6 @@ try {
         return game.addSelectedEntity(entity);
     }
 
-    game.selectEntities = function(entities) {
-        if (entities?.length) {
-            game.deselectEntities(false, true);
-            entities.forEach(entity => {
-                game.addSelectedEntity(entity, true);
-            });
-            game.updateSelectedBuildingMenu();
-        }
-    }
-
     game.getSelectedEntity = function() {
         return selectedEntities.length === 1 ? selectedEntities[0] : null;
     }
@@ -1053,6 +1059,9 @@ try {
             entity.onSelect();
             if (!noMenuUpdate) {
                 game.updateSelectedBuildingMenu();
+            }
+            if (game.settings.showSelectionStats) {
+                game.statisticsMenuComponent?.refresh();
             }
             return true;
         }
@@ -1075,6 +1084,9 @@ try {
             if (!noMenuUpdate) {
                 game.updateSelectedBuildingMenu();
             }
+            if (game.settings.showSelectionStats) {
+                game.statisticsMenuComponent?.refresh();
+            }
             return true;
         }
         return false;
@@ -1095,6 +1107,9 @@ try {
             selectedEntities = [];
             if (!noMenuUpdate) {
                 game.updateSelectedBuildingMenu();
+            }
+            if (game.settings.showSelectionStats) {
+                game.statisticsMenuComponent?.refresh();
             }
             return true;
         }
@@ -1927,13 +1942,7 @@ try {
                     entity.addChild(entity.sockets);
                 }
 
-                let socket;
-                if (ENABLE_DEBUG || !socketData.temp) {
-                    socket = new PIXI.Graphics();
-                } else {
-                    socket = new PIXI.Container();
-                }
-
+                const socket = new PIXI.Container();
                 socket.connections = {};
                 socket.socketData = socketData;
                 socket.socketData.x = x ?? (isNaN(socket.socketData.x) ? 0 : (-buildingWidth/2) + ((socket.socketData.x / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE));
@@ -1941,24 +1950,8 @@ try {
                 socket.socketData.rotation = rotation ?? socket.socketData.rotation;
                 socket.position.set(socket.socketData.x, socket.socketData.y);
                 socket.rotation = rotation ?? Math.deg2rad(socket.socketData.rotation);
+
                 if (ENABLE_DEBUG || !socketData.temp) {
-                    if (socket.socketData.flow === 'in') {
-                        socket.beginFill(COLOR_RED);
-                        socket.drawRect(-socketWidth/2, -socketThickness, socketWidth, socketThickness);
-                    } else if (socket.socketData.flow === 'out') {
-                        socket.beginFill(COLOR_GREEN);
-                        socket.drawRect(-socketWidth/2, -socketThickness, socketWidth, socketThickness);
-                    } else if (socket.socketData.flow === 'bi' && socket.socketData.cap !== 'left' && socket.socketData.cap !== 'right') {
-                        socket.beginFill(COLOR_BLUE);
-                        socket.drawRect(-socketWidth/2, -socketThickness, socketWidth, socketThickness);
-                    } else if (socket.socketData.type === 'power') {
-                        socket.beginFill(COLOR_YELLOW);
-                        socket.drawRect(-powerSocketSize/2, -powerSocketSize/2, powerSocketSize, powerSocketSize);
-                    } else if (socket.socketData.type === 'traincar' || socket.socketData.type === 'smalltraincar' || socket.socketData.type === 'smallrail' || socket.socketData.type === 'largerail' || socket.socketData.type === 'cranerail' || socket.socketData.type === 'road') {
-                        socket.beginFill(COLOR_ORANGE);
-                        socket.drawRect(-socketThickness/2, -socketThickness, socketThickness, socketThickness);
-                    }
-                    socket.endFill();
                     // Might want to add what kind of liquid it expects, water, oil, power, etc.
                     if (socket.socketData.flow === 'in') {
                         socket.pointer = new PIXI.Sprite(resources.pointer.texture);
@@ -1970,22 +1963,47 @@ try {
                     } else if (socket.socketData.flow === 'bi' && socket.socketData.cap !== 'left' && socket.socketData.cap !== 'right') {
                         socket.pointer = new PIXI.Sprite(resources.bipointer.texture);
                         socket.pointer.anchor.set(0.5, 1.5);
-                    } else if (socket.socketData.type === 'power') {
+                    } else if (socket.socketData.name === 'power') {
                         socket.pointer = new PIXI.Sprite(resources.power.texture);
                         socket.pointer.anchor.set(0.5, 1.5);
                         entity.handleTick = true;
-                    } else if (socket.socketData.type === 'foundation') {
-                        let foundationBorder = resources[entity.building.textureBorder].texture;
-                        socket.pointer = new PIXI.Sprite(foundationBorder);
-                        socket.pointer.width = foundationBorder.width / METER_PIXEL_SCALE;
-                        socket.pointer.height = foundationBorder.height / METER_PIXEL_SCALE;
+                    } else if (entity.building?.textureBorder) {
+                        let textureBorder = resources[entity.building.textureBorder].texture;
+                        socket.pointer = new PIXI.Sprite(textureBorder);
+                        socket.pointer.width = textureBorder.width / METER_PIXEL_SCALE;
+                        socket.pointer.height = textureBorder.height / METER_PIXEL_SCALE;
                         socket.pointer.anchor.set(0.5, 1.0);
                     } else if (socket.socketData.temp) {
                         socket.pointer = new PIXI.Sprite(resources.bipointer.texture);
                         socket.pointer.anchor.set(0.5, 1.5);
+                    } else if (socket.socketData.texture) {
+                        socket.pointer = new PIXI.Sprite(resources[socket.socketData.texture].texture);
+                        socket.pointer.width = socket.pointer.width / METER_PIXEL_SCALE;
+                        socket.pointer.height = socket.pointer.height / METER_PIXEL_SCALE;
+                        socket.pointer.anchor.set(0.5, 0.5);
                     }
                     if (socket.pointer) {
                         socket.addChild(socket.pointer);
+                    }
+
+                    function createSocketIndicator(color, width, length) {
+                        socket.indicator = new PIXI.Graphics();
+                        socket.indicator.beginFill(color ?? COLOR_ORANGE);
+                        socket.indicator.drawRect(-(width ?? socketWidth)/2, -(length ?? socketThickness), (width ?? socketWidth), (length ?? socketThickness));
+                        socket.indicator.endFill();
+                        socket.addChild(socket.indicator);
+                    }
+
+                    if (socket.socketData.flow === 'in') {
+                        createSocketIndicator(COLOR_RED);
+                    } else if (socket.socketData.flow === 'out') {
+                        createSocketIndicator(COLOR_GREEN);
+                    } else if (socket.socketData.flow === 'bi' && socket.socketData.cap !== 'left' && socket.socketData.cap !== 'right') {
+                        createSocketIndicator(COLOR_BLUE);
+                    } else if (socket.socketData.name === 'power') {
+                        createSocketIndicator(COLOR_YELLOW, powerSocketSize, powerSocketSize);
+                    } else if (game.settings.enableExperimental || socket.socketData.type === 'traincar' || socket.socketData.type === 'smalltraincar' || socket.socketData.type === 'smallrail' || socket.socketData.type === 'largerail' || socket.socketData.type === 'cranerail' || socket.socketData.type === 'road') {
+                        createSocketIndicator();
                     }
                 }
                 socket.setConnection = function(connectingEntityId, connectingSocket, connectingSocketId) {
@@ -2069,8 +2087,14 @@ try {
                         const socketType = socket.socketData.type, connectingSocketType = connectingSocket.socketData.type;
                         if (typeof socketType === typeof connectingSocketType) {
                             if (!socket.socketData.flow || (socket.socketData.flow === 'bi' || (socket.socketData.flow !== connectingSocket.socketData.flow))) {
-                                if (typeof connectingSocketType === 'object') {
-                                    return (socketType.category & connectingSocketType.mask) !== 0 && (connectingSocketType.category & socketType.mask) !== 0;
+                                if (typeof connectingSocketType === 'object' && Array.isArray(connectingSocketType)) {
+                                    for (const socketTypeA of socketType) {
+                                        for (const socketTypeB of connectingSocketType) {
+                                            if ((socketTypeA.category & socketTypeB.mask) !== 0 && (socketTypeB.category & socketTypeA.mask) !== 0) {
+                                                return true;
+                                            }
+                                        }
+                                    }
                                 } else {
                                     return socketType === connectingSocketType;
                                 }
@@ -2123,10 +2147,16 @@ try {
                 }
                 socket.setVisible = function(visible) {
                     if (!ENABLE_DEBUG) {
-                        if (socket.socketData.type !== 'power') {
-                            socket.visible = visible;
-                        } else if (socket.pointer) {
-                            socket.pointer.visible = visible ?? Object.keys(socket.connections).length === 0;
+                        if (socket.indicator && socket.socketData.name !== 'power') {
+                            socket.indicator.visible = visible;
+                        }
+                        if (socket.pointer) {
+                            visible = visible ?? Object.keys(socket.connections).length === 0;
+                            if (socket.socketData.textureAlt) {
+                                socket.pointer.texture = resources[visible ? socket.socketData.texture : socket.socketData.textureAlt].texture;
+                            } else {
+                                socket.pointer.visible = visible;
+                            }
                         }
                     }
                 }
@@ -3083,13 +3113,13 @@ try {
                                         }
                                     }
                                     if (nearestSocket) {
-                                        if (handleSocket.socketData.type === 'power') {
+                                        if (handleSocket.socketData.name === 'power') {
                                             entity.rotation = Math.angleBetween(entity, nearestSocketPos);
                                         }
                                         nearestSocketPos = entity.toLocal(nearestSocketPos, app.cstage, undefined, true);
                                         const socketRotation = Math.angleNormalized(((entity2.rotation + nearestSocket.rotation) - entity.rotation) - Math.deg2rad(handleSocket.socketData.rotation));
                                         // TODO: Only force rotate snap constraint whenever the first socket is connected, otherwise the entity should be able to rotate and attempt snapping.
-                                        if (handleSocket.socketData.type === 'power' || Math.angleDifference(Math.angleNormalized(selectedHandlePoint.rotation), socketRotation) === 0 && Math.round(nearestSocketPos.y) === 0 || entity.building?.isBezier) {
+                                        if (handleSocket.socketData.name === 'power' || Math.angleDifference(Math.angleNormalized(selectedHandlePoint.rotation), socketRotation) === 0 && Math.round(nearestSocketPos.y) === 0 || entity.building?.isBezier) {
                                             handleSocket.setConnection(entity2.id, nearestSocket);
                                             selectedHandlePoint.x = nearestSocketPos.x;
                                             if (entity.building?.isBezier) {
@@ -3187,7 +3217,7 @@ try {
                     if (entity.sockets) {
                         for (let i = 0; i < entity.sockets.children.length; i++) {
                             let socket = entity.sockets.children[i];
-                            if (socket.socketData.type === 'power') {
+                            if (socket.socketData.name === 'power') {
                                 socket.pointer.rotation = -(entity.rotation + socket.rotation);
                             }
                         }
@@ -3643,6 +3673,34 @@ try {
         return array;
     }
 
+    game.clearHistory = function() {
+        game.constructionHistoryPointer = 0;
+        game.constructionHistory = [null];
+    }
+    game.clearHistory();
+
+    // TODO: History should be actions, create, modify, remove.
+    game.traverseHistory = function(i) {
+        const newPointer = Math.min(Math.max(game.constructionHistoryPointer + i, 0), game.constructionHistory.length - 1);
+        if (game.constructionHistoryPointer !== newPointer) {
+            game.constructionHistoryPointer = newPointer;
+            const historyData = game.constructionHistory[game.constructionHistoryPointer];
+            if (historyData) {
+                game.loadSave(JSON.parse(historyData), false, true);
+            } else {
+                game.removeEntities();
+            }
+        }
+    }
+
+    game.undo = function() {
+        game.traverseHistory(-1);
+    }
+
+    game.redo = function() {
+        game.traverseHistory(1);
+    }
+
     const FPSMIN = 30;
     let fpsCheck = null;
     let menuInit = false;
@@ -3671,6 +3729,19 @@ try {
         background.scale.set(camera.zoom);
         background.tilePosition.x = -camera.x / camera.zoom;
         background.tilePosition.y = -camera.y / camera.zoom;
+
+        if (game.settings.enableHistory && selectedEntities.length && !pickupSelectedEntities && !selectedHandlePoint && !selectionRotation) {
+            // TODO: This is very bad, and completely abuses the fact that our saving is so fast hahaha. I'll properly fix this... one day. =)
+            const saveData = JSON.stringify(game.getSaveData());
+            if (game.constructionHistory[game.constructionHistory.length - 1] !== saveData) {
+                game.constructionHistory.length = game.constructionHistoryPointer + 1;
+                game.constructionHistory.push(saveData);
+                if (game.constructionHistory.length > game.settings.historySize) {
+                    game.constructionHistory.shift();
+                }
+                game.constructionHistoryPointer = game.constructionHistory.length - 1;
+            }
+        }
 
         /*
         if (game.settings.quality === 'auto') {

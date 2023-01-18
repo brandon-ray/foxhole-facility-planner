@@ -94,18 +94,18 @@ Vue.component('app-game-sidebar', {
             </div>
         </div>
         <div id="sidebar-footer">
-            <a class="float-left github-button" href="https://github.com/brandon-ray/foxhole-facility-planner" target="_blank" @click="bmc()" @mouseenter="bme()">
+            <a class="btn-small float-left github-button" href="https://github.com/brandon-ray/foxhole-facility-planner" target="_blank" @click="bmc()" @mouseenter="bme()">
                 <i class="fa fa-github"></i>
             </a>
-            <a class="float-left discord-button" href="https://discord.gg/SnyEDQyAVr" target="_blank" @click="bmc()" @mouseenter="bme()">
+            <a class="btn-small float-left discord-button" href="https://discord.gg/SnyEDQyAVr" target="_blank" @click="bmc()" @mouseenter="bme()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36">
                     <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
                 </svg>
             </a>
-            <button v-on:click="event.preventDefault(); changeMenu('settings')" class="float-right" @mouseenter="bme()">
+            <button v-on:click="event.preventDefault(); changeMenu('settings')" class="btn-small float-right" @mouseenter="bme()">
                 <i class="fa fa-gear"></i>
             </button>
-            <button v-on:click="event.preventDefault(); changeMenu('about')" class="float-right" @mouseenter="bme()">
+            <button v-on:click="event.preventDefault(); changeMenu('about')" class="btn-small float-right" @mouseenter="bme()">
                 <i class="fa fa-question-circle"></i>
             </button>
         </div>
@@ -331,17 +331,9 @@ Vue.component('app-menu-building-selected', {
             this.bmc();
             game.deselectEntities(true);
         },
-        showUpgradeHover: function(key, upgrade) {
-            this.hoverUpgradeName = upgrade ? upgrade.name : null;
-            let buildingUpgrade = null;
-            if (key && upgrade && this.entity) {
-                this.bme();
-                const building = this.entity.building;
-                if (building) {
-                    buildingUpgrade = window.objectData.buildings[(building.parentKey ? building.parentKey : building.key) + '_' + key];
-                }
-            }
-            game.sidebarMenuComponent.showHoverMenu(buildingUpgrade);
+        showUpgradeHover: function(upgrade) {
+            this.hoverUpgradeName = upgrade?.upgradeName ?? (upgrade?.name ?? null);
+            game.sidebarMenuComponent.showHoverMenu(upgrade);
         },
         focusText: function() {
             if (this.entity && this.entity.type === 'text') {
@@ -480,10 +472,10 @@ Vue.component('app-menu-building-selected', {
         </div>
         <template v-if="game.getSelectedEntities().length === 1">
             <div v-if="entity.building && entity.building.upgrades" class="settings-option-wrapper upgrade-list">
-                <div class="settings-title">{{hoverUpgradeName ?? (entity.building.upgradeName ?? 'No Upgrade Selected')}}</div>
-                <button class="upgrade-button" v-for="(upgrade, key) in entity.building.upgrades" :class="{'selected-upgrade': entity.building.parentKey && entity.building.key === entity.building.parentKey + '_' + key}"
-                    @mouseenter="showUpgradeHover(key, upgrade)" @mouseleave="showUpgradeHover()" @click="changeUpgrade(key)">
-                    <div class="resource-icon" :title="upgrade.name" :style="{backgroundImage:'url(' + (upgrade.icon ?? entity.building.icon) + ')'}"></div>
+                <div class="settings-title">{{hoverUpgradeName ?? (entity.building.upgradeName ?? (entity.building.upgrades[entity.building.key]?.name ?? 'No Upgrade Selected'))}}</div>
+                <button class="upgrade-button" v-for="upgrade in entity.building.upgrades" :class="{'selected-upgrade': (entity.building.parent && entity.building.key === entity.building.parent.key + '_' + upgrade.key) || entity.building.key === upgrade.key}"
+                    @mouseenter="showUpgradeHover(upgrade); bme()" @mouseleave="showUpgradeHover()" @click="changeUpgrade(upgrade)">
+                    <div class="resource-icon" :title="upgrade.upgradeName ?? upgrade.name" :style="{backgroundImage:'url(' + (upgrade.icon ?? entity.building.icon) + ')'}"></div>
                 </button>
             </div>
             <div v-if="productionData" class="settings-option-wrapper">
@@ -669,7 +661,7 @@ Vue.component('app-menu-construction-list', {
                     <select class="btn-small app-input construction-category" @click="bmc()" title="Filter by Category" v-model="game.selectedBuildingCategory" @change="refresh()">
                         <option value="all">All Buildings</option>
                         <template v-for="(category, key) in window.objectData.categories">
-                            <option v-if="game.settings.enableExperimental || key !== 'entrenchments'" :value="key">{{category.name}}</option>
+                            <option :value="key">{{category.name}}</option>
                         </template>
                     </select>
                 </div>
@@ -686,7 +678,7 @@ Vue.component('app-menu-construction-list', {
             </template>
             <template v-else>
                 <template v-for="(category, key) in window.objectData.categories">
-                    <template v-if="(game.settings.showCollapsibleBuildingList || key !== 'vehicles') && (game.settings.enableExperimental || key !== 'entrenchments')">
+                    <template v-if="(game.settings.showCollapsibleBuildingList || key !== 'vehicles')">
                         <div v-if="game.settings.showCollapsibleBuildingList" class="construction-item-category" @click="category.visible = !category.visible; refresh()">
                             {{category.name}}<i class="fa float-right" :class="{'fa-angle-down': category.visible, 'fa-angle-right': !category.visible}" style="margin-top: 2px;" aria-hidden="true"></i>
                         </div>
@@ -826,6 +818,14 @@ Vue.component('app-menu-settings', {
                 <i class="fa fa-flag" aria-hidden="true"></i> Display Faction Colors
                 <input class="app-input" type="checkbox" v-model="game.settings.displayFactionTheme" @change="game.updateSettings()">
             </label>
+            <label class="app-input-label">
+                <i class="fa fa-history" aria-hidden="true"></i> Save History (Undo / Redo)
+                <input class="app-input" type="checkbox" v-model="game.settings.enableHistory" @change="game.updateSettings()">
+            </label>
+            <label v-if="game.settings.enableHistory" class="app-input-label" title="The total amount of saves / actions that can be stored to undo / redo.">
+                <i class="fa fa-hdd-o" aria-hidden="true"></i> Stored History Size
+                <input class="app-input" type="number" v-model.number="game.settings.historySize" @input="game.updateSettings()">
+            </label>
             <!--
             <label class="app-input-label">
                 <i class="fa fa-flask" aria-hidden="true"></i> Enable Experimental Features
@@ -863,7 +863,7 @@ Vue.component('app-menu-settings', {
                 <select class="app-input" v-model="game.settings.defaultBuildingCategory" @change="game.updateSettings()">
                     <option value="all">All Buildings</option>
                     <template v-for="(category, key) in window.objectData.categories">
-                        <option v-if="game.settings.enableExperimental || key !== 'entrenchments'" :value="key">{{category.name}}</option>
+                        <option :value="key">{{category.name}}</option>
                     </template>
                 </select>
             </label>
@@ -972,13 +972,12 @@ Vue.component('app-menu-save-load', {
                 </button>
             </div>
         </div>
-        <div v-if="game.settings.enableExperimental" class="settings-option-wrapper">
+        <div class="settings-option-wrapper">
             <div class="settings-title">Facility Presets</div>
             <div class="text-center">
                 <div class="select-preset-wrapper">
                     <select title="Load a Preset" v-model="presetName">
                         <option v-bind:value="null">Choose a Preset</option>
-                        <option value="all_structures">All Buildings + Upgrades</option>
                         <option value="small_120mm_facility">Small 120mm Facility</option>
                         <option value="bunker_test">Bunker Testing</option>
                         <option value="train_test">Train Testing</option>
