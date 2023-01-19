@@ -2161,7 +2161,7 @@ try {
                     }
                 }
 
-                if (game.settings.enableExperimental && socketData.switch === 'rail') {
+                if (socketData.switch === 'rail') {
                     let railSwitch = new PIXI.Sprite(resources['white'].texture);
                     railSwitch.anchor.set(0.5);
                     railSwitch.tint = 0xFF0000;

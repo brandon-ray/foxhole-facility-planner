@@ -678,7 +678,7 @@ Vue.component('app-menu-construction-list', {
             </template>
             <template v-else>
                 <template v-for="(category, key) in window.objectData.categories">
-                    <template v-if="(game.settings.showCollapsibleBuildingList || key !== 'vehicles')">
+                    <template v-if="(game.settings.showCollapsibleBuildingList || !category.hideInBuildingList)">
                         <div v-if="game.settings.showCollapsibleBuildingList" class="construction-item-category" @click="category.visible = !category.visible; refresh()">
                             {{category.name}}<i class="fa float-right" :class="{'fa-angle-down': category.visible, 'fa-angle-right': !category.visible}" style="margin-top: 2px;" aria-hidden="true"></i>
                         </div>

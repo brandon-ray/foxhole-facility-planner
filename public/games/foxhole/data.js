@@ -19,7 +19,12 @@ const foxholeData = {
 			"name": "Power"
 		},
 		"vehicles": {
-			"name": "Vehicles"
+			"name": "Vehicles",
+			"hideInBuildingList": true
+		},
+		"trains": {
+			"name": "Locomotives",
+			"hideInBuildingList": true
 		},
 		"misc": {
 			"name": "Miscellaneous"
@@ -3281,7 +3286,7 @@ const foxholeData = {
 			"codeName": "ForwardBase1",
 			"description": "A temporary forward operating base. Players can spawn from here.",
 			"category": "misc",
-			"categoryOrder": 1,
+			"categoryOrder": 5,
 			"range": {
 				"type": "garrison",
 				"max": 80
@@ -5061,6 +5066,20 @@ const foxholeData = {
 				"facilitymaterials1": 35
 			},
 			"repairCost": 100
+		},
+		"materialplatform": {
+			"name": "Material Pallet",
+			"codeName": "MaterialPlatform",
+			"description": "A material pallet.",
+			"category": "misc",
+			"categoryOrder": 1,
+			"icon": "game/Textures/UI/ItemIcons/MaterialPlatformItemIcon.webp",
+			"texture": "game/Textures/Structures/material_platform.webp",
+			"maxHealth": 1000,
+			"cost": {
+				"cloth": 25
+			},
+			"repairCost": 50
 		},
 		"materials_factory": {
 			"name": "Materials Factory",
@@ -7564,7 +7583,7 @@ const foxholeData = {
 			"name": "Relic Base",
 			"codeName": "RelicBase1",
 			"category": "misc",
-			"categoryOrder": 5,
+			"categoryOrder": 6,
 			"hideInList": true,
 			"hitArea": [
 				{
@@ -7728,8 +7747,8 @@ const foxholeData = {
 			"name": "BMS Railtruck",
 			"codeName": "SmallTrainDump",
 			"description": "A small gauge container car for transporting raw materials. ",
-			"category": "vehicles",
-			"hideInList": true,
+			"category": "trains",
+			"categoryOrder": 3,
 			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeResourceCarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/smalltraindump.webp",
@@ -7759,8 +7778,8 @@ const foxholeData = {
 			"name": "BMS Mineseeker",
 			"codeName": "SmallTrainEngine",
 			"description": "The Mineseeker is the Bassett Motor Society’s mechanized mule. This small 0-4-0 locomotive can haul tonnes of weight over short distances with little overhead. Ideal for a mining operation or short-range supply chains. ",
-			"category": "vehicles",
-			"hideInList": true,
+			"category": "trains",
+			"categoryOrder": 1,
 			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeEngineVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/smalltrainengine.webp",
@@ -7792,8 +7811,8 @@ const foxholeData = {
 			"name": "BMS Linerunner",
 			"codeName": "SmallTrainResourcePlatform",
 			"description": "A low profile flatbed car for transporting large resources and munitions over short distances on small gauge tracks.",
-			"category": "vehicles",
-			"hideInList": true,
+			"category": "trains",
+			"categoryOrder": 2,
 			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeFlatbedCarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/smalltrainresourceplatform.webp",
@@ -8201,7 +8220,7 @@ const foxholeData = {
 			"name": "Town Base",
 			"codeName": "TownBase3",
 			"category": "misc",
-			"categoryOrder": 6,
+			"categoryOrder": 7,
 			"hideInList": true,
 			"hitArea": [
 				{
@@ -8267,8 +8286,8 @@ const foxholeData = {
 			"name": "BMS Roadhouse",
 			"codeName": "TrainCaboose",
 			"description": "A simple caboose that allows rail crews to maintain tracks more efficiently.",
-			"category": "vehicles",
-			"hideInList": true,
+			"category": "trains",
+			"categoryOrder": 11,
 			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/TrainCabooseItemIcon.webp",
 			"texture": "game/Textures/Vehicles/traincaboose.webp",
@@ -8299,8 +8318,8 @@ const foxholeData = {
 			"name": "BMS Rockhold",
 			"codeName": "TrainCoal",
 			"description": "A container car for transporting coal to refuel trains over long-distance trips. ",
-			"category": "vehicles",
-			"hideInList": true,
+			"category": "trains",
+			"categoryOrder": 5,
 			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/TrainCoalCarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/traincoal.webp",
@@ -8331,9 +8350,9 @@ const foxholeData = {
 			"name": "Aegis Steelbreaker K5a",
 			"codeName": "TrainCombatCarC",
 			"description": "Known across the colonies as King of the Rails, this heavily armoured train car is designed to protect and exert dominance over contested rail lines, especially when transporting supplies into contested territory as well as safely transporting infantry. This armoured beast boasts a forward facing cannon, as well as heavy lateral guns.",
-			"category": "vehicles",
+			"category": "trains",
+			"categoryOrder": 8,
 			"faction": "c",
-			"hideInList": true,
 			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/CombatCarCVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/traincombatcarc.webp",
@@ -8364,9 +8383,9 @@ const foxholeData = {
 			"name": "O’Brien Warsmith v.215",
 			"codeName": "TrainCombatCarW",
 			"description": "In his later years, O’Brien nearly died in an attack on a military passenger train while travelling to Whedon’s Row. In response, he put his team to work designing not only an infantry car that offered powerful protection to any locomotive, but one that just the sight of it would run off all but the most committed of attackers—Namely its thick armour plating and powerful twin turrets. ",
-			"category": "vehicles",
+			"category": "trains",
+			"categoryOrder": 9,
 			"faction": "w",
-			"hideInList": true,
 			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/CombatCarWVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/traincombatcarw.webp",
@@ -8397,8 +8416,8 @@ const foxholeData = {
 			"name": "BMS Black Bolt",
 			"codeName": "TrainEngine",
 			"description": "One of the most storied mass-market 0-6-2 locomotives engineered by the Bassett Motor Society, this coal-powered industrial train engine is reliable, tested, and incredibly durable. The Black Bolt’s legacy is unmatched having aided the Bassett Motor Society in supplying countries across the globe.",
-			"category": "vehicles",
-			"hideInList": true,
+			"category": "trains",
+			"categoryOrder": 4,
 			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/TrainEngineVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/trainengine.webp",
@@ -8431,8 +8450,8 @@ const foxholeData = {
 			"name": "BMS Longrider",
 			"codeName": "TrainFlatbed",
 			"description": "A flatbed car for transporting large resources and munitions by train over long-distances. ",
-			"category": "vehicles",
-			"hideInList": true,
+			"category": "trains",
+			"categoryOrder": 6,
 			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/TrainCarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/trainflatbed.webp",
@@ -8463,8 +8482,8 @@ const foxholeData = {
 			"name": "BMS Holdout",
 			"codeName": "TrainInfantry",
 			"description": "An armoured train car with a mounted machinegun position for transporting infantry safely over long distances.",
-			"category": "vehicles",
-			"hideInList": true,
+			"category": "trains",
+			"categoryOrder": 7,
 			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/InfantryCarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/traininfantry.webp",
@@ -8495,7 +8514,8 @@ const foxholeData = {
 			"name": "Tempest Cannon RA-2",
 			"codeName": "TrainLRArtillery",
 			"description": "All the power of a stationary Storm Cannon, but easily relocated via rails. This devastating cannon is capable of leveling enemy fortifications at very large distances.",
-			"category": "vehicles",
+			"category": "trains",
+			"categoryOrder": 10,
 			"hideInList": true,
 			"length": 3.74,
 			"sortLayer": "vehicle",
@@ -9131,7 +9151,7 @@ const foxholeData = {
 			"name": "Public Road",
 			"description": "A public road featured throughout the world of Foxhole. This structure cannot be placed by a player, and is entirely for your reference.",
 			"category": "misc",
-			"categoryOrder": 7,
+			"categoryOrder": 8,
 			"sortLayer": "road",
 			"hasHandle": true,
 			"isBezier": true,
