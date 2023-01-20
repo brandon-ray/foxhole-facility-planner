@@ -117,7 +117,7 @@
 }
 
 .statistics-panel {
-    width: 300px;
+    width: 325px;
     background: #1a1a1a;
     /*background: linear-gradient(rgb(42, 42, 42), rgb(32, 32, 32));*/
     position: fixed;
@@ -127,6 +127,7 @@
     overflow: hidden;
     border: 1px solid black;
     border-radius: 6px;
+    text-align: left;
 }
 
 .statistics-panel-header {
@@ -142,28 +143,42 @@
     /*border: 1px solid black;*/
 }
 
-/*
 .colonial-faction .statistics-panel-header {
-    background: linear-gradient(rgb(24, 24, 24), rgb(5, 26, 6));
+    /*background: linear-gradient(rgb(24, 24, 24), rgb(5, 26, 6));*/
+    background: linear-gradient(rgb(31, 70, 33), rgb(5, 26, 6));
 }
 
 .warden-faction .statistics-panel-header {
-    background: linear-gradient(rgb(24, 24, 24), rgb(5, 16, 26));
+    /*background: linear-gradient(rgb(24, 24, 24), rgb(5, 16, 26));*/
+    background: linear-gradient(rgb(12, 61, 106), rgb(5, 16, 26));
 }
-*/
 
 .statistics-panel-header button {
     background: transparent;
 }
 
 .statistics-panel-body {
-    min-height: 400px;
+    /*min-height: 400px;*/
     max-height: 890px;
-    padding: 10px;
+    padding: 10px 12px;
     overflow: auto;
 }
 
-/*
+.statistics-panel-body .resource-row {
+    background: #0b0b0b;
+    margin: 0;
+}
+
+.statistics-panel-body .resource-row:not(:last-child) {
+    border-bottom: 1px solid black;
+}
+
+.statistics-panel-body .resource-icon {
+    background-color: #171717;
+    border: none;
+    border-right: 1px solid black;
+}
+
 .colonial-faction .statistics-panel-body {
     background: linear-gradient(rgb(54, 79, 18), rgb(38, 51, 32));
 }
@@ -171,7 +186,6 @@
 .warden-faction .statistics-panel-body {
     background: linear-gradient(rgb(18, 50, 79), rgb(32, 42, 51));
 }
-*/
 
 /*
 .statistics-panel-fac-input, .statistics-panel-fac-output {
@@ -183,4 +197,65 @@
 
 .statistics-panel-fac-output .resource-amount {
     color: #03b003;
+}
+
+.statistics-panel .construction-options .btn-small {
+    cursor: default;
+}
+
+.statistics-panel .construction-options .btn-small:hover {
+    border-color: black;
+}
+
+.statistics-panel .construction-options .btn-small .label {
+    font-weight: bold;
+}
+
+.high-structural-integrity {
+    color: rgb(3, 176, 3) !important;
+}
+
+.medium-structural-integrity {
+    color: rgb(208, 208, 4) !important;
+}
+
+.low-structural-integrity {
+    color: rgb(255, 165, 0) !important;
+}
+
+.critical-structural-integrity {
+    color: rgb(213, 1, 1) !important;
+}
+
+.statistics-time-dropdown {
+    height: 40px;
+    position: relative;
+}
+
+.statistics-time-dropdown i {
+    width: 35px;
+    background-color: #121212;
+    line-height: 38px;
+    font-size: 1.25em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+    border-right: 1px solid black;
+}
+
+.statistics-time-dropdown .time-select-wrapper {
+    height: 100%;
+    position: absolute;
+    inset: 0;
+    left: 35px;
+}
+
+.statistics-time-dropdown select {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 0;
+    background-color: #090909;
+    padding: 0 12px;
 }

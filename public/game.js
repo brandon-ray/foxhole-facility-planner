@@ -3544,12 +3544,12 @@ try {
         let entity = game.getSelectedEntity();
         let bData = entity?.building;
         if (bData) {
-            if (upgrade) {
-                upgrade = bData.parentKey ? bData.parentKey + '_' + upgrade : bData.key + '_' + upgrade;
-                upgrade = bData.key === upgrade ? bData.parentKey || bData.key : upgrade;
+            let upgradeKey = upgrade?.key;
+            if (upgradeKey && bData.parent?.key && upgradeKey === entity.building.key) {
+                upgradeKey = bData.parent.key;
             }
-            let clone = createSelectableEntity('building', upgrade ?? entity.building.key, entity.x, entity.y, entity.z, entity.rotation, entity.id);
-            if (upgrade) {
+            let clone = createSelectableEntity('building', upgradeKey ?? entity.building.key, entity.x, entity.y, entity.z, entity.rotation, entity.id);
+            if (upgradeKey) {
                 let position = { x: clone.x, y: clone.y };
                 if (entity.building?.positionOffset) {
                     position.x -= ((entity.building.positionOffset.x ?? 0) / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;

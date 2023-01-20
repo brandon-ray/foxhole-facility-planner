@@ -432,11 +432,17 @@ input[type=number].btn-small {
     background: #222;
 }
 
+.construction-options-wrapper {
+    background: black;
+    border: 1px solid black;
+    margin-bottom: 10px;
+}
+
 .construction-options-header {
     background: #121212;
     margin: 0;
-    padding: 5px 10px;
-    border: 1px solid black;
+    padding: 6px 10px;
+    border-bottom: 1px solid black;
     color: #eee;
 }
 
@@ -598,6 +604,18 @@ input[type=number].btn-small {
 #construction-page .construction-item-category:hover {
     background: #1b1b1b;
 }
+
+/*
+#construction-page .construction-item-category-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-size: 22px;
+    background-repeat: no-repeat;
+    background-position: center;
+    vertical-align: middle;
+}
+*/
 
 #about-page > .about-section {
     margin-bottom: 20px;

@@ -77,10 +77,12 @@ Vue.component('app-menu-statistics', {
             input: {},
             output: {},
             time: 3600,
+            bunker: null,
             powerTotal: 0,
             powerProduced: 0,
             powerConsumed: 0,
-            garrisonSupplies: 0,
+            selection: false,
+            garrisonSupplies: 0
         };
     },
     mounted() {
@@ -98,21 +100,33 @@ Vue.component('app-menu-statistics', {
             let cost = {};
             let input = {};
             let output = {};
+            let bunker = {
+                total: 0,
+                maxHealth: 0,
+                repairCost: 0,
+                structuralIntegrity: 1.0
+            };
             let powerTotal = 0;
             let powerProduced = 0;
             let powerConsumed = 0;
             let garrisonSupplies = 0;
             let garrisonConsumptionRate = Math.floor(this.time / 3600);
             let garrisonConsumptionReducers = [];
-            for (let i=0; i<game.getEntities().length; i++) {
+
+            for (let i = 0; i < game.getEntities().length; i++) {
                 let entity = game.getEntities()[i];
                 if (entity.building && entity.building.range?.type === 'garrisonReduceDecay') {
                     garrisonConsumptionReducers.push(entity);
                 }
             }
 
-            for (let i=0; i<game.getEntities().length; i++) {
-                let entity = game.getEntities()[i];
+            const selectedEntities = game.getSelectedEntities();
+
+            //this.selection = game.settings.showSelectionStats && selectedEntities.length;
+
+            let entities = this.selection ? selectedEntities : game.getEntities();
+            for (let i = 0; i < entities.length; i++) {
+                let entity = entities[i];
                 if (entity.type === 'building') {
                     let buildingData = window.objectData.buildings[entity.subtype];
                     if (!buildingData) {
@@ -129,6 +143,13 @@ Vue.component('app-menu-statistics', {
                             }
                         }
                         garrisonSupplies += consumptionRate;
+                    }
+
+                    if (buildingData.structuralIntegrity) {
+                        bunker.total += 1;
+                        bunker.maxHealth += buildingData.maxHealth;
+                        bunker.repairCost += buildingData.repairCost;
+                        bunker.structuralIntegrity *= buildingData.structuralIntegrity;
                     }
 
                     let productionSelected = typeof entity.selectedProduction === 'number';
@@ -226,9 +247,13 @@ Vue.component('app-menu-statistics', {
                 }
             }
 
-            this.cost = cost;
-            this.input = input;
-            this.output = output;
+            bunker.structuralIntegrity = bunker.total === 1 ? 1 : bunker.structuralIntegrity;
+            bunker.class = bunker.structuralIntegrity >= 0.75 ? 'high' : (bunker.structuralIntegrity >= 0.5 ? 'medium' : (bunker.structuralIntegrity >= 0.25 ? 'low' : 'critical'));
+
+            this.cost = Object.keys(cost).length ? cost : null;
+            this.input = Object.keys(input).length ? input : null;
+            this.output = Object.keys(output).length ? output : null;
+            this.bunker = bunker;
             this.powerTotal = powerTotal;
             this.powerProduced = powerProduced;
             this.powerConsumed = powerConsumed;
@@ -238,46 +263,89 @@ Vue.component('app-menu-statistics', {
         },
     },
     template: html`
-    <div style="text-align:left;">
+    <div class="statistics-panel">
         <div class="statistics-panel-header">
             <h4 class="float-left m-0" style="color: #eee"><i class="fa fa-bar-chart"></i> Statistics</h4>
             <!--<button class="btn-small m-0 float-right" title="Maximize Stats"><i class="fa fa-window-maximize"></i></button>-->
             <button class="btn-small m-0 mr-1 float-right" title="Minimize Stats" @click="game.settings.enableStats = false; game.updateSettings()"><i class="fa fa-window-minimize"></i></button>
         </div>
         <div class="statistics-panel-body">
-            <h4><i class="fa fa-wrench"></i> Construction Cost</h4>
-            <div>
-                <app-game-resource-icon v-for="(value, key) in cost" :resource="key" :amount="value"/>
+            <div v-if="!(cost || bunker?.total || powerProduced || powerConsumed || powerTotal || input || output)" class="text-center" style="color: #f0f0f0">Place buildings to see their stats here!</div>
+            <div v-if="cost" class="construction-options-wrapper">
+                <h5 class="construction-options-header"><i class="fa fa-wrench"></i> Construction Cost</h5>
+                <div>
+                    <app-game-resource-icon v-for="(value, key) in cost" :resource="key" :amount="value"/>
+                </div>
             </div>
-            <br>
-            <h4><i class="fa fa-bolt"></i> Facility Power</h4>
-            <div style="color:#d0d004; width:250px; margin:auto;">
-                <span style="color:#03b003;">Produced: {{powerProduced}} MW</span><br>
-                <span style="color:#d50101;">Consumed: {{powerConsumed}} MW</span><br>
-                Total: {{powerTotal}} MW
+            <div v-if="bunker?.total" class="construction-options-wrapper">
+                <h5 class="construction-options-header"><i class="fa fa-shield" aria-hidden="true"></i> Bunker Stats</h5>
+                <div class="construction-options row d-flex justify-content-center">
+                    <!--
+                        D26 = Hours since placed, decimals would work.
+                        CEILING(I15/(240*0.25*IFS(ISBLANK(D26),1,D26<2.4, 10, D26<24, 24/D26,D26=24,1, D26>24, 1)*0.95),1)
+                        (Concrete does not begin drying until 2.4 hours after placing, after 24 hours it's completely dry)
+                        (Concrete is required to build T3 bunker pieces and is unusuable during this period)
+                    -->
+
+                    <div class="btn-small col" style="color: #03b003;">
+                        <span style="font-size: 18px;">{{Math.floor(bunker.maxHealth * bunker.structuralIntegrity)}}</span>
+                        <span class="label">health</span>
+                    </div>
+                    <div class="btn-small col" style="color: #d0d004;">
+                        <span style="font-size: 18px;">{{bunker.repairCost}}</span>
+                        <span class="label">repair</span>
+                    </div>
+                    <div class="btn-small col" :class="bunker.class + '-structural-integrity'">
+                        <span style="font-size: 18px;">{{Math.floor(bunker.structuralIntegrity * 100)}} <small>%</small></span>
+                        <!--<span class="label">{{bunker.structuralIntegrity.toFixed(4)}}</span>-->
+                        <span class="label">{{bunker.class}}</span>
+                    </div>
+                </div>
             </div>
-            <br>
-            <select class="app-input" v-model="time" @change="refresh()">
-                <option value="86400">Per 24 Hours</option>
-                <option value="43200">Per 12 Hours</option>
-                <option value="21600">Per 6 Hours</option>
-                <option value="10800">Per 3 Hours</option>
-                <option value="3600">Per 1 Hour</option>
-                <option value="1800">Per 30 Minutes</option>
-                <option value="900">Per 15 Minutes</option>
-                <option value="60">Per 1 Minute</option>
-            </select>
-            <br><br>
-            <app-game-resource-icon :resource="'garrisonsupplies'" :amount="garrisonSupplies"/>
-            <br>
-            <h4><i class="fa fa-sign-in"></i> Facility Input</h4>
-            <div class="statistics-panel-fac-input">
-                <app-game-resource-icon v-for="(value, key) in input" :resource="key" :amount="value"/>
+            <div v-if="powerProduced || powerConsumed || powerTotal" class="construction-options-wrapper">
+                <h5 class="construction-options-header"><i class="fa fa-bolt"></i> {{selection ? 'Selection' : 'Facility'}} Power</h5>
+                <div class="construction-options row d-flex justify-content-center">
+                    <div class="btn-small col" style="color: #03b003;">
+                        <span style="font-size: 18px;">{{powerProduced}} <small>MW</small></span>
+                        <span class="label">produced</span>
+                    </div>
+                    <div class="btn-small col" style="color: #ff0d0d;">
+                        <span style="font-size: 18px;">{{powerConsumed}} <small>MW</small></span>
+                        <span class="label">consumed</span>
+                    </div>
+                    <div class="btn-small col" style="color: #d0d004;">
+                        <span style="font-size: 18px;">{{powerTotal}} <small>MW</small></span>
+                        <span class="label">total</span>
+                    </div>
+                </div>
             </div>
-            <br>
-            <h4><i class="fa fa-sign-out"></i> Facility Output</h4>
-            <div class="statistics-panel-fac-output">
-                <app-game-resource-icon v-for="(value, key) in output" :resource="key" :amount="value"/>
+            <div v-if="input || output" class="construction-options-wrapper statistics-time-dropdown">
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                <div class="time-select-wrapper">
+                    <select class="app-input" v-model="time" @change="refresh()">
+                        <option value="86400">Per 24 Hours</option>
+                        <option value="43200">Per 12 Hours</option>
+                        <option value="21600">Per 6 Hours</option>
+                        <option value="10800">Per 3 Hours</option>
+                        <option value="3600">Per 1 Hour</option>
+                        <option value="1800">Per 30 Minutes</option>
+                        <option value="900">Per 15 Minutes</option>
+                        <option value="60">Per 1 Minute</option>
+                    </select>
+                </div>
+            </div>
+            <div v-if="input" class="construction-options-wrapper">
+                <h5 class="construction-options-header"><i class="fa fa-sign-in"></i> {{selection ? 'Selection' : 'Facility'}} Input</h5>
+                <div class="statistics-panel-fac-input">
+                    <app-game-resource-icon v-if="garrisonSupplies" :resource="'garrisonsupplies'" :amount="garrisonSupplies"/>
+                    <app-game-resource-icon v-for="(value, key) in input" :resource="key" :amount="value"/>
+                </div>
+            </div>
+            <div v-if="output" class="construction-options-wrapper">
+                <h5 class="construction-options-header"><i class="fa fa-sign-out"></i> {{selection ? 'Selection' : 'Facility'}} Output</h5>
+                <div class="statistics-panel-fac-output">
+                    <app-game-resource-icon v-for="(value, key) in output" :resource="key" :amount="value"/>
+                </div>
             </div>
         </div>
     </div>

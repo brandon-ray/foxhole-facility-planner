@@ -95,7 +95,9 @@ function assetDir(str) {
                 if (!upgrade.reference) {
                     appendGameAssets(upgrade);
 
-                    let upgradeBuilding = Object.assign({}, building, upgrade);
+                    let upgradeBuilding = Object.assign({}, building, upgrade, {
+                        parentKey: undefined
+                    });
                     upgradeBuilding.parent = building;
                     upgradeBuilding.upgradeName = upgrade.name;
                     upgradeBuilding.name = building.name + ' (' + upgrade.name + ')';

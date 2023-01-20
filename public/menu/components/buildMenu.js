@@ -416,7 +416,7 @@ Vue.component('app-menu-building-selected', {
             </div>
             <div class="settings-option-wrapper">
                 <div class="settings-title">
-                    {{entity.building?.parent?.name ?? (entity.building?.name ?? 'Other Options')}}
+                    {{(entity.building && ((!entity.building.parentKey && entity.building.parent?.name) || entity.building.name)) ?? 'Other Options'}}
                 </div>
                 <label class="app-input-label">
                     <i class="fa fa-arrows" aria-hidden="true"></i> Position X:
@@ -472,7 +472,12 @@ Vue.component('app-menu-building-selected', {
         </div>
         <template v-if="game.getSelectedEntities().length === 1">
             <div v-if="entity.building && entity.building.upgrades" class="settings-option-wrapper upgrade-list">
-                <div class="settings-title">{{hoverUpgradeName ?? (entity.building.upgradeName ?? (entity.building.upgrades[entity.building.key]?.name ?? 'No Upgrade Selected'))}}</div>
+                <div class="settings-title">
+                    <button v-if="entity.building?.parentKey" type="button" class="title-button return-button" v-on:click="changeUpgrade(entity.building.parent)" title="Go to Previous Tier" @mouseenter="bme()" style="padding: 1px 2px;">
+                        <div class="btn-small m-1"><i class="fa fa-arrow-left"></i></div>
+                    </button>
+                    {{hoverUpgradeName ?? (entity.building.upgradeName ?? (entity.building.upgrades[entity.building.key]?.name ?? 'No Upgrade Selected'))}}
+                </div>
                 <button class="upgrade-button" v-for="upgrade in entity.building.upgrades" :class="{'selected-upgrade': (entity.building.parent && entity.building.key === entity.building.parent.key + '_' + upgrade.key) || entity.building.key === upgrade.key}"
                     @mouseenter="showUpgradeHover(upgrade); bme()" @mouseleave="showUpgradeHover()" @click="changeUpgrade(upgrade)">
                     <div class="resource-icon" :title="upgrade.upgradeName ?? upgrade.name" :style="{backgroundImage:'url(' + (upgrade.icon ?? entity.building.icon) + ')'}"></div>
@@ -787,10 +792,10 @@ Vue.component('app-game-building-list-icon', {
     },
     template: html`
     <div v-if="(!building.hideInList || game.settings.enableExperimental) &&
-        (!building.parent || game.settings.showUpgradesAsBuildings) &&
+        (!building.parent || building.parentKey || game.settings.showUpgradesAsBuildings) &&
         (!building.techId || (game.settings.selectedTier === 2 && building.techId === 'unlockfacilitytier2') || game.settings.selectedTier === 3) &&
         (!game.settings.selectedFaction || (!building.faction || building.faction === game.settings.selectedFaction))"
-        class="build-icon" :title="building.name" :style="{backgroundImage:'url(' + ((building.parent?.icon ?? building.icon) ?? '/assets/default_icon.webp') + ')'}"
+        class="build-icon" :title="building.name" :style="{backgroundImage:'url(' + (((!building.parentKey && building.parent?.icon) || building.icon) ?? '/assets/default_icon.webp') + ')'}"
         @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" @click="buildBuilding(building)">
     </div>
     `

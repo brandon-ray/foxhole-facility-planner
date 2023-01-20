@@ -2407,6 +2407,7 @@ const foxholeData = {
 		"fortcornert1": {
 			"name": "Bunker Corner (Tier 1)",
 			"codeName": "FortCornerT1",
+			"parentKey": "fortt1",
 			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
 			"category": "entrenchments",
 			"categoryOrder": 4,
@@ -2493,7 +2494,7 @@ const foxholeData = {
 		"fortcornert2": {
 			"name": "Bunker Corner (Tier 2)",
 			"codeName": "FortCornerT2",
-			"parentKey": "fortcornert1",
+			"parentKey": "fortt1",
 			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
 			"category": "entrenchments",
 			"categoryOrder": 4,
@@ -2583,7 +2584,7 @@ const foxholeData = {
 		"fortcornert3": {
 			"name": "Bunker Corner (Tier 3)",
 			"codeName": "FortCornerT3",
-			"parentKey": "fortcornert2",
+			"parentKey": "fortt2",
 			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
 			"category": "entrenchments",
 			"categoryOrder": 4,

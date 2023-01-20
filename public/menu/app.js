@@ -55,9 +55,7 @@ if (isMobile && !isPhoneApp) {
                     <i class="fa fa-wrench" aria-hidden="true"></i> {{game.facilityName}}
                 </div>
 
-                <div v-if="game.settings.enableStats" class="statistics-panel">
-                    <app-menu-statistics></app-menu-statistics>
-                </div>
+                <app-menu-statistics v-if="game.settings.enableStats"></app-menu-statistics>
 
                 <app-game-confirmation-popup></app-game-confirmation-popup>
 
