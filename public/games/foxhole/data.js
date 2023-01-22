@@ -7,7 +7,8 @@ const foxholeData = {
 			"name": "Defenses"
 		},
 		"entrenchments": {
-			"name": "Entrenchments"
+			"name": "Entrenchments",
+			"hideInList": true
 		},
 		"factories": {
 			"name": "Facilities"
@@ -2158,6 +2159,7 @@ const foxholeData = {
 			"hideInList": true,
 			"width": 5.76,
 			"length": 5.76,
+			"sortLayer": "upgrade",
 			"icon": "game/Textures/UI/StructureIcons/FortT1BaseIcon.webp",
 			"texture": "game/Textures/Structures/fortt1_base.webp",
 			"textureOffset": {
@@ -2246,8 +2248,8 @@ const foxholeData = {
 			"icon": "game/Textures/UI/StructureIcons/FortT2BaseIcon.webp",
 			"texture": "game/Textures/Structures/fortt2_base.webp",
 			"textureOffset": {
-				"x": 306,
-				"y": 312
+				"x": 384,
+				"y": 402
 			},
 			"canSnap": true,
 			"snapNearest": true,
@@ -2331,8 +2333,8 @@ const foxholeData = {
 			"icon": "game/Textures/UI/StructureIcons/FortT3BaseIcon.webp",
 			"texture": "game/Textures/Structures/fortt3_base.webp",
 			"textureOffset": {
-				"x": 306,
-				"y": 312
+				"x": 382,
+				"y": 382
 			},
 			"canSnap": true,
 			"snapNearest": true,
@@ -2498,6 +2500,8 @@ const foxholeData = {
 			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
 			"category": "entrenchments",
 			"categoryOrder": 4,
+			"hideInList": true,
+			"tierUpgrade": true,
 			"width": 5.76,
 			"length": 5.76,
 			"hitArea": [
@@ -2881,6 +2885,8 @@ const foxholeData = {
 			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
 			"category": "entrenchments",
 			"categoryOrder": 3,
+			"hideInList": true,
+			"tierUpgrade": true,
 			"width": 5.76,
 			"length": 5.76,
 			"icon": "game/Textures/UI/StructureIcons/FortT2Icon.webp",
@@ -3001,6 +3007,7 @@ const foxholeData = {
 					"name": "Machine Gun Garrison (Tier 2)",
 					"codeName": "MGAIT2",
 					"description": "An entrenched machine gun manned by stationed troops.",
+					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/FortT2MGunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt2_mgai.webp",
 					"maxHealth": 2150,
@@ -3033,6 +3040,10 @@ const foxholeData = {
 					"description": "A ramp that enables access to underground Bunkers.",
 					"icon": "game/Textures/UI/StructureIcons/FortT2RampIcon.webp",
 					"texture": "game/Textures/Structures/fortt2_ramp.webp",
+					"textureOffset": {
+						"x": 328,
+						"y": 318
+					},
 					"maxHealth": 1850,
 					"structuralIntegrity": 0.95,
 					"cost": {
@@ -3152,6 +3163,8 @@ const foxholeData = {
 					"description": "A high-tech listening post designed to intercept and decode enemy transmissions. The intelligence Center can target distant locations and will continue to decipher sensitive transmissions over a sustained period.",
 					"icon": "game/Textures/UI/StructureIcons/IntelligenceCenterIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_intelcenter.webp",
+					"textureBorder": null,
+					"textureOffset": null,
 					"maxHealth": 2550,
 					"structuralIntegrity": 0.65,
 					"cost": {
@@ -3165,6 +3178,11 @@ const foxholeData = {
 					"description": "A heavy fixed position artillery that can release devastating firepower on distant enemy targets.",
 					"icon": "game/Textures/UI/StructureIcons/LongRangedArtilleryIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_lrartillery.webp",
+					"textureBorder": null,
+					"textureOffset": {
+						"x": 770,
+						"y": 792
+					},
 					"maxHealth": 2550,
 					"structuralIntegrity": 0.65,
 					"cost": {
@@ -3228,8 +3246,10 @@ const foxholeData = {
 					"name": "Machine Gun Garrison (Tier 3)",
 					"codeName": "MGAIT3",
 					"description": "An entrenched machine gun manned by stationed troops.",
+					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/FortT3MGunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_mgai.webp",
+					"textureOffset": null,
 					"maxHealth": 3000,
 					"structuralIntegrity": 0.96,
 					"cost": {
@@ -3260,6 +3280,10 @@ const foxholeData = {
 					"description": "A ramp that enables access to underground Bunkers.",
 					"icon": "game/Textures/UI/StructureIcons/FortT3RampIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_ramp.webp",
+					"textureOffset": {
+						"x": 315,
+						"y": 287
+					},
 					"maxHealth": 2000,
 					"structuralIntegrity": 0.99,
 					"cost": {
@@ -3273,6 +3297,7 @@ const foxholeData = {
 					"description": "An entrenched bunker manned by stationed troops armed with Rifles.",
 					"icon": "game/Textures/UI/StructureIcons/FortT3GunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_rifleai.webp",
+					"textureOffset": null,
 					"maxHealth": 2250,
 					"structuralIntegrity": 0.96,
 					"cost": {
@@ -6979,6 +7004,7 @@ const foxholeData = {
 					"sockets": [
 						{
 							"id": 0,
+							"name": "power",
 							"type": [
 								{
 									"mask": 131072,
@@ -8355,6 +8381,14 @@ const foxholeData = {
 			"categoryOrder": 8,
 			"faction": "c",
 			"sortLayer": "vehicle",
+			"hitArea": [
+				{
+					"shape": [ 151.04,26.56,114.56,66.88,-114.56,-66.24,115.2,-66.24,152.32,-27.2 ]
+				},
+				{
+					"shape": [ -152.32,-26.56,-114.56,-66.24,114.56,66.88,-114.56,66.24,-152.32,27.2 ]
+				}
+			],
 			"icon": "game/Textures/UI/VehicleIcons/CombatCarCVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/traincombatcarc.webp",
 			"sockets": [
@@ -8743,6 +8777,8 @@ const foxholeData = {
 			"codeName": "TrenchEmpT2",
 			"parentKey": "trenchempt1",
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches. This variant can also serve as an emplacement for mannable defenses.",
+			"hideInList": true,
+			"tierUpgrade": true,
 			"icon": "game/Textures/UI/StructureIcons/TrenchT2EmplacementIcon.webp",
 			"texture": "game/Textures/Structures/trenchempt2.webp",
 			"maxHealth": 1850,
@@ -8852,6 +8888,8 @@ const foxholeData = {
 			"codeName": "TrenchT2",
 			"parentKey": "trencht1",
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers.",
+			"hideInList": true,
+			"tierUpgrade": true,
 			"icon": "game/Textures/UI/StructureIcons/TrenchT2Icon.webp",
 			"texture": null,
 			"maxHealth": 1850,

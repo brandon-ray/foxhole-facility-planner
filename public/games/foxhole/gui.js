@@ -270,7 +270,7 @@ Vue.component('app-menu-statistics', {
             <button class="btn-small m-0 mr-1 float-right" title="Minimize Stats" @click="game.settings.enableStats = false; game.updateSettings()"><i class="fa fa-window-minimize"></i></button>
         </div>
         <div class="statistics-panel-body">
-            <div v-if="!(cost || bunker?.total || powerProduced || powerConsumed || powerTotal || input || output)" class="text-center" style="color: #f0f0f0">Place buildings to see their stats here!</div>
+            <div v-if="!(cost || bunker?.total || powerProduced || powerConsumed || powerTotal || garrisonSupplies || input || output)" class="text-center" style="color: #f0f0f0">Place buildings to see their stats here!</div>
             <div v-if="cost" class="construction-options-wrapper">
                 <h5 class="construction-options-header"><i class="fa fa-wrench"></i> Construction Cost</h5>
                 <div>
@@ -280,13 +280,6 @@ Vue.component('app-menu-statistics', {
             <div v-if="bunker?.total" class="construction-options-wrapper">
                 <h5 class="construction-options-header"><i class="fa fa-shield" aria-hidden="true"></i> Bunker Stats</h5>
                 <div class="construction-options row d-flex justify-content-center">
-                    <!--
-                        D26 = Hours since placed, decimals would work.
-                        CEILING(I15/(240*0.25*IFS(ISBLANK(D26),1,D26<2.4, 10, D26<24, 24/D26,D26=24,1, D26>24, 1)*0.95),1)
-                        (Concrete does not begin drying until 2.4 hours after placing, after 24 hours it's completely dry)
-                        (Concrete is required to build T3 bunker pieces and is unusuable during this period)
-                    -->
-
                     <div class="btn-small col" style="color: #03b003;">
                         <span style="font-size: 18px;">{{Math.floor(bunker.maxHealth * bunker.structuralIntegrity)}}</span>
                         <span class="label">health</span>
@@ -334,7 +327,7 @@ Vue.component('app-menu-statistics', {
                     </select>
                 </div>
             </div>
-            <div v-if="input" class="construction-options-wrapper">
+            <div v-if="garrisonSupplies || input" class="construction-options-wrapper">
                 <h5 class="construction-options-header"><i class="fa fa-sign-in"></i> {{selection ? 'Selection' : 'Facility'}} Input</h5>
                 <div class="statistics-panel-fac-input">
                     <app-game-resource-icon v-if="garrisonSupplies" :resource="'garrisonsupplies'" :amount="garrisonSupplies"/>

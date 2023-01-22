@@ -159,6 +159,9 @@ Vue.component('app-menu-building-selected', {
                 label: null,
                 style: null
             },
+            debug: {
+                textureOffset: null
+            },
             productionData: null,
             hoverUpgradeName: null,
             lockState: 0
@@ -174,6 +177,14 @@ Vue.component('app-menu-building-selected', {
             this.lockState = game.getSelectedLockState();
             let selectedEntity = game.getSelectedEntity();
             if (selectedEntity) {
+                if (selectedEntity.building?.textureOffset) {
+                    this.debug.textureOffset = {
+                        x: selectedEntity.building.textureOffset?.x,
+                        y: selectedEntity.building.textureOffset?.y
+                    }
+                } else {
+                    this.debug.textureOffset = null;
+                }
                 if (noForce && this.entity && this.entity.x === selectedEntity.x && this.entity.y === selectedEntity.y && this.entity.rotation === selectedEntity.rotation) {
                     return;
                 }
@@ -207,6 +218,7 @@ Vue.component('app-menu-building-selected', {
                 this.entity = null;
                 this.productionData = null;
             }
+            game.saveStateChanged = true;
             this.$forceUpdate();
         },
         updateEntity: function(removeConnections) {
@@ -239,6 +251,7 @@ Vue.component('app-menu-building-selected', {
                     this.refresh();
                 }
             }
+            game.saveStateChanged = true;
         },
         updateStyleOptions: function(reset) {
             let selectedEntity = game.getSelectedEntity();
@@ -388,6 +401,13 @@ Vue.component('app-menu-building-selected', {
                     }
                 }
             }
+        },
+        updateDebugProps: function() {
+            const selectedEntity = game.getSelectedEntity();
+            if (selectedEntity && this.debug?.textureOffset) {
+                selectedEntity.sprite.x = (-this.debug.textureOffset.x / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
+                selectedEntity.sprite.y = (-this.debug.textureOffset.y / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
+            }
         }
     },
     template: html`
@@ -445,6 +465,19 @@ Vue.component('app-menu-building-selected', {
                     <button class="btn-small m-0" type="button" @click="flipTrain()"><i class="fa fa-exchange" aria-hidden="true"></i></button>
                 </div>
             </div>
+            <div v-if="game.settings.enableExperimental && debug?.textureOffset" class="settings-option-wrapper">
+                <div class="settings-title">
+                    Texture Offset
+                </div>
+                <label class="app-input-label">
+                    <i class="fa fa-arrows" aria-hidden="true"></i> Texture Position X:
+                    <input class="app-input" type="number" v-model.number="debug.textureOffset.x" @input="updateDebugProps()">
+                </label>
+                <label class="app-input-label">
+                    <i class="fa fa-arrows" aria-hidden="true"></i> Texture Position Y:
+                    <input class="app-input" type="number" v-model.number="debug.textureOffset.y" @input="updateDebugProps()">
+                </label>
+            </div>
             <div v-if="entity.building?.vehicle?.engine" class="settings-option-wrapper">
                 <div class="settings-title">
                     Train Controls
@@ -456,7 +489,7 @@ Vue.component('app-menu-building-selected', {
                 </label>
                 <label class="app-input-label">
                     <i class="fa fa-train" aria-hidden="true"></i> Throttle ({{Math.round(entity.userThrottle*100)}}%)
-                    <input type="range" class="slider w-50" v-model.number="entity.userThrottle" min="-1" max="1" step="0.1" @input="updateEntity()">
+                    <input type="range" class="slider w-50" v-model.number="entity.userThrottle" min="-1" max="1" step="0.1" @input="game.setPlaying(true); updateEntity()">
                 </label>
             </div>
         </template>
@@ -684,10 +717,10 @@ Vue.component('app-menu-construction-list', {
             <template v-else>
                 <template v-for="(category, key) in window.objectData.categories">
                     <template v-if="(game.settings.showCollapsibleBuildingList || !category.hideInBuildingList)">
-                        <div v-if="game.settings.showCollapsibleBuildingList" class="construction-item-category" @click="category.visible = !category.visible; refresh()">
+                        <div v-if="game.settings.showCollapsibleBuildingList && (game.settings.enableExperimental || !category.hideInList)" class="construction-item-category" @click="category.visible = !category.visible; refresh()">
                             {{category.name}}<i class="fa float-right" :class="{'fa-angle-down': category.visible, 'fa-angle-right': !category.visible}" style="margin-top: 2px;" aria-hidden="true"></i>
                         </div>
-                        <div v-if="!game.settings.showCollapsibleBuildingList || category.visible">
+                        <div v-if="(game.settings.enableExperimental || !category.hideInList) && !game.settings.showCollapsibleBuildingList || category.visible">
                             <app-game-building-list-icon v-for="building in category.buildings" :test="this" :building="building"/>
                         </div>
                     </template>
@@ -977,7 +1010,7 @@ Vue.component('app-menu-save-load', {
                 </button>
             </div>
         </div>
-        <div class="settings-option-wrapper">
+        <div v-if="game.settings.enableExperimental" class="settings-option-wrapper">
             <div class="settings-title">Facility Presets</div>
             <div class="text-center">
                 <div class="select-preset-wrapper">

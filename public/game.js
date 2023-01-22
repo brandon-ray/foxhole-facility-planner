@@ -25,6 +25,12 @@ const DEFAULT_SHAPE_STYLE = {
     lineColor: COLOR_WHITE
 };
 
+const METER_PIXEL_SIZE = 32;
+const METER_UNREAL_UNITS = 100, METER_PIXEL_UNIT = 50; // 100 Unreal Units = 50 Pixels // Both equivalent to one meter.
+const METER_TEXTURE_SCALE = METER_UNREAL_UNITS / METER_PIXEL_UNIT;
+const METER_PIXEL_SCALE = METER_PIXEL_UNIT / METER_PIXEL_SIZE;
+const SELECTION_BORDER_WIDTH = 6, TRACK_SEGMENT_LENGTH = 16;
+
 const game = {
     services: {},
     settings: {
@@ -32,8 +38,8 @@ const game = {
         disableSound: false,
         disableHUD: false,
         enableExperimental: false,
-        enableHistory: false,
-        historySize: 50,
+        enableHistory: true,
+        historySize: 25,
         enableGrid: true,
         enableStats: true,
         gridSize: 16,
@@ -74,6 +80,7 @@ const game = {
 };
 
 game.defaultSettings = JSON.parse(JSON.stringify(game.settings));
+game.playMode = false;
 
 function escapeHtml(str) {
     if (str && str.replace) {
@@ -274,6 +281,13 @@ try {
                 followEntity.following = true;
             }
             game.buildingSelectedMenuComponent?.refresh();
+        }
+    }
+
+    game.setPlaying = function(playing) {
+        if (game.playMode !== playing) {
+            game.playMode = playing;
+            game.appComponent.$forceUpdate();
         }
     }
 
@@ -525,7 +539,7 @@ try {
                         const buildings = Object.values(window.objectData.buildings);
                         for (let i=0; i<1000; i++) {
                             let buildingData = buildings[Math.floor(Math.random() * buildings.length)];
-                            if (!buildingData.hideInList && (!buildingData.parent || !buildingData.parent.hideInList)) {
+                            if ((game.settings.enableExperimental || !window.objectData.categories[buildingData.category].hideInList) && !buildingData.hideInList && (!buildingData.parent || !buildingData.parent.hideInList)) {
                                 createSelectableEntity('building', buildingData.key, x, y, 0);
                                 x += 500;
                                 if (x >= 10000) {
@@ -542,14 +556,16 @@ try {
                     setTimeout(() => {
                         let x = 0, y = 0;
                         for (const category of Object.values(window.objectData.categories)) {
-                            for (let i = 0; i < category.buildings.length; i++) {
-                                const building = category.buildings[i];
-                                if (game.settings.enableExperimental || (!building.hideInList && (!building.parent || !building.parent.hideInList))) {
-                                    createSelectableEntity('building', building.key, x * 600, y * 600, 0);
-                                    x++;
-                                    if (x >= 10) {
-                                        x = 0;
-                                        y++;
+                            if (game.settings.enableExperimental || !category.hideInList) {
+                                for (let i = 0; i < category.buildings.length; i++) {
+                                    const building = category.buildings[i];
+                                    if (game.settings.enableExperimental || (!building.hideInList && (!building.parent || !building.parent.hideInList))) {
+                                        createSelectableEntity('building', building.key, x * 600, y * 600, 0);
+                                        x++;
+                                        if (x >= 10) {
+                                            x = 0;
+                                            y++;
+                                        }
                                     }
                                 }
                             }
@@ -591,6 +607,9 @@ try {
                 }
             } else {
                 switch (key) {
+                    case 32: // Space
+                        game.setPlaying(!game.playMode);
+                        break;
                     case 37: // Left Arrow
                         game.moveSelected(-1, 0);
                         break;
@@ -1733,12 +1752,6 @@ try {
         }
     };
 
-    const METER_PIXEL_SIZE = 32;
-    const METER_UNREAL_UNITS = 100, METER_PIXEL_UNIT = 50; // 100 Unreal Units = 50 Pixels // Both equivalent to one meter.
-    const METER_TEXTURE_SCALE = METER_UNREAL_UNITS / METER_PIXEL_UNIT;
-    const METER_PIXEL_SCALE = METER_PIXEL_UNIT / METER_PIXEL_SIZE;
-    const SELECTION_BORDER_WIDTH = 6, TRACK_SEGMENT_LENGTH = 16;
-
     function createSelectableEntity(type, subtype, x, y, z, rotation, id, netData) {
         let entity = createEntity(type, subtype, x, y, z, id, netData);
         
@@ -1851,6 +1864,7 @@ try {
                 if (!building.textureOffset) {
                     sprite.anchor.set(0.5);
                 } else {
+                    // TODO: Add support for percentages. <= 1 could set anchor so we don't need exact pixels.
                     sprite.x = (-building.textureOffset.x / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
                     sprite.y = (-building.textureOffset.y / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
                 }
@@ -1966,6 +1980,7 @@ try {
                     } else if (socket.socketData.name === 'power') {
                         socket.pointer = new PIXI.Sprite(resources.power.texture);
                         socket.pointer.anchor.set(0.5, 1.5);
+                        socket.pointer.rotation = -(entity.rotation + socket.rotation);
                         entity.handleTick = true;
                     } else if (entity.building?.textureBorder) {
                         let textureBorder = resources[entity.building.textureBorder].texture;
@@ -1986,10 +2001,10 @@ try {
                         socket.addChild(socket.pointer);
                     }
 
-                    function createSocketIndicator(color, width, length) {
+                    function createSocketIndicator(color, width, length, center) {
                         socket.indicator = new PIXI.Graphics();
                         socket.indicator.beginFill(color ?? COLOR_ORANGE);
-                        socket.indicator.drawRect(-(width ?? socketWidth)/2, -(length ?? socketThickness), (width ?? socketWidth), (length ?? socketThickness));
+                        socket.indicator.drawRect(-(width ?? socketWidth)/2, -(length ?? socketThickness) / (center ? 2 : 1), (width ?? socketWidth), (length ?? socketThickness));
                         socket.indicator.endFill();
                         socket.addChild(socket.indicator);
                     }
@@ -1998,12 +2013,14 @@ try {
                         createSocketIndicator(COLOR_RED);
                     } else if (socket.socketData.flow === 'out') {
                         createSocketIndicator(COLOR_GREEN);
-                    } else if (socket.socketData.flow === 'bi' && socket.socketData.cap !== 'left' && socket.socketData.cap !== 'right') {
-                        createSocketIndicator(COLOR_BLUE);
+                    } else if (socket.socketData.flow === 'bi') {
+                        if (socket.socketData.cap !== 'left' && socket.socketData.cap !== 'right') {
+                            createSocketIndicator(COLOR_BLUE);
+                        }
                     } else if (socket.socketData.name === 'power') {
-                        createSocketIndicator(COLOR_YELLOW, powerSocketSize, powerSocketSize);
-                    } else if (game.settings.enableExperimental || socket.socketData.type === 'traincar' || socket.socketData.type === 'smalltraincar' || socket.socketData.type === 'smallrail' || socket.socketData.type === 'largerail' || socket.socketData.type === 'cranerail' || socket.socketData.type === 'road') {
-                        createSocketIndicator();
+                        createSocketIndicator(COLOR_YELLOW, powerSocketSize, powerSocketSize, true);
+                    } else if (socket.socketData.type === 'traincar' || socket.socketData.type === 'smalltraincar' || entity.building?.hasHandle) {
+                        createSocketIndicator(undefined, socketThickness, socketThickness, true);
                     }
                 }
                 socket.setConnection = function(connectingEntityId, connectingSocket, connectingSocketId) {
@@ -2885,6 +2902,15 @@ try {
                 soundStop(sound);
                 sound = null;
             }
+            if (entity.subtype === 'rail_large_gauge' || entity.subtype === 'rail_small_gauge') {
+                for (const entity2 of entities) {
+                    if (entity2.isTrain && entity2.currentTrack === entity) {
+                        entity2.currentTrack = null;
+                        entity2.currentTrackT = null;
+                        entity2.trackVelocity = 0;
+                    }
+                }
+            }
         };
 
         const boundsBuffer = 16, boundsPadding = boundsBuffer / 2;
@@ -3294,7 +3320,7 @@ try {
                         rate = 1;
                     }
 
-                    if (entity.subtype === 'trainengine' && entity.currentTrack && Math.abs(entity.userThrottle) > 0) {
+                    if (game.playMode && entity.subtype === 'trainengine' && entity.currentTrack && Math.abs(entity.userThrottle) > 0) {
                         if (game.settings.quality === 'auto' || game.settings.quality === 'high') {
                             if (!entity.smokeTime || entity.smokeTime <= 0) {
                                 entity.smokeTime = 6 - Math.floor(Math.abs(entity.trackVelocity)*0.5);
@@ -3311,7 +3337,7 @@ try {
                         }
                     }
 
-                    if (rate > 0.15) {
+                    if (game.playMode && rate > 0.15) {
                         if (!sound) {
                             let soundKey = 'train_wheel_loop';
                             if (entity.subtype === 'trainengine' && Math.abs(entity.userThrottle) >= 0.05) {
@@ -3337,7 +3363,7 @@ try {
                 }
             }
 
-            if (entity.isTrain && entity.currentTrack && entity.currentTrack.bezier) {
+            if (game.playMode && entity.isTrain && entity.currentTrack && entity.currentTrack.bezier) {
                 if (entity.currentTrackT === null) {
                     const projection = entity.currentTrack.bezier?.project(entity.currentTrack.toLocal({x: entity.x, y: entity.y}, app.cstage, undefined, true));
                     entity.currentTrackT = projection.t;
@@ -3730,8 +3756,8 @@ try {
         background.tilePosition.x = -camera.x / camera.zoom;
         background.tilePosition.y = -camera.y / camera.zoom;
 
-        if (game.settings.enableHistory && selectedEntities.length && !pickupSelectedEntities && !selectedHandlePoint && !selectionRotation) {
-            // TODO: This is very bad, and completely abuses the fact that our saving is so fast hahaha. I'll properly fix this... one day. =)
+        if (game.saveStateChanged && game.settings.enableHistory && selectedEntities.length && !pickupSelectedEntities && !selectedHandlePoint && !selectionRotation) {
+            game.saveStateChanged = false;
             const saveData = JSON.stringify(game.getSaveData());
             if (game.constructionHistory[game.constructionHistory.length - 1] !== saveData) {
                 game.constructionHistory.length = game.constructionHistoryPointer + 1;
@@ -3807,104 +3833,106 @@ try {
             }
         }
 
-        shuffle(vehicles);
-        const SOLVER_STEPS = 4;
-        for (let k=0; k<SOLVER_STEPS; k++) {
-            for (let i = 0; i < vehicles.length; i++) {
-                let entity = vehicles[i];
-                if (entity.valid && entity.isTrain && entity.currentTrack) {
-                    for (let j=vehicles.length-1; j>=0; j--) {
-                        if (i !== j) {
-                            let entity2 = vehicles[j];
-                            if (!entity2 || !entity2.isTrain || !entity2.currentTrack) {
-                                continue;
-                            }
-                            let dist = Math.distanceBetween(entity, entity2);
-                            if (dist > 1000) {
-                                continue;
-                            }
-
-                            let buffer = 15;
-                            let poly1Width = (entity.sprite.width-buffer)/2;
-                            let poly1Height = (entity.sprite.height-buffer)/2;
-                            let box1 = new SAT.Polygon(new SAT.Vector(entity.x, entity.y), [
-                                new SAT.Vector(-poly1Width,-poly1Height),
-                                new SAT.Vector(poly1Width,-poly1Height),
-                                new SAT.Vector(poly1Width,poly1Height),
-                                new SAT.Vector(-poly1Width,poly1Height),
-                            ]);
-                            box1.setAngle(entity.rotation);
-                            let poly2Width = (entity2.sprite.width-buffer)/2;
-                            let poly2Height = (entity2.sprite.height-buffer)/2;
-                            let box2 = new SAT.Polygon(new SAT.Vector(entity2.x, entity2.y), [
-                                new SAT.Vector(-poly2Width,-poly2Height),
-                                new SAT.Vector(poly2Width,-poly2Height),
-                                new SAT.Vector(poly2Width,poly2Height),
-                                new SAT.Vector(-poly2Width,poly2Height),
-                            ]);
-                            box2.setAngle(entity2.rotation);
-
-                            let response = new SAT.Response();
-                            if (SAT.testPolygonPolygon(box1, box2, response)) {
-                                let pPos = app.cstage.toLocal(entity.currentTrack.bezier.get(entity.currentTrackT + (0.05 * entity.trackDirection)), entity.currentTrack, undefined, true);
-                                let pNeg = app.cstage.toLocal(entity.currentTrack.bezier.get(entity.currentTrackT - (0.05 * entity.trackDirection)), entity.currentTrack, undefined, true);
-
-                                let distDiff = response.overlap;
-                                let distDiffScaled = (distDiff / entity.currentTrack.bezier.length()) * entity.trackDirection;
-                                if (Math.distanceBetween(entity2, pPos) >= Math.distanceBetween(entity2, pNeg)) {
-                                    entity.moveAlongBezier(distDiffScaled/2);
-                                    entity.trackVelocity += distDiff/entity.mass;
-                                } else {
-                                    entity.moveAlongBezier(-distDiffScaled/2);
-                                    entity.trackVelocity -= distDiff/entity.mass;
+        if (game.playMode) {
+            shuffle(vehicles);
+            const SOLVER_STEPS = 4;
+            for (let k=0; k<SOLVER_STEPS; k++) {
+                for (let i = 0; i < vehicles.length; i++) {
+                    let entity = vehicles[i];
+                    if (entity.valid && entity.isTrain && entity.currentTrack) {
+                        for (let j=vehicles.length-1; j>=0; j--) {
+                            if (i !== j) {
+                                let entity2 = vehicles[j];
+                                if (!entity2 || !entity2.isTrain || !entity2.currentTrack) {
+                                    continue;
+                                }
+                                let dist = Math.distanceBetween(entity, entity2);
+                                if (dist > 1000) {
+                                    continue;
                                 }
 
-                                if (k === 0) {
-                                    let closestSocketDist = 25;
-                                    let closestEntitySocket = null;
-                                    let closestEntity2Socket = null;
-                                    if (!entity.hasConnectionToEntity(entity2)) {
-                                        for (let l = 0; l < entity.sockets.children.length; l++) {
-                                            let entitySocket = entity.sockets.children[l];
-                                            if (!Object.keys(entitySocket.connections).length) {
-                                                for (let p = 0; p < entity2.sockets.children.length; p++) {
-                                                    let entity2Socket = entity2.sockets.children[p];
-                                                    if (!Object.keys(entity2Socket.connections).length) {
-                                                        let socket1Pos = app.cstage.toLocal(entitySocket.position, entity, undefined, true);
-                                                        let socket2Pos = app.cstage.toLocal(entity2Socket.position, entity2, undefined, true);
-                                                        let socketDist = Math.distanceBetween(socket1Pos, socket2Pos);
-                                                        if (socketDist <= closestSocketDist) {
-                                                            closestEntitySocket = entitySocket;
-                                                            closestEntity2Socket = entity2Socket;
+                                let buffer = 15;
+                                let poly1Width = (entity.sprite.width-buffer)/2;
+                                let poly1Height = (entity.sprite.height-buffer)/2;
+                                let box1 = new SAT.Polygon(new SAT.Vector(entity.x, entity.y), [
+                                    new SAT.Vector(-poly1Width,-poly1Height),
+                                    new SAT.Vector(poly1Width,-poly1Height),
+                                    new SAT.Vector(poly1Width,poly1Height),
+                                    new SAT.Vector(-poly1Width,poly1Height),
+                                ]);
+                                box1.setAngle(entity.rotation);
+                                let poly2Width = (entity2.sprite.width-buffer)/2;
+                                let poly2Height = (entity2.sprite.height-buffer)/2;
+                                let box2 = new SAT.Polygon(new SAT.Vector(entity2.x, entity2.y), [
+                                    new SAT.Vector(-poly2Width,-poly2Height),
+                                    new SAT.Vector(poly2Width,-poly2Height),
+                                    new SAT.Vector(poly2Width,poly2Height),
+                                    new SAT.Vector(-poly2Width,poly2Height),
+                                ]);
+                                box2.setAngle(entity2.rotation);
+
+                                let response = new SAT.Response();
+                                if (SAT.testPolygonPolygon(box1, box2, response)) {
+                                    let pPos = app.cstage.toLocal(entity.currentTrack.bezier.get(entity.currentTrackT + (0.05 * entity.trackDirection)), entity.currentTrack, undefined, true);
+                                    let pNeg = app.cstage.toLocal(entity.currentTrack.bezier.get(entity.currentTrackT - (0.05 * entity.trackDirection)), entity.currentTrack, undefined, true);
+
+                                    let distDiff = response.overlap;
+                                    let distDiffScaled = (distDiff / entity.currentTrack.bezier.length()) * entity.trackDirection;
+                                    if (Math.distanceBetween(entity2, pPos) >= Math.distanceBetween(entity2, pNeg)) {
+                                        entity.moveAlongBezier(distDiffScaled/2);
+                                        entity.trackVelocity += distDiff/entity.mass;
+                                    } else {
+                                        entity.moveAlongBezier(-distDiffScaled/2);
+                                        entity.trackVelocity -= distDiff/entity.mass;
+                                    }
+
+                                    if (k === 0) {
+                                        let closestSocketDist = 25;
+                                        let closestEntitySocket = null;
+                                        let closestEntity2Socket = null;
+                                        if (!entity.hasConnectionToEntity(entity2)) {
+                                            for (let l = 0; l < entity.sockets.children.length; l++) {
+                                                let entitySocket = entity.sockets.children[l];
+                                                if (!Object.keys(entitySocket.connections).length) {
+                                                    for (let p = 0; p < entity2.sockets.children.length; p++) {
+                                                        let entity2Socket = entity2.sockets.children[p];
+                                                        if (!Object.keys(entity2Socket.connections).length) {
+                                                            let socket1Pos = app.cstage.toLocal(entitySocket.position, entity, undefined, true);
+                                                            let socket2Pos = app.cstage.toLocal(entity2Socket.position, entity2, undefined, true);
+                                                            let socketDist = Math.distanceBetween(socket1Pos, socket2Pos);
+                                                            if (socketDist <= closestSocketDist) {
+                                                                closestEntitySocket = entitySocket;
+                                                                closestEntity2Socket = entity2Socket;
+                                                            }
                                                         }
                                                     }
                                                 }
                                             }
                                         }
-                                    }
 
-                                    if (closestEntitySocket && closestEntity2Socket) {
-                                        closestEntitySocket.setConnection(entity2.id, closestEntity2Socket);
+                                        if (closestEntitySocket && closestEntity2Socket) {
+                                            closestEntitySocket.setConnection(entity2.id, closestEntity2Socket);
+                                        }
                                     }
                                 }
-                            }
 
-                            if (entity.hasConnectionToEntity(entity2) && dist > entity.sprite.width/2+entity2.sprite.width/2+5) {
-                                if (dist > entity.sprite.width/2+entity2.sprite.width/2+30) {
-                                    entity.removeConnectionsToEntity(entity2);
-                                    continue;
-                                }
-                                let pPos = app.cstage.toLocal(entity.currentTrack.bezier.get(entity.currentTrackT + (0.05 * entity.trackDirection)), entity.currentTrack, undefined, true);
-                                let pNeg = app.cstage.toLocal(entity.currentTrack.bezier.get(entity.currentTrackT - (0.05 * entity.trackDirection)), entity.currentTrack, undefined, true);
+                                if (entity.hasConnectionToEntity(entity2) && dist > entity.sprite.width/2+entity2.sprite.width/2+5) {
+                                    if (dist > entity.sprite.width/2+entity2.sprite.width/2+30) {
+                                        entity.removeConnectionsToEntity(entity2);
+                                        continue;
+                                    }
+                                    let pPos = app.cstage.toLocal(entity.currentTrack.bezier.get(entity.currentTrackT + (0.05 * entity.trackDirection)), entity.currentTrack, undefined, true);
+                                    let pNeg = app.cstage.toLocal(entity.currentTrack.bezier.get(entity.currentTrackT - (0.05 * entity.trackDirection)), entity.currentTrack, undefined, true);
 
-                                let distDiff = dist-(entity.sprite.width/2+entity2.sprite.width/2+10);
-                                let distDiffScaled = (distDiff / entity.currentTrack.bezier.length()) * entity.trackDirection;
-                                if (Math.distanceBetween(entity2, pPos) >= Math.distanceBetween(entity2, pNeg)) {
-                                    entity.trackVelocity -= distDiff/entity.mass;
-                                    entity.moveAlongBezier(-distDiffScaled/2);
-                                } else {
-                                    entity.trackVelocity += distDiff/entity.mass;
-                                    entity.moveAlongBezier(distDiffScaled/2);
+                                    let distDiff = dist-(entity.sprite.width/2+entity2.sprite.width/2+10);
+                                    let distDiffScaled = (distDiff / entity.currentTrack.bezier.length()) * entity.trackDirection;
+                                    if (Math.distanceBetween(entity2, pPos) >= Math.distanceBetween(entity2, pNeg)) {
+                                        entity.trackVelocity -= distDiff/entity.mass;
+                                        entity.moveAlongBezier(-distDiffScaled/2);
+                                    } else {
+                                        entity.trackVelocity += distDiff/entity.mass;
+                                        entity.moveAlongBezier(distDiffScaled/2);
+                                    }
                                 }
                             }
                         }

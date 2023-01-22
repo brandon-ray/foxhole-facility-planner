@@ -95,6 +95,9 @@ if (isMobile && !isPhoneApp) {
                     <button v-if="game.settings.enableHistory" class="btn-small" @click="game.undo()">
                         <i class="fa fa-undo" aria-hidden="true"></i>
                     </button>
+                    <button class="btn-small" :title="game.playMode ? 'Pause' : 'Resume'" @click="game.setPlaying(!game.playMode)">
+                        <i class="fa" :class="{ 'fa-pause': game.playMode, 'fa-play': !game.playMode }" aria-hidden="true"></i>
+                    </button>
                 </div>
             </div>
             `
