@@ -1,9 +1,12 @@
-const game_asset_keys = ['icon', 'texture', 'textureBorder', 'textureFrontCap', 'textureBackCap'];
-const game_asset_list = {};
-
 function assetDir(str) {
     return !str.startsWith('/games/foxhole/assets/') ? '/games/foxhole/assets/' + str : str;
 }
+
+const game_asset_keys = ['icon', 'texture', 'textureBorder', 'textureFrontCap', 'textureBackCap'];
+const game_asset_list = {
+    trackswitch_active: assetDir('game/Textures/Structures/trackswitch_active.webp'),
+    trackswitch_inactive: assetDir('game/Textures/Structures/trackswitch_inactive.webp')
+};
 
 (function() {
     window.objectData = {

@@ -76,6 +76,7 @@ Vue.component('app-menu-statistics', {
             cost: {},
             input: {},
             output: {},
+            displayTime: false,
             time: 3600,
             bunker: null,
             powerTotal: 0,
@@ -106,6 +107,7 @@ Vue.component('app-menu-statistics', {
                 repairCost: 0,
                 structuralIntegrity: 1.0
             };
+            let displayTime = false;
             let powerTotal = 0;
             let powerProduced = 0;
             let powerConsumed = 0;
@@ -120,11 +122,7 @@ Vue.component('app-menu-statistics', {
                 }
             }
 
-            const selectedEntities = game.getSelectedEntities();
-
-            //this.selection = game.settings.showSelectionStats && selectedEntities.length;
-
-            let entities = this.selection ? selectedEntities : game.getEntities();
+            const entities = game.getEntities();
             for (let i = 0; i < entities.length; i++) {
                 let entity = entities[i];
                 if (entity.type === 'building') {
@@ -135,6 +133,7 @@ Vue.component('app-menu-statistics', {
 
                     // TODO: Need to actually get whether a structure decays or not from foxhole data.
                     if (buildingData.category !== 'vehicles' && buildingData.category !== 'trains' && buildingData.category !== 'misc') {
+                        displayTime = true;
                         let consumptionRate = (2 * (buildingData.garrisonSupplyMultiplier ?? 1)) * garrisonConsumptionRate;
                         for (let j = 0; j < garrisonConsumptionReducers.length; j++) {
                             const garrison = garrisonConsumptionReducers[j];
@@ -179,6 +178,8 @@ Vue.component('app-menu-statistics', {
                             }
                         });
                         if (selectedProduction) {
+                            displayTime = true;
+
                             if (selectedProduction.power) {
                                 power = selectedProduction.power;
                             }
@@ -254,6 +255,7 @@ Vue.component('app-menu-statistics', {
             this.input = Object.keys(input).length ? input : null;
             this.output = Object.keys(output).length ? output : null;
             this.bunker = bunker;
+            this.displayTime = displayTime;
             this.powerTotal = powerTotal;
             this.powerProduced = powerProduced;
             this.powerConsumed = powerConsumed;
@@ -263,14 +265,14 @@ Vue.component('app-menu-statistics', {
         },
     },
     template: html`
-    <div class="statistics-panel">
-        <div class="statistics-panel-header">
+    <div class="board-panel statistics-panel">
+        <div class="board-panel-header">
             <h4 class="float-left m-0" style="color: #eee"><i class="fa fa-bar-chart"></i> Statistics</h4>
             <!--<button class="btn-small m-0 float-right" title="Maximize Stats"><i class="fa fa-window-maximize"></i></button>-->
             <button class="btn-small m-0 mr-1 float-right" title="Minimize Stats" @click="game.settings.enableStats = false; game.updateSettings()"><i class="fa fa-window-minimize"></i></button>
         </div>
-        <div class="statistics-panel-body">
-            <div v-if="!(cost || bunker?.total || powerProduced || powerConsumed || powerTotal || garrisonSupplies || input || output)" class="text-center" style="color: #f0f0f0">Place buildings to see their stats here!</div>
+        <div class="board-panel-body">
+            <div v-if="!(cost || bunker?.total || displayTime || powerProduced || powerConsumed || powerTotal || garrisonSupplies || input || output)" class="text-center" style="color: #f0f0f0">Place buildings to see their stats here.</div>
             <div v-if="cost" class="construction-options-wrapper">
                 <h5 class="construction-options-header"><i class="fa fa-wrench"></i> Construction Cost</h5>
                 <div>
@@ -312,7 +314,7 @@ Vue.component('app-menu-statistics', {
                     </div>
                 </div>
             </div>
-            <div v-if="input || output" class="construction-options-wrapper statistics-time-dropdown">
+            <div v-if="displayTime" class="construction-options-wrapper statistics-time-dropdown">
                 <i class="fa fa-clock-o" aria-hidden="true"></i>
                 <div class="time-select-wrapper">
                     <select class="app-input" v-model="time" @change="refresh()">

@@ -112,7 +112,7 @@ Vue.component('app-game-sidebar', {
         <div id="hover-building-info" v-if="hoverData">
             <div class="building-info-name">
                 <img v-bind:src="hoverData.icon ?? '/assets/default_icon.webp'" />
-                <h4>{{hoverData.parent?.name ?? hoverData.name}}</h4>
+                <h4>{{!hoverData.parentKey && hoverData.parent?.name || hoverData.name}}</h4>
             </div>
             <div v-if="hoverData.parent?.name" class="building-info-upgrade">
                 <i class="fa fa-check-circle" aria-hidden="true"></i> {{hoverData.upgradeName}} Upgrade
@@ -825,6 +825,7 @@ Vue.component('app-game-building-list-icon', {
     },
     template: html`
     <div v-if="(!building.hideInList || game.settings.enableExperimental) &&
+        (!building.tierUpgrade || (game.settings.showTiersAsBuildings || game.settings.showUpgradesAsBuildings)) &&
         (!building.parent || building.parentKey || game.settings.showUpgradesAsBuildings) &&
         (!building.techId || (game.settings.selectedTier === 2 && building.techId === 'unlockfacilitytier2') || game.settings.selectedTier === 3) &&
         (!game.settings.selectedFaction || (!building.faction || building.faction === game.settings.selectedFaction))"
@@ -926,8 +927,12 @@ Vue.component('app-menu-settings', {
                 <input class="app-input" type="checkbox" v-model="game.settings.showCollapsibleBuildingList" @change="game.updateSettings()">
             </label>
             <label class="app-input-label">
-                <i class="fa fa-chevron-circle-up" aria-hidden="true"></i> Show Upgrades in Building List
+                <i class="fa fa-chevron-circle-up" aria-hidden="true"></i> Show All Upgrades in List
                 <input class="app-input" type="checkbox" v-model="game.settings.showUpgradesAsBuildings" @change="game.updateSettings()">
+            </label>
+            <label v-if="game.settings.enableExperimental && !game.settings.showUpgradesAsBuildings" class="app-input-label">
+                <i class="fa fa-chevron-circle-up" aria-hidden="true"></i> Show Tier Upgrades in List
+                <input class="app-input" type="checkbox" v-model="game.settings.showTiersAsBuildings" @change="game.updateSettings()">
             </label>
         </div>
     </div>
@@ -1017,7 +1022,7 @@ Vue.component('app-menu-save-load', {
                     <select title="Load a Preset" v-model="presetName">
                         <option v-bind:value="null">Choose a Preset</option>
                         <option value="small_120mm_facility">Small 120mm Facility</option>
-                        <option value="bunker_test">Bunker Testing</option>
+                        <option value="bunker_w_module">Bunker W Module</option>
                         <option value="train_test">Train Testing</option>
                     </select>
                 </div>
@@ -1074,6 +1079,10 @@ Vue.component('app-menu-about', {
                 <div class="keyboard-key">shift</div> + <div class="left-mouse-button"></div> Add structure to selection.<br>
                 <div class="keyboard-key">shift</div> + <div class="left-mouse-button"></div> Snap structure to grid.
                 <hr>
+                <div class="keyboard-key"><i class="fa fa-angle-up" aria-hidden="true"></i></div> <div class="keyboard-key"><i class="fa fa-angle-down" aria-hidden="true"></i></div> Move selection up / down.<br>
+                <div class="keyboard-key"><i class="fa fa-angle-left" aria-hidden="true"></i></div> <div class="keyboard-key"><i class="fa fa-angle-right" aria-hidden="true"></i></div> Move selection left / right.
+                <hr>
+                <div class="keyboard-key">space</div> Pause / Resume physics.<br>
                 <div class="keyboard-key">L</div> Toggle lock for selected structures.<br>
                 <div class="keyboard-key">P</div> Toggle production output icons.<br>
                 <div class="keyboard-key">del</div> Delete selected structures.<br>

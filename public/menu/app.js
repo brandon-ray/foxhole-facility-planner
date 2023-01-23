@@ -83,11 +83,14 @@ if (isMobile && !isPhoneApp) {
                     <button class="btn-small" title="Toggle Fullscreen" @click="game.tryFullscreen()">
                         <i class="fa fa-arrows-alt" aria-hidden="true"></i>
                     </button>
-                    <button class="btn-small" title="Center Board" @click="game.zoomToFacilityCenter()">
-                        <i class="fa fa-crosshairs" aria-hidden="true"></i>
+                    <button class="btn-small" :class="{'btn-active': game.settings.enableDarkMode}" title="Toggle Dark Mode" @click="game.setDarkMode(!game.settings.enableDarkMode)">
+                        <i class="fa fa-moon-o" aria-hidden="true"></i>
                     </button>
                     <button class="btn-small" title="Clear Board" @click="game.confirmDeletion()">
                         <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
+                    <button class="btn-small" title="Center Board" @click="game.zoomToFacilityCenter()">
+                        <i class="fa fa-crosshairs" aria-hidden="true"></i>
                     </button>
                     <button v-if="game.settings.enableHistory" class="btn-small" @click="game.redo()">
                         <i class="fa fa-repeat" aria-hidden="true"></i>
@@ -95,7 +98,7 @@ if (isMobile && !isPhoneApp) {
                     <button v-if="game.settings.enableHistory" class="btn-small" @click="game.undo()">
                         <i class="fa fa-undo" aria-hidden="true"></i>
                     </button>
-                    <button class="btn-small" :title="game.playMode ? 'Pause' : 'Resume'" @click="game.setPlaying(!game.playMode)">
+                    <button class="btn-small" :class="{ 'btn-active': game.playMode }" :title="game.playMode ? 'Pause' : 'Resume'" @click="game.setPlaying(!game.playMode)">
                         <i class="fa" :class="{ 'fa-pause': game.playMode, 'fa-play': !game.playMode }" aria-hidden="true"></i>
                     </button>
                 </div>
@@ -137,22 +140,24 @@ Vue.component('app-game-confirmation-popup', {
         }
     },
     template: html`
-    <div v-if="confirmationVisible" id="confirmation-dialog">
+    <div v-if="confirmationVisible" class="board-panel confirmation-dialog">
         <template v-if="type === 'delete'">
-            <div class="confirmation-header">
-                <h3><i class="fa fa-trash" aria-hidden="true"></i> Confirm Deletion</h3><button class="btn-small" @click="closePopup(false)"><i class="fa fa-times" aria-hidden="true"></i></button>
+            <div class="board-panel-header">
+                <h4 class="float-left m-0" style="color: #eee"><i class="fa fa-trash"></i> Confirm Deletion</h4>
+                <button class="btn-small m-0 mr-1 float-right" title="ASDASDASDADS" @click="closePopup(false)"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
-            <p class="confirmation-body">
+            <p class="board-panel-body">
                 This will delete all objects you have placed.<br>
                 Note: This <u>cannot</u> be undone.
                 <button @click="closePopup(true)">Erase Board</button>
             </p>
         </template>
         <template v-else-if="type === 'save-work'">
-            <div class="confirmation-header">
-                <h3><i class="fa fa-upload" aria-hidden="true"></i> Confirm Load</h3><button class="btn-small" @click="closePopup(false)"><i class="fa fa-times" aria-hidden="true"></i></button>
+            <div class="board-panel-header">
+                <h4 class="float-left m-0" style="color: #eee"><i class="fa fa-upload"></i> Confirm Load</h4>
+                <button class="btn-small m-0 mr-1 float-right" title="ASDASDASDADS" @click="closePopup(false)"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
-            <p class="confirmation-body">
+            <p class="board-panel-body">
                 Your current work will be lost if you don't save.<br>
                 Note: This <u>cannot</u> be undone.
                 <button @click="closePopup(true)">Erase Board</button>

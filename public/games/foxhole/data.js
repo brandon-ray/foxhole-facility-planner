@@ -1307,6 +1307,7 @@ const foxholeData = {
 				"x": 382,
 				"y": 578
 			},
+			"garrisonSupplyMultiplier": 0,
 			"techId": "unlockfacilitytier3",
 			"maxHealth": 1000,
 			"cost": {
@@ -2157,6 +2158,7 @@ const foxholeData = {
 			"description": "A large forward operating base. Players can spawn and stockpile items here.",
 			"category": "entrenchments",
 			"hideInList": true,
+			"tierUpgrade": true,
 			"width": 5.76,
 			"length": 5.76,
 			"sortLayer": "upgrade",
@@ -8592,8 +8594,11 @@ const foxholeData = {
 			"sortLayer": "foundation",
 			"hasHandle": true,
 			"isBezier": true,
+			"trenchConnector": true,
+			"maxLength": 8,
 			"icon": "game/Textures/UI/StructureIcons/TrenchT1ConnectorIcon.webp",
 			"texture": "game/Textures/Structures/trencht1.webp",
+			"textureBorder": "game/Textures/Structures/trencht1_connector_side.webp",
 			"canSnap": true,
 			"sockets": [
 				{
@@ -8604,6 +8609,7 @@ const foxholeData = {
 							"category": 1026
 						}
 					],
+					"texture": "game/Textures/Structures/trencht1_end.webp",
 					"cap": "front",
 					"rotation": 270
 				},
@@ -8615,6 +8621,7 @@ const foxholeData = {
 							"category": 1026
 						}
 					],
+					"texture": "game/Textures/Structures/trencht1_end.webp",
 					"cap": "back",
 					"rotation": 90
 				}
@@ -8622,27 +8629,43 @@ const foxholeData = {
 			"maxHealth": 1500,
 			"repairCost": 115,
 			"upgrades": {
+				"trenchconnectort1": {
+					"reference": "trenchconnectort1"
+				},
 				"trenchconnectort2": {
-					"name": "Trench Connector (Tier 2)",
-					"codeName": "TrenchConnectorT2",
-					"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers. This is a special Trench variant that can resize dynamically and can be built underneath roads.",
-					"icon": "game/Textures/UI/StructureIcons/TrenchT2ConnectorIcon.webp",
-					"texture": null,
-					"cost": {
-						"cloth": 75
-					}
+					"reference": "trenchconnectort2"
 				},
 				"trenchconnectort3": {
-					"name": "Trench Connector (Tier 3)",
-					"codeName": "TrenchConnectorT3",
-					"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers. This is a special Trench variant that can resize dynamically and can be built underneath roads.",
-					"icon": "game/Textures/UI/StructureIcons/TrenchT3ConnectorIcon.webp",
-					"texture": null,
-					"cost": {
-						"concrete": 30
-					}
+					"reference": "trenchconnectort3"
 				}
 			}
+		},
+		"trenchconnectort2": {
+			"name": "Trench Connector (Tier 2)",
+			"codeName": "TrenchConnectorT2",
+			"parentKey": "trenchconnectort1",
+			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers. This is a special Trench variant that can resize dynamically and can be built underneath roads.",
+			"tierUpgrade": true,
+			"icon": "game/Textures/UI/StructureIcons/TrenchT2ConnectorIcon.webp",
+			"texture": "game/Textures/Structures/trencht1.webp",
+			"maxHealth": 1850,
+			"cost": {
+				"cloth": 75
+			},
+			"repairCost": 75
+		},
+		"trenchconnectort3": {
+			"name": "Trench Connector (Tier 3)",
+			"codeName": "TrenchConnectorT3",
+			"parentKey": "trenchconnectort2",
+			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers. This is a special Trench variant that can resize dynamically and can be built underneath roads.",
+			"icon": "game/Textures/UI/StructureIcons/TrenchT3ConnectorIcon.webp",
+			"texture": "game/Textures/Structures/trencht1.webp",
+			"maxHealth": 3500,
+			"cost": {
+				"concrete": 30
+			},
+			"repairCost": 120
 		},
 		"trenchempt1": {
 			"name": "Trench Emplacement (Tier 1)",
@@ -8891,7 +8914,7 @@ const foxholeData = {
 			"hideInList": true,
 			"tierUpgrade": true,
 			"icon": "game/Textures/UI/StructureIcons/TrenchT2Icon.webp",
-			"texture": null,
+			"texture": "game/Textures/Structures/trencht1.webp",
 			"maxHealth": 1850,
 			"cost": {
 				"cloth": 50
@@ -8915,7 +8938,7 @@ const foxholeData = {
 			"parentKey": "trencht2",
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers.",
 			"icon": "game/Textures/UI/StructureIcons/TrenchT3Icon.webp",
-			"texture": null,
+			"texture": "game/Textures/Structures/trencht1.webp",
 			"maxHealth": 3500,
 			"cost": {
 				"concrete": 20

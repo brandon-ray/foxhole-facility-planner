@@ -154,25 +154,70 @@ p {
     text-align: center;
 }
 
-#loading{
-    position: fixed !important;
+#loading {
+    background: #121212;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    position: fixed !important;
+    inset: 0;
     z-index: 1000;
-    top: -250px !important;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: 0 !important;
-    padding: 1rem;
 }
-#loading > *{
-    margin: 1rem;
+
+#loading .logo-icon {
+    width: 300px;
+    height: 300px;
+    background-image: url('/assets/logo_icon.webp');
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: relative;
+    margin-bottom: 20px;
 }
-#loading br{
-    display: none;
+
+#loading .logo-icon::after {
+    content: '';
+    display: block;
+    border-radius: 50%;
+    border-top: 2px solid #f47901;
+    width: 310px;
+    height: 310px;
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    -webkit-animation: spin 0.85s linear infinite;
+    animation: spin 0.85s linear infinite;
+}
+
+#loading h5 {
+    font-family: Verdana, sans-serif;
+    font-weight: bold;
+    color: #ff900d;
+    text-shadow: 0 0 3px black;
+    animation: biggify 0.85s alternate infinite;
+    letter-spacing: 10px;
+    text-align: center;
+}
+
+@-webkit-keyframes biggify {
+    0% {
+        opacity: 0.5;
+        letter-spacing: 10px;
+    }
+    100% {
+        opacity: 1;
+        letter-spacing: 12px;
+    }
+}
+
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 .app-content {
@@ -709,8 +754,8 @@ input[type=number].btn-small {
 
 #about-page > .about-section .keyboard-key {
     display: inline-block;
-    min-width: 25px;
-    min-height: 25px;
+    min-width: 27px;
+    min-height: 27px;
     background: white;
     border-radius: 3px;
     color: black;
@@ -1079,8 +1124,69 @@ input[type=number].btn-small {
     color: #45d745;
 }
 
+.board-panel {
+    background: #1a1a1a;
+    background: linear-gradient(rgb(40, 40, 40), rgb(20, 20, 20));
+    box-shadow: 0 4px 10px #00000038;
+    position: fixed;
+    overflow: hidden;
+    border: 1px solid black;
+    border-radius: 6px;
+    text-align: left;
+}
+
+.board-panel-header {
+    background: linear-gradient(rgb(24, 24, 24), rgb(12, 12, 12));
+    padding: 6px 6px 6px 12px;
+    position: relative;
+    overflow: auto;
+}
+
+.board-panel-header button {
+    background: none;
+}
+
+.board-panel-body {
+    overflow: auto;
+}
+
+.confirmation-dialog {
+    width: 400px;
+    height: 200px;
+    top: 50%;
+    left: 50%;
+    margin-top: -100px;
+    margin-left: -200px;
+}
+
+.confirmation-dialog .board-panel-body {
+    padding: 20px;
+    text-align: center;
+}
+
+.confirmation-dialog .board-panel-body > button {
+    width: 100%;
+    background: linear-gradient(rgb(255, 0, 0), rgb(168, 0, 0));
+    margin-top: 14px;
+    padding: 4px 4px 4px 9px;
+    position: relative;
+    font-size: 2em;
+    color: white;
+    border: 2px solid black;
+    box-shadow: 0 0 3px #000;
+    cursor: pointer;
+}
+
+.confirmation-dialog .board-panel-body > button:hover {
+    border: 2px solid white;
+}
+
 .footer {
+    /*
     background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 1));
+    background: linear-gradient(#191919, #010101);
+    */
+    background: #090909;
     color: white;
     height: 44px;
     position: fixed;
@@ -1088,6 +1194,7 @@ input[type=number].btn-small {
     bottom: 0;
     left: 350px;
     text-align: left;
+    /*border-top: 1px solid #1e1e1e;*/
 }
 
 .footer .checkbox-button {

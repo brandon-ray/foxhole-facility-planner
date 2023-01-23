@@ -27,7 +27,7 @@ Made with ❤️ by the PEG Regiment using Vue.js and Pixi.js
 
 ## Screenshots
 
-![Screenshot](public/assets/screenshot4.jpg)
+![Screenshot](public/assets/screenshot5.jpg)
 
 
 ## Live Website (Latest Release)

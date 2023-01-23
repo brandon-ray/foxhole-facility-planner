@@ -68,132 +68,51 @@
 }
 */
 
-#confirmation-dialog {
-    width: 400px;
-    height: 200px;
-    background-color: #1a1a1a;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin-top: -100px;
-    margin-left: -200px;
-}
-
-#confirmation-dialog .confirmation-header {
-    background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
-    padding: 4px 4px 4px 9px;
-    position: relative;
-    text-align: left;
-}
-
-#confirmation-dialog .confirmation-header > h3 {
-    display: inline-block;
-    margin: 0;
-}
-
-#confirmation-dialog .confirmation-header > button {
-    margin: 2px;
-}
-
-#confirmation-dialog .confirmation-body {
-    padding: 20px;
-}
-
-#confirmation-dialog .confirmation-body > button {
-    width: 100%;
-    background: linear-gradient(rgb(255, 0, 0), rgb(168, 0, 0));
-    margin-top: 14px;
-    padding: 4px 4px 4px 9px;
-    position: relative;
-    font-size: 2em;
-    color: white;
-    border: 2px solid black;
-    box-shadow: 0 0 3px #000;
-    cursor: pointer;
-}
-
-#confirmation-dialog .confirmation-body > button:hover {
-    border: 2px solid white;
-}
-
-.statistics-panel {
-    width: 325px;
-    background: #1a1a1a;
-    /*background: linear-gradient(rgb(42, 42, 42), rgb(32, 32, 32));*/
-    position: fixed;
-    top: 15px;
-    right: 15px;
-    padding: 0;
-    overflow: hidden;
-    border: 1px solid black;
-    border-radius: 6px;
-    text-align: left;
-}
-
-.statistics-panel-header {
-    /*background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));*/
-    padding: 6px 6px 6px 12px;
-    position: relative;
-    overflow: auto;
-}
-
-.statistics-panel-header {
-    background: #0f0f0f;
-    background: linear-gradient(rgb(24, 24, 24), rgb(12, 12, 12));
-    /*border: 1px solid black;*/
-}
-
-.colonial-faction .statistics-panel-header {
-    /*background: linear-gradient(rgb(24, 24, 24), rgb(5, 26, 6));*/
+/*
+.colonial-faction .board-panel-header {
+    *background: linear-gradient(rgb(24, 24, 24), rgb(5, 26, 6));*
     background: linear-gradient(rgb(31, 70, 33), rgb(5, 26, 6));
 }
 
-.warden-faction .statistics-panel-header {
-    /*background: linear-gradient(rgb(24, 24, 24), rgb(5, 16, 26));*/
+.warden-faction .board-panel-header {
+    *background: linear-gradient(rgb(24, 24, 24), rgb(5, 16, 26));*
     background: linear-gradient(rgb(12, 61, 106), rgb(5, 16, 26));
 }
 
-.statistics-panel-header button {
-    background: transparent;
+.colonial-faction .board-panel-body {
+    background: linear-gradient(rgb(54, 79, 18), rgb(38, 51, 32));
 }
 
-.statistics-panel-body {
-    /*min-height: 400px;*/
+.warden-faction .board-panel-body {
+    background: linear-gradient(rgb(18, 50, 79), rgb(32, 42, 51));
+}
+*/
+
+.statistics-panel {
+    width: 325px;
+    top: 15px;
+    right: 15px;
+}
+
+.statistics-panel .board-panel-body {
     max-height: 890px;
     padding: 10px 12px;
-    overflow: auto;
 }
 
-.statistics-panel-body .resource-row {
+.statistics-panel .board-panel-body .resource-row {
     background: #0b0b0b;
     margin: 0;
 }
 
-.statistics-panel-body .resource-row:not(:last-child) {
+.statistics-panel .board-panel-body .resource-row:not(:last-child) {
     border-bottom: 1px solid black;
 }
 
-.statistics-panel-body .resource-icon {
+.statistics-panel .board-panel-body .resource-icon {
     background-color: #171717;
     border: none;
     border-right: 1px solid black;
 }
-
-.colonial-faction .statistics-panel-body {
-    background: linear-gradient(rgb(54, 79, 18), rgb(38, 51, 32));
-}
-
-.warden-faction .statistics-panel-body {
-    background: linear-gradient(rgb(18, 50, 79), rgb(32, 42, 51));
-}
-
-/*
-.statistics-panel-fac-input, .statistics-panel-fac-output {
-    background: #0d0d0d;
-    padding: 4px;
-    border: 1px solid black;
-}
-*/
 
 .statistics-panel-fac-output .resource-amount {
     color: #03b003;

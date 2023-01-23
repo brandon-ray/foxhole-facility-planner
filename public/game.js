@@ -14,8 +14,6 @@ const COLOR_SELECTION_BORDER = 0xFF8248; // Lighter Orange
 const COLOR_RANGE = 0x72FF5A; // Green
 const COLOR_RANGE_BORDER = 0xED2323; // Red
 
-const FONT_FAMILY = ['Recursive', 'sans-serif'];
-
 const DEFAULT_SHAPE_STYLE = {
     alpha: 1,
     fill: true,
@@ -37,6 +35,7 @@ const game = {
         quality: 'auto',
         disableSound: false,
         disableHUD: false,
+        enableDarkMode: false,
         enableExperimental: false,
         enableHistory: true,
         historySize: 25,
@@ -53,10 +52,10 @@ const game = {
         defaultBuildingCategory: 'all',
         showCollapsibleBuildingList: true,
         showUpgradesAsBuildings: false,
+        showTiersAsBuildings: false,
         showFacilityName: true,
         showRanges: false,
         showProductionIcons: false,
-        showSelectionStats: true,
         styles: {
             label: {
                 fontFamily: 'Arial',
@@ -291,6 +290,14 @@ try {
         }
     }
 
+    game.setDarkMode = function(darkMode) {
+        if (game.settings.enableDarkMode !== darkMode) {
+            game.settings.enableDarkMode = darkMode;
+            background.texture = resources[game.settings.enableDarkMode ? 'background_dark' : 'background'].texture;
+            game.updateSettings();
+        }
+    }
+
     game.setConstructionMode = function(mode) {
         mode = mode ?? game.constructionModes[game.constructionModes.length - 1];
         if (game.constructionMode !== mode) {
@@ -374,6 +381,7 @@ try {
     let asset_list = {
         white: 'white.png',
         background: 'grid_32.webp',
+        background_dark: 'grid_32_dark.webp',
         point: 'point.webp',
         pointer: 'pointer.webp',
         bipointer: 'bipointer.webp',
@@ -708,7 +716,7 @@ try {
         resources = res;
         console.info('Asset loading completed.');
 
-        background = new PIXI.TilingSprite(resources['background'].texture);
+        background = new PIXI.TilingSprite(resources[game.settings.enableDarkMode ? 'background_dark' : 'background'].texture);
         app.stage.addChild(background);
 
         app.cstage = new PIXI.Container();
@@ -752,7 +760,6 @@ try {
         debugText = new PIXI.Text();
         debugText.visible = ENABLE_DEBUG;
         debugText.style.fill = COLOR_WHITE;
-        debugText.style.fontFamily = FONT_FAMILY;
         debugText.anchor.x = 0;
         debugText.x = WIDTH*0.22;
         debugText.y = 12;
@@ -1079,9 +1086,6 @@ try {
             if (!noMenuUpdate) {
                 game.updateSelectedBuildingMenu();
             }
-            if (game.settings.showSelectionStats) {
-                game.statisticsMenuComponent?.refresh();
-            }
             return true;
         }
         return false;
@@ -1103,9 +1107,6 @@ try {
             if (!noMenuUpdate) {
                 game.updateSelectedBuildingMenu();
             }
-            if (game.settings.showSelectionStats) {
-                game.statisticsMenuComponent?.refresh();
-            }
             return true;
         }
         return false;
@@ -1126,9 +1127,6 @@ try {
             selectedEntities = [];
             if (!noMenuUpdate) {
                 game.updateSelectedBuildingMenu();
-            }
-            if (game.settings.showSelectionStats) {
-                game.statisticsMenuComponent?.refresh();
             }
             return true;
         }
@@ -1982,7 +1980,7 @@ try {
                         socket.pointer.anchor.set(0.5, 1.5);
                         socket.pointer.rotation = -(entity.rotation + socket.rotation);
                         entity.handleTick = true;
-                    } else if (entity.building?.textureBorder) {
+                    } else if (entity.building?.textureBorder && !entity.building.trenchConnector) {
                         let textureBorder = resources[entity.building.textureBorder].texture;
                         socket.pointer = new PIXI.Sprite(textureBorder);
                         socket.pointer.width = textureBorder.width / METER_PIXEL_SCALE;
@@ -2179,20 +2177,19 @@ try {
                 }
 
                 if (socketData.switch === 'rail') {
-                    let railSwitch = new PIXI.Sprite(resources['white'].texture);
+                    let railSwitch = new PIXI.Sprite(resources['trackswitch_inactive'].texture);
                     railSwitch.anchor.set(0.5);
-                    railSwitch.tint = 0xFF0000;
-                    railSwitch.width = 30;
-                    railSwitch.height = 30;
+                    railSwitch.width = 32;
+                    railSwitch.height = 32;
                     railSwitch.position.x += 100;
                     railSwitch.interactive = true;
                     socket.switchEnabled = false;
                     railSwitch.on('pointerdown', () => {
                         socket.switchEnabled = !socket.switchEnabled;
                         if (socket.switchEnabled) {
-                            railSwitch.tint = COLOR_GREEN;
+                            railSwitch.texture = resources['trackswitch_active'].texture;
                         } else {
-                            railSwitch.tint = COLOR_RED;
+                            railSwitch.texture = resources['trackswitch_inactive'].texture;
                         }
                     });
                     socket.addChild(railSwitch);
@@ -2608,142 +2605,200 @@ try {
                             }
                         }
                         if (entity.building) {
-                            let bezierPoints = [];
-                            for (let i=0; i<points.length; i++) {
-                                let point = points[i];
+                            if (entity.building?.trenchConnector) {
+                                entity.sprite.removeChild(entity.sprite.trapezoid);
 
-                                if (entity.building?.simpleBezier) {
-                                    if (i < points.length - 1) {
-                                        bezierPoints.push({
-                                            x: point.x,
-                                            y: point.y
-                                        });
+                                const floorHalfHeight = 57, textureBorderHeight = 19, floorTexturePadding = 100;
+                                const frontPoint = points[0], endPoint = points[points.length - 1];
+                                const frontPoint1 = { x: 0, y: -57 };
+                                const frontPoint2 = { x: 0, y: 57 };
+                                const endPoint1 = Math.extendPoint(endPoint, 57, endPoint.rotation - Math.PI/2);
+                                const endPoint2 = Math.extendPoint(endPoint, 57, endPoint.rotation + Math.PI/2);
 
-                                        let point2 = points[i + 1];
-                                        if (point2) {
-                                            let dist = Math.distanceBetween(point, point2) * 0.1;
-                                            if (dist < 35) {
-                                                dist = 35;
-                                            }
-                                            if (dist > 50) {
-                                                dist = 50;
-                                            }
-                                            bezierPoints.push({
-                                                x: point.x + dist,
-                                                y: point.y
-                                            });
-                                            bezierPoints.push({
-                                                x: point.x + dist,
-                                                y: point.y
-                                            });
-                                            bezierPoints.push({
-                                                x: point.x + dist,
-                                                y: point.y
-                                            });
-                                        }
-                                    } else {
-                                        let point1 = points[i - 1];
-                                        if (point1) {
-                                            let dist = Math.distanceBetween(point, point1) * 0.1;
-                                            if (dist < 35) {
-                                                dist = 35;
-                                            }
-                                            if (dist > 50) {
-                                                dist = 50;
-                                            }
-                                            bezierPoints.push({
-                                                x: point.x + (Math.cos(point.rotation) * dist),
-                                                y: point.y + (Math.sin(point.rotation) * dist)
-                                            });
-                                            bezierPoints.push({
-                                                x: point.x + (Math.cos(point.rotation) * dist),
-                                                y: point.y + (Math.sin(point.rotation) * dist)
-                                            });
-                                            bezierPoints.push({
-                                                x: point.x + (Math.cos(point.rotation) * dist),
-                                                y: point.y + (Math.sin(point.rotation) * dist)
-                                            });
-                                        }
+                                const angle = Math.angleBetween({x: 0, y: 0}, endPoint);
+                                entity.sprite.trapezoid = new PIXI.Container();
 
-                                        bezierPoints.push({
-                                            x: point.x,
-                                            y: point.y
-                                        });
-                                    }
-                                } else {
-                                    if (i < points.length - 1) {
-                                        bezierPoints.push({
-                                            x: point.x,
-                                            y: point.y
-                                        });
+                                const trapezoid = new PIXI.Polygon([
+                                    frontPoint1.x, frontPoint1.y,
+                                    frontPoint2.x, frontPoint2.y,
+                                    endPoint1.x, endPoint1.y,
+                                    endPoint2.x, endPoint2.y
+                                ]);
 
-                                        let point2 = points[i + 1];
-                                        if (point2) {
-                                            let dist = Math.distanceBetween(point, point2) * 0.4;
-                                            bezierPoints.push({
-                                                x: point.x + dist,
-                                                y: point.y
-                                            });
-                                        }
-                                    } else {
-                                        let point1 = points[i - 1];
-                                        if (point1) {
-                                            let dist = Math.distanceBetween(point, point1) * 0.4;
-                                            bezierPoints.push({
-                                                x: point.x + (Math.cos(point.rotation) * dist),
-                                                y: point.y + (Math.sin(point.rotation) * dist)
-                                            });
-                                        }
+                                const floorMask = new PIXI.Graphics();
+                                floorMask.beginFill(0xFF3300);
+                                floorMask.drawPolygon(trapezoid);
+                                floorMask.endFill();
+                                entity.sprite.trapezoid.addChild(floorMask);
 
-                                        bezierPoints.push({
-                                            x: point.x,
-                                            y: point.y
-                                        });
-                                    }
-                                }
-                            }
-                            entity.bezier = new Bezier(bezierPoints);
-                            const lut = entity.bezier.getLUT(Math.round(entity.bezier.length()/TRACK_SEGMENT_LENGTH));
-                            if (entity.building.texture) {
-                                resources[entity.building.texture].texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
-                                entity.sprite.rope = new PIXI.SimpleRope(resources[entity.building.texture].texture, lut, 1);
-                                if (typeof entity.building.color === 'number') {
-                                    entity.sprite.rope.tint = entity.building.color;
-                                }
-                                entity.sprite.addChild(entity.sprite.rope);
-                            }
-                            updateTextureCap(entity.frontCap, frontPoint, Math.PI);
-                            updateTextureCap(entity.backCap, backPoint, Math.PI);
-                            entity.bezier.mid = entity.bezier.get(0.5);
-                            if (entity.sockets) {
-                                let midNormal = entity.bezier.normal(entity.bezier.mid.t);
-                                let midAngle = Math.angleBetween({x: 0, y: 0}, midNormal) - Math.PI/2;
+                                entity.sprite.hitArea = trapezoid;
+
+                                entity.sprite.trapezoid.floor = new PIXI.TilingSprite(resources[entity.building.texture].texture, Math.distanceBetween(frontPoint, endPoint) + floorTexturePadding);
+                                entity.sprite.trapezoid.floor.anchor.set((floorTexturePadding / entity.sprite.trapezoid.floor.width) / 2, 0.5);
+                                entity.sprite.trapezoid.floor.mask = floorMask;
+                                entity.sprite.trapezoid.floor.rotation = angle;
+                                entity.sprite.trapezoid.addChild(entity.sprite.trapezoid.floor);
+
+                                const connectorTopBorder = new PIXI.TilingSprite(resources[entity.building.textureBorder].texture, Math.distanceBetween(frontPoint1, endPoint2), textureBorderHeight);
+                                connectorTopBorder.y = -floorHalfHeight;
+                                connectorTopBorder.anchor.set(0, 0.5);
+                                connectorTopBorder.rotation = Math.angleBetween(frontPoint1, endPoint2);
+                                entity.sprite.trapezoid.addChild(connectorTopBorder);
+
+                                const connectorBottomBorder = new PIXI.TilingSprite(resources[entity.building.textureBorder].texture, Math.distanceBetween(frontPoint2, endPoint1), textureBorderHeight);
+                                connectorBottomBorder.y = floorHalfHeight;
+                                connectorBottomBorder.scale.y = -1;
+                                connectorBottomBorder.anchor.set(0, 0.5);
+                                connectorBottomBorder.rotation = Math.angleBetween(frontPoint2, endPoint1);
+                                entity.sprite.trapezoid.addChild(connectorBottomBorder);
+
+                                entity.sprite.addChild(entity.sprite.trapezoid);
+
                                 for (let i = 0; i < entity.sockets.children.length; i++) {
                                     let socket = entity.sockets.children[i];
-                                    let socketPosition, socketRotation;
-                                    if (socket.socketData.cap === 'left' || socket.socketData.cap === 'right') {
-                                        socketRotation = midAngle + Math.deg2rad(socket.socketData.rotation);
-                                        socketPosition = Math.extendPoint(entity.bezier.mid, 8, socketRotation - Math.PI/2);
-                                    }
-                                    switch (socket.socketData.cap) {
-                                        case 'left':
-                                        case 'right':
-                                            socket.position.set(socketPosition.x, socketPosition.y);
-                                            socket.rotation = socketRotation;
-                                            break;
-                                        case 'back':
-                                            socket.position.set(backPoint.x, backPoint.y);
-                                            socket.rotation = backPoint.rotation - Math.PI/2;
-                                            break;
+                                    if (socket.socketData.cap === 'back') {
+                                        socket.position.set(endPoint.x, endPoint.y);
+                                        socket.rotation = endPoint.rotation - Math.PI/2;
                                     }
                                 }
-                            }
-                            if (entity.building.hasOutline !== false) {
-                                entity.sprite.removeChild(entity.sprite.outline);
-                                entity.sprite.outline = new PIXI.SimpleRope(resources.white.texture, lut, 1);
-                                entity.sprite.outline.visible = entity.selected;
-                                entity.sprite.outline.tint = entity.locked ? COLOR_RED : COLOR_ORANGE;
-                                entity.sprite.addChild(entity.sprite.outline);
+                            } else {
+                                let bezierPoints = [];
+                                for (let i=0; i<points.length; i++) {
+                                    let point = points[i];
+                                    
+                                    if (entity.building?.simpleBezier) {
+                                        if (i < points.length - 1) {
+                                            bezierPoints.push({
+                                                x: point.x,
+                                                y: point.y
+                                            });
+
+                                            let point2 = points[i + 1];
+                                            if (point2) {
+                                                let dist = Math.distanceBetween(point, point2) * 0.1;
+                                                if (dist < 35) {
+                                                    dist = 35;
+                                                }
+                                                if (dist > 50) {
+                                                    dist = 50;
+                                                }
+                                                bezierPoints.push({
+                                                    x: point.x + dist,
+                                                    y: point.y
+                                                });
+                                                bezierPoints.push({
+                                                    x: point.x + dist,
+                                                    y: point.y
+                                                });
+                                                bezierPoints.push({
+                                                    x: point.x + dist,
+                                                    y: point.y
+                                                });
+                                            }
+                                        } else {
+                                            let point1 = points[i - 1];
+                                            if (point1) {
+                                                let dist = Math.distanceBetween(point, point1) * 0.1;
+                                                if (dist < 35) {
+                                                    dist = 35;
+                                                }
+                                                if (dist > 50) {
+                                                    dist = 50;
+                                                }
+                                                bezierPoints.push({
+                                                    x: point.x + (Math.cos(point.rotation) * dist),
+                                                    y: point.y + (Math.sin(point.rotation) * dist)
+                                                });
+                                                bezierPoints.push({
+                                                    x: point.x + (Math.cos(point.rotation) * dist),
+                                                    y: point.y + (Math.sin(point.rotation) * dist)
+                                                });
+                                                bezierPoints.push({
+                                                    x: point.x + (Math.cos(point.rotation) * dist),
+                                                    y: point.y + (Math.sin(point.rotation) * dist)
+                                                });
+                                            }
+
+                                            bezierPoints.push({
+                                                x: point.x,
+                                                y: point.y
+                                            });
+                                        }
+                                    } else {
+                                        if (i < points.length - 1) {
+                                            bezierPoints.push({
+                                                x: point.x,
+                                                y: point.y
+                                            });
+
+                                            let point2 = points[i + 1];
+                                            if (point2) {
+                                                let dist = Math.distanceBetween(point, point2) * 0.4;
+                                                bezierPoints.push({
+                                                    x: point.x + dist,
+                                                    y: point.y
+                                                });
+                                            }
+                                        } else {
+                                            let point1 = points[i - 1];
+                                            if (point1) {
+                                                let dist = Math.distanceBetween(point, point1) * 0.4;
+                                                bezierPoints.push({
+                                                    x: point.x + (Math.cos(point.rotation) * dist),
+                                                    y: point.y + (Math.sin(point.rotation) * dist)
+                                                });
+                                            }
+
+                                            bezierPoints.push({
+                                                x: point.x,
+                                                y: point.y
+                                            });
+                                        }
+                                    }
+                                }
+                                entity.bezier = new Bezier(bezierPoints);
+                                const lut = entity.bezier.getLUT(Math.round(entity.bezier.length()/TRACK_SEGMENT_LENGTH));
+                                if (entity.building.texture) {
+                                    resources[entity.building.texture].texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
+                                    entity.sprite.rope = new PIXI.SimpleRope(resources[entity.building.texture].texture, lut, 1);
+                                    if (typeof entity.building.color === 'number') {
+                                        entity.sprite.rope.tint = entity.building.color;
+                                    }
+                                    entity.sprite.addChild(entity.sprite.rope);
+                                }
+                                updateTextureCap(entity.frontCap, frontPoint, Math.PI);
+                                updateTextureCap(entity.backCap, backPoint, Math.PI);
+                                entity.bezier.mid = entity.bezier.get(0.5);
+                                if (entity.sockets) {
+                                    let midNormal = entity.bezier.normal(entity.bezier.mid.t);
+                                    let midAngle = Math.angleBetween({x: 0, y: 0}, midNormal) - Math.PI/2;
+                                    for (let i = 0; i < entity.sockets.children.length; i++) {
+                                        let socket = entity.sockets.children[i];
+                                        let socketPosition, socketRotation;
+                                        if (socket.socketData.cap === 'left' || socket.socketData.cap === 'right') {
+                                            socketRotation = midAngle + Math.deg2rad(socket.socketData.rotation);
+                                            socketPosition = Math.extendPoint(entity.bezier.mid, 8, socketRotation - Math.PI/2);
+                                        }
+                                        switch (socket.socketData.cap) {
+                                            case 'left':
+                                            case 'right':
+                                                socket.position.set(socketPosition.x, socketPosition.y);
+                                                socket.rotation = socketRotation;
+                                                break;
+                                            case 'back':
+                                                socket.position.set(backPoint.x, backPoint.y);
+                                                socket.rotation = backPoint.rotation - Math.PI/2;
+                                                break;
+                                        }
+                                    }
+                                }
+                                if (entity.building.hasOutline !== false) {
+                                    entity.sprite.removeChild(entity.sprite.outline);
+                                    entity.sprite.outline = new PIXI.SimpleRope(resources.white.texture, lut, 1);
+                                    entity.sprite.outline.visible = entity.selected;
+                                    entity.sprite.outline.tint = entity.locked ? COLOR_RED : COLOR_ORANGE;
+                                    entity.sprite.addChild(entity.sprite.outline);
+                                }
                             }
                         } else if (entity.type === 'shape') {
                             entity.sprite.clear();
@@ -2944,9 +2999,9 @@ try {
                             return true;
                         }
                     } else {
-                        if (entity.building?.hitArea) {
+                        if (entity.sprite?.hitArea) {
                             const mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
-                            return entity.sprite?.hitArea.contains(mousePos.x, mousePos.y);
+                            return entity.sprite.hitArea.contains(mousePos.x, mousePos.y);
                         }
 
                         // https://stackoverflow.com/a/67732811 <3
@@ -3145,7 +3200,7 @@ try {
                                         nearestSocketPos = entity.toLocal(nearestSocketPos, app.cstage, undefined, true);
                                         const socketRotation = Math.angleNormalized(((entity2.rotation + nearestSocket.rotation) - entity.rotation) - Math.deg2rad(handleSocket.socketData.rotation));
                                         // TODO: Only force rotate snap constraint whenever the first socket is connected, otherwise the entity should be able to rotate and attempt snapping.
-                                        if (handleSocket.socketData.name === 'power' || Math.angleDifference(Math.angleNormalized(selectedHandlePoint.rotation), socketRotation) === 0 && Math.round(nearestSocketPos.y) === 0 || entity.building?.isBezier) {
+                                        if (handleSocket.socketData.name === 'power' || Math.angleDifference(Math.angleNormalized(selectedHandlePoint.rotation), socketRotation) === 0 && Math.round(nearestSocketPos.y) === 0 || entity.building?.isBezier || entity.building?.trenchConnector) {
                                             handleSocket.setConnection(entity2.id, nearestSocket);
                                             selectedHandlePoint.x = nearestSocketPos.x;
                                             if (entity.building?.isBezier) {
@@ -3268,10 +3323,10 @@ try {
                 let mid;
                 if (entity.bezier) {
                     mid = entity.bezier.mid;
-                } else if (entity.type === 'shape' && points && (entity.subtype === 'rectangle' || entity.subtype === 'line')) {
+                } else if (points && (entity.building?.trenchConnector || (entity.type === 'shape' && (entity.subtype === 'rectangle' || entity.subtype === 'line')))) {
                     mid = {
-                        x: (points[0].x + points[1].x) / 2,
-                        y: (points[0].y + points[1].y) / 2
+                        x: (points[0].x + points[points.length - 1].x) / 2,
+                        y: (points[0].y + points[points.length - 1].y) / 2
                     };
                 }
 
@@ -3596,6 +3651,23 @@ try {
             clone.onLoad(entityData);
             clone.afterLoad(entityData);
             game.selectEntity(clone);
+            if (entity.sockets) {
+                for (const entitySocket of entity.sockets.children) {
+                    if (clone.sockets) {
+                        let foundSocket = false;
+                        for (const cloneSocket of clone.sockets.children) {
+                            if (entitySocket.socketData.id === cloneSocket.socketData.id) {
+                                foundSocket = true;
+                                break;
+                            }
+                        }
+                        if (foundSocket) {
+                            continue;
+                        }
+                    }
+                    entitySocket.removeConnections();
+                }
+            }
             entity.sockets = null;
             entity.remove();
             return clone;
@@ -4016,6 +4088,12 @@ try {
                 let snappedMX = gmx, snappedMY = gmy;
                 if (game.settings.enableGrid || keys[16]) {
                     let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
+                    if (!pickupPosition) {
+                        pickupPosition = {
+                            x: gmx,
+                            y: gmy
+                        };
+                    }
                     let mXDiff = pickupPosition.x - snappedMX;
                     let mYDiff = pickupPosition.y - snappedMY;
                     snappedMX = pickupPosition.x - (Math.round(mXDiff / gridSize) * gridSize);
@@ -4059,7 +4137,7 @@ try {
                                 if (selectedEntity.subtype === entity.subtype || (selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain) {
                                     const mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
                                     const projection = entity.bezier?.project(mousePos);
-                                    if (!projection || projection.d <= (entity.building?.lineWidth ?? 25)) {
+                                    if (!projection || projection.d <= Math.max(entity.building?.lineWidth ?? 0, 25)) {
                                         if (selectedEntity.sockets && entity.sockets && selectedEntity.building?.canSnap && (selectedEntity.building?.canSnapStructureType !== false || selectedEntity.subtype !== entity.subtype)) {
                                             let frontSocket = null, nearestSocket = null, nearestSocketDist = null;
                                             const connectEntitiesBySockets = function(fromSocket, toSocket) {
