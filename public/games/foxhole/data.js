@@ -2893,7 +2893,6 @@ const foxholeData = {
 			"length": 5.76,
 			"icon": "game/Textures/UI/StructureIcons/FortT2Icon.webp",
 			"texture": "game/Textures/Structures/fortt2.webp",
-			"textureBorder": "game/Textures/Structures/fortt2_border.webp",
 			"textureOffset": {
 				"x": 340,
 				"y": 372
@@ -2982,6 +2981,10 @@ const foxholeData = {
 					"description": "An entrenched AT gun manned by stationed troops.",
 					"icon": "game/Textures/UI/StructureIcons/FortT2ATGunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt2_atgunai.webp",
+					"textureOffset": {
+						"x": 306,
+						"y": 306
+					},
 					"maxHealth": 1650,
 					"structuralIntegrity": 0.82,
 					"cost": {
@@ -2997,7 +3000,7 @@ const foxholeData = {
 					"codeName": "EngineRoomT2",
 					"description": "A engineering facility that provides power to Bunker structures using pipe connections.",
 					"icon": "game/Textures/UI/StructureIcons/EngineRoomIcon.webp",
-					"texture": null,
+					"texture": "game/Textures/Structures/fortt2.webp",
 					"maxHealth": 1350,
 					"structuralIntegrity": 0.75,
 					"cost": {
@@ -3012,6 +3015,10 @@ const foxholeData = {
 					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/FortT2MGunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt2_mgai.webp",
+					"textureOffset": {
+						"x": 308,
+						"y": 308
+					},
 					"maxHealth": 2150,
 					"structuralIntegrity": 0.85,
 					"cost": {
@@ -3029,6 +3036,10 @@ const foxholeData = {
 					},
 					"icon": "game/Textures/UI/StructureIcons/ObservationBunkerT2ItemIcon.webp",
 					"texture": "game/Textures/Structures/fortt2_observationbunker.webp",
+					"textureOffset": {
+						"x": 306,
+						"y": 306
+					},
 					"maxHealth": 1650,
 					"structuralIntegrity": 0.82,
 					"cost": {
@@ -3059,6 +3070,10 @@ const foxholeData = {
 					"description": "An entrenched bunker manned by stationed troops armed with Rifles.",
 					"icon": "game/Textures/UI/StructureIcons/FortT2GunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt2_rifleai.webp",
+					"textureOffset": {
+						"x": 306,
+						"y": 306
+					},
 					"maxHealth": 1850,
 					"structuralIntegrity": 0.85,
 					"cost": {
@@ -3199,7 +3214,7 @@ const foxholeData = {
 					"codeName": "AmmoRoomT3",
 					"description": "A facility that stores equipment and ammunition for artillery. Retrieval is very quick for this structure.. ",
 					"icon": "game/Textures/UI/StructureIcons/AmmoRoomIcon.webp",
-					"texture": null,
+					"texture": "game/Textures/Structures/fortt3.webp",
 					"maxHealth": 2000,
 					"structuralIntegrity": 0.95,
 					"cost": {
@@ -3240,7 +3255,7 @@ const foxholeData = {
 					"codeName": "EngineRoomT3",
 					"description": "A engineering facility that provides power to Bunker structures using pipe connections.",
 					"icon": "game/Textures/UI/StructureIcons/EngineRoomIcon.webp",
-					"texture": null,
+					"texture": "game/Textures/Structures/fortt3.webp",
 					"maxHealth": 1500,
 					"structuralIntegrity": 0.85,
 					"cost": {
@@ -8677,10 +8692,12 @@ const foxholeData = {
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches. This variant can also serve as an emplacement for mannable defenses.",
 			"category": "entrenchments",
 			"categoryOrder": 5,
+			"width": 12.3,
+			"length": 12.3,
 			"sortLayer": "foundation",
 			"hitArea": [
 				{
-					"shape": [ 195.84,-76.48,194.56,80.96,82.56,194.24,-80.64,196.16,-195.84,77.12,-194.56,-82.24,-81.92,-194.24,81.92,-195.52 ]
+					"shape": [ 195.52,-75.84,194.24,81.6,82.24,194.88,-80.96,196.8,-196.16,77.76,-194.88,-81.6,-82.24,-193.6,81.6,-194.88 ]
 				}
 			],
 			"icon": "game/Textures/UI/StructureIcons/TrenchT1EmplacementIcon.webp",
@@ -8696,7 +8713,7 @@ const foxholeData = {
 							"category": 2
 						}
 					],
-					"x": 614,
+					"x": 615,
 					"y": 6,
 					"rotation": 0
 				},
@@ -8708,8 +8725,8 @@ const foxholeData = {
 							"category": 2
 						}
 					],
-					"x": 1044,
-					"y": 188,
+					"x": 1046,
+					"y": 186,
 					"rotation": 45
 				},
 				{
@@ -8720,8 +8737,8 @@ const foxholeData = {
 							"category": 2
 						}
 					],
-					"x": 1220,
-					"y": 618,
+					"x": 1224,
+					"y": 615,
 					"rotation": 90
 				},
 				{
@@ -8732,7 +8749,7 @@ const foxholeData = {
 							"category": 2
 						}
 					],
-					"x": 1040,
+					"x": 1046,
 					"y": 1046,
 					"rotation": 135
 				},
@@ -8744,7 +8761,7 @@ const foxholeData = {
 							"category": 2
 						}
 					],
-					"x": 614,
+					"x": 616,
 					"y": 1228,
 					"rotation": 180
 				},
@@ -8768,8 +8785,8 @@ const foxholeData = {
 							"category": 2
 						}
 					],
-					"x": 8,
-					"y": 618,
+					"x": 7,
+					"y": 617,
 					"rotation": 270
 				},
 				{
@@ -8781,7 +8798,7 @@ const foxholeData = {
 						}
 					],
 					"x": 182,
-					"y": 186,
+					"y": 185,
 					"rotation": 315
 				}
 			],

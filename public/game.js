@@ -784,6 +784,20 @@ try {
         update();
 
         onWindowResize();
+
+        if (game.settings.enableDebug) {
+            fetch(`/games/foxhole/assets/presets/debug.json`).then(response => {
+                return response.json();
+            }).then(saveObject => {
+                try {
+                    game.loadSave(saveObject);
+                } catch (e) {
+                    console.error('Failed to load debug save:', e);
+                }
+            }).catch(e => {
+                console.info('Failed to load debug preset. This will typically occur if one doesn\'t exist.');
+            });
+        }
     });
 
     game.isRunning = function(){
