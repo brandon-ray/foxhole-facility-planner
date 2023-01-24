@@ -36,6 +36,7 @@ const game = {
         disableSound: false,
         disableHUD: false,
         enableDarkMode: false,
+        enableDebug: false,
         enableExperimental: false,
         enableHistory: true,
         historySize: 25,
@@ -547,7 +548,7 @@ try {
                         const buildings = Object.values(window.objectData.buildings);
                         for (let i=0; i<1000; i++) {
                             let buildingData = buildings[Math.floor(Math.random() * buildings.length)];
-                            if ((game.settings.enableExperimental || !window.objectData.categories[buildingData.category].hideInList) && !buildingData.hideInList && (!buildingData.parent || !buildingData.parent.hideInList)) {
+                            if ((game.settings.enableExperimental || !window.objectData.categories[buildingData.category].experimental) && (game.settings.enableDebug || (!buildingData.hideInList && (!buildingData.parent || !buildingData.parent.hideInList)))) {
                                 createSelectableEntity('building', buildingData.key, x, y, 0);
                                 x += 500;
                                 if (x >= 10000) {
@@ -564,10 +565,10 @@ try {
                     setTimeout(() => {
                         let x = 0, y = 0;
                         for (const category of Object.values(window.objectData.categories)) {
-                            if (game.settings.enableExperimental || !category.hideInList) {
+                            if (game.settings.enableExperimental || !category.experimental) {
                                 for (let i = 0; i < category.buildings.length; i++) {
                                     const building = category.buildings[i];
-                                    if (game.settings.enableExperimental || (!building.hideInList && (!building.parent || !building.parent.hideInList))) {
+                                    if (game.settings.enableDebug || (!building.hideInList && (!building.parent || !building.parent.hideInList))) {
                                         createSelectableEntity('building', building.key, x * 600, y * 600, 0);
                                         x++;
                                         if (x >= 10) {
@@ -2017,7 +2018,7 @@ try {
                         }
                     } else if (socket.socketData.name === 'power') {
                         createSocketIndicator(COLOR_YELLOW, powerSocketSize, powerSocketSize, true);
-                    } else if (socket.socketData.type === 'traincar' || socket.socketData.type === 'smalltraincar' || entity.building?.hasHandle) {
+                    } else if (socket.socketData.type === 'traincar' || socket.socketData.type === 'smalltraincar' || entity.building?.hasHandle || game.settings.enableExperimental) {
                         createSocketIndicator(undefined, socketThickness, socketThickness, true);
                     }
                 }

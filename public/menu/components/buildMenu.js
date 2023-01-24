@@ -450,7 +450,7 @@ Vue.component('app-menu-building-selected', {
                     <i class="fa fa-repeat" aria-hidden="true"></i> Rotation:
                     <input class="app-input" type="number" v-model.number="entity.rotationDegrees" @input="updateEntity(true)" :disabled="entity.building?.vehicle">
                 </label>
-                <label v-if="game.settings.enableExperimental && entity.subtype === 'power_line'" class="app-input-label">
+                <label v-if="game.settings.enableDebug && entity.subtype === 'power_line'" class="app-input-label">
                     <i class="fa fa-paint-brush" aria-hidden="true"></i> Color:
                     <input type="color" v-model="entity.color" style="padding: 1px;" @input="setColor()">
                 </label>
@@ -465,7 +465,7 @@ Vue.component('app-menu-building-selected', {
                     <button class="btn-small m-0" type="button" @click="flipTrain()"><i class="fa fa-exchange" aria-hidden="true"></i></button>
                 </div>
             </div>
-            <div v-if="game.settings.enableExperimental && debug?.textureOffset" class="settings-option-wrapper">
+            <div v-if="game.settings.enableDebug && debug?.textureOffset" class="settings-option-wrapper">
                 <div class="settings-title">
                     Texture Offset
                 </div>
@@ -717,10 +717,10 @@ Vue.component('app-menu-construction-list', {
             <template v-else>
                 <template v-for="(category, key) in window.objectData.categories">
                     <template v-if="(game.settings.showCollapsibleBuildingList || !category.hideInBuildingList)">
-                        <div v-if="game.settings.showCollapsibleBuildingList && (game.settings.enableExperimental || !category.hideInList)" class="construction-item-category" @click="category.visible = !category.visible; refresh()">
+                        <div v-if="game.settings.showCollapsibleBuildingList && (game.settings.enableExperimental || !category.experimental)" class="construction-item-category" @click="category.visible = !category.visible; refresh()">
                             {{category.name}}<i class="fa float-right" :class="{'fa-angle-down': category.visible, 'fa-angle-right': !category.visible}" style="margin-top: 2px;" aria-hidden="true"></i>
                         </div>
-                        <div v-if="(game.settings.enableExperimental || !category.hideInList) && !game.settings.showCollapsibleBuildingList || category.visible">
+                        <div v-if="(game.settings.enableExperimental || !category.experimental) && (!game.settings.showCollapsibleBuildingList || category.visible)">
                             <app-game-building-list-icon v-for="building in category.buildings" :test="this" :building="building"/>
                         </div>
                     </template>
@@ -824,7 +824,8 @@ Vue.component('app-game-building-list-icon', {
         }
     },
     template: html`
-    <div v-if="(!building.hideInList || game.settings.enableExperimental) &&
+    <div v-if="(!building.hideInList || game.settings.enableDebug) &&
+        (!building.experimental || game.settings.enableExperimental) &&
         (!building.tierUpgrade || (game.settings.showTiersAsBuildings || game.settings.showUpgradesAsBuildings)) &&
         (!building.parent || building.parentKey || game.settings.showUpgradesAsBuildings) &&
         (!building.techId || (game.settings.selectedTier === 2 && building.techId === 'unlockfacilitytier2') || game.settings.selectedTier === 3) &&
@@ -865,12 +866,10 @@ Vue.component('app-menu-settings', {
                 <i class="fa fa-hdd-o" aria-hidden="true"></i> Stored History Size
                 <input class="app-input" type="number" v-model.number="game.settings.historySize" @input="game.updateSettings()">
             </label>
-            <!--
             <label class="app-input-label">
                 <i class="fa fa-flask" aria-hidden="true"></i> Enable Experimental Features
                 <input class="app-input" type="checkbox" v-model="game.settings.enableExperimental" @change="game.updateSettings()">
             </label>
-            -->
         </div>
         <div class="settings-option-wrapper">
             <div class="settings-title">Board Settings</div>
@@ -1001,7 +1000,7 @@ Vue.component('app-menu-save-load', {
     <div id="save-load-page">
         <input id="fileUpload" @change="loadFile()" type="file" ref="file" hidden>
         <div class="settings-option-wrapper">
-            <div class="settings-title">Facility Properties</div>
+            <div class="settings-title">Plan Properties</div>
             <label class="app-input-label facility-name-input">
                 <i class="fa fa-pencil-square edit-icon" aria-hidden="true"></i>
                 <input class="app-input" type="text" v-model="game.facilityName" @change="updateName()">
@@ -1015,8 +1014,8 @@ Vue.component('app-menu-save-load', {
                 </button>
             </div>
         </div>
-        <div v-if="game.settings.enableExperimental" class="settings-option-wrapper">
-            <div class="settings-title">Facility Presets</div>
+        <div v-if="game.settings.enableDebug" class="settings-option-wrapper">
+            <div class="settings-title">Building Presets</div>
             <div class="text-center">
                 <div class="select-preset-wrapper">
                     <select title="Load a Preset" v-model="presetName">

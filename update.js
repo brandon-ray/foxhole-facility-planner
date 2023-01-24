@@ -236,6 +236,7 @@ function iterateStructures(dirPath) {
                                     'categoryOrder': structureData.categoryOrder ?? structure.BuildOrder ?? baseData.BuildOrder,
                                     'faction': structureData.faction,
                                     'color': structureData.color,
+                                    'experimental': structureData.experimental,
                                     'hideInList': structureData.hideInList,
                                     'tierUpgrade': structureData.tierUpgrade,
                                     'width': structureData.width,
