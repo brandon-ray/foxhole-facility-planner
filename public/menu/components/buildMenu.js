@@ -699,7 +699,7 @@ Vue.component('app-menu-construction-list', {
                     <select class="btn-small app-input construction-category" @click="bmc()" title="Filter by Category" v-model="game.selectedBuildingCategory" @change="refresh()">
                         <option value="all">All Buildings</option>
                         <template v-for="(category, key) in window.objectData.categories">
-                            <option :value="key">{{category.name}}</option>
+                            <option v-if="!category.experimental || game.settings.enableExperimental" :value="key">{{category.name}}</option>
                         </template>
                     </select>
                 </div>
@@ -718,7 +718,7 @@ Vue.component('app-menu-construction-list', {
                 <template v-for="(category, key) in window.objectData.categories">
                     <template v-if="(game.settings.showCollapsibleBuildingList || !category.hideInBuildingList)">
                         <div v-if="game.settings.showCollapsibleBuildingList && (game.settings.enableExperimental || !category.experimental)" class="construction-item-category" @click="category.visible = !category.visible; refresh()">
-                            {{category.name}}<i class="fa float-right" :class="{'fa-angle-down': category.visible, 'fa-angle-right': !category.visible}" style="margin-top: 2px;" aria-hidden="true"></i>
+                            {{category.name}}{{category.experimental && ' (Preview)'}}<i class="fa float-right" :class="{'fa-angle-down': category.visible, 'fa-angle-right': !category.visible}" style="margin-top: 2px;" aria-hidden="true"></i>
                         </div>
                         <div v-if="(game.settings.enableExperimental || !category.experimental) && (!game.settings.showCollapsibleBuildingList || category.visible)">
                             <app-game-building-list-icon v-for="building in category.buildings" :test="this" :building="building"/>
@@ -901,7 +901,7 @@ Vue.component('app-menu-settings', {
                 <select class="app-input" v-model="game.settings.defaultBuildingCategory" @change="game.updateSettings()">
                     <option value="all">All Buildings</option>
                     <template v-for="(category, key) in window.objectData.categories">
-                        <option :value="key">{{category.name}}</option>
+                        <option v-if="!category.experimental || game.settings.enableExperimental" :value="key">{{category.name}}</option>
                     </template>
                 </select>
             </label>

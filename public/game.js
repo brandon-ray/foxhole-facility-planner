@@ -1254,30 +1254,35 @@ try {
                     });
                     for (let i=0; i<entities.length; i++) {
                         let entity = entities[i];
-                        if (entity.valid && entity.visible && entity.selectable && entity.canGrab()) {
-                            if (keys[46]) {
-                                entity.remove();
-                            } else {
-                                if (!entity.selected) {
-                                    if (e.ctrlKey || e.shiftKey) {
-                                        game.addSelectedEntity(entity);
-                                    } else {
-                                        game.selectEntity(entity);
-                                    }
-                                } else if (!(entity.hasHandle && entity.grabHandlePoint()) && (e.ctrlKey || e.shiftKey)) {
-                                    game.removeSelectedEntity(entity);
-                                }
-                                /* Not sure how I feel about this yet. Might be worth keeping, unsure.
-                                if (entity.selected && followNext) {
-                                    game.followEntity(entity);
-                                }
-                                */
-                                if (entity.selected && entity.type === 'text') {
-                                    game.buildingSelectedMenuComponent?.focusText();
-                                }
-                                game.setPickupEntities(true);
+                        if (entity.valid && entity.visible && entity.selectable) {
+                            if (entity.selected && entity.hasHandle && entity.grabHandlePoint()) {
+                                return;
                             }
-                            return;
+                            if (entity.canGrab()) {
+                                if (keys[46]) {
+                                    entity.remove();
+                                } else {
+                                    if (!entity.selected) {
+                                        if (e.ctrlKey || e.shiftKey) {
+                                            game.addSelectedEntity(entity);
+                                        } else {
+                                            game.selectEntity(entity);
+                                        }
+                                    } else if (e.ctrlKey || e.shiftKey) {
+                                        game.removeSelectedEntity(entity);
+                                    }
+                                    /* Not sure how I feel about this yet. Might be worth keeping, unsure.
+                                    if (entity.selected && followNext) {
+                                        game.followEntity(entity);
+                                    }
+                                    */
+                                    if (entity.selected && entity.type === 'text') {
+                                        game.buildingSelectedMenuComponent?.focusText();
+                                    }
+                                    game.setPickupEntities(true);
+                                }
+                                return;
+                            }
                         }
                     }
                     if (!(e.ctrlKey || e.shiftKey)) {

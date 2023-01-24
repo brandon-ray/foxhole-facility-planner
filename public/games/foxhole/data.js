@@ -7,7 +7,7 @@ const foxholeData = {
 			"name": "Defenses"
 		},
 		"entrenchments": {
-			"name": "Entrenchments (Preview)",
+			"name": "Entrenchments",
 			"experimental": true
 		},
 		"factories": {
