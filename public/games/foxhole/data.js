@@ -2779,6 +2779,11 @@ const foxholeData = {
 					"name": "Machine Gun Garrison (Tier 1)",
 					"codeName": "MGAIT1",
 					"description": "An entrenched machine gun manned by stationed troops.",
+					"range": {
+						"type": "killbox",
+						"arc": 45,
+						"max": 33.5
+					},
 					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/FortT1MGunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt1_mgai.webp",
@@ -2864,6 +2869,10 @@ const foxholeData = {
 					"name": "Rifle Garrison (Tier 1)",
 					"codeName": "RifleAIT1",
 					"description": "An entrenched bunker manned by stationed troops armed with Rifles.",
+					"range": {
+						"type": "killbox",
+						"max": 25
+					},
 					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/FortT1GunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt1_rifleai.webp",
@@ -2979,6 +2988,11 @@ const foxholeData = {
 					"name": "AT Gun Garrison (Tier 2)",
 					"codeName": "ATGunAIT2",
 					"description": "An entrenched AT gun manned by stationed troops.",
+					"range": {
+						"type": "killbox",
+						"arc": 90,
+						"max": 30
+					},
 					"icon": "game/Textures/UI/StructureIcons/FortT2ATGunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt2_atgunai.webp",
 					"textureOffset": {
@@ -3012,6 +3026,11 @@ const foxholeData = {
 					"name": "Machine Gun Garrison (Tier 2)",
 					"codeName": "MGAIT2",
 					"description": "An entrenched machine gun manned by stationed troops.",
+					"range": {
+						"type": "killbox",
+						"arc": 45,
+						"max": 33.5
+					},
 					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/FortT2MGunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt2_mgai.webp",
@@ -3068,6 +3087,10 @@ const foxholeData = {
 					"name": "Rifle Garrison (Tier 2)",
 					"codeName": "RifleAIT2",
 					"description": "An entrenched bunker manned by stationed troops armed with Rifles.",
+					"range": {
+						"type": "killbox",
+						"max": 29
+					},
 					"icon": "game/Textures/UI/StructureIcons/FortT2GunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt2_rifleai.webp",
 					"textureOffset": {
@@ -3240,6 +3263,11 @@ const foxholeData = {
 					"name": "AT Gun Garrison (Tier 3)",
 					"codeName": "ATGunAIT3",
 					"description": "An entrenched AT gun manned by stationed troops.",
+					"range": {
+						"type": "killbox",
+						"arc": 90,
+						"max": 30
+					},
 					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/FortT3ATGunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_atgunai.webp",
@@ -3267,6 +3295,11 @@ const foxholeData = {
 					"name": "Machine Gun Garrison (Tier 3)",
 					"codeName": "MGAIT3",
 					"description": "An entrenched machine gun manned by stationed troops.",
+					"range": {
+						"type": "killbox",
+						"arc": 45,
+						"max": 33.5
+					},
 					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/FortT3MGunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_mgai.webp",
@@ -3316,6 +3349,10 @@ const foxholeData = {
 					"name": "Rifle Garrison (Tier 3)",
 					"codeName": "RifleAIT3",
 					"description": "An entrenched bunker manned by stationed troops armed with Rifles.",
+					"range": {
+						"type": "killbox",
+						"max": 29
+					},
 					"icon": "game/Textures/UI/StructureIcons/FortT3GunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_rifleai.webp",
 					"textureOffset": null,
