@@ -8616,7 +8616,7 @@ const foxholeData = {
 			"trenchConnector": true,
 			"maxLength": 8,
 			"icon": "game/Textures/UI/StructureIcons/TrenchT1ConnectorIcon.webp",
-			"texture": "game/Textures/Structures/trencht1.webp",
+			"texture": "game/Textures/Structures/trencht1_connector.webp",
 			"textureBorder": "game/Textures/Structures/trencht1_connector_side.webp",
 			"canSnap": true,
 			"sockets": [
@@ -8666,7 +8666,34 @@ const foxholeData = {
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers. This is a special Trench variant that can resize dynamically and can be built underneath roads.",
 			"tierUpgrade": true,
 			"icon": "game/Textures/UI/StructureIcons/TrenchT2ConnectorIcon.webp",
-			"texture": "game/Textures/Structures/trencht1.webp",
+			"texture": "game/Textures/Structures/trencht2_connector.webp",
+			"textureBorder": "game/Textures/Structures/trencht2_connector_side.webp",
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 1094,
+							"category": 1026
+						}
+					],
+					"texture": "game/Textures/Structures/trencht2_end.webp",
+					"cap": "front",
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": [
+						{
+							"mask": 1094,
+							"category": 1026
+						}
+					],
+					"texture": "game/Textures/Structures/trencht2_end.webp",
+					"cap": "back",
+					"rotation": 90
+				}
+			],
 			"maxHealth": 1850,
 			"cost": {
 				"cloth": 75
@@ -8679,7 +8706,34 @@ const foxholeData = {
 			"parentKey": "trenchconnectort2",
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers. This is a special Trench variant that can resize dynamically and can be built underneath roads.",
 			"icon": "game/Textures/UI/StructureIcons/TrenchT3ConnectorIcon.webp",
-			"texture": "game/Textures/Structures/trencht1.webp",
+			"texture": "game/Textures/Structures/trencht3_connector.webp",
+			"textureBorder": "game/Textures/Structures/trencht3_connector_side.webp",
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 1094,
+							"category": 1026
+						}
+					],
+					"texture": "game/Textures/Structures/trencht3_end.webp",
+					"cap": "front",
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": [
+						{
+							"mask": 1094,
+							"category": 1026
+						}
+					],
+					"texture": "game/Textures/Structures/trencht3_end.webp",
+					"cap": "back",
+					"rotation": 90
+				}
+			],
 			"maxHealth": 3500,
 			"cost": {
 				"concrete": 30
@@ -8934,7 +8988,63 @@ const foxholeData = {
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers.",
 			"tierUpgrade": true,
 			"icon": "game/Textures/UI/StructureIcons/TrenchT2Icon.webp",
-			"texture": "game/Textures/Structures/trencht1.webp",
+			"texture": "game/Textures/Structures/trencht2.webp",
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 70,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trencht2_end.webp",
+					"x": 0,
+					"y": 150,
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": [
+						{
+							"mask": 2,
+							"category": 64
+						}
+					],
+					"texture": "game/Textures/Structures/trencht2_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trencht2_side_open.webp",
+					"x": 500,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 2,
+					"type": [
+						{
+							"mask": 70,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trencht2_end.webp",
+					"x": 1000,
+					"y": 150,
+					"rotation": 90
+				},
+				{
+					"id": 3,
+					"type": [
+						{
+							"mask": 2,
+							"category": 64
+						}
+					],
+					"texture": "game/Textures/Structures/trencht2_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trencht2_side_open.webp",
+					"x": 500,
+					"y": 300,
+					"rotation": 180
+				}
+			],
 			"maxHealth": 1850,
 			"cost": {
 				"cloth": 50
@@ -8958,7 +9068,63 @@ const foxholeData = {
 			"parentKey": "trencht2",
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers.",
 			"icon": "game/Textures/UI/StructureIcons/TrenchT3Icon.webp",
-			"texture": "game/Textures/Structures/trencht1.webp",
+			"texture": "game/Textures/Structures/trencht3.webp",
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 70,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trencht3_end.webp",
+					"x": 0,
+					"y": 150,
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": [
+						{
+							"mask": 2,
+							"category": 64
+						}
+					],
+					"texture": "game/Textures/Structures/trencht3_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trencht3_side_open.webp",
+					"x": 500,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 2,
+					"type": [
+						{
+							"mask": 70,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trencht3_end.webp",
+					"x": 1000,
+					"y": 150,
+					"rotation": 90
+				},
+				{
+					"id": 3,
+					"type": [
+						{
+							"mask": 2,
+							"category": 64
+						}
+					],
+					"texture": "game/Textures/Structures/trencht3_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trencht3_side_open.webp",
+					"x": 500,
+					"y": 300,
+					"rotation": 180
+				}
+			],
 			"maxHealth": 3500,
 			"cost": {
 				"concrete": 20

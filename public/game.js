@@ -2037,7 +2037,7 @@ try {
                         }
                     } else if (socket.socketData.name === 'power') {
                         createSocketIndicator(COLOR_YELLOW, powerSocketSize, powerSocketSize, true);
-                    } else if (socket.socketData.type === 'traincar' || socket.socketData.type === 'smalltraincar' || entity.building?.hasHandle || game.settings.enableExperimental) {
+                    } else if (socket.socketData.type === 'traincar' || socket.socketData.type === 'smalltraincar' || entity.building?.hasHandle || game.settings.enableDebug) {
                         createSocketIndicator(undefined, socketThickness, socketThickness, true);
                     }
                 }
@@ -2186,6 +2186,7 @@ try {
                             socket.indicator.visible = visible;
                         }
                         if (socket.pointer) {
+                            // TODO: Add ability to only remove texture when the socket is connected to another socket that has the same entity sortLayer.
                             visible = visible ?? Object.keys(socket.connections).length === 0;
                             if (socket.socketData.textureAlt) {
                                 socket.pointer.texture = resources[visible ? socket.socketData.texture : socket.socketData.textureAlt].texture;
@@ -2628,12 +2629,12 @@ try {
                             if (entity.building?.trenchConnector) {
                                 entity.sprite.removeChild(entity.sprite.trapezoid);
 
-                                const floorHalfHeight = 57, textureBorderHeight = 19, floorTexturePadding = 100;
+                                const floorHalfHeight = 57, floorTexturePadding = 100;
                                 const frontPoint = points[0], endPoint = points[points.length - 1];
-                                const frontPoint1 = { x: 0, y: -57 };
-                                const frontPoint2 = { x: 0, y: 57 };
-                                const endPoint1 = Math.extendPoint(endPoint, 57, endPoint.rotation - Math.PI/2);
-                                const endPoint2 = Math.extendPoint(endPoint, 57, endPoint.rotation + Math.PI/2);
+                                const frontPoint1 = { x: 0, y: -floorHalfHeight };
+                                const frontPoint2 = { x: 0, y: floorHalfHeight };
+                                const endPoint1 = Math.extendPoint(endPoint, floorHalfHeight, endPoint.rotation - Math.PI/2);
+                                const endPoint2 = Math.extendPoint(endPoint, floorHalfHeight, endPoint.rotation + Math.PI/2);
 
                                 const angle = Math.angleBetween({x: 0, y: 0}, endPoint);
                                 entity.sprite.trapezoid = new PIXI.Container();
@@ -2658,6 +2659,8 @@ try {
                                 entity.sprite.trapezoid.floor.mask = floorMask;
                                 entity.sprite.trapezoid.floor.rotation = angle;
                                 entity.sprite.trapezoid.addChild(entity.sprite.trapezoid.floor);
+
+                                const textureBorderHeight = resources[entity.building.textureBorder].texture.height;
 
                                 const connectorTopBorder = new PIXI.TilingSprite(resources[entity.building.textureBorder].texture, Math.distanceBetween(frontPoint1, endPoint2), textureBorderHeight);
                                 connectorTopBorder.y = -floorHalfHeight;
