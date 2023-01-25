@@ -2202,7 +2202,7 @@ try {
                     railSwitch.anchor.set(0.5);
                     railSwitch.width = 32;
                     railSwitch.height = 32;
-                    railSwitch.position.x += 100;
+                    railSwitch.position.x += (entity.subtype === 'rail_large_gauge' ? 100 : 70);
                     railSwitch.interactive = true;
                     socket.switchEnabled = false;
                     railSwitch.on('pointerdown', () => {
