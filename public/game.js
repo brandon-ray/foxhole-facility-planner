@@ -2677,12 +2677,22 @@ try {
 
                                 entity.sprite.addChild(entity.sprite.trapezoid);
 
+                                // TODO: Get the max rotation for a socket from the data.
+                                const maxAngle = Math.deg2rad((15 * 3) + 1), angleBetweenPoints = Math.angleBetween(frontPoint, endPoint);
+                                const angleLimitReached = (Math.abs(angleBetweenPoints) > maxAngle) || (Math.abs(Math.angleNormalized(-angleBetweenPoints + endPoint.rotation + Math.PI)) > maxAngle);
+                                if (angleLimitReached) {
+                                    entity.sprite.trapezoid.floor.tint = COLOR_RED;
+                                    connectorTopBorder.tint = COLOR_RED;
+                                    connectorBottomBorder.tint = COLOR_RED;
+                                }
+
                                 for (let i = 0; i < entity.sockets.children.length; i++) {
                                     let socket = entity.sockets.children[i];
                                     if (socket.socketData.cap === 'back') {
                                         socket.position.set(endPoint.x, endPoint.y);
                                         socket.rotation = endPoint.rotation - Math.PI/2;
                                     }
+                                    socket.pointer.tint = angleLimitReached ? COLOR_RED : COLOR_WHITE;
                                 }
                             } else {
                                 let bezierPoints = [];
