@@ -170,7 +170,6 @@ Vue.component('app-menu-building-selected', {
     mounted: function() {
         game.buildingSelectedMenuComponent = this;
         this.refresh();
-        this.focusText();
     },
     methods: {
         refresh: function(noForce) {

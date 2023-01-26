@@ -92,10 +92,10 @@ if (isMobile && !isPhoneApp) {
                     <button class="btn-small" title="Center Board" @click="game.zoomToFacilityCenter()">
                         <i class="fa fa-crosshairs" aria-hidden="true"></i>
                     </button>
-                    <button v-if="game.settings.enableHistory" class="btn-small" @click="game.redo()">
+                    <button v-if="game.settings.enableHistory" class="btn-small" title="Redo" @click="game.redo()">
                         <i class="fa fa-repeat" aria-hidden="true"></i>
                     </button>
-                    <button v-if="game.settings.enableHistory" class="btn-small" @click="game.undo()">
+                    <button v-if="game.settings.enableHistory" class="btn-small" title="Undo" @click="game.undo()">
                         <i class="fa fa-undo" aria-hidden="true"></i>
                     </button>
                     <button class="btn-small" :class="{ 'btn-active': game.playMode }" :title="game.playMode ? 'Pause' : 'Resume'" @click="game.setPlaying(!game.playMode)">

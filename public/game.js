@@ -531,9 +531,6 @@ try {
                     game.deselectEntities();
                 }
                 break;
-            case 46: // Delete
-                game.deselectEntities(true);
-                break;
             case 113: // F2
                 ENABLE_DEBUG = !ENABLE_DEBUG;
                 if (debugText) {
@@ -611,7 +608,11 @@ try {
                         game.redo();
                         break;
                     case 90: // Z
-                        game.undo();
+                        if (event.shiftKey) {
+                            game.redo();
+                        } else {
+                            game.undo();
+                        }
                         break;
                 }
             } else {
@@ -630,6 +631,9 @@ try {
                         break;
                     case 40: // Down Arrow
                         game.moveSelected(0, 1);
+                        break;
+                    case 46: // Delete
+                        game.deselectEntities(true);
                         break;
                     case 76: // L
                         game.lockSelected();
@@ -1276,9 +1280,6 @@ try {
                                         game.followEntity(entity);
                                     }
                                     */
-                                    if (entity.selected && entity.type === 'text') {
-                                        game.buildingSelectedMenuComponent?.focusText();
-                                    }
                                     game.setPickupEntities(true);
                                 }
                                 return;
@@ -3632,11 +3633,15 @@ try {
     game.create = function(type, subtype, x, y, z) {
         game.updateConstructionMode(type, subtype);
         let entity = createSelectableEntity(type, subtype, x ?? 0, y ?? 0, z ?? 0);
-        if (type === 'text') {
-            game.resetConstructionMode();
-        }
         //game.resetConstructionLayer(entity.building?.layer);
         game.selectEntity(entity);
+        if (type === 'text') {
+            game.resetConstructionMode();
+            setTimeout(() => {
+                // Unsure what's causing the text to unfocus, so added timeout here so it's forced.
+                game.buildingSelectedMenuComponent?.focusText();
+            }, 150);
+        }
         game.setPickupEntities(true, true);
         if (entity.hasHandle) {
             entity.shouldSelectLastHandlePoint = true;
