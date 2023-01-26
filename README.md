@@ -78,6 +78,6 @@ Start the server
 Go to http://localhost:3000/ in your browser
 ## Support & Feedback
 
-If you need help or have any feedback, join our [Discord](https://discord.gg/SnyEDQyAVr) or e-mail us.
+If you need help or have any feedback, join our [Discord](https://discord.gg/2hgaMQN26s) or e-mail us.
 - **Brandon (Rayboy)**: brandon@bombsightgames.com
 - **James (Jimbo)**: james@tegature.com
