@@ -264,6 +264,7 @@ p {
     height: 48px;
     margin: 0 2px;
     padding: 0;
+    position: relative;
     line-height: 42px;
     vertical-align: middle;
     text-align: center;
@@ -285,6 +286,37 @@ input.btn-small::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number].btn-small {
     -moz-appearance: textfield;
+}
+
+.btn-small.btn-float-left {
+    float: left;
+    margin: 6px 0 6px 6px;
+}
+
+.btn-small.btn-checkbox.btn-active::after {
+    content: '';
+    display: block;
+    background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
+    position: absolute;
+    inset: 4px;
+    border-radius: 1px;
+}
+
+.btn-checkbox-wrapper {
+    line-height: 28px;
+    margin: 6px 40px 6px 6px;
+    font-size: 1.05em;
+    color: #777;
+    cursor: pointer;
+    overflow: auto;
+}
+
+.btn-checkbox-wrapper:hover {
+    color: white;
+}
+
+.btn-checkbox-wrapper .btn-small {
+    margin: 0 8px 0 0;
 }
 
 /* Sidebar */
@@ -944,7 +976,7 @@ input[type=number].btn-small {
     background: linear-gradient(rgb(255, 0, 0), rgb(168, 0, 0)) !important;
 }
 
-.facility-banner {
+.project-banner {
     position: fixed;
     bottom: 50px;
     left: 365px;
@@ -1197,34 +1229,6 @@ input[type=number].btn-small {
     /*border-top: 1px solid #1e1e1e;*/
 }
 
-.footer .checkbox-button {
-    display: inline-block;
-    cursor: pointer;
-    margin: 8px 55px 0 8px;
-}
-
-.footer .checkbox-button input[type="checkbox"] {
-    cursor: pointer;
-    -webkit-appearance: none;
-    appearance: none;
-    margin: 0;
-    width: 25px;
-    height: 25px;
-    border: 2px solid white;
-    padding: 3px;
-    vertical-align: middle;
-}
-
-.footer .checkbox-button input[type="checkbox"]::before {
-    content: "";
-    display: block;
-    height: 100%;
-}
-
-.footer .checkbox-button input[type="checkbox"]:checked::before {
-    background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
-}
-
 .title-button {
     background: none;
     border: none;
@@ -1433,7 +1437,7 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
     outline: none;
 }
 
-#save-load-page .facility-name-input {
+#save-load-page .project-name-input {
     position: relative;
     padding: 6px;
 }
@@ -1447,7 +1451,7 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
     pointer-events: none;
 }
 
-#save-load-page .facility-name-input input {
+#save-load-page .project-name-input input {
     width: 100%;
     height: 36px;
     color: white;

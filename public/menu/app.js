@@ -15,7 +15,8 @@ if (isMobile && !isPhoneApp) {
                 return {
                     isPlayScreen: game.isPlayScreen,
                     isInMenu: game.isInMenu,
-                    settings: game.settings
+                    settings: game.settings,
+                    layerSelectionVisible: false
                 };
             },
             methods: {
@@ -37,12 +38,8 @@ if (isMobile && !isPhoneApp) {
                         this.reloadMenu();
                     }
                 },
-                updateRangeSprites: function() {
-                    game.updateRangeSprites();
-                    game.updateSettings();
-                },
-                updateProductionIcons: function() {
-                    game.updateProductionIcons();
+                updateEntityOverlays: function() {
+                    game.updateEntityOverlays();
                     game.updateSettings();
                 }
             },
@@ -51,8 +48,37 @@ if (isMobile && !isPhoneApp) {
                 <app-game-game-menu></app-game-game-menu>
                 <app-game-sidebar></app-game-sidebar>
                 
-                <div v-if="game.settings.showFacilityName && game.facilityName && game.facilityName !== 'Unnamed Facility'" class="facility-banner">
-                    <i class="fa fa-wrench" aria-hidden="true"></i> {{game.facilityName}}
+                <div v-if="game.settings.showFacilityName && game.projectName && game.projectName !== 'Unnamed Facility' && game.projectName !== 'Unnamed Project'" class="project-banner">
+                    <i class="fa fa-wrench" aria-hidden="true"></i> {{game.projectName}}
+                </div>
+
+                <div v-if="layerSelectionVisible" class="board-panel layer-selection">
+                    <div class="board-panel-header">
+                        <h4 class="float-left m-0" style="color: #eee"><i class="fa fa-cogs"></i> Toggle Layers</h4>
+                        <button class="btn-small m-0 mr-1 float-right" title="Minimize Layers" @click="layerSelectionVisible = false"><i class="fa fa-window-minimize" aria-hidden="true"></i></button>
+                    </div>
+                    <p class="board-panel-body">
+                        <label class="btn-checkbox-wrapper d-block">
+                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.showProductionIcons }" @click="game.projectSettings.showProductionIcons = !game.projectSettings.showProductionIcons; updateEntityOverlays()"></button>
+                            Production Icons
+                        </label>
+                        <label class="btn-checkbox-wrapper d-block">
+                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.showRangeWhenSelected }" @click="game.projectSettings.showRangeWhenSelected = !game.projectSettings.showRangeWhenSelected; updateEntityOverlays()"></button>
+                            Selection Ranges
+                        </label>
+                        <label class="btn-checkbox-wrapper d-block">
+                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.crane }" @click="game.projectSettings.ranges.crane = !game.projectSettings.ranges.crane; updateEntityOverlays()"></button>
+                            Crane Ranges
+                        </label>
+                        <label class="btn-checkbox-wrapper d-block">
+                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.killbox }" @click="game.projectSettings.ranges.killbox = !game.projectSettings.ranges.killbox; updateEntityOverlays()"></button>
+                            Killbox Ranges
+                        </label>
+                        <label class="btn-checkbox-wrapper d-block">
+                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.radio }" @click="game.projectSettings.ranges.radio = !game.projectSettings.ranges.radio; updateEntityOverlays()"></button>
+                            Radio Ranges
+                        </label>
+                    </p>
                 </div>
 
                 <app-menu-statistics v-if="game.settings.enableStats"></app-menu-statistics>
@@ -60,25 +86,21 @@ if (isMobile && !isPhoneApp) {
                 <app-game-confirmation-popup></app-game-confirmation-popup>
 
                 <div class="footer">
-                    <label class="checkbox-button align-middle">
-                        <input type="checkbox" name="snap-to-grid-toggle" v-model="settings.enableGrid" @change="game.updateSettings()" />
+                    <label class="btn-checkbox-wrapper">
+                        <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': settings.enableGrid }" @click="settings.enableGrid = !settings.enableGrid; game.updateSettings()"></button>
                         Snap to Grid
                     </label>
-                    <label class="checkbox-button align-middle">
-                        <input type="checkbox" name="snap-rotation-toggle" v-model="settings.enableSnapRotation" @change="game.updateSettings()" />
+                    <label class="btn-checkbox-wrapper">
+                        <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': settings.enableSnapRotation }" @click="settings.enableSnapRotation = !settings.enableSnapRotation; game.updateSettings()"></button>
                         Snap Rotation
                     </label>
-                    <label class="checkbox-button align-middle">
-                        <input type="checkbox" name="stats-info-toggle" v-model="game.settings.enableStats" @change="game.updateSettings()" />
+                    <label class="btn-checkbox-wrapper">
+                        <button class="btn-small btn-float-left" :class="{ 'btn-active': layerSelectionVisible }" title="Toggle Visual Layers" @click="layerSelectionVisible = !layerSelectionVisible"><i class="fa fa-cogs" aria-hidden="true"></i></button>
+                        Show Layers
+                    </label>
+                    <label class="btn-checkbox-wrapper">
+                        <button class="btn-small btn-float-left" :class="{ 'btn-active': settings.enableStats }" @click="settings.enableStats = !settings.enableStats; game.updateSettings()"><i class="fa fa-bar-chart" aria-hidden="true"></i></button>
                         Show Stats
-                    </label>
-                    <label class="checkbox-button align-middle">
-                        <input type="checkbox" name="ranges-visible-toggle" v-model="game.settings.showRanges" @change="updateRangeSprites()" />
-                        Show Structure Ranges
-                    </label>
-                    <label class="checkbox-button align-middle">
-                        <input type="checkbox" name="production-visible-toggle" v-model="game.settings.showProductionIcons" @change="updateProductionIcons()" />
-                        (P) Show Production Icons
                     </label>
                     <button class="btn-small" title="Toggle Fullscreen" @click="game.tryFullscreen()">
                         <i class="fa fa-arrows-alt" aria-hidden="true"></i>
@@ -89,7 +111,7 @@ if (isMobile && !isPhoneApp) {
                     <button class="btn-small" title="Clear Board" @click="game.confirmDeletion()">
                         <i class="fa fa-trash" aria-hidden="true"></i>
                     </button>
-                    <button class="btn-small" title="Center Board" @click="game.zoomToFacilityCenter()">
+                    <button class="btn-small" title="Center Board" @click="game.zoomToEntitiesCenter()">
                         <i class="fa fa-crosshairs" aria-hidden="true"></i>
                     </button>
                     <button v-if="game.settings.enableHistory" class="btn-small" title="Redo" @click="game.redo()">
@@ -144,7 +166,7 @@ Vue.component('app-game-confirmation-popup', {
         <template v-if="type === 'delete'">
             <div class="board-panel-header">
                 <h4 class="float-left m-0" style="color: #eee"><i class="fa fa-trash"></i> Confirm Deletion</h4>
-                <button class="btn-small m-0 mr-1 float-right" title="ASDASDASDADS" @click="closePopup(false)"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <button class="btn-small m-0 mr-1 float-right" title="Close" @click="closePopup(false)"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
             <p class="board-panel-body">
                 This will delete all objects you have placed.<br>
@@ -155,7 +177,7 @@ Vue.component('app-game-confirmation-popup', {
         <template v-else-if="type === 'save-work'">
             <div class="board-panel-header">
                 <h4 class="float-left m-0" style="color: #eee"><i class="fa fa-upload"></i> Confirm Load</h4>
-                <button class="btn-small m-0 mr-1 float-right" title="ASDASDASDADS" @click="closePopup(false)"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <button class="btn-small m-0 mr-1 float-right" title="Close" @click="closePopup(false)"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
             <p class="board-panel-body">
                 Your current work will be lost if you don't save.<br>

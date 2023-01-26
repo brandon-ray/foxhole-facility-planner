@@ -681,15 +681,6 @@ Vue.component('app-menu-construction-list', {
                 <app-game-shape-options v-else-if="game.constructionMode.key === 'rectangle' || game.constructionMode.key === 'circle' || game.constructionMode.key === 'line'" :container="this" :shapeOptions="modeOptions" :subtype="game.constructionMode.key"></app-game-shape-options>
             </template>
             <div v-else class="construction-options row d-flex justify-content-center">
-                <!--
-                <template v-else>
-                    <button v-for="layer in game.constructionLayers" class="btn-small col" :title="layer.title" type="button" :class="{ 'layer-active': !layer.inactive, 'layer-inactive': layer.inactive }" @mouseenter="bme()" @click="toggleConstructionLayer(layer)">
-                        <div v-if="layer.img" :style="{backgroundImage: 'url(' + assetDir('game/Textures/UI/' + layer.img) + ')'}"></div>
-                        <i v-if="layer.icon" class="fa" :class="layer.icon" aria-hidden="true"></i>
-                        <i v-if="layer.inactive" class="fa fa-ban position-absolute layer-inactive" aria-hidden="true"></i>
-                    </button>
-                </template>
-                -->
                 <button class="btn-small construction-settings-button" @click="game.sidebarMenuComponent?.changeMenu('settings')" title="Filter Settings">
                     <i class="fa fa-sliders" aria-hidden="true"></i>
                 </button>
@@ -873,7 +864,7 @@ Vue.component('app-menu-settings', {
         <div class="settings-option-wrapper">
             <div class="settings-title">Board Settings</div>
             <label class="app-input-label">
-                <i class="fa fa-header" aria-hidden="true"></i> Display Facility Name
+                <i class="fa fa-header" aria-hidden="true"></i> Display Project Name
                 <input class="app-input" type="checkbox" v-model="game.settings.showFacilityName" @change="game.updateSettings()">
             </label>
             <label class="app-input-label">
@@ -956,7 +947,7 @@ Vue.component('app-menu-save-load', {
                     saveObject = JSON.parse(saveObject);
                 }
                 if (saveObject.name && !this.importAsSelection) {
-                    game.facilityName = saveObject.name;
+                    game.projectName = saveObject.name;
                     game.appComponent.$forceUpdate();
                 }
                 game.loadSave(saveObject, this.importAsSelection);
@@ -988,8 +979,8 @@ Vue.component('app-menu-save-load', {
             reader.readAsArrayBuffer(file);
         },
         updateName: function() {
-            if (game.facilityName === '') {
-                game.facilityName = 'Unnamed Facility';
+            if (game.projectName === '') {
+                game.projectName = 'Unnamed Project';
             }
             this.$forceUpdate();
             game.appComponent.$forceUpdate();
@@ -999,10 +990,10 @@ Vue.component('app-menu-save-load', {
     <div id="save-load-page">
         <input id="fileUpload" @change="loadFile()" type="file" ref="file" hidden>
         <div class="settings-option-wrapper">
-            <div class="settings-title">Plan Properties</div>
-            <label class="app-input-label facility-name-input">
+            <div class="settings-title">Project Properties</div>
+            <label class="app-input-label project-name-input">
                 <i class="fa fa-pencil-square edit-icon" aria-hidden="true"></i>
-                <input class="app-input" type="text" v-model="game.facilityName" @change="updateName()">
+                <input class="app-input" type="text" v-model="game.projectName" @change="updateName()">
             </label>
             <div class="text-center">
                 <button class="app-btn app-btn-primary load-button" type="button" v-on:click="openFileBrowser()" @mouseenter="bme()">
@@ -1057,7 +1048,7 @@ Vue.component('app-menu-about', {
         <div class="about-section">
             <div class="about-section-header"><i class="fa fa-question-circle"></i> What is Foxhole Planner?</div>
             <p>
-                This is a tool that allows you to draw up plans for facilities from Foxhole's Inferno update.
+                This is a fan-made tool that allows you to create plans for bunkers, facilities, and more from the game Foxhole.
             </p>
         </div>
         <div class="about-section">

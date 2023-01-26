@@ -178,3 +178,13 @@
     background-color: #090909;
     padding: 0 12px;
 }
+
+.layer-selection {
+    width: 275px;
+    bottom: 59px;
+    left: 365px;
+}
+
+.layer-selection .btn-checkbox-wrapper {
+    margin: 5px;
+}

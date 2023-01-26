@@ -6,7 +6,9 @@ const COLOR_ORANGE = 0xFF8F00;
 const COLOR_RED = 0xFF0000;
 const COLOR_GREEN = 0x00FF00;
 const COLOR_BLUE = 0x0000FF;
+const COLOR_LIGHTBLUE = 0x00E1FF;
 const COLOR_YELLOW = 0xFFFF00;
+const COLOR_PURPLE = 0x9900FF;
 
 const COLOR_SELECTION = 0xE16931; // Orange
 const COLOR_SELECTION_BORDER = 0xFF8248; // Lighter Orange
@@ -55,8 +57,6 @@ const game = {
         showUpgradesAsBuildings: false,
         showTiersAsBuildings: false,
         showFacilityName: true,
-        showRanges: false,
-        showProductionIcons: false,
         styles: {
             label: {
                 fontFamily: 'Arial',
@@ -178,7 +178,19 @@ try {
     let ignoreMousePickup = true;
     let effects = [];
 
-    game.facilityName = 'Unnamed Facility';
+    game.projectName = 'Unnamed Project';
+
+    // TODO: Store project settings in save.
+    game.projectSettings = {
+        showProductionIcons: true,
+        showRangeWhenSelected: true,
+        ranges: {
+            "crane": false,
+            "radio": false,
+            "killbox": false
+        }
+    };
+
     game.selectedBuildingCategory = game.settings.defaultBuildingCategory;
 
     game.constructionModes = [
@@ -327,32 +339,6 @@ try {
     }
     game.resetConstructionMode();
 
-    /*
-    game.toggleConstructionLayer = function(layer, active) {
-        if (layer) {
-            const inactive = typeof active === 'boolean' ? !active : !layer.inactive;
-            if (layer.inactive !== inactive) {
-                if (selectedEntities.length) {
-                    game.deselectEntities();
-                }
-                layer.inactive = inactive;
-                for (let i = 0; i < entities.length; i++) {
-                    const entity = entities[i];
-                    entity.alpha = entity.building?.layer && game.constructionLayers[entity.building.layer].inactive ? 0.25 : 1;
-                }
-                game.constructionMenuComponent?.refresh();
-            }
-        }
-    }
-
-    game.resetConstructionLayer = function(layer) {
-        if (layer) {
-            layer = typeof layer === 'string' ? game.constructionLayers[layer] : layer;
-            return game.toggleConstructionLayer(layer, true);
-        }
-    }
-    */
-
     let timeScale = 1;
 
     let dropShadowFilter = new PIXI.Filter(shadowFilter.vert, shadowFilter.frag);
@@ -456,21 +442,9 @@ try {
         game.updateSettings();
     };
 
-    game.updateRangeSprites = function() {
-        for (let i = 0; i < entities.length; i++) {
-            let entity = entities[i];
-            if (!entity.selected && entity.rangeSprite) {
-                entity.rangeSprite.visible = game.settings.showRanges;
-            }
-        }
-    }
-
-    game.updateProductionIcons = function() {
-        for (let i = 0; i < entities.length; i++) {
-            let entity = entities[i];
-            if (entity.productionIcons) {
-                entity.productionIcons.visible = game.settings.showProductionIcons;
-            }
+    game.updateEntityOverlays = function() {
+        for (const entity of entities) {
+            entity.updateOverlays();
         }
     }
 
@@ -639,8 +613,8 @@ try {
                         game.lockSelected();
                         break;
                     case 80: // P
-                        game.settings.showProductionIcons = !game.settings.showProductionIcons;
-                        game.updateProductionIcons();
+                        game.projectSettings.showProductionIcons = !game.projectSettings.showProductionIcons;
+                        game.updateEntityOverlays();
                         break;
                 }
             }
@@ -939,7 +913,7 @@ try {
 
     game.getSaveData = function(isSelection) {
         let saveObject = {
-            name: game.facilityName,
+            name: game.projectName,
             faction: game.settings.selectedFaction,
             entityIds: _entityIds,
             entities: []
@@ -964,7 +938,7 @@ try {
     }
 
     game.downloadSave = function(isSelection) {
-        let fileName = game.facilityName.toLowerCase().trim()
+        let fileName = game.projectName.toLowerCase().trim()
             .replace(/[^\w\s-]/g, '')
             .replace(/[\s_-]+/g, '_')
             .replace(/^-+|-+$/g, '');
@@ -1034,7 +1008,7 @@ try {
                 game.setPickupEntities(true, false, centerPos, true);
                 game.updateSelectedBuildingMenu();
             } else if (!ignoreConfirmation) {
-                game.zoomToFacilityCenter();
+                game.zoomToEntitiesCenter();
             }
         }, 1);
     };
@@ -1062,7 +1036,7 @@ try {
         return ents.mid;
     };
 
-    game.zoomToFacilityCenter = function() {
+    game.zoomToEntitiesCenter = function() {
         if (followEntity) {
             game.followEntity(null);
         }
@@ -1076,7 +1050,7 @@ try {
         }
         game.resetZoom();
     }
-    game.zoomToFacilityCenter();
+    game.zoomToEntitiesCenter();
 
     game.setFaction = function(faction) {
         if (game.settings.selectedFaction !== faction) {
@@ -1812,6 +1786,17 @@ try {
             entity.selectionArea.drawRect(-(width/2)-SELECTION_BORDER_WIDTH, -(height/2)-SELECTION_BORDER_WIDTH, width+(SELECTION_BORDER_WIDTH*2), height+(SELECTION_BORDER_WIDTH*2));
         }
 
+        entity.updateOverlays = function() {
+            if (entity.productionIcons) {
+                entity.productionIcons.visible = game.projectSettings.showProductionIcons;
+            }
+            if (entity.rangeSprite) {
+                const showWhenSelected = game.projectSettings.showRangeWhenSelected && entity.selected;
+                const showRangeType = entity.building?.range?.type && game.projectSettings.ranges[entity.building.range.type];
+                entity.rangeSprite.visible = showWhenSelected || showRangeType;
+            }
+        }
+
         if (type === 'text') {
             entity.labelStyle = Object.assign({
                 dropShadow: true,
@@ -1915,10 +1900,10 @@ try {
 
             if (building.range || building.overlapDist) {
                 entity.rangeSprite = new PIXI.Graphics();
-                entity.rangeSprite.alpha = 0.25;
-                entity.rangeSprite.visible = game.settings.showRanges;
+                entity.rangeSprite.alpha = 0.15;
+                entity.updateOverlays();
                 if (building.range) {
-                    const rangeColor = building.range.type === 'killbox' ? COLOR_RED : COLOR_RANGE;
+                    const rangeColor = building.range.type === 'killbox' ? COLOR_RED : (building.range.type === 'radio' ? COLOR_PURPLE : (building.range.type === 'crane' ? COLOR_LIGHTBLUE : COLOR_RANGE));
                     if (!isNaN(building.range.arc)) {
                         entity.rangeSprite.beginFill(rangeColor);
                         entity.rangeSprite.lineStyle(1, rangeColor);
@@ -2392,7 +2377,7 @@ try {
                     entity.removeChild(entity.productionIcons);
                     if (typeof id === 'number') {
                         entity.productionIcons = new PIXI.Container();
-                        entity.productionIcons.visible = game.settings.showProductionIcons;
+                        entity.productionIcons.visible = game.projectSettings.showProductionIcons;
                         entity.productionIcons.rotation = -entity.rotation;
                         for (let i = 0; i < entity.building.production.length; i++) {
                             const production = entity.building.production[i];
@@ -2946,9 +2931,7 @@ try {
             delete entity.prevPosition;
             delete entity.prevRotation;
 
-            if (entity.rangeSprite && !game.settings.showRanges) {
-                entity.rangeSprite.visible = false;
-            }
+            entity.updateOverlays();
 
             if (entity.building || entity.type === 'shape') {
                 if (entity.building) {
@@ -3633,7 +3616,6 @@ try {
     game.create = function(type, subtype, x, y, z) {
         game.updateConstructionMode(type, subtype);
         let entity = createSelectableEntity(type, subtype, x ?? 0, y ?? 0, z ?? 0);
-        //game.resetConstructionLayer(entity.building?.layer);
         game.selectEntity(entity);
         if (type === 'text') {
             game.resetConstructionMode();

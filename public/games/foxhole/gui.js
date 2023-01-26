@@ -330,14 +330,14 @@ Vue.component('app-menu-statistics', {
                 </div>
             </div>
             <div v-if="garrisonSupplies || input" class="construction-options-wrapper">
-                <h5 class="construction-options-header"><i class="fa fa-sign-in"></i> {{selection ? 'Selection' : 'Facility'}} Input</h5>
+                <h5 class="construction-options-header"><i class="fa fa-sign-in"></i> {{selection ? 'Selection' : 'Production'}} Input</h5>
                 <div class="statistics-panel-fac-input">
                     <app-game-resource-icon v-if="garrisonSupplies" :resource="'garrisonsupplies'" :amount="garrisonSupplies"/>
                     <app-game-resource-icon v-for="(value, key) in input" :resource="key" :amount="value"/>
                 </div>
             </div>
             <div v-if="output" class="construction-options-wrapper">
-                <h5 class="construction-options-header"><i class="fa fa-sign-out"></i> {{selection ? 'Selection' : 'Facility'}} Output</h5>
+                <h5 class="construction-options-header"><i class="fa fa-sign-out"></i> {{selection ? 'Selection' : 'Production'}} Output</h5>
                 <div class="statistics-panel-fac-output">
                     <app-game-resource-icon v-for="(value, key) in output" :resource="key" :amount="value"/>
                 </div>
