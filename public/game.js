@@ -4176,7 +4176,7 @@ try {
                                 }
                                 if (selectedEntity.subtype === entity.subtype || (selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain) {
                                     const mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
-                                    const projection = entity.bezier?.project(mousePos);
+                                    const projection = selectedEntities.length === 1 && entity.bezier?.project(mousePos);
                                     if (!projection || projection.d <= Math.max(entity.building?.lineWidth ?? 0, 25)) {
                                         if (selectedEntity.sockets && entity.sockets && selectedEntity.building?.canSnap && (selectedEntity.building?.canSnapStructureType !== false || selectedEntity.subtype !== entity.subtype)) {
                                             let frontSocket = null, nearestSocket = null, nearestSocketDist = null;
