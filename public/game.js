@@ -16,6 +16,14 @@ const COLOR_SELECTION_BORDER = 0xFF8248; // Lighter Orange
 const COLOR_RANGE = 0x72FF5A; // Green
 const COLOR_RANGE_BORDER = 0xED2323; // Red
 
+const DEFAULT_TEXT_STYLE = {
+    dropShadow: true,
+    dropShadowAlpha: 0.25,
+    dropShadowBlur: 6,
+    dropShadowDistance: 0,
+    padding: 12
+};
+
 const DEFAULT_SHAPE_STYLE = {
     alpha: 1,
     fill: true,
@@ -914,9 +922,8 @@ try {
 
     game.getSaveData = function(isSelection) {
         let saveObject = {
-            name: game.projectName,
-            faction: game.settings.selectedFaction,
-            entityIds: _entityIds,
+            name: (game.projectName !== 'Unnamed Project' && game.projectName) || undefined,
+            faction: game.settings.selectedFaction || undefined,
             entities: []
         };
         let saveEntities = isSelection ? selectedEntities : entities;
@@ -926,9 +933,9 @@ try {
                 id: entity.id,
                 x: parseFloat(entity.x),
                 y: parseFloat(entity.y),
-                z: parseInt(entity.z),
-                rotation: entity.rotation,
-                locked: entity.locked,
+                z: parseFloat(entity.z) || undefined,
+                rotation: entity.rotation || undefined,
+                locked: entity.locked || undefined,
                 type: entity.type,
                 subtype: entity.subtype
             };
@@ -1799,13 +1806,7 @@ try {
         }
 
         if (type === 'text') {
-            entity.labelStyle = Object.assign({
-                dropShadow: true,
-                dropShadowAlpha: 0.25,
-                dropShadowBlur: 6,
-                dropShadowDistance: 0,
-                padding: 12
-            }, game.settings.styles.label);
+            entity.labelStyle = Object.assign({}, DEFAULT_TEXT_STYLE, game.settings.styles.label);
             entity.label = new PIXI.Text('', entity.labelStyle);
             entity.label.anchor.set(0.5);
             entity.setSelectionSize(entity.label.width, entity.label.height);
@@ -1828,7 +1829,7 @@ try {
                 entityData.sortOffset = entity.sortOffset - game.constructionLayers[entity.sortLayer];
                 entityData.label = entity.label.text;
                 for (const[key, value] of Object.entries(entity.labelStyle)) {
-                    if (value !== game.defaultSettings.styles.label[key]) {
+                    if (!(key in DEFAULT_TEXT_STYLE) && value !== game.defaultSettings.styles.label[key]) {
                         if (!entityData.labelStyle) {
                             entityData.labelStyle = {};
                         }
