@@ -142,7 +142,7 @@ Vue.component('app-game-sidebar', {
                 <div class="power-produced" v-else-if="hoverData.power > 0">
                     <i class="fa fa-bolt"></i> {{hoverData.production && hoverData.production.power ? hoverData.production.power : hoverData.power}} MW
                 </div>
-                <div v-if="hoverData.category === 'presets'" class="building-preview" :style="{backgroundImage: 'url(' + hoverData.texture + ')'}"></div>
+                <img v-if="hoverData.category === 'presets'" class="building-preview" :src="hoverData.texture">
             </div>
         </div>
     </div>

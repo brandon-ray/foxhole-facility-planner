@@ -45,6 +45,16 @@ const foxholeData = {
 			"name": "Simple Vehicle Factory",
 			"description": "A simple vehicle factory to output upgraded vehicles per hour.",
 			"author": "Jimbo"
+		},
+		"coastal_storage_facility_by_eg0611": {
+			"name": "Coastal Storage Facility",
+			"description": "A small facility with only purpose of storing items. No power production and consumption. It depends nearby bunker base for GSUPS usage.",
+			"author": "EG0611"
+		},
+		"locomotive_factory_by_eg0611": {
+			"name": "Locomotive Factory",
+			"description": "A facility that is capable to build Black Bolt, Longrider, Holdout, Rockhold and Roadhouse and their necessary manufacturing materials. 4 independent power systems allow facility to be functional 7/24.",
+			"author": "EG0611"
 		}
 	},
 	"tech": {

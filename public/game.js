@@ -536,8 +536,8 @@ try {
                 if (ENABLE_DEBUG) {
                     setTimeout(() => {
                         let x = 0, y = 0;
-                        for (const category of Object.values(window.objectData.categories)) {
-                            if (game.settings.enableExperimental || !category.experimental) {
+                        for (const [key, category] of Object.entries(window.objectData.categories)) {
+                            if (key !== 'presets' && (game.settings.enableExperimental || !category.experimental)) {
                                 for (let i = 0; i < category.buildings.length; i++) {
                                     const building = category.buildings[i];
                                     if (game.settings.enableDebug || (!building.hideInList && (!building.parent || !building.parent.hideInList))) {
