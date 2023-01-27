@@ -8667,6 +8667,16 @@ const foxholeData = {
 			},
 			"techId": "unlockfacilitytier3"
 		},
+		"tree": {
+			"name": "Tree",
+			"description": "A tree featured throughout the world of Foxhole. This structure cannot be placed by a player, and is entirely for your reference.",
+			"category": "misc",
+			"categoryOrder": 10,
+			"sortLayer": "overhead",
+			"icon": "game/Textures/UI/StructureIcons/TreeIcon.webp",
+			"texture": "game/Textures/Structures/tree.webp",
+			"garrisonSupplyMultiplier": 0
+		},
 		"trenchconnectort1": {
 			"name": "Trench Connector (Tier 1)",
 			"codeName": "TrenchConnectorT1",
