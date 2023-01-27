@@ -153,6 +153,7 @@ Vue.component('app-menu-building-selected', {
                 y: 0,
                 rotation: 0,
                 rotationDegrees: 0,
+                baseProduction: false,
                 selectedProduction: null,
                 productionScale: null,
                 following: false,
@@ -194,6 +195,7 @@ Vue.component('app-menu-building-selected', {
                     y: selectedEntity.y,
                     rotation: selectedEntity.rotation,
                     rotationDegrees: Math.rad2deg(selectedEntity.rotation),
+                    baseProduction: selectedEntity.baseProduction,
                     selectedProduction: selectedEntity.selectedProduction,
                     productionScale: selectedEntity.productionScale,
                     building: selectedEntity.building,
@@ -237,7 +239,7 @@ Vue.component('app-menu-building-selected', {
                         if (removeConnections) {
                             selectedEntity.removeConnections();
                         }
-                        selectedEntity.setProductionId(this.entity.selectedProduction);
+                        selectedEntity.setProductionId(this.entity.selectedProduction, this.entity.baseProduction);
                         if (typeof this.entity.userThrottle === 'number') {
                             selectedEntity.userThrottle = this.entity.userThrottle;
                         }
@@ -293,10 +295,12 @@ Vue.component('app-menu-building-selected', {
             }
         },
         */
-        changeProduction: function(id) {
+        changeProduction: function(id, useBaseProduction = false) {
             this.bmc();
             if (this.entity) {
-                this.entity.selectedProduction = this.entity.selectedProduction !== id ? id : null;
+                const isMatchingProduction = this.entity.baseProduction === useBaseProduction && this.entity.selectedProduction === id;
+                this.entity.baseProduction = isMatchingProduction ? false : useBaseProduction;
+                this.entity.selectedProduction = isMatchingProduction ? null : id;
                 this.entity.productionScale = null;
                 this.updateEntity();
             }
@@ -308,8 +312,9 @@ Vue.component('app-menu-building-selected', {
                     this.productionData = null;
                     selectedEntity.productionScale = null;
                 } else {
-                    for (let i = 0; i < this.entity.building.production.length; i++) {
-                        let production = this.entity.building.production[i];
+                    const productionList = ((this.entity.baseProduction && this.entity.building?.parent) || this.entity.building)?.production;
+                    for (let i = 0; i < productionList.length; i++) {
+                        let production = productionList[i];
                         if (production.id === this.entity.selectedProduction) {
                             this.productionData = production;
                             this.productionData.max = Math.floor((production.time > 3600 ? 86400 : 3600) / production.time);
@@ -562,24 +567,39 @@ Vue.component('app-menu-building-selected', {
                 </div>
             </div>
             <div v-else-if="entity.building && entity.building.production && entity.building.production.length" class="settings-option-wrapper">
-                <div class="settings-title">Select Production</div>
+                <div class="settings-title">
+                    Select Production
+                </div>
                 <div class="production-list">
-                    <template v-for="production in entity.building.production">
-                        <div class="select-production" v-if="!production.faction || !game.settings.selectedFaction || production.faction == game.settings.selectedFaction" :class="{'selected-production': entity.selectedProduction === production.id}" @click="changeProduction(production.id)">
-                            <app-game-recipe :building="entity.building" :recipe="production"></app-game-recipe>
-                            <h6 class="production-requirements">
-                                <template v-if="production.power || entity.building.power">
-                                    <span title="Power"><i class="fa fa-bolt"></i> {{production.power || entity.building.power}} MW</span>
-                                    &nbsp;&nbsp;&nbsp;
-                                </template>
-                                <span title="Time"><i class="fa fa-clock-o"></i> {{production.time}}s</span>
-                            </h6>
-                            <div class="production-enabled"><i class="fa fa-power-off " aria-hidden="true"></i></div>
-                        </div>
+                    <template v-if="game.settings.showParentProductionList">
+                        <app-menu-production-list-row v-for="production in entity.building?.parent?.production" :production="production" :isParent="true"></app-menu-production-list-row>
                     </template>
+                    <app-menu-production-list-row v-for="production in entity.building.production" :production="production"></app-menu-production-list-row>
                 </div>
             </div>
         </template>
+    </div>
+    `
+});
+
+Vue.component('app-menu-production-list-row', {
+    props: ['production', 'isParent'],
+    data: function() {
+        return {
+            container: game.buildingSelectedMenuComponent
+        }
+    },
+    template: html`
+    <div class="select-production" v-if="container.entity && (!production.faction || !game.settings.selectedFaction || production.faction == game.settings.selectedFaction)" @click="container.changeProduction(production.id, isParent)">
+        <app-game-recipe :building="container.entity.building" :recipe="production"></app-game-recipe>
+        <h6 class="production-requirements">
+            <template v-if="production.power || container.entity.building.power">
+                <span title="Power"><i class="fa fa-bolt"></i> {{production.power || container.entity.building.power}} MW</span>
+                &nbsp;&nbsp;&nbsp;
+            </template>
+            <span title="Time"><i class="fa fa-clock-o"></i> {{production.time}}s</span>
+        </h6>
+        <div class="production-enabled"><i class="fa fa-power-off " aria-hidden="true"></i></div>
     </div>
     `
 });
@@ -922,6 +942,13 @@ Vue.component('app-menu-settings', {
             <label v-if="game.settings.enableExperimental && !game.settings.showUpgradesAsBuildings" class="app-input-label">
                 <i class="fa fa-chevron-circle-up" aria-hidden="true"></i> Show Tier Upgrades in List
                 <input class="app-input" type="checkbox" v-model="game.settings.showTiersAsBuildings" @change="game.updateSettings()">
+            </label>
+        </div>
+        <div class="settings-option-wrapper">
+            <div class="settings-title">Building Settings</div>
+            <label class="app-input-label">
+                <i class="fa fa-sitemap" aria-hidden="true"></i> Show Base Production Recipes
+                <input class="app-input" type="checkbox" v-model="game.settings.showParentProductionList" @change="game.updateSettings()">
             </label>
         </div>
     </div>

@@ -53,6 +53,7 @@ const game = {
         bringSelectedToFront: true,
         displayFactionTheme: true,
         defaultBuildingCategory: 'all',
+        showParentProductionList: true,
         showCollapsibleBuildingList: true,
         showUpgradesAsBuildings: false,
         showTiersAsBuildings: false,
@@ -2368,8 +2369,9 @@ try {
                 return productionIcon;
             }
 
-            entity.setProductionId = function(id) {
-                if (entity.building?.production && entity.building.selectedProduction !== id) {
+            entity.setProductionId = function(id, useBaseProduction = false) {
+                if (entity.building?.production && !(entity.baseProduction === useBaseProduction && entity.selectedProduction === id)) {
+                    entity.baseProduction = useBaseProduction;
                     entity.selectedProduction = id;
                     if (game.getSelectedEntity() === entity) {
                         game.buildingSelectedMenuComponent?.updateProduction();
@@ -2379,8 +2381,9 @@ try {
                         entity.productionIcons = new PIXI.Container();
                         entity.productionIcons.visible = game.projectSettings.showProductionIcons;
                         entity.productionIcons.rotation = -entity.rotation;
-                        for (let i = 0; i < entity.building.production.length; i++) {
-                            const production = entity.building.production[i];
+                        const productionList = (entity.baseProduction ? entity.building.parent : entity.building).production;
+                        for (let i = 0; i < productionList.length; i++) {
+                            const production = productionList[i];
                             if (production.id === id) {
                                 if (production.output) {
                                     for (const resource of Object.keys(production.output)) {
@@ -2473,6 +2476,9 @@ try {
                     if (typeof entity.productionScale === 'number') {
                         entityData.productionScale = entity.productionScale;
                     }
+                    if (entity.baseProduction) {
+                        entityData.baseProduction = entity.baseProduction;
+                    }
                     entityData.selectedProduction = entity.selectedProduction;
                 }
 
@@ -2540,7 +2546,7 @@ try {
                     if (typeof entityData.productionScale === 'number') {
                         entity.productionScale = entityData.productionScale;
                     }
-                    entity.setProductionId(entityData.selectedProduction);
+                    entity.setProductionId(entityData.selectedProduction, entityData.baseProduction);
                 }
 
                 if (entity.hasHandle && entityData.railPoints) {
@@ -3667,6 +3673,7 @@ try {
             clone.selectionArea.tint = clone.locked ? COLOR_RED : COLOR_WHITE;
             let entityData = {};
             entity.onSave(entityData);
+            entityData.baseProduction = false;
             entityData.selectedProduction = null;
             clone.onLoad(entityData);
             clone.afterLoad(entityData);

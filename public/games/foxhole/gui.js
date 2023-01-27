@@ -172,11 +172,12 @@ Vue.component('app-menu-statistics', {
 
                     if (productionSelected && buildingData.production && buildingData.production.length) {
                         let selectedProduction;
-                        buildingData.production.forEach(production => {
+                        for (const production of ((entity.baseProduction && buildingData.parent) || buildingData).production) {
                             if (production.id === entity.selectedProduction) {
                                 selectedProduction = production;
+                                break;
                             }
-                        });
+                        }
                         if (selectedProduction) {
                             displayTime = true;
 
