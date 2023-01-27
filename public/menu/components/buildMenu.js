@@ -119,8 +119,14 @@ Vue.component('app-game-sidebar', {
             </div>
             <div class="building-info-body">
                 <p class="building-info-description">{{hoverData.description}}</p>
+                <p class="building-tech-description" v-if="hoverData.author">
+                    <span>Author:</span> {{hoverData.author}}
+                </p>
                 <p class="building-tech-description" v-if="hoverData.techId">
                     <span>Requires Tech<template v-if="window.objectData.tech[hoverData.techId]">:</template></span> {{window.objectData.tech[hoverData.techId]?.name}}
+                </p>
+                <p class="building-tech-description" v-if="hoverData.author">
+                    <span>Want your design featured in the planner?</span> Submit it on our Discord!
                 </p>
                 <div class="building-info-production" v-if="hoverData.production && hoverData.production.length && hoverData.production.hasOutput">
                     <template v-for="(recipe, index) in hoverData.production">
@@ -136,6 +142,7 @@ Vue.component('app-game-sidebar', {
                 <div class="power-produced" v-else-if="hoverData.power > 0">
                     <i class="fa fa-bolt"></i> {{hoverData.production && hoverData.production.power ? hoverData.production.power : hoverData.power}} MW
                 </div>
+                <div v-if="hoverData.category === 'presets'" class="building-preview" :style="{backgroundImage: 'url(' + hoverData.texture + ')'}"></div>
             </div>
         </div>
     </div>
@@ -826,7 +833,7 @@ Vue.component('app-game-building-list-icon', {
     methods: {
         buildBuilding: function(building) {
             this.bmc();
-            game.create('building', building.key);
+            game.create((building.category === 'presets' && 'preset') || 'building', building.category === 'presets' ? building.dataFile : building.key);
             game.sidebarMenuComponent.showHoverMenu(null);
         },
         buildingHover: function(building) {
@@ -848,6 +855,13 @@ Vue.component('app-game-building-list-icon', {
 
 Vue.component('app-menu-settings', {
     props: ['menuData'],
+    methods: {
+        updateSettings: function() {
+            game.settings.gridSize = Math.max(game.settings.gridSize, 1);
+            game.settings.snapRotationDegrees = Math.min(Math.max(game.settings.snapRotationDegrees, 1), 360);
+            game.updateSettings();
+        }
+    },
     template: html`
     <div id="settings" class="text-left">
         <div class="settings-option-wrapper">
@@ -897,11 +911,11 @@ Vue.component('app-menu-settings', {
             </label>
             <label class="app-input-label">
                 <i class="fa fa-th-large" aria-hidden="true"></i> Snap Grid Size
-                <input class="app-input" type="number" v-model.number="game.settings.gridSize" @input="game.updateSettings()">
+                <input class="app-input" type="number" v-model.number="game.settings.gridSize" min="1" @change="updateSettings()">
             </label>
             <label class="app-input-label">
                 <i class="fa fa-repeat" aria-hidden="true"></i> Snap Rotation Degrees
-                <input class="app-input" type="number" v-model.number="game.settings.snapRotationDegrees" @input="game.updateSettings()">
+                <input class="app-input" type="number" v-model.number="game.settings.snapRotationDegrees" min="1" max="360" @change="updateSettings()">
             </label>
         </div>
         <div class="settings-option-wrapper">
@@ -959,8 +973,7 @@ Vue.component('app-menu-save-load', {
     props: ['menuData'],
     data() {
         return {
-            importAsSelection: false,
-            presetName: null
+            importAsSelection: false
         };
     },
     methods: {
@@ -982,17 +995,6 @@ Vue.component('app-menu-save-load', {
             } catch (e) {
                 console.error('Failed to load save:', e);
                 game.showGrowl('Failed to load save.');
-            }
-        },
-        fetchPreset: function() {
-            if (this.presetName !== null) {
-                this.importAsSelection = false;
-                fetch(`/games/foxhole/assets/presets/${this.presetName}.json`).then(response => {
-                    return response.json();
-                }).then(saveObject => this.loadSave(saveObject)).catch(e => {
-                    console.error('Failed to load preset:', e);
-                    game.showGrowl('Failed to load preset.');
-                });
             }
         },
         loadFile: function() {
@@ -1028,22 +1030,6 @@ Vue.component('app-menu-save-load', {
                 </button>
                 <button class="app-btn app-btn-primary save-button" type="button" v-on:click="game.downloadSave()" @mouseenter="bme()">
                     <i class="fa fa-save"></i> Save
-                </button>
-            </div>
-        </div>
-        <div v-if="game.settings.enableDebug" class="settings-option-wrapper">
-            <div class="settings-title">Building Presets</div>
-            <div class="text-center">
-                <div class="select-preset-wrapper">
-                    <select title="Load a Preset" v-model="presetName">
-                        <option v-bind:value="null">Choose a Preset</option>
-                        <option value="small_120mm_facility">Small 120mm Facility</option>
-                        <option value="bunker_w_module">Bunker W Module</option>
-                        <option value="train_test">Train Testing</option>
-                    </select>
-                </div>
-                <button class="preset-load-button" type="button" v-on:click="fetchPreset()" @mouseenter="bme()">
-                    <i class="fa fa-upload"></i> Load
                 </button>
             </div>
         </div>

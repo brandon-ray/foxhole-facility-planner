@@ -2918,9 +2918,7 @@ try {
             entity.selectionArea.tint = entity.locked ? COLOR_RED : COLOR_WHITE;
             entity.selectionArea.visible = true;
 
-            if (entity.rangeSprite && !entity.rangeSprite.visible) {
-                entity.rangeSprite.visible = true;
-            }
+            entity.updateOverlays();
 
             if (entity.sprite?.outline) {
                 entity.sprite.outline.tint = entity.locked ? COLOR_RED : COLOR_ORANGE;
@@ -3620,21 +3618,36 @@ try {
     }
 
     game.create = function(type, subtype, x, y, z) {
-        game.updateConstructionMode(type, subtype);
-        let entity = createSelectableEntity(type, subtype, x ?? 0, y ?? 0, z ?? 0);
-        game.selectEntity(entity);
-        if (type === 'text') {
-            game.resetConstructionMode();
-            setTimeout(() => {
-                // Unsure what's causing the text to unfocus, so added timeout here so it's forced.
-                game.buildingSelectedMenuComponent?.focusText();
-            }, 150);
+        if (type === 'preset') {
+            fetch(subtype).then(response => {
+                return response.json();
+            }).then(saveObject => {
+                try {
+                    game.loadSave(saveObject, true);
+                } catch (e) {
+                    console.error('Failed to load preset:', e);
+                }
+            }).catch(e => {
+                console.info('Failed to load preset. This will typically occur if one doesn\'t exist.');
+            });
+        } else {
+            game.updateConstructionMode(type, subtype);
+            let entity = createSelectableEntity(type, subtype, x ?? 0, y ?? 0, z ?? 0);
+            game.selectEntity(entity);
+            if (type === 'text') {
+                game.resetConstructionMode();
+                setTimeout(() => {
+                    // Unsure what's causing the text to unfocus, so added timeout here so it's forced.
+                    game.buildingSelectedMenuComponent?.focusText();
+                }, 150);
+            }
+            game.setPickupEntities(true, true);
+            if (entity.hasHandle) {
+                entity.shouldSelectLastHandlePoint = true;
+            }
+            return entity;
         }
-        game.setPickupEntities(true, true);
-        if (entity.hasHandle) {
-            entity.shouldSelectLastHandlePoint = true;
-        }
-        return entity;
+        return null;
     }
 
     game.createBuildingAtCenter = function(key) {

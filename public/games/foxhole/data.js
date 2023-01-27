@@ -1,5 +1,9 @@
 const foxholeData = {
 	"categories": {
+		"presets": {
+			"name": "Building Presets",
+			"experimental": true
+		},
 		"foundations": {
 			"name": "Foundations"
 		},
@@ -29,6 +33,18 @@ const foxholeData = {
 		},
 		"misc": {
 			"name": "Miscellaneous"
+		}
+	},
+	"presets": {
+		"bunker_w_module": {
+			"name": "Bunker W Module",
+			"description": "A meta bunker design that has lots of health with great structural integrity and defenses.",
+			"author": "Jimbo"
+		},
+		"simple_vehicle_factory": {
+			"name": "Simple Vehicle Factory",
+			"description": "A simple vehicle factory to output upgraded vehicles per hour.",
+			"author": "Jimbo"
 		}
 	},
 	"tech": {

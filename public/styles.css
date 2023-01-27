@@ -1156,6 +1156,15 @@ input[type=number].btn-small {
     color: #45d745;
 }
 
+#hover-building-info > .building-info-body > .building-preview {
+    width: 100%;
+    height: 512px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 1px solid black;
+}
+
 .board-panel {
     background: #1a1a1a;
     background: linear-gradient(rgb(40, 40, 40), rgb(20, 20, 20));
@@ -1471,6 +1480,7 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
     font-size: 1.35em;
 }
 
+/*
 #save-load-page .select-preset-wrapper {
     display: inline-block;
     height: 40px;
@@ -1509,6 +1519,7 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
 #save-load-page .preset-load-button:hover {
     background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
 }
+*/
 
 /* Scrollbars */
 

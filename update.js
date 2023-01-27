@@ -747,6 +747,7 @@ async function updateData() {
 
     let foxholeDataStr = JSON.stringify({
         'categories': foxholeData.categories,
+        'presets': foxholeData.presets,
         'tech': sortList(techList),
         'resources': sortList(itemList),
         'buildings': sortList(structureList)
