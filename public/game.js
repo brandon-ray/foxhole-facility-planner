@@ -1905,14 +1905,20 @@ try {
                 entity.rangeSprite.alpha = 0.15;
                 entity.updateOverlays();
                 if (building.range) {
-                    const rangeColor = building.range.type === 'killbox' ? COLOR_RED : (building.range.type === 'radio' ? COLOR_PURPLE : (building.range.type === 'crane' ? COLOR_LIGHTBLUE : COLOR_RANGE));
+                    const colors = {'killbox': COLOR_GREEN, 'killbox-mg': COLOR_BLUE, 'killbox-at': COLOR_RED, 'killbox-arty': COLOR_YELLOW, 'radio': COLOR_PURPLE, 'crane': COLOR_LIGHTBLUE};
+                    const rangeColor = Object.keys(colors).includes(building.range.type) ? colors[building.range.type] : COLOR_RANGE;
                     if (!isNaN(building.range.arc)) {
                         entity.rangeSprite.beginFill(rangeColor);
                         entity.rangeSprite.lineStyle(1, rangeColor);
-                        entity.rangeSprite.moveTo(0, 0);
+                        if(!isNaN(building.range.min)) {
+                            const rangeArc = Math.deg2rad(building.range.arc);
+                            entity.rangeSprite.arc(0, 0, building.range.min * METER_PIXEL_SIZE, Math.PI/2 + rangeArc, Math.PI/2 - rangeArc, true);
+                        } else {
+                            entity.rangeSprite.moveTo(0, 0);
+                        }
                         const rangeArc = Math.deg2rad(building.range.arc);
                         entity.rangeSprite.arc(0, 0, building.range.max * METER_PIXEL_SIZE, Math.PI/2 - rangeArc, Math.PI/2 + rangeArc);
-                        entity.rangeSprite.lineTo(0, 0);
+                        if(isNaN(building.range.min)) entity.rangeSprite.lineTo(0, 0);
                         entity.rangeSprite.endFill();
                     } else if (!isNaN(building.range.min)) {
                         entity.rangeSprite.lineStyle((building.range.max - building.range.min) * METER_PIXEL_SIZE, rangeColor, 1);
