@@ -102,6 +102,22 @@ if (isMobile && !isPhoneApp) {
                         <button class="btn-small btn-float-left" :class="{ 'btn-active': settings.enableStats }" @click="settings.enableStats = !settings.enableStats; game.updateSettings()"><i class="fa fa-bar-chart" aria-hidden="true"></i></button>
                         Show Stats
                     </label>
+                    <label class="btn-checkbox-wrapper">
+                        <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': settings.showRG }" @click="settings.showRG = !settings.showRG; game.updateSettings()"></button>
+                        RG range
+                    </label>
+                    <label class="btn-checkbox-wrapper">
+                        <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': settings.showMG }" @click="settings.showMG = !settings.showMG; game.updateSettings()"></button>
+                        MG range
+                    </label>
+                    <label class="btn-checkbox-wrapper">
+                        <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': settings.showAT }" @click="settings.showAT = !settings.showAT; game.updateSettings()"></button>
+                        AT range
+                    </label>
+                    <label class="btn-checkbox-wrapper">
+                        <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': settings.showArty }" @click="settings.showArty = !settings.showArty; game.updateSettings()"></button>
+                        Arty range
+                    </label>
                     <button class="btn-small" title="Toggle Fullscreen" @click="game.tryFullscreen()">
                         <i class="fa fa-arrows-alt" aria-hidden="true"></i>
                     </button>

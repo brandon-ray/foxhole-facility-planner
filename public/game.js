@@ -52,6 +52,10 @@ const game = {
         historySize: 25,
         enableGrid: true,
         enableStats: true,
+        showRG: true,
+        showMG: true,
+        showAT: true,
+        showArty: true,
         gridSize: 16,
         enableSnapRotation: true,
         snapRotationDegrees: 15,
@@ -2933,6 +2937,11 @@ try {
 
             if (entity.hasHandle) {
                 entity.updateHandles();
+            }
+            entity.removeChild(entity.rangeSprite);
+            const enabled = {'killbox': game.settings.showRG, 'killbox-mg': game.settings.showMG, 'killbox-at': game.settings.showAT, 'killbox-arty': game.settings.showArty, 'radio': COLOR_PURPLE, 'crane': true};
+            if(Object.keys(enabled).includes(building.range.type) ? enabled[building.range.type] : true) {
+                entity.addChild(entity.rangeSprite);
             }
         };
 
