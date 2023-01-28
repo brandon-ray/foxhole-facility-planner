@@ -41,6 +41,16 @@ if (isMobile && !isPhoneApp) {
                 updateEntityOverlays: function() {
                     game.updateEntityOverlays();
                     game.updateSettings();
+                },
+                toggleProjectSetting: function(type, subtype) {
+                    if (subtype) {
+                        game.projectSettings[type][subtype] = !game.projectSettings[type][subtype];
+                    } else {
+                        game.projectSettings[type] = !game.projectSettings[type];
+                    }
+                    game.updateEntityOverlays();
+                    game.updateSave();
+                    game.appComponent.$forceUpdate();
                 }
             },
             template: html`
@@ -59,35 +69,35 @@ if (isMobile && !isPhoneApp) {
                     </div>
                     <p class="board-panel-body">
                         <label class="btn-checkbox-wrapper d-block">
-                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.showProductionIcons }" @click="game.projectSettings.showProductionIcons = !game.projectSettings.showProductionIcons; updateEntityOverlays()"></button>
+                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.showProductionIcons }" @click="toggleProjectSetting('showProductionIcons')"></button>
                             Production Icons
                         </label>
                         <label class="btn-checkbox-wrapper d-block">
-                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.showRangeWhenSelected }" @click="game.projectSettings.showRangeWhenSelected = !game.projectSettings.showRangeWhenSelected; updateEntityOverlays()"></button>
+                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.showRangeWhenSelected }" @click="toggleProjectSetting('showRangeWhenSelected')"></button>
                             Selection Ranges
                         </label>
                         <label class="btn-checkbox-wrapper d-block">
-                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.crane }" @click="game.projectSettings.ranges.crane = !game.projectSettings.ranges.crane; game.updateSave(); updateEntityOverlays()"></button>
+                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.crane }" @click="toggleProjectSetting('ranges', 'crane')"></button>
                             Crane Ranges
                         </label>
                         <label class="btn-checkbox-wrapper d-block">
-                        <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges['killbox'] }" @click="game.projectSettings.ranges['killbox'] = !game.projectSettings.ranges['killbox']; game.updateSave();(); updateEntityOverlays()"></button>
+                        <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.killbox }" @click="toggleProjectSetting('ranges', 'killbox')"></button>
                             Rifle Ranges
                         </label>
                         <label class="btn-checkbox-wrapper d-block">
-                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges['killbox-mg'] }" @click="game.projectSettings.ranges['killbox-mg'] = !game.projectSettings.ranges['killbox-mg']; game.updateSave(); updateEntityOverlays()"></button>
+                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.killboxMG }" @click="toggleProjectSetting('ranges', 'killboxMG')"></button>
                             Machine Gun Ranges
                         </label>
                         <label class="btn-checkbox-wrapper d-block">
-                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges['killbox-at'] }" @click="game.projectSettings.ranges['killbox-at'] = !game.projectSettings.ranges['killbox-at']; game.updateSave(); updateEntityOverlays()"></button>
+                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.killboxAT }" @click="toggleProjectSetting('ranges', 'killboxAT')"></button>
                             Anti Tank Ranges
                         </label>
                         <label class="btn-checkbox-wrapper d-block">
-                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges['killbox-arty'] }" @click="game.projectSettings.ranges['killbox-arty'] = !game.projectSettings.ranges['killbox-arty']; game.updateSave(); updateEntityOverlays()"></button>
+                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.killboxArty }" @click="toggleProjectSetting('ranges', 'killboxArty')"></button>
                             Artillery Ranges
                         </label>
                         <label class="btn-checkbox-wrapper d-block">
-                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.radio }" @click="game.projectSettings.ranges.radio = !game.projectSettings.ranges.radio; game.updateSave(); updateEntityOverlays()"></button>
+                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.radio }" @click="toggleProjectSetting('ranges', 'radio')"></button>
                             Radio Ranges
                         </label>
                     </p>

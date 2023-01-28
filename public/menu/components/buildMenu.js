@@ -890,6 +890,10 @@ Vue.component('app-menu-settings', {
                 <i class="fa fa-hdd-o" aria-hidden="true"></i> Stored History Size
                 <input class="app-input" type="number" v-model.number="game.settings.historySize" @input="game.updateSettings()">
             </label>
+            <label v-if="game.settings.enableHistory" class="app-input-label">
+                <i class="fa fa-upload" aria-hidden="true"></i> Auto-Load Last Save
+                <input class="app-input" type="checkbox" v-model="game.settings.enableAutoLoading" @change="game.updateSettings()">
+            </label>
             <label class="app-input-label">
                 <i class="fa fa-flask" aria-hidden="true"></i> Enable Experimental Features
                 <input class="app-input" type="checkbox" v-model="game.settings.enableExperimental" @change="game.updateSettings()">
