@@ -1011,6 +1011,7 @@ Vue.component('app-menu-save-load', {
             if (game.projectName === '') {
                 game.projectName = 'Unnamed Project';
             }
+            game.updateSave();
             this.$forceUpdate();
             game.appComponent.$forceUpdate();
         }

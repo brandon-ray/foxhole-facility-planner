@@ -200,7 +200,10 @@ try {
         ranges: {
             "crane": false,
             "radio": false,
-            "killbox": false
+            "killbox": false,
+            "killbox-mg": false,
+            "killbox-at": false,
+            "killbox-arty": false,
         }
     };
 
@@ -466,6 +469,8 @@ try {
             if (window.localStorage) {
                 let settingsString = JSON.stringify(game.settings);
                 window.localStorage.setItem('settings', settingsString);
+                const projectSettingsString = JSON.stringify(game.projectSettings);
+                window.localStorage.setItem('projectSettings', projectSettingsString);
             }
         } catch(e) {
             console.error('Failed to update settings.');
@@ -776,6 +781,21 @@ try {
 
         onWindowResize();
 
+        try {
+            if (window.localStorage) {
+                const newSaveString = window.localStorage.getItem('save');
+                if (newSaveString) {
+                    try {
+                        game.loadSave(JSON.parse(newSaveString));
+                    } catch (e) {
+                        console.error('Failed to load save:', e);
+                    }
+                    
+                }
+            }
+        } catch(e) {
+            console.error('Failed to parse save.');
+        }
         if (game.settings.enableDebug) {
             fetch(`/games/foxhole/assets/presets/debug.json`).then(response => {
                 return response.json();
@@ -928,6 +948,7 @@ try {
         let saveObject = {
             name: (game.projectName !== 'Unnamed Project' && game.projectName) || undefined,
             faction: game.settings.selectedFaction || undefined,
+            projectSettings: game.projectSettings,
             entities: []
         };
         let saveEntities = isSelection ? selectedEntities : entities;
@@ -974,7 +995,11 @@ try {
             } else {
                 game.removeEntities();
             }
+            game.projectName = saveObject.name || 'Unnamed Project';
             game.setFaction(saveObject.faction);
+            if(saveObject.projectSettings) {
+                game.projectSettings = saveObject.projectSettings;
+            }
         }
         setTimeout(() => {
             let entityIdMap = {};
@@ -1024,6 +1049,21 @@ try {
             }
         }, 1);
     };
+
+    game.updateSave = function (saveString) {
+        try {
+            if (window.localStorage) {
+                if(saveString) {
+                    window.localStorage.setItem('save', saveString);
+                } else {
+                    const saveData = JSON.stringify(game.getSaveData());
+                    window.localStorage.setItem('save', saveData);
+                }
+            }
+        } catch(e) {
+            console.error('Failed to update save.');
+        }
+    }
 
     game.getEntitiesCenter = function(ents, isSelection) {
         const count = ents?.length ?? 1;
@@ -1910,7 +1950,7 @@ try {
                 entity.updateOverlays();
                 if (building.range) {
                     const colors = {'killbox': COLOR_GREEN, 'killbox-mg': COLOR_BLUE, 'killbox-at': COLOR_RED, 'killbox-arty': COLOR_YELLOW, 'radio': COLOR_PURPLE, 'crane': COLOR_LIGHTBLUE};
-                    const rangeColor = Object.keys(colors).includes(building.range.type) ? colors[building.range.type] : COLOR_RANGE;
+                    const rangeColor = colors[building.range.type] ?? COLOR_RANGE;
                     if (!isNaN(building.range.arc)) {
                         entity.rangeSprite.beginFill(rangeColor);
                         entity.rangeSprite.lineStyle(1, rangeColor);
@@ -2938,11 +2978,6 @@ try {
             if (entity.hasHandle) {
                 entity.updateHandles();
             }
-            entity.removeChild(entity.rangeSprite);
-            const enabled = {'killbox': game.settings.showRG, 'killbox-mg': game.settings.showMG, 'killbox-at': game.settings.showAT, 'killbox-arty': game.settings.showArty, 'radio': COLOR_PURPLE, 'crane': true};
-            if(Object.keys(enabled).includes(building.range.type) ? enabled[building.range.type] : true) {
-                entity.addChild(entity.rangeSprite);
-            }
         };
 
         entity.onDeselect = function() {
@@ -3887,6 +3922,7 @@ try {
         if (game.saveStateChanged && game.settings.enableHistory && selectedEntities.length && !pickupSelectedEntities && !selectedHandlePoint && !selectionRotation) {
             game.saveStateChanged = false;
             const saveData = JSON.stringify(game.getSaveData());
+            game.updateSave(saveData);
             if (game.constructionHistory[game.constructionHistory.length - 1] !== saveData) {
                 game.constructionHistory.length = game.constructionHistoryPointer + 1;
                 game.constructionHistory.push(saveData);
