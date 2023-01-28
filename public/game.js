@@ -52,6 +52,10 @@ const game = {
         historySize: 25,
         enableGrid: true,
         enableStats: true,
+        showRG: true,
+        showMG: true,
+        showAT: true,
+        showArty: true,
         gridSize: 16,
         enableSnapRotation: true,
         snapRotationDegrees: 15,
@@ -786,6 +790,7 @@ try {
                     } catch (e) {
                         console.error('Failed to load save:', e);
                     }
+                    
                 }
             }
         } catch(e) {
