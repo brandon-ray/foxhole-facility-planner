@@ -859,6 +859,7 @@ Vue.component('app-menu-settings', {
         updateSettings: function() {
             game.settings.gridSize = Math.max(game.settings.gridSize, 1);
             game.settings.snapRotationDegrees = Math.min(Math.max(game.settings.snapRotationDegrees, 1), 360);
+            game.settings.zoomSpeed = Math.min(Math.max(game.settings.zoomSpeed, 1), 5);
             game.updateSettings();
         }
     },
@@ -920,6 +921,10 @@ Vue.component('app-menu-settings', {
             <label class="app-input-label">
                 <i class="fa fa-repeat" aria-hidden="true"></i> Snap Rotation Degrees
                 <input class="app-input" type="number" v-model.number="game.settings.snapRotationDegrees" min="1" max="360" @change="updateSettings()">
+            </label>
+            <label class="app-input-label">
+                <i class="fa fa-search-plus" aria-hidden="true"></i> Zoom Speed
+                <input class="app-input" type="number" v-model.number="game.settings.zoomSpeed" min="1" max="5" @change="updateSettings()">
             </label>
         </div>
         <div class="settings-option-wrapper">

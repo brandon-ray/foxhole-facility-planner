@@ -64,6 +64,7 @@ const game = {
         gridSize: 16,
         enableSnapRotation: true,
         snapRotationDegrees: 15,
+        zoomSpeed: 3,
         selectedFaction: null,
         selectedTier: 3,
         disableLockedMouseEvents: false,
@@ -1214,13 +1215,8 @@ try {
     mouseEventListenerObject.addEventListener('wheel', (e) => {
         if (!e.ctrlKey) {
             let lastZoom = camera.zoom;
-            camera.zoom -= (e.deltaY * 0.0005);
-            if (camera.zoom > 1.6) {
-                camera.zoom = 1.6;
-            }
-            if (camera.zoom < 0.1) {
-                camera.zoom = 0.1;
-            }
+            camera.zoom *= (1 - e.deltaY * (game.settings.zoomSpeed * 0.000225));
+            camera.zoom = Math.max(0.01, Math.min(1.6, camera.zoom));
 
             let zoomAmount = camera.zoom - lastZoom;
 
