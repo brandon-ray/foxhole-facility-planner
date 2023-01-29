@@ -41,6 +41,11 @@ const foxholeData = {
 			"description": "A meta bunker design that has lots of health with great structural integrity and defenses.",
 			"author": "Jimbo"
 		},
+		"compact_corner_bunker": {
+			"name": "Compact Corner Bunker",
+			"description": "This is a compact AT, MG and HG corner design that covers a 90 degree angle. This design is meant to be integrated into a straight line defence without wasting any space, or making any concessions on defence. Corner cutting is needed in the middle where 4 corner cuts are needed, but are easy to do. Do note that this design is only viable at the concrete tier.",
+			"author": "Danetello"
+		},
 		"simple_vehicle_factory": {
 			"name": "Simple Vehicle Factory",
 			"description": "A simple vehicle factory to output upgraded vehicles per hour.",
