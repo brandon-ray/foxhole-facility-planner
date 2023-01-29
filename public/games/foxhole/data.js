@@ -1155,7 +1155,7 @@ const foxholeData = {
 			"category": "defenses",
 			"categoryOrder": 8,
 			"range": {
-				"type": "killbox",
+				"type": "killboxAT",
 				"min": 3.5,
 				"max": 28
 			},
@@ -2811,7 +2811,7 @@ const foxholeData = {
 					"codeName": "MGAIT1",
 					"description": "An entrenched machine gun manned by stationed troops.",
 					"range": {
-						"type": "killbox",
+						"type": "killboxMG",
 						"arc": 45,
 						"max": 33.5
 					},
@@ -3020,7 +3020,7 @@ const foxholeData = {
 					"codeName": "ATGunAIT2",
 					"description": "An entrenched AT gun manned by stationed troops.",
 					"range": {
-						"type": "killbox",
+						"type": "killboxAT",
 						"arc": 90,
 						"max": 30
 					},
@@ -3058,7 +3058,7 @@ const foxholeData = {
 					"codeName": "MGAIT2",
 					"description": "An entrenched machine gun manned by stationed troops.",
 					"range": {
-						"type": "killbox",
+						"type": "killboxMG",
 						"arc": 45,
 						"max": 33.5
 					},
@@ -3280,6 +3280,12 @@ const foxholeData = {
 					"name": "Howitzer Garrison",
 					"codeName": "ArtilleryAIT3",
 					"description": "An entrenched Howitzer manned by stationed troops.",
+					"range": {
+						"type": "killboxArty",
+						"min": 25,
+						"max": 600,
+						"arc": 60,
+					},
 					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/FortT3HowitzerAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_artilleryai.webp",
@@ -3295,7 +3301,7 @@ const foxholeData = {
 					"codeName": "ATGunAIT3",
 					"description": "An entrenched AT gun manned by stationed troops.",
 					"range": {
-						"type": "killbox",
+						"type": "killboxAT",
 						"arc": 90,
 						"max": 30
 					},
@@ -3327,7 +3333,7 @@ const foxholeData = {
 					"codeName": "MGAIT3",
 					"description": "An entrenched machine gun manned by stationed troops.",
 					"range": {
-						"type": "killbox",
+						"type": "killboxMG",
 						"arc": 45,
 						"max": 33.5
 					},
@@ -6028,7 +6034,7 @@ const foxholeData = {
 			"category": "defenses",
 			"categoryOrder": 7,
 			"range": {
-				"type": "killbox",
+				"type": "killboxMG",
 				"arc": 45,
 				"max": 30
 			},

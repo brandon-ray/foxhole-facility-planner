@@ -13,7 +13,15 @@ const COLOR_PURPLE = 0x9900FF;
 const COLOR_SELECTION = 0xE16931; // Orange
 const COLOR_SELECTION_BORDER = 0xFF8248; // Lighter Orange
 
-const COLOR_RANGE = 0x72FF5A; // Green
+const COLOR_RANGES = {
+    default: 0x72FF5A, // Green
+    killbox: COLOR_ORANGE,
+    killboxMG: COLOR_BLUE,
+    killboxAT: COLOR_RED,
+    killboxArty: COLOR_YELLOW,
+    radio: COLOR_PURPLE,
+    crane: COLOR_LIGHTBLUE
+};
 const COLOR_RANGE_BORDER = 0xED2323; // Red
 
 const DEFAULT_TEXT_STYLE = {
@@ -50,6 +58,7 @@ const game = {
         enableExperimental: false,
         enableHistory: true,
         historySize: 25,
+        enableAutoLoading: true,
         enableGrid: true,
         enableStats: true,
         gridSize: 16,
@@ -189,14 +198,16 @@ try {
 
     game.projectName = 'Unnamed Project';
 
-    // TODO: Store project settings in save.
     game.projectSettings = {
         showProductionIcons: true,
         showRangeWhenSelected: true,
         ranges: {
-            "crane": false,
-            "radio": false,
-            "killbox": false
+            crane: false,
+            radio: false,
+            killbox: false,
+            killboxMG: false,
+            killboxAT: false,
+            killboxArty: false
         }
     };
 
@@ -771,7 +782,7 @@ try {
         update();
 
         onWindowResize();
-
+        
         if (game.settings.enableDebug) {
             fetch(`/games/foxhole/assets/presets/debug.json`).then(response => {
                 return response.json();
@@ -784,6 +795,22 @@ try {
             }).catch(e => {
                 console.info('Failed to load debug preset. This will typically occur if one doesn\'t exist.');
             });
+        } else if (game.settings.enableHistory && game.settings.enableAutoLoading) {
+            try {
+                if (window.localStorage) {
+                    const newSaveString = window.localStorage.getItem('save');
+                    if (newSaveString) {
+                        try {
+                            game.loadSave(JSON.parse(newSaveString));
+                        } catch (e) {
+                            console.error('Failed to load save:', e);
+                        }
+                        
+                    }
+                }
+            } catch(e) {
+                console.error('Failed to parse save.');
+            }
         }
     });
 
@@ -924,6 +951,7 @@ try {
         let saveObject = {
             name: (game.projectName !== 'Unnamed Project' && game.projectName) || undefined,
             faction: game.settings.selectedFaction || undefined,
+            projectSettings: game.projectSettings,
             entities: []
         };
         let saveEntities = isSelection ? selectedEntities : entities;
@@ -970,7 +998,11 @@ try {
             } else {
                 game.removeEntities();
             }
+            game.projectName = saveObject.name || 'Unnamed Project';
             game.setFaction(saveObject.faction);
+            if (saveObject.projectSettings) {
+                Object.assign(game.projectSettings, saveObject.projectSettings);
+            }
         }
         setTimeout(() => {
             let entityIdMap = {};
@@ -1020,6 +1052,21 @@ try {
             }
         }, 1);
     };
+
+    game.updateSave = function (saveString) {
+        try {
+            if (window.localStorage) {
+                if(saveString) {
+                    window.localStorage.setItem('save', saveString);
+                } else {
+                    const saveData = JSON.stringify(game.getSaveData());
+                    window.localStorage.setItem('save', saveData);
+                }
+            }
+        } catch(e) {
+            console.error('Failed to update save.');
+        }
+    }
 
     game.getEntitiesCenter = function(ents, isSelection) {
         const count = ents?.length ?? 1;
@@ -1905,14 +1952,19 @@ try {
                 entity.rangeSprite.alpha = 0.15;
                 entity.updateOverlays();
                 if (building.range) {
-                    const rangeColor = building.range.type === 'killbox' ? COLOR_RED : (building.range.type === 'radio' ? COLOR_PURPLE : (building.range.type === 'crane' ? COLOR_LIGHTBLUE : COLOR_RANGE));
+                    const rangeColor = COLOR_RANGES[building.range.type] ?? COLOR_RANGES.default;
                     if (!isNaN(building.range.arc)) {
                         entity.rangeSprite.beginFill(rangeColor);
                         entity.rangeSprite.lineStyle(1, rangeColor);
-                        entity.rangeSprite.moveTo(0, 0);
+                        if(!isNaN(building.range.min)) {
+                            const rangeArc = Math.deg2rad(building.range.arc);
+                            entity.rangeSprite.arc(0, 0, building.range.min * METER_PIXEL_SIZE, Math.PI/2 + rangeArc, Math.PI/2 - rangeArc, true);
+                        } else {
+                            entity.rangeSprite.moveTo(0, 0);
+                        }
                         const rangeArc = Math.deg2rad(building.range.arc);
                         entity.rangeSprite.arc(0, 0, building.range.max * METER_PIXEL_SIZE, Math.PI/2 - rangeArc, Math.PI/2 + rangeArc);
-                        entity.rangeSprite.lineTo(0, 0);
+                        if(isNaN(building.range.min)) entity.rangeSprite.lineTo(0, 0);
                         entity.rangeSprite.endFill();
                     } else if (!isNaN(building.range.min)) {
                         entity.rangeSprite.lineStyle((building.range.max - building.range.min) * METER_PIXEL_SIZE, rangeColor, 1);
@@ -3783,6 +3835,7 @@ try {
             entities = [];
             _entityIds = 0;
             entityMap = {};
+            game.saveStateChanged = true;
             if (game.statisticsMenuComponent) {
                 game.statisticsMenuComponent.refresh();
             }
@@ -3869,9 +3922,10 @@ try {
         background.tilePosition.x = -camera.x / camera.zoom;
         background.tilePosition.y = -camera.y / camera.zoom;
 
-        if (game.saveStateChanged && game.settings.enableHistory && selectedEntities.length && !pickupSelectedEntities && !selectedHandlePoint && !selectionRotation) {
+        if (game.saveStateChanged && game.settings.enableHistory && (entities.length === 0 || selectedEntities.length) && !pickupSelectedEntities && !selectedHandlePoint && !selectionRotation) {
             game.saveStateChanged = false;
             const saveData = JSON.stringify(game.getSaveData());
+            game.updateSave(saveData);
             if (game.constructionHistory[game.constructionHistory.length - 1] !== saveData) {
                 game.constructionHistory.length = game.constructionHistoryPointer + 1;
                 game.constructionHistory.push(saveData);
@@ -3940,6 +3994,7 @@ try {
                 entities.splice(i, 1);
                 if (entities.length === 0) {
                     _entityIds = 0;
+                    game.saveStateChanged = true;
                 }
                 i--;
                 entity.afterRemove();
