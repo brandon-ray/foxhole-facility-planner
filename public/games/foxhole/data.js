@@ -9329,6 +9329,10 @@ const foxholeData = {
 			"name": "Watch Tower",
 			"codeName": "WatchTower",
 			"description": "Reports nearby enemy movements to players with Radios equipped",
+			"range": {
+				"type": "radio",
+				"max": 240
+			},
 			"category": "defenses",
 			"categoryOrder": 5,
 			"icon": "game/Textures/UI/StructureIcons/WatchTowerStructureIcon.webp",
