@@ -3045,7 +3045,7 @@ const foxholeData = {
 					"codeName": "EngineRoomT2",
 					"description": "A engineering facility that provides power to Bunker structures using pipe connections.",
 					"icon": "game/Textures/UI/StructureIcons/EngineRoomIcon.webp",
-					"texture": "game/Textures/Structures/fortt2.webp",
+					"texture": "game/Textures/Structures/fortt2_engineroom.webp",
 					"maxHealth": 1350,
 					"structuralIntegrity": 0.75,
 					"cost": {
@@ -3320,7 +3320,7 @@ const foxholeData = {
 					"codeName": "EngineRoomT3",
 					"description": "A engineering facility that provides power to Bunker structures using pipe connections.",
 					"icon": "game/Textures/UI/StructureIcons/EngineRoomIcon.webp",
-					"texture": "game/Textures/Structures/fortt3.webp",
+					"texture": "game/Textures/Structures/fortt3_engineroom.webp",
 					"maxHealth": 1500,
 					"structuralIntegrity": 0.85,
 					"cost": {
