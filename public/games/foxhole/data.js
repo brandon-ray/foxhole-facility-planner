@@ -58,20 +58,30 @@ const foxholeData = {
 			"author": "Unknown",
 			"module": true
 		},
-		"simple_vehicle_factory": {
-			"name": "Simple Vehicle Factory (Example)",
-			"description": "A simple vehicle factory to output upgraded vehicles per hour. This is an example of a preset for the planner. Contribute your own saves to our Discord!",
-			"author": "Jimbo"
+		"locomotive_factory_by_eg0611": {
+			"name": "Locomotive Factory",
+			"description": "A facility that is capable to build Black Bolt, Longrider, Holdout, Rockhold and Roadhouse and their necessary manufacturing materials. 4 independent power systems allow facility to be functional 7/24.",
+			"author": "EG0611"
+		},
+		"compact_coal_liquefaction": {
+			"name": "Compact Coal Liquefaction",
+			"description": "Produce coal with the power of coal! You can easily power this setup with a coal power station and an extra water pump for \"automatic\" coal. The coal to coal conversion factor is of ≃2.6. Taking into account power the multiplier is of ≃2.286",
+			"author": "[5th] Menxs"
+		},
+		"5mw_80h_drip_power": {
+			"name": "5mw 80h Drip Power",
+			"description": "Very useful to ease maintenance. This Design will be producing power ≃50% of the time, maintenance tunnels on its grid will be generating ≃80 Gsups/h and fuel will last twice as much (80h)",
+			"author": "[5th] Menxs"
 		},
 		"coastal_storage_facility_by_eg0611": {
 			"name": "Coastal Storage Facility",
 			"description": "A small facility with only purpose of storing items. No power production and consumption. It depends nearby bunker base for GSUPS usage.",
 			"author": "EG0611"
 		},
-		"locomotive_factory_by_eg0611": {
-			"name": "Locomotive Factory",
-			"description": "A facility that is capable to build Black Bolt, Longrider, Holdout, Rockhold and Roadhouse and their necessary manufacturing materials. 4 independent power systems allow facility to be functional 7/24.",
-			"author": "EG0611"
+		"simple_vehicle_factory": {
+			"name": "Simple Vehicle Factory (Example)",
+			"description": "A simple vehicle factory to output upgraded vehicles per hour. This is an example of a preset for the planner. Contribute your own saves to our Discord!",
+			"author": "Jimbo"
 		}
 	},
 	"tech": {
