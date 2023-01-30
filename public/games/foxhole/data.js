@@ -52,6 +52,12 @@ const foxholeData = {
 			"author": "Danetello",
 			"module": true
 		},
+		"obs_bunker": {
+			"name": "OBS Bunker (Module)",
+			"description": "Standard observation bunker. Power only 2 rifle garrisons and the OBS bunker.",
+			"author": "Unknown",
+			"module": true
+		},
 		"simple_vehicle_factory": {
 			"name": "Simple Vehicle Factory (Example)",
 			"description": "A simple vehicle factory to output upgraded vehicles per hour. This is an example of a preset for the planner. Contribute your own saves to our Discord!",
