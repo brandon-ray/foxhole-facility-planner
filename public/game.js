@@ -557,10 +557,10 @@ try {
                     setTimeout(() => {
                         let x = 0, y = 0;
                         for (const [key, category] of Object.entries(window.objectData.categories)) {
-                            if (key !== 'presets' && (game.settings.enableExperimental || !category.experimental)) {
+                            if (game.settings.enableExperimental || !category.experimental) {
                                 for (let i = 0; i < category.buildings.length; i++) {
                                     const building = category.buildings[i];
-                                    if (game.settings.enableDebug || (!building.hideInList && (!building.parent || !building.parent.hideInList))) {
+                                    if (!building.preset && (game.settings.enableDebug || (!building.hideInList && (!building.parent || !building.parent.hideInList)))) {
                                         createSelectableEntity('building', building.key, x * 600, y * 600, 0);
                                         x++;
                                         if (x >= 10) {

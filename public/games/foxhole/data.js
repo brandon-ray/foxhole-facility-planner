@@ -1,7 +1,7 @@
 const foxholeData = {
 	"categories": {
 		"presets": {
-			"name": "Building Presets",
+			"name": "Modules",
 			"experimental": true
 		},
 		"foundations": {
@@ -33,22 +33,28 @@ const foxholeData = {
 		},
 		"misc": {
 			"name": "Miscellaneous"
+		},
+		"showcase": {
+			"name": "Showcase",
+			"experimental": true
 		}
 	},
 	"presets": {
 		"bunker_w_module": {
-			"name": "Bunker W Module",
+			"name": "W Bunker (Module)",
 			"description": "A meta bunker design that has lots of health with great structural integrity and defenses.",
-			"author": "Jimbo"
+			"author": "Unknown",
+			"module": true
 		},
 		"compact_corner_bunker": {
-			"name": "Compact Corner Bunker",
+			"name": "Compact Corner Bunker (Module)",
 			"description": "This is a compact AT, MG and HG corner design that covers a 90 degree angle. This design is meant to be integrated into a straight line defence without wasting any space, or making any concessions on defence. Corner cutting is needed in the middle where 4 corner cuts are needed, but are easy to do. Do note that this design is only viable at the concrete tier.",
-			"author": "Danetello"
+			"author": "Danetello",
+			"module": true
 		},
 		"simple_vehicle_factory": {
-			"name": "Simple Vehicle Factory",
-			"description": "A simple vehicle factory to output upgraded vehicles per hour.",
+			"name": "Simple Vehicle Factory (Example)",
+			"description": "A simple vehicle factory to output upgraded vehicles per hour. This is an example of a preset for the planner. Contribute your own saves to our Discord!",
 			"author": "Jimbo"
 		},
 		"coastal_storage_facility_by_eg0611": {

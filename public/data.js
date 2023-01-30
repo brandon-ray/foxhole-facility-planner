@@ -147,12 +147,14 @@ const game_asset_list = {
     }
 
     window.objectData.categories.presets.buildings = [];
+    window.objectData.categories.showcase.buildings = [];
     for (const [key, data] of Object.entries(foxholeData.presets)) {
-        data.category = 'presets';
+        data.preset = true;
+        data.category = (data.module && 'presets') || 'showcase';
         data.dataFile = assetDir(`presets/${key}/preset.json`);
         data.icon = assetDir(`presets/${key}/icon.webp`);
         data.texture = assetDir(`presets/${key}/preview.webp`);
-        window.objectData.categories.presets.buildings.push(data);
+        window.objectData.categories[data.category].buildings.push(data);
     }
 
     for (const category of Object.values(window.objectData.categories)) {
