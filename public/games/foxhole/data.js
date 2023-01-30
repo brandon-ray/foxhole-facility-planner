@@ -3268,7 +3268,7 @@ const foxholeData = {
 					"codeName": "AmmoRoomT3",
 					"description": "A facility that stores equipment and ammunition for artillery. Retrieval is very quick for this structure.. ",
 					"icon": "game/Textures/UI/StructureIcons/AmmoRoomIcon.webp",
-					"texture": "game/Textures/Structures/fortt3.webp",
+					"texture": "game/Textures/Structures/fortt3_ammoroom.webp",
 					"maxHealth": 2000,
 					"structuralIntegrity": 0.95,
 					"cost": {
