@@ -8818,6 +8818,7 @@ const foxholeData = {
 			"codeName": "TrenchConnectorT3",
 			"parentKey": "trenchconnectort2",
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers. This is a special Trench variant that can resize dynamically and can be built underneath roads.",
+			"tier": 3,
 			"icon": "game/Textures/UI/StructureIcons/TrenchT3ConnectorIcon.webp",
 			"texture": "game/Textures/Structures/trencht3_connector.webp",
 			"textureBorder": "game/Textures/Structures/trencht3_connector_side.webp",

@@ -942,7 +942,7 @@ Vue.component('app-menu-settings', {
             </label>
             <label class="app-input-label">
                 <i class="fa fa-users" aria-hidden="true"></i> Selected Faction
-                <select class="app-input" v-model="game.settings.selectedFaction" @change="game.updateSettings()">
+                <select class="app-input" v-model="game.settings.selectedFaction" @change="game.setFaction(game.settings.selectedFaction)">
                     <option :value="null">Neutral</option>
                     <option value="c">Colonials</option>
                     <option value="w">Wardens</option>

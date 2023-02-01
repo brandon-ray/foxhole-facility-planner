@@ -1051,6 +1051,8 @@ try {
             } else if (!ignoreConfirmation) {
                 game.zoomToEntitiesCenter();
             }
+
+            game.updateSave();
         }, 1);
     };
 
@@ -1108,11 +1110,10 @@ try {
     }
     game.zoomToEntitiesCenter();
 
-    game.setFaction = function(faction) {
-        if (game.settings.selectedFaction !== faction) {
-            game.settings.selectedFaction = faction;
-            game.updateSettings();
-        }
+    game.setFaction = function(faction = null) {
+        game.settings.selectedFaction = faction;
+        game.updateSettings();
+        game.updateSave();
     }
 
     game.selectEntity = function(entity) {
