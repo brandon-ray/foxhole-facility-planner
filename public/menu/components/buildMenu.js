@@ -845,6 +845,7 @@ Vue.component('app-game-building-list-icon', {
         (!building.experimental || game.settings.enableExperimental) &&
         (!building.tierUpgrade || (game.settings.showTiersAsBuildings || game.settings.showUpgradesAsBuildings)) &&
         (!building.parent || building.parentKey || game.settings.showUpgradesAsBuildings) &&
+        (!building.tier || (building.tier <= game.settings.selectedTier)) &&
         (!building.techId || (game.settings.selectedTier === 2 && building.techId === 'unlockfacilitytier2') || game.settings.selectedTier === 3) &&
         (!game.settings.selectedFaction || (!building.faction || building.faction === game.settings.selectedFaction))"
         class="build-icon" :class="{'ignore-transform': building.preset}" :title="building.name" :style="{backgroundImage:'url(' + ((building.category !== 'entrenchments' && building.parent && !building.parentKey && building.parent.icon || building.icon) ?? '/assets/default_icon.webp') + ')'}"

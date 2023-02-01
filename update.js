@@ -238,6 +238,7 @@ function iterateStructures(dirPath) {
                                     'color': structureData.color,
                                     'experimental': structureData.experimental,
                                     'hideInList': structureData.hideInList,
+                                    'tier': structureData.tier,
                                     'tierUpgrade': structureData.tierUpgrade,
                                     'width': structureData.width,
                                     'length': structureData.length,
