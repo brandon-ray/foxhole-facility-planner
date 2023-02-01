@@ -284,11 +284,11 @@ Vue.component('app-menu-statistics', {
                 <h5 class="construction-options-header"><i class="fa fa-shield" aria-hidden="true"></i> Bunker Stats</h5>
                 <div class="construction-options row d-flex justify-content-center">
                     <div class="btn-small col" style="color: #03b003;">
-                        <span style="font-size: 18px;">{{Math.floor(bunker.maxHealth * bunker.structuralIntegrity)}}</span>
+                        <span style="font-size: 18px;">{{Math.floor(bunker.maxHealth * bunker.structuralIntegrity).toLocaleString()}}</span>
                         <span class="label">health</span>
                     </div>
                     <div class="btn-small col" style="color: #d0d004;">
-                        <span style="font-size: 18px;">{{bunker.repairCost}}</span>
+                        <span style="font-size: 18px;">{{bunker.repairCost.toLocaleString()}}</span>
                         <span class="label">repair</span>
                     </div>
                     <div class="btn-small col" :class="bunker.class + '-structural-integrity'">

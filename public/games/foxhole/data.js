@@ -2751,6 +2751,7 @@ const foxholeData = {
 				"y": 304
 			},
 			"canSnap": true,
+			"canUnion": true,
 			"snapNearest": true,
 			"sockets": [
 				{

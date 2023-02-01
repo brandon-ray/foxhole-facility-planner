@@ -463,11 +463,31 @@ try {
         game.updateSettings();
     };
 
+    game.updateEntityUnions = function() {
+        const unionEntities = [];
+        for (const unionEntity of entities) {
+            if (unionEntity?.building?.canUnion) {
+                unionEntity.removeUnion();
+                unionEntities.push(unionEntity);
+            }
+        }
+        for (const unionEntity of unionEntities) {
+            for (const entitySocket of unionEntity.sockets.children) {
+                for (const entityId of Object.keys(entitySocket.connections)) {
+                    const connectedEntity = game.getEntityById(entityId);
+                    if (connectedEntity?.building?.canUnion) {
+                        unionEntity.setUnion(connectedEntity);
+                    }
+                }
+            }
+        }
+    };
+
     game.updateEntityOverlays = function() {
         for (const entity of entities) {
             entity.updateOverlays();
         }
-    }
+    };
 
     game.updateSettings = function() {
         try {
@@ -1824,6 +1844,12 @@ try {
         entity.selectionArea = new PIXI.Graphics();
         entity.selectionArea.visible = false;
 
+        entity.setSelectionColor = function(color) {
+            const width = building.width ? building.width * METER_PIXEL_SIZE : entity.sprite?.width ?? 0;
+            const height = building.length ? building.length * METER_PIXEL_SIZE : entity.sprite?.height ?? 0;
+            entity.setSelectionSize(width, height, color);
+        }
+
         entity.setSelectionSize = function(width, height, color = COLOR_ORANGE) {
             entity.selectionArea.clear();
             entity.selectionArea.lineStyle(SELECTION_BORDER_WIDTH, color);
@@ -1832,7 +1858,7 @@ try {
                     for (const poly of building.hitArea) {
                         entity.selectionArea.drawPolygon(new PIXI.Polygon(poly.shape));
                     }
-                } else if (building.hitArea?.length === 1) {
+                } else {
                     entity.selectionArea.drawPolygon(new PIXI.Polygon(building.hitArea[0].shape));
                 }
             } else {
@@ -2104,6 +2130,9 @@ try {
                         }
                         socket.connections[connectingEntityId] = connectingSocketId ?? connectingSocket.socketData.id;
                         socket.setVisible(false);
+                        if (building.canUnion) {
+                            entity.setUnion(game.getEntityById(connectingEntityId));
+                        }
                         return connectingSocket;
                     }
                 }
@@ -2216,6 +2245,9 @@ try {
                             } else {
                                 socket.setVisible(true);
                             }
+                            if (building.canUnion) {
+                                game.updateEntityUnions();
+                            }
                         }
                     }
                 }
@@ -2267,6 +2299,52 @@ try {
                     }
                 }
                 return null;
+            }
+
+            if (building.canUnion) {
+                entity.union = entity;
+                entity.unionRank = 0;
+
+                entity.getUnion = function() {
+                    if (entity.union !== entity) {
+                        entity.union = entity.union.getUnion();
+                    }
+                    return entity.union;
+                };
+
+                entity.getUnionEntities = function() {
+                    let union = entity.getUnion(), unionEntities = [];
+                    for (let unionEntity of entities) {
+                        if (unionEntity?.building?.canUnion && unionEntity.getUnion() === union) {
+                            unionEntities.push(unionEntity);
+                        }
+                    }
+                    return unionEntities;
+                };
+
+                entity.setUnion = function(unionEntity) {
+                    if (unionEntity?.building?.canUnion) {
+                        let unionEntityA = entity.getUnion(), unionEntityB = unionEntity.getUnion();
+                        if (unionEntityA === unionEntityB) {
+                            return;
+                        }
+                        if (unionEntityA.unionRank < unionEntityB.unionRank) {
+                            unionEntityA.union = unionEntityB;
+                        } else if (unionEntityA.unionRank > unionEntityB.unionRank) {
+                            unionEntityB.union = unionEntityA;
+                        } else {
+                            unionEntityB.union = unionEntityA;
+                            unionEntityA.unionRank++;
+                        }
+                        entity.setSelectionColor(COLOR_LIGHTBLUE);
+                        unionEntity.setSelectionColor(COLOR_LIGHTBLUE);
+                    }
+                };
+
+                entity.removeUnion = function() {
+                    entity.union = entity;
+                    entity.setSelectionColor();
+                };
             }
 
             if (building.sockets) {
@@ -2977,6 +3055,12 @@ try {
             if (entity.hasHandle) {
                 entity.updateHandles();
             }
+
+            if (keys[16] && entity.union) {
+                for (const unionEntity of entity.getUnionEntities()) {
+                    game.addSelectedEntity(unionEntity);
+                }
+            }
         };
 
         entity.onDeselect = function() {
@@ -3008,6 +3092,12 @@ try {
                 entity.updateHandles();
             } else if (entity.type === 'text' && entity.label.text.length === 0) {
                 entity.remove();
+            }
+
+            if (keys[16] && entity.union) {
+                for (const unionEntity of entity.getUnionEntities()) {
+                    game.removeSelectedEntity(unionEntity);
+                }
             }
         };
 

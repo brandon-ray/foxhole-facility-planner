@@ -269,6 +269,7 @@ function iterateStructures(dirPath) {
 			                        'canSnapRotate': structureData.canSnapRotate,
                                     'canSnapStructureType': structureData.canSnapStructureType,
                                     'canSnapAlongBezier': structureData.canSnapAlongBezier,
+                                    'canUnion': structureData.canUnion,
                                     'ignoreSnapSettings': structureData.ignoreSnapSettings,
                                     'snapNearest': structureData.snapNearest,
                                     'requireConnection': structureData.requireConnection,
