@@ -2,6 +2,7 @@ const foxholeData = {
 	"categories": {
 		"presets": {
 			"name": "Modules",
+			"hideInBuildingList": true,
 			"experimental": true
 		},
 		"foundations": {
@@ -36,6 +37,7 @@ const foxholeData = {
 		},
 		"showcase": {
 			"name": "Showcase",
+			"hideInBuildingList": true,
 			"experimental": true
 		}
 	},

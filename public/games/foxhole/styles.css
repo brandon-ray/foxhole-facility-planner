@@ -1,3 +1,14 @@
+@font-face {
+    font-family: 'Jost';
+    src: url('/assets/fonts/jost-webfont.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'Jost', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif !important;
+}
+
 .colonial-faction #sidebar-header {
     background: linear-gradient(rgb(24, 24, 24), rgb(5, 26, 6));
 }
@@ -127,7 +138,8 @@
 }
 
 .statistics-panel .construction-options .btn-small .label {
-    font-weight: bold;
+    /* font-weight: bold; */
+    font-size: 0.6em;
 }
 
 .high-structural-integrity {

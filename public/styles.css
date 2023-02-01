@@ -9,6 +9,10 @@ html {
     overflow-y: hidden;
 }
 
+body, .base-font {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif !important;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -16,7 +20,6 @@ body {
     overflow-x: hidden;
     overflow-y: hidden;
     background-color: #3f3f3f;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif !important;
 
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -81,6 +84,7 @@ p {
     font-size: 32px;
     color: #faf1eb;
     background-color: black;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     display: inline-block;
     border: none;
     margin: 6px auto;
@@ -239,7 +243,7 @@ p {
 }
 
 .app-input {
-    padding: 5px;
+    padding: 0 5px;
     box-sizing: border-box;
     border: 1px solid #101010;
     color: white;
@@ -607,6 +611,7 @@ input[type=number].btn-small {
 .construction-options .btn-small.layer-inactive > span.slash-icon {
     /*color: #ff9b9b;*/
     line-height: 38px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-size: 1.5em;
     position: absolute;
     inset: 0;

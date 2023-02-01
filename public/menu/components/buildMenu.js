@@ -698,7 +698,7 @@ Vue.component('app-menu-construction-list', {
     <div id="construction-page">
         <div class="construction-modes-wrapper">
             <div class="construction-mode-switcher row">
-                <button v-for="mode in game.constructionModes" class="construction-mode-button col" :class="[{ 'mode-selected': game.constructionMode.key === mode.key }, mode.key + '-mode-button']" :title="mode.title" @mouseenter="bme()" @click="setConstructionMode(mode)">
+                <button v-for="mode in game.constructionModes" class="construction-mode-button col base-font" :class="[{ 'mode-selected': game.constructionMode.key === mode.key }, mode.key + '-mode-button']" :title="mode.title" @mouseenter="bme()" @click="setConstructionMode(mode)">
                     <i v-if="mode.icon" :class="'fa ' + mode.icon" aria-hidden="true"></i>
                     <span v-else-if="mode.text">{{mode.text}}</span>
                 </button>
