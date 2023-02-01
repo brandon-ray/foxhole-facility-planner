@@ -1056,20 +1056,15 @@ try {
         }, 1);
     };
 
-    game.updateSave = function (saveString) {
+    game.updateSave = function(saveString = JSON.stringify(game.getSaveData())) {
         try {
-            if (window.localStorage) {
-                if(saveString) {
-                    window.localStorage.setItem('save', saveString);
-                } else {
-                    const saveData = JSON.stringify(game.getSaveData());
-                    window.localStorage.setItem('save', saveData);
-                }
+            if (window.localStorage && saveString) {
+                window.localStorage.setItem('save', saveString);
             }
         } catch(e) {
             console.error('Failed to update save.');
         }
-    }
+    };
 
     game.getEntitiesCenter = function(ents, isSelection) {
         const count = ents?.length ?? 1;
@@ -1828,14 +1823,21 @@ try {
 
         entity.selectionArea = new PIXI.Graphics();
         entity.selectionArea.visible = false;
-        if (!entity.hasHandle) {
-            entity.addChild(entity.selectionArea);
-        }
 
-        entity.setSelectionSize = function(width, height) {
+        entity.setSelectionSize = function(width, height, color = COLOR_ORANGE) {
             entity.selectionArea.clear();
-            entity.selectionArea.lineStyle(SELECTION_BORDER_WIDTH, COLOR_ORANGE);
-            entity.selectionArea.drawRect(-(width/2)-SELECTION_BORDER_WIDTH, -(height/2)-SELECTION_BORDER_WIDTH, width+(SELECTION_BORDER_WIDTH*2), height+(SELECTION_BORDER_WIDTH*2));
+            entity.selectionArea.lineStyle(SELECTION_BORDER_WIDTH, color);
+            if (building?.hitArea && (game.settings.enableDebug || building.hitArea?.length === 1)) {
+                if (game.settings.enableDebug) {
+                    for (const poly of building.hitArea) {
+                        entity.selectionArea.drawPolygon(new PIXI.Polygon(poly.shape));
+                    }
+                } else if (building.hitArea?.length === 1) {
+                    entity.selectionArea.drawPolygon(new PIXI.Polygon(building.hitArea[0].shape));
+                }
+            } else {
+                entity.selectionArea.drawRect(-(width/2)-SELECTION_BORDER_WIDTH, -(height/2)-SELECTION_BORDER_WIDTH, width+(SELECTION_BORDER_WIDTH*2), height+(SELECTION_BORDER_WIDTH*2));
+            }
         }
 
         entity.updateOverlays = function() {
@@ -2959,9 +2961,7 @@ try {
             }
         }
 
-        if (entity.hasHandle) {
-            entity.addChild(entity.selectionArea);
-        }
+        entity.addChild(entity.selectionArea);
 
         entity.onSelect = function() {
             entity.selected = true;
