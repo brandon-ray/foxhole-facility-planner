@@ -1068,6 +1068,7 @@ try {
                 }
                 game.setPickupEntities(true, false, centerPos, true);
                 game.updateSelectedBuildingMenu();
+                game.statisticsMenuComponent?.refresh();
             } else if (!ignoreConfirmation) {
                 game.zoomToEntitiesCenter();
             }
@@ -1150,6 +1151,7 @@ try {
             entity.onSelect();
             if (!noMenuUpdate) {
                 game.updateSelectedBuildingMenu();
+                game.statisticsMenuComponent?.refresh();
             }
             return true;
         }
@@ -1171,6 +1173,7 @@ try {
             } 
             if (!noMenuUpdate) {
                 game.updateSelectedBuildingMenu();
+                game.statisticsMenuComponent?.refresh();
             }
             return true;
         }
@@ -1192,6 +1195,7 @@ try {
             selectedEntities = [];
             if (!noMenuUpdate) {
                 game.updateSelectedBuildingMenu();
+                game.statisticsMenuComponent?.refresh();
             }
             return true;
         }
@@ -1389,6 +1393,7 @@ try {
             });
             if (selectedChange) {
                 game.updateSelectedBuildingMenu();
+                game.statisticsMenuComponent?.refresh();
             }
         }
     });
@@ -1844,9 +1849,10 @@ try {
         entity.selectionArea = new PIXI.Graphics();
         entity.selectionArea.visible = false;
 
+        // TODO: Clean up / combine these two functions.
         entity.setSelectionColor = function(color) {
-            const width = building.width ? building.width * METER_PIXEL_SIZE : entity.sprite?.width ?? 0;
-            const height = building.length ? building.length * METER_PIXEL_SIZE : entity.sprite?.height ?? 0;
+            const width = building?.width ? building.width * METER_PIXEL_SIZE : entity.sprite?.width ?? 0;
+            const height = building?.length ? building.length * METER_PIXEL_SIZE : entity.sprite?.height ?? 0;
             entity.setSelectionSize(width, height, color);
         }
 
@@ -3751,6 +3757,8 @@ try {
                     pickupTime = Date.now();
                     pickupPosition = {x: position?.x ?? gmx, y: position?.y ?? gmy};
                     ignoreMousePickup = true;
+                } else {
+                    game.statisticsMenuComponent?.refresh();
                 }
                 pickupSelectedEntities = pickup;
             }

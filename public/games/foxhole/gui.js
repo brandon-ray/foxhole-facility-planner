@@ -115,10 +115,21 @@ Vue.component('app-menu-statistics', {
             let garrisonConsumptionRate = Math.floor(this.time / 3600);
             let garrisonConsumptionReducers = [];
 
+            let selectedBunker = null;
             for (let i = 0; i < game.getEntities().length; i++) {
                 let entity = game.getEntities()[i];
-                if (entity.building && entity.building.range?.type === 'garrisonReduceDecay') {
-                    garrisonConsumptionReducers.push(entity);
+                if (entity.building) {
+                    if (entity.building.range?.type === 'garrisonReduceDecay') {
+                        garrisonConsumptionReducers.push(entity);
+                    }
+                    if (selectedBunker !== false && entity.building.canUnion && entity.selected) {
+                        if (selectedBunker === null) {
+                            selectedBunker = entity;
+                        }
+                        if (selectedBunker && selectedBunker.getUnion() !== entity.getUnion()) {
+                            selectedBunker = false;
+                        }
+                    }
                 }
             }
 
@@ -144,7 +155,7 @@ Vue.component('app-menu-statistics', {
                         garrisonSupplies += consumptionRate;
                     }
 
-                    if (buildingData.structuralIntegrity) {
+                    if (selectedBunker && buildingData?.canUnion && buildingData.structuralIntegrity && entity.getUnion() === selectedBunker.getUnion()) {
                         bunker.total += 1;
                         bunker.maxHealth += buildingData.maxHealth;
                         bunker.repairCost += buildingData.repairCost;
@@ -249,13 +260,15 @@ Vue.component('app-menu-statistics', {
                 }
             }
 
-            bunker.structuralIntegrity = bunker.total === 1 ? 1 : bunker.structuralIntegrity;
-            bunker.class = bunker.structuralIntegrity >= 0.75 ? 'high' : (bunker.structuralIntegrity >= 0.5 ? 'medium' : (bunker.structuralIntegrity >= 0.25 ? 'low' : 'critical'));
+            if (selectedBunker) {
+                bunker.structuralIntegrity = bunker.total === 1 ? 1 : bunker.structuralIntegrity;
+                bunker.class = bunker.structuralIntegrity >= 0.75 ? 'high' : (bunker.structuralIntegrity >= 0.5 ? 'medium' : (bunker.structuralIntegrity >= 0.25 ? 'low' : 'critical'));
+            }
 
             this.cost = Object.keys(cost).length ? cost : null;
             this.input = Object.keys(input).length ? input : null;
             this.output = Object.keys(output).length ? output : null;
-            this.bunker = bunker;
+            this.bunker = (selectedBunker && bunker) || null;
             this.displayTime = displayTime;
             this.powerTotal = powerTotal;
             this.powerProduced = powerProduced;
@@ -281,7 +294,7 @@ Vue.component('app-menu-statistics', {
                 </div>
             </div>
             <div v-if="bunker?.total" class="construction-options-wrapper">
-                <h5 class="construction-options-header"><i class="fa fa-shield" aria-hidden="true"></i> Bunker Stats</h5>
+                <h5 class="construction-options-header"><i class="fa fa-shield" aria-hidden="true"></i> Selected Bunker Stats</h5>
                 <div class="construction-options row d-flex justify-content-center">
                     <div class="btn-small col" style="color: #03b003;">
                         <span style="font-size: 18px;">{{Math.floor(bunker.maxHealth * bunker.structuralIntegrity).toLocaleString()}}</span>
