@@ -67,6 +67,7 @@ const game = {
         zoomSpeed: 3,
         selectedFaction: null,
         selectedTier: 3,
+        showSelectedTierOnly: true,
         disableLockedMouseEvents: false,
         bringSelectedToFront: true,
         displayFactionTheme: true,
@@ -74,7 +75,6 @@ const game = {
         showParentProductionList: true,
         showCollapsibleBuildingList: true,
         showUpgradesAsBuildings: false,
-        showTiersAsBuildings: false,
         showFacilityName: true,
         styles: {
             label: {

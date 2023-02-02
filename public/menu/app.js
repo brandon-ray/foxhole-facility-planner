@@ -67,40 +67,44 @@ if (isMobile && !isPhoneApp) {
                         <h4 class="float-left m-0" style="color: #eee"><i class="fa fa-cogs"></i> Toggle Layers</h4>
                         <button class="btn-small m-0 mr-1 float-right" title="Minimize Layers" @click="layerSelectionVisible = false"><i class="fa fa-window-minimize" aria-hidden="true"></i></button>
                     </div>
-                    <p class="board-panel-body">
-                        <label class="btn-checkbox-wrapper d-block">
-                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.showProductionIcons }" @click="toggleProjectSetting('showProductionIcons')"></button>
-                            Production Icons
-                        </label>
-                        <label class="btn-checkbox-wrapper d-block">
-                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.showRangeWhenSelected }" @click="toggleProjectSetting('showRangeWhenSelected')"></button>
-                            Selection Ranges
-                        </label>
-                        <label class="btn-checkbox-wrapper d-block">
-                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.crane }" @click="toggleProjectSetting('ranges', 'crane')"></button>
-                            Crane Ranges
-                        </label>
-                        <label class="btn-checkbox-wrapper d-block">
-                        <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.killbox }" @click="toggleProjectSetting('ranges', 'killbox')"></button>
-                            Rifle Ranges
-                        </label>
-                        <label class="btn-checkbox-wrapper d-block">
-                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.killboxMG }" @click="toggleProjectSetting('ranges', 'killboxMG')"></button>
-                            Machine Gun Ranges
-                        </label>
-                        <label class="btn-checkbox-wrapper d-block">
-                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.killboxAT }" @click="toggleProjectSetting('ranges', 'killboxAT')"></button>
-                            Anti Tank Ranges
-                        </label>
-                        <label class="btn-checkbox-wrapper d-block">
-                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.killboxArty }" @click="toggleProjectSetting('ranges', 'killboxArty')"></button>
-                            Artillery Ranges
-                        </label>
-                        <label class="btn-checkbox-wrapper d-block">
-                            <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.radio }" @click="toggleProjectSetting('ranges', 'radio')"></button>
-                            Radio Ranges
-                        </label>
-                    </p>
+                    <div class="board-panel-body row p-1">
+                        <div class="col">
+                            <label class="btn-checkbox-wrapper d-block">
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.showProductionIcons }" @click="toggleProjectSetting('showProductionIcons')"></button>
+                                Production Icons
+                            </label>
+                            <label class="btn-checkbox-wrapper d-block">
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.showRangeWhenSelected }" @click="toggleProjectSetting('showRangeWhenSelected')"></button>
+                                Selection Ranges
+                            </label>
+                            <label class="btn-checkbox-wrapper d-block">
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.crane }" @click="toggleProjectSetting('ranges', 'crane')"></button>
+                                Crane Ranges
+                            </label>
+                            <label class="btn-checkbox-wrapper d-block">
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.radio }" @click="toggleProjectSetting('ranges', 'radio')"></button>
+                                Radio Ranges
+                            </label>
+                        </div>
+                        <div class="col">
+                            <label class="btn-checkbox-wrapper d-block">
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.killbox }" @click="toggleProjectSetting('ranges', 'killbox')"></button>
+                                Rifle Ranges
+                            </label>
+                            <label class="btn-checkbox-wrapper d-block">
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.killboxMG }" @click="toggleProjectSetting('ranges', 'killboxMG')"></button>
+                                Machine Gun Ranges
+                            </label>
+                            <label class="btn-checkbox-wrapper d-block">
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.killboxAT }" @click="toggleProjectSetting('ranges', 'killboxAT')"></button>
+                                Anti Tank Ranges
+                            </label>
+                            <label class="btn-checkbox-wrapper d-block">
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.killboxArty }" @click="toggleProjectSetting('ranges', 'killboxArty')"></button>
+                                Artillery Ranges
+                            </label>
+                        </div>
+                    </div>
                 </div>
 
                 <app-menu-statistics v-if="game.settings.enableStats"></app-menu-statistics>

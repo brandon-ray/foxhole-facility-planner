@@ -843,9 +843,8 @@ Vue.component('app-game-building-list-icon', {
     template: html`
     <div v-if="(!building.hideInList || game.settings.enableDebug) &&
         (!building.experimental || game.settings.enableExperimental) &&
-        (!building.tierUpgrade || (game.settings.showTiersAsBuildings || game.settings.showUpgradesAsBuildings)) &&
         (!building.parent || building.parentKey || game.settings.showUpgradesAsBuildings) &&
-        (!building.tier || (building.tier <= game.settings.selectedTier)) &&
+        ((!building.tier || (!game.settings.showSelectedTierOnly && (building.tier <= game.settings.selectedTier))) || building.tier === game.settings.selectedTier) &&
         (!building.techId || (game.settings.selectedTier === 2 && building.techId === 'unlockfacilitytier2') || game.settings.selectedTier === 3) &&
         (!game.settings.selectedFaction || (!building.faction || building.faction === game.settings.selectedFaction))"
         class="build-icon" :class="{'ignore-transform': building.preset}" :title="building.name" :style="{backgroundImage:'url(' + ((building.category !== 'entrenchments' && building.parent && !building.parentKey && building.parent.icon || building.icon) ?? '/assets/default_icon.webp') + ')'}"
@@ -957,16 +956,16 @@ Vue.component('app-menu-settings', {
                 </select>
             </label>
             <label class="app-input-label">
+                <i class="fa fa-ban" aria-hidden="true"></i> Show Selected Tier Only
+                <input class="app-input" type="checkbox" v-model="game.settings.showSelectedTierOnly" @change="game.updateSettings()">
+            </label>
+            <label class="app-input-label">
                 <i class="fa fa-compress" aria-hidden="true"></i> Show Collapsible Building List
                 <input class="app-input" type="checkbox" v-model="game.settings.showCollapsibleBuildingList" @change="game.updateSettings()">
             </label>
             <label class="app-input-label">
                 <i class="fa fa-chevron-circle-up" aria-hidden="true"></i> Show All Upgrades in List
                 <input class="app-input" type="checkbox" v-model="game.settings.showUpgradesAsBuildings" @change="game.updateSettings()">
-            </label>
-            <label v-if="game.settings.enableExperimental && !game.settings.showUpgradesAsBuildings" class="app-input-label">
-                <i class="fa fa-chevron-circle-up" aria-hidden="true"></i> Show Tier Upgrades in List
-                <input class="app-input" type="checkbox" v-model="game.settings.showTiersAsBuildings" @change="game.updateSettings()">
             </label>
         </div>
         <div class="settings-option-wrapper">
