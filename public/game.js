@@ -809,7 +809,7 @@ try {
                 return response.json();
             }).then(saveObject => {
                 try {
-                    game.loadSave(saveObject);
+                    game.loadSave(saveObject, undefined, undefined, true);
                 } catch (e) {
                     console.error('Failed to load debug save:', e);
                 }
@@ -822,11 +822,10 @@ try {
                     const newSaveString = window.localStorage.getItem('save');
                     if (newSaveString) {
                         try {
-                            game.loadSave(JSON.parse(newSaveString));
+                            game.loadSave(JSON.parse(newSaveString), undefined, undefined, true);
                         } catch (e) {
                             console.error('Failed to load save:', e);
                         }
-                        
                     }
                 }
             } catch(e) {
@@ -1005,7 +1004,7 @@ try {
         download(JSON.stringify(game.getSaveData(isSelection)), fileName, 'application/json');
     };
 
-    game.loadSave = function(saveObject, isSelection, ignoreConfirmation) {
+    game.loadSave = function(saveObject, isSelection, ignoreConfirmation, isAutoLoad) {
         if (isSelection) {
             game.deselectEntities(false, true);
         } else {
@@ -1020,7 +1019,7 @@ try {
                 game.removeEntities();
             }
             game.projectName = saveObject.name || 'Unnamed Project';
-            game.setFaction(saveObject.faction);
+            game.setFaction(saveObject.faction, true);
             if (saveObject.projectSettings) {
                 Object.assign(game.projectSettings, saveObject.projectSettings);
             }
@@ -1073,7 +1072,9 @@ try {
                 game.zoomToEntitiesCenter();
             }
 
-            game.updateSave();
+            if (!isAutoLoad) {
+                game.updateSave();
+            }
         }, 1);
     };
 
@@ -1126,10 +1127,12 @@ try {
     }
     game.zoomToEntitiesCenter();
 
-    game.setFaction = function(faction = null) {
+    game.setFaction = function(faction = null, isLoading) {
         game.settings.selectedFaction = faction;
         game.updateSettings();
-        game.updateSave();
+        if (!isLoading) {
+            game.updateSave();
+        }
     }
 
     game.selectEntity = function(entity) {
