@@ -2213,6 +2213,7 @@ const foxholeData = {
 			"description": "A large forward operating base. Players can spawn and stockpile items here.",
 			"category": "entrenchments",
 			"experimental": true,
+			"baseGarrisonRadius": 80,
 			"tierUpgrade": true,
 			"width": 5.76,
 			"length": 5.76,
@@ -3437,46 +3438,14 @@ const foxholeData = {
 			"description": "A temporary forward operating base. Players can spawn from here.",
 			"category": "misc",
 			"categoryOrder": 5,
-			"range": {
-				"type": "garrison",
-				"max": 80
-			},
-			"sortLayer": "range",
+			"baseGarrisonRadius": 80,
 			"icon": "game/Textures/UI/StructureIcons/EncampmentIcon.webp",
 			"texture": "game/Textures/Structures/forwardbase1.webp",
 			"maxHealth": 1725,
 			"cost": {
 				"cloth": 300
 			},
-			"repairCost": 300,
-			"upgrades": {
-				"provisional_garrison": {
-					"name": "Provisional Garrison",
-					"description": "A Provisional Garrison connects this base to nearby defensive structures. Defensive structures will deactivate if player activity is too low. This also allows Towns to be claimed towards the victory condition.",
-					"icon": "game/Textures/UI/Menus/IconFacilitiesProvisionalGarrison.webp",
-					"cost": false
-				},
-				"small_garrison": {
-					"name": "Small Garrison",
-					"description": "A Small Garrison permanently connects this base to nearby defensive structures. In addition, structure decay for surrounding structures can be prevented when Garrison Supplies exist in the stockpile. The rate of Garrison Supplies consumption is 2 per hour per structure once decay has begun.",
-					"icon": "game/Textures/UI/Menus/IconFacilitiesSmallGarrison.webp",
-					"range": {
-						"type": "garrisonDecay",
-						"max": 80
-					},
-					"cost": false
-				},
-				"large_garrison": {
-					"name": "Large Garrison",
-					"description": "A Large Garrison permanently connects this base to nearby defensive structures. The cost of Garrison Supplies for preventing structure decay is further reduced. The rate of Garrison Supplies consumption is 1 per hour per structure once decay has begun.",
-					"icon": "game/Textures/UI/Menus/IconFacilitiesLargeGarrison.webp",
-					"range": {
-						"type": "garrisonReduceDecay",
-						"max": 80
-					},
-					"cost": false
-				}
-			}
+			"repairCost": 300
 		},
 		"foundation_1x1": {
 			"name": "Foundation (1x1)",
@@ -6509,6 +6478,7 @@ const foxholeData = {
 							"shape": [ -78.08,-49.92,-65.92,-49.92,-47.36,60.8,-78.08,60.8 ]
 						}
 					],
+					"baseIcon": "game/Textures/UI/StructureIcons/FacilityElectricOilWellIcon.webp",
 					"icon": "game/Textures/UI/StructureIcons/FacilityElectricOilWellIcon.webp",
 					"texture": "game/Textures/Structures/oil_well_electric_oil.webp",
 					"positionOffset": {
@@ -6601,6 +6571,7 @@ const foxholeData = {
 							"shape": [ -62.72,78.08,-74.88,50.56,-74.88,42.24,-14.72,-76.8 ]
 						}
 					],
+					"baseIcon": "game/Textures/UI/StructureIcons/FacilityFrackerIcon.webp",
 					"icon": "game/Textures/UI/StructureIcons/FacilityFrackerIcon.webp",
 					"texture": "game/Textures/Structures/oil_well_fracking_oil.webp",
 					"positionOffset": {
@@ -7727,9 +7698,10 @@ const foxholeData = {
 		"relicbase1": {
 			"name": "Relic Base",
 			"codeName": "RelicBase1",
+			"description": "A world base that players can respawn and rearm at. It can be destroyed and rebuilt to be claimed by a faction. It has garrison upgrades to supply local structures with garrison supplies.  This structure cannot be placed by a player, and is entirely for your reference.",
 			"category": "misc",
 			"categoryOrder": 6,
-			"hideInList": true,
+			"baseGarrisonRadius": 150,
 			"hitArea": [
 				{
 					"shape": [ -146.56,215.04,-103.68,249.6,-144.64,248.32 ]
@@ -7756,7 +7728,7 @@ const foxholeData = {
 					"shape": [ 146.56,215.04,146.56,-218.88,152.32,-216.32,152.32,215.04 ]
 				}
 			],
-			"icon": "game/Textures/UI/StructureIcons/RelicBase1Icon.webp",
+			"icon": "game/Textures/UI/CustomIcons/RelicBase1Icon.webp",
 			"texture": "game/Textures/Structures/relicbase1.webp",
 			"cost": false
 		},
@@ -8166,6 +8138,7 @@ const foxholeData = {
 							"shape": [ 50.56,15.36,19.84,-98.56,50.56,-93.44 ]
 						}
 					],
+					"baseIcon": "game/Textures/UI/CustomIcons/FacilityMineResource2ExcavatorIcon.webp",
 					"icon": "game/Textures/UI/StructureIcons/FacilityExcavatorIcon.webp",
 					"texture": "game/Textures/Structures/stationary_harvester_components_excavator.webp",
 					"positionOffset": {
@@ -8364,9 +8337,10 @@ const foxholeData = {
 		"townbase3": {
 			"name": "Town Base",
 			"codeName": "TownBase3",
+			"description": "A world base that players can respawn and rearm at. It can be destroyed and rebuilt to be claimed by a faction. It has garrison upgrades to supply local structures with garrison supplies. This structure cannot be placed by a player, and is entirely for your reference.",
 			"category": "misc",
 			"categoryOrder": 7,
-			"hideInList": true,
+			"baseGarrisonRadius": 150,
 			"hitArea": [
 				{
 					"shape": [ -188.8,-207.36,-247.68,-203.52,-248.96,-247.04,-245.12,-259.2,-188.16,-258.56 ]
@@ -8423,8 +8397,39 @@ const foxholeData = {
 					"shape": [ 302.72,-112,-38.4,-202.88,37.12,-202.88 ]
 				}
 			],
-			"icon": "game/Textures/UI/StructureIcons/TownBase3Icon.webp",
+			"icon": "game/Textures/UI/CustomIcons/TownBase3Icon.webp",
 			"texture": "game/Textures/Structures/townbase3.webp",
+			"cost": false
+		},
+		"townclargegarrisongs1": {
+			"name": "Safe House",
+			"codeName": "TownCLargeGarrisonGS1",
+			"description": "A world base that players can respawn and rearm at. It can be destroyed and rebuilt to be claimed by a faction. It has garrison upgrades to supply local structures with garrison supplies. This structure cannot be placed by a player, and is entirely for your reference.",
+			"category": "misc",
+			"categoryOrder": 8,
+			"baseGarrisonRadius": 150,
+			"hitArea": [
+				{
+					"shape": [ -246.72,14.72,-34.88,-268.16,84.16,115.2,83.52,281.6,-245.44,281.6 ]
+				},
+				{
+					"shape": [ -34.88,-268.16,-246.72,14.72,-260.16,14.72,-259.52,-268.8 ]
+				},
+				{
+					"shape": [ 251.2,115.84,165.44,115.2,84.16,-215.04,250.56,-215.04 ]
+				},
+				{
+					"shape": [ 84.16,-215.04,-18.24,-280.96,57.8036328125,-271.127265625,84.16,-256 ]
+				},
+				{
+					"shape": [ 96.96,130.56,96.96,115.2,165.44,115.2,165.44,130.56 ]
+				},
+				{
+					"shape": [ 84.16,115.2,-34.88,-268.16,-18.24,-280.96,84.16,-215.04,165.44,115.2 ]
+				}
+			],
+			"icon": "game/Textures/UI/CustomIcons/SafeHouseIcon.webp",
+			"texture": "game/Textures/Structures/townclargegarrisongs1.webp",
 			"cost": false
 		},
 		"traincaboose": {
@@ -8704,7 +8709,7 @@ const foxholeData = {
 			"category": "misc",
 			"categoryOrder": 10,
 			"sortLayer": "overhead",
-			"icon": "game/Textures/UI/StructureIcons/TreeIcon.webp",
+			"icon": "game/Textures/UI/CustomIcons/TreeIcon.webp",
 			"texture": "game/Textures/Structures/tree.webp",
 			"garrisonSupplyMultiplier": 0
 		},
@@ -9453,6 +9458,7 @@ const foxholeData = {
 							"shape": [ -77.12,58.56,31.58857421875,61.39428466796875,-59.84,61.12 ]
 						}
 					],
+					"baseIcon": "game/Textures/UI/StructureIcons/FacilityElectricWaterPumpIcon.webp",
 					"icon": "game/Textures/UI/StructureIcons/FacilityElectricWaterPumpIcon.webp",
 					"texture": "game/Textures/Structures/water_pump_electric_water.webp",
 					"positionOffset": {

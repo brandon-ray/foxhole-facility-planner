@@ -111,7 +111,7 @@ Vue.component('app-game-sidebar', {
         </div>
         <div id="hover-building-info" v-if="hoverData">
             <div class="building-info-name">
-                <img v-bind:src="hoverData.icon ?? '/assets/default_icon.webp'" />
+                <img v-bind:src="hoverData.baseIcon || hoverData.icon || '/assets/default_icon.webp'" />
                 <h4>{{!hoverData.parentKey && hoverData.parent?.name || hoverData.name}}</h4>
             </div>
             <div v-if="hoverData.parent?.name" class="building-info-upgrade">
@@ -847,9 +847,9 @@ Vue.component('app-game-building-list-icon', {
         ((!building.tier || (!game.settings.showSelectedTierOnly && (building.tier <= game.settings.selectedTier))) || building.tier === game.settings.selectedTier) &&
         (!building.techId || (game.settings.selectedTier === 2 && building.techId === 'unlockfacilitytier2') || game.settings.selectedTier === 3) &&
         (!game.settings.selectedFaction || (!building.faction || building.faction === game.settings.selectedFaction))"
-        class="build-icon" :class="{'ignore-transform': building.preset}" :title="building.name" :style="{backgroundImage:'url(' + ((building.category !== 'entrenchments' && building.parent && !building.parentKey && building.parent.icon || building.icon) ?? '/assets/default_icon.webp') + ')'}"
+        class="build-icon" :class="{'ignore-transform': building.preset}" :title="building.name" :style="{backgroundImage:'url(' + ((building.baseIcon || (building.category !== 'entrenchments' && building.parent && !building.parentKey && building.parent.icon) || building.icon) ?? '/assets/default_icon.webp') + ')'}"
         @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" @click="buildBuilding(building)">
-        <div v-if="!building.parentKey && building.parent?.icon && building.parent.icon !== building.icon" class="build-subicon" :title="building.parent.name" :style="{backgroundImage: 'url(' + ((building.category === 'entrenchments' && building.parent.icon) || building.icon) + ')'}"></div>
+        <div v-if="!building.baseIcon && !building.parentKey && building.parent?.icon && building.parent.icon !== building.icon" class="build-subicon" :title="building.parent.name" :style="{backgroundImage: 'url(' + ((building.category === 'entrenchments' && building.parent.icon) || building.icon) + ')'}"></div>
     </div>
     `
 });
