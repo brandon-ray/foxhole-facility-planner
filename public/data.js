@@ -28,6 +28,43 @@ const game_asset_list = {
             Object.assign(building, ...parentData);
             building.parent = window.objectData.buildings[building.parentKey];
         }
+        if (building.baseGarrisonRadius) {
+            const garrisonData = {
+                sortLayer: 'range',
+                baseUpgrades: {
+                    'base': {
+                        'provisional_garrison': {
+                            name: 'Provisional Garrison',
+                            description: 'A Provisional Garrison connects this base to nearby defensive structures. Defensive structures will deactivate if player activity is too low. This also allows Towns to be claimed towards the victory condition.',
+                            icon: assetDir('game/Textures/UI/Menus/IconFacilitiesProvisionalGarrison.webp'),
+                            range: {
+                                type: 'garrison',
+                                max: building.baseGarrisonRadius
+                            }
+                        },
+                        'small_garrison': {
+                            name: 'Small Garrison',
+                            description: 'A Small Garrison permanently connects this base to nearby defensive structures. In addition, structure decay for surrounding structures can be prevented when Garrison Supplies exist in the stockpile. The rate of Garrison Supplies consumption is 2 per hour per structure once decay has begun.',
+                            icon: assetDir('game/Textures/UI/Menus/IconFacilitiesSmallGarrison.webp'),
+                            range: {
+                                type: 'garrisonDecay',
+                                max: building.baseGarrisonRadius
+                            }
+                        },
+                        'large_garrison': {
+                            name: 'Large Garrison',
+                            description: 'A Large Garrison permanently connects this base to nearby defensive structures. The cost of Garrison Supplies for preventing structure decay is further reduced. The rate of Garrison Supplies consumption is 1 per hour per structure once decay has begun.',
+                            icon: assetDir('game/Textures/UI/Menus/IconFacilitiesLargeGarrison.webp'),
+                            range: {
+                                type: 'garrisonReduceDecay',
+                                max: building.baseGarrisonRadius
+                            }
+                        }
+                    }
+                }
+            };
+            Object.assign(building, garrisonData);
+        }
     }
 
     const appendGameAssets = function(data) {

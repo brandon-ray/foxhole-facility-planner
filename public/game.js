@@ -977,18 +977,20 @@ try {
         let saveEntities = isSelection ? selectedEntities : entities;
         for (let i = 0; i < saveEntities.length; i++) {
             let entity = saveEntities[i];
-            let entityData = {
-                id: entity.id,
-                x: parseFloat(entity.x),
-                y: parseFloat(entity.y),
-                z: parseFloat(entity.z) || undefined,
-                rotation: entity.rotation || undefined,
-                locked: entity.locked || undefined,
-                type: entity.type,
-                subtype: entity.subtype
-            };
-            entity.onSave(entityData, isSelection);
-            saveObject.entities.push(entityData);
+            if (entity.valid) {
+                let entityData = {
+                    id: entity.id,
+                    x: parseFloat(entity.x),
+                    y: parseFloat(entity.y),
+                    z: parseFloat(entity.z) || undefined,
+                    rotation: entity.rotation || undefined,
+                    locked: entity.locked || undefined,
+                    type: entity.type,
+                    subtype: entity.subtype
+                };
+                entity.onSave(entityData, isSelection);
+                saveObject.entities.push(entityData);
+            }
         }
         return saveObject;
     }
@@ -1981,41 +1983,44 @@ try {
                 entity.addChild(entity.backCap);
             }
 
-            if (building.range || building.overlapDist) {
-                entity.rangeSprite = new PIXI.Graphics();
-                entity.rangeSprite.alpha = 0.15;
-                entity.updateOverlays();
-                if (building.range) {
-                    const rangeColor = COLOR_RANGES[building.range.type] ?? COLOR_RANGES.default;
-                    if (!isNaN(building.range.arc)) {
+            entity.assignRange = function(rangeData) {
+                entity.removeChild(entity.rangeSprite);
+                if (rangeData) {
+                    const rangeColor = COLOR_RANGES[rangeData.type] ?? COLOR_RANGES.default;
+                    entity.rangeSprite = new PIXI.Graphics();
+                    entity.rangeSprite.alpha = 0.15;
+                    entity.updateOverlays();
+                    if (!isNaN(rangeData.arc)) {
                         entity.rangeSprite.beginFill(rangeColor);
                         entity.rangeSprite.lineStyle(1, rangeColor);
-                        if(!isNaN(building.range.min)) {
-                            const rangeArc = Math.deg2rad(building.range.arc);
-                            entity.rangeSprite.arc(0, 0, building.range.min * METER_PIXEL_SIZE, Math.PI/2 + rangeArc, Math.PI/2 - rangeArc, true);
+                        if(!isNaN(rangeData.min)) {
+                            const rangeArc = Math.deg2rad(rangeData.arc);
+                            entity.rangeSprite.arc(0, 0, rangeData.min * METER_PIXEL_SIZE, Math.PI/2 + rangeArc, Math.PI/2 - rangeArc, true);
                         } else {
                             entity.rangeSprite.moveTo(0, 0);
                         }
-                        const rangeArc = Math.deg2rad(building.range.arc);
-                        entity.rangeSprite.arc(0, 0, building.range.max * METER_PIXEL_SIZE, Math.PI/2 - rangeArc, Math.PI/2 + rangeArc);
-                        if(isNaN(building.range.min)) entity.rangeSprite.lineTo(0, 0);
+                        const rangeArc = Math.deg2rad(rangeData.arc);
+                        entity.rangeSprite.arc(0, 0, rangeData.max * METER_PIXEL_SIZE, Math.PI/2 - rangeArc, Math.PI/2 + rangeArc);
+                        if(isNaN(rangeData.min)) entity.rangeSprite.lineTo(0, 0);
                         entity.rangeSprite.endFill();
-                    } else if (!isNaN(building.range.min)) {
-                        entity.rangeSprite.lineStyle((building.range.max - building.range.min) * METER_PIXEL_SIZE, rangeColor, 1);
-                        entity.rangeSprite.drawCircle(0, 0, ((building.range.min + building.range.max) / 2) * METER_PIXEL_SIZE);
+                    } else if (!isNaN(rangeData.min)) {
+                        entity.rangeSprite.lineStyle((rangeData.max - rangeData.min) * METER_PIXEL_SIZE, rangeColor, 1);
+                        entity.rangeSprite.drawCircle(0, 0, ((rangeData.min + rangeData.max) / 2) * METER_PIXEL_SIZE);
                     } else {
                         entity.rangeSprite.beginFill(rangeColor);
-                        entity.rangeSprite.drawCircle(0, 0, building.range.max * METER_PIXEL_SIZE);
+                        entity.rangeSprite.drawCircle(0, 0, rangeData.max * METER_PIXEL_SIZE);
                         entity.rangeSprite.endFill();
                     }
+                    if (rangeData.overlap) {
+                        entity.rangeSprite.lineStyle(10, COLOR_RANGE_BORDER, 1);
+                        entity.rangeSprite.drawCircle(0, 0, rangeData.overlap * METER_PIXEL_SIZE);
+                    }
+                    entity.addChild(entity.rangeSprite);
                 }
-                if (building.overlapDist) {
-                    entity.rangeSprite.lineStyle(10, COLOR_RANGE_BORDER, 1);
-                    let overlapDist = building.overlapDist * METER_PIXEL_SIZE;
-                    entity.rangeSprite.drawCircle(0, 0, overlapDist);
-                    //entity.rangeSprite.drawRect(-(sprite.width/2) - overlapDist, -(sprite.height/2) - overlapDist, sprite.width + overlapDist*2, sprite.height + overlapDist*2);
-                }
-                entity.addChild(entity.rangeSprite);
+            }
+
+            if (building.range) {
+                entity.assignRange(building.range);
             }
 
             let buildingWidth, buildingLength;
@@ -2362,6 +2367,10 @@ try {
                 }
             }
 
+            if (building.baseUpgrades) {
+                entity.baseUpgrades = {};
+            }
+
             /*
             let buildingIcon = building.parent?.icon ?? building.icon;
             if (sprite && buildingIcon && (!building.textureIcon || !building.textureIcon?.disabled)) {
@@ -2559,6 +2568,15 @@ try {
                     }
                 }
             }
+
+            entity.setBaseUpgrade = function(tree, key = undefined) {
+                entity.baseUpgrades[tree] = key;
+                entity.assignRange(key && entity.building.baseUpgrades[tree][key].range ? entity.building.baseUpgrades[tree][key].range : entity.building.range);
+                if (entity.selected) {
+                    game.buildingSelectedMenuComponent?.refresh();
+                }
+                game.statisticsMenuComponent?.refresh();
+            };
         }
 
         let points;
@@ -2613,7 +2631,7 @@ try {
                     }
                 }
 
-                if (entity.building && !entityData.clone) {
+                if (entity.building && !entityData.upgrading) {
                     if (typeof entity.productionScale === 'number') {
                         entityData.productionScale = entity.productionScale;
                     }
@@ -2622,28 +2640,9 @@ try {
                     }
                     entityData.selectedProduction = entity.selectedProduction;
 
-                    // TODO: Rename to baseUpgrades since we need socket / rotation data for addons anyway.
-                    /*
-                    if (entity.modifications) {
-                        for (const [parentKey, values] of Object.entries(entity.modifications)) {
-                            let modificationEntries;
-                            for (const [childKey, value] of Object.entries(values)) {
-                                if (value) {
-                                    if (!modificationEntries) {
-                                        modificationEntries = [];
-                                    }
-                                    modificationEntries.push(childKey);
-                                }
-                            }
-                            if (modificationEntries) {
-                                if (!entityData.modifications) {
-                                    entityData.modifications = {};
-                                }
-                                entityData.modifications[parentKey] = modificationEntries;
-                            }
-                        }
+                    if (entity.baseUpgrades) {
+                        entityData.baseUpgrades = Object.assign({}, entity.baseUpgrades);
                     }
-                    */
                 }
 
                 if (entity.sockets) {
@@ -2713,15 +2712,11 @@ try {
                         }
                         entity.setProductionId(entityData.selectedProduction, entityData.baseProduction);
                     }
-                    /*
-                    if (entityData.modifications) {
-                        for (const [key, values] of Object.entries(entityData.modifications)) {
-                            for (const value of values) {
-                                entity.modifications[key][value] = true;
-                            }
+                    if (entityData.baseUpgrades) {
+                        for (const [tree, key] of Object.entries(entityData.baseUpgrades)) {
+                            entity.setBaseUpgrade(tree, key);
                         }
                     }
-                    */
                 }
 
                 if (entity.hasHandle && entityData.railPoints) {
@@ -3872,7 +3867,7 @@ try {
             clone.locked = entity.locked;
             clone.selectionArea.tint = clone.locked ? COLOR_RED : COLOR_WHITE;
             let entityData = {
-                clone: true
+                upgrading: true
             };
             entity.onSave(entityData);
             clone.onLoad(entityData);

@@ -5097,9 +5097,9 @@ const foxholeData = {
 			"color": 1052688,
 			"range": {
 				"type": "preventDecay",
-				"max": 40
+				"max": 40,
+				"overlap": 65
 			},
-			"overlapDist": 65,
 			"sortLayer": "range",
 			"hitArea": [
 				{

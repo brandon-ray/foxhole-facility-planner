@@ -205,6 +205,7 @@ Vue.component('app-menu-building-selected', {
                     baseProduction: selectedEntity.baseProduction,
                     selectedProduction: selectedEntity.selectedProduction,
                     productionScale: selectedEntity.productionScale,
+                    baseUpgrades: selectedEntity.baseUpgrades,
                     building: selectedEntity.building,
                     following: selectedEntity.following,
                     label: selectedEntity.label?.text,
@@ -342,6 +343,14 @@ Vue.component('app-menu-building-selected', {
             this.bmc();
             game.upgradeSelected(upgrade);
         },
+        changeBaseUpgrade: function(tree, key) {
+            this.bmc();
+            const selectedEntity = game.getSelectedEntity();
+            if (selectedEntity && selectedEntity.type === 'building') {
+                selectedEntity.setBaseUpgrade(tree, (selectedEntity.baseUpgrades[tree] !== key && key) || undefined);
+                game.saveStateChanged = true;
+            }
+        },
         cloneBuildings: function() {
             this.bmc();
             game.cloneSelected();
@@ -355,8 +364,10 @@ Vue.component('app-menu-building-selected', {
             this.bmc();
             game.deselectEntities(true);
         },
-        showUpgradeHover: function(upgrade) {
-            this.hoverUpgradeName = upgrade?.upgradeName ?? (upgrade?.name ?? null);
+        showUpgradeHover: function(upgrade, updateName = true) {
+            if (updateName) {
+                this.hoverUpgradeName = upgrade?.upgradeName ?? (upgrade?.name ?? null);
+            }
             game.sidebarMenuComponent.showHoverMenu(upgrade);
         },
         focusText: function() {
@@ -525,6 +536,13 @@ Vue.component('app-menu-building-selected', {
                 <button class="upgrade-button" v-for="upgrade in entity.building.upgrades" :class="{'selected-upgrade': (entity.building.parent && entity.building.key === entity.building.parent.key + '_' + upgrade.key) || entity.building.key === upgrade.key}"
                     @mouseenter="showUpgradeHover(upgrade); bme()" @mouseleave="showUpgradeHover()" @click="changeUpgrade(upgrade)">
                     <div class="resource-icon" :title="upgrade.upgradeName ?? upgrade.name" :style="{backgroundImage:'url(' + (upgrade.icon ?? entity.building.icon) + ')'}"></div>
+                </button>
+            </div>
+            <div v-if="entity.baseUpgrades && entity.building?.baseGarrisonRadius" class="settings-option-wrapper upgrade-list">
+                <div class="settings-title">Base Upgrades</div>
+                <button class="upgrade-button" v-for="(upgrade, key) in entity.building.baseUpgrades.base" :class="{'selected-upgrade': entity.baseUpgrades.base === key}"
+                    @mouseenter="showUpgradeHover(upgrade, false); bme()" @mouseleave="showUpgradeHover()" @click="changeBaseUpgrade('base', key)">
+                    <div class="resource-icon" :title="upgrade.name" :style="{backgroundImage:'url(' + (upgrade.icon ?? entity.building.icon) + ')'}"></div>
                 </button>
             </div>
             <div v-if="productionData" class="settings-option-wrapper">

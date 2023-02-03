@@ -119,7 +119,7 @@ Vue.component('app-menu-statistics', {
             for (let i = 0; i < game.getEntities().length; i++) {
                 let entity = game.getEntities()[i];
                 if (entity.building) {
-                    if (entity.building.range?.type === 'garrisonReduceDecay') {
+                    if (entity.baseUpgrades?.base === 'large_garrison') {
                         garrisonConsumptionReducers.push(entity);
                     }
                     if (selectedBunker !== false && entity.building.canUnion && entity.selected) {
@@ -148,8 +148,9 @@ Vue.component('app-menu-statistics', {
                         let consumptionRate = (2 * (buildingData.garrisonSupplyMultiplier ?? 1)) * garrisonConsumptionRate;
                         for (let j = 0; j < garrisonConsumptionReducers.length; j++) {
                             const garrison = garrisonConsumptionReducers[j];
-                            if (Math.distanceBetween(entity.mid, garrison) < garrison.building.range.max * 32) {
+                            if (Math.distanceBetween(entity.mid, garrison) < (garrison.building.baseUpgrades.base['large_garrison'].range.max * 32)) {
                                 consumptionRate /= 2;
+                                break;
                             }
                         }
                         garrisonSupplies += consumptionRate;
