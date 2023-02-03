@@ -870,7 +870,7 @@ Vue.component('app-game-building-list-icon', {
         (!building.experimental || game.settings.enableExperimental) &&
         (!building.parent || building.parentKey || game.settings.showUpgradesAsBuildings) &&
         ((!building.tier || (!game.settings.showSelectedTierOnly && (building.tier <= game.settings.selectedTier))) || building.tier === game.settings.selectedTier) &&
-        (!building.techId || (game.settings.selectedTier === 2 && building.techId === 'unlockfacilitytier2') || game.settings.selectedTier === 3) &&
+        ((!building.techId || !window.objectData.tech[building.techId]) || ((building.techId === 'unlockfacilitytier2' && game.settings.selectedTier >= 2) || (building.techId === 'unlockfacilitytier3' && game.settings.selectedTier >= 3))) &&
         (!game.settings.selectedFaction || (!building.faction || building.faction === game.settings.selectedFaction))"
         class="build-icon" :class="{'ignore-transform': building.preset}" :title="building.name" :style="{backgroundImage:'url(' + ((building.baseIcon || (building.category !== 'entrenchments' && building.parent && !building.parentKey && building.parent.icon) || building.icon) ?? '/assets/default_icon.webp') + ')'}"
         @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" @click="buildBuilding(building)">

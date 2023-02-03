@@ -1,38 +1,34 @@
-![Foxhole Facility Planner](public/assets/logo.webp)
-# Foxhole Facility Planner
+![Foxhole Building Planner](public/assets/logo.webp)
+# Foxhole Planner (Also known as Foxhole Building Planner)
 
-This tool allows you to draw up plans for facilities from Foxhole's new Inferno update. It takes power and resource needs into account to help you efficiently design your facilities. You can save your plans to be loaded later and share them with fellow members of your regiment!
+Create blueprints for a bunker, facility, and more using this fan-made tool for the video game Foxhole. Formerly known as Foxhole Facility Planner, this tool now features facilities, bunkers, trenches, and more! Made with ❤️ using Vue.js and Pixi.js
 
-Made with ❤️ by the PEG Regiment using Vue.js and Pixi.js
+Access the tool at: https://foxholeplanner.com
+
 ## Features
 
-- **Facility Blueprint Editor**
-    - Saving and Loading
-    - Multi-Building Selection
-    - Label, Rectangle, Circle, & Line Tool
-    - Redo & Undo Actions
-    - Building Placement
+- **Blueprint Editor**
+    - Project Loading & Saving
+    - Multi-Selection, Label, Rectangle, Circle, & Line Tool
+    - Auto-Saving with History and Undo / Redo Actions
+    - Facility, Bunker, and Trench Construction
     - Pipe and Power Line Construction
     - Rail and Road Construction
 - **Building Browser**
+    - Community-Made Presets and Showcase
     - Category, Faction, and Tier Filtering
     - Production Recipes Overview
-    - Building Properties
-    - Upgrade and Production Selection
-- **Facility Statistics**
+    - Building Properties with Upgrades and Production Selection
+- **Statistics**
     - Total Construction Cost
-    - Power and Garrison Supply Consumption
-    - Facility Resource Input and Production Output
-    - Production Time Filtering
+    - Bunker Health, Repair Cost, and Structural Integrity
+    - Production Limits & Time Filtering
+    - Garrison / Bunker Supply Consumption
+    - Facility Power and Resource Production Input / Output
 
 ## Screenshots
 
 ![Screenshot](public/assets/screenshot5.jpg)
-
-
-## Live Website (Latest Release)
-
-https://foxholeplanner.com
 
 
 ## Project Authors / Maintainers
@@ -41,13 +37,12 @@ https://foxholeplanner.com
 - **James Cunningham** ([@jimdcunningham](https://github.com/jimdcunningham))
 
 ## Special Thanks
-- **[22-ACR] Justin**: Exporting images for all the structures from the game.
+- **Siege Camp**: Allowing us to continue working on this project and featuring us on Foxhole's website. 🧡
+- **Romboter**: Actively helping our community grow and giving some great tips about Foxhole's data in the early days.
+- **[22-ACR] Justin**: Exporting images for all the structures from the game. Seriously, amazing work.
 
-## Potential Future Features 
-***Note:** These are things we might add in the future.*
-
-- **Facility Image Export:** Save an image of your facility locally.
-- **Statistics CSV Export:** Save your Facility stats to a spreadsheet.
+## Community Appreciation
+The future for the planner is incredibly promising. Thank you to everyone who's been giving suggestions, sharing plans, and actively been a part of this journey with us. We've had an overwhelming amount of positive feedback and look forward to our future together. We've loved hearing from everyone. 🧡
 
 ## Run Locally
 

@@ -240,7 +240,6 @@ function iterateStructures(dirPath) {
                                     'hideInList': structureData.hideInList,
                                     'baseGarrisonRadius': structureData.baseGarrisonRadius,
                                     'tier': structureData.tier,
-                                    'tierUpgrade': structureData.tierUpgrade,
                                     'width': structureData.width,
                                     'length': structureData.length,
                                     'range': structureData.range,
