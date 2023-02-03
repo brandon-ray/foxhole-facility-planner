@@ -997,7 +997,7 @@ input[type=number].btn-small {
 }
 
 .production-list > .select-production > .production-enabled {
-    color: black;
+    color: #d50101;
     position: absolute;
     bottom: 0;
     right: 8px;

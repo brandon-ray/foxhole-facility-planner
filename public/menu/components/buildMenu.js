@@ -573,17 +573,24 @@ Vue.component('app-menu-building-selected', {
                     </template>
                 </div>
             </div>
-            <div v-else-if="entity.building && entity.building.production && entity.building.production.length" class="settings-option-wrapper">
-                <div class="settings-title">
-                    Select Production
+            <template v-else-if="entity.building && entity.building.production && entity.building.production.length">
+                <div v-if="game.settings.showParentProductionList && entity.building?.parent?.production" class="settings-option-wrapper">
+                    <div class="settings-title">
+                        {{entity.building.parent?.name ?? entity.building.name}} Production
+                    </div>
+                    <div class="production-list">
+                        <app-menu-production-list-row v-for="production in entity.building.parent.production" :production="production" :isParent="true"></app-menu-production-list-row>
+                    </div>
                 </div>
-                <div class="production-list">
-                    <template v-if="game.settings.showParentProductionList">
-                        <app-menu-production-list-row v-for="production in entity.building?.parent?.production" :production="production" :isParent="true"></app-menu-production-list-row>
-                    </template>
-                    <app-menu-production-list-row v-for="production in entity.building.production" :production="production"></app-menu-production-list-row>
+                <div class="settings-option-wrapper">
+                    <div class="settings-title">
+                        {{entity.building.upgradeName ?? entity.building.name}} Production
+                    </div>
+                    <div class="production-list">
+                        <app-menu-production-list-row v-for="production in entity.building.production" :production="production"></app-menu-production-list-row>
+                    </div>
                 </div>
-            </div>
+            </template>
         </template>
     </div>
     `
@@ -1090,6 +1097,7 @@ Vue.component('app-menu-about', {
                 <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">C</div> Clone selection.
                 <hr>
                 <div class="keyboard-key">shift</div> + <div class="left-mouse-button"></div> Add structure to selection.<br>
+                <div class="keyboard-key">shift</div> + <div class="left-mouse-button"></div> Add bunker to selection.<br>
                 <div class="keyboard-key">shift</div> + <div class="left-mouse-button"></div> Snap structure to grid.
                 <hr>
                 <div class="keyboard-key"><i class="fa fa-angle-up" aria-hidden="true"></i></div> <div class="keyboard-key"><i class="fa fa-angle-down" aria-hidden="true"></i></div> Move selection up / down.<br>

@@ -2611,7 +2611,9 @@ try {
                             rotation: point.rotation
                         });
                     }
-                } else {
+                }
+
+                if (entity.building && !entityData.clone) {
                     if (typeof entity.productionScale === 'number') {
                         entityData.productionScale = entity.productionScale;
                     }
@@ -2619,6 +2621,29 @@ try {
                         entityData.baseProduction = entity.baseProduction;
                     }
                     entityData.selectedProduction = entity.selectedProduction;
+
+                    // TODO: Rename to baseUpgrades since we need socket / rotation data for addons anyway.
+                    /*
+                    if (entity.modifications) {
+                        for (const [parentKey, values] of Object.entries(entity.modifications)) {
+                            let modificationEntries;
+                            for (const [childKey, value] of Object.entries(values)) {
+                                if (value) {
+                                    if (!modificationEntries) {
+                                        modificationEntries = [];
+                                    }
+                                    modificationEntries.push(childKey);
+                                }
+                            }
+                            if (modificationEntries) {
+                                if (!entityData.modifications) {
+                                    entityData.modifications = {};
+                                }
+                                entityData.modifications[parentKey] = modificationEntries;
+                            }
+                        }
+                    }
+                    */
                 }
 
                 if (entity.sockets) {
@@ -2681,11 +2706,22 @@ try {
                     entity.sortOffset += entityData.sortOffset;
                 }
 
-                if (entity.building && typeof entityData.selectedProduction === 'number') {
-                    if (typeof entityData.productionScale === 'number') {
-                        entity.productionScale = entityData.productionScale;
+                if (entity.building) {
+                    if (typeof entityData.selectedProduction === 'number') {
+                        if (typeof entityData.productionScale === 'number') {
+                            entity.productionScale = entityData.productionScale;
+                        }
+                        entity.setProductionId(entityData.selectedProduction, entityData.baseProduction);
                     }
-                    entity.setProductionId(entityData.selectedProduction, entityData.baseProduction);
+                    /*
+                    if (entityData.modifications) {
+                        for (const [key, values] of Object.entries(entityData.modifications)) {
+                            for (const value of values) {
+                                entity.modifications[key][value] = true;
+                            }
+                        }
+                    }
+                    */
                 }
 
                 if (entity.hasHandle && entityData.railPoints) {
@@ -3835,10 +3871,10 @@ try {
             }
             clone.locked = entity.locked;
             clone.selectionArea.tint = clone.locked ? COLOR_RED : COLOR_WHITE;
-            let entityData = {};
+            let entityData = {
+                clone: true
+            };
             entity.onSave(entityData);
-            entityData.baseProduction = false;
-            entityData.selectedProduction = null;
             clone.onLoad(entityData);
             clone.afterLoad(entityData);
             game.selectEntity(clone);
