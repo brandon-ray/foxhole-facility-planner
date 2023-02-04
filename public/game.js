@@ -1053,12 +1053,15 @@ try {
                     }
                 }
             }
-            setTimeout(() => {
-                for (let i = 0; i < saveObject.entities.length; i++) {
-                    let entityData = saveObject.entities[i];
-                    entityData.createdEntity?.afterLoad(entityData, entityIdMap);
-                }
-            }, 1);
+
+            for (let i = 0; i < saveObject.entities.length; i++) {
+                let entityData = saveObject.entities[i];
+                entityData.createdEntity?.afterLoad(entityData, entityIdMap);
+            }
+
+            if (!isAutoLoad) {
+                game.updateSave();
+            }
 
             if (isSelection) {
                 let centerPos = game.getEntitiesCenter(selectedEntities, isSelection);
@@ -1072,10 +1075,6 @@ try {
                 game.statisticsMenuComponent?.refresh();
             } else if (!ignoreConfirmation) {
                 game.zoomToEntitiesCenter();
-            }
-
-            if (!isAutoLoad) {
-                game.updateSave();
             }
         }, 1);
     };

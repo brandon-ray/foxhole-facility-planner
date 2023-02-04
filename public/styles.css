@@ -1464,11 +1464,17 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
     cursor: pointer;
 }
 
-.settings-option-wrapper button.text-button:hover {
+.settings-option-wrapper button.text-button:not(:disabled):hover {
     background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
     font-size: 1.35em;
     box-shadow: 0 0 5px #000;
     text-decoration: none;
+}
+
+.settings-option-wrapper button.text-button:disabled {
+    background: linear-gradient(rgb(19, 19, 19), rgb(15, 15, 15));
+    color: #7d7d7d;
+    cursor: default;
 }
 
 .settings-option-wrapper textarea {

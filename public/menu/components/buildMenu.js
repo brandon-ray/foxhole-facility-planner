@@ -1021,10 +1021,6 @@ Vue.component('app-menu-save-load', {
                 if (typeof saveObject === 'string') {
                     saveObject = JSON.parse(saveObject);
                 }
-                if (saveObject.name && !this.importAsSelection) {
-                    game.projectName = saveObject.name;
-                    game.appComponent.$forceUpdate();
-                }
                 game.loadSave(saveObject, this.importAsSelection);
                 this.$forceUpdate();
             } catch (e) {
@@ -1061,10 +1057,10 @@ Vue.component('app-menu-save-load', {
                 <input class="app-input" type="text" v-model="game.projectName" @change="updateName()">
             </label>
             <div class="text-center">
-                <button class="app-btn app-btn-primary load-button" type="button" v-on:click="openFileBrowser()" @mouseenter="bme()">
+                <button class="app-btn app-btn-primary load-button" type="button" @click="openFileBrowser()" @mouseenter="bme()">
                     <i class="fa fa-upload"></i> Load
                 </button>
-                <button class="app-btn app-btn-primary save-button" type="button" v-on:click="game.downloadSave()" @mouseenter="bme()">
+                <button class="app-btn app-btn-primary save-button" type="button" @click="game.downloadSave()" @mouseenter="bme()">
                     <i class="fa fa-save"></i> Save
                 </button>
             </div>
@@ -1072,10 +1068,10 @@ Vue.component('app-menu-save-load', {
         <div class="settings-option-wrapper">
             <div class="settings-title">Selection Options</div>
             <div class="text-button-wrapper">
-                <button class="text-button" type="button" v-on:click="openFileBrowser(true)" @mouseenter="bme()">
+                <button class="text-button" type="button" @click="openFileBrowser(true)" @mouseenter="bme()">
                     <i class="fa fa-upload"></i> Import Selection
                 </button>
-                <button v-if="game.getSelectedEntities().length > 1" class="text-button" type="button" v-on:click="game.downloadSave(true)" @mouseenter="bme()">
+                <button v-if="game.getSelectedEntities().length > 1" class="text-button" type="button" @click="game.downloadSave(true)" @mouseenter="bme()">
                     <i class="fa fa-save"></i> Export Selection
                 </button>
             </div>
