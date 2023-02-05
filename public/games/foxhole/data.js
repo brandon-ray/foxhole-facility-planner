@@ -65,6 +65,16 @@ const foxholeData = {
 			"description": "A facility that is capable to build Black Bolt, Longrider, Holdout, Rockhold and Roadhouse and their necessary manufacturing materials. 4 independent power systems allow facility to be functional 7/24.",
 			"author": "EG0611"
 		},
+		"frontline_sandbag_factory": {
+			"name": "Frontline Sandbag Factory",
+			"description": "Small one man Facility with Low Gsupps cost of 432 for 24h when the lvl 3 Encampment is reached.",
+			"author": "Oberst_Den"
+		},
+		"small_munition_factory": {
+			"name": "Small Munition Factory",
+			"description": "Simple, easy to maintain frontline sandbag factory. Heavily based off of Small Munition Factory by Oberst_Den",
+			"author": "runningpeanuts"
+		},
 		"compact_coal_liquefaction": {
 			"name": "Compact Coal Liquefaction",
 			"description": "Produce coal with the power of coal! You can easily power this setup with a coal power station and an extra water pump for \"automatic\" coal. The coal to coal conversion factor is of ≃2.6. Taking into account power the multiplier is of ≃2.286",
