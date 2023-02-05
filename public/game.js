@@ -831,6 +831,8 @@ try {
             } catch(e) {
                 console.error('Failed to parse save.');
             }
+        } else {
+            game.updateHistory();
         }
     });
 
@@ -992,6 +994,7 @@ try {
                 saveObject.entities.push(entityData);
             }
         }
+        saveObject.entities.sort((a, b) => a.id - b.id);
         return saveObject;
     }
 
@@ -1018,7 +1021,7 @@ try {
                 }, true);
                 return;
             } else {
-                game.removeEntities();
+                game.removeEntities(true);
             }
             game.projectName = saveObject.name || 'Unnamed Project';
             game.setFaction(saveObject.faction, true);
@@ -1059,8 +1062,13 @@ try {
                 entityData.createdEntity?.afterLoad(entityData, entityIdMap);
             }
 
-            if (!isAutoLoad) {
-                game.updateSave();
+            if (!isSelection) {
+                const saveString = JSON.stringify(game.getSaveData());
+                if (!isAutoLoad) {
+                    game.updateSave(saveString);
+                } else {
+                    game.updateHistory(saveString);
+                }
             }
 
             if (isSelection) {
@@ -1077,16 +1085,6 @@ try {
                 game.zoomToEntitiesCenter();
             }
         }, 1);
-    };
-
-    game.updateSave = function(saveString = JSON.stringify(game.getSaveData())) {
-        try {
-            if (window.localStorage && saveString) {
-                window.localStorage.setItem('save', saveString);
-            }
-        } catch(e) {
-            console.error('Failed to update save.');
-        }
     };
 
     game.getEntitiesCenter = function(ents, isSelection) {
@@ -3952,7 +3950,7 @@ try {
         }
     }
 
-    game.removeEntities = function() {
+    game.removeEntities = function(isLoading) {
         if (entities.length) {
             game.deselectEntities();
             game.setPickupEntities(false);
@@ -3963,7 +3961,9 @@ try {
             entities = [];
             _entityIds = 0;
             entityMap = {};
-            game.saveStateChanged = true;
+            if (!isLoading) {
+                game.saveStateChanged = true;
+            }
             if (game.statisticsMenuComponent) {
                 game.statisticsMenuComponent.refresh();
             }
@@ -3993,10 +3993,32 @@ try {
         return array;
     }
 
+    game.updateSave = function(saveString = JSON.stringify(game.getSaveData())) {
+        try {
+            if (window.localStorage && saveString) {
+                window.localStorage.setItem('save', saveString);
+            }
+            game.updateHistory(saveString);
+        } catch(e) {
+            console.error('Failed to update save.');
+        }
+    };
+
+    game.updateHistory = function(saveString = JSON.stringify(game.getSaveData())) {
+        if (game.constructionHistory[game.constructionHistoryPointer] !== saveString) {
+            game.constructionHistory.length = game.constructionHistoryPointer + 1;
+            game.constructionHistory.push(saveString);
+            if (game.constructionHistory.length > game.settings.historySize) {
+                game.constructionHistory.shift();
+            }
+            game.constructionHistoryPointer = game.constructionHistory.length - 1;
+        }
+    };
+
     game.clearHistory = function() {
         game.constructionHistoryPointer = 0;
-        game.constructionHistory = [null];
-    }
+        game.constructionHistory = [JSON.stringify(game.getSaveData())];
+    };
     game.clearHistory();
 
     // TODO: History should be actions, create, modify, remove.
@@ -4011,15 +4033,15 @@ try {
                 game.removeEntities();
             }
         }
-    }
+    };
 
     game.undo = function() {
         game.traverseHistory(-1);
-    }
+    };
 
     game.redo = function() {
         game.traverseHistory(1);
-    }
+    };
 
     const FPSMIN = 30;
     let fpsCheck = null;
@@ -4049,20 +4071,6 @@ try {
         background.scale.set(camera.zoom);
         background.tilePosition.x = -camera.x / camera.zoom;
         background.tilePosition.y = -camera.y / camera.zoom;
-
-        if (game.saveStateChanged && game.settings.enableHistory && (entities.length === 0 || selectedEntities.length) && !pickupSelectedEntities && !selectedHandlePoint && !selectionRotation) {
-            game.saveStateChanged = false;
-            const saveData = JSON.stringify(game.getSaveData());
-            game.updateSave(saveData);
-            if (game.constructionHistory[game.constructionHistory.length - 1] !== saveData) {
-                game.constructionHistory.length = game.constructionHistoryPointer + 1;
-                game.constructionHistory.push(saveData);
-                if (game.constructionHistory.length > game.settings.historySize) {
-                    game.constructionHistory.shift();
-                }
-                game.constructionHistoryPointer = game.constructionHistory.length - 1;
-            }
-        }
 
         /*
         if (game.settings.quality === 'auto') {
@@ -4587,6 +4595,11 @@ try {
             } catch (e) {
                 console.error('Sound error 2:', e);
             }
+        }
+
+        if (game.saveStateChanged && game.settings.enableHistory && !pickupSelectedEntities && !selectedHandlePoint && !selectionRotation) {
+            game.saveStateChanged = false;
+            game.updateSave();
         }
     }
 
