@@ -205,6 +205,7 @@ try {
         ranges: {
             crane: false,
             radio: false,
+            resourceField: false,
             killbox: false,
             killboxMG: false,
             killboxAT: false,
@@ -1861,7 +1862,9 @@ try {
         entity.setSelectionSize = function(width, height, color = COLOR_ORANGE) {
             entity.selectionArea.clear();
             entity.selectionArea.lineStyle(SELECTION_BORDER_WIDTH, color);
-            if (building?.hitArea && (game.settings.enableDebug || building.hitArea?.length === 1)) {
+            if (building?.radius) {
+                entity.selectionArea.drawCircle(0, 0, building.radius * METER_PIXEL_SIZE);
+            } else if (building?.hitArea && (game.settings.enableDebug || building.hitArea?.length === 1)) {
                 if (game.settings.enableDebug) {
                     for (const poly of building.hitArea) {
                         entity.selectionArea.drawPolygon(new PIXI.Polygon(poly.shape));
@@ -3172,9 +3175,13 @@ try {
             if (ignoreMouse || immovable) {
                 return !immovable;
             }
-            if (entity.type === 'shape' && entity.subtype === 'circle') {
+            if (entity.building?.radius || (entity.type === 'shape' && entity.subtype === 'circle')) {
                 const centerDist = Math.distanceBetween(entity, { x: gmx, y: gmy });
-                if ((centerDist < ((entity.sprite.width/2) + boundsPadding)) && (!entity.shapeStyle?.border || (centerDist > (((entity.sprite.width/2) - entity.shapeStyle?.lineWidth) - boundsPadding)))) {
+                if (entity.building?.radius) {
+                    if (centerDist < (entity.building.radius * METER_PIXEL_SIZE)) {
+                        return true;
+                    }
+                } else if ((centerDist < ((entity.sprite.width/2) + boundsPadding)) && (!entity.shapeStyle?.border || (centerDist > (((entity.sprite.width/2) - entity.shapeStyle?.lineWidth) - boundsPadding)))) {
                     return true;
                 }
             } else {

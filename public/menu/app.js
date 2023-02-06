@@ -85,6 +85,10 @@ if (isMobile && !isPhoneApp) {
                                 <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.radio }" @click="toggleProjectSetting('ranges', 'radio')"></button>
                                 Radio Ranges
                             </label>
+                            <label class="btn-checkbox-wrapper d-block">
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.resourceField }" @click="toggleProjectSetting('ranges', 'resourceField')"></button>
+                                Resource Field Ranges
+                            </label>
                         </div>
                         <div class="col">
                             <label class="btn-checkbox-wrapper d-block">

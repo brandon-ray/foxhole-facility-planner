@@ -1387,6 +1387,7 @@ const foxholeData = {
 			"category": "vehicles",
 			"categoryOrder": 5,
 			"faction": "c",
+			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/BusIcon.webp",
 			"texture": "game/Textures/Vehicles/busc.webp",
 			"techId": "unlockbus"
@@ -1398,6 +1399,7 @@ const foxholeData = {
 			"category": "vehicles",
 			"categoryOrder": 6,
 			"faction": "w",
+			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/BusWarIcon.webp",
 			"texture": "game/Textures/Vehicles/busw.webp"
 		},
@@ -1882,6 +1884,7 @@ const foxholeData = {
 			"description": "A specialized vehicle designed by the Basset Motor Society used in the construction of large structures.",
 			"category": "vehicles",
 			"categoryOrder": 9,
+			"sortLayer": "vehicle",
 			"hitArea": [
 				{
 					"shape": [ -106.56,19.52,-121.28,43.84,-121.28,20.16 ]
@@ -1923,6 +1926,7 @@ const foxholeData = {
 				"min": null,
 				"max": null
 			},
+			"sortLayer": "vehicle",
 			"hitArea": [
 				{
 					"shape": [ -26.56,77.76,-61.76,44.48,-26.56,45.12 ]
@@ -2213,6 +2217,7 @@ const foxholeData = {
 			"description": "A heavy duty shipping transport truck designed by Bassett Motor Society. It’s built for hauling the heaviest of equipment over long distances with ease. ",
 			"category": "vehicles",
 			"categoryOrder": 7,
+			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/FlatbedTruckVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/flatbedtruck.webp"
 		},
@@ -3998,6 +4003,7 @@ const foxholeData = {
 			"description": "The Scrap Hauler, designed by the Bassett Motor Society is a heavy-duty piece of machinery designed to reduce scrap metal and other materials into usable, raw resources. Scrap Haulers are often used to extract battlefield resources following skirmishes.",
 			"category": "vehicles",
 			"categoryOrder": 8,
+			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/Harvester.webp",
 			"texture": "game/Textures/Vehicles/harvester.webp",
 			"techId": "unlockharvester"
@@ -6663,6 +6669,7 @@ const foxholeData = {
 			"category": "vehicles",
 			"categoryOrder": 3,
 			"faction": "c",
+			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/OilTankerIcon.webp",
 			"texture": "game/Textures/Vehicles/oiltankerc.webp"
 		},
@@ -6673,6 +6680,7 @@ const foxholeData = {
 			"category": "vehicles",
 			"categoryOrder": 4,
 			"faction": "w",
+			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/OilTankerWarIcon.webp",
 			"texture": "game/Textures/Vehicles/oiltankerw.webp"
 		},
@@ -6949,7 +6957,7 @@ const foxholeData = {
 			"name": "Player (Colonial)",
 			"description": "The Colonials are described as a faction of ingenuity and practicality. They are sometimes referred to as \"The Colonial Legion\" or \"Little Green Men\".",
 			"category": "misc",
-			"categoryOrder": 20,
+			"categoryOrder": 50,
 			"faction": "c",
 			"sortLayer": "player",
 			"icon": "game/Textures/UI/ItemIcons/Uniforms/SoldierUniformCIcon.webp",
@@ -6959,7 +6967,7 @@ const foxholeData = {
 			"name": "Player (Warden)",
 			"description": "The Wardens are described to be a nation of honor and tradition. They are the native inhabitants of the region where the game takes place.",
 			"category": "misc",
-			"categoryOrder": 21,
+			"categoryOrder": 51,
 			"faction": "w",
 			"sortLayer": "player",
 			"icon": "game/Textures/UI/ItemIcons/Uniforms/SoldierUniformWIcon.webp",
@@ -7700,7 +7708,7 @@ const foxholeData = {
 		"relicbase1": {
 			"name": "Relic Base",
 			"codeName": "RelicBase1",
-			"description": "A world base that players can respawn and rearm at. It can be destroyed and rebuilt to be claimed by a faction. It has garrison upgrades to supply local structures with garrison supplies.  This structure cannot be placed by a player, and is entirely for your reference.",
+			"description": "A world base that players can respawn and rearm at. It can be destroyed and rebuilt to be claimed by a faction. It has garrison upgrades to supply local structures with garrison supplies. This structure cannot be placed by a player, and is entirely for your reference.",
 			"category": "misc",
 			"categoryOrder": 6,
 			"baseGarrisonRadius": 150,
@@ -7766,6 +7774,47 @@ const foxholeData = {
 				"cloth": 50
 			},
 			"repairCost": 50
+		},
+		"resourcefield": {
+			"name": "Resource Field",
+			"upgradeName": "Scrap Field",
+			"description": "This is a resource field. This can be mined by a player or with a stationary harvester. This structure cannot be placed by a player, and is entirely for your reference.",
+			"category": "misc",
+			"categoryOrder": 20,
+			"radius": 15,
+			"range": {
+				"type": "resourceField",
+				"min": 15,
+				"max": 27
+			},
+			"icon": "game/Textures/UI/ItemIcons/SalvageIcon.webp",
+			"texture": "game/Textures/Structures/scrap_field.webp",
+			"garrisonSupplyMultiplier": 0,
+			"maxHealth": 2147483647,
+			"upgrades": {
+				"resourcefield": {
+					"name": "Scrap Field",
+					"reference": "resourcefield"
+				},
+				"component": {
+					"name": "Component Field",
+					"baseIcon": "game/Textures/UI/ItemIcons/ComponentsIcon.webp",
+					"icon": "game/Textures/UI/ItemIcons/ComponentsIcon.webp",
+					"texture": "game/Textures/Structures/component_field.webp"
+				},
+				"coal": {
+					"name": "Coal Field",
+					"baseIcon": "game/Textures/UI/ItemIcons/CoalIcon.webp",
+					"icon": "game/Textures/UI/ItemIcons/CoalIcon.webp",
+					"texture": "game/Textures/Structures/coal_field.webp"
+				},
+				"sulfur": {
+					"name": "Sulfur Field",
+					"baseIcon": "game/Textures/UI/ItemIcons/SulfurIcon.webp",
+					"icon": "game/Textures/UI/ItemIcons/SulfurIcon.webp",
+					"texture": "game/Textures/Structures/sulfur_field.webp"
+				}
+			}
 		},
 		"riflepillbox": {
 			"name": "Rifle Pillbox",
@@ -9265,6 +9314,7 @@ const foxholeData = {
 			"category": "vehicles",
 			"categoryOrder": 1,
 			"faction": "c",
+			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/TruckVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/truckc.webp"
 		},
@@ -9275,6 +9325,7 @@ const foxholeData = {
 			"category": "vehicles",
 			"categoryOrder": 2,
 			"faction": "w",
+			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/TruckWarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/truckw.webp"
 		},
