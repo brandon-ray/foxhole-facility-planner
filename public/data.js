@@ -47,7 +47,7 @@ const game_asset_list = {
                             description: 'A Small Garrison permanently connects this base to nearby defensive structures. In addition, structure decay for surrounding structures can be prevented when Garrison Supplies exist in the stockpile. The rate of Garrison Supplies consumption is 2 per hour per structure once decay has begun.',
                             icon: assetDir('game/Textures/UI/Menus/IconFacilitiesSmallGarrison.webp'),
                             range: {
-                                type: 'garrisonDecay',
+                                type: 'preventDecay',
                                 max: building.baseGarrisonRadius
                             }
                         },
@@ -56,7 +56,7 @@ const game_asset_list = {
                             description: 'A Large Garrison permanently connects this base to nearby defensive structures. The cost of Garrison Supplies for preventing structure decay is further reduced. The rate of Garrison Supplies consumption is 1 per hour per structure once decay has begun.',
                             icon: assetDir('game/Textures/UI/Menus/IconFacilitiesLargeGarrison.webp'),
                             range: {
-                                type: 'garrisonReduceDecay',
+                                type: 'preventDecay',
                                 max: building.baseGarrisonRadius
                             }
                         }

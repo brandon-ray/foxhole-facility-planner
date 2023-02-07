@@ -3878,11 +3878,7 @@ const foxholeData = {
 			"category": "factories",
 			"categoryOrder": 80,
 			"color": 1052688,
-			"hitArea": [
-				{
-					"shape": [ -11.52,-42.24,12.16,-42.24,32,0,12.16,41.6,-11.52,41.6,-32,-0.64 ]
-				}
-			],
+			"radius": 1.25,
 			"icon": "game/Textures/UI/StructureIcons/OilSiloIcon.webp",
 			"texture": "game/Textures/Structures/fuel_silo.webp",
 			"textureIcon": {
@@ -5103,35 +5099,13 @@ const foxholeData = {
 			"category": "factories",
 			"categoryOrder": 40,
 			"color": 1052688,
+			"radius": 2,
 			"range": {
 				"type": "preventDecay",
 				"max": 40,
 				"overlap": 65
 			},
 			"sortLayer": "range",
-			"hitArea": [
-				{
-					"shape": [ 61.12,13.76,49.6,13.76,48.32,-16.32,61.12,-15.04 ]
-				},
-				{
-					"shape": [ -48.96,-13.76,-49.6,15.04,-61.12,14.4,-60.48,-13.76 ]
-				},
-				{
-					"shape": [ 16.32,-61.12,16.96,-48.96,-16.32,-48.32,-16.32,-60.48 ]
-				},
-				{
-					"shape": [ -16.32,48.96,16.32,48.96,16.96,60.48,-15.68,61.12 ]
-				},
-				{
-					"shape": [ 36.16,36.16,16.32,48.96,-16.32,48.96,-36.8,36.16,16.96,-48.96,48.32,-16.32,49.6,13.76 ]
-				},
-				{
-					"shape": [ -48.96,-13.76,-37.44,-34.88,-16.32,-48.32,16.96,-48.96,-36.8,36.16,-49.6,15.04 ]
-				},
-				{
-					"shape": [ 48.32,-16.32,16.96,-48.96,37.44,-36.16 ]
-				}
-			],
 			"icon": "game/Textures/UI/StructureIcons/TunnelNetworkStructureIcon.webp",
 			"texture": "game/Textures/Structures/maintenance_tunnel.webp",
 			"textureIcon": {

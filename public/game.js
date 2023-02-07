@@ -206,6 +206,7 @@ try {
             crane: false,
             radio: false,
             resourceField: false,
+            preventDecay: false,
             killbox: false,
             killboxMG: false,
             killboxAT: false,
@@ -1883,8 +1884,8 @@ try {
             }
             if (entity.rangeSprite) {
                 const showWhenSelected = game.projectSettings.showRangeWhenSelected && entity.selected;
-                const showRangeType = entity.building?.range?.type && game.projectSettings.ranges[entity.building.range.type];
-                entity.rangeSprite.visible = showWhenSelected || showRangeType;
+                const rangeType = entity.building?.range?.type || (entity.baseUpgrades?.base && entity.building.baseUpgrades.base[entity.baseUpgrades.base].range?.type);
+                entity.rangeSprite.visible = showWhenSelected || (rangeType && game.projectSettings.ranges[rangeType]);
             }
         }
 

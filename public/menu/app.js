@@ -78,16 +78,16 @@ if (isMobile && !isPhoneApp) {
                                 Selection Ranges
                             </label>
                             <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.crane }" @click="toggleProjectSetting('ranges', 'crane')"></button>
-                                Crane Ranges
-                            </label>
-                            <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.radio }" @click="toggleProjectSetting('ranges', 'radio')"></button>
-                                Radio Ranges
-                            </label>
-                            <label class="btn-checkbox-wrapper d-block">
                                 <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.resourceField }" @click="toggleProjectSetting('ranges', 'resourceField')"></button>
                                 Resource Field Ranges
+                            </label>
+                            <label class="btn-checkbox-wrapper d-block">
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.preventDecay }" @click="toggleProjectSetting('ranges', 'preventDecay')"></button>
+                                Garrison Supply Ranges
+                            </label>
+                            <label class="btn-checkbox-wrapper d-block">
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.crane }" @click="toggleProjectSetting('ranges', 'crane')"></button>
+                                Crane Ranges
                             </label>
                         </div>
                         <div class="col">
@@ -106,6 +106,10 @@ if (isMobile && !isPhoneApp) {
                             <label class="btn-checkbox-wrapper d-block">
                                 <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.killboxArty }" @click="toggleProjectSetting('ranges', 'killboxArty')"></button>
                                 Artillery Ranges
+                            </label>
+                            <label class="btn-checkbox-wrapper d-block">
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.radio }" @click="toggleProjectSetting('ranges', 'radio')"></button>
+                                Radio Ranges
                             </label>
                         </div>
                     </div>
