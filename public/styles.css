@@ -513,6 +513,71 @@ input[type=number].btn-small {
     background: #222;
 }
 
+.construction-search {
+    display: block;
+    height: 38px;
+    border: 1px solid black;
+    position: relative;
+    margin: 0;
+}
+
+.construction-search:focus-within {
+    border-color: white;
+}
+
+.construction-search > i {
+    width: 35px;
+    background-color: #121212;
+    line-height: 36px;
+    font-size: 1.25em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+    border-right: 1px solid black;
+}
+
+.construction-search .input-wrapper {
+    height: 100%;
+    position: absolute;
+    inset: 0;
+    left: 36px;
+}
+
+.construction-search input {
+    width: 100%;
+    height: 100%;
+    background: #090909;
+    border: none;
+    border-radius: 0;
+    color: white;
+    padding: 0 10px;
+    outline: none !important;
+}
+
+.construction-search .input-wrapper > i {
+    display: none;
+    width: 35px;
+    /* line-height: 36px; */
+    line-height: 32px;
+    /* font-size: 1.25em; */
+    font-size: 1.15em;
+    position: absolute;
+    top: 0;
+    right: 0;
+    text-align: center;
+    color: gray;
+    cursor: pointer;
+}
+
+.construction-search .input-wrapper > i.active:hover {
+    color: white;
+}
+
+.construction-search .input-wrapper > i.active {
+    display: block;
+}
+
 .construction-options-wrapper {
     background: black;
     border: 1px solid black;

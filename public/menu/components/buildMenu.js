@@ -60,7 +60,7 @@ Vue.component('app-game-sidebar', {
             this.bmc();
             game.setFaction(game.settings.selectedFaction !== faction ? faction : null);
         },
-        showHoverMenu: function(data) {
+        showHoverMenu: function(data = null) {
             this.hoverData = data;
         }
     },
@@ -71,7 +71,7 @@ Vue.component('app-game-sidebar', {
             <img class="sidebar-logo" src="/assets/logo_transparent.webp">
             <button class="warden-button" :class="{ selected: game.settings.selectedFaction == 'w' }" title="Warden Faction" @click="selectFaction('w')" @mouseenter="bme()"></button>
         </div>
-        <div id="sidebar-body" :class="currentMenu ? currentMenu.key + '-page' : 'construction-page'">
+        <div id="sidebar-body" :class="currentMenu ? currentMenu.key + '-page' : 'construction-page'" @mouseenter="game.sidebarMenuComponent?.showHoverMenu()" @mouseleave="game.sidebarMenuComponent?.showHoverMenu()">
             <div v-if="!currentMenu" class="menu-body">
                 <app-menu-construction-list></app-menu-construction-list>
             </div>
@@ -641,8 +641,26 @@ Vue.component('app-menu-construction-list', {
     data: function() {
         return {
             buildings: window.objectData.buildings_list,
-            modeOptions: null
+            modeOptions: null,
+            searchQuery: null
         };
+    },
+    computed: {
+        getSearchResults() {
+            let results = [];
+            if (this.searchQuery) {
+                for (const category of Object.values(window.objectData.categories)) {
+                    if (game.settings.enableExperimental || !category.experimental) {
+                        for (const building of category.buildings) {
+                            if (building.name.toLowerCase().includes(this.searchQuery.toLowerCase())) {
+                                results.push(building);
+                            }
+                        }
+                    }
+                }
+            }
+            return results;
+        }
     },
     mounted: function() {
         game.constructionMenuComponent = this;
@@ -753,7 +771,18 @@ Vue.component('app-menu-construction-list', {
             </div>
         </div>
         <div class="menu-page">
-            <template v-if="game.selectedBuildingCategory !== 'all'">
+            <label class="construction-search">
+                <i class="fa fa-search" aria-hidden="true"></i>
+                <div class="input-wrapper">
+                    <input type="text" v-model="searchQuery" placeholder="Search" @input="refresh()">
+                    <i class="fa fa-close" :class="{'active': searchQuery}" aria-hidden="true" @click="searchQuery = null"></i>
+                </div>
+            </label>
+            <template v-if="searchQuery">
+                <p v-if="!getSearchResults.length" class="px-2 py-1">Sorry, couldn't find anything with that name.</p>
+                <app-game-building-list-icon v-for="building in getSearchResults" :building="building" :search="searchQuery"/>
+            </template>
+            <template v-else-if="game.selectedBuildingCategory !== 'all'">
                 <app-game-building-list-icon v-for="building in window.objectData.categories[game.selectedBuildingCategory].buildings" :building="building"/>
             </template>
             <template v-else>
@@ -763,7 +792,7 @@ Vue.component('app-menu-construction-list', {
                             {{category.name}}{{category.experimental && ' (Preview)'}}<i class="fa float-right" :class="{'fa-angle-down': category.visible, 'fa-angle-right': !category.visible}" style="margin-top: 2px;" aria-hidden="true"></i>
                         </div>
                         <div v-if="(game.settings.enableExperimental || !category.experimental) && (!game.settings.showCollapsibleBuildingList || category.visible)">
-                            <app-game-building-list-icon v-for="building in category.buildings" :test="this" :building="building"/>
+                            <app-game-building-list-icon v-for="building in category.buildings" :building="building"/>
                         </div>
                     </template>
                 </template>
@@ -854,7 +883,7 @@ Vue.component('app-game-shape-options', {
 });
 
 Vue.component('app-game-building-list-icon', {
-    props: ['building'],
+    props: ['building', 'search'],
     methods: {
         buildBuilding: function(building) {
             this.bmc();
@@ -868,10 +897,10 @@ Vue.component('app-game-building-list-icon', {
     template: html`
     <div v-if="(!building.hideInList || game.settings.enableDebug) &&
         (!building.experimental || game.settings.enableExperimental) &&
-        (!building.parent || building.parentKey || game.settings.showUpgradesAsBuildings) &&
+        (search || ((!building.parent || building.parentKey || game.settings.showUpgradesAsBuildings) &&
         ((!building.tier || (!game.settings.showSelectedTierOnly && (building.tier <= game.settings.selectedTier))) || building.tier === game.settings.selectedTier) &&
         ((!building.techId || !window.objectData.tech[building.techId]) || ((building.techId === 'unlockfacilitytier2' && game.settings.selectedTier >= 2) || (building.techId === 'unlockfacilitytier3' && game.settings.selectedTier >= 3))) &&
-        (!game.settings.selectedFaction || (!building.faction || building.faction === game.settings.selectedFaction))"
+        (!game.settings.selectedFaction || (!building.faction || building.faction === game.settings.selectedFaction))))"
         class="build-icon" :class="{'ignore-transform': building.preset}" :title="building.name" :style="{backgroundImage:'url(' + ((building.baseIcon || (building.category !== 'entrenchments' && building.parent && !building.parentKey && building.parent.icon) || building.icon) ?? '/assets/default_icon.webp') + ')'}"
         @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" @click="buildBuilding(building)">
         <div v-if="!building.baseIcon && !building.parentKey && building.parent?.icon && building.parent.icon !== building.icon" class="build-subicon" :title="building.parent.name" :style="{backgroundImage: 'url(' + ((building.category === 'entrenchments' && building.parent.icon) || building.icon) + ')'}"></div>
