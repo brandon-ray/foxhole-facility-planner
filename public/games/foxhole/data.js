@@ -65,6 +65,11 @@ const foxholeData = {
 			"description": "A facility that is capable to build Black Bolt, Longrider, Holdout, Rockhold and Roadhouse and their necessary manufacturing materials. 4 independent power systems allow facility to be functional 7/24.",
 			"author": "EG0611"
 		},
+		"t2_oil_field": {
+			"name": "T2 Oil Field",
+			"description": "Supply the whole back line with petrol! Basic Oil field at tier 2 facilities with 6 oil reformer and 1 cracking unit, never waste a drop of oil anymore.",
+			"author": "[5th] Menxs"
+		},
 		"small_munition_factory": {
 			"name": "Small Munition Factory",
 			"description": "Small one man Facility with Low Gsupps cost of 432 for 24h when the lvl 3 Encampment is reached.",
