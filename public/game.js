@@ -259,6 +259,7 @@ try {
         foundation: 1000,
         road: 10000,
         rail: 15000,
+        resource: 17500,
         pipe: 20000,
         unspecified: 50000,
         upgrade: 75000,
@@ -1196,6 +1197,9 @@ try {
                 }
                 selectedEntity.onDeselect();
             }
+            if (remove) {
+                game.saveStateChanged = true;
+            }
             selectedEntities = [];
             if (!noMenuUpdate) {
                 game.updateSelectedBuildingMenu();
@@ -1886,6 +1890,7 @@ try {
                 const showWhenSelected = game.projectSettings.showRangeWhenSelected && entity.selected;
                 const rangeType = entity.building?.range?.type || (entity.baseUpgrades?.base && entity.building.baseUpgrades.base[entity.baseUpgrades.base].range?.type);
                 entity.rangeSprite.visible = showWhenSelected || (rangeType && game.projectSettings.ranges[rangeType]);
+                entity.updateRangeMask();
             }
         }
 
@@ -2017,6 +2022,128 @@ try {
                         entity.rangeSprite.drawCircle(0, 0, rangeData.overlap * METER_PIXEL_SIZE);
                     }
                     entity.addChild(entity.rangeSprite);
+                }
+            }
+
+            entity.updateRangeMask = function() {
+                if (game.settings.enableExperimental && entity.building.range?.lineOfSight && entity.rangeSprite?.visible) {
+                    function rayCast(polygons, rayStart, rayEnd) {
+                        let closestIntersection = null;
+    
+                        for (let polygon of polygons) {
+                            for (let i = 0; i < polygon.length; i++) {
+                                let p1 = polygon[i];
+                                let p2 = polygon[(i + 1) % polygon.length];
+    
+                                let intersection = getLineIntersection(p1, p2, rayStart, rayEnd);
+                                if (!intersection) continue;
+    
+                                if (!closestIntersection || Math.distanceBetween(rayStart, intersection) < Math.distanceBetween(rayStart, closestIntersection)) {
+                                    closestIntersection = intersection;
+                                }
+                            }
+                        }
+    
+                        return closestIntersection;
+                    }
+
+                    function getLineIntersection(p1, p2, p3, p4) {
+                        let denominator = (p4.y - p3.y) * (p2.x - p1.x) - (p4.x - p3.x) * (p2.y - p1.y);
+                        if (denominator == 0) return null;
+    
+                        let ua = ((p4.x - p3.x) * (p1.y - p3.y) - (p4.y - p3.y) * (p1.x - p3.x)) / denominator;
+                        let ub = ((p2.x - p1.x) * (p1.y - p3.y) - (p2.y - p1.y) * (p1.x - p3.x)) / denominator;
+    
+                        if (ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1) {
+                            return {
+                                x: p1.x + ua * (p2.x - p1.x),
+                                y: p1.y + ua * (p2.y - p1.y)
+                            };
+                        }
+    
+                        return null;
+                    }
+                    
+                    const polygons = [], entitySortLayer = game.constructionLayers[entity.sortLayer];
+                    for (const e2 of entities) {
+                        if (!e2.valid || e2 === entity || !e2.building || e2.bezier) {
+                            continue;
+                        }
+                        if (game.constructionLayers[e2.sortLayer] >= entitySortLayer && Math.distanceBetween(entity, e2) < 1200) {
+                            if (e2.building?.hitArea) {
+                                for (const poly of e2.building.hitArea) {
+                                    if (poly.shape) {
+                                        const shapePoints = [];
+                                        for (let i = 0; i < poly.shape.length; i += 2) {
+                                            shapePoints.push(entity.toLocal({
+                                                x: poly.shape[i],
+                                                y: poly.shape[i + 1]
+                                            }, e2));
+                                        }
+                                        polygons.push(shapePoints);
+                                    }
+                                }
+                            } else {
+                                const w = ((e2.building?.width * METER_PIXEL_SIZE) || e2.sprite.width) / 2;
+                                const h = ((e2.building?.length * METER_PIXEL_SIZE) || e2.sprite.height) / 2;
+                                polygons.push([
+                                    entity.toLocal({ x: -w, y: -h }, e2),
+                                    entity.toLocal({ x: w, y: -h }, e2),
+                                    entity.toLocal({ x: w, y: h }, e2),
+                                    entity.toLocal({ x: -w, y: h }, e2)
+                                ]);
+                            }
+                        }
+                    }
+                    
+                    const maxDist = (entity.building.range.max * 2) * METER_PIXEL_SIZE, hitPoints = [];
+
+                    hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, { x: -maxDist, y: -maxDist }) || { x: -maxDist, y: -maxDist });
+                    hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, { x: maxDist, y: -maxDist }) || { x: maxDist, y: -maxDist });
+                    hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, { x: maxDist, y: maxDist }) || { x: maxDist, y: maxDist });
+                    hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, { x: -maxDist, y: maxDist }) || { x: -maxDist, y: maxDist });
+    
+                    for (const poly of polygons) {
+                        for (const p of poly) {
+                            hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, p));
+                        }
+                    }
+
+                    for (const poly of polygons) {
+                        for (const p of poly) {
+                            let angle = Math.angleBetween({ x: 0, y: 0 }, p);
+                            let p1 = Math.extendPoint({ x: 0, y: 0 }, maxDist, angle - 0.001);
+                            let p2 = Math.extendPoint({ x: 0, y: 0 }, maxDist, angle + 0.001);
+                            hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, p1) || p1);
+                            hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, p2) || p2);
+                        }
+                    }
+
+                    hitPoints.sort((p1, p2) => {
+                        return Math.angleBetween({ x: 0, y: 0}, p1) - Math.angleBetween({ x: 0, y: 0}, p2);
+                    });
+
+                    entity.removeChild(entity.lineOfSightRange);
+                    if (ENABLE_DEBUG) {
+                        entity.lineOfSightRange = new PIXI.Container();
+                        for (const p of hitPoints) {
+                            let line = new PIXI.Graphics();
+                            line.lineStyle(2, COLOR_GREEN).moveTo(0, 0).lineTo(p.x, p.y);
+                            entity.lineOfSightRange.addChild(line);
+                        }
+                        entity.addChild(entity.lineOfSightRange);
+                    }
+    
+                    if (!entity.rangeSpriteMask) {
+                        entity.rangeSpriteMask = new PIXI.Graphics();
+                        entity.addChild(entity.rangeSpriteMask);
+                        entity.rangeSprite.mask = entity.rangeSpriteMask;
+                    }
+
+                    entity.rangeSpriteMask.clear();
+                    entity.rangeSpriteMask.beginFill(0xFF3300);
+                    entity.rangeSpriteMask.drawPolygon(new PIXI.Polygon(hitPoints));
+                    entity.rangeSpriteMask.endFill();
                 }
             }
 
@@ -2499,6 +2626,10 @@ try {
                         entity.currentTrack = game.getEntityById(entityData.currentTrackId);
                     }
                     entity.currentTrackT = entityData.currentTrackT;
+                }
+
+                if (entity.rangeSprite) {
+                    entity.updateRangeMask();
                 }
             }
 
@@ -4602,6 +4733,14 @@ try {
                 Howler.pos(listener_pos.x / 100000, 0, listener_pos.y / 100000);
             } catch (e) {
                 console.error('Sound error 2:', e);
+            }
+        }
+
+        if (game.settings.enableExperimental && (game.saveStateChanged || pickupSelectedEntities)) {
+            for (const entity of entities) {
+                if (entity.valid && entity.rangeSprite) {
+                    entity.updateRangeMask();
+                }
             }
         }
 
