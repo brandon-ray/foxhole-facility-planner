@@ -182,10 +182,10 @@ function iterateSocketData(data) {
     }
 }
 
-function iterateStructures(dirPath) {
+async function iterateStructures(dirPath) {
     dirPath = dirPath ?? `${foxholeDataDirectory}War/Content/Blueprints/`;
     let files = fs.readdirSync(dirPath);
-    files.forEach(file => {
+    for await (const file of files) {
         const filePath = path.join(dirPath, file);
         const fileStats = fs.statSync(filePath);
         if (fileStats.isFile() && path.extname(filePath) === '.json') {
@@ -196,7 +196,7 @@ function iterateStructures(dirPath) {
             let structureData;
             let baseData = {};
             let modificationsData = [];
-            uAsset.forEach(uProperty => {
+            for await (const uProperty of uAsset) {
                 switch(uProperty.Type) {
                     case 'BlueprintGeneratedClass':
                         className = uProperty.Name ?? className;
@@ -290,7 +290,7 @@ function iterateStructures(dirPath) {
                                     'upgrades': structureData.upgrades
                                 }
                                 if (structureData.texture) {
-                                    structureData.hitArea = structurePolygons[path.basename(structureData.texture, '.webp')];
+                                    structureData.hitArea = await getStructureHitArea(structureData);
                                 }
                                 iterateSocketData(structureData);
                                 initializeStructureItems(structure);
@@ -354,7 +354,7 @@ function iterateStructures(dirPath) {
                                         }
                                         iterateSocketData(modificationData);
                                         if (modificationData.texture) {
-                                            modificationData.hitArea = structurePolygons[path.basename(modificationData.texture, '.webp')];
+                                            modificationData.hitArea = await getStructureHitArea(modificationData);
                                         }
                                         if (modificationData.techId) {
                                             techList[modificationData.techId] = {};
@@ -384,11 +384,11 @@ function iterateStructures(dirPath) {
                         }
                         break;
                 }
-            });
+            }
         } else if (fileStats.isDirectory()) {
-            iterateStructures(filePath);
+            await iterateStructures(filePath);
         }
-    });
+    }
 }
 
 function iterateBaseAssets(uProperty, baseData) {
@@ -657,31 +657,29 @@ function findFile(directory, fileName) {
     return null;
 }
 
-async function updateData() {
-    const METER_PIXEL_SCALE = 1.5625; // 50 / 32
-    for (const [textureName, shapes] of Object.entries(structurePolygons)) {
-        let textureFile = `./public/games/foxhole/assets/game/Textures/Structures/${textureName}.webp`;
-        if (!fs.existsSync(textureFile)) {
-            textureFile = findFile('./public/games/foxhole/assets/game/Textures/', `${textureName}.webp`);
-        }
-        if (textureFile) {
-            const texture = await sharp(textureFile).metadata();
-            if (texture) {
-                let hitAreaPolygons = [];
-                for (let i = 0; i < shapes.length; i++) {
-                    const shape = shapes[i].shape;
-                    let adjustedShape = [], x = true;
-                    for (let i = 0; i < shape.length; i++) {
-                        adjustedShape.push((shape[i] - (x ? texture.width / 2 : texture.height / 2)) / METER_PIXEL_SCALE);
-                        x = !x;
-                    }
-                    hitAreaPolygons.push({ 'shape': `[ ${adjustedShape.join()} ]` });
+const METER_PIXEL_SCALE = 1.5625; // 50 / 32
+async function getStructureHitArea(structureData) {
+    const shapes = structurePolygons[path.basename(structureData.texture, '.webp')];
+    if (shapes) {
+        const texture = await sharp('./public/games/foxhole/assets/' + structureData.texture).metadata();
+        if (texture) {
+            let hitAreaPolygons = [];
+            for (let i = 0; i < shapes.length; i++) {
+                const shape = shapes[i].shape;
+                let adjustedShape = [];
+                for (let i = 0; i < shape.length; i += 2) {
+                    adjustedShape.push((shape[i] - ((structureData.textureOffset?.x ?? texture.width) / 2)) / METER_PIXEL_SCALE);
+                    adjustedShape.push((shape[i + 1] - ((structureData.textureOffset?.y ?? texture.height) / 2)) / METER_PIXEL_SCALE);
                 }
-                structurePolygons[textureName] = hitAreaPolygons;
+                hitAreaPolygons.push({ 'shape': `[ ${adjustedShape.join()} ]` });
             }
+            return hitAreaPolygons;
         }
     }
+    return undefined;
+}
 
+async function updateData() {
     // Switch IDs for CodeNames so the parser has an easier time identifying entries as their Foxhole counterpart.
     structureList = Object.keys(structureList).reduce((structures, id) => {
         let structure = structureList[id];
@@ -700,7 +698,7 @@ async function updateData() {
 
     iterateUpgradeCodeNames(`${foxholeDataDirectory}War/Content/Blueprints/`);
 
-    iterateStructures(`${foxholeDataDirectory}War/Content/Blueprints/`);
+    await iterateStructures(`${foxholeDataDirectory}War/Content/Blueprints/`);
 
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPVehicleDynamicData.json`, itemList, true);
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, itemList, true); // Check for items in the structure data... Yes, Material Pallet is stored here.
