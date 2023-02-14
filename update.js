@@ -163,7 +163,7 @@ function iterateUpgradeCodeNames(dirPath) {
     });
 }
 
-const socketDataKeys = ['id', 'name', 'type', 'texture', 'textureAlt', 'flow', 'cap', 'x', 'y', 'rotation', 'connectionLimit'];
+const socketDataKeys = ['id', 'name', 'type', 'texture', 'textureAlt', 'below', 'flow', 'cap', 'x', 'y', 'rotation', 'connectionLimit'];
 
 // TODO: sortUpdateData(keys, data, base)
 function iterateSocketData(data) {

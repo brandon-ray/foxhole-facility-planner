@@ -25,6 +25,7 @@ const COLOR_RANGES = {
 const COLOR_RANGE_BORDER = 0xED2323; // Red
 
 const DEFAULT_TEXT_STYLE = {
+    fontFamily: 'Jost',
     dropShadow: true,
     dropShadowAlpha: 0.25,
     dropShadowBlur: 6,
@@ -78,7 +79,6 @@ const game = {
         showFacilityName: true,
         styles: {
             label: {
-                fontFamily: 'Arial',
                 fontSize: 64,
                 fontStyle: 'normal',
                 fontWeight: 'normal',
@@ -475,7 +475,7 @@ try {
             }
         }
         for (const unionEntity of unionEntities) {
-            for (const entitySocket of unionEntity.sockets.children) {
+            for (const entitySocket of unionEntity.sockets) {
                 for (const entityId of Object.keys(entitySocket.connections)) {
                     const connectedEntity = game.getEntityById(entityId);
                     if (connectedEntity?.building?.canUnion) {
@@ -653,12 +653,30 @@ try {
                     case 46: // Delete
                         game.deselectEntities(true);
                         break;
+                    case 65: // A
+                        game.moveSelected(event.shiftKey ? -16 : -32, 0);
+                        break;
+                    case 68: // D
+                        game.moveSelected(event.shiftKey ? 16 : 32, 0);
+                        break;
+                    case 69: // E
+                        game.rotateSelected(Math.PI / (event.shiftKey ? 2 : 4));
+                        break;
                     case 76: // L
                         game.lockSelected();
                         break;
                     case 80: // P
                         game.projectSettings.showProductionIcons = !game.projectSettings.showProductionIcons;
                         game.updateEntityOverlays();
+                        break;
+                    case 81: // Q
+                        game.rotateSelected(-Math.PI / (event.shiftKey ? 2 : 4));
+                        break;
+                    case 83: // S
+                        game.moveSelected(0, event.shiftKey ? 16 : 32);
+                        break;
+                    case 87: // W
+                        game.moveSelected(0, event.shiftKey ? -16 : -32);
                         break;
                 }
             }
@@ -678,6 +696,8 @@ try {
     });
 
     function loadAssets() {
+        PIXI.Loader.shared.add('Jost', 'assets/fonts/jost-webfont.ttf');
+
         for (let key in asset_list) {
             PIXI.Loader.shared.add(key, 'assets/' + asset_list[key]);
         }
@@ -1895,7 +1915,7 @@ try {
         }
 
         if (type === 'text') {
-            entity.labelStyle = Object.assign({}, DEFAULT_TEXT_STYLE, game.settings.styles.label);
+            entity.labelStyle = Object.assign({}, game.settings.styles.label, DEFAULT_TEXT_STYLE);
             entity.label = new PIXI.Text('', entity.labelStyle);
             entity.label.anchor.set(0.5);
             entity.setSelectionSize(entity.label.width, entity.label.height);
@@ -2177,8 +2197,15 @@ try {
             const socketWidth = 32, socketThickness = 6, powerSocketSize = 8;
             entity.createSocket = function(socketData, x, y, rotation) {
                 if (!entity.sockets) {
-                    entity.sockets = new PIXI.Container();
-                    entity.addChild(entity.sockets);
+                    entity.sockets = [];
+                    entity.bottomSockets = new PIXI.Container();
+                    entity.bottomSockets.zIndex = -1;
+                    entity.addChild(entity.bottomSockets);
+                    // TODO: Sort top sockets above selectionArea.
+                    entity.topSockets = new PIXI.Container();
+                    entity.topSockets.zIndex = 1;
+                    entity.addChild(entity.topSockets);
+                    entity.sortChildren();
                 }
 
                 const socket = new PIXI.Container();
@@ -2257,8 +2284,8 @@ try {
                         } else if (typeof connectingSocketId === 'number') {
                             const connectingEntity = game.getEntityById(connectingEntityId);
                             if (connectingEntity?.sockets) {
-                                for (let i = 0; i < connectingEntity.sockets.children.length; i++) {
-                                    const connectingEntitySocket = connectingEntity.sockets.children[i];
+                                for (let i = 0; i < connectingEntity.sockets.length; i++) {
+                                    const connectingEntitySocket = connectingEntity.sockets[i];
                                     if (connectingEntitySocket.socketData.id === connectingSocketId) {
                                         connectingSocket = connectingEntitySocket;
                                         break;
@@ -2282,8 +2309,8 @@ try {
                 socket.createConnection = function(connectingEntity, x, y, rotation, id) {
                     if (connectingEntity?.sockets) {
                         let connectingSocket = null;
-                        for (let i = 0; i < connectingEntity.sockets.children.length; i++) {
-                            const socket2 = connectingEntity.sockets.children[i];
+                        for (let i = 0; i < connectingEntity.sockets.length; i++) {
+                            const socket2 = connectingEntity.sockets[i];
                             if (typeof socket2.connections[entity.id] === 'number') {
                                 connectingSocket = socket2;
                                 break;
@@ -2301,7 +2328,7 @@ try {
 
                         if (!connectingSocket) {
                             let socketData = {
-                                'id': id ?? connectingEntity.sockets.children.length,
+                                'id': id ?? connectingEntity.sockets.length,
                                 'type': socket.socketData.type,
                                 'temp': true,
                                 'switch': 'rail'
@@ -2348,6 +2375,16 @@ try {
                     }
                     return false;
                 }
+                socket.remove = function() {
+                    if (socketData.temp) {
+                        if (socketData.below) {
+                            entity.bottomSockets.removeChild(socket);
+                        } else {
+                            entity.topSockets.removeChild(socket);
+                        }
+                        entity.sockets = entity.sockets.filter(obj => obj !== socket);
+                    }
+                }
                 socket.removeConnections = function(entityId, ignoreSelected) {
                     if (Object.keys(socket.connections).length) {
                         let connectionEstablished = false;
@@ -2362,15 +2399,15 @@ try {
                                     connectionEstablished = true;
                                     continue;
                                 }
-                                for (let k = 0; k < connectedEntity.sockets.children.length; k++) {
-                                    const connectedSocket = connectedEntity.sockets.children[k];
+                                for (let k = 0; k < connectedEntity.sockets.length; k++) {
+                                    const connectedSocket = connectedEntity.sockets[k];
                                     if (connectedSocket.socketData.id === connectedSocketId) {
                                         delete connectedSocket.connections[entity.id];
                                         if (Object.keys(connectedSocket.connections).length === 0) {
                                             if (connectedEntity.building?.requireConnection) {
                                                 connectedEntity.remove();
                                             } else if (connectedSocket.socketData.temp) {
-                                                connectedEntity.sockets.removeChild(connectedSocket);
+                                                connectedSocket.remove();
                                             } else {
                                                 connectedSocket.setVisible(true);
                                             }
@@ -2383,7 +2420,7 @@ try {
                         }
                         if (!connectionEstablished) {
                             if (socket.socketData.temp) {
-                                entity.sockets.removeChild(socket);
+                                socket.remove();
                             } else {
                                 socket.setVisible(true);
                             }
@@ -2399,13 +2436,23 @@ try {
                             socket.indicator.visible = visible;
                         }
                         if (socket.pointer) {
-                            // TODO: Add ability to only remove texture when the socket is connected to another socket that has the same entity sortLayer.
-                            visible = visible ?? Object.keys(socket.connections).length === 0;
+                            const connectedEntityIds = Object.keys(socket.connections);
+                            visible = visible ?? connectedEntityIds.length === 0;
                             if (socket.socketData.textureAlt) {
-                                socket.pointer.texture = resources[visible ? socket.socketData.texture : socket.socketData.textureAlt].texture;
-                            } else {
-                                socket.pointer.visible = visible;
+                                let texture = resources[visible ? socket.socketData.texture : socket.socketData.textureAlt].texture;
+                                socket.pointer.texture = texture;
+                                socket.pointer.width = texture.width / METER_PIXEL_SCALE;
+                                socket.pointer.height = texture.height / METER_PIXEL_SCALE;
+                                visible = true;
+                            } else if (socket.socketData.texture && !visible) {
+                                if (connectedEntityIds.length === 1) {
+                                    const e2 = game.getEntityById(connectedEntityIds[0]);
+                                    if (e2 && (game.constructionLayers[e2.sortLayer] < game.constructionLayers[entity.sortLayer])) {
+                                        visible = true;
+                                    }
+                                }
                             }
+                            socket.pointer.visible = visible;
                         }
                     }
                 }
@@ -2429,13 +2476,18 @@ try {
                     socket.addChild(railSwitch);
                 }
 
-                entity.sockets.addChild(socket);
+                entity.sockets.push(socket);
+                if (socketData.below) {
+                    entity.bottomSockets.addChild(socket);
+                } else {
+                    entity.topSockets.addChild(socket);
+                }
                 return socket;
             }
 
             entity.getSocketById = function(id) {
-                for (let i = 0; i < entity.sockets.children.length; i++) {
-                    const socket = entity.sockets.children[i];
+                for (let i = 0; i < entity.sockets.length; i++) {
+                    const socket = entity.sockets[i];
                     if (socket.socketData?.id === id) {
                         return socket;
                     }
@@ -2554,8 +2606,8 @@ try {
 
             entity.hasConnections = function() {
                 if (entity.sockets) {
-                    for (let i = 0; i < entity.sockets.children.length; i++) {
-                        const entitySocket = entity.sockets.children[i];
+                    for (let i = 0; i < entity.sockets.length; i++) {
+                        const entitySocket = entity.sockets[i];
                         if (Object.keys(entitySocket.connections).length > 0) {
                             return true;
                         }
@@ -2566,8 +2618,8 @@ try {
 
             entity.hasConnectionToEntityId = function(entityId, ignoredSocket) {
                 if (entity.sockets) {
-                    for (let i = 0; i < entity.sockets.children.length; i++) {
-                        const entitySocket = entity.sockets.children[i];
+                    for (let i = 0; i < entity.sockets.length; i++) {
+                        const entitySocket = entity.sockets[i];
                         if ((!ignoredSocket || entitySocket !== ignoredSocket) && typeof entitySocket.connections[entityId] === 'number') {
                             return true;
                         }
@@ -2578,11 +2630,36 @@ try {
 
             entity.hasConnectionToEntity = (connectingEntity, ignoredSocket) => entity.hasConnectionToEntityId(connectingEntity.id, ignoredSocket);
 
+            entity.attemptReconnections = function(removeConnections = true) {
+                if (removeConnections) {
+                    entity.removeConnections();
+                }
+                for (const e2 of entities) {
+                    if (e2 === entity || !e2.sockets || Math.distanceBetween(entity.mid ?? entity, e2.mid ?? e2) > 1000) {
+                        continue;
+                    }
+                    for (const eSocket of entity.sockets) {
+                        const eSocketPosition = app.cstage.toLocal({x: eSocket.x, y: eSocket.y}, entity);
+                        for (const e2Socket of e2.sockets) {
+                            const e2SocketPosition = app.cstage.toLocal({x: e2Socket.x, y: e2Socket.y}, e2, undefined, true);
+                            if (eSocket.canConnect(e2Socket) && (!e2Socket.socketData.connectionLimit || Object.keys(e2Socket.connections).length < e2Socket.socketData.connectionLimit) && (Math.distanceBetween(eSocketPosition, e2SocketPosition) < 1)) {
+                                let eSocketRotation = Math.angleNormalized((entity.rotation + eSocket.rotation) - Math.PI);
+                                let e2SocketRotation = Math.angleNormalized(e2.rotation + e2Socket.rotation);
+                                let angleDiff = Math.angleDifference(eSocketRotation, e2SocketRotation);
+                                if (angleDiff < 0.001 && angleDiff > -0.001) {
+                                    eSocket.setConnection(e2.id, e2Socket);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             entity.removeConnections = function(socketId, ignoreSelected, ignoreSocket, entityId) {
                 if (entity.sockets) {
                     // Iterate sockets to make sure we either remove the connections and update the socket or remove the entity altogether.
-                    for (let i = 0; i < entity.sockets.children.length; i++) {
-                        const entitySocket = entity.sockets.children[i];
+                    for (let i = 0; i < entity.sockets.length; i++) {
+                        const entitySocket = entity.sockets[i];
                         if (typeof socketId !== 'number' || (ignoreSocket ? entitySocket.socketData.id !== socketId : entitySocket.socketData.id === socketId)) {
                             entitySocket.removeConnections(entityId, ignoreSelected);
                         }
@@ -2604,8 +2681,8 @@ try {
 
             entity.afterLoad = function(entityData, entityIdMap) {
                 if (entity.sockets && entityData.connections) {
-                    for (let i = 0; i < entity.sockets.children.length; i++) {
-                        const socket = entity.sockets.children[i];
+                    for (let i = 0; i < entity.sockets.length; i++) {
+                        const socket = entity.sockets[i];
                         const socketConnectionData = entityData.connections[socket.socketData.id];
                         if (socketConnectionData) {
                             for (const [connectedEntityId, connectedSocketId] of Object.entries(socketConnectionData)) {
@@ -2778,8 +2855,8 @@ try {
                 }
 
                 if (entity.sockets) {
-                    for (let i = 0; i < entity.sockets.children.length; i++) {
-                        let socket = entity.sockets.children[i];
+                    for (let i = 0; i < entity.sockets.length; i++) {
+                        let socket = entity.sockets[i];
                         let socketConnections = isSelection ? {} : socket.connections;
                         if (isSelection) {
                             for (const [connectedEntityId, connectedSocketId] of Object.entries(socket.connections)) {
@@ -2973,20 +3050,20 @@ try {
 
                                 // TODO: Get the max rotation for a socket from the data.
                                 const maxAngle = Math.deg2rad((15 * 3) + 1), angleBetweenPoints = Math.angleBetween(frontPoint, endPoint);
-                                const angleLimitReached = (Math.abs(angleBetweenPoints) > maxAngle) || (Math.abs(Math.angleNormalized(-angleBetweenPoints + endPoint.rotation + Math.PI)) > maxAngle);
-                                if (angleLimitReached) {
+                                const limitReached = (entity.building?.minLength && (Math.distanceBetween(frontPoint, endPoint) < (entity.building.minLength * METER_PIXEL_SIZE))) || ((Math.abs(angleBetweenPoints) > maxAngle) || (Math.abs(Math.angleNormalized(-angleBetweenPoints + endPoint.rotation + Math.PI)) > maxAngle));
+                                if (limitReached) {
                                     entity.sprite.trapezoid.floor.tint = COLOR_RED;
                                     connectorTopBorder.tint = COLOR_RED;
                                     connectorBottomBorder.tint = COLOR_RED;
                                 }
 
-                                for (let i = 0; i < entity.sockets.children.length; i++) {
-                                    let socket = entity.sockets.children[i];
+                                for (let i = 0; i < entity.sockets.length; i++) {
+                                    let socket = entity.sockets[i];
                                     if (socket.socketData.cap === 'back') {
                                         socket.position.set(endPoint.x, endPoint.y);
                                         socket.rotation = endPoint.rotation - Math.PI/2;
                                     }
-                                    socket.pointer.tint = angleLimitReached ? COLOR_RED : COLOR_WHITE;
+                                    socket.pointer.tint = limitReached ? COLOR_RED : COLOR_WHITE;
                                 }
                             } else {
                                 let bezierPoints = [];
@@ -3099,8 +3176,8 @@ try {
                                 if (entity.sockets) {
                                     let midNormal = entity.bezier.normal(entity.bezier.mid.t);
                                     let midAngle = Math.angleBetween({x: 0, y: 0}, midNormal) - Math.PI/2;
-                                    for (let i = 0; i < entity.sockets.children.length; i++) {
-                                        let socket = entity.sockets.children[i];
+                                    for (let i = 0; i < entity.sockets.length; i++) {
+                                        let socket = entity.sockets[i];
                                         let socketPosition, socketRotation;
                                         if (socket.socketData.cap === 'left' || socket.socketData.cap === 'right') {
                                             socketRotation = midAngle + Math.deg2rad(socket.socketData.rotation);
@@ -3249,8 +3326,8 @@ try {
                         entity.remove();
                     } else if (entity.building.requireConnection) {
                         // Requires all sockets have at least one connection. Mainly for power lines.
-                        for (let i = 0; i < entity.sockets.children.length; i++) {
-                            const socket = entity.sockets.children[i];
+                        for (let i = 0; i < entity.sockets.length; i++) {
+                            const socket = entity.sockets[i];
                             if (Object.keys(socket.connections).length === 0) {
                                 entity.remove();
                                 break;
@@ -3495,8 +3572,8 @@ try {
                         let connectionEstablished = false;
                         if (entity.sockets) {
                             // TODO: Store this somewhere in sockets.
-                            for (let i = 0; i < entity.sockets.children.length; i++) {
-                                const entitySocket = entity.sockets.children[i];
+                            for (let i = 0; i < entity.sockets.length; i++) {
+                                const entitySocket = entity.sockets[i];
                                 if (entitySocket.socketData?.cap === 'back') {
                                     handleSocket = entitySocket;
                                     break;
@@ -3514,8 +3591,8 @@ try {
                                 if (entity.building?.canSnapStructureType !== false || entity.subtype !== entity2.subtype) {
                                     const mousePos2 = entity2.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
                                     let nearestSocket, nearestSocketPos, nearestSocketDist = null;
-                                    for (let i = 0; i < entity2.sockets.children.length; i++) {
-                                        const entitySocket = entity2.sockets.children[i];
+                                    for (let i = 0; i < entity2.sockets.length; i++) {
+                                        const entitySocket = entity2.sockets[i];
                                         if (handleSocket.canConnect(entitySocket) && !entitySocket.socketData.temp) {
                                             const socketDistance = Math.distanceBetween(mousePos2, entitySocket);
                                             if ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || entity.subtype === 'power_line' && entity2.canGrab()) {
@@ -3633,8 +3710,8 @@ try {
                     }
 
                     if (entity.sockets) {
-                        for (let i = 0; i < entity.sockets.children.length; i++) {
-                            let socket = entity.sockets.children[i];
+                        for (let i = 0; i < entity.sockets.length; i++) {
+                            let socket = entity.sockets[i];
                             if (socket.socketData.name === 'power') {
                                 socket.pointer.rotation = -(entity.rotation + socket.rotation);
                             }
@@ -3801,8 +3878,8 @@ try {
             if (entity.currentTrackT < 0 || entity.currentTrackT > 1) {
                 let closestSocket = null;
                 let closestDist = 1000000;
-                for (let j = 0; j < entity.currentTrack.sockets.children.length; j++) {
-                    const socket = entity.currentTrack.sockets.children[j];
+                for (let j = 0; j < entity.currentTrack.sockets.length; j++) {
+                    const socket = entity.currentTrack.sockets[j];
                     let worldSocketPos = app.cstage.toLocal({
                         x: socket.x,
                         y: socket.y
@@ -3832,8 +3909,8 @@ try {
                 }
             } else {
                 let closeSocket = null;
-                for (let j = 0; j < entity.currentTrack.sockets.children.length; j++) {
-                    const socket = entity.currentTrack.sockets.children[j];
+                for (let j = 0; j < entity.currentTrack.sockets.length; j++) {
+                    const socket = entity.currentTrack.sockets[j];
                     if (socket.switchEnabled &&
                         ((previousTrackT <= socket.switchT && entity.currentTrackT >= socket.switchT) ||
                         (previousTrackT >= socket.switchT && entity.currentTrackT <= socket.switchT))
@@ -4010,10 +4087,10 @@ try {
             clone.afterLoad(entityData);
             game.selectEntity(clone);
             if (entity.sockets) {
-                for (const entitySocket of entity.sockets.children) {
+                for (const entitySocket of entity.sockets) {
                     if (clone.sockets) {
                         let foundSocket = false;
-                        for (const cloneSocket of clone.sockets.children) {
+                        for (const cloneSocket of clone.sockets) {
                             if (entitySocket.socketData.id === cloneSocket.socketData.id) {
                                 foundSocket = true;
                                 break;
@@ -4079,13 +4156,41 @@ try {
                 const eX = selectedEntity.x + x, eY = selectedEntity.y + y;
                 selectedEntity.x = snapped ? Math.round(eX / gridSize) * gridSize : eX;
                 selectedEntity.y = snapped ? Math.round(eY / gridSize) * gridSize : eY;
+                selectedEntity.attemptReconnections();
             } else {
-                selectedEntities.forEach(selectedEntity => {
+                for (const selectedEntity of selectedEntities) {
+                    if (selectedEntity.sockets) {
+                        selectedEntity.removeConnections(undefined, true);
+                    }
                     selectedEntity.x += x;
                     selectedEntity.y += y;
-                });
+                }
+                for (const selectedEntity of selectedEntities) {
+                    selectedEntity.attemptReconnections();
+                }
             }
             game.buildingSelectedMenuComponent?.refresh(true);
+        }
+    }
+
+    // TODO: Add support for rotating multiple entities and add support for flipping trains.
+    game.rotateSelected = function(angle) {
+        const selectedEntity = game.getSelectedEntity();
+        if (selectedEntity) {
+            let rotation = Math.angleNormalized(selectedEntity.rotation + angle);
+            if (game.settings.enableSnapRotation) {
+                rotation = Math.round(rotation / angle) * angle;
+            }
+            if (selectedEntity.mid.x !== selectedEntity.x || selectedEntity.mid.y !== selectedEntity.y) {
+                let rotatedPosition = Math.rotateAround(selectedEntity.mid, selectedEntity, angle);
+                selectedEntity.x = rotatedPosition.x;
+                selectedEntity.y = rotatedPosition.y;
+            }
+            selectedEntity.rotation = rotation;
+            if (selectedEntity.sockets) {
+                selectedEntity.attemptReconnections();
+            }
+            game.saveStateChanged = true;
         }
     }
 
@@ -4181,6 +4286,18 @@ try {
     game.redo = function() {
         game.traverseHistory(1);
     };
+
+    game.canShowListItem = function(building, search = false) {
+        if (building && (!building.hideInList || game.settings.enableDebug) &&
+            (!building.experimental || game.settings.enableExperimental) &&
+            (search || ((!building.parent || building.parentKey || game.settings.showUpgradesAsBuildings) &&
+            ((!building.tier || (!game.settings.showSelectedTierOnly && (building.tier <= game.settings.selectedTier))) || building.tier === game.settings.selectedTier) &&
+            ((!building.techId || !window.objectData.tech[building.techId]) || ((building.techId === 'unlockfacilitytier2' && game.settings.selectedTier >= 2) || (building.techId === 'unlockfacilitytier3' && game.settings.selectedTier >= 3))) &&
+            (!game.settings.selectedFaction || (!building.faction || building.faction === game.settings.selectedFaction))))) {
+            return true;
+        }
+        return false;
+    }
 
     const FPSMIN = 30;
     let fpsCheck = null;
@@ -4334,11 +4451,11 @@ try {
                                         let closestEntitySocket = null;
                                         let closestEntity2Socket = null;
                                         if (!entity.hasConnectionToEntity(entity2)) {
-                                            for (let l = 0; l < entity.sockets.children.length; l++) {
-                                                let entitySocket = entity.sockets.children[l];
+                                            for (let l = 0; l < entity.sockets.length; l++) {
+                                                let entitySocket = entity.sockets[l];
                                                 if (!Object.keys(entitySocket.connections).length) {
-                                                    for (let p = 0; p < entity2.sockets.children.length; p++) {
-                                                        let entity2Socket = entity2.sockets.children[p];
+                                                    for (let p = 0; p < entity2.sockets.length; p++) {
+                                                        let entity2Socket = entity2.sockets[p];
                                                         if (!Object.keys(entity2Socket.connections).length) {
                                                             let socket1Pos = app.cstage.toLocal(entitySocket.position, entity, undefined, true);
                                                             let socket2Pos = app.cstage.toLocal(entity2Socket.position, entity2, undefined, true);
@@ -4544,14 +4661,14 @@ try {
                                                     return true;
                                                 }
                                             }
-                                            for (let k = 0; k < entity.sockets.children.length; k++) {
-                                                let entitySocket = entity.sockets.children[k];
+                                            for (let k = 0; k < entity.sockets.length; k++) {
+                                                let entitySocket = entity.sockets[k];
                                                 if (!entitySocket.socketData.temp) {
                                                     let socketDistance = Math.distanceBetween(mousePos, entitySocket);
                                                     // Checks socket distance is close, closer than previous socket distance, or hovering a building with a power socket.
                                                     if (selectedEntity.building?.snapNearest || ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || selectedEntity.subtype === 'power_line' && entity.canGrab())) {
-                                                        for (let l = 0; l < selectedEntity.sockets.children.length; l++) {
-                                                            let selectedSocket = selectedEntity.sockets.children[l];
+                                                        for (let l = 0; l < selectedEntity.sockets.length; l++) {
+                                                            let selectedSocket = selectedEntity.sockets[l];
                                                             if (selectedEntities.length === 1 && selectedEntity.building?.hasHandle && selectedSocket.socketData.id !== 0) {
                                                                 continue;
                                                             }
@@ -4630,8 +4747,8 @@ try {
                                             }
             
                                             if (!connectionEstablished && selectedEntity.sockets && (selectedEntity.subtype === 'rail_large_gauge' || selectedEntity.subtype === 'rail_small_gauge')) {
-                                                for (let k = 0; k < selectedEntity.sockets.children.length; k++) {
-                                                    let selectedSocket = selectedEntity.sockets.children[k];
+                                                for (let k = 0; k < selectedEntity.sockets.length; k++) {
+                                                    let selectedSocket = selectedEntity.sockets[k];
                                                     if (selectedSocket.socketData.cap === 'front') {
                                                         // TODO: Store this somewhere so we don't have to loop each time for sockets. There will only ever be one front and back socket for rails.
                                                         selectedSocket.createConnection(entity, projection.x, projection.y, angle);

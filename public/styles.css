@@ -578,6 +578,13 @@ input[type=number].btn-small {
     display: block;
 }
 
+.construction-list-wrapper {
+    position: absolute;
+    inset: 0;
+    top: 38px;
+    overflow-y: auto;
+}
+
 .construction-options-wrapper {
     background: black;
     border: 1px solid black;
@@ -1497,11 +1504,11 @@ label.settings-option-wrapper input, .settings-option-wrapper label input {
     float: right;
 }
 
-label.settings-option-wrapper input:not(.slider), .settings-option-wrapper label input:not(.slider) {
+.settings-option-wrapper input:not(.slider) {
     width: 100px;
 }
 
-label.settings-option-wrapper input[type="checkbox"], .settings-option-wrapper label input[type="checkbox"] {
+label.settings-option-wrapper input[type="checkbox"], .settings-option-wrapper input[type="checkbox"] {
     width: 30px;
 }
 

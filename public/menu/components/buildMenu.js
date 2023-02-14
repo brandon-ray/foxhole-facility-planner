@@ -398,21 +398,21 @@ Vue.component('app-menu-building-selected', {
                 selectedEntity.trackDirection *= -1;
                 if (selectedEntity.sockets) {
                     let entityConnections = {};
-                    for (let i = 0; i < selectedEntity.sockets.children.length; i++) {
-                        const entitySocket = selectedEntity.sockets.children[i];
+                    for (let i = 0; i < selectedEntity.sockets.length; i++) {
+                        const entitySocket = selectedEntity.sockets[i];
                         if (entitySocket.socketData.id === 0 || entitySocket.socketData.id === 1) {
                             entityConnections[entitySocket.socketData.id] = Object.assign({}, entitySocket.connections);
                         }
                     }
-                    for (let i = 0; i < selectedEntity.sockets.children.length; i++) {
-                        const entitySocket = selectedEntity.sockets.children[i];
+                    for (let i = 0; i < selectedEntity.sockets.length; i++) {
+                        const entitySocket = selectedEntity.sockets[i];
                         if (entitySocket.socketData.id === 0 || entitySocket.socketData.id === 1) {
                             const socketConnections = entityConnections[entitySocket.socketData.id ? 0 : 1];
                             for (const [connectedEntityId, connectedSocketId] of Object.entries(socketConnections)) {
                                 const connectedEntity = game.getEntityById(connectedEntityId);
                                 if (connectedEntity.sockets) {
-                                    for (let j = 0; j < connectedEntity.sockets.children.length; j++) {
-                                        const connectedSocket = connectedEntity.sockets.children[j];
+                                    for (let j = 0; j < connectedEntity.sockets.length; j++) {
+                                        const connectedSocket = connectedEntity.sockets[j];
                                         if (connectedSocket.socketData.id === connectedSocketId) {
                                             connectedSocket.setConnection(selectedEntity.id, entitySocket);
                                         }
@@ -468,10 +468,14 @@ Vue.component('app-menu-building-selected', {
                     <i class="fa fa-arrows" aria-hidden="true"></i> Position Y:
                     <input class="app-input" type="number" v-model.number="entity.y" @input="updateEntity(true)" :disabled="entity.building?.vehicle">
                 </label>
-                <label class="app-input-label">
+                <div class="app-input-label settings-option-row">
                     <i class="fa fa-repeat" aria-hidden="true"></i> Rotation:
-                    <input class="app-input" type="number" v-model.number="entity.rotationDegrees" @input="updateEntity(true)" :disabled="entity.building?.vehicle">
-                </label>
+                    <input class="app-input float-right" type="number" v-model.number="entity.rotationDegrees" @input="updateEntity(true)" :disabled="entity.building?.vehicle">
+                    <template v-if="!entity.building?.vehicle">
+                        <button class="btn-small m-0 mr-1 float-right" type="button" title="Rotate 45 degrees" @click="game.rotateSelected(Math.PI / 4)"><i class="fa fa-repeat" aria-hidden="true"></i></button>&nbsp;
+                        <button class="btn-small m-0 mr-1 float-right" type="button" title="Rotate -45 degrees"@click="game.rotateSelected(-Math.PI / 4)"><i class="fa fa-undo" aria-hidden="true"></i></button>&nbsp;
+                    </template>
+                </div>
                 <label v-if="game.settings.enableDebug && entity.subtype === 'power_line'" class="app-input-label">
                     <i class="fa fa-paint-brush" aria-hidden="true"></i> Color:
                     <input type="color" v-model="entity.color" style="padding: 1px;" @input="setColor()">
@@ -652,7 +656,7 @@ Vue.component('app-menu-construction-list', {
                 for (const category of Object.values(window.objectData.categories)) {
                     if (game.settings.enableExperimental || !category.experimental) {
                         for (const building of category.buildings) {
-                            if (building.name.toLowerCase().includes(this.searchQuery.toLowerCase())) {
+                            if (building.name.toLowerCase().includes(this.searchQuery.toLowerCase()) && game.canShowListItem(building, true)) {
                                 results.push(building);
                             }
                         }
@@ -778,25 +782,27 @@ Vue.component('app-menu-construction-list', {
                     <i class="fa fa-close" :class="{'active': searchQuery}" aria-hidden="true" @click="searchQuery = null"></i>
                 </div>
             </label>
-            <template v-if="searchQuery">
-                <p v-if="!getSearchResults.length" class="px-2 py-1">Sorry, couldn't find anything with that name.</p>
-                <app-game-building-list-icon v-for="building in getSearchResults" :building="building" :search="searchQuery"/>
-            </template>
-            <template v-else-if="game.selectedBuildingCategory !== 'all'">
-                <app-game-building-list-icon v-for="building in window.objectData.categories[game.selectedBuildingCategory].buildings" :building="building"/>
-            </template>
-            <template v-else>
-                <template v-for="(category, key) in window.objectData.categories">
-                    <template v-if="(game.settings.showCollapsibleBuildingList || !category.hideInBuildingList)">
-                        <div v-if="game.settings.showCollapsibleBuildingList && (game.settings.enableExperimental || !category.experimental)" class="construction-item-category" @click="category.visible = !category.visible; refresh()">
-                            {{category.name}}{{category.experimental && ' (Preview)'}}<i class="fa float-right" :class="{'fa-angle-down': category.visible, 'fa-angle-right': !category.visible}" style="margin-top: 2px;" aria-hidden="true"></i>
-                        </div>
-                        <div v-if="(game.settings.enableExperimental || !category.experimental) && (!game.settings.showCollapsibleBuildingList || category.visible)">
-                            <app-game-building-list-icon v-for="building in category.buildings" :building="building"/>
-                        </div>
+            <div class="construction-list-wrapper">
+                <template v-if="searchQuery">
+                    <p v-if="!getSearchResults.length" class="px-2 py-1 text-center">Sorry, couldn't find anything with that name.</p>
+                    <app-game-building-list-icon v-for="building in getSearchResults" :building="building" :search="searchQuery"/>
+                </template>
+                <template v-else-if="game.selectedBuildingCategory !== 'all'">
+                    <app-game-building-list-icon v-for="building in window.objectData.categories[game.selectedBuildingCategory].buildings" :building="building"/>
+                </template>
+                <template v-else>
+                    <template v-for="(category, key) in window.objectData.categories">
+                        <template v-if="(game.settings.showCollapsibleBuildingList || !category.hideInBuildingList)">
+                            <div v-if="game.settings.showCollapsibleBuildingList && (game.settings.enableExperimental || !category.experimental)" class="construction-item-category" @click="category.visible = !category.visible; refresh()">
+                                {{category.name}}{{category.experimental && ' (Preview)'}}<i class="fa float-right" :class="{'fa-angle-down': category.visible, 'fa-angle-right': !category.visible}" style="margin-top: 2px;" aria-hidden="true"></i>
+                            </div>
+                            <div v-if="(game.settings.enableExperimental || !category.experimental) && (!game.settings.showCollapsibleBuildingList || category.visible)">
+                                <app-game-building-list-icon v-for="building in category.buildings" :building="building"/>
+                            </div>
+                        </template>
                     </template>
                 </template>
-            </template>
+            </div>
         </div>
     </div>
     `
@@ -895,13 +901,8 @@ Vue.component('app-game-building-list-icon', {
         }
     },
     template: html`
-    <div v-if="(!building.hideInList || game.settings.enableDebug) &&
-        (!building.experimental || game.settings.enableExperimental) &&
-        (search || ((!building.parent || building.parentKey || game.settings.showUpgradesAsBuildings) &&
-        ((!building.tier || (!game.settings.showSelectedTierOnly && (building.tier <= game.settings.selectedTier))) || building.tier === game.settings.selectedTier) &&
-        ((!building.techId || !window.objectData.tech[building.techId]) || ((building.techId === 'unlockfacilitytier2' && game.settings.selectedTier >= 2) || (building.techId === 'unlockfacilitytier3' && game.settings.selectedTier >= 3))) &&
-        (!game.settings.selectedFaction || (!building.faction || building.faction === game.settings.selectedFaction))))"
-        class="build-icon" :class="{'ignore-transform': building.preset}" :title="building.name" :style="{backgroundImage:'url(' + ((building.baseIcon || (building.category !== 'entrenchments' && building.parent && !building.parentKey && building.parent.icon) || building.icon) ?? '/assets/default_icon.webp') + ')'}"
+    <div v-if="search || game.canShowListItem(building)" class="build-icon" :class="{'ignore-transform': building.preset}" :title="building.name"
+        :style="{backgroundImage:'url(' + ((building.baseIcon || (building.category !== 'entrenchments' && building.parent && !building.parentKey && building.parent.icon) || building.icon) ?? '/assets/default_icon.webp') + ')'}"
         @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" @click="buildBuilding(building)">
         <div v-if="!building.baseIcon && !building.parentKey && building.parent?.icon && building.parent.icon !== building.icon" class="build-subicon" :title="building.parent.name" :style="{backgroundImage: 'url(' + ((building.category === 'entrenchments' && building.parent.icon) || building.icon) + ')'}"></div>
     </div>
