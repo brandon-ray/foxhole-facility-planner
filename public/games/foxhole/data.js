@@ -8112,6 +8112,30 @@ const foxholeData = {
 			"description": "An anti-tank obstacle that prevents vehicle access to an area. Can be dismantled with a Wrench.",
 			"category": "defenses",
 			"categoryOrder": 9,
+			"radius": 1.75,
+			"hitArea": [
+				{
+					"shape": [ 19.2705078125,1.518642578125,12.5450830078125,-9.2203369140625,41.92,-10.88,41.92,-0.64 ]
+				},
+				{
+					"shape": [ 14.4,10.88,-0.7972900390625,7.48474609375,-5.44,5.12,8.64,-15.36,19.2705078125,1.518642578125 ]
+				},
+				{
+					"shape": [ -2.24,-19.84,-9.92,-7.68,-25.28,-37.76,-15.04,-42.88 ]
+				},
+				{
+					"shape": [ -30.4,20.48,-20.16,5.12,-9.92,-7.68,8.64,-15.36,-5.44,5.12,-20.8,24.96,-26.900426025390626,24.64680908203125 ]
+				},
+				{
+					"shape": [ 8.64,-15.36,-9.92,-7.68,-2.24,-19.84,16.32,-44.16,25.92,-39.68 ]
+				},
+				{
+					"shape": [ -40.64,-3.2,-9.92,-7.68,-20.16,5.12,-40,7.04,-42.151489372253415,1.77021484375 ]
+				},
+				{
+					"shape": [ 20.8,44.8,-0.7972900390625,7.48474609375,14.4,10.88,29.76,39.68 ]
+				}
+			],
 			"icon": "game/Textures/UI/StructureIcons/TankStopIcon.webp",
 			"texture": "game/Textures/Structures/tankstop.webp",
 			"techId": "unlocktankstop",
@@ -8511,6 +8535,7 @@ const foxholeData = {
 			"hasHandle": true,
 			"isBezier": true,
 			"trenchConnector": true,
+			"minLength": 2.5,
 			"maxLength": 8,
 			"icon": "game/Textures/UI/StructureIcons/TrenchT1ConnectorIcon.webp",
 			"texture": "game/Textures/Structures/trencht1_connector.webp",
@@ -8804,8 +8829,8 @@ const foxholeData = {
 			"category": "entrenchments",
 			"categoryOrder": 1,
 			"tier": 1,
-			"width": 10,
-			"length": 3,
+			"width": 10.56,
+			"length": 3.1,
 			"sortLayer": "foundation",
 			"icon": "game/Textures/UI/StructureIcons/TrenchT1Icon.webp",
 			"texture": "game/Textures/Structures/trencht1.webp",
@@ -8822,7 +8847,7 @@ const foxholeData = {
 					],
 					"texture": "game/Textures/Structures/trencht1_end.webp",
 					"x": 0,
-					"y": 150,
+					"y": 155,
 					"rotation": 270
 				},
 				{
@@ -8835,7 +8860,7 @@ const foxholeData = {
 					],
 					"texture": "game/Textures/Structures/trencht1_side_closed.webp",
 					"textureAlt": "game/Textures/Structures/trencht1_side_open.webp",
-					"x": 500,
+					"x": 528,
 					"y": 0,
 					"rotation": 0
 				},
@@ -8848,8 +8873,8 @@ const foxholeData = {
 						}
 					],
 					"texture": "game/Textures/Structures/trencht1_end.webp",
-					"x": 1000,
-					"y": 150,
+					"x": 1056,
+					"y": 155,
 					"rotation": 90
 				},
 				{
@@ -8862,8 +8887,8 @@ const foxholeData = {
 					],
 					"texture": "game/Textures/Structures/trencht1_side_closed.webp",
 					"textureAlt": "game/Textures/Structures/trencht1_side_open.webp",
-					"x": 500,
-					"y": 300,
+					"x": 528,
+					"y": 310,
 					"rotation": 180
 				}
 			],
@@ -8900,7 +8925,7 @@ const foxholeData = {
 					],
 					"texture": "game/Textures/Structures/trencht2_end.webp",
 					"x": 0,
-					"y": 150,
+					"y": 155,
 					"rotation": 270
 				},
 				{
@@ -8913,7 +8938,7 @@ const foxholeData = {
 					],
 					"texture": "game/Textures/Structures/trencht2_side_closed.webp",
 					"textureAlt": "game/Textures/Structures/trencht2_side_open.webp",
-					"x": 500,
+					"x": 528,
 					"y": 0,
 					"rotation": 0
 				},
@@ -8926,8 +8951,8 @@ const foxholeData = {
 						}
 					],
 					"texture": "game/Textures/Structures/trencht2_end.webp",
-					"x": 1000,
-					"y": 150,
+					"x": 1056,
+					"y": 155,
 					"rotation": 90
 				},
 				{
@@ -8940,8 +8965,8 @@ const foxholeData = {
 					],
 					"texture": "game/Textures/Structures/trencht2_side_closed.webp",
 					"textureAlt": "game/Textures/Structures/trencht2_side_open.webp",
-					"x": 500,
-					"y": 300,
+					"x": 528,
+					"y": 310,
 					"rotation": 180
 				}
 			],
@@ -8981,7 +9006,7 @@ const foxholeData = {
 					],
 					"texture": "game/Textures/Structures/trencht3_end.webp",
 					"x": 0,
-					"y": 150,
+					"y": 155,
 					"rotation": 270
 				},
 				{
@@ -8994,7 +9019,7 @@ const foxholeData = {
 					],
 					"texture": "game/Textures/Structures/trencht3_side_closed.webp",
 					"textureAlt": "game/Textures/Structures/trencht3_side_open.webp",
-					"x": 500,
+					"x": 528,
 					"y": 0,
 					"rotation": 0
 				},
@@ -9007,8 +9032,8 @@ const foxholeData = {
 						}
 					],
 					"texture": "game/Textures/Structures/trencht3_end.webp",
-					"x": 1000,
-					"y": 150,
+					"x": 1056,
+					"y": 155,
 					"rotation": 90
 				},
 				{
@@ -9021,8 +9046,8 @@ const foxholeData = {
 					],
 					"texture": "game/Textures/Structures/trencht3_side_closed.webp",
 					"textureAlt": "game/Textures/Structures/trencht3_side_open.webp",
-					"x": 500,
-					"y": 300,
+					"x": 528,
+					"y": 310,
 					"rotation": 180
 				}
 			],
