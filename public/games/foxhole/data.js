@@ -2213,9 +2213,18 @@ const foxholeData = {
 			"description": "A large forward operating base. Players can spawn and stockpile items here.",
 			"category": "entrenchments",
 			"baseGarrisonRadius": 80,
-			"width": 5.76,
-			"length": 5.76,
 			"sortLayer": "upgrade",
+			"hitArea": [
+				{
+					"shape": [ 90.88,92.16,-85.12,91.52,-92.16,-88.32,88.96,-90.88 ]
+				},
+				{
+					"shape": [ -83.84,260.48,-85.12,91.52,84.48,92.16,83.84,260.48 ]
+				},
+				{
+					"shape": [ -92.16,-88.32,-85.12,91.52,-90.24,91.52 ]
+				}
+			],
 			"icon": "game/Textures/UI/StructureIcons/FortT1BaseIcon.webp",
 			"texture": "game/Textures/Structures/fortt1_base.webp",
 			"textureOffset": {
@@ -2237,7 +2246,7 @@ const foxholeData = {
 							"category": 4
 						}
 					],
-					"x": 288,
+					"x": 264,
 					"y": 0,
 					"rotation": 0
 				},
@@ -2253,8 +2262,8 @@ const foxholeData = {
 							"category": 4
 						}
 					],
-					"x": 576,
-					"y": 288,
+					"x": 528,
+					"y": 264,
 					"rotation": 90
 				},
 				{
@@ -2270,7 +2279,7 @@ const foxholeData = {
 						}
 					],
 					"x": 0,
-					"y": 288,
+					"y": 264,
 					"rotation": 270
 				}
 			],
@@ -2297,18 +2306,24 @@ const foxholeData = {
 			"codeName": "FortBaseT2",
 			"parentKey": "fortbaset1",
 			"description": "A large forward operating base. Players can spawn and stockpile items here.",
-			"category": "entrenchments",
 			"tier": 2,
-			"width": 5.76,
-			"length": 5.76,
+			"hitArea": [
+				{
+					"shape": [ -94.08,113.28,89.6,112.64,87.04,290.56,-93.44,290.56 ]
+				},
+				{
+					"shape": [ 108.16,-113.28,108.16,112.64,-110.72,112.64,-110.72,-113.92 ]
+				},
+				{
+					"shape": [ -110.72,112.64,89.6,112.64,-94.08,113.28 ]
+				}
+			],
 			"icon": "game/Textures/UI/StructureIcons/FortT2BaseIcon.webp",
 			"texture": "game/Textures/Structures/fortt2_base.webp",
 			"textureOffset": {
 				"x": 384,
 				"y": 402
 			},
-			"canSnap": true,
-			"snapNearest": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -2322,7 +2337,7 @@ const foxholeData = {
 							"category": 4
 						}
 					],
-					"x": 288,
+					"x": 264,
 					"y": 0,
 					"rotation": 0
 				},
@@ -2338,8 +2353,8 @@ const foxholeData = {
 							"category": 4
 						}
 					],
-					"x": 576,
-					"y": 288,
+					"x": 528,
+					"y": 264,
 					"rotation": 90
 				},
 				{
@@ -2355,7 +2370,7 @@ const foxholeData = {
 						}
 					],
 					"x": 0,
-					"y": 288,
+					"y": 264,
 					"rotation": 270
 				}
 			],
@@ -2382,18 +2397,27 @@ const foxholeData = {
 			"codeName": "FortBaseT3",
 			"parentKey": "fortbaset2",
 			"description": "A large forward operating base. Players can spawn and stockpile items here.",
-			"category": "entrenchments",
 			"tier": 3,
-			"width": 5.76,
-			"length": 5.76,
+			"hitArea": [
+				{
+					"shape": [ -88.32,111.36,87.68,111.36,83.84,285.44,-85.12,285.44 ]
+				},
+				{
+					"shape": [ 87.68,111.36,-88.32,111.36,-112.64,95.36,-112.64,-99.2,-98.56,-113.28,111.36,-98.56,112,91.52,103.68,104.96 ]
+				},
+				{
+					"shape": [ -112.64,95.36,-88.32,111.36,-101.76,108.16 ]
+				},
+				{
+					"shape": [ 111.36,-98.56,-98.56,-113.28,97.92,-113.28 ]
+				}
+			],
 			"icon": "game/Textures/UI/StructureIcons/FortT3BaseIcon.webp",
 			"texture": "game/Textures/Structures/fortt3_base.webp",
 			"textureOffset": {
 				"x": 382,
 				"y": 382
 			},
-			"canSnap": true,
-			"snapNearest": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -2407,7 +2431,7 @@ const foxholeData = {
 							"category": 4
 						}
 					],
-					"x": 288,
+					"x": 264,
 					"y": 0,
 					"rotation": 0
 				},
@@ -2423,8 +2447,8 @@ const foxholeData = {
 							"category": 4
 						}
 					],
-					"x": 576,
-					"y": 288,
+					"x": 528,
+					"y": 264,
 					"rotation": 90
 				},
 				{
@@ -2440,7 +2464,7 @@ const foxholeData = {
 						}
 					],
 					"x": 0,
-					"y": 288,
+					"y": 264,
 					"rotation": 270
 				}
 			],
@@ -2469,21 +2493,14 @@ const foxholeData = {
 			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
 			"category": "entrenchments",
 			"categoryOrder": 4,
-			"width": 5.76,
-			"length": 5.76,
 			"hitArea": [
 				{
-					"shape": [ 92.8,-86.4,92.8,-15.36,-14.08,92.8,-83.84,93.44,-88.96,-85.76 ]
+					"shape": [ 91.52,-90.24,91.52,-19.2,-15.36,88.96,-85.12,89.6,-90.24,-89.6 ]
 				}
 			],
 			"icon": "game/Textures/UI/StructureIcons/FortT1CornerIcon.webp",
 			"texture": "game/Textures/Structures/fortt1_corner.webp",
-			"textureOffset": {
-				"x": 320,
-				"y": 310
-			},
-			"canSnap": true,
-			"snapNearest": true,
+			"textureOffset": null,
 			"sockets": [
 				{
 					"id": 0,
@@ -2497,12 +2514,14 @@ const foxholeData = {
 							"category": 4
 						}
 					],
-					"x": 288,
+					"texture": "game/Textures/Structures/fortt1_border.webp",
+					"below": true,
+					"x": 264,
 					"y": 0,
 					"rotation": 0
 				},
 				{
-					"id": 1,
+					"id": 3,
 					"type": [
 						{
 							"mask": 2,
@@ -2513,12 +2532,14 @@ const foxholeData = {
 							"category": 4
 						}
 					],
-					"x": 395,
-					"y": 395,
-					"rotation": 135
+					"texture": "game/Textures/Structures/fortt1_border.webp",
+					"below": true,
+					"x": 0,
+					"y": 264,
+					"rotation": 270
 				},
 				{
-					"id": 2,
+					"id": 4,
 					"type": [
 						{
 							"mask": 2,
@@ -2529,9 +2550,10 @@ const foxholeData = {
 							"category": 4
 						}
 					],
-					"x": 0,
-					"y": 288,
-					"rotation": 270
+					"texture": "game/Textures/Structures/fortt1_border.webp",
+					"x": 358,
+					"y": 358,
+					"rotation": 135
 				}
 			],
 			"maxHealth": 1500,
@@ -2557,21 +2579,14 @@ const foxholeData = {
 			"category": "entrenchments",
 			"categoryOrder": 4,
 			"tier": 2,
-			"width": 5.76,
-			"length": 5.76,
 			"hitArea": [
 				{
-					"shape": [ 87.68,-89.6,86.4,-14.08,-24.96,99.2,-89.6,96.64,-88.96,-89.6 ]
+					"shape": [ 99.2,-71.68,97.92,3.84,-13.44,117.12,-78.08,114.56,-77.44,-71.68 ]
 				}
 			],
 			"icon": "game/Textures/UI/StructureIcons/FortT2CornerIcon.webp",
 			"texture": "game/Textures/Structures/fortt2_corner.webp",
-			"textureOffset": {
-				"x": 336,
-				"y": 360
-			},
-			"canSnap": true,
-			"snapNearest": true,
+			"textureOffset": null,
 			"sockets": [
 				{
 					"id": 0,
@@ -2585,12 +2600,14 @@ const foxholeData = {
 							"category": 4
 						}
 					],
-					"x": 288,
+					"texture": "game/Textures/Structures/fortt2_border.webp",
+					"below": true,
+					"x": 264,
 					"y": 0,
 					"rotation": 0
 				},
 				{
-					"id": 1,
+					"id": 3,
 					"type": [
 						{
 							"mask": 2,
@@ -2601,12 +2618,14 @@ const foxholeData = {
 							"category": 4
 						}
 					],
-					"x": 395,
-					"y": 395,
-					"rotation": 135
+					"texture": "game/Textures/Structures/fortt2_border.webp",
+					"below": true,
+					"x": 0,
+					"y": 264,
+					"rotation": 270
 				},
 				{
-					"id": 2,
+					"id": 4,
 					"type": [
 						{
 							"mask": 2,
@@ -2617,9 +2636,10 @@ const foxholeData = {
 							"category": 4
 						}
 					],
-					"x": 0,
-					"y": 288,
-					"rotation": 270
+					"texture": "game/Textures/Structures/fortt2_border.webp",
+					"x": 358,
+					"y": 358,
+					"rotation": 135
 				}
 			],
 			"maxHealth": 1850,
@@ -2645,24 +2665,15 @@ const foxholeData = {
 			"codeName": "FortCornerT3",
 			"parentKey": "fortt2",
 			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
-			"category": "entrenchments",
-			"categoryOrder": 4,
 			"tier": 3,
-			"width": 5.76,
-			"length": 5.76,
 			"hitArea": [
 				{
-					"shape": [ 96.32,-96.32,96.32,-35.52,-35.52,96.32,-96.32,96.32,-96.32,-96.32 ]
+					"shape": [ 80.64,-112,80.64,-51.2,-51.2,80.64,-112,80.64,-112,-112 ]
 				}
 			],
 			"icon": "game/Textures/UI/StructureIcons/FortT3CornerIcon.webp",
 			"texture": "game/Textures/Structures/fortt3_corner.webp",
-			"textureOffset": {
-				"x": 290,
-				"y": 290
-			},
-			"canSnap": true,
-			"snapNearest": true,
+			"textureOffset": null,
 			"sockets": [
 				{
 					"id": 0,
@@ -2676,12 +2687,14 @@ const foxholeData = {
 							"category": 4
 						}
 					],
-					"x": 288,
+					"texture": "game/Textures/Structures/fortt3_border.webp",
+					"below": true,
+					"x": 264,
 					"y": 0,
 					"rotation": 0
 				},
 				{
-					"id": 1,
+					"id": 3,
 					"type": [
 						{
 							"mask": 2,
@@ -2692,12 +2705,14 @@ const foxholeData = {
 							"category": 4
 						}
 					],
-					"x": 395,
-					"y": 395,
-					"rotation": 135
+					"texture": "game/Textures/Structures/fortt3_border.webp",
+					"below": true,
+					"x": 0,
+					"y": 264,
+					"rotation": 270
 				},
 				{
-					"id": 2,
+					"id": 4,
 					"type": [
 						{
 							"mask": 2,
@@ -2708,9 +2723,11 @@ const foxholeData = {
 							"category": 4
 						}
 					],
-					"x": 0,
-					"y": 288,
-					"rotation": 270
+					"texture": "game/Textures/Structures/fortt3_border.webp",
+					"below": true,
+					"x": 358,
+					"y": 358,
+					"rotation": 135
 				}
 			],
 			"maxHealth": 2000,
@@ -2738,14 +2755,10 @@ const foxholeData = {
 			"category": "entrenchments",
 			"categoryOrder": 3,
 			"tier": 1,
-			"width": 5.76,
-			"length": 5.76,
+			"width": 5.28,
+			"length": 5.28,
 			"icon": "game/Textures/UI/StructureIcons/FortT1Icon.webp",
 			"texture": "game/Textures/Structures/fortt1.webp",
-			"textureOffset": {
-				"x": 290,
-				"y": 304
-			},
 			"canSnap": true,
 			"canUnion": true,
 			"snapNearest": true,
@@ -2762,7 +2775,9 @@ const foxholeData = {
 							"category": 4
 						}
 					],
-					"x": 288,
+					"texture": "game/Textures/Structures/fortt1_border.webp",
+					"below": true,
+					"x": 264,
 					"y": 0,
 					"rotation": 0
 				},
@@ -2778,8 +2793,10 @@ const foxholeData = {
 							"category": 4
 						}
 					],
-					"x": 576,
-					"y": 288,
+					"texture": "game/Textures/Structures/fortt1_border.webp",
+					"below": true,
+					"x": 528,
+					"y": 264,
 					"rotation": 90
 				},
 				{
@@ -2794,8 +2811,10 @@ const foxholeData = {
 							"category": 4
 						}
 					],
-					"x": 288,
-					"y": 576,
+					"texture": "game/Textures/Structures/fortt1_border.webp",
+					"below": true,
+					"x": 264,
+					"y": 528,
 					"rotation": 180
 				},
 				{
@@ -2810,8 +2829,10 @@ const foxholeData = {
 							"category": 4
 						}
 					],
+					"texture": "game/Textures/Structures/fortt1_border.webp",
+					"below": true,
 					"x": 0,
-					"y": 288,
+					"y": 264,
 					"rotation": 270
 				}
 			],
@@ -2875,7 +2896,7 @@ const foxholeData = {
 									"category": 4
 								}
 							],
-							"x": 288,
+							"x": 250,
 							"y": 0,
 							"rotation": 0
 						},
@@ -2891,8 +2912,8 @@ const foxholeData = {
 									"category": 4
 								}
 							],
-							"x": 576,
-							"y": 288,
+							"x": 500,
+							"y": 250,
 							"rotation": 90
 						},
 						{
@@ -2908,7 +2929,7 @@ const foxholeData = {
 								}
 							],
 							"x": 0,
-							"y": 288,
+							"y": 250,
 							"rotation": 270
 						}
 					],
@@ -2949,19 +2970,9 @@ const foxholeData = {
 			"codeName": "FortT2",
 			"parentKey": "fortt1",
 			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
-			"category": "entrenchments",
-			"categoryOrder": 3,
 			"tier": 2,
-			"width": 5.76,
-			"length": 5.76,
 			"icon": "game/Textures/UI/StructureIcons/FortT2Icon.webp",
 			"texture": "game/Textures/Structures/fortt2.webp",
-			"textureOffset": {
-				"x": 340,
-				"y": 372
-			},
-			"canSnap": true,
-			"snapNearest": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -2975,7 +2986,9 @@ const foxholeData = {
 							"category": 4
 						}
 					],
-					"x": 288,
+					"texture": "game/Textures/Structures/fortt2_border.webp",
+					"below": true,
+					"x": 264,
 					"y": 0,
 					"rotation": 0
 				},
@@ -2991,8 +3004,10 @@ const foxholeData = {
 							"category": 4
 						}
 					],
-					"x": 576,
-					"y": 288,
+					"texture": "game/Textures/Structures/fortt2_border.webp",
+					"below": true,
+					"x": 528,
+					"y": 264,
 					"rotation": 90
 				},
 				{
@@ -3007,8 +3022,10 @@ const foxholeData = {
 							"category": 4
 						}
 					],
-					"x": 288,
-					"y": 576,
+					"texture": "game/Textures/Structures/fortt2_border.webp",
+					"below": true,
+					"x": 264,
+					"y": 528,
 					"rotation": 180
 				},
 				{
@@ -3023,8 +3040,10 @@ const foxholeData = {
 							"category": 4
 						}
 					],
+					"texture": "game/Textures/Structures/fortt2_border.webp",
+					"below": true,
 					"x": 0,
-					"y": 288,
+					"y": 264,
 					"rotation": 270
 				}
 			],
@@ -3048,12 +3067,14 @@ const foxholeData = {
 						"arc": 90,
 						"max": 30
 					},
+					"sortLayer": "upgrade",
+					"hitArea": [
+						{
+							"shape": [ 73.6,-81.92,74.24,41.6,32,72.96,-41.6,72.96,-84.48,42.24,-83.2,-81.92 ]
+						}
+					],
 					"icon": "game/Textures/UI/StructureIcons/FortT2ATGunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt2_atgunai.webp",
-					"textureOffset": {
-						"x": 306,
-						"y": 306
-					},
 					"maxHealth": 1650,
 					"structuralIntegrity": 0.82,
 					"cost": {
@@ -3090,10 +3111,6 @@ const foxholeData = {
 					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/FortT2MGunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt2_mgai.webp",
-					"textureOffset": {
-						"x": 308,
-						"y": 308
-					},
 					"maxHealth": 2150,
 					"structuralIntegrity": 0.85,
 					"cost": {
@@ -3109,12 +3126,14 @@ const foxholeData = {
 						"type": "radio",
 						"max": 130
 					},
+					"sortLayer": "upgrade",
+					"hitArea": [
+						{
+							"shape": [ -30.72,-69.76,35.2,-69.12,75.52,-28.8,75.52,37.76,35.2,78.08,-31.36,78.72,-71.68,37.76,-72.32,-28.16 ]
+						}
+					],
 					"icon": "game/Textures/UI/StructureIcons/ObservationBunkerT2ItemIcon.webp",
 					"texture": "game/Textures/Structures/fortt2_observationbunker.webp",
-					"textureOffset": {
-						"x": 306,
-						"y": 306
-					},
 					"maxHealth": 1650,
 					"structuralIntegrity": 0.82,
 					"cost": {
@@ -3132,6 +3151,56 @@ const foxholeData = {
 						"x": 328,
 						"y": 318
 					},
+					"sockets": [
+						{
+							"id": 0,
+							"type": [
+								{
+									"mask": 2,
+									"category": 4
+								},
+								{
+									"mask": 4,
+									"category": 4
+								}
+							],
+							"x": 250,
+							"y": 0,
+							"rotation": 0
+						},
+						{
+							"id": 1,
+							"type": [
+								{
+									"mask": 2,
+									"category": 4
+								},
+								{
+									"mask": 4,
+									"category": 4
+								}
+							],
+							"x": 500,
+							"y": 250,
+							"rotation": 90
+						},
+						{
+							"id": 3,
+							"type": [
+								{
+									"mask": 2,
+									"category": 4
+								},
+								{
+									"mask": 4,
+									"category": 4
+								}
+							],
+							"x": 0,
+							"y": 250,
+							"rotation": 270
+						}
+					],
 					"maxHealth": 1850,
 					"structuralIntegrity": 0.95,
 					"cost": {
@@ -3148,12 +3217,9 @@ const foxholeData = {
 						"lineOfSight": true,
 						"max": 29
 					},
+					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/FortT2GunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt2_rifleai.webp",
-					"textureOffset": {
-						"x": 306,
-						"y": 306
-					},
 					"maxHealth": 1850,
 					"structuralIntegrity": 0.85,
 					"cost": {
@@ -3168,20 +3234,9 @@ const foxholeData = {
 			"codeName": "FortT3",
 			"parentKey": "fortt2",
 			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
-			"category": "entrenchments",
-			"categoryOrder": 3,
 			"tier": 3,
-			"width": 5.76,
-			"length": 5.76,
 			"icon": "game/Textures/UI/StructureIcons/FortT3Icon.webp",
 			"texture": "game/Textures/Structures/fortt3.webp",
-			"textureBorder": "game/Textures/Structures/fortt3_border.webp",
-			"textureOffset": {
-				"x": 288,
-				"y": 288
-			},
-			"canSnap": true,
-			"snapNearest": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -3195,7 +3250,9 @@ const foxholeData = {
 							"category": 4
 						}
 					],
-					"x": 288,
+					"texture": "game/Textures/Structures/fortt3_border.webp",
+					"below": true,
+					"x": 264,
 					"y": 0,
 					"rotation": 0
 				},
@@ -3211,8 +3268,10 @@ const foxholeData = {
 							"category": 4
 						}
 					],
-					"x": 576,
-					"y": 288,
+					"texture": "game/Textures/Structures/fortt3_border.webp",
+					"below": true,
+					"x": 528,
+					"y": 264,
 					"rotation": 90
 				},
 				{
@@ -3227,8 +3286,10 @@ const foxholeData = {
 							"category": 4
 						}
 					],
-					"x": 288,
-					"y": 576,
+					"texture": "game/Textures/Structures/fortt3_border.webp",
+					"below": true,
+					"x": 264,
+					"y": 528,
 					"rotation": 180
 				},
 				{
@@ -3243,8 +3304,10 @@ const foxholeData = {
 							"category": 4
 						}
 					],
+					"texture": "game/Textures/Structures/fortt3_border.webp",
+					"below": true,
 					"x": 0,
-					"y": 288,
+					"y": 264,
 					"rotation": 270
 				}
 			],
@@ -3262,7 +3325,6 @@ const foxholeData = {
 					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/IntelligenceCenterIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_intelcenter.webp",
-					"textureBorder": null,
 					"textureOffset": null,
 					"maxHealth": 2550,
 					"structuralIntegrity": 0.65,
@@ -3278,7 +3340,6 @@ const foxholeData = {
 					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/LongRangedArtilleryIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_lrartillery.webp",
-					"textureBorder": null,
 					"textureOffset": {
 						"x": 770,
 						"y": 792
@@ -3314,8 +3375,23 @@ const foxholeData = {
 						"arc": 60
 					},
 					"sortLayer": "upgrade",
+					"hitArea": [
+						{
+							"shape": [ -31.499130859375,74.629560546875,31.36,74.24,30.83130859375,81.864345703125,26.88,90.24,-24.96,90.24,-31.499130859375,82.699130859375 ]
+						},
+						{
+							"shape": [ 47.80521484375,73.79478515625,-31.499130859375,74.629560546875,-84.64695678710937,-77.0226171875,-73.6,-85.76,77.8573828125,-85.3704296875,87.04,-76.8,85.76,40.32 ]
+						},
+						{
+							"shape": [ -84.64695678710937,-77.0226171875,-31.499130859375,74.629560546875,-49.28,73.6,-84.48,47.36 ]
+						}
+					],
 					"icon": "game/Textures/UI/StructureIcons/FortT3HowitzerAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_artilleryai.webp",
+					"textureOffset": {
+						"x": 288,
+						"y": 288
+					},
 					"maxHealth": 1750,
 					"structuralIntegrity": 0.93,
 					"cost": {
@@ -3334,8 +3410,26 @@ const foxholeData = {
 						"max": 30
 					},
 					"sortLayer": "upgrade",
+					"hitArea": [
+						{
+							"shape": [ 92.16,-92.16,92.8,35.2,47.36,94.72,-23.68,104.32,-47.36,95.36,-67.2,81.28,-92.8,37.12,-92.16,-92.16 ]
+						},
+						{
+							"shape": [ 47.36,94.72,92.8,35.2,82.56,60.16,67.84,80 ]
+						},
+						{
+							"shape": [ -92.8,37.12,-67.2,81.28,-83.2,61.44 ]
+						},
+						{
+							"shape": [ -23.68,104.32,47.36,94.72,25.6,104.32,0,108.16 ]
+						}
+					],
 					"icon": "game/Textures/UI/StructureIcons/FortT3ATGunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_atgunai.webp",
+					"textureOffset": {
+						"x": 288,
+						"y": 288
+					},
 					"maxHealth": 1750,
 					"structuralIntegrity": 0.93,
 					"cost": {
@@ -3385,6 +3479,15 @@ const foxholeData = {
 						"type": "radio",
 						"max": 180
 					},
+					"sortLayer": "upgrade",
+					"hitArea": [
+						{
+							"shape": [ -76.16,-30.08,-31.36,-76.16,31.36,-76.16,76.8,31.36,32.64,76.16,-31.499130859375,75.46434814453124,-76.16,32.64 ]
+						},
+						{
+							"shape": [ 76.8,31.36,31.36,-76.16,76.46609375,-31.666083984375 ]
+						}
+					],
 					"icon": "game/Textures/UI/StructureIcons/ObservationBunkerT3ItemIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_observationbunker.webp",
 					"maxHealth": 1750,
@@ -3404,6 +3507,56 @@ const foxholeData = {
 						"x": 315,
 						"y": 287
 					},
+					"sockets": [
+						{
+							"id": 0,
+							"type": [
+								{
+									"mask": 2,
+									"category": 4
+								},
+								{
+									"mask": 4,
+									"category": 4
+								}
+							],
+							"x": 250,
+							"y": 0,
+							"rotation": 0
+						},
+						{
+							"id": 1,
+							"type": [
+								{
+									"mask": 2,
+									"category": 4
+								},
+								{
+									"mask": 4,
+									"category": 4
+								}
+							],
+							"x": 500,
+							"y": 250,
+							"rotation": 90
+						},
+						{
+							"id": 3,
+							"type": [
+								{
+									"mask": 2,
+									"category": 4
+								},
+								{
+									"mask": 4,
+									"category": 4
+								}
+							],
+							"x": 0,
+							"y": 250,
+							"rotation": 270
+						}
+					],
 					"maxHealth": 2000,
 					"structuralIntegrity": 0.99,
 					"cost": {
@@ -3420,6 +3573,7 @@ const foxholeData = {
 						"lineOfSight": true,
 						"max": 29
 					},
+					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/FortT3GunAIIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_rifleai.webp",
 					"textureOffset": null,
@@ -3787,7 +3941,7 @@ const foxholeData = {
 			"sortLayer": "foundation",
 			"hitArea": [
 				{
-					"shape": [ -87.68,97.28,-88.32,42.88,42.88,-88.32,96,-88.32,96.64,96.64 ]
+					"shape": [ -91.52,93.44,-92.16,39.04,39.04,-92.16,92.16,-92.16,92.8,92.8 ]
 				}
 			],
 			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation02Icon.webp",
@@ -8520,6 +8674,7 @@ const foxholeData = {
 			"category": "misc",
 			"categoryOrder": 10,
 			"sortLayer": "overhead",
+			"radius": 2,
 			"icon": "game/Textures/UI/CustomIcons/TreeIcon.webp",
 			"texture": "game/Textures/Structures/tree.webp",
 			"garrisonSupplyMultiplier": 0

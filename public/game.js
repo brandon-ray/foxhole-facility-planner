@@ -2291,7 +2291,7 @@ try {
                                         break;
                                     }
                                 }
-                                if (!connectingSocket) {
+                                if (!connectingSocket && (entity.subtype === 'rail_large_gauge' || entity.subtype === 'rail_small_gauge')) {
                                     const socketPosition = connectingEntity.toLocal(socket, entity);
                                     connectingSocket = socket.createConnection(connectingEntity, socketPosition.x, socketPosition.y, ((entity.rotation + socket.rotation) - connectingEntity.rotation) + Math.PI, connectingSocketId);
                                 }
