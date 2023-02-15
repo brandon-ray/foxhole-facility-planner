@@ -2655,6 +2655,33 @@ try {
                 }
             }
 
+            entity.recoverConnections = function(recoveredEntities = [entity]) {
+                for (const eSocket of entity.sockets) {
+                    for (const [connectedEntityId, connectedSocketId] of Object.entries(eSocket.connections)) {
+                        const connectedEntity = game.getEntityById(connectedEntityId);
+                        if (connectedEntity && connectedEntity.sockets && !recoveredEntities.includes(connectedEntity)) {
+                            const e2Socket = connectedEntity.getSocketById(connectedSocketId);
+                            if (e2Socket) {
+                                recoveredEntities.push(connectedEntity);
+
+                                let connectedEntityPosition = app.cstage.toLocal({x: eSocket.x, y: eSocket.y}, entity);
+                                const connectedEntityRotation = Math.angleNormalized(-Math.angleDifference(entity.rotation + eSocket.rotation + Math.PI, e2Socket.rotation));
+                                if (e2Socket.x !== 0 || e2Socket.y !== 0) {
+                                    const e2SocketDist = Math.distanceBetween({ x: 0, y: 0 }, e2Socket);
+                                    const socketAngleDiff = Math.angleBetween({ x: 0, y: 0 }, e2Socket) + Math.PI;
+                                    connectedEntityPosition = Math.extendPoint(connectedEntityPosition, e2SocketDist, connectedEntityRotation + socketAngleDiff);
+                                }
+
+                                connectedEntity.position.set(connectedEntityPosition.x, connectedEntityPosition.y);
+                                connectedEntity.rotation = connectedEntityRotation;
+
+                                connectedEntity.recoverConnections(recoveredEntities);
+                            }
+                        }
+                    }
+                }
+            }
+
             entity.removeConnections = function(socketId, ignoreSelected, ignoreSocket, entityId) {
                 if (entity.sockets) {
                     // Iterate sockets to make sure we either remove the connections and update the socket or remove the entity altogether.

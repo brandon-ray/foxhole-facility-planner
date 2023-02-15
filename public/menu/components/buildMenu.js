@@ -430,7 +430,13 @@ Vue.component('app-menu-building-selected', {
                 selectedEntity.sprite.x = (-this.debug.textureOffset.x / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
                 selectedEntity.sprite.y = (-this.debug.textureOffset.y / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
             }
-        }
+        },
+        recoverConnections: function() {
+            const selectedEntity = game.getSelectedEntity();
+            if (selectedEntity) {
+                selectedEntity.recoverConnections();
+            }
+        },
     },
     template: html`
     <div class="text-left">
@@ -613,6 +619,14 @@ Vue.component('app-menu-building-selected', {
                     </div>
                 </div>
             </template>
+            <div v-if="game.settings.enableExperimental && entity.building?.sockets" class="settings-option-wrapper">
+                <div class="settings-title">Socket Options</div>
+                <div class="text-button-wrapper">
+                    <button class="text-button" type="button" @click="recoverConnections()" @mouseenter="bme()">
+                        <i class="fa fa-wrench" aria-hidden="true"></i> Repair Connections
+                    </button>
+                </div>
+            </div>
         </template>
     </div>
     `

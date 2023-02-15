@@ -2495,7 +2495,7 @@ const foxholeData = {
 			"categoryOrder": 4,
 			"hitArea": [
 				{
-					"shape": [ 91.52,-90.24,91.52,-19.2,-15.36,88.96,-85.12,89.6,-90.24,-89.6 ]
+					"shape": [ 89.6,-85.12,89.6,-30.08,-31.36,92.8,-83.84,93.44,-85.12,-84.48 ]
 				}
 			],
 			"icon": "game/Textures/UI/StructureIcons/FortT1CornerIcon.webp",
@@ -2521,7 +2521,24 @@ const foxholeData = {
 					"rotation": 0
 				},
 				{
-					"id": 3,
+					"id": 1,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"texture": "game/Textures/Structures/fortt1_border.webp",
+					"x": 358,
+					"y": 358,
+					"rotation": 135
+				},
+				{
+					"id": 2,
 					"type": [
 						{
 							"mask": 2,
@@ -2537,23 +2554,6 @@ const foxholeData = {
 					"x": 0,
 					"y": 264,
 					"rotation": 270
-				},
-				{
-					"id": 4,
-					"type": [
-						{
-							"mask": 2,
-							"category": 4
-						},
-						{
-							"mask": 4,
-							"category": 4
-						}
-					],
-					"texture": "game/Textures/Structures/fortt1_border.webp",
-					"x": 358,
-					"y": 358,
-					"rotation": 135
 				}
 			],
 			"maxHealth": 1500,
@@ -2581,7 +2581,7 @@ const foxholeData = {
 			"tier": 2,
 			"hitArea": [
 				{
-					"shape": [ 99.2,-71.68,97.92,3.84,-13.44,117.12,-78.08,114.56,-77.44,-71.68 ]
+					"shape": [ 87.68,-88.96,87.68,-24.32,-29.44,91.52,-86.4,91.52,-86.4,-89.6 ]
 				}
 			],
 			"icon": "game/Textures/UI/StructureIcons/FortT2CornerIcon.webp",
@@ -2607,7 +2607,24 @@ const foxholeData = {
 					"rotation": 0
 				},
 				{
-					"id": 3,
+					"id": 1,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"texture": "game/Textures/Structures/fortt2_border.webp",
+					"x": 358,
+					"y": 358,
+					"rotation": 135
+				},
+				{
+					"id": 2,
 					"type": [
 						{
 							"mask": 2,
@@ -2623,23 +2640,6 @@ const foxholeData = {
 					"x": 0,
 					"y": 264,
 					"rotation": 270
-				},
-				{
-					"id": 4,
-					"type": [
-						{
-							"mask": 2,
-							"category": 4
-						},
-						{
-							"mask": 4,
-							"category": 4
-						}
-					],
-					"texture": "game/Textures/Structures/fortt2_border.webp",
-					"x": 358,
-					"y": 358,
-					"rotation": 135
 				}
 			],
 			"maxHealth": 1850,
@@ -2668,7 +2668,7 @@ const foxholeData = {
 			"tier": 3,
 			"hitArea": [
 				{
-					"shape": [ 80.64,-112,80.64,-51.2,-51.2,80.64,-112,80.64,-112,-112 ]
+					"shape": [ 103.04,-90.24,102.4,-33.28,-32.64,103.04,-90.88,103.04,-90.88,-90.24 ]
 				}
 			],
 			"icon": "game/Textures/UI/StructureIcons/FortT3CornerIcon.webp",
@@ -2694,7 +2694,24 @@ const foxholeData = {
 					"rotation": 0
 				},
 				{
-					"id": 3,
+					"id": 1,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"texture": "game/Textures/Structures/fortt3_border.webp",
+					"x": 358,
+					"y": 358,
+					"rotation": 135
+				},
+				{
+					"id": 2,
 					"type": [
 						{
 							"mask": 2,
@@ -2710,24 +2727,6 @@ const foxholeData = {
 					"x": 0,
 					"y": 264,
 					"rotation": 270
-				},
-				{
-					"id": 4,
-					"type": [
-						{
-							"mask": 2,
-							"category": 4
-						},
-						{
-							"mask": 4,
-							"category": 4
-						}
-					],
-					"texture": "game/Textures/Structures/fortt3_border.webp",
-					"below": true,
-					"x": 358,
-					"y": 358,
-					"rotation": 135
 				}
 			],
 			"maxHealth": 2000,
@@ -3070,7 +3069,7 @@ const foxholeData = {
 					"sortLayer": "upgrade",
 					"hitArea": [
 						{
-							"shape": [ 73.6,-81.92,74.24,41.6,32,72.96,-41.6,72.96,-84.48,42.24,-83.2,-81.92 ]
+							"shape": [ 73.6,-78.72,74.24,44.8,32,76.16,-41.6,76.16,-84.48,45.44,-83.2,-78.72 ]
 						}
 					],
 					"icon": "game/Textures/UI/StructureIcons/FortT2ATGunAIIcon.webp",
@@ -3129,7 +3128,7 @@ const foxholeData = {
 					"sortLayer": "upgrade",
 					"hitArea": [
 						{
-							"shape": [ -30.72,-69.76,35.2,-69.12,75.52,-28.8,75.52,37.76,35.2,78.08,-31.36,78.72,-71.68,37.76,-72.32,-28.16 ]
+							"shape": [ -30.72,-73.6,35.2,-72.96,75.52,-32.64,75.52,33.92,35.2,74.24,-31.36,74.88,-71.68,33.92,-72.32,-32 ]
 						}
 					],
 					"icon": "game/Textures/UI/StructureIcons/ObservationBunkerT2ItemIcon.webp",
