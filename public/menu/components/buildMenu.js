@@ -775,7 +775,7 @@ Vue.component('app-menu-construction-list', {
             </div>
         </div>
         <div class="menu-page">
-            <label class="construction-search">
+            <label class="construction-search" title="Search">
                 <i class="fa fa-search" aria-hidden="true"></i>
                 <div class="input-wrapper">
                     <input type="text" v-model="searchQuery" placeholder="Search" @input="refresh()">
@@ -792,11 +792,11 @@ Vue.component('app-menu-construction-list', {
                 </template>
                 <template v-else>
                     <template v-for="(category, key) in window.objectData.categories">
-                        <template v-if="(game.settings.showCollapsibleBuildingList || !category.hideInBuildingList)">
-                            <div v-if="game.settings.showCollapsibleBuildingList && (game.settings.enableExperimental || !category.experimental)" class="construction-item-category" @click="category.visible = !category.visible; refresh()">
+                        <template v-if="!category.hideInList && (game.settings.showCollapsibleBuildingList || !category.hideInBuildingList) && (game.settings.enableExperimental || !category.experimental)">
+                            <div v-if="game.settings.showCollapsibleBuildingList" class="construction-item-category" @click="category.visible = !category.visible; refresh()">
                                 {{category.name}}{{category.experimental && ' (Preview)'}}<i class="fa float-right" :class="{'fa-angle-down': category.visible, 'fa-angle-right': !category.visible}" style="margin-top: 2px;" aria-hidden="true"></i>
                             </div>
-                            <div v-if="(game.settings.enableExperimental || !category.experimental) && (!game.settings.showCollapsibleBuildingList || category.visible)">
+                            <div v-if="(!game.settings.showCollapsibleBuildingList || category.visible)">
                                 <app-game-building-list-icon v-for="building in category.buildings" :building="building"/>
                             </div>
                         </template>
