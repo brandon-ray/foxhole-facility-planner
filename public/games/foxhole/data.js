@@ -2895,7 +2895,7 @@ const foxholeData = {
 									"category": 4
 								}
 							],
-							"x": 250,
+							"x": 264,
 							"y": 0,
 							"rotation": 0
 						},
@@ -2911,8 +2911,8 @@ const foxholeData = {
 									"category": 4
 								}
 							],
-							"x": 500,
-							"y": 250,
+							"x": 528,
+							"y": 264,
 							"rotation": 90
 						},
 						{
@@ -2928,7 +2928,7 @@ const foxholeData = {
 								}
 							],
 							"x": 0,
-							"y": 250,
+							"y": 264,
 							"rotation": 270
 						}
 					],
@@ -3163,7 +3163,7 @@ const foxholeData = {
 									"category": 4
 								}
 							],
-							"x": 250,
+							"x": 264,
 							"y": 0,
 							"rotation": 0
 						},
@@ -3179,8 +3179,8 @@ const foxholeData = {
 									"category": 4
 								}
 							],
-							"x": 500,
-							"y": 250,
+							"x": 528,
+							"y": 264,
 							"rotation": 90
 						},
 						{
@@ -3196,7 +3196,7 @@ const foxholeData = {
 								}
 							],
 							"x": 0,
-							"y": 250,
+							"y": 264,
 							"rotation": 270
 						}
 					],
@@ -3519,7 +3519,7 @@ const foxholeData = {
 									"category": 4
 								}
 							],
-							"x": 250,
+							"x": 264,
 							"y": 0,
 							"rotation": 0
 						},
@@ -3535,8 +3535,8 @@ const foxholeData = {
 									"category": 4
 								}
 							],
-							"x": 500,
-							"y": 250,
+							"x": 528,
+							"y": 264,
 							"rotation": 90
 						},
 						{
@@ -3552,7 +3552,7 @@ const foxholeData = {
 								}
 							],
 							"x": 0,
-							"y": 250,
+							"y": 264,
 							"rotation": 270
 						}
 					],
