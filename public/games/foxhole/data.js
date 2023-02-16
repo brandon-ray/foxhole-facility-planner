@@ -42,20 +42,63 @@ const foxholeData = {
 		}
 	},
 	"presets": {
+		"classic_storm_cannon": {
+			"name": "Classic Storm Cannon",
+			"description": "Storm Cannon setup with corner howitzers.",
+			"author": "Stonefox",
+			"module": true
+		},
+		"classic_intel_center": {
+			"name": "Classic Intelligence Center",
+			"description": "Intelligence Center setup with corner howitzers.",
+			"author": "Stonefox",
+			"module": true
+		},
+
+		"halberd_bunker": {
+			"name": "\"Halberd\" Bunker",
+			"description": "A common reliable defensive bunker pattern.",
+			"author": "Unknown",
+			"module": true
+		},
+		"xi_observation_bunker1": {
+			"name": "XI Observation Bunker",
+			"description": "Simple observation bunker split into two pieces to help with integrity (especially if left T2). Only 2 RGs can be lit, but that should be enough to prevent anyone from slipping into the bunker without suppression.",
+			"author": "nondidjos",
+			"module": true
+		},
+		"m_bunker_t3": {
+			"name": "\"M\" Bunker T3",
+			"description": "Wide concrete bunker. This bunker has a lower garrison density but is better for wide fronts.",
+			"author": "Stonefox",
+			"module": true
+		},
+		"squid_bunker_t2_1": {
+			"name": "\"Squid\" Bunker T2",
+			"description": "Fragile but hard hitting T2 bunker.",
+			"author": "Stonefox",
+			"module": true
+		},
+		"squid_bunker_t3": {
+			"name": "\"Squid\" Bunker T3",
+			"description": "Conversion for T2 version but not purpose built concrete structure. This is more an upgrade for the T2 \"Squid\", not recommended if you plan for concrete.",
+			"author": "Stonefox",
+			"module": true
+		},
 		"bunker_w_module": {
-			"name": "W Bunker (Module)",
+			"name": "\"W\" Bunker",
 			"description": "A meta bunker design that has lots of health with great structural integrity and defenses.",
 			"author": "Unknown",
 			"module": true
 		},
 		"compact_corner_bunker": {
-			"name": "Compact Corner Bunker (Module)",
+			"name": "Compact Corner Bunker",
 			"description": "This is a compact AT, MG and HG corner design that covers a 90 degree angle. This design is meant to be integrated into a straight line defence without wasting any space, or making any concessions on defence. Corner cutting is needed in the middle where 4 corner cuts are needed, but are easy to do. Do note that this design is only viable at the concrete tier.",
 			"author": "Danetello",
 			"module": true
 		},
 		"obs_bunker": {
-			"name": "OBS Bunker (Module)",
+			"name": "OBS Bunker",
 			"description": "Standard observation bunker. Power only 2 rifle garrisons and the OBS bunker.",
 			"author": "Unknown",
 			"module": true
@@ -64,6 +107,21 @@ const foxholeData = {
 			"name": "Locomotive Factory",
 			"description": "A facility that is capable to build Black Bolt, Longrider, Holdout, Rockhold and Roadhouse and their necessary manufacturing materials. 4 independent power systems allow facility to be functional 7/24.",
 			"author": "EG0611"
+		},
+		"m_bunker_w_trenches": {
+			"name": "\"M\" Bunker w/ Trenches",
+			"description": "Wide concrete bunker with trench support.",
+			"author": "Stonefox"
+		},
+		"t2_courtyard": {
+			"name": "T2 Courtyard",
+			"description": "A courtyard T2 bunker layout for early - mid war.",
+			"author": "Stonefox"
+		},
+		"t2_or_t3_halberd_trench_designs": {
+			"name": "T2 / T3 Halberd Trench Designs",
+			"description": "Using the Halberd bunker design here are some trenches you can use to connect them, varying in amount of emplacements.",
+			"author": "Stonefox"
 		},
 		"t2_oil_field": {
 			"name": "T2 Oil Field",
