@@ -65,6 +65,7 @@ const game = {
         gridSize: 16,
         enableSnapRotation: true,
         snapRotationDegrees: 15,
+        keySnapRotationDegrees: 45,
         zoomSpeed: 3,
         selectedFaction: null,
         selectedTier: 3,
@@ -634,6 +635,8 @@ try {
                         break;
                 }
             } else {
+                let angle;
+                let snapRotationDegrees;
                 switch (key) {
                     case 32: // Space
                         game.setPlaying(!game.playMode);
@@ -660,7 +663,13 @@ try {
                         game.moveSelected(event.shiftKey ? 16 : 32, 0);
                         break;
                     case 69: // E
-                        game.rotateSelected(Math.PI / (event.shiftKey ? 2 : 4));
+                        snapRotationDegrees = game.settings.keySnapRotationDegrees * (event.shiftKey ? 2 : 1);
+                        if (game.settings.enableSnapRotation) {
+                            angle = (snapRotationDegrees * Math.PI) / 180;
+                        } else {
+                            angle = Math.PI / (event.shiftKey ? 2 : 4);
+                        }
+                        game.rotateSelected(angle);
                         break;
                     case 76: // L
                         game.lockSelected();
@@ -670,7 +679,13 @@ try {
                         game.updateEntityOverlays();
                         break;
                     case 81: // Q
-                        game.rotateSelected(-Math.PI / (event.shiftKey ? 2 : 4));
+                        snapRotationDegrees = game.settings.keySnapRotationDegrees * (event.shiftKey ? 2 : 1);
+                        if (game.settings.enableSnapRotation) {
+                            angle = -(snapRotationDegrees * Math.PI) / 180;
+                        } else {
+                            angle = -Math.PI / (event.shiftKey ? 2 : 4);
+                        }
+                        game.rotateSelected(angle);
                         break;
                     case 83: // S
                         game.moveSelected(0, event.shiftKey ? 16 : 32);
@@ -2642,7 +2657,7 @@ try {
                         const eSocketPosition = app.cstage.toLocal({x: eSocket.x, y: eSocket.y}, entity);
                         for (const e2Socket of e2.sockets) {
                             const e2SocketPosition = app.cstage.toLocal({x: e2Socket.x, y: e2Socket.y}, e2, undefined, true);
-                            if (eSocket.canConnect(e2Socket) && (!e2Socket.socketData.connectionLimit || Object.keys(e2Socket.connections).length < e2Socket.socketData.connectionLimit) && (Math.distanceBetween(eSocketPosition, e2SocketPosition) < 1)) {
+                            if (eSocket.canConnect(e2Socket) && (!e2Socket.socketData.connectionLimit || Object.keys(e2Socket.connections).length < e2Socket.socketData.connectionLimit) && (Math.distanceBetween(eSocketPosition, e2SocketPosition) < 3)) {
                                 let eSocketRotation = Math.angleNormalized((entity.rotation + eSocket.rotation) - Math.PI);
                                 let e2SocketRotation = Math.angleNormalized(e2.rotation + e2Socket.rotation);
                                 let angleDiff = Math.angleDifference(eSocketRotation, e2SocketRotation);
@@ -4200,26 +4215,32 @@ try {
         }
     }
 
-    // TODO: Add support for rotating multiple entities and add support for flipping trains.
+    // TODO: Add support for flipping trains.
     game.rotateSelected = function(angle) {
-        const selectedEntity = game.getSelectedEntity();
-        if (selectedEntity) {
+        const selectionCenter = game.getEntitiesCenter(selectedEntities);
+    
+        for (let i = 0; i < selectedEntities.length; i++) {
+            let selectedEntity = selectedEntities[i];
             let rotation = Math.angleNormalized(selectedEntity.rotation + angle);
+    
             if (game.settings.enableSnapRotation) {
-                rotation = Math.round(rotation / angle) * angle;
+                let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ?? 15);
+                rotation = Math.round(rotation / snapRotationDegrees) * snapRotationDegrees;
             }
-            if (selectedEntity.mid.x !== selectedEntity.x || selectedEntity.mid.y !== selectedEntity.y) {
-                let rotatedPosition = Math.rotateAround(selectedEntity.mid, selectedEntity, angle);
-                selectedEntity.x = rotatedPosition.x;
-                selectedEntity.y = rotatedPosition.y;
-            }
+    
             selectedEntity.rotation = rotation;
+
+            const entityCenter = { x: selectedEntity.mid.x, y: selectedEntity.mid.y };
+            let rotatedPosition = Math.rotateAround(selectionCenter, entityCenter, angle);
+            selectedEntity.x = rotatedPosition.x - (entityCenter.x - selectedEntity.x);
+            selectedEntity.y = rotatedPosition.y - (entityCenter.y - selectedEntity.y);
+    
             if (selectedEntity.sockets) {
                 selectedEntity.attemptReconnections();
             }
             game.saveStateChanged = true;
         }
-    }
+    };
 
     game.removeEntities = function(isLoading) {
         if (entities.length) {
