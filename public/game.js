@@ -65,6 +65,7 @@ const game = {
         gridSize: 16,
         enableSnapRotation: true,
         snapRotationDegrees: 15,
+        keySnapRotationDegrees: 45,
         zoomSpeed: 3,
         selectedFaction: null,
         selectedTier: 3,
@@ -662,7 +663,7 @@ try {
                         game.moveSelected(event.shiftKey ? 16 : 32, 0);
                         break;
                     case 69: // E
-                        snapRotationDegrees = game.settings.snapRotationDegrees * (event.shiftKey ? 2 : 1);
+                        snapRotationDegrees = game.settings.keySnapRotationDegrees * (event.shiftKey ? 2 : 1);
                         if (game.settings.enableSnapRotation) {
                             angle = (snapRotationDegrees * Math.PI) / 180;
                         } else {
@@ -678,7 +679,7 @@ try {
                         game.updateEntityOverlays();
                         break;
                     case 81: // Q
-                        snapRotationDegrees = game.settings.snapRotationDegrees * (event.shiftKey ? 2 : 1);
+                        snapRotationDegrees = game.settings.keySnapRotationDegrees * (event.shiftKey ? 2 : 1);
                         if (game.settings.enableSnapRotation) {
                             angle = -(snapRotationDegrees * Math.PI) / 180;
                         } else {
@@ -2656,7 +2657,7 @@ try {
                         const eSocketPosition = app.cstage.toLocal({x: eSocket.x, y: eSocket.y}, entity);
                         for (const e2Socket of e2.sockets) {
                             const e2SocketPosition = app.cstage.toLocal({x: e2Socket.x, y: e2Socket.y}, e2, undefined, true);
-                            if (eSocket.canConnect(e2Socket) && (!e2Socket.socketData.connectionLimit || Object.keys(e2Socket.connections).length < e2Socket.socketData.connectionLimit) && (Math.distanceBetween(eSocketPosition, e2SocketPosition) < 1)) {
+                            if (eSocket.canConnect(e2Socket) && (!e2Socket.socketData.connectionLimit || Object.keys(e2Socket.connections).length < e2Socket.socketData.connectionLimit) && (Math.distanceBetween(eSocketPosition, e2SocketPosition) < 3)) {
                                 let eSocketRotation = Math.angleNormalized((entity.rotation + eSocket.rotation) - Math.PI);
                                 let e2SocketRotation = Math.angleNormalized(e2.rotation + e2Socket.rotation);
                                 let angleDiff = Math.angleDifference(eSocketRotation, e2SocketRotation);
@@ -4216,30 +4217,29 @@ try {
 
     // TODO: Add support for flipping trains.
     game.rotateSelected = function(angle) {
-    const selectionCenter = game.getEntitiesCenter(selectedEntities);
-  
-    for (let i = 0; i < selectedEntities.length; i++) {
-        let selectedEntity = selectedEntities[i];
-        let rotation = Math.angleNormalized(selectedEntity.rotation + angle);
-  
-        if (game.settings.enableSnapRotation) {
-            let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ?? 15);
-            rotation = Math.round(rotation / snapRotationDegrees) * snapRotationDegrees;
-        }
-  
-        selectedEntity.rotation = rotation;
+        const selectionCenter = game.getEntitiesCenter(selectedEntities);
+    
+        for (let i = 0; i < selectedEntities.length; i++) {
+            let selectedEntity = selectedEntities[i];
+            let rotation = Math.angleNormalized(selectedEntity.rotation + angle);
+    
+            if (game.settings.enableSnapRotation) {
+                let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ?? 15);
+                rotation = Math.round(rotation / snapRotationDegrees) * snapRotationDegrees;
+            }
+    
+            selectedEntity.rotation = rotation;
 
-        const entityCenter = { x: selectedEntity.mid.x, y: selectedEntity.mid.y };
-        let rotatedPosition = Math.rotateAround(selectionCenter, entityCenter, angle);
-        selectedEntity.x = rotatedPosition.x - (entityCenter.x - selectedEntity.x);
-        selectedEntity.y = rotatedPosition.y - (entityCenter.y - selectedEntity.y);
-  
-        if (selectedEntity.sockets) {
-            selectedEntity.attemptReconnections();
+            const entityCenter = { x: selectedEntity.mid.x, y: selectedEntity.mid.y };
+            let rotatedPosition = Math.rotateAround(selectionCenter, entityCenter, angle);
+            selectedEntity.x = rotatedPosition.x - (entityCenter.x - selectedEntity.x);
+            selectedEntity.y = rotatedPosition.y - (entityCenter.y - selectedEntity.y);
+    
+            if (selectedEntity.sockets) {
+                selectedEntity.attemptReconnections();
+            }
+            game.saveStateChanged = true;
         }
-        game.saveStateChanged = true;
-
-    }
     };
 
     game.removeEntities = function(isLoading) {
