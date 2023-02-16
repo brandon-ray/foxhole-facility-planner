@@ -634,6 +634,8 @@ try {
                         break;
                 }
             } else {
+                let angle;
+                let snapRotationDegrees;
                 switch (key) {
                     case 32: // Space
                         game.setPlaying(!game.playMode);
@@ -660,7 +662,13 @@ try {
                         game.moveSelected(event.shiftKey ? 16 : 32, 0);
                         break;
                     case 69: // E
-                        game.rotateSelected(Math.PI / (event.shiftKey ? 2 : 4));
+                        snapRotationDegrees = game.settings.snapRotationDegrees * (event.shiftKey ? 2 : 1);
+                        if (game.settings.enableSnapRotation) {
+                            angle = (snapRotationDegrees * Math.PI) / 180;
+                        } else {
+                            angle = Math.PI / (event.shiftKey ? 2 : 4);
+                        }
+                        game.rotateSelected(angle);
                         break;
                     case 76: // L
                         game.lockSelected();
@@ -670,7 +678,13 @@ try {
                         game.updateEntityOverlays();
                         break;
                     case 81: // Q
-                        game.rotateSelected(-Math.PI / (event.shiftKey ? 2 : 4));
+                        snapRotationDegrees = game.settings.snapRotationDegrees * (event.shiftKey ? 2 : 1);
+                        if (game.settings.enableSnapRotation) {
+                            angle = -(snapRotationDegrees * Math.PI) / 180;
+                        } else {
+                            angle = -Math.PI / (event.shiftKey ? 2 : 4);
+                        }
+                        game.rotateSelected(angle);
                         break;
                     case 83: // S
                         game.moveSelected(0, event.shiftKey ? 16 : 32);
@@ -4200,26 +4214,33 @@ try {
         }
     }
 
-    // TODO: Add support for rotating multiple entities and add support for flipping trains.
+    // TODO: Add support for flipping trains.
     game.rotateSelected = function(angle) {
-        const selectedEntity = game.getSelectedEntity();
-        if (selectedEntity) {
-            let rotation = Math.angleNormalized(selectedEntity.rotation + angle);
-            if (game.settings.enableSnapRotation) {
-                rotation = Math.round(rotation / angle) * angle;
-            }
-            if (selectedEntity.mid.x !== selectedEntity.x || selectedEntity.mid.y !== selectedEntity.y) {
-                let rotatedPosition = Math.rotateAround(selectedEntity.mid, selectedEntity, angle);
-                selectedEntity.x = rotatedPosition.x;
-                selectedEntity.y = rotatedPosition.y;
-            }
-            selectedEntity.rotation = rotation;
-            if (selectedEntity.sockets) {
-                selectedEntity.attemptReconnections();
-            }
-            game.saveStateChanged = true;
+    const selectionCenter = game.getEntitiesCenter(selectedEntities);
+  
+    for (let i = 0; i < selectedEntities.length; i++) {
+        let selectedEntity = selectedEntities[i];
+        let rotation = Math.angleNormalized(selectedEntity.rotation + angle);
+  
+        if (game.settings.enableSnapRotation) {
+            let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ?? 15);
+            rotation = Math.round(rotation / snapRotationDegrees) * snapRotationDegrees;
         }
+  
+        selectedEntity.rotation = rotation;
+
+        const entityCenter = { x: selectedEntity.mid.x, y: selectedEntity.mid.y };
+        let rotatedPosition = Math.rotateAround(selectionCenter, entityCenter, angle);
+        selectedEntity.x = rotatedPosition.x - (entityCenter.x - selectedEntity.x);
+        selectedEntity.y = rotatedPosition.y - (entityCenter.y - selectedEntity.y);
+  
+        if (selectedEntity.sockets) {
+            selectedEntity.attemptReconnections();
+        }
+        game.saveStateChanged = true;
+
     }
+    };
 
     game.removeEntities = function(isLoading) {
         if (entities.length) {
