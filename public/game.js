@@ -4216,24 +4216,23 @@ try {
     }
 
     // TODO: Add support for flipping trains.
-    game.rotateSelected = function(angle) {
+    game.rotateSelected = function (angle) {
         const selectionCenter = game.getEntitiesCenter(selectedEntities);
     
         for (let i = 0; i < selectedEntities.length; i++) {
             let selectedEntity = selectedEntities[i];
-            let rotation = Math.angleNormalized(selectedEntity.rotation + angle);
     
-            if (game.settings.enableSnapRotation) {
-                let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ?? 15);
-                rotation = Math.round(rotation / snapRotationDegrees) * snapRotationDegrees;
-            }
+            let rotatedPosition = Math.rotateAround(
+                selectionCenter,
+                { x: selectedEntity.x, y: selectedEntity.y },
+                angle
+            );
     
-            selectedEntity.rotation = rotation;
-
-            const entityCenter = { x: selectedEntity.mid.x, y: selectedEntity.mid.y };
-            let rotatedPosition = Math.rotateAround(selectionCenter, entityCenter, angle);
-            selectedEntity.x = rotatedPosition.x - (entityCenter.x - selectedEntity.x);
-            selectedEntity.y = rotatedPosition.y - (entityCenter.y - selectedEntity.y);
+            selectedEntity.x = rotatedPosition.x;
+            selectedEntity.y = rotatedPosition.y;
+            selectedEntity.rotation = Math.angleNormalized(
+                selectedEntity.rotation + angle
+            );
     
             if (selectedEntity.sockets) {
                 selectedEntity.attemptReconnections();
