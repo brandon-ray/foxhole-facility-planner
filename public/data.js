@@ -24,6 +24,23 @@ const game_asset_list = {
                 currParent = window.objectData.buildings[currParent.parentKey];
                 parentData.push(currParent);
             }
+            
+            let buildingCost;
+            for (const parent of parentData) {
+                if (parent.cost) {
+                    if (!buildingCost) {
+                        buildingCost = Object.assign({}, building.cost);
+                    }
+                    for (const [resource, amount] of Object.entries(parent.upgradeCost ?? parent.cost)) {
+                        buildingCost[resource] = (buildingCost[resource] ?? 0) + amount;
+                    }
+                }
+            }
+            if (buildingCost) {
+                building.upgradeCost = building.cost;
+                building.cost = buildingCost;
+            }
+
             parentData.push(Object.assign({}, building));
             Object.assign(building, ...parentData);
             building.parent = window.objectData.buildings[building.parentKey];
