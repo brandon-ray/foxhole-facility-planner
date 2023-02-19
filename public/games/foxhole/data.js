@@ -54,7 +54,6 @@ const foxholeData = {
 			"author": "Stonefox",
 			"module": true
 		},
-
 		"halberd_bunker": {
 			"name": "\"Halberd\" Bunker",
 			"description": "A common reliable defensive bunker pattern.",
@@ -9389,7 +9388,7 @@ const foxholeData = {
 			"categoryOrder": 5,
 			"range": {
 				"type": "radio",
-				"max": 240
+				"max": 80
 			},
 			"icon": "game/Textures/UI/StructureIcons/WatchTowerStructureIcon.webp",
 			"texture": "game/Textures/Structures/watchtower.webp",
