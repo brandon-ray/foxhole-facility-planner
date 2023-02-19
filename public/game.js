@@ -4198,19 +4198,24 @@ try {
                 const eX = selectedEntity.x + x, eY = selectedEntity.y + y;
                 selectedEntity.x = snapped ? Math.round(eX / gridSize) * gridSize : eX;
                 selectedEntity.y = snapped ? Math.round(eY / gridSize) * gridSize : eY;
-                selectedEntity.attemptReconnections();
             } else {
                 for (const selectedEntity of selectedEntities) {
-                    if (selectedEntity.sockets) {
-                        selectedEntity.removeConnections(undefined, true);
-                    }
                     selectedEntity.x += x;
                     selectedEntity.y += y;
                 }
-                for (const selectedEntity of selectedEntities) {
+            }
+            for (const selectedEntity of selectedEntities) {
+                if (selectedEntity.sockets) {
                     selectedEntity.attemptReconnections();
                 }
+                if (pickupSelectedEntities) {
+                    selectedEntity.pickupOffset = {
+                        x: gmx - selectedEntity.x,
+                        y: gmy - selectedEntity.y
+                    };
+                }
             }
+            game.saveStateChanged = true;
             game.buildingSelectedMenuComponent?.refresh(true);
         }
     }
@@ -4236,6 +4241,15 @@ try {
     
             if (selectedEntity.sockets) {
                 selectedEntity.attemptReconnections();
+            }
+
+            if (pickupSelectedEntities) {
+                selectedEntities.forEach(entity => {
+                    entity.pickupOffset = {
+                        x: gmx - entity.x,
+                        y: gmy - entity.y
+                    };
+                });
             }
             game.saveStateChanged = true;
         }
