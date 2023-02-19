@@ -2645,18 +2645,18 @@ try {
 
             entity.hasConnectionToEntity = (connectingEntity, ignoredSocket) => entity.hasConnectionToEntityId(connectingEntity.id, ignoredSocket);
 
-            entity.attemptReconnections = function(removeConnections = true) {
+            entity.attemptReconnections = function(removeConnections = true, ignoreSelected = true) {
                 if (removeConnections) {
-                    entity.removeConnections();
+                    entity.removeConnections(undefined, ignoreSelected);
                 }
                 for (const e2 of entities) {
-                    if (e2 === entity || !e2.sockets || Math.distanceBetween(entity.mid ?? entity, e2.mid ?? e2) > 1000) {
+                    if (e2 === entity || !e2.sockets || (ignoreSelected && e2.selected) || Math.distanceBetween(entity.mid ?? entity, e2.mid ?? e2) > 1000) {
                         continue;
                     }
                     for (const eSocket of entity.sockets) {
                         const eSocketPosition = app.cstage.toLocal({x: eSocket.x, y: eSocket.y}, entity);
                         for (const e2Socket of e2.sockets) {
-                            const e2SocketPosition = app.cstage.toLocal({x: e2Socket.x, y: e2Socket.y}, e2, undefined, true);
+                            const e2SocketPosition = app.cstage.toLocal({x: e2Socket.x, y: e2Socket.y}, e2);
                             if (eSocket.canConnect(e2Socket) && (!e2Socket.socketData.connectionLimit || Object.keys(e2Socket.connections).length < e2Socket.socketData.connectionLimit) && (Math.distanceBetween(eSocketPosition, e2SocketPosition) < 3)) {
                                 let eSocketRotation = Math.angleNormalized((entity.rotation + eSocket.rotation) - Math.PI);
                                 let e2SocketRotation = Math.angleNormalized(e2.rotation + e2Socket.rotation);
