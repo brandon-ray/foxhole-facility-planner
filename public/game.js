@@ -3048,16 +3048,16 @@ try {
                             entity.sprite.texture = texture;
 
                             if (entityData.imported) {
-                                entity.x -= entity.sprite.texture.width / 2;
-                                entity.y -= entity.sprite.texture.height / 2;
-                            }
+                                entity.x -= texture.width / 2;
+                                entity.y -= texture.height / 2;
 
-                            let handlePoint = points[points.length - 1];
-                            handlePoint.x = texture.width;
-                            handlePoint.y = texture.height;
-                            if (handlePoint.handle) {
-                                handlePoint.handle.position.x = handlePoint.x;
-                                handlePoint.handle.position.y = handlePoint.y;
+                                let handlePoint = points[points.length - 1];
+                                handlePoint.x = texture.width;
+                                handlePoint.y = texture.height;
+                                if (handlePoint.handle) {
+                                    handlePoint.handle.position.x = handlePoint.x;
+                                    handlePoint.handle.position.y = handlePoint.y;
+                                }
                             }
 
                             entity.regenerate();
