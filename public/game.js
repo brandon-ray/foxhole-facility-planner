@@ -1220,6 +1220,16 @@ try {
         return false;
     }
 
+    game.deselectHandle = function() {
+        if (selectedHandlePoint) {
+            selectedHandlePoint = null;
+            const selectedEntity = game.getSelectedEntity();
+            if (selectedEntity?.subtype === 'image' && (selectedEntity.sprite.width < selectedEntity.sprite.texture.width || selectedEntity.sprite.height < selectedEntity.sprite.texture.height)) {
+                // Resize texture image?
+            }
+        }
+    }
+
     game.deselectEntities = function(remove, noMenuUpdate) {
         if (selectedEntities.length) {
             game.setPickupEntities(false);
@@ -1386,6 +1396,44 @@ try {
             dragCamera = true;
         }
     });
+    mouseEventListenerObject.addEventListener('dragover', (e) => {
+        e.preventDefault();
+    });
+    function importImageData(data, x, y) {
+        if (game.settings.enableExperimental) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                if (reader.result) {
+                    let pos = (isNaN(x) && isNaN(y)) ? game.getMousePosition() : {
+                        x: (camera.x + x) / camera.zoom,
+                        y: (camera.y + y) / camera.zoom
+                    };
+                    let entity = createSelectableEntity('shape', 'image', pos.x, pos.y);
+                    if (entity) {
+                        entity.onLoad({ textureData: reader.result, imported: true });
+                        game.selectEntity(entity);
+                    }
+                }
+            };
+            reader.readAsDataURL(data);
+        }
+    }
+    mouseEventListenerObject.addEventListener('drop', (e) => {
+        e.preventDefault();
+        importImageData(e.dataTransfer.files[0], e.offsetX, e.offsetY);
+    });
+    document.addEventListener('paste', (e) => {
+        if (!(document.activeElement && (document.activeElement.type === 'text' || document.activeElement.type === 'number' || document.activeElement.type === 'textarea'))) {
+            e.preventDefault();
+            const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+            if (items.length > 0) {
+                const item = items[0];
+                if (item.type.indexOf('image') !== -1) {
+                    importImageData(item.getAsFile());
+                }
+            }
+        }
+    });
 
     mouseEventListenerObject.addEventListener(eventPrefix + 'move', (e) => {
         e.preventDefault();
@@ -1459,7 +1507,7 @@ try {
                 game.setPickupEntities(false);
             }
             if (game.constructionMode.key !== 'select' && selectedHandlePoint) {
-                selectedHandlePoint = null;
+                game.deselectHandle();
                 game.resetConstructionMode();
             }
         } else if (mouseButton === 1 || mouseButton === 4) {
@@ -2918,6 +2966,9 @@ try {
                 }
 
                 if (entity.type === 'shape') {
+                    if (entity.subtype === 'image') {
+                        entityData.textureData = entity.textureData;
+                    }
                     const defaultSettings = game.defaultSettings.styles[entity.subtype];
                     for (const[key, value] of Object.entries(entity.shapeStyle)) {
                         if (!defaultSettings || value !== defaultSettings[key]) {
@@ -2984,6 +3035,39 @@ try {
                 }
 
                 if (entity.type === 'shape') {
+                    if (entityData.textureData) {
+                        entity.textureData = entityData.textureData;
+                        if (!entity.sprite) {
+                            entity.sprite = new PIXI.Sprite();
+                            entity.addChild(entity.sprite);
+                        }
+                        const loader = new PIXI.Loader();
+                        loader.add(entity.textureData);
+                        loader.load(() => {
+                            const texture = loader.resources[entity.textureData].texture;
+                            entity.sprite.texture = texture;
+
+                            if (entityData.imported) {
+                                entity.x -= entity.sprite.texture.width / 2;
+                                entity.y -= entity.sprite.texture.height / 2;
+                            }
+
+                            let handlePoint = points[points.length - 1];
+                            handlePoint.x = texture.width;
+                            handlePoint.y = texture.height;
+                            if (handlePoint.handle) {
+                                handlePoint.handle.position.x = handlePoint.x;
+                                handlePoint.handle.position.y = handlePoint.y;
+                            }
+
+                            entity.regenerate();
+                        });
+                        loader.onError.add((error, resource) => {
+                            console.error('Failed to load image:', error.message);
+                            entity.remove();
+                            return;
+                        });
+                    }
                     Object.assign(entity.shapeStyle, game.defaultSettings.styles[entity.subtype], entityData.shapeStyle);
                     entity.setShapeStyle(entity.shapeStyle);
                 }
@@ -3024,6 +3108,24 @@ try {
                 entity.regenerate();
                 return newPoint;
             };
+
+            entity.flipPoints = function(vertical = false) {
+                let backPoint = points[points.length - 1];
+                let dist;
+                if (!vertical) {
+                    dist = backPoint.x;
+                    backPoint.x = -dist;
+                    backPoint.handle.x = backPoint.x;
+                } else {
+                    dist = backPoint.y;
+                    backPoint.y = -dist;
+                    backPoint.handle.y = backPoint.y;
+                }
+                let position = Math.extendPoint(entity, dist, !vertical ? entity.rotation : entity.rotation + Math.PI/2);
+                entity.x = position.x;
+                entity.y = position.y;
+                entity.regenerate();
+            }
 
             entity.regenerate = function() {
                 if (entity.sprite) {
@@ -3247,39 +3349,38 @@ try {
                                 }
                             }
                         } else if (entity.type === 'shape') {
-                            entity.sprite.clear();
                             entity.sprite.alpha = entity.shapeStyle.alpha;
-                            let endPoint = points[points.length - 1];
-                            /*
-                            if (entity.shapeStyle.fill) {
-                                entity.sprite.beginFill(entity.shapeStyle.fillColor);
-                            }
-                            if (entity.subtype === 'line') {
-                                entity.sprite.lineStyle(entity.shapeStyle.lineWidth, entity.shapeStyle.fillColor).moveTo((entity.shapeStyle.frontArrow ? entity.shapeStyle.lineWidth * 1.875 : 0), 0).lineTo(endPoint.x - (entity.shapeStyle.backArrow ? entity.shapeStyle.lineWidth * 1.875 : 0), endPoint.y);
-                                updateTextureCap(entity.frontCap, frontPoint, Math.PI/2);
-                                updateTextureCap(entity.backCap, backPoint, -Math.PI/2);
-                            } else if (entity.shapeStyle.border) {
-                                entity.sprite.lineStyle(entity.shapeStyle.lineWidth, entity.shapeStyle.lineColor, 1);
-                            }
-                            */
-                            if (entity.subtype === 'line') {
-                                entity.sprite.lineStyle(entity.shapeStyle.lineWidth, entity.shapeStyle.fillColor).moveTo((entity.shapeStyle.frontArrow ? entity.shapeStyle.lineWidth * 1.875 : 0), 0).lineTo(endPoint.x - (entity.shapeStyle.backArrow ? entity.shapeStyle.lineWidth * 1.875 : 0), endPoint.y);
-                                updateTextureCap(entity.frontCap, frontPoint, Math.PI/2);
-                                updateTextureCap(entity.backCap, backPoint, -Math.PI/2);
-                            } else if (entity.shapeStyle.border) {
-                                entity.sprite.lineStyle(entity.shapeStyle.lineWidth, entity.shapeStyle.fillColor, 1);
+                            if (entity.subtype === 'image') {
+                                entity.sprite.scale.set(backPoint.x / entity.sprite.texture.width, backPoint.y / entity.sprite.texture.height);
                             } else {
-                                entity.sprite.beginFill(entity.shapeStyle.fillColor);
+                                entity.sprite.clear();
+                                if (entity.subtype === 'line') {
+                                    // TODO: The offset for arrows will have to be calculated based on rotation / angle here.
+                                    // TODO: Update selecting lines with multiple points. It's completely borked for more than 2 points.
+                                    const line = entity.sprite.lineStyle(entity.shapeStyle.lineWidth, entity.shapeStyle.fillColor).moveTo((entity.shapeStyle.frontArrow ? entity.shapeStyle.lineWidth * 1.875 : 0), 0);
+                                    let lastPoint;
+                                    for (let i = 1; i < points.length; i++) {
+                                        let point = points[i];
+                                        lastPoint = points[i - 1];
+                                        line.lineTo(point.x - ((entity.shapeStyle.backArrow && i === points.length - 1) ? entity.shapeStyle.lineWidth * 1.875 : 0), point.y);
+                                    }
+                                    updateTextureCap(entity.frontCap, frontPoint, Math.PI/2);
+                                    updateTextureCap(entity.backCap, backPoint, Math.angleBetween(lastPoint, backPoint) - Math.PI/2);
+                                } else if (entity.shapeStyle.border) {
+                                    entity.sprite.lineStyle(entity.shapeStyle.lineWidth, entity.shapeStyle.fillColor, 1);
+                                } else {
+                                    entity.sprite.beginFill(entity.shapeStyle.fillColor);
+                                }
+                                if (entity.subtype === 'rectangle') {
+                                    const p1 = { x: backPoint.x < 0 ? backPoint.x : 0, y: backPoint.y < 0 ? backPoint.y : 0 };
+                                    const w = backPoint.x > 0 ? backPoint.x : -backPoint.x;
+                                    const h = backPoint.y > 0 ? backPoint.y : -backPoint.y;
+                                    entity.sprite.drawRect(p1.x, p1.y, w, h);
+                                } else if (entity.subtype === 'circle') {
+                                    entity.sprite.drawCircle(0, 0, backPoint.x);
+                                }
+                                entity.sprite.endFill();
                             }
-                            if (entity.subtype === 'rectangle') {
-                                const p1 = { x: endPoint.x < 0 ? endPoint.x : 0, y: endPoint.y < 0 ? endPoint.y : 0 };
-                                const w = endPoint.x > 0 ? endPoint.x : -endPoint.x;
-                                const h = endPoint.y > 0 ? endPoint.y : -endPoint.y;
-                                entity.sprite.drawRect(p1.x, p1.y, w, h);
-                            } else if (entity.subtype === 'circle') {
-                                entity.sprite.drawCircle(0, 0, endPoint.x);
-                            }
-                            entity.sprite.endFill();
                         }
                         entity.handleTick = true;
                     }
@@ -3287,8 +3388,10 @@ try {
             };
 
             if (entity.type ==='shape') {
-                entity.sprite = new PIXI.Graphics();
-                entity.addChild(entity.sprite);
+                if (entity.subtype !== 'image') {
+                    entity.sprite = new PIXI.Graphics();
+                    entity.addChild(entity.sprite);
+                }
                 entity.shapeStyle = Object.assign({}, entity.subtype === 'line' ? game.settings.styles.line : (entity.subtype === 'circle' ? game.settings.styles.circle : game.settings.styles.rectangle));
 
                 function updateArrow(sprite, visible) {
@@ -3399,9 +3502,7 @@ try {
             if (entity.following) {
                 game.followEntity(null);
             }
-            if (selectedHandlePoint) {
-                selectedHandlePoint = null;
-            }
+            game.deselectHandle();
             if (entity.sockets) {
                 entity.removeConnections();
             }
@@ -3779,7 +3880,7 @@ try {
                 let mid;
                 if (entity.bezier) {
                     mid = entity.bezier.mid;
-                } else if (points && (entity.building?.trenchConnector || (entity.type === 'shape' && (entity.subtype === 'rectangle' || entity.subtype === 'line')))) {
+                } else if (points && (entity.building?.trenchConnector || (entity.type === 'shape' && (entity.subtype === 'rectangle' || entity.subtype === 'image' || entity.subtype === 'line')))) {
                     mid = {
                         x: (points[0].x + points[points.length - 1].x) / 2,
                         y: (points[0].y + points[points.length - 1].y) / 2
@@ -4035,9 +4136,18 @@ try {
                 } else if (!ignoreLock && entity.locked) {
                     locked = true;
                 } else if (!locked) {
+                    let offsetX = 0, offsetY = 0;
+                    if (ignoreOffset) {
+                        if (entity.building?.hasHandle) {
+                            offsetX = entity.building.minLength > 1 ? (entity.building.minLength * METER_PIXEL_SIZE) / 2 : 100;
+                        } else if (entity.subtype === 'rectangle' || entity.subtype === 'image' || entity.subtype === 'line') {
+                            offsetX = entity.mid.x;
+                            offsetY = entity.mid.y;
+                        }
+                    }
                     entity.pickupOffset = {
-                        x: ignoreOffset ? (entity.building?.hasHandle ? (entity.building.minLength > 1 ? (entity.building.minLength * METER_PIXEL_SIZE) / 2 : 100) : 0) : (position?.x ?? gmx) - entity.x,
-                        y: ignoreOffset ? 0 : (position?.y ?? gmy) - entity.y
+                        x: ignoreOffset ? offsetX : ((position?.x ?? gmx) - entity.x),
+                        y: ignoreOffset ? offsetY : ((position?.y ?? gmy) - entity.y)
                     };
                 }
             });
@@ -4223,7 +4333,6 @@ try {
     // TODO: Add support for flipping trains.
     game.rotateSelected = function (angle) {
         const selectionCenter = game.getEntitiesCenter(selectedEntities);
-    
         for (let i = 0; i < selectedEntities.length; i++) {
             let selectedEntity = selectedEntities[i];
     
@@ -4251,8 +4360,18 @@ try {
                     };
                 });
             }
-            game.saveStateChanged = true;
         }
+        game.saveStateChanged = true;
+    };
+
+    // TODO: Add support for flipping a group of objects along their center?
+    game.flipSelected = function(vertical = false) {
+        for (const selectedEntity of selectedEntities) {
+            if (selectedEntity.type === 'shape' && selectedEntity.subtype === 'image') {
+                selectedEntity.flipPoints(vertical);
+            }
+        }
+        game.saveStateChanged = true;
     };
 
     game.removeEntities = function(isLoading) {
@@ -4273,7 +4392,7 @@ try {
                 game.statisticsMenuComponent.refresh();
             }
         }
-    }
+    };
 
     game.confirmDeletion = function(callback, loading) {
         game.confirmationPopup.showPopup(loading ? 'save-work' : 'delete', confirmed => {
@@ -4284,7 +4403,7 @@ try {
                 callback(confirmed);
             }
         });
-    }
+    };
 
     function shuffle(array) {
         let currentIndex = array.length, temporaryValue, randomIndex;
@@ -4304,8 +4423,8 @@ try {
                 window.localStorage.setItem('save', saveString);
             }
             game.updateHistory(saveString);
-        } catch(e) {
-            console.error('Failed to update save.');
+        } catch (e) {
+            console.error('Failed to update save:', e);
         }
     };
 
@@ -4429,8 +4548,8 @@ try {
             }
         }
 
-        if (selectedHandlePoint && !mouseDown[0]) {
-            selectedHandlePoint = null;
+        if (!mouseDown[0]) {
+            game.deselectHandle();
         }
 
         let vehicles = [];

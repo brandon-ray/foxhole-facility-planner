@@ -292,7 +292,7 @@ Vue.component('app-menu-building-selected', {
             }
         },
         resetStyleOptions: function() {
-            this.entity.style = Object.assign({}, game.defaultSettings.styles[this.entity.type === 'text' ? 'label' : this.entity.subtype]);
+            this.entity.style = Object.assign({}, game.defaultSettings.styles[this.entity.type === 'text' ? 'label' : (this.entity.subtype === 'image' ? 'rectangle' : this.entity.subtype)]);
             this.updateStyleOptions(true);
         },
         /*
@@ -881,7 +881,17 @@ Vue.component('app-game-shape-options', {
                 <span class="label">arrow</span>
             </div>
         </template>
-        <div v-if="subtype !== 'line'" title="Border" class="btn-small col" :class="{ 'btn-active': shapeOptions.border }" @click="shapeOptions.border = !shapeOptions.border; container.updateStyleOptions()">
+        <template v-if="subtype === 'image'">
+            <div class="btn-small col" title="Flip Horizontally" @click="game.flipSelected()">
+                <i class="fa fa-arrows-h" aria-hidden="true"></i>
+                <span class="label">flip horizontal</span>
+            </div>
+            <div class="btn-small col" title="Flip Vertically" @click="game.flipSelected(true)">
+                <i class="fa fa-arrows-v" aria-hidden="true"></i>
+                <span class="label">flip vertical</span>
+            </div>
+        </template>
+        <div v-if="subtype !== 'image' && subtype !== 'line'" title="Border" class="btn-small col" :class="{ 'btn-active': shapeOptions.border }" @click="shapeOptions.border = !shapeOptions.border; container.updateStyleOptions()">
             <i class="fa" :class="{ 'fa-square-o': subtype === 'rectangle', 'fa-circle-thin': subtype === 'circle' }" aria-hidden="true"></i>
             <span class="label">border</span>
         </div>
@@ -889,7 +899,7 @@ Vue.component('app-game-shape-options', {
             <input class="btn-small small-number-input" title="Line Thickness" type="number" v-model.number="shapeOptions.lineWidth" min="6" max="64" @change="container.updateStyleOptions()">
             <span class="label">thickness</span>
         </div>
-        <div class="btn-small col" title="Color">
+        <div v-if="subtype !== 'image'" class="btn-small col" title="Color">
             <input class="btn-small color-input" type="color" v-model="shapeOptions.fillColor" @input="container.updateStyleOptions()">
             <i class="fa fa-tint icon-shadow" :style="{color: shapeOptions.fillColor}" aria-hidden="true"></i>
             <span class="label">color</span>
