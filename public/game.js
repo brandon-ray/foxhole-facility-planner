@@ -88,6 +88,7 @@ const game = {
             },
             rectangle: DEFAULT_SHAPE_STYLE,
             image: Object.assign({}, DEFAULT_SHAPE_STYLE, {
+                sendToBackground: false,
                 maintainAspectRatio: true
             }),
             circle: Object.assign({}, DEFAULT_SHAPE_STYLE),
@@ -260,6 +261,7 @@ try {
     ];
 
     game.constructionLayers = {
+        background: 0,
         foundation: 1000,
         road: 10000,
         rail: 15000,
@@ -3429,6 +3431,14 @@ try {
                 }
 
                 entity.setShapeStyle = function(style) {
+                    if (entity.subtype === 'image') {
+                        let sortLayer = style.sendToBackground ? 'background' : entity.type;
+                        if (entity.sortLayer !== sortLayer) {
+                            let sortOffset = entity.sortOffset - game.constructionLayers[entity.sortLayer];
+                            entity.sortLayer = sortLayer;
+                            entity.sortOffset = game.constructionLayers[entity.sortLayer] + sortOffset;
+                        }
+                    }
                     entity.shapeStyle = style;
                     if (entity.subtype === 'line') {
                         entity.frontCap = updateArrow(entity.frontCap, entity.shapeStyle.frontArrow);
@@ -4314,7 +4324,7 @@ try {
     }
 
     game.moveSelected = function(x, y, snapped) {
-        if (selectedEntities.length) {
+        if (selectedEntities.length && game.getSelectedLockState() === null) {
             const gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
             if (snapped) {
                 x *= gridSize;
@@ -4349,36 +4359,38 @@ try {
 
     // TODO: Add support for flipping trains.
     game.rotateSelected = function (angle) {
-        const selectionCenter = game.getEntitiesCenter(selectedEntities);
-        for (let i = 0; i < selectedEntities.length; i++) {
-            let selectedEntity = selectedEntities[i];
-    
-            let rotatedPosition = Math.rotateAround(
-                selectionCenter,
-                { x: selectedEntity.x, y: selectedEntity.y },
-                angle
-            );
-    
-            selectedEntity.x = rotatedPosition.x;
-            selectedEntity.y = rotatedPosition.y;
-            selectedEntity.rotation = Math.angleNormalized(
-                selectedEntity.rotation + angle
-            );
-    
-            if (selectedEntity.sockets) {
-                selectedEntity.attemptReconnections();
-            }
+        if (selectedEntities.length && game.getSelectedLockState() === null) {
+            const selectionCenter = game.getEntitiesCenter(selectedEntities);
+            for (let i = 0; i < selectedEntities.length; i++) {
+                let selectedEntity = selectedEntities[i];
+        
+                let rotatedPosition = Math.rotateAround(
+                    selectionCenter,
+                    { x: selectedEntity.x, y: selectedEntity.y },
+                    angle
+                );
+        
+                selectedEntity.x = rotatedPosition.x;
+                selectedEntity.y = rotatedPosition.y;
+                selectedEntity.rotation = Math.angleNormalized(
+                    selectedEntity.rotation + angle
+                );
+        
+                if (selectedEntity.sockets) {
+                    selectedEntity.attemptReconnections();
+                }
 
-            if (pickupSelectedEntities) {
-                selectedEntities.forEach(entity => {
-                    entity.pickupOffset = {
-                        x: gmx - entity.x,
-                        y: gmy - entity.y
-                    };
-                });
+                if (pickupSelectedEntities) {
+                    selectedEntities.forEach(entity => {
+                        entity.pickupOffset = {
+                            x: gmx - entity.x,
+                            y: gmy - entity.y
+                        };
+                    });
+                }
             }
+            game.saveStateChanged = true;
         }
-        game.saveStateChanged = true;
     };
 
     // TODO: Add support for flipping a group of objects along their center?
@@ -4709,7 +4721,7 @@ try {
         }
 
         if (mouseDown[2] && !selectedHandlePoint) {
-            if (!selectionRotation) {
+            if (!selectionRotation && game.getSelectedLockState() === null) {
                 let rotationOffset = null;
                 selectedEntities.forEach(selectedEntity => {
                     if (rotationOffset !== false) {

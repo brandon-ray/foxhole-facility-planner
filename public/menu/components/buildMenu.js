@@ -894,6 +894,10 @@ Vue.component('app-game-shape-options', {
                 <i class="fa fa-expand fa-rotate-90" aria-hidden="true"></i>
                 <span class="label">keep aspect</span>
             </div>
+            <div class="btn-small col" title="Send to Back" :class="{ 'btn-active': shapeOptions.sendToBackground }" @click="shapeOptions.sendToBackground = !shapeOptions.sendToBackground; container.updateStyleOptions()">
+                <i class="fa fa-arrow-circle-down" aria-hidden="true"></i>
+                <span class="label">background</span>
+            </div>
         </template>
         <div v-if="subtype !== 'image' && subtype !== 'line'" title="Border" class="btn-small col" :class="{ 'btn-active': shapeOptions.border }" @click="shapeOptions.border = !shapeOptions.border; container.updateStyleOptions()">
             <i class="fa" :class="{ 'fa-square-o': subtype === 'rectangle', 'fa-circle-thin': subtype === 'circle' }" aria-hidden="true"></i>
