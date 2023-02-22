@@ -87,6 +87,9 @@ const game = {
                 align: 'center'
             },
             rectangle: DEFAULT_SHAPE_STYLE,
+            image: Object.assign({}, DEFAULT_SHAPE_STYLE, {
+                maintainAspectRatio: true
+            }),
             circle: Object.assign({}, DEFAULT_SHAPE_STYLE),
             line: Object.assign({}, DEFAULT_SHAPE_STYLE, {
                 lineWidth: 14,
@@ -3351,6 +3354,20 @@ try {
                         } else if (entity.type === 'shape') {
                             entity.sprite.alpha = entity.shapeStyle.alpha;
                             if (entity.subtype === 'image') {
+                                if (entity.shapeStyle.maintainAspectRatio) {
+                                    const textureAspectRatio = entity.sprite.texture.width / entity.sprite.texture.height;
+                                    const pX = Math.abs(backPoint.x), pY = Math.abs(backPoint.y);
+                                    const pointsAspectRatio = pX / pY;
+                                    if (pointsAspectRatio > textureAspectRatio) {
+                                        backPoint.x = Math.sign(backPoint.x) * pY * textureAspectRatio;
+                                    } else {
+                                        backPoint.y = Math.sign(backPoint.y) * pX / textureAspectRatio;
+                                    }
+                                    if (backPoint.handle) {
+                                        backPoint.handle.x = backPoint.x;
+                                        backPoint.handle.y = backPoint.y;
+                                    }
+                                }
                                 entity.sprite.scale.set(backPoint.x / entity.sprite.texture.width, backPoint.y / entity.sprite.texture.height);
                             } else {
                                 entity.sprite.clear();

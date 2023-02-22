@@ -292,7 +292,7 @@ Vue.component('app-menu-building-selected', {
             }
         },
         resetStyleOptions: function() {
-            this.entity.style = Object.assign({}, game.defaultSettings.styles[this.entity.type === 'text' ? 'label' : (this.entity.subtype === 'image' ? 'rectangle' : this.entity.subtype)]);
+            this.entity.style = Object.assign({}, game.defaultSettings.styles[this.entity.type === 'text' ? 'label' : this.entity.subtype]);
             this.updateStyleOptions(true);
         },
         /*
@@ -884,11 +884,15 @@ Vue.component('app-game-shape-options', {
         <template v-if="subtype === 'image'">
             <div class="btn-small col" title="Flip Horizontally" @click="game.flipSelected()">
                 <i class="fa fa-arrows-h" aria-hidden="true"></i>
-                <span class="label">flip horizontal</span>
+                <span class="label">flip</span>
             </div>
             <div class="btn-small col" title="Flip Vertically" @click="game.flipSelected(true)">
                 <i class="fa fa-arrows-v" aria-hidden="true"></i>
-                <span class="label">flip vertical</span>
+                <span class="label">flip</span>
+            </div>
+            <div class="btn-small col" title="Maintain Aspect Ratio" :class="{ 'btn-active': shapeOptions.maintainAspectRatio }" @click="shapeOptions.maintainAspectRatio = !shapeOptions.maintainAspectRatio; container.updateStyleOptions()">
+                <i class="fa fa-expand fa-rotate-90" aria-hidden="true"></i>
+                <span class="label">keep aspect</span>
             </div>
         </template>
         <div v-if="subtype !== 'image' && subtype !== 'line'" title="Border" class="btn-small col" :class="{ 'btn-active': shapeOptions.border }" @click="shapeOptions.border = !shapeOptions.border; container.updateStyleOptions()">
