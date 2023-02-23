@@ -1367,6 +1367,23 @@ const foxholeData = {
 			},
 			"repairCost": 20
 		},
+		"barge": {
+			"name": "BMS - Aquatipper",
+			"codeName": "Barge",
+			"description": "A large shipping vessel, the Aquatipper is used to transport vehicles, equipment, and personnel over large bodies of water.",
+			"category": "vehicles",
+			"categoryOrder": 20,
+			"hitArea": [
+				{
+					"shape": [ -191.36,103.68,-192.64,-103.04,196.48,-103.68,197.12,101.12 ]
+				},
+				{
+					"shape": [ -192.64,-103.04,-192.64,-39.68,-202.24,-72.96 ]
+				}
+			],
+			"icon": "game/Textures/UI/VehicleIcons/BargeVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/barge.webp"
+		},
 		"bms_foreman_stacker": {
 			"name": "BMS Foreman Stacker",
 			"codeName": "FacilityCrane",
@@ -4058,6 +4075,29 @@ const foxholeData = {
 					}
 				}
 			}
+		},
+		"freighter": {
+			"name": "BMS - Ironship",
+			"codeName": "Freighter",
+			"description": "The Basset Motor Society’s Ironship-class shipping vessel is used to freight shippable goods and heavy vehicles.",
+			"category": "vehicles",
+			"categoryOrder": 21,
+			"hitArea": [
+				{
+					"shape": [ 319.36,49.28,293.12,72.96,298.24,-69.76,322.56,-44.8,356.48,0.64 ]
+				},
+				{
+					"shape": [ -345.6,90.88,-357.12,-1.92,-309.76,-126.08,184.32,-127.36,254.72,99.84,185.6,127.36,-302.72,126.72,-326.4,119.68 ]
+				},
+				{
+					"shape": [ -309.76,-126.08,-357.12,-1.92,-346.24,-88.96,-331.52,-115.84 ]
+				},
+				{
+					"shape": [ 247.68,-103.68,298.24,-69.76,293.12,72.96,254.72,99.84,184.32,-127.36 ]
+				}
+			],
+			"icon": "game/Textures/UI/VehicleIcons/FreighterVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/freighter.webp"
 		},
 		"fuel_container": {
 			"name": "Fuel Container",
