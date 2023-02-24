@@ -271,8 +271,8 @@ try {
 
     game.constructionLayers = {
         background: 0,
-        foundation: 1000,
-        road: 10000,
+        road: 1000,
+        foundation: 5000,
         rail: 15000,
         resource: 17500,
         pipe: 20000,

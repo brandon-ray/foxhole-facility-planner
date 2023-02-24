@@ -1100,6 +1100,10 @@ input[type=number].btn-small {
     pointer-events: none;
 }
 
+.no-sidebar .project-banner {
+    left: 15px;
+}
+
 .btn-small {
     width: 30px;
     height: 30px;
@@ -1120,6 +1124,10 @@ input[type=number].btn-small {
     text-align: left;
     z-index: 100;
     pointer-events: none;
+}
+
+.no-sidebar #hover-building-info {
+    left: 15px;
 }
 
 #hover-building-info > .building-info-name {
@@ -1349,6 +1357,10 @@ input[type=number].btn-small {
     left: 350px;
     text-align: left;
     /*border-top: 1px solid #1e1e1e;*/
+}
+
+.no-sidebar .footer {
+    left: 0;
 }
 
 .title-button {
@@ -1646,6 +1658,10 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
     left: 365px;
 }
 
+.no-sidebar .layer-selection {
+    left: 15px;
+}
+
 .layer-selection .btn-checkbox-wrapper {
     margin: 5px;
 }
@@ -1740,7 +1756,7 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
 }
 
 #toolbelt-panel .toolbelt-end-buttons {
-    width: 32px;
+    width: 30px;
 }
 
 #toolbelt-panel .toolbelt-header .btn-small {
@@ -1752,7 +1768,7 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
     line-height: 22px;
     border-width: 1px;
     box-shadow: inset -1px -1px 4px black;
-    margin: 2px;
+    margin: 2px 0 0 2px;
     float: none;
 }
 

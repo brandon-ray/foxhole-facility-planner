@@ -16,6 +16,7 @@ if (isMobile && !isPhoneApp) {
                     isPlayScreen: game.isPlayScreen,
                     isInMenu: game.isInMenu,
                     settings: game.settings,
+                    sidebarVisible: true,
                     layerSelectionVisible: false
                 };
             },
@@ -54,9 +55,9 @@ if (isMobile && !isPhoneApp) {
                 }
             },
             template: html`
-            <div ref="app" :class="{'colonial-faction': game.settings.displayFactionTheme && game.settings.selectedFaction === 'c', 'warden-faction': game.settings.displayFactionTheme && game.settings.selectedFaction === 'w' }">
+            <div ref="app" :class="{'colonial-faction': game.settings.displayFactionTheme && game.settings.selectedFaction === 'c', 'warden-faction': game.settings.displayFactionTheme && game.settings.selectedFaction === 'w', 'no-sidebar': !sidebarVisible }">
                 <app-game-game-menu></app-game-game-menu>
-                <app-game-sidebar></app-game-sidebar>
+                <app-game-sidebar v-if="sidebarVisible"></app-game-sidebar>
                 
                 <div v-if="game.settings.showFacilityName && game.projectName && game.projectName !== 'Unnamed Facility' && game.projectName !== 'Unnamed Project'" class="project-banner">
                     <i class="fa fa-wrench" aria-hidden="true"></i> {{game.projectName}}
@@ -122,6 +123,9 @@ if (isMobile && !isPhoneApp) {
                 <app-game-toolbelt v-if="game.settings.enableExperimental"></app-game-toolbelt>
 
                 <div class="footer">
+                    <button class="btn-small btn-float-left" :class="{ 'btn-active': !sidebarVisible }" title="Toggle Sidebar Menu" @click="sidebarVisible = !sidebarVisible">
+                        <i class="fa" :class="{'fa-chevron-left': sidebarVisible, 'fa-chevron-right': !sidebarVisible}" aria-hidden="true"></i>
+                    </button>
                     <label class="btn-checkbox-wrapper">
                         <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': settings.enableGrid }" @click="settings.enableGrid = !settings.enableGrid; game.updateSettings()"></button>
                         Snap to Grid
@@ -311,7 +315,6 @@ Vue.component('app-game-toolbelt', {
         buildBuilding: function(building) {
             this.bmc();
             // game.create((building.preset && 'preset') || 'building', building.preset ? building.dataFile : building.key);
-            // game.sidebarMenuComponent.showHoverMenu(null);
             if (this.lastSlotClicked !== null) {
                 game.settings.toolbelts[game.settings.selectedToolbelt][this.lastSlotClicked] = {
                     type: 'building',
