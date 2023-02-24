@@ -1373,6 +1373,7 @@ const foxholeData = {
 			"description": "A large shipping vessel, the Aquatipper is used to transport vehicles, equipment, and personnel over large bodies of water.",
 			"category": "vehicles",
 			"categoryOrder": 20,
+			"sortLayer": "vehicle",
 			"hitArea": [
 				{
 					"shape": [ -191.36,103.68,-192.64,-103.04,196.48,-103.68,197.12,101.12 ]
@@ -4082,6 +4083,7 @@ const foxholeData = {
 			"description": "The Basset Motor Society’s Ironship-class shipping vessel is used to freight shippable goods and heavy vehicles.",
 			"category": "vehicles",
 			"categoryOrder": 21,
+			"sortLayer": "vehicle",
 			"hitArea": [
 				{
 					"shape": [ 319.36,49.28,293.12,72.96,298.24,-69.76,322.56,-44.8,356.48,0.64 ]

@@ -78,6 +78,9 @@ const game = {
         showCollapsibleBuildingList: true,
         showUpgradesAsBuildings: false,
         showFacilityName: true,
+        showToolbelt: true,
+        selectedToolbelt: 0,
+        toolbelts: [],
         styles: {
             label: {
                 fontSize: 64,
@@ -102,6 +105,12 @@ const game = {
     },
     isPlayScreen: false
 };
+
+let toolbelt = [];
+for (let i = 0; i < 10; i++) {
+    toolbelt.push({});
+}
+game.settings.toolbelts.push(toolbelt);
 
 game.defaultSettings = JSON.parse(JSON.stringify(game.settings));
 game.playMode = false;
@@ -550,6 +559,9 @@ try {
         let key = event.keyCode;
         switch (key) {
             case 27: // Escape
+                if (game.toolbeltComponent) {
+                    game.toolbeltComponent.showList(false);
+                }
                 game.resetConstructionMode();
                 if (!selectionArea?.visible) {
                     game.deselectEntities();
@@ -661,6 +673,36 @@ try {
                     case 46: // Delete
                         game.deselectEntities(true);
                         break;
+                    case 48: // 0
+                        game.activateToolbeltItem(9);
+                        break;
+                    case 49: // 1
+                        game.activateToolbeltItem(0);
+                        break;
+                    case 50: // 2
+                        game.activateToolbeltItem(1);
+                        break;
+                    case 51: // 3
+                        game.activateToolbeltItem(2);
+                        break;
+                    case 52: // 4
+                        game.activateToolbeltItem(3);
+                        break;
+                    case 53: // 5
+                        game.activateToolbeltItem(4);
+                        break;
+                    case 54: // 6
+                        game.activateToolbeltItem(5);
+                        break;
+                    case 55: // 7
+                        game.activateToolbeltItem(6);
+                        break;
+                    case 56: // 8
+                        game.activateToolbeltItem(7);
+                        break;
+                    case 57: // 9
+                        game.activateToolbeltItem(8);
+                        break;
                     case 65: // A
                         game.moveSelected(event.shiftKey ? -16 : -32, 0);
                         break;
@@ -705,6 +747,12 @@ try {
             keys[key] = true;
         }
     });
+
+    game.activateToolbeltItem = function(index) {
+        if (game.settings.enableExperimental && game.toolbeltComponent) {
+            game.toolbeltComponent.activateToolbeltItem(index, game.settings.toolbelts[game.settings.selectedToolbelt][index]);
+        }
+    }
 
     document.addEventListener('keyup', function (event) {
         event = event || window.event;
@@ -1335,6 +1383,10 @@ try {
             game.followEntity(null);
         }
 
+        if (game.toolbeltComponent) {
+            game.toolbeltComponent.showList(false);
+        }
+
         mouseDown[mouseButton] = true;
         if (mouseButton === 0) {
             if (!selectedHandlePoint) {
@@ -1469,6 +1521,10 @@ try {
 
             if (!selectionArea.visible) {
                 selectionArea.visible = true;
+                if (game.settings.enableExperimental && game.toolbeltComponent) {
+                    const el = document.getElementById('toolbelt-panel');
+                    el.style.pointerEvents = 'none';
+                }
             }
 
             let selectedChange = false;
@@ -1507,6 +1563,10 @@ try {
             if (selectionArea) {
                 selectionArea.origin = null;
                 selectionArea.visible = false;
+                if (game.settings.enableExperimental && game.toolbeltComponent) {
+                    const el = document.getElementById('toolbelt-panel');
+                    el.style.pointerEvents = 'auto';
+                }
             }
             if (pickupSelectedEntities) {
                 game.setPickupEntities(false);
@@ -4180,7 +4240,7 @@ try {
             });
             if (!locked) {
                 if (pickup) {
-                    pickupTime = Date.now();
+                    pickupTime = !ignoreOffset ? Date.now() : null;
                     pickupPosition = {x: position?.x ?? gmx, y: position?.y ?? gmy};
                     ignoreMousePickup = true;
                 } else {

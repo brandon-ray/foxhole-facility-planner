@@ -195,13 +195,3 @@ body {
 .statistics-time-dropdown select:hover {
     border-color: white;
 }
-
-.layer-selection {
-    width: 500px;
-    bottom: 59px;
-    left: 365px;
-}
-
-.layer-selection .btn-checkbox-wrapper {
-    margin: 5px;
-}

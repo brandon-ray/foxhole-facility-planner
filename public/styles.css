@@ -1640,6 +1640,151 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
 }
 */
 
+.layer-selection {
+    width: 500px;
+    bottom: 59px;
+    left: 365px;
+}
+
+.layer-selection .btn-checkbox-wrapper {
+    margin: 5px;
+}
+
+#toolbelt-panel {
+    width: 550px;
+    /* background: linear-gradient(rgb(24, 24, 24), rgb(12, 12, 12)); */
+    top: 15px;
+    left: 50%;
+    margin-left: -275px;
+    padding: 3px;
+}
+
+/*
+#toolbelt-panel .toolbelt-header {
+    background: linear-gradient(rgb(24, 24, 24), rgb(12, 12, 12));
+}
+*/
+
+#toolbelt-panel .toolbelt-buttons div {
+    width: 10%;
+    height: 52px;
+    background-color: rgba(0, 0, 0, 0.25);
+    background-size: 94%;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 2px;
+    border: 1px solid transparent;
+    position: relative;
+    cursor: pointer;
+    box-shadow: inset -1px -1px 4px black;
+    text-align: center;
+    transition-duration: 0.1s;
+}
+
+#toolbelt-panel .toolbelt-buttons div:not(.deletion):hover,
+#toolbelt-panel .toolbelt-buttons div.item-selected {
+    background-color: rgba(0, 0, 0, 0.5);
+    background-position: center 2px;
+    border-color: white;
+}
+
+#toolbelt-panel .toolbelt-buttons div i {
+    opacity: 0;
+    font-size: 1.5em;
+    line-height: 52px;
+    transition-duration: 0.1s;
+}
+
+#toolbelt-panel .toolbelt-buttons div:hover i,
+#toolbelt-panel .toolbelt-buttons div.item-selected i {
+    opacity: 1;
+}
+
+#toolbelt-panel .toolbelt-buttons div small {
+    position: absolute;
+    top: 0;
+    left: 5px;
+    color: gray;
+}
+
+#toolbelt-panel .toolbelt-buttons div:hover small,
+#toolbelt-panel .toolbelt-buttons div.item-selected small,
+#toolbelt-panel .toolbelt-buttons div.anim-active small {
+    color: white;
+}
+
+#toolbelt-panel .toolbelt-buttons div.anim-active {
+    background-color: #ff8f00;
+}
+
+#toolbelt-panel .toolbelt-buttons div.item-selected {
+    background-color: #303030;
+}
+
+#toolbelt-panel .toolbelt-buttons div.deletion:hover {
+    border-color: red;
+}
+
+#toolbelt-panel .toolbelt-buttons .fa-trash {
+    opacity: 0.75;
+    color: red;
+    line-height: initial;
+    font-size: 1em;
+    position: absolute;
+    bottom: 0;
+    right: 1px;
+}
+
+#toolbelt-panel .toolbelt-buttons div:hover .fa-trash {
+    opacity: 1;
+}
+
+#toolbelt-panel .toolbelt-end-buttons {
+    width: 32px;
+}
+
+#toolbelt-panel .toolbelt-header .btn-small {
+    display: block;
+    background-color: rgba(0, 0, 0, 0.25);
+    width: 25px;
+    height: 25px;
+    font-size: 1em;
+    line-height: 22px;
+    border-width: 1px;
+    box-shadow: inset -1px -1px 4px black;
+    margin: 2px;
+    float: none;
+}
+
+#toolbelt-panel .toolbelt-selection-wrapper {
+    background: black;
+    margin: 3px;
+    overflow: auto;
+}
+
+#toolbelt-panel .toolbelt-selection-wrapper.no-slot-selected {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+#toolbelt-panel .toolbelt-selection {
+    background: black;
+    min-height: 150px;
+    max-height: 350px;
+    overflow-y: auto;
+    border: 1px solid black;
+}
+
+#toolbelt-panel .toolbelt-selection .build-icon {
+    width: 10%;
+    padding-top: 10%;
+}
+
+#toolbelt-panel .hover-building-info {
+    padding: 4px 10px;
+    text-align: center;
+}
+
 /* Scrollbars */
 
 *::-webkit-scrollbar {
