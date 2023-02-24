@@ -1523,7 +1523,9 @@ try {
                 selectionArea.visible = true;
                 if (game.settings.enableExperimental && game.toolbeltComponent) {
                     const el = document.getElementById('toolbelt-panel');
-                    el.style.pointerEvents = 'none';
+                    if (el) {
+                        el.style.pointerEvents = 'none';
+                    }
                 }
             }
 
@@ -1565,7 +1567,9 @@ try {
                 selectionArea.visible = false;
                 if (game.settings.enableExperimental && game.toolbeltComponent) {
                     const el = document.getElementById('toolbelt-panel');
-                    el.style.pointerEvents = 'auto';
+                    if (el) {
+                        el.style.pointerEvents = 'auto';
+                    }
                 }
             }
             if (pickupSelectedEntities) {
