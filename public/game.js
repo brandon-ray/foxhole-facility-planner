@@ -1025,10 +1025,10 @@ try {
             if (entity.valid) {
                 let entityData = {
                     id: entity.id,
-                    x: parseFloat(entity.x),
-                    y: parseFloat(entity.y),
-                    z: parseFloat(entity.z) || undefined,
-                    rotation: entity.rotation || undefined,
+                    x: parseFloat(entity.x).round(3),
+                    y: parseFloat(entity.y).round(3),
+                    z: parseFloat(entity.z).round(3) || undefined,
+                    rotation: parseFloat(entity.rotation).round(3) || undefined,
                     locked: entity.locked || undefined,
                     type: entity.type,
                     subtype: entity.subtype
@@ -1042,6 +1042,15 @@ try {
     }
 
     game.downloadSave = function(isSelection) {
+        let saveData = game.getSaveData(isSelection);
+        let saveString = JSON.stringify(saveData, function(key, value) {
+            if (typeof value === 'number') {
+                if (key === 'x' || key === 'y' || key === 'z' || key === 'rotation') {
+                    return value.round(3);
+                }
+            }
+            return value;
+        });
         let fileName = game.projectName.toLowerCase().trim()
             .replace(/[^\w\s-]/g, '')
             .replace(/[\s_-]+/g, '_')
@@ -1049,7 +1058,7 @@ try {
         if (isSelection) {
             fileName += '_selection';
         }
-        download(JSON.stringify(game.getSaveData(isSelection)), fileName, 'application/json');
+        download(saveString, fileName, 'application/json');
     };
 
     game.loadSave = function(saveObject, isSelection, ignoreConfirmation, isAutoLoad) {
@@ -5193,4 +5202,8 @@ try {
 
         return false;
     };
+    Number.prototype.round = function(n) {
+        const d = Math.pow(10, n);
+        return Math.round((this + Number.EPSILON) * d) / d;
+      }
 })();
