@@ -2366,6 +2366,38 @@ const foxholeData = {
 					"x": 0,
 					"y": 264,
 					"rotation": 270
+				},
+				{
+					"id": 4,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 528,
+					"y": 792,
+					"rotation": 90
+				},
+				{
+					"id": 5,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 0,
+					"y": 792,
+					"rotation": 270
 				}
 			],
 			"maxHealth": 1750,
@@ -2456,6 +2488,38 @@ const foxholeData = {
 					],
 					"x": 0,
 					"y": 264,
+					"rotation": 270
+				},
+				{
+					"id": 4,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 528,
+					"y": 792,
+					"rotation": 90
+				},
+				{
+					"id": 5,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 0,
+					"y": 792,
 					"rotation": 270
 				}
 			],
@@ -2550,6 +2614,38 @@ const foxholeData = {
 					],
 					"x": 0,
 					"y": 264,
+					"rotation": 270
+				},
+				{
+					"id": 4,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 528,
+					"y": 792,
+					"rotation": 90
+				},
+				{
+					"id": 5,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 0,
+					"y": 792,
 					"rotation": 270
 				}
 			],
@@ -3001,6 +3097,22 @@ const foxholeData = {
 							"rotation": 90
 						},
 						{
+							"id": 2,
+							"type": [
+								{
+									"mask": 2,
+									"category": 4
+								},
+								{
+									"mask": 4,
+									"category": 4
+								}
+							],
+							"x": 264,
+							"y": 528,
+							"rotation": 180
+						},
+						{
 							"id": 3,
 							"type": [
 								{
@@ -3267,6 +3379,22 @@ const foxholeData = {
 							"x": 528,
 							"y": 264,
 							"rotation": 90
+						},
+						{
+							"id": 2,
+							"type": [
+								{
+									"mask": 2,
+									"category": 4
+								},
+								{
+									"mask": 4,
+									"category": 4
+								}
+							],
+							"x": 264,
+							"y": 528,
+							"rotation": 180
 						},
 						{
 							"id": 3,
@@ -3623,6 +3751,22 @@ const foxholeData = {
 							"x": 528,
 							"y": 264,
 							"rotation": 90
+						},
+						{
+							"id": 2,
+							"type": [
+								{
+									"mask": 2,
+									"category": 4
+								},
+								{
+									"mask": 4,
+									"category": 4
+								}
+							],
+							"x": 264,
+							"y": 528,
+							"rotation": 180
 						},
 						{
 							"id": 3,
