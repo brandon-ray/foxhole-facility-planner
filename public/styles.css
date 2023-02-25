@@ -984,6 +984,10 @@ input[type=number].btn-small {
     pointer-events: none;
 }
 
+.resource-row > .resource-amount small {
+    font-size: 90%;
+}
+
 .resource-col.power-production .resource-icon {
     font-size: 1.7em;
     text-align: center;
