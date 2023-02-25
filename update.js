@@ -14,6 +14,21 @@ let structureList = foxholeData.buildings;
 let upgradeList = {};
 let techList = {};
 let itemList = {
+    "facilitymaterials4": {
+        "icon": "game/Textures/UI/ItemIcons/AssemblyMaterials1Icon.webp"
+    },
+    "facilitymaterials5": {
+        "icon": "game/Textures/UI/ItemIcons/AssemblyMaterials2Icon.webp"
+    },
+    "facilitymaterials6": {
+        "icon": "game/Textures/UI/ItemIcons/AssemblyMaterials3Icon.webp"
+    },
+    "facilitymaterials7": {
+        "icon": "game/Textures/UI/ItemIcons/AssemblyMaterials4Icon.webp"
+    },
+    "facilitymaterials8": {
+        "icon": "game/Textures/UI/ItemIcons/AssemblyMaterials5Icon.webp"
+    },
     "oilcan": {
         "name": "Oil (Canned)",
         "description": "A raw viscous liquid that must be refined into fuel at Facilities.",
@@ -46,10 +61,16 @@ function getTableString(entry) {
     }
 }
 
+function createItemEntry(codeName) {
+    if (!itemList[codeName]) {
+        itemList[codeName] = {};
+    }
+}
+
 function iterateItemList(resourceList) {
     if (resourceList) {
         resourceList.forEach(resource => {
-            itemList[resource.CodeName.toLowerCase()] = {};
+            createItemEntry(resource.CodeName.toLowerCase());
         });
     }
 }
@@ -58,9 +79,9 @@ function iterateItemList(resourceList) {
 function initializeStructureItems(component) {
     if (component.AssemblyItems) {
         for (const [id, recipe] of Object.entries(component.AssemblyItems)) {
-            itemList[recipe.CodeName.toLowerCase()] = {};
+            createItemEntry(recipe.CodeName.toLowerCase());
             if (recipe.RequiredCodeName !== 'None') {
-                itemList[recipe.RequiredCodeName.toLowerCase()] = {};
+                createItemEntry(recipe.RequiredCodeName.toLowerCase());
             }
         }
     }
@@ -423,12 +444,12 @@ function getResourceCosts(resources) {
     if (resources && resources.Resource.CodeName !== 'None' && resources.Resource.CodeName !== 'Excavation') {
         let resourceCost = {};
         let resourceCodeName = resources.Resource.CodeName.toLowerCase();
-        itemList[resourceCodeName] = {};
+        createItemEntry(resourceCodeName);
         resourceCost[resourceCodeName] = resources.Resource.Quantity;
         if (resources.OtherResources) {
             resources.OtherResources.forEach(resource => {
                 resourceCodeName = resource.CodeName.toLowerCase();
-                itemList[resourceCodeName] = {};
+                createItemEntry(resourceCodeName);
                 resourceCost[resourceCodeName] = resource.Quantity;
             });
         }
@@ -505,7 +526,7 @@ function iterateAssets(dirPath) {
                             itemList[codeName] = {
                                 'name': item.DisplayName?.SourceString ?? (baseData.name ?? item.CodeName),
                                 'description': item.Description?.SourceString ?? baseData.description,
-                                'icon': getLocalIcon(item) ?? baseData.icon,
+                                'icon': itemList[codeName]?.icon ?? getLocalIcon(item) ?? baseData.icon,
                                 'faction': item.FactionVariant === 'EFactionId::Wardens' ? 'w' : item.FactionVariant === 'EFactionId::Colonials' ? 'c' : baseData.faction,
                                 'isLiquid': item.bIsLiquid ?? baseData.isLiquid,
                                 'cost': itemList[codeName]?.cost

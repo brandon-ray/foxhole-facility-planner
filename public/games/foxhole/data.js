@@ -370,27 +370,27 @@ const foxholeData = {
 		"facilitymaterials4": {
 			"name": "Assembly Materials I",
 			"description": "Specialized metal sheets forged using Coal that are required to assemble advanced vehicles and equipment.",
-			"icon": "game/Textures/UI/ItemIcons/FacilityMaterials4Icon.webp"
+			"icon": "game/Textures/UI/ItemIcons/AssemblyMaterials1Icon.webp"
 		},
 		"facilitymaterials5": {
 			"name": "Assembly Materials II",
 			"description": "Specialized metallic bars fortified with Petrol that are required to assemble advanced vehicles and equipment.",
-			"icon": "game/Textures/UI/ItemIcons/FacilityMaterials4Icon.webp"
+			"icon": "game/Textures/UI/ItemIcons/AssemblyMaterials2Icon.webp"
 		},
 		"facilitymaterials6": {
 			"name": "Assembly Materials III",
 			"description": "Sulfur-enriched metallic bars that are required to assemble advanced vehicles and equipment.",
-			"icon": "game/Textures/UI/ItemIcons/FacilityMaterials4Icon.webp"
+			"icon": "game/Textures/UI/ItemIcons/AssemblyMaterials3Icon.webp"
 		},
 		"facilitymaterials7": {
 			"name": "Assembly Materials IV",
 			"description": "High-end steel bars, fortified with Heavy Oil that are required to assemble advanced vehicles and equipment.",
-			"icon": "game/Textures/UI/ItemIcons/FacilityMaterials4Icon.webp"
+			"icon": "game/Textures/UI/ItemIcons/AssemblyMaterials4Icon.webp"
 		},
 		"facilitymaterials8": {
 			"name": "Assembly Materials V",
 			"description": "Meticulously engineered alloy beams that are required to assemble advanced vehicles and equipment.",
-			"icon": "game/Textures/UI/ItemIcons/FacilityMaterials4Icon.webp"
+			"icon": "game/Textures/UI/ItemIcons/AssemblyMaterials5Icon.webp"
 		},
 		"facilityoil1": {
 			"name": "Heavy Oil",
