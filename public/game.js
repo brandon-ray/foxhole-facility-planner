@@ -80,7 +80,7 @@ const game = {
         showFacilityName: true,
         showToolbelt: true,
         selectedToolbelt: 0,
-        toolbelts: [],
+        toolbelts: {},
         styles: {
             label: {
                 fontSize: 64,
@@ -105,12 +105,6 @@ const game = {
     },
     isPlayScreen: false
 };
-
-let toolbelt = [];
-for (let i = 0; i < 10; i++) {
-    toolbelt.push({});
-}
-game.settings.toolbelts.push(toolbelt);
 
 game.defaultSettings = JSON.parse(JSON.stringify(game.settings));
 game.playMode = false;
@@ -142,7 +136,20 @@ try {
     if (window.localStorage) {
         let newSettings = window.localStorage.getItem('settings');
         if (newSettings) {
-            game.settings = Object.assign({}, game.settings, JSON.parse(newSettings));
+            newSettings = JSON.parse(newSettings);
+            if (newSettings.toolbelts && Array.isArray(newSettings.toolbelts)) {
+                let oldToolbelt = newSettings.toolbelts[0];
+                let newToolbelt = {};
+                for (let i = 0; i < oldToolbelt.length; i++) {
+                    if (oldToolbelt[i]?.type) {
+                        newToolbelt[i] = oldToolbelt[i];
+                    }
+                }
+                newSettings.toolbelts = {
+                    0: newToolbelt
+                };
+            }
+            game.settings = Object.assign({}, game.settings, newSettings);
         }
     }
 } catch(e) {
@@ -557,6 +564,9 @@ try {
     document.addEventListener('keydown', function (event) {
         event = event || window.event;
         let key = event.keyCode;
+        if (game.settings.enableExperimental && game.toolbeltComponent) {
+            game.toolbeltComponent.setToolbeltSwapping(event.shiftKey);
+        }
         switch (key) {
             case 27: // Escape
                 if (game.toolbeltComponent) {
@@ -674,34 +684,34 @@ try {
                         game.deselectEntities(true);
                         break;
                     case 48: // 0
-                        game.activateToolbeltItem(9);
+                        game.activateToolbeltSlot(9, event.shiftKey);
                         break;
                     case 49: // 1
-                        game.activateToolbeltItem(0);
+                        game.activateToolbeltSlot(0, event.shiftKey);
                         break;
                     case 50: // 2
-                        game.activateToolbeltItem(1);
+                        game.activateToolbeltSlot(1, event.shiftKey);
                         break;
                     case 51: // 3
-                        game.activateToolbeltItem(2);
+                        game.activateToolbeltSlot(2, event.shiftKey);
                         break;
                     case 52: // 4
-                        game.activateToolbeltItem(3);
+                        game.activateToolbeltSlot(3, event.shiftKey);
                         break;
                     case 53: // 5
-                        game.activateToolbeltItem(4);
+                        game.activateToolbeltSlot(4, event.shiftKey);
                         break;
                     case 54: // 6
-                        game.activateToolbeltItem(5);
+                        game.activateToolbeltSlot(5, event.shiftKey);
                         break;
                     case 55: // 7
-                        game.activateToolbeltItem(6);
+                        game.activateToolbeltSlot(6, event.shiftKey);
                         break;
                     case 56: // 8
-                        game.activateToolbeltItem(7);
+                        game.activateToolbeltSlot(7, event.shiftKey);
                         break;
                     case 57: // 9
-                        game.activateToolbeltItem(8);
+                        game.activateToolbeltSlot(8, event.shiftKey);
                         break;
                     case 65: // A
                         game.moveSelected(event.shiftKey ? -16 : -32, 0);
@@ -748,15 +758,19 @@ try {
         }
     });
 
-    game.activateToolbeltItem = function(index) {
+    game.activateToolbeltSlot = function(index, swapBelt = false) {
         if (game.settings.enableExperimental && game.toolbeltComponent) {
-            game.toolbeltComponent.activateToolbeltItem(index, game.settings.toolbelts[game.settings.selectedToolbelt][index]);
+            game.toolbeltComponent.activateToolbeltSlot(index, swapBelt);
         }
     }
 
     document.addEventListener('keyup', function (event) {
         event = event || window.event;
         let key = event.keyCode;
+
+        if (game.settings.enableExperimental && game.toolbeltComponent) {
+            game.toolbeltComponent.setToolbeltSwapping(event.shiftKey);
+        }
 
         if (keys[key]) {
             keys[key] = false;

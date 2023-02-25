@@ -253,6 +253,7 @@ Vue.component('app-game-toolbelt', {
     },
     mounted: function() {
         game.toolbeltComponent = this;
+        this.refresh();
     },
     data: function() {
         return {
@@ -262,41 +263,66 @@ Vue.component('app-game-toolbelt', {
             activeItemTimeoutId: null,
             lastSlotClicked: null,
             toolbeltSelection: false,
+            toolbeltItems: null,
+            toolbeltSwap: false,
             searchQuery: null
         };
     },
     methods: {
-        refresh: function() {
+        refresh: function(updateItems = true) {
+            if (updateItems) {
+                let toolbelt = game.settings.toolbelts[game.settings.selectedToolbelt], items = [];
+                for (let i = 0; i < 10; i++) {
+                    items.push((toolbelt && toolbelt[i]) ?? {});
+                }
+                this.toolbeltItems = items;
+            }
             this.$forceUpdate();
         },
         showList: function(visible = true) {
-            if (!visible) {
+            if (this.toolbeltSelection !== visible) {
+                if (!visible) {
                 this.lastSlotClicked = null;
-            }
-            this.confirmReset = false;
-            this.toolbeltSelection = visible;
-            this.refresh();
-        },
-        activateToolbeltItem: function(index, item) {
-            if (item.type || item.subtype) {
-                if (this.toolbeltSelection) {
-                    this.lastSlotClicked = null;
-                    game.settings.toolbelts[game.settings.selectedToolbelt][index] = {};
-                    game.updateSettings();
-                    this.refresh();
-                } else {
-                    game.create(item.type, item.subtype);
-                    clearTimeout(this.activeItemTimeoutId);
-                    this.activeItemIndex = index;
-                    this.activeItemTimeoutId = setTimeout(() => {
-                        this.activeItemIndex = null;
-                    }, 200);
                 }
-            } else if (this.lastSlotClicked === index) {
-                this.showList(false);
-            } else {
-                this.lastSlotClicked = index;
-                this.showList();
+                this.confirmReset = false;
+                this.toolbeltSelection = visible;
+                this.refresh(false);
+            }
+        },
+        selectToolbelt: function(index) {
+            if (game.settings.selectedToolbelt !== index) {
+                game.settings.selectedToolbelt = index;
+                game.updateSettings();
+                this.refresh();
+            }
+        },
+        activateToolbeltSlot: function(index, swapBelt) {
+            if (swapBelt) {
+                this.selectToolbelt(index);
+            } else if (this.toolbeltItems) {
+                let item = this.toolbeltItems[index];
+                if (item?.type || item?.subtype) {
+                    if (this.toolbeltSelection || this.toolbeltSwap) {
+                        this.lastSlotClicked = null;
+                        if (game.settings.toolbelts[game.settings.selectedToolbelt]) {
+                            delete game.settings.toolbelts[game.settings.selectedToolbelt][index];
+                        }
+                        game.updateSettings();
+                        this.refresh();
+                    } else {
+                        game.create(item.type, item.subtype);
+                        clearTimeout(this.activeItemTimeoutId);
+                        this.activeItemIndex = index;
+                        this.activeItemTimeoutId = setTimeout(() => {
+                            this.activeItemIndex = null;
+                        }, 200);
+                    }
+                } else if (this.lastSlotClicked === index) {
+                    this.showList(false);
+                } else {
+                    this.lastSlotClicked = index;
+                    this.showList();
+                }
             }
         },
         resetToolbeltSlots: function() {
@@ -306,16 +332,23 @@ Vue.component('app-game-toolbelt', {
                 return;
             }
             this.confirmReset = false;
-            for (let i = 0; i < 10; i++) {
-                game.settings.toolbelts[game.settings.selectedToolbelt][i] = {};
-            }
+            delete game.settings.toolbelts[game.settings.selectedToolbelt];
             game.updateSettings();
             this.refresh();
+        },
+        setToolbeltSwapping: function(swapping = false) {
+            if (this.toolbeltSwap !== swapping) {
+                this.toolbeltSwap = swapping;
+                this.refresh(false);
+            }
         },
         buildBuilding: function(building) {
             this.bmc();
             // game.create((building.preset && 'preset') || 'building', building.preset ? building.dataFile : building.key);
             if (this.lastSlotClicked !== null) {
+                if (!game.settings.toolbelts[game.settings.selectedToolbelt]) {
+                    game.settings.toolbelts[game.settings.selectedToolbelt] = {};
+                }
                 game.settings.toolbelts[game.settings.selectedToolbelt][this.lastSlotClicked] = {
                     type: 'building',
                     subtype: building.key,
@@ -331,10 +364,13 @@ Vue.component('app-game-toolbelt', {
         }
     },
     template: html`
-    <div v-if="game.settings.showToolbelt" id="toolbelt-panel" class="board-panel">
+    <div v-if="game.settings.showToolbelt" id="toolbelt-panel" class="board-panel" :class="{'toolbelt-swapping': toolbeltSwap}">
+        <div class="toolbelt-tabs d-flex">
+            <div v-for="n in 10" class="toolbelt-tab" :class="{'active': (n - 1) === game.settings.selectedToolbelt}" @click="selectToolbelt(n - 1)"></div>
+        </div>
         <div class="toolbelt-header d-flex">
             <div class="toolbelt-buttons d-flex w-100">
-                <div v-for="toolbeltItem, i in game.settings.toolbelts[game.settings.selectedToolbelt]" :class="{'anim-active': activeItemIndex === i, 'item-selected': lastSlotClicked === i, 'deletion': toolbeltSelection && toolbeltItem?.type}" :style="{backgroundImage: toolbeltItem?.icon && ('url(' + toolbeltItem.icon + ')')}" @mouseenter="bme()" @click="bmc(); activateToolbeltItem(i, toolbeltItem)">
+                <div v-for="(toolbeltItem, i) in toolbeltItems" :class="{'anim-active': activeItemIndex === i, 'item-selected': lastSlotClicked === i, 'deletion': toolbeltItem?.type && toolbeltSelection}" :style="{backgroundImage: toolbeltItem?.icon && ('url(' + toolbeltItem.icon + ')')}" @mouseenter="bme()" @click="bmc(); activateToolbeltSlot(i)">
                     <i v-if="!toolbeltItem?.icon || toolbeltSelection || confirmReset" class="fa fa-plus" :class="{'fa-trash': toolbeltItem?.type && (confirmReset || toolbeltSelection)}" aria-hidden="true"></i>
                     <small>{{i + 1 < 10 ? i + 1 : 0}}</small>
                 </div>

@@ -1672,12 +1672,89 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
     top: 15px;
     left: 50%;
     margin-left: -275px;
-    padding: 3px;
+    padding: 1px 3px 3px;
+}
+
+#toolbelt-panel .toolbelt-header {
+    margin-top: -2px;
+}
+
+#toolbelt-panel .toolbelt-tabs {
+    width: 100%;
+    padding: 0 1px;
+}
+
+#toolbelt-panel .toolbelt-tab {
+    width: 10%;
+    padding: 4px 2px;
+    cursor: pointer;
+}
+
+#toolbelt-panel .toolbelt-tab::after {
+    content: '';
+    display: block;
+    height: 7px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid transparent;
+}
+
+#toolbelt-panel .toolbelt-tab:hover::after {
+    background: white;
+}
+
+#toolbelt-panel .toolbelt-tab.active:nth-child(1)::after,
+#toolbelt-panel .toolbelt-tab:hover:nth-child(1)::after {
+    background-color: #FF8F00; /* vibrant orange */
+}
+
+#toolbelt-panel .toolbelt-tab.active:nth-child(2)::after,
+#toolbelt-panel .toolbelt-tab:hover:nth-child(2)::after {
+    background-color: #FFFF00; /* vibrant yellow */
+}
+
+#toolbelt-panel .toolbelt-tab.active:nth-child(3)::after,
+#toolbelt-panel .toolbelt-tab:hover:nth-child(3)::after {
+    background-color: #00FF7F; /* vibrant green */
+}
+
+#toolbelt-panel .toolbelt-tab.active:nth-child(4)::after,
+#toolbelt-panel .toolbelt-tab:hover:nth-child(4)::after {
+    background-color: #00fff2; /* vibrant cyan */
+}
+
+#toolbelt-panel .toolbelt-tab.active:nth-child(5)::after,
+#toolbelt-panel .toolbelt-tab:hover:nth-child(5)::after {
+    background-color: #00BFFF; /* vibrant blue */
+}
+
+#toolbelt-panel .toolbelt-tab.active:nth-child(6)::after,
+#toolbelt-panel .toolbelt-tab:hover:nth-child(6)::after {
+    background-color: #9400D3; /* vibrant violet */
+}
+
+#toolbelt-panel .toolbelt-tab.active:nth-child(7)::after,
+#toolbelt-panel .toolbelt-tab:hover:nth-child(7)::after {
+    background-color: #FF00FF; /* vibrant magenta */
+}
+
+#toolbelt-panel .toolbelt-tab.active:nth-child(8)::after,
+#toolbelt-panel .toolbelt-tab:hover:nth-child(8)::after {
+    background-color: #FF1493; /* vibrant pink */
+}
+
+#toolbelt-panel .toolbelt-tab.active:nth-child(9)::after,
+#toolbelt-panel .toolbelt-tab:hover:nth-child(9)::after {
+    background-color: #CE0074; /* vibrant purple */
+}
+
+#toolbelt-panel .toolbelt-tab.active:nth-child(10)::after,
+#toolbelt-panel .toolbelt-tab:hover:nth-child(10)::after {
+    background-color: #FF4500; /* vibrant red */
 }
 
 /*
-#toolbelt-panel .toolbelt-header {
-    background: linear-gradient(rgb(24, 24, 24), rgb(12, 12, 12));
+#toolbelt-panel .toolbelt-tab.active:hover::after {
+    border-color: white;
 }
 */
 
@@ -1694,7 +1771,7 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
     cursor: pointer;
     box-shadow: inset -1px -1px 4px black;
     text-align: center;
-    transition-duration: 0.1s;
+    transition-duration: 0.075s;
 }
 
 #toolbelt-panel .toolbelt-buttons div:not(.deletion):hover,
@@ -1708,7 +1785,7 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
     opacity: 0;
     font-size: 1.5em;
     line-height: 52px;
-    transition-duration: 0.1s;
+    /* transition-duration: 0.1s; */
 }
 
 #toolbelt-panel .toolbelt-buttons div:hover i,
@@ -1725,16 +1802,17 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
 
 #toolbelt-panel .toolbelt-buttons div:hover small,
 #toolbelt-panel .toolbelt-buttons div.item-selected small,
-#toolbelt-panel .toolbelt-buttons div.anim-active small {
+#toolbelt-panel .toolbelt-buttons div.anim-active small,
+#toolbelt-panel.toolbelt-swapping .toolbelt-buttons div small {
     color: white;
-}
-
-#toolbelt-panel .toolbelt-buttons div.anim-active {
-    background-color: #ff8f00;
 }
 
 #toolbelt-panel .toolbelt-buttons div.item-selected {
     background-color: #303030;
+}
+
+#toolbelt-panel .toolbelt-buttons div.anim-active {
+    background-color: #ff8f00 !important;
 }
 
 #toolbelt-panel .toolbelt-buttons div.deletion:hover {
