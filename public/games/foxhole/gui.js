@@ -1,3 +1,12 @@
+const liquidResourceMap = {
+    'diesel': 100,
+    'petrol': 50,
+    'water': 50,
+    'oil': 50,
+    'facilityoil1': 30,
+    'facilityoil2': 30
+};
+
 Vue.component('app-game-resource-icon', {
     props: ['resource', 'amount', 'column'],
     data: function() {
@@ -39,7 +48,7 @@ Vue.component('app-game-resource-icon', {
             <div class="resource-icon" :style="style"></div>
             <div class="resource-name">{{resourceData.name}}</div>
             <div class="resource-amount">
-                x{{amount.toLocaleString('en-US')}}<template v-if="resourceData.isLiquid">L</template>
+                x{{amount.toLocaleString('en-US')}}<template v-if="resourceData.isLiquid">L <small v-if="liquidResourceMap[resource]">(x{{Math.ceil(amount / liquidResourceMap[resource])}} Cans)</small></template>
             </div>
         </div>
     </template>

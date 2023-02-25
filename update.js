@@ -13,7 +13,18 @@ const structurePolygons = JSON.parse(fs.readFileSync(`${foxholeDataDirectory}pol
 let structureList = foxholeData.buildings;
 let upgradeList = {};
 let techList = {};
-let itemList = {};
+let itemList = {
+    "oilcan": {
+        "name": "Oil (Canned)",
+        "description": "A raw viscous liquid that must be refined into fuel at Facilities.",
+        "icon": "game/Textures/UI/ItemIcons/Facilities/OilIcon.webp"
+    },
+    "watercan": {
+        "name": "Water (Canned)",
+        "description": "Water... in a can!",
+        "icon": "game/Textures/UI/ItemIcons/WaterIcon.webp"
+    }
+};
 
 const conversionEntriesMap = {
     'Input': 'input',
@@ -21,11 +32,6 @@ const conversionEntriesMap = {
     'Output': 'output',
     'FuelOutput': 'output'
 };
-
-const liquidResourceMap = {
-    'Oil': 50,
-    'Water': 50
-}
 
 function getLocalIcon(component) {
     let iconPath = component?.Icon?.ObjectPath ?? component?.Icon?.ResourceObject?.ObjectPath ?? component?.BrushOverride?.ResourceObject?.ObjectPath;
@@ -550,6 +556,11 @@ function compareRecipe(oldRecipe, newRecipe) {
     return compareItems(oldRecipe?.input, newRecipe?.input) && compareItems(oldRecipe?.output, newRecipe?.output) && (oldRecipe?.faction === newRecipe?.faction) && (oldRecipe?.time === newRecipe?.time) && (oldRecipe?.power === newRecipe?.power);
 }
 
+const liquidResourceMap = {
+    'Oil': 'oilcan',
+    'Water': 'watercan'
+};
+
 function updateProductionRecipes(component) {
     let id = component._productionLength ?? 0;
     let constructionRecipes = [];
@@ -567,15 +578,16 @@ function updateProductionRecipes(component) {
                 if (entry[from]?.length) {
                     constructionRecipe[to] = constructionRecipe[to] ?? {};
                     entry[from].forEach(resource => {
+                        let resourceCodeName = resource.CodeName.toLowerCase();
                         let resourceQuantity = resource.Quantity;
                         if ((from === 'Input' || from === 'Output') && itemList[resource.CodeName.toLowerCase()].isLiquid) {
                             if (liquidResourceMap[resource.CodeName]) {
-                                resourceQuantity *= liquidResourceMap[resource.CodeName];
+                                resourceCodeName = liquidResourceMap[resource.CodeName];
                             } else {
-                                console.error('Unknown liquid type. Update script to include liters for:', resource.CodeName);
+                                console.error('Unknown liquid type. Update script for:', resource.CodeName);
                             }
                         }
-                        constructionRecipe[to][resource.CodeName.toLowerCase()] = resourceQuantity;
+                        constructionRecipe[to][resourceCodeName] = resourceQuantity;
                     });
                 }
             }

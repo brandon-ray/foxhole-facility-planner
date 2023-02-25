@@ -280,11 +280,11 @@ Vue.component('app-game-toolbelt', {
             this.$forceUpdate();
         },
         showList: function(visible = true) {
+            this.confirmReset = false;
             if (this.toolbeltSelection !== visible) {
                 if (!visible) {
-                this.lastSlotClicked = null;
+                    this.lastSlotClicked = null;
                 }
-                this.confirmReset = false;
                 this.toolbeltSelection = visible;
                 this.refresh(false);
             }
@@ -376,7 +376,7 @@ Vue.component('app-game-toolbelt', {
                 </div>
             </div>
             <div class="toolbelt-end-buttons">
-                <div class="btn-small" @click="resetToolbeltSlots()"><i class="fa" :class="{'fa-trash': !confirmReset, 'fa-check': confirmReset}" aria-hidden="true"></i></div>
+                <div class="btn-small" @click="resetToolbeltSlots()"><i class="fa" :class="{'fa-trash': !confirmReset, 'fa-check text-danger': confirmReset}" aria-hidden="true"></i></div>
                 <div class="btn-small" :class="{'btn-active': toolbeltSelection}" @click="showList(!toolbeltSelection)"><i class="fa fa-gear" aria-hidden="true"></i></div>
             </div>
         </div>

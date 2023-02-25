@@ -685,6 +685,11 @@ const foxholeData = {
 			"icon": "game/Textures/UI/ItemIcons/Facilities/OilIcon.webp",
 			"isLiquid": true
 		},
+		"oilcan": {
+			"name": "Oil (Canned)",
+			"description": "A raw viscous liquid that must be refined into fuel at Facilities.",
+			"icon": "game/Textures/UI/ItemIcons/Facilities/OilIcon.webp"
+		},
 		"petrol": {
 			"name": "Petrol",
 			"description": "A medium grade fuel that's refined from Oil. Used as a higher end fuel for vehicles and in various applications at Facilities.",
@@ -871,6 +876,11 @@ const foxholeData = {
 			"description": "Water... in a can!",
 			"icon": "game/Textures/UI/ItemIcons/WaterIcon.webp",
 			"isLiquid": true
+		},
+		"watercan": {
+			"name": "Water (Canned)",
+			"description": "Water... in a can!",
+			"icon": "game/Textures/UI/ItemIcons/WaterIcon.webp"
 		}
 	},
 	"buildings": {
@@ -6618,7 +6628,7 @@ const foxholeData = {
 				{
 					"id": 0,
 					"output": {
-						"oil": 50
+						"oilcan": 1
 					},
 					"time": 50
 				}
@@ -6691,7 +6701,7 @@ const foxholeData = {
 						{
 							"id": 0,
 							"output": {
-								"oil": 50
+								"oilcan": 1
 							},
 							"time": 26,
 							"power": -2
@@ -6801,7 +6811,7 @@ const foxholeData = {
 								"water": 25
 							},
 							"output": {
-								"oil": 100
+								"oilcan": 2
 							},
 							"time": 40,
 							"power": -3
@@ -9475,7 +9485,7 @@ const foxholeData = {
 				{
 					"id": 0,
 					"output": {
-						"water": 50
+						"watercan": 1
 					},
 					"time": 50
 				}
@@ -9573,7 +9583,7 @@ const foxholeData = {
 						{
 							"id": 1,
 							"output": {
-								"water": 50
+								"watercan": 1
 							},
 							"time": 40
 						}

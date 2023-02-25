@@ -1698,6 +1698,10 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
     border: 1px solid transparent;
 }
 
+#toolbelt-panel.toolbelt-swapping .toolbelt-tab::after {
+    background: rgba(0, 0, 0, 0.5);
+}
+
 #toolbelt-panel .toolbelt-tab:hover::after {
     background: white;
 }
