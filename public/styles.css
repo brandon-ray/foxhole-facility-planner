@@ -962,9 +962,12 @@ input[type=number].btn-small {
 }
 
 .resource-col > .resource-amount {
+    background: rgba(0, 0, 0, 0.65);
     position: absolute;
-    bottom: 0;
-    right: 0;
+    bottom: -5px;
+    right: -4px;
+    border-radius: 3px;
+    padding: 1px;
 }
 
 .resource-row > .resource-icon {
@@ -979,7 +982,7 @@ input[type=number].btn-small {
 }
 
 .resource-row > .resource-amount, .resource-col > .resource-amount {
-    color: #d50101;
+    color: #ff0d0d;
     line-height: 16px;
     pointer-events: none;
 }
@@ -1073,14 +1076,14 @@ input[type=number].btn-small {
 }
 
 .production-list > .select-production > .production-enabled {
-    color: #d50101;
+    color: #ff0d0d;
     position: absolute;
     bottom: 0;
     right: 8px;
 }
 
 .production-list > .select-production.selected-production > .production-enabled {
-    color: #03b003;
+    color: #00ca00;
 }
 
 .production-list > .select-production h6 {
@@ -1088,7 +1091,7 @@ input[type=number].btn-small {
 }
 
 .production-list > .select-production.selected-production {
-    border-color: #03b003;
+    border-color: #00ca00;
 }
 
 .delete-button:hover {
@@ -1196,7 +1199,7 @@ input[type=number].btn-small {
 
 .produced-resource-row .production-recipe {
     display: inline-block;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .produced-resource-row .production-recipe * {
@@ -1223,7 +1226,7 @@ input[type=number].btn-small {
 }
 
 .produced-resource-row .produced-resource-output .resource-amount {
-    color: #03b003;
+    color: #00ca00;
 }
 
 .produced-resource-row .production-pointer {
@@ -1271,7 +1274,7 @@ input[type=number].btn-small {
 }
 
 #hover-building-info > .building-info-body > .power-cost, #hover-building-info > .building-info-body > .power-produced {
-    color: #d50101;
+    color: #ff0d0d;
     font-size: 1.2em;
     position: absolute;
     bottom: 0;

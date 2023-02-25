@@ -306,7 +306,7 @@ Vue.component('app-menu-statistics', {
             <div v-if="bunker?.total" class="construction-options-wrapper">
                 <h5 class="construction-options-header"><i class="fa fa-shield" aria-hidden="true"></i> Selected Bunker Stats</h5>
                 <div class="construction-options row d-flex justify-content-center">
-                    <div class="btn-small col" style="color: #03b003;">
+                    <div class="btn-small col" style="color: #00ca00;">
                         <span style="font-size: 18px;">{{Math.floor(bunker.maxHealth * bunker.structuralIntegrity).toLocaleString()}}</span>
                         <span class="label">health</span>
                     </div>
@@ -324,7 +324,7 @@ Vue.component('app-menu-statistics', {
             <div v-if="powerProduced || powerConsumed || powerTotal" class="construction-options-wrapper">
                 <h5 class="construction-options-header"><i class="fa fa-bolt"></i> {{selection ? 'Selection' : 'Facility'}} Power</h5>
                 <div class="construction-options row d-flex justify-content-center">
-                    <div class="btn-small col" style="color: #03b003;">
+                    <div class="btn-small col" style="color: #00ca00;">
                         <span style="font-size: 18px;">{{powerProduced}} <small>MW</small></span>
                         <span class="label">produced</span>
                     </div>
