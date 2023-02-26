@@ -881,6 +881,11 @@ const foxholeData = {
 			"name": "Water (Canned)",
 			"description": "Water... in a can!",
 			"icon": "game/Textures/UI/ItemIcons/WaterIcon.webp"
+		},
+		"wood": {
+			"name": "Refined Materials",
+			"description": "Resource used for building advanced structures and producing special items.",
+			"icon": "game/Textures/UI/ItemIcons/RefinedMaterialsIcon.webp"
 		}
 	},
 	"buildings": {
@@ -4330,7 +4335,6 @@ const foxholeData = {
 			"description": "A gate that provides access to a walled off area.",
 			"category": "defenses",
 			"categoryOrder": 4,
-			"hideInList": true,
 			"sortLayer": "wall",
 			"icon": "game/Textures/UI/StructureIcons/Gate-T1Icon.webp",
 			"texture": "game/Textures/Structures/gatet1.webp",
@@ -4345,8 +4349,10 @@ const foxholeData = {
 							"category": 512
 						}
 					],
+					"texture": "game/Textures/Structures/wallsplinet1_post.webp",
+					"textureAlt": "game/Textures/Structures/wallsplinet1_post.webp",
 					"x": 18,
-					"y": 42,
+					"y": 40,
 					"rotation": 270
 				},
 				{
@@ -4357,8 +4363,10 @@ const foxholeData = {
 							"category": 512
 						}
 					],
+					"texture": "game/Textures/Structures/wallsplinet1_post.webp",
+					"textureAlt": "game/Textures/Structures/wallsplinet1_post.webp",
 					"x": 1552,
-					"y": 42,
+					"y": 40,
 					"rotation": 90
 				}
 			],
@@ -4375,6 +4383,36 @@ const foxholeData = {
 					"icon": "game/Textures/UI/StructureIcons/Gate-T2Icon.webp",
 					"texture": "game/Textures/Structures/gatet2.webp",
 					"techId": "unlockgatetier2",
+					"sockets": [
+						{
+							"id": 0,
+							"type": [
+								{
+									"mask": 512,
+									"category": 512
+								}
+							],
+							"texture": "game/Textures/Structures/wallsplinet2_post.webp",
+							"textureAlt": "game/Textures/Structures/wallsplinet2_post.webp",
+							"x": 18,
+							"y": 22,
+							"rotation": 270
+						},
+						{
+							"id": 1,
+							"type": [
+								{
+									"mask": 512,
+									"category": 512
+								}
+							],
+							"texture": "game/Textures/Structures/wallsplinet2_post.webp",
+							"textureAlt": "game/Textures/Structures/wallsplinet2_post.webp",
+							"x": 1552,
+							"y": 22,
+							"rotation": 90
+						}
+					],
 					"cost": {
 						"cloth": 50
 					}
@@ -4386,6 +4424,36 @@ const foxholeData = {
 					"icon": "game/Textures/UI/StructureIcons/Gate-T3Icon.webp",
 					"texture": "game/Textures/Structures/gatet3.webp",
 					"techId": "unlockgatetier3",
+					"sockets": [
+						{
+							"id": 0,
+							"type": [
+								{
+									"mask": 512,
+									"category": 512
+								}
+							],
+							"texture": "game/Textures/Structures/wallsplinet3_post.webp",
+							"textureAlt": "game/Textures/Structures/wallsplinet3_post.webp",
+							"x": 18,
+							"y": 38,
+							"rotation": 270
+						},
+						{
+							"id": 1,
+							"type": [
+								{
+									"mask": 512,
+									"category": 512
+								}
+							],
+							"texture": "game/Textures/Structures/wallsplinet3_post.webp",
+							"textureAlt": "game/Textures/Structures/wallsplinet3_post.webp",
+							"x": 1552,
+							"y": 38,
+							"rotation": 90
+						}
+					],
 					"cost": {
 						"wood": 30
 					}
@@ -9207,10 +9275,10 @@ const foxholeData = {
 			"codeName": "TrenchEmpT2",
 			"parentKey": "trenchempt1",
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches. This variant can also serve as an emplacement for mannable defenses.",
+			"experimental": true,
 			"tier": 2,
 			"icon": "game/Textures/UI/StructureIcons/TrenchT2EmplacementIcon.webp",
 			"texture": "game/Textures/Structures/trenchempt2.webp",
-			"experimental": true,
 			"maxHealth": 1850,
 			"cost": {
 				"cloth": 50
@@ -9222,9 +9290,9 @@ const foxholeData = {
 			"codeName": "TrenchEmpT3",
 			"parentKey": "trenchempt2",
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches. This variant can also serve as an emplacement for mannable defenses.",
+			"experimental": true,
 			"tier": 3,
 			"icon": "game/Textures/UI/StructureIcons/TrenchT3EmplacementIcon.webp",
-			"experimental": true,
 			"texture": "game/Textures/Structures/trenchempt3.webp",
 			"maxHealth": 3500,
 			"cost": {
@@ -9506,15 +9574,12 @@ const foxholeData = {
 			"description": "A basic barrier that is used to prevent passage through an area.",
 			"category": "defenses",
 			"categoryOrder": 3,
-			"hideInList": true,
 			"sortLayer": "wall",
 			"hasHandle": true,
 			"minLength": 3,
 			"maxLength": 10,
 			"icon": "game/Textures/UI/ItemIcons/Wall-T1Icon.webp",
 			"texture": "game/Textures/Structures/wallsplinet1.webp",
-			"textureFrontCap": "game/Textures/Structures/wallsplinet1_post.webp",
-			"textureBackCap": "game/Textures/Structures/wallsplinet1_post.webp",
 			"canSnap": true,
 			"canSnapRotate": true,
 			"sockets": [
@@ -9526,6 +9591,8 @@ const foxholeData = {
 							"category": 512
 						}
 					],
+					"texture": "game/Textures/Structures/wallsplinet1_post.webp",
+					"textureAlt": "game/Textures/Structures/wallsplinet1_post.webp",
 					"cap": "front",
 					"rotation": 270
 				},
@@ -9537,6 +9604,8 @@ const foxholeData = {
 							"category": 512
 						}
 					],
+					"texture": "game/Textures/Structures/wallsplinet1_post.webp",
+					"textureAlt": "game/Textures/Structures/wallsplinet1_post.webp",
 					"cap": "back",
 					"rotation": 90
 				}
@@ -9555,9 +9624,35 @@ const foxholeData = {
 					"maxLength": 10,
 					"icon": "game/Textures/UI/ItemIcons/Wall-T2Icon.webp",
 					"texture": "game/Textures/Structures/wallsplinet2.webp",
-					"textureFrontCap": "game/Textures/Structures/wallsplinet2_post.webp",
-					"textureBackCap": "game/Textures/Structures/wallsplinet2_post.webp",
 					"techId": "unlockwalltier2",
+					"sockets": [
+						{
+							"id": 0,
+							"type": [
+								{
+									"mask": 4608,
+									"category": 512
+								}
+							],
+							"texture": "game/Textures/Structures/wallsplinet2_post.webp",
+							"textureAlt": "game/Textures/Structures/wallsplinet2_post.webp",
+							"cap": "front",
+							"rotation": 270
+						},
+						{
+							"id": 1,
+							"type": [
+								{
+									"mask": 4608,
+									"category": 512
+								}
+							],
+							"texture": "game/Textures/Structures/wallsplinet2_post.webp",
+							"textureAlt": "game/Textures/Structures/wallsplinet2_post.webp",
+							"cap": "back",
+							"rotation": 90
+						}
+					],
 					"cost": {
 						"cloth": 30
 					}
@@ -9570,9 +9665,35 @@ const foxholeData = {
 					"maxLength": 10,
 					"icon": "game/Textures/UI/ItemIcons/Wall-T3Icon.webp",
 					"texture": "game/Textures/Structures/wallsplinet3.webp",
-					"textureFrontCap": "game/Textures/Structures/wallsplinet3_post.webp",
-					"textureBackCap": "game/Textures/Structures/wallsplinet3_post.webp",
 					"techId": "unlockwalltier3",
+					"sockets": [
+						{
+							"id": 0,
+							"type": [
+								{
+									"mask": 4608,
+									"category": 512
+								}
+							],
+							"texture": "game/Textures/Structures/wallsplinet3_post.webp",
+							"textureAlt": "game/Textures/Structures/wallsplinet3_post.webp",
+							"cap": "front",
+							"rotation": 270
+						},
+						{
+							"id": 1,
+							"type": [
+								{
+									"mask": 4608,
+									"category": 512
+								}
+							],
+							"texture": "game/Textures/Structures/wallsplinet3_post.webp",
+							"textureAlt": "game/Textures/Structures/wallsplinet3_post.webp",
+							"cap": "back",
+							"rotation": 90
+						}
+					],
 					"cost": {
 						"concrete": 25
 					}

@@ -3871,13 +3871,13 @@ try {
                                         }
                                     }
                                     if (nearestSocket) {
-                                        if (handleSocket.socketData.name === 'power') {
+                                        if (entity.building?.canSnapRotate) {
                                             entity.rotation = Math.angleBetween(entity, nearestSocketPos);
                                         }
                                         nearestSocketPos = entity.toLocal(nearestSocketPos, app.cstage, undefined, true);
                                         const socketRotation = Math.angleNormalized(((entity2.rotation + nearestSocket.rotation) - entity.rotation) - Math.deg2rad(handleSocket.socketData.rotation));
                                         // TODO: Only force rotate snap constraint whenever the first socket is connected, otherwise the entity should be able to rotate and attempt snapping.
-                                        if (handleSocket.socketData.name === 'power' || Math.angleDifference(Math.angleNormalized(selectedHandlePoint.rotation), socketRotation) === 0 && Math.round(nearestSocketPos.y) === 0 || entity.building?.isBezier || entity.building?.trenchConnector) {
+                                        if (entity.building?.canSnapRotate || Math.angleDifference(Math.angleNormalized(selectedHandlePoint.rotation), socketRotation) === 0 && Math.round(nearestSocketPos.y) === 0 || entity.building?.isBezier || entity.building?.trenchConnector) {
                                             handleSocket.setConnection(entity2.id, nearestSocket);
                                             selectedHandlePoint.x = nearestSocketPos.x;
                                             if (entity.building?.isBezier) {

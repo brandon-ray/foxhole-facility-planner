@@ -38,6 +38,11 @@ let itemList = {
         "name": "Water (Canned)",
         "description": "Water... in a can!",
         "icon": "game/Textures/UI/ItemIcons/WaterIcon.webp"
+    },
+    "wood": {
+        "name": "Refined Materials",
+        "description": "Resource used for building advanced structures and producing special items.",
+        "icon": "game/Textures/UI/ItemIcons/RefinedMaterialsIcon.webp"
     }
 };
 
