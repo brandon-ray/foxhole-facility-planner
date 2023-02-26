@@ -9076,6 +9076,7 @@ const foxholeData = {
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches. This variant can also serve as an emplacement for mannable defenses.",
 			"category": "entrenchments",
 			"categoryOrder": 5,
+			"experimental": true,
 			"tier": 1,
 			"width": 12.3,
 			"length": 12.3,
@@ -9209,6 +9210,7 @@ const foxholeData = {
 			"tier": 2,
 			"icon": "game/Textures/UI/StructureIcons/TrenchT2EmplacementIcon.webp",
 			"texture": "game/Textures/Structures/trenchempt2.webp",
+			"experimental": true,
 			"maxHealth": 1850,
 			"cost": {
 				"cloth": 50
@@ -9222,6 +9224,7 @@ const foxholeData = {
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches. This variant can also serve as an emplacement for mannable defenses.",
 			"tier": 3,
 			"icon": "game/Textures/UI/StructureIcons/TrenchT3EmplacementIcon.webp",
+			"experimental": true,
 			"texture": "game/Textures/Structures/trenchempt3.webp",
 			"maxHealth": 3500,
 			"cost": {

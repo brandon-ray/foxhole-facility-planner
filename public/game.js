@@ -54,6 +54,7 @@ const game = {
         quality: 'auto',
         disableSound: false,
         disableHUD: false,
+        enableAdvanced: false,
         enableDarkMode: false,
         enableDebug: false,
         enableExperimental: false,
@@ -81,6 +82,11 @@ const game = {
         showToolbelt: true,
         selectedToolbelt: 0,
         toolbelts: {},
+        toolbeltFilters: {
+            showUpgradesAsBuildings: false,
+            selectedTier: 3,
+            showSelectedTierOnly: false
+        },
         styles: {
             label: {
                 fontSize: 64,
@@ -564,7 +570,8 @@ try {
     document.addEventListener('keydown', function (event) {
         event = event || window.event;
         let key = event.keyCode;
-        if (game.settings.enableExperimental && game.toolbeltComponent) {
+        let inputSelected = document.activeElement && (document.activeElement.type === 'text' || document.activeElement.type === 'number' || document.activeElement.type === 'textarea');
+        if (game.toolbeltComponent && (!event.shiftKey || !inputSelected)) {
             game.toolbeltComponent.setToolbeltSwapping(event.shiftKey);
         }
         switch (key) {
@@ -626,7 +633,7 @@ try {
                 }
                 break;
         }
-        if (!(document.activeElement && (document.activeElement.type === 'text' || document.activeElement.type === 'number' || document.activeElement.type === 'textarea'))) {
+        if (!inputSelected) {
             if (event.ctrlKey) {
                 switch (key) {
                     case 37: // Left Arrow
@@ -759,7 +766,7 @@ try {
     });
 
     game.activateToolbeltSlot = function(index, swapBelt = false) {
-        if (game.settings.enableExperimental && game.toolbeltComponent) {
+        if (game.toolbeltComponent) {
             game.toolbeltComponent.activateToolbeltSlot(index, swapBelt);
         }
     }
@@ -768,7 +775,7 @@ try {
         event = event || window.event;
         let key = event.keyCode;
 
-        if (game.settings.enableExperimental && game.toolbeltComponent) {
+        if (game.toolbeltComponent) {
             game.toolbeltComponent.setToolbeltSwapping(event.shiftKey);
         }
 
@@ -1535,7 +1542,7 @@ try {
 
             if (!selectionArea.visible) {
                 selectionArea.visible = true;
-                if (game.settings.enableExperimental && game.toolbeltComponent) {
+                if (game.toolbeltComponent) {
                     const el = document.getElementById('toolbelt-panel');
                     if (el) {
                         el.style.pointerEvents = 'none';
@@ -1579,7 +1586,7 @@ try {
             if (selectionArea) {
                 selectionArea.origin = null;
                 selectionArea.visible = false;
-                if (game.settings.enableExperimental && game.toolbeltComponent) {
+                if (game.toolbeltComponent) {
                     const el = document.getElementById('toolbelt-panel');
                     if (el) {
                         el.style.pointerEvents = 'auto';
@@ -3001,6 +3008,10 @@ try {
             entity.onSave = function(entityData, isSelection) {
                 entityData.sortOffset = entity.sortOffset - game.constructionLayers[entity.sortLayer];
 
+                if (entity.properties) {
+                    entityData.properties = Object.assign({}, entity.properties);
+                }
+
                 if (entity.hasHandle) {
                     entityData.railPoints = [];
                     for (let i=0; i<points.length; i++) {
@@ -3088,6 +3099,10 @@ try {
             entity.onLoad = function(entityData) {
                 if (typeof entityData.sortOffset === 'number') {
                     entity.sortOffset += entityData.sortOffset;
+                }
+
+                if (entityData.properties) {
+                    entity.properties = Object.assign({}, entity.properties, entityData.properties);
                 }
 
                 if (entity.building) {
@@ -4574,12 +4589,12 @@ try {
         game.traverseHistory(1);
     };
 
-    game.canShowListItem = function(building, search = false) {
+    game.canShowListItem = function(building, search = false, filters = game.settings) {
         if (building && (!building.hideInList || game.settings.enableDebug) &&
             (!building.experimental || game.settings.enableExperimental) &&
-            (search || ((!building.parent || building.parentKey || game.settings.showUpgradesAsBuildings) &&
-            ((!building.tier || (!game.settings.showSelectedTierOnly && (building.tier <= game.settings.selectedTier))) || building.tier === game.settings.selectedTier) &&
-            ((!building.techId || !window.objectData.tech[building.techId]) || ((building.techId === 'unlockfacilitytier2' && game.settings.selectedTier >= 2) || (building.techId === 'unlockfacilitytier3' && game.settings.selectedTier >= 3))) &&
+            (search || ((!building.parent || building.parentKey || filters.showUpgradesAsBuildings) &&
+            ((!building.tier || (!filters.showSelectedTierOnly && (building.tier <= filters.selectedTier))) || building.tier === filters.selectedTier) &&
+            ((!building.techId || !window.objectData.tech[building.techId]) || ((building.techId === 'unlockfacilitytier2' && filters.selectedTier >= 2) || (building.techId === 'unlockfacilitytier3' && filters.selectedTier >= 3))) &&
             (!game.settings.selectedFaction || (!building.faction || building.faction === game.settings.selectedFaction))))) {
             return true;
         }

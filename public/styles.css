@@ -1854,9 +1854,9 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
     width: 25px;
     height: 25px;
     font-size: 1em;
-    line-height: 22px;
+    line-height: 23px;
     border-width: 1px;
-    box-shadow: inset -1px -1px 4px black;
+    box-shadow: inset 0 0 3px black;
     margin: 2px 0 0 2px;
     float: none;
 }
@@ -1870,6 +1870,26 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
 #toolbelt-panel .toolbelt-selection-wrapper.no-slot-selected {
     opacity: 0.5;
     pointer-events: none;
+}
+
+#toolbelt-panel .toolbelt-selection-filters {
+    height: 38px;
+}
+
+#toolbelt-panel .toolbelt-selection-filters > * {
+    height: 100%;
+}
+
+#toolbelt-panel .toolbelt-selection-filters .construction-tech-button {
+    width: 20%;
+    background: #090909;
+    margin: 0;
+    line-height: initial;
+    border: 1px solid black;
+}
+
+#toolbelt-panel .toolbelt-selection-filters .construction-tech-button:hover {
+    border-color: white;
 }
 
 #toolbelt-panel .toolbelt-selection {
@@ -1888,6 +1908,47 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
 #toolbelt-panel .hover-building-info {
     padding: 4px 10px;
     text-align: center;
+}
+
+.custom-properties-panel .settings-option-row {
+    padding: 0 8px;
+}
+
+.custom-property-row {
+    height: 30px;
+    margin: 9px 0;
+}
+
+.custom-property-row > * {
+    margin: 0 3px;
+}
+
+.custom-property-row > input,
+.custom-property-row > select,
+.custom-property-row > button {
+    width: 45% !important;
+    height: 100%;
+    background: #131313;
+    border: 1px solid black !important;
+    border-radius: 0 !important;
+    outline: none !important;
+}
+
+.custom-property-row > input:first-of-type {
+    width: 45% !important;
+}
+
+.custom-property-row > button {
+    width: 10% !important;
+}
+
+.custom-property-row > select,
+.custom-property-row > input[type=color] {
+    cursor: pointer;
+}
+
+.custom-property-row > *:hover, .custom-property-row > *:active {
+    border-color: white;
 }
 
 /* Scrollbars */

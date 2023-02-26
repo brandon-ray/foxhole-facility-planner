@@ -163,6 +163,7 @@ Vue.component('app-menu-building-selected', {
                 baseProduction: false,
                 selectedProduction: null,
                 productionScale: null,
+                properties: {},
                 following: false,
                 label: null,
                 style: null
@@ -172,6 +173,15 @@ Vue.component('app-menu-building-selected', {
             },
             productionData: null,
             hoverUpgradeName: null,
+            propertyKey: null,
+            propertyType: 'bool',
+            defaultPropertyTypes: {
+                bool: false,
+                color: '#ffffff',
+                float: 0.0,
+                int: 0,
+                string: ''
+            },
             lockState: 0
         };
     },
@@ -180,7 +190,7 @@ Vue.component('app-menu-building-selected', {
         this.refresh();
     },
     methods: {
-        refresh: function(noForce) {
+        refresh: function(noForce = false) {
             this.lockState = game.getSelectedLockState();
             let selectedEntity = game.getSelectedEntity();
             if (selectedEntity) {
@@ -205,6 +215,7 @@ Vue.component('app-menu-building-selected', {
                     baseProduction: selectedEntity.baseProduction,
                     selectedProduction: selectedEntity.selectedProduction,
                     productionScale: selectedEntity.productionScale,
+                    properties: selectedEntity.properties,
                     baseUpgrades: selectedEntity.baseUpgrades,
                     building: selectedEntity.building,
                     following: selectedEntity.following,
@@ -252,6 +263,7 @@ Vue.component('app-menu-building-selected', {
                             selectedEntity.userThrottle = this.entity.userThrottle;
                         }
                     }
+                    this.updateProperties(selectedEntity, false);
                     if (game.statisticsMenuComponent) {
                         game.statisticsMenuComponent.refresh();
                     }
@@ -294,6 +306,59 @@ Vue.component('app-menu-building-selected', {
         resetStyleOptions: function() {
             this.entity.style = Object.assign({}, game.defaultSettings.styles[this.entity.type === 'text' ? 'label' : this.entity.subtype]);
             this.updateStyleOptions(true);
+        },
+        updateProperties: function(selectedEntity = game.getSelectedEntity(), forceRefresh = true) {
+            if (selectedEntity) {
+                selectedEntity.properties = this.entity.properties;
+            }
+            if (forceRefresh) {
+                this.refresh();
+            }
+        },
+        addProperty: function(key = this.propertyKey, type = this.propertyType, value = this.defaultPropertyTypes[type]) {
+            if (this.entity && key) {
+                if (!this.entity.properties) {
+                    this.entity.properties = {};
+                }
+                if (!this.entity.properties.hasOwnProperty(key)) {
+                    this.entity.properties[key] = {
+                        key: key,
+                        type: type,
+                        value: value
+                    };
+                    this.updateProperties();
+                    this.propertyKey = null;
+                    return true;
+                }
+            }
+            return false;
+        },
+        updateProperty: function(key) {
+            if (this.entity?.properties && this.entity.properties.hasOwnProperty(key)) {
+                let property = this.entity.properties[key];
+                if (property.key !== key) {
+                    if (property.key !== '' && !this.entity.properties[property.key]) {
+                        this.entity.properties[property.key] = property;
+                        delete this.entity.properties[key];
+                    } else {
+                        property.key = key;
+                    }
+                }
+                if (property.type === 'int') {
+                    property.value = Math.round(property.value);
+                }
+                this.updateProperties();
+                return true;
+            }
+            return false;
+        },
+        removeProperty: function(key) {
+            if (this.entity?.properties && this.entity.properties.hasOwnProperty(key)) {
+                delete this.entity.properties[key];
+                this.updateProperties();
+                return true;
+            }
+            return false;
         },
         /*
         addRail: function() {
@@ -509,6 +574,34 @@ Vue.component('app-menu-building-selected', {
                     <i class="fa fa-arrows" aria-hidden="true"></i> Texture Position Y:
                     <input class="app-input" type="number" v-model.number="debug.textureOffset.y" @input="updateDebugProps()">
                 </label>
+            </div>
+            <div v-if="game.settings.enableAdvanced" class="settings-option-wrapper custom-properties-panel">
+                <div class="settings-title">
+                    Custom Properties
+                </div>
+                <div v-if="entity.properties && Object.keys(entity.properties).length" class="settings-option-row">
+                    <div v-for="(property, key) in entity.properties" class="custom-property-row d-flex justify-content-center">
+                        <input class="app-input" type="text" placeholder="Key" v-model="property.key" @change="updateProperty(key)">
+                        <select v-if="property.type === 'bool'" class="app-input" v-model="property.value" @change="updateProperty(key)">
+                            <option :value="true">true</option>
+                            <option :value="false">false</option>
+                        </select>
+                        <input v-else-if="property.type === 'color'" type="color" v-model="property.value" @change="updateProperty(key)">
+                        <input v-else-if="property.type === 'float' || property.type === 'int'" class="app-input" type="number" v-model="property.value" @change="updateProperty(key)">
+                        <input v-else class="app-input" type="text" :placeholder="property.type" v-model="property.value" @change="updateProperty(key)">
+                        <button class="btn-small" type="button" @click="removeProperty(key)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+                <div class="settings-option-row">
+                    <div class="custom-property-row d-flex justify-content-center">
+                        <input class="app-input" type="text" v-model="propertyKey" placeholder="Key">
+                        <select class="app-input" v-model="propertyType">
+                            <!-- <option :value="null">Type</option> -->
+                            <option v-for="(value, key) in defaultPropertyTypes" :value="key">{{key}}</option>
+                        </select>
+                        <button class="btn-small" type="button" @click="addProperty()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                    </div>
+                </div>
             </div>
             <div v-if="entity.building?.vehicle?.engine" class="settings-option-wrapper">
                 <div class="settings-title">

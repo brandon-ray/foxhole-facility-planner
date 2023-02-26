@@ -118,9 +118,9 @@ if (isMobile && !isPhoneApp) {
 
                 <app-menu-statistics v-if="game.settings.enableStats"></app-menu-statistics>
 
-                <app-game-confirmation-popup></app-game-confirmation-popup>
+                <app-game-toolbelt></app-game-toolbelt>
 
-                <app-game-toolbelt v-if="game.settings.enableExperimental"></app-game-toolbelt>
+                <app-game-confirmation-popup></app-game-confirmation-popup>
 
                 <div class="footer">
                     <button class="btn-small btn-float-left" :class="{ 'btn-active': !sidebarVisible }" title="Toggle Sidebar Menu" @click="sidebarVisible = !sidebarVisible">
@@ -139,12 +139,12 @@ if (isMobile && !isPhoneApp) {
                         Layers
                     </label>
                     <label class="btn-checkbox-wrapper">
-                        <button class="btn-small btn-float-left" :class="{ 'btn-active': settings.enableStats }" @click="settings.enableStats = !settings.enableStats; game.updateSettings()"><i class="fa fa-bar-chart" aria-hidden="true"></i></button>
-                        Stats
-                    </label>
-                    <label v-if="game.settings.enableExperimental" class="btn-checkbox-wrapper">
                         <button class="btn-small btn-float-left" :class="{ 'btn-active': settings.showToolbelt }" @click="settings.showToolbelt = !settings.showToolbelt; game.updateSettings()"><i class="fa fa-wrench" aria-hidden="true"></i></button>
                         Toolbelt
+                    </label>
+                    <label class="btn-checkbox-wrapper">
+                        <button class="btn-small btn-float-left" :class="{ 'btn-active': settings.enableStats }" @click="settings.enableStats = !settings.enableStats; game.updateSettings()"><i class="fa fa-bar-chart" aria-hidden="true"></i></button>
+                        Stats
                     </label>
                     <button class="btn-small" title="Toggle Fullscreen" @click="game.tryFullscreen()">
                         <i class="fa fa-arrows-alt" aria-hidden="true"></i>
@@ -361,6 +361,14 @@ Vue.component('app-game-toolbelt', {
         },
         buildingHover: function(building) {
             this.hoverData = building;
+        },
+        incrementTier: function() {
+            this.bmc();
+            game.settings.toolbeltFilters.selectedTier++;
+            if (game.settings.toolbeltFilters.selectedTier >= 4) {
+                game.settings.toolbeltFilters.selectedTier = 1;
+            }
+            game.updateSettings();
         }
     },
     template: html`
@@ -382,23 +390,33 @@ Vue.component('app-game-toolbelt', {
         </div>
         <template v-if="toolbeltSelection">
             <div class="toolbelt-selection-wrapper" :class="{'no-slot-selected': lastSlotClicked === null}">
-                <label class="construction-search" title="Search">
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                    <div class="input-wrapper">
-                        <input type="text" v-model="searchQuery" placeholder="Search" @input="refresh()">
-                        <i class="fa fa-close" :class="{'active': searchQuery}" aria-hidden="true" @click="searchQuery = null"></i>
-                    </div>
-                </label>
+                <div class="construction-options toolbelt-selection-filters d-flex">
+                    <label class="construction-search w-100" title="Search">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                        <div class="input-wrapper">
+                            <input type="text" v-model="searchQuery" placeholder="Search" @input="refresh()">
+                            <i class="fa fa-close" :class="{'active': searchQuery}" aria-hidden="true" @click="searchQuery = null"></i>
+                        </div>
+                    </label>
+                    <button class="btn-small construction-tech-button" @click="incrementTier()" title="Filter by Tier">
+                        {{'Tier ' + game.settings.toolbeltFilters.selectedTier}}
+                        <span class="label">tech</span>
+                    </button>
+                    <button class="btn-small construction-tech-button" @click="game.settings.toolbeltFilters.showSelectedTierOnly = !game.settings.toolbeltFilters.showSelectedTierOnly; game.updateSettings();" title="Exclude Previous Tiers">
+                        {{game.settings.toolbeltFilters.showSelectedTierOnly ? 'Exclude' : 'All'}}
+                        <span class="label">tier mode</span>
+                    </button>
+                </div>
                 <div class="toolbelt-selection">
                     <template v-if="searchQuery">
                         <p v-if="!getSearchResults.length" class="px-2 py-1 text-center">Sorry, couldn't find anything with that name.</p>
-                        <app-game-building-list-icon-v2 v-for="building in getSearchResults" :container="game.toolbeltComponent" :building="building" :search="searchQuery"/>
+                        <app-game-building-list-icon-v2 v-for="building in getSearchResults" :container="game.toolbeltComponent" :building="building" :search="searchQuery" :filters="game.settings.toolbeltFilters"/>
                     </template>
                     <template v-else>
                         <template v-for="(category, key) in window.objectData.categories">
                             <template v-if="!category.hideInList && (game.settings.enableExperimental || !category.experimental)">
                                 <template v-for="building in category.buildings">
-                                    <app-game-building-list-icon-v2 v-if="!building.preset" :container="game.toolbeltComponent" :building="building"/>
+                                    <app-game-building-list-icon-v2 v-if="!building.preset" :container="game.toolbeltComponent" :building="building" :filters="game.settings.toolbeltFilters"/>
                                 </template>
                             </template>
                         </template>
@@ -412,9 +430,9 @@ Vue.component('app-game-toolbelt', {
 });
 
 Vue.component('app-game-building-list-icon-v2', {
-    props: ['container', 'building', 'search'],
+    props: ['container', 'building', 'search', 'filters'],
     template: html`
-    <div v-if="search || game.canShowListItem(building)" class="build-icon" :class="{'ignore-transform': building.preset}" :title="building.name"
+    <div v-if="search || game.canShowListItem(building, search, filters)" class="build-icon" :class="{'ignore-transform': building.preset}" :title="building.name"
         :style="{backgroundImage:'url(' + ((building.baseIcon || (building.category !== 'entrenchments' && building.parent && !building.parentKey && building.parent.icon) || building.icon) ?? '/assets/default_icon.webp') + ')'}"
         @mouseenter="bme(); container.buildingHover(building)" @mouseleave="container.buildingHover(null)" @click="container.buildBuilding(building)">
         <div v-if="!building.baseIcon && !building.parentKey && building.parent?.icon && building.parent.icon !== building.icon" class="build-subicon" :title="building.parent.name" :style="{backgroundImage: 'url(' + ((building.category === 'entrenchments' && building.parent.icon) || building.icon) + ')'}"></div>
