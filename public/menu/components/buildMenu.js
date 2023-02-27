@@ -1257,7 +1257,7 @@ Vue.component('app-menu-about', {
             </p>
         </div>
         <div class="about-section">
-            <div class="about-section-header"><i class="fa fa-keyboard-o " aria-hidden="true"></i> Controls + Hotkeys</div>
+            <div class="about-section-header"><i class="fa fa-keyboard-o" aria-hidden="true"></i> Controls + Hotkeys</div>
             <div class="controls-section-body">
                 <div class="middle-mouse-button"></div> Move board position.<br>
                 <div class="middle-mouse-button"></div> Scroll to zoom in/out board.
@@ -1270,12 +1270,25 @@ Vue.component('app-menu-about', {
                 <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">A</div> Select all structures.<br>
                 <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">C</div> Clone selection.
                 <hr>
+                <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">Z</div> Undo previous action.<br>
+                <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">Y</div> Redo previous action.<br>
+                <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">shift</div> + <div class="keyboard-key">Z</div> Redo previous action.
+                <hr>
                 <div class="keyboard-key">shift</div> + <div class="left-mouse-button"></div> Add structure to selection.<br>
                 <div class="keyboard-key">shift</div> + <div class="left-mouse-button"></div> Add bunker to selection.<br>
                 <div class="keyboard-key">shift</div> + <div class="left-mouse-button"></div> Snap structure to grid.
                 <hr>
+                <div class="keyboard-key">number</div> Select toolbelt slot. (0-9)<br>
+                <i class="fa fa-reply fa-rotate-180" aria-hidden="true"></i> <div class="keyboard-key">shift</div> Swap toolbelt. (0-9)
+                <hr>
                 <div class="keyboard-key"><i class="fa fa-angle-up" aria-hidden="true"></i></div> <div class="keyboard-key"><i class="fa fa-angle-down" aria-hidden="true"></i></div> Move selection up / down.<br>
                 <div class="keyboard-key"><i class="fa fa-angle-left" aria-hidden="true"></i></div> <div class="keyboard-key"><i class="fa fa-angle-right" aria-hidden="true"></i></div> Move selection left / right.
+                <hr>
+                <div class="keyboard-key">W, A, S, D</div> Move selection along grid.<br>
+                <i class="fa fa-reply fa-rotate-180" aria-hidden="true"></i> <div class="keyboard-key">shift</div> Halve selection movement.
+                <hr>
+                <div class="keyboard-key">Q, E</div> Rotate selection by degrees. ({{game.settings.keySnapRotationDegrees}}°)<br>
+                <i class="fa fa-reply fa-rotate-180" aria-hidden="true"></i> <div class="keyboard-key">shift</div> Double selection rotation. ({{game.settings.keySnapRotationDegrees * 2}}°)
                 <hr>
                 <div class="keyboard-key">space</div> Pause / Resume physics.<br>
                 <div class="keyboard-key">L</div> Toggle lock for selected structures.<br>
