@@ -3449,20 +3449,6 @@ try {
                         } else if (entity.type === 'shape') {
                             entity.sprite.alpha = entity.shapeStyle.alpha;
                             if (entity.subtype === 'image') {
-                                if (entity.shapeStyle.maintainAspectRatio) {
-                                    const textureAspectRatio = entity.sprite.texture.width / entity.sprite.texture.height;
-                                    const pX = Math.abs(backPoint.x), pY = Math.abs(backPoint.y);
-                                    const pointsAspectRatio = pX / pY;
-                                    if (pointsAspectRatio > textureAspectRatio) {
-                                        backPoint.x = Math.sign(backPoint.x) * pY * textureAspectRatio;
-                                    } else {
-                                        backPoint.y = Math.sign(backPoint.y) * pX / textureAspectRatio;
-                                    }
-                                    if (backPoint.handle) {
-                                        backPoint.handle.x = backPoint.x;
-                                        backPoint.handle.y = backPoint.y;
-                                    }
-                                }
                                 entity.sprite.scale.set(backPoint.x / entity.sprite.texture.width, backPoint.y / entity.sprite.texture.height);
                             } else {
                                 entity.sprite.clear();
@@ -3798,14 +3784,25 @@ try {
                             selectedHandlePoint.y = mousePos.y;
                         }
 
-                        if (entity.subtype === 'line' || entity.subtype === 'circle') {
-                            let angle = Math.angleBetween(entity, { x: gmx, y: gmy });
-                            if (game.settings.enableSnapRotation) {
-                                let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ? game.settings.snapRotationDegrees : 15);
-                                angle = Math.round(angle / snapRotationDegrees) * snapRotationDegrees;
+                        if (entity.type === 'shape') {
+                            if (entity.subtype === 'line' || entity.subtype === 'circle') {
+                                let angle = Math.angleBetween(entity, { x: gmx, y: gmy });
+                                if (game.settings.enableSnapRotation) {
+                                    let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ? game.settings.snapRotationDegrees : 15);
+                                    angle = Math.round(angle / snapRotationDegrees) * snapRotationDegrees;
+                                }
+                                entity.rotation = angle;
+                                selectedHandlePoint.y = 0;
+                            } else if (entity.subtype === 'image' && entity.shapeStyle?.maintainAspectRatio) {
+                                const textureAspectRatio = entity.sprite.texture.width / entity.sprite.texture.height;
+                                const pX = Math.abs(selectedHandlePoint.x), pY = Math.abs(selectedHandlePoint.y);
+                                const pointsAspectRatio = pX / pY;
+                                if (pointsAspectRatio > textureAspectRatio) {
+                                    selectedHandlePoint.x = Math.sign(selectedHandlePoint.x) * pY * textureAspectRatio;
+                                } else {
+                                    selectedHandlePoint.y = Math.sign(selectedHandlePoint.y) * pX / textureAspectRatio;
+                                }
                             }
-                            entity.rotation = angle;
-                            selectedHandlePoint.y = 0;
                         }
 
                         if (entity.building) {
