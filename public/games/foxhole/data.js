@@ -9144,14 +9144,12 @@ const foxholeData = {
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches. This variant can also serve as an emplacement for mannable defenses.",
 			"category": "entrenchments",
 			"categoryOrder": 5,
-			"experimental": true,
 			"tier": 1,
-			"width": 12.3,
-			"length": 12.3,
-			"sortLayer": "foundation",
+			"width": 10.56,
+			"length": 10.56,
 			"hitArea": [
 				{
-					"shape": [ 195.52,-77.12,194.24,80.32,82.24,193.6,-80.96,195.52,-196.16,76.48,-194.88,-82.88,-82.24,-194.88,81.6,-196.16 ]
+					"shape": [ -57.6,-141.44,58.24,-141.44,141.44,-57.6,141.44,58.24,58.24,141.44,-57.6,141.44,-140.8,57.6,-140.8,-58.88 ]
 				}
 			],
 			"icon": "game/Textures/UI/StructureIcons/TrenchT1EmplacementIcon.webp",
@@ -9167,8 +9165,10 @@ const foxholeData = {
 							"category": 2
 						}
 					],
-					"x": 615,
-					"y": 6,
+					"texture": "game/Textures/Structures/trenchempt1_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt1_side_open.webp",
+					"x": 528,
+					"y": 0,
 					"rotation": 0
 				},
 				{
@@ -9179,8 +9179,10 @@ const foxholeData = {
 							"category": 2
 						}
 					],
-					"x": 1046,
-					"y": 186,
+					"texture": "game/Textures/Structures/trenchempt1_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt1_side_open.webp",
+					"x": 901,
+					"y": 155,
 					"rotation": 45
 				},
 				{
@@ -9191,8 +9193,10 @@ const foxholeData = {
 							"category": 2
 						}
 					],
-					"x": 1224,
-					"y": 615,
+					"texture": "game/Textures/Structures/trenchempt1_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt1_side_open.webp",
+					"x": 1056,
+					"y": 528,
 					"rotation": 90
 				},
 				{
@@ -9203,8 +9207,10 @@ const foxholeData = {
 							"category": 2
 						}
 					],
-					"x": 1046,
-					"y": 1046,
+					"texture": "game/Textures/Structures/trenchempt1_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt1_side_open.webp",
+					"x": 901,
+					"y": 901,
 					"rotation": 135
 				},
 				{
@@ -9215,8 +9221,10 @@ const foxholeData = {
 							"category": 2
 						}
 					],
-					"x": 616,
-					"y": 1228,
+					"texture": "game/Textures/Structures/trenchempt1_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt1_side_open.webp",
+					"x": 528,
+					"y": 1056,
 					"rotation": 180
 				},
 				{
@@ -9227,8 +9235,10 @@ const foxholeData = {
 							"category": 2
 						}
 					],
-					"x": 186,
-					"y": 1048,
+					"texture": "game/Textures/Structures/trenchempt1_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt1_side_open.webp",
+					"x": 155,
+					"y": 901,
 					"rotation": 225
 				},
 				{
@@ -9239,8 +9249,10 @@ const foxholeData = {
 							"category": 2
 						}
 					],
-					"x": 7,
-					"y": 617,
+					"texture": "game/Textures/Structures/trenchempt1_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt1_side_open.webp",
+					"x": 0,
+					"y": 528,
 					"rotation": 270
 				},
 				{
@@ -9251,8 +9263,10 @@ const foxholeData = {
 							"category": 2
 						}
 					],
-					"x": 182,
-					"y": 185,
+					"texture": "game/Textures/Structures/trenchempt1_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt1_side_open.webp",
+					"x": 155,
+					"y": 155,
 					"rotation": 315
 				}
 			],
@@ -9275,10 +9289,123 @@ const foxholeData = {
 			"codeName": "TrenchEmpT2",
 			"parentKey": "trenchempt1",
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches. This variant can also serve as an emplacement for mannable defenses.",
-			"experimental": true,
 			"tier": 2,
 			"icon": "game/Textures/UI/StructureIcons/TrenchT2EmplacementIcon.webp",
 			"texture": "game/Textures/Structures/trenchempt2.webp",
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt2_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt2_side_open.webp",
+					"x": 528,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 1,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt2_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt2_side_open.webp",
+					"x": 901,
+					"y": 155,
+					"rotation": 45
+				},
+				{
+					"id": 2,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt2_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt2_side_open.webp",
+					"x": 1056,
+					"y": 528,
+					"rotation": 90
+				},
+				{
+					"id": 3,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt2_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt2_side_open.webp",
+					"x": 901,
+					"y": 901,
+					"rotation": 135
+				},
+				{
+					"id": 4,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt2_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt2_side_open.webp",
+					"x": 528,
+					"y": 1056,
+					"rotation": 180
+				},
+				{
+					"id": 5,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt2_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt2_side_open.webp",
+					"x": 155,
+					"y": 901,
+					"rotation": 225
+				},
+				{
+					"id": 6,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt2_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt2_side_open.webp",
+					"x": 0,
+					"y": 528,
+					"rotation": 270
+				},
+				{
+					"id": 7,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt2_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt2_side_open.webp",
+					"x": 155,
+					"y": 155,
+					"rotation": 315
+				}
+			],
 			"maxHealth": 1850,
 			"cost": {
 				"cloth": 50
@@ -9290,10 +9417,123 @@ const foxholeData = {
 			"codeName": "TrenchEmpT3",
 			"parentKey": "trenchempt2",
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches. This variant can also serve as an emplacement for mannable defenses.",
-			"experimental": true,
 			"tier": 3,
 			"icon": "game/Textures/UI/StructureIcons/TrenchT3EmplacementIcon.webp",
 			"texture": "game/Textures/Structures/trenchempt3.webp",
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt3_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt3_side_open.webp",
+					"x": 528,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 1,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt3_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt3_side_open.webp",
+					"x": 901,
+					"y": 155,
+					"rotation": 45
+				},
+				{
+					"id": 2,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt3_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt3_side_open.webp",
+					"x": 1056,
+					"y": 528,
+					"rotation": 90
+				},
+				{
+					"id": 3,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt3_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt3_side_open.webp",
+					"x": 901,
+					"y": 901,
+					"rotation": 135
+				},
+				{
+					"id": 4,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt3_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt3_side_open.webp",
+					"x": 528,
+					"y": 1056,
+					"rotation": 180
+				},
+				{
+					"id": 5,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt3_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt3_side_open.webp",
+					"x": 155,
+					"y": 901,
+					"rotation": 225
+				},
+				{
+					"id": 6,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt3_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt3_side_open.webp",
+					"x": 0,
+					"y": 528,
+					"rotation": 270
+				},
+				{
+					"id": 7,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt3_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt3_side_open.webp",
+					"x": 155,
+					"y": 155,
+					"rotation": 315
+				}
+			],
 			"maxHealth": 3500,
 			"cost": {
 				"concrete": 20
