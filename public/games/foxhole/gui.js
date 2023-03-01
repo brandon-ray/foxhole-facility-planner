@@ -341,7 +341,7 @@ Vue.component('app-menu-statistics', {
                         </div>
                     </div>
                 </div>
-                <div class="construction-options-wrapper">
+                <div v-if="game.settings.enableExperimental" class="construction-options-wrapper">
                     <h5 class="construction-options-header"><i class="fa fa-shield"></i> Bunker Destruction Req's</h5>
                     <div class="bunker-damage-profile-stats">
                         <div class="weapon-row d-flex table-heading">
