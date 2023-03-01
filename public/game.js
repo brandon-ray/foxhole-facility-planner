@@ -63,6 +63,7 @@ const game = {
         enableAutoLoading: true,
         enableGrid: true,
         enableStats: true,
+        enableSelectionStats: true,
         gridSize: 16,
         enableSnapRotation: true,
         snapRotationDegrees: 15,
@@ -1192,12 +1193,18 @@ try {
                 }
                 game.setPickupEntities(true, false, centerPos, true);
                 game.updateSelectedBuildingMenu();
-                game.statisticsMenuComponent?.refresh();
+                game.refreshStats();
             } else if (!ignoreConfirmation) {
                 game.zoomToEntitiesCenter();
             }
         }, 1);
     };
+
+    game.refreshStats = function() {
+        if (game.statisticsMenuComponent) {
+            game.statisticsMenuComponent.refresh();
+        }
+    }
 
     game.getEntitiesCenter = function(ents, isSelection) {
         const count = ents?.length ?? 1;
@@ -1265,7 +1272,7 @@ try {
             entity.onSelect();
             if (!noMenuUpdate) {
                 game.updateSelectedBuildingMenu();
-                game.statisticsMenuComponent?.refresh();
+                game.refreshStats();
             }
             return true;
         }
@@ -1287,7 +1294,7 @@ try {
             } 
             if (!noMenuUpdate) {
                 game.updateSelectedBuildingMenu();
-                game.statisticsMenuComponent?.refresh();
+                game.refreshStats();
             }
             return true;
         }
@@ -1322,7 +1329,7 @@ try {
             selectedEntities = [];
             if (!noMenuUpdate) {
                 game.updateSelectedBuildingMenu();
-                game.statisticsMenuComponent?.refresh();
+                game.refreshStats();
             }
             return true;
         }
@@ -1568,7 +1575,7 @@ try {
             });
             if (selectedChange) {
                 game.updateSelectedBuildingMenu();
-                game.statisticsMenuComponent?.refresh();
+                game.refreshStats();
             }
         }
     });
@@ -2752,9 +2759,7 @@ try {
             */
 
             setTimeout(() => {
-                if (game.statisticsMenuComponent) {
-                    game.statisticsMenuComponent.refresh();
-                }
+                game.refreshStats();
             }, 1);
 
             entity.hasConnections = function() {
@@ -2853,9 +2858,7 @@ try {
 
             entity.afterRemove = function() {
                 setTimeout(() => {
-                    if (game.statisticsMenuComponent) {
-                        game.statisticsMenuComponent.refresh();
-                    }
+                    game.refreshStats();
                 }, 1);
             };
 
@@ -2964,7 +2967,7 @@ try {
                 if (entity.selected) {
                     game.buildingSelectedMenuComponent?.refresh();
                 }
-                game.statisticsMenuComponent?.refresh();
+                game.refreshStats();
             };
         }
 
@@ -4274,7 +4277,7 @@ try {
                     pickupPosition = {x: position?.x ?? gmx, y: position?.y ?? gmy};
                     ignoreMousePickup = true;
                 } else {
-                    game.statisticsMenuComponent?.refresh();
+                    game.refreshStats();
                 }
                 pickupSelectedEntities = pickup;
             }
@@ -4507,9 +4510,7 @@ try {
             if (!isLoading) {
                 game.saveStateChanged = true;
             }
-            if (game.statisticsMenuComponent) {
-                game.statisticsMenuComponent.refresh();
-            }
+            game.refreshStats();
         }
     };
 

@@ -46,6 +46,66 @@ let itemList = {
     }
 };
 
+// TODO: Add weapon damage variants. HV, HVFC, Spatha, etc. If there's a lot of entries, adding a search function might be nice.
+let weaponList = {
+    hegrenade: { // Mammon
+        alias: 'HE Grenade',
+        damageType: {
+            multipliers: {
+                't2': 0.95,
+                't3': 0.95
+            }
+        }
+    },
+    helaunchedgrenade: { // Tremola Launched Grenade
+        alias: 'HE Launcher',
+        damageType: {
+            multipliers: {
+                't2': 0.95,
+                't3': 0.95
+            }
+        }
+    },
+    minitankammo: { // 30mm
+        damageType: {
+            multipliers: {
+                't2': 0.99,
+                't3': 0.99
+            }
+        }
+    },
+    rpgammo: { // RPG
+        damageType: {
+            multipliers: {
+                't3': 0.99
+            }
+        }
+    },
+    lighttankammo: {}, // 40mm
+    battletankammo: {}, // 75mm
+    atammo: {}, // 68mm
+    atlargeammo: {}, // 94.5mm
+    mortarammo: { // Mortar
+        alias: 'Mortar'
+    },
+    lightartilleryammo: {}, // 120mm
+    heavyartilleryammo: {}, // 150mm
+    herocketammo: { // Rocket / 3C-High Explosive Rocket
+        alias: 'Rocket'
+    },
+    firerocketammo: { // Flame Rocket / 4C-Fire Rocket
+        alias: 'Fire Rocket'
+    },
+    explosivelightc: { // Hydras
+        alias: 'Hydras'
+    },
+    mortartankammo: {}, // 250mm
+    lrartilleryammo: {}, // 300mm
+    satchelcharge: { // Satchels / Alligator Charge
+        alias: 'Satchel'
+    }
+};
+
 const conversionEntriesMap = {
     'Input': 'input',
     'FuelInput': 'input',
@@ -462,14 +522,47 @@ function getResourceCosts(resources) {
     }
 }
 
-function iterateData(filePath, list, isItem) {
+function iterateData(filePath, list, type) {
     let rawdata = fs.readFileSync(filePath);
     let uAsset = JSON.parse(rawdata)[0];
     if (uAsset.Rows) {
         for (let [codeName, data] of Object.entries(uAsset.Rows)) {
             codeName = codeName.toLowerCase();
             const listItem = list[codeName];
-            if (listItem && listItem.cost !== false && !listItem.reference) {
+            if (listItem && type === 'weapon') {
+                if (data.Damage) {
+                    let weapon = Object.assign({
+                        codeName: codeName
+                    }, weaponList[codeName], {
+                        damage: data.Damage
+                    });
+                    if (data.DamageType.ObjectName.startsWith('BlueprintGeneratedClass')) {
+                        let rawDamageData = fs.readFileSync(foxholeDataDirectory + data.DamageType.ObjectPath.split('.')[0] + '.json');
+                        let damageTypeProperties = JSON.parse(rawDamageData)[1].Properties;
+                        weapon.damageType = Object.assign({
+                            name: damageTypeProperties.DisplayName.SourceString,
+                            type: damageTypeProperties.Type.replace('EDamageType::', '').toLowerCase(),
+                            description: damageTypeProperties.DescriptionDetails?.Text?.SourceString
+                        }, weaponList[codeName]?.damageType);
+                    }
+                    weaponList[codeName] = weapon;
+                }
+            } else if (type === 'damageType') {
+                for (const [key, weapon] of Object.entries(weaponList)) {
+                    if (weapon.damageType?.type === codeName) {
+                        delete weapon.damageType.type;
+                        if (data.Tier1Structure !== 1 || data.Tier2Structure !== 1 || data.Tier3Structure !== 1) {
+                            weapon.damageType.profiles = {
+                                't1': 1 - data.Tier1Structure,
+                                't2': 1 - data.Tier2Structure,
+                                't3': 1 - data.Tier3Structure
+                            };
+                        } else {
+                            delete weaponList[key];
+                        }
+                    }
+                }
+            } else if (listItem && listItem.cost !== false && !listItem.reference) {
                 /*
                 This seems to be where Field Modification Center pulls its data from.
                 if (data.bHasTierUpgrades) {
@@ -478,7 +571,7 @@ function iterateData(filePath, list, isItem) {
                     }
                 }
                 */
-                if (isItem) {
+                if (type === 'item') {
                     if (data.AltResourceAmounts && data.AltResourceAmounts.Resource.CodeName !== 'None') {
                         listItem.cost = getResourceCosts(data.AltResourceAmounts);
                     }
@@ -536,6 +629,13 @@ function iterateAssets(dirPath) {
                                 'isLiquid': item.bIsLiquid ?? baseData.isLiquid,
                                 'cost': itemList[codeName]?.cost
                             };
+                        }
+                        if (weaponList[codeName]) {
+                            weaponList[codeName] = Object.assign({
+                                name: item.DisplayName?.SourceString,
+                                description: item.DisplayName?.SourceString,
+                                icon: getLocalIcon(item)
+                            }, weaponList[codeName]);
                         }
                     } else if (item.ItemInfo) {
                         for (const [codeName, techInfo] of Object.entries(item.ItemInfo)) {
@@ -738,8 +838,10 @@ async function updateData() {
 
     await iterateStructures(`${foxholeDataDirectory}War/Content/Blueprints/`);
 
-    iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPVehicleDynamicData.json`, itemList, true);
-    iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, itemList, true); // Check for items in the structure data... Yes, Material Pallet is stored here.
+    iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPVehicleDynamicData.json`, itemList, 'item');
+    iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, itemList, 'item'); // Check for items in the structure data... Yes, Material Pallet is stored here.
+    iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPAmmoDynamicData.json`, weaponList, 'weapon');
+    iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/DTDamageProfiles.json`, weaponList, 'damageType');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, structureList);
 
     for (const [codeName, structureData] of Object.entries(structureList)) {
@@ -790,6 +892,7 @@ async function updateData() {
         'presets': foxholeData.presets,
         'tech': sortList(techList),
         'resources': sortList(itemList),
+        'weapons': weaponList,
         'buildings': sortList(structureList)
     }, null, '\t');
     foxholeDataStr = foxholeDataStr.replaceAll('"[ ', '[ ').replaceAll(' ]"', ' ]');

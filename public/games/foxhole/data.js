@@ -888,6 +888,285 @@ const foxholeData = {
 			"icon": "game/Textures/UI/ItemIcons/RefinedMaterialsIcon.webp"
 		}
 	},
+	"weapons": {
+		"hegrenade": {
+			"name": "Mammon 91-b",
+			"description": "Mammon 91-b",
+			"icon": "game/Textures/UI/ItemIcons/HEGrenadeItemIcon.webp",
+			"codeName": "hegrenade",
+			"alias": "HE Grenade",
+			"damageType": {
+				"name": "Explosive",
+				"multipliers": {
+					"t2": 0.95,
+					"t3": 0.95
+				},
+				"profiles": {
+					"t1": 0.75,
+					"t2": 0.75,
+					"t3": 0.25
+				}
+			},
+			"damage": 240
+		},
+		"helaunchedgrenade": {
+			"name": "Tremola Grenade GPb-1",
+			"description": "Tremola Grenade GPb-1",
+			"icon": "game/Textures/UI/ItemIcons/HELaunchedGrenadeItemIcon.webp",
+			"codeName": "helaunchedgrenade",
+			"alias": "HE Launcher",
+			"damageType": {
+				"name": "Explosive",
+				"multipliers": {
+					"t2": 0.95,
+					"t3": 0.95
+				},
+				"profiles": {
+					"t1": 0.75,
+					"t2": 0.75,
+					"t3": 0.25
+				}
+			},
+			"damage": 200
+		},
+		"minitankammo": {
+			"name": "30mm",
+			"description": "30mm",
+			"icon": "game/Textures/UI/ItemIcons/MiniTankAmmoItemIcon.webp",
+			"codeName": "minitankammo",
+			"damageType": {
+				"name": "Explosive",
+				"multipliers": {
+					"t2": 0.99,
+					"t3": 0.99
+				},
+				"profiles": {
+					"t1": 0.75,
+					"t2": 0.75,
+					"t3": 0.25
+				}
+			},
+			"damage": 400
+		},
+		"rpgammo": {
+			"name": "RPG",
+			"description": "RPG",
+			"icon": "game/Textures/UI/ItemIcons/RpgAmmoItemIcon.webp",
+			"codeName": "rpgammo",
+			"damageType": {
+				"name": "Explosive",
+				"multipliers": {
+					"t3": 0.99
+				},
+				"profiles": {
+					"t1": 0.75,
+					"t2": 0.75,
+					"t3": 0.25
+				}
+			},
+			"damage": 550
+		},
+		"lighttankammo": {
+			"name": "40mm",
+			"description": "40mm",
+			"icon": "game/Textures/UI/ItemIcons/LightTankAmmoItemIcon.webp",
+			"codeName": "lighttankammo",
+			"damage": 600,
+			"damageType": {
+				"name": "Explosive",
+				"profiles": {
+					"t1": 0.75,
+					"t2": 0.75,
+					"t3": 0.25
+				}
+			}
+		},
+		"battletankammo": {
+			"name": "75mm",
+			"description": "75mm",
+			"icon": "game/Textures/UI/ItemIcons/BattleTankAmmoItemIcon.webp",
+			"codeName": "battletankammo",
+			"damage": 1750,
+			"damageType": {
+				"name": "Explosive",
+				"profiles": {
+					"t1": 0.75,
+					"t2": 0.75,
+					"t3": 0.25
+				}
+			}
+		},
+		"atammo": {
+			"name": "68mm",
+			"description": "68mm",
+			"icon": "game/Textures/UI/ItemIcons/ATAmmoIcon.webp",
+			"codeName": "atammo",
+			"damage": 600,
+			"damageType": {
+				"name": "Armour Piercing",
+				"profiles": {
+					"t1": 0.25,
+					"t2": 0.25,
+					"t3": 0.06999999999999995
+				}
+			}
+		},
+		"atlargeammo": {
+			"name": "94.5mm",
+			"description": "94.5mm",
+			"icon": "game/Textures/UI/ATLargeAmmoIcon.webp",
+			"codeName": "atlargeammo",
+			"damage": 1750,
+			"damageType": {
+				"name": "Armour Piercing",
+				"profiles": {
+					"t1": 0.25,
+					"t2": 0.25,
+					"t3": 0.06999999999999995
+				}
+			}
+		},
+		"mortarammo": {
+			"name": "Mortar Shell",
+			"description": "Mortar Shell",
+			"icon": "game/Textures/UI/ItemIcons/MortarAmmoIcon.webp",
+			"codeName": "mortarammo",
+			"alias": "Mortar",
+			"damage": 300,
+			"damageType": {
+				"name": "High Explosive",
+				"profiles": {
+					"t1": 0.75,
+					"t2": 0.75,
+					"t3": 0.25
+				}
+			}
+		},
+		"lightartilleryammo": {
+			"name": "120mm",
+			"description": "120mm",
+			"icon": "game/Textures/UI/ItemIcons/LightArtilleryAmmoItemIcon.webp",
+			"codeName": "lightartilleryammo",
+			"damage": 400,
+			"damageType": {
+				"name": "High Explosive",
+				"profiles": {
+					"t1": 0.75,
+					"t2": 0.75,
+					"t3": 0.25
+				}
+			}
+		},
+		"heavyartilleryammo": {
+			"name": "150mm",
+			"description": "150mm",
+			"icon": "game/Textures/UI/ItemIcons/HeavyArtilleryAmmoItemIcon.webp",
+			"codeName": "heavyartilleryammo",
+			"damage": 900,
+			"damageType": {
+				"name": "High Explosive",
+				"profiles": {
+					"t1": 0.75,
+					"t2": 0.75,
+					"t3": 0.25
+				}
+			}
+		},
+		"herocketammo": {
+			"name": "3C-High Explosive Rocket",
+			"description": "3C-High Explosive Rocket",
+			"icon": "game/Textures/UI/ItemIcons/HERocketAmmoIcon.webp",
+			"codeName": "herocketammo",
+			"alias": "Rocket",
+			"damage": 300,
+			"damageType": {
+				"name": "Incendiary",
+				"profiles": {
+					"t1": 0.75,
+					"t2": 0.75,
+					"t3": 0.25
+				}
+			}
+		},
+		"firerocketammo": {
+			"name": "4C-Fire Rocket",
+			"description": "4C-Fire Rocket",
+			"icon": "game/Textures/UI/ItemIcons/FlameRocketAmmoIcon.webp",
+			"codeName": "firerocketammo",
+			"alias": "Fire Rocket",
+			"damage": 145,
+			"damageType": {
+				"name": "Incendiary",
+				"profiles": {
+					"t1": 0.75,
+					"t2": 0.75,
+					"t3": 0.25
+				}
+			}
+		},
+		"explosivelightc": {
+			"name": "Hydra’s Whisper",
+			"description": "Hydra’s Whisper",
+			"icon": "game/Textures/UI/Menus/BangaloreItemIcon.webp",
+			"codeName": "explosivelightc",
+			"alias": "Hydras",
+			"damage": 350,
+			"damageType": {
+				"name": "Demolition",
+				"profiles": {
+					"t1": 1,
+					"t2": 1,
+					"t3": 1
+				}
+			}
+		},
+		"mortartankammo": {
+			"name": "250mm",
+			"description": "250mm",
+			"icon": "game/Textures/UI/ItemIcons/MortarTankIcon.webp",
+			"codeName": "mortartankammo",
+			"damage": 1000,
+			"damageType": {
+				"name": "Demolition",
+				"profiles": {
+					"t1": 1,
+					"t2": 1,
+					"t3": 1
+				}
+			}
+		},
+		"lrartilleryammo": {
+			"name": "300mm",
+			"description": "300mm",
+			"icon": "game/Textures/UI/ItemIcons/LRArtilleryAmmoItemIcon.webp",
+			"codeName": "lrartilleryammo",
+			"damage": 1500,
+			"damageType": {
+				"name": "High Explosive",
+				"profiles": {
+					"t1": 0.75,
+					"t2": 0.75,
+					"t3": 0.25
+				}
+			}
+		},
+		"satchelcharge": {
+			"name": "Alligator Charge",
+			"description": "Alligator Charge",
+			"icon": "game/Textures/UI/StructureIcons/SatchelCharge.webp",
+			"codeName": "satchelcharge",
+			"alias": "Satchel",
+			"damage": 1500,
+			"damageType": {
+				"name": "Demolition",
+				"profiles": {
+					"t1": 1,
+					"t2": 1,
+					"t3": 1
+				}
+			}
+		}
+	},
 	"buildings": {
 		"ammunition_factory": {
 			"name": "Ammunition Factory",

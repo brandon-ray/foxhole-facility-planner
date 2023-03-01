@@ -200,6 +200,13 @@ const game_asset_list = {
         }
     }
 
+    for (const weapon of Object.values(foxholeData.weapons)) {
+        if (weapon.icon) {
+            weapon.icon = assetDir(weapon.icon);
+            game_asset_list[weapon.icon] = weapon.icon;
+        }
+    }
+
     window.objectData.categories.presets.buildings = [];
     window.objectData.categories.showcase.buildings = [];
     for (const [key, data] of Object.entries(foxholeData.presets)) {

@@ -264,9 +264,7 @@ Vue.component('app-menu-building-selected', {
                         }
                     }
                     this.updateProperties(selectedEntity, false);
-                    if (game.statisticsMenuComponent) {
-                        game.statisticsMenuComponent.refresh();
-                    }
+                    game.refreshStats();
                     this.$forceUpdate();
                 } else {
                     this.refresh();
@@ -395,7 +393,7 @@ Vue.component('app-menu-building-selected', {
                                 this.entity.productionScale = this.entity.productionScale ?? this.productionData.max;
                                 if (selectedEntity.productionScale !== this.entity.productionScale) {
                                     selectedEntity.productionScale = this.entity.productionScale;
-                                    game.statisticsMenuComponent?.refresh();
+                                    game.refreshStats();
                                 }
                             }
                             break;

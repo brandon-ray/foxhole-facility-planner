@@ -195,3 +195,41 @@ body {
 .statistics-time-dropdown select:hover {
     border-color: white;
 }
+
+.statistics-panel .bunker-damage-profile-stats .weapon-row {
+    background: #0b0b0b;
+    line-height: 32px;
+}
+
+.statistics-panel .bunker-damage-profile-stats .weapon-row:nth-child(odd) {
+    background: #0d0d0d;
+}
+
+/*
+.statistics-panel .bunker-damage-profile-stats .weapon-row:hover {
+    background: #1a1a1a;
+}
+*/
+
+.statistics-panel .bunker-damage-profile-stats .weapon-row.table-heading {
+    background: #121212;
+}
+
+.statistics-panel .bunker-damage-profile-stats .weapon-row > div {
+    border: 1px solid black;
+}
+
+.statistics-panel .bunker-damage-profile-stats .weapon-row .weapon-name {
+    flex-grow: 1;
+}
+
+.statistics-panel .bunker-damage-profile-stats .weapon-row .weapon-name .resource-icon {
+    width: 32px;
+    height: 32px;
+    background-size: 92%;
+}
+
+.statistics-panel .bunker-damage-profile-stats .weapon-row .weapon-damage {
+    width: 56px;
+    text-align: center;
+}
