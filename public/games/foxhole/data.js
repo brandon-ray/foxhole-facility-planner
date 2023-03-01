@@ -3898,6 +3898,7 @@ const foxholeData = {
 				"atgunait3": {
 					"name": "AT Gun Garrison (Tier 3)",
 					"codeName": "ATGunAIT3",
+					"prevUpgradeKey": "fortt2_atgunait2",
 					"description": "An entrenched AT gun manned by stationed troops.",
 					"range": {
 						"type": "killboxAT",
@@ -3936,6 +3937,7 @@ const foxholeData = {
 				"engineroomt3": {
 					"name": "Engine Room (Tier 3)",
 					"codeName": "EngineRoomT3",
+					"prevUpgradeKey": "fortt2_engineroomt2",
 					"description": "A engineering facility that provides power to Bunker structures using pipe connections.",
 					"icon": "game/Textures/UI/StructureIcons/EngineRoomIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_engineroom.webp",
@@ -3949,6 +3951,7 @@ const foxholeData = {
 				"mgait3": {
 					"name": "Machine Gun Garrison (Tier 3)",
 					"codeName": "MGAIT3",
+					"prevUpgradeKey": "fortt2_mgait2",
 					"description": "An entrenched machine gun manned by stationed troops.",
 					"range": {
 						"type": "killboxMG",
@@ -3970,6 +3973,7 @@ const foxholeData = {
 				"observationbunkert3": {
 					"name": "Observation Bunker (Tier 3)",
 					"codeName": "ObservationBunkerT3",
+					"prevUpgradeKey": "fortt2_observationbunkert2",
 					"description": "A radio bunker that provides intel to friendly units about the surrounding area. Built from solid concrete, this reliable structure can push its effective range beyond lesser fortified radio structures.",
 					"range": {
 						"type": "radio",
@@ -3996,6 +4000,7 @@ const foxholeData = {
 				"fortrampt3": {
 					"name": "Bunker Ramp (Tier 3)",
 					"codeName": "FortRampT3",
+					"prevUpgradeKey": "fortt2_fortrampt2",
 					"description": "A ramp that enables access to underground Bunkers.",
 					"icon": "game/Textures/UI/StructureIcons/FortT3RampIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_ramp.webp",
@@ -4079,6 +4084,7 @@ const foxholeData = {
 				"rifleait3": {
 					"name": "Rifle Garrison (Tier 3)",
 					"codeName": "RifleAIT3",
+					"prevUpgradeKey": "fortt2_rifleait2",
 					"description": "An entrenched bunker manned by stationed troops armed with Rifles.",
 					"range": {
 						"type": "killbox",
