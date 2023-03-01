@@ -1,3 +1,5 @@
+const SAVE_VERSION = '1.0.0';
+
 const COLOR_WHITE = 0xFFFFFF; // Also resets tint.
 const COLOR_DARKGREY = 0x505050;
 const COLOR_CHARCOAL = 0x0B0B0B;
@@ -1084,6 +1086,7 @@ try {
 
     game.getSaveData = function(isSelection) {
         let saveObject = {
+            version: SAVE_VERSION,
             name: (game.projectName !== 'Unnamed Project' && game.projectName) || undefined,
             faction: game.settings.selectedFaction || undefined,
             projectSettings: game.projectSettings,
@@ -1123,6 +1126,28 @@ try {
     };
 
     game.loadSave = function(saveObject, isSelection, ignoreConfirmation, isAutoLoad) {
+        if (!saveObject.version) {
+            // Socket ID's for bunker corners were incorrectly set during experimental. This will update those socket IDs.
+            for (const entity of saveObject.entities) {
+                if (entity.connections && (entity.subtype === 'fortcornert1' || entity.subtype === 'fortcornert2' || entity.subtype === 'fortcornert3')) {
+                    const remapSocketIdTo = function(prevSocketId, newSocketId) {
+                        if (entity.connections[prevSocketId]) {
+                            entity.connections[newSocketId] = entity.connections[prevSocketId];
+                            delete entity.connections[prevSocketId];
+                            for (const e2 of saveObject.entities) {
+                                for (const [entityId, socketId] of Object.entries(entity.connections[newSocketId])) {
+                                    if (e2.id == entityId && e2.connections && e2.connections[socketId]) {
+                                        e2.connections[socketId][entity.id] = newSocketId;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    remapSocketIdTo(1, 6);
+                    remapSocketIdTo(2, 3);
+                }
+            }
+        }
         if (isSelection) {
             game.deselectEntities(false, true);
         } else {

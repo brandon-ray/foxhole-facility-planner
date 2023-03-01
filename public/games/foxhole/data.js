@@ -2,8 +2,7 @@ const foxholeData = {
 	"categories": {
 		"presets": {
 			"name": "Modules",
-			"hideInBuildingList": true,
-			"experimental": true
+			"hideInBuildingList": true
 		},
 		"foundations": {
 			"name": "Foundations"
@@ -12,8 +11,7 @@ const foxholeData = {
 			"name": "Defenses"
 		},
 		"entrenchments": {
-			"name": "Entrenchments",
-			"experimental": true
+			"name": "Entrenchments"
 		},
 		"factories": {
 			"name": "Facilities"
@@ -37,8 +35,7 @@ const foxholeData = {
 		},
 		"showcase": {
 			"name": "Showcase",
-			"hideInBuildingList": true,
-			"experimental": true
+			"hideInBuildingList": true
 		}
 	},
 	"presets": {
@@ -2986,7 +2983,7 @@ const foxholeData = {
 					"rotation": 0
 				},
 				{
-					"id": 1,
+					"id": 6,
 					"type": [
 						{
 							"mask": 2,
@@ -3003,7 +3000,7 @@ const foxholeData = {
 					"rotation": 135
 				},
 				{
-					"id": 2,
+					"id": 3,
 					"type": [
 						{
 							"mask": 2,
@@ -3072,7 +3069,7 @@ const foxholeData = {
 					"rotation": 0
 				},
 				{
-					"id": 1,
+					"id": 6,
 					"type": [
 						{
 							"mask": 2,
@@ -3089,7 +3086,7 @@ const foxholeData = {
 					"rotation": 135
 				},
 				{
-					"id": 2,
+					"id": 3,
 					"type": [
 						{
 							"mask": 2,
@@ -3130,6 +3127,7 @@ const foxholeData = {
 			"codeName": "FortCornerT3",
 			"parentKey": "fortt2",
 			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
+			"categoryOrder": 5,
 			"tier": 3,
 			"hitArea": [
 				{
@@ -3159,7 +3157,7 @@ const foxholeData = {
 					"rotation": 0
 				},
 				{
-					"id": 1,
+					"id": 6,
 					"type": [
 						{
 							"mask": 2,
@@ -3176,7 +3174,7 @@ const foxholeData = {
 					"rotation": 135
 				},
 				{
-					"id": 2,
+					"id": 3,
 					"type": [
 						{
 							"mask": 2,
