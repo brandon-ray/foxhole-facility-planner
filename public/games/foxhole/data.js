@@ -10069,6 +10069,40 @@ const foxholeData = {
 				}
 			}
 		},
+		"troopship": {
+			"name": "BMS - White Whale",
+			"codeName": "TroopShip",
+			"description": "A heavily armoured vessel, the Basset Motor Society’s White Whale-class troop transports can deploy on faraway beaches to function as a permanent forward operating base.",
+			"category": "vehicles",
+			"categoryOrder": 22,
+			"sortLayer": "vehicle",
+			"hitArea": [
+				{
+					"shape": [ 327.36,-61.76,344,-31.68,344,31.04,16.96,92.48,-255.68,-89.92,275.52,-93.12,304.96,-82.88 ]
+				},
+				{
+					"shape": [ 278.08,93.12,16.96,92.48,344,31.04,328.64,60.48,304.96,82.88 ]
+				},
+				{
+					"shape": [ -338.24,64.96,-347.2,50.88,-347.2,-54.72,-256.32,89.92,-280,89.28,-309.44,83.52 ]
+				},
+				{
+					"shape": [ 344,31.04,344,-31.68,349.12,0.32 ]
+				},
+				{
+					"shape": [ -280,-89.28,-255.68,-89.92,16.96,92.48,9.28,118.08,-256.32,89.92,-347.2,-54.72,-334.4,-68.16,-305.6,-83.52 ]
+				},
+				{
+					"shape": [ 8.64,-118.08,16.96,-92.48,-255.68,-89.92,-240.96,-118.08 ]
+				},
+				{
+					"shape": [ -256.32,89.92,9.28,118.08,-241.6,118.08 ]
+				}
+			],
+			"icon": "game/Textures/UI/VehicleIcons/TroopShipVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/troopship.webp",
+			"techId": "unlocktroopship"
+		},
 		"truckc": {
 			"name": "R-1 Hauler",
 			"codeName": "TruckC",
