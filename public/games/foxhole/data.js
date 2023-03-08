@@ -9243,7 +9243,7 @@ const gameData = {
 			"length": 3.74,
 			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/TrainLRArtilleryVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/trainlrartillery.webp",
+			"texture": "game/Textures/Vehicles/trainlrartillery_full.webp",
 			"textureOffset": {
 				"x": 1197,
 				"y": 187
