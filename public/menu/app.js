@@ -310,7 +310,7 @@ Vue.component('app-game-toolbelt', {
                         game.updateSettings();
                         this.refresh();
                     } else {
-                        game.create(item.type, item.subtype);
+                        game.createObject(item.subtype);
                         clearTimeout(this.activeItemTimeoutId);
                         this.activeItemIndex = index;
                         this.activeItemTimeoutId = setTimeout(() => {
@@ -344,7 +344,6 @@ Vue.component('app-game-toolbelt', {
         },
         buildBuilding: function(building) {
             this.bmc();
-            // game.create((building.preset && 'preset') || 'building', building.preset ? building.dataFile : building.key);
             if (this.lastSlotClicked !== null) {
                 if (!game.settings.toolbelts[game.settings.selectedToolbelt]) {
                     game.settings.toolbelts[game.settings.selectedToolbelt] = {};

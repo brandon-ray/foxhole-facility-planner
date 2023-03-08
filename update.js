@@ -4,7 +4,7 @@ const sharp = require('sharp');
 
 const METER_UNREAL_UNITS = 100;
 const foxholeDataDirectory = 'dev/';
-const foxholeDataVariable = 'const foxholeData = ';
+const foxholeDataVariable = 'const gameData = ';
 let foxholeData = JSON.parse(fs.readFileSync('./public/games/foxhole/data.js').toString().substring(foxholeDataVariable.length));
 
 const stStructures = JSON.parse(fs.readFileSync(`${foxholeDataDirectory}War/Content/Blueprints/StringTables/STStructures.json`))[0].StringTable.KeysToMetaData;

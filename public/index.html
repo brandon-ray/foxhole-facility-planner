@@ -102,14 +102,6 @@
     </div>
 </div>
 
-
-<div class="loading-overlay" id="loading-overlay">
-    <div class="loading-overlay-text">
-        <i class="fa fa-refresh fa-spin fa-4x"></i><br><br>
-        <h4>LOADING</h4>
-    </div>
-</div>
-
 <div id="webgl-disabled-message" style="display:none;">
     <div class="loading-overlay-text">
         <br><br>
@@ -140,54 +132,6 @@
     </div>
 </div>
 
-<div class="game-menu-button" style="display:none;">
-    <a href="#" onclick="event.preventDefault(); game.gameMenuComponent.showModal(true)" tabindex="-1">
-        <i class="fa fa-bars fa-4x" style="color:white;"></i>
-    </a>
-</div>
-
-<div class="modal modal-fullscreen selectable" id="changeLogModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"><i class="fa fa-list"></i> Change Log</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="text-left" id="change-log-text" data-update-count="1">
-                    <b>9/15/2022</b>
-                    <p>+ Initial release</p>
-                    <hr>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal modal-fullscreen" id="aboutModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"><i class="fa fa-question-mark-circle"></i> About</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <h3>
-                    Foxhole Facility Planner
-                </h3>
-                <p>
-                    Foxhole Facility Planner is a tool that allows you to draw up plans for facilities from Foxhole's new Inferno update.
-                </p>
-                <a href="https://bombsightgames.com/">Bombsight Games</a>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- inject:js -->
 <script src="vendor/vue.min.js"></script>
 <script src="vendor/js.cookie.min.js"></script>
@@ -206,9 +150,11 @@
 
 <script src="filters.js"></script>
 <script src="games/foxhole/data.js"></script>
+<script src="games/foxhole/loader.js"></script>
 <script src="games/foxhole/gui.js"></script>
-<script src="data.js"></script>
 <script src="game.js"></script>
+<script src="board.js"></script>
+<script src="games/foxhole/building.js"></script>
 <script src="menu/services/api.js"></script>
 <script src="menu/components/mixins.js"></script>
 <script src="menu/components/gameMenu.js"></script>

@@ -219,7 +219,6 @@ try {
     let entities = [];
     let entityMap = {};
     let selectedEntities = [];
-    let selectedHandlePoint = null;
     let followEntity = null;
     let pickupSelectedEntities = false;
     let pickupTime = null;
@@ -227,8 +226,9 @@ try {
     let ignoreMousePickup = true;
     let effects = [];
 
-    game.projectName = 'Unnamed Project';
+    game.selectedHandlePoint = null;
 
+    game.projectName = 'Unnamed Project';
     game.projectSettings = {
         showProductionIcons: true,
         showRangeWhenSelected: true,
@@ -292,7 +292,7 @@ try {
         rail: 15000,
         resource: 17500,
         pipe: 20000,
-        unspecified: 50000,
+        building: 50000,
         upgrade: 75000,
         vehicle: 120000,
         container: 150000,
@@ -315,6 +315,13 @@ try {
     game.getSelectedEntities = () => {
         return selectedEntities;
     };
+
+    game.getGlobalMousePosition = () => {
+        return {
+            x: gmx,
+            y: gmy
+        }
+    }
 
     game.getEntityById = (id) => {
         const entityId = typeof id !== 'number' ? Number(id) : id;
@@ -361,7 +368,7 @@ try {
     game.setDarkMode = function(darkMode) {
         if (game.settings.enableDarkMode !== darkMode) {
             game.settings.enableDarkMode = darkMode;
-            background.texture = resources[game.settings.enableDarkMode ? 'background_dark' : 'background'].texture;
+            background.texture = game.resources[game.settings.enableDarkMode ? 'background_dark' : 'background'].texture;
             game.updateSettings();
         }
     }
@@ -418,7 +425,6 @@ try {
     });
 
     let debugText = null;
-    let resources = null;
     let sounds = null;
     let asset_list = {
         white: 'white.png',
@@ -567,6 +573,34 @@ try {
         }
     };
 
+    game.soundPlay = function(sound, entity, volume, fadein) {
+        let tso = {
+            id: -1,
+            entity: entity,
+            volume: volume,
+        };
+
+        let ttso = game.soundUpdate(tso);
+        if (ttso != null) {
+            let so = {
+                id: sound.play(),
+                sound: sound,
+                volume: volume,
+                entity: entity,
+                started: Date.now()
+            };
+
+            if (fadein) {
+                so.fadein = 600;
+            }
+
+            so = game.soundUpdate(so);
+            return so;
+        }
+
+        return null;
+    }
+
     app.view.tabIndex = 0;
 
     let keys = {};
@@ -596,13 +630,12 @@ try {
             case 119: // F8
                 if (ENABLE_DEBUG) {
                     setTimeout(() => {
-                        let x = 0;
-                        let y = 0;
+                        let x = 0, y = 0;
                         const buildings = Object.values(window.objectData.buildings);
                         for (let i=0; i<1000; i++) {
                             let buildingData = buildings[Math.floor(Math.random() * buildings.length)];
                             if ((game.settings.enableExperimental || !window.objectData.categories[buildingData.category].experimental) && (game.settings.enableDebug || (!buildingData.hideInList && (!buildingData.parent || !buildingData.parent.hideInList)))) {
-                                createSelectableEntity('building', buildingData.key, x, y, 0);
+                                game.createObject(buildingData, x, y, 0, 0, undefined, false);
                                 x += 500;
                                 if (x >= 10000) {
                                     x = 0;
@@ -622,7 +655,7 @@ try {
                                 for (let i = 0; i < category.buildings.length; i++) {
                                     const building = category.buildings[i];
                                     if (!building.preset && (game.settings.enableDebug || (!building.hideInList && (!building.parent || !building.parent.hideInList)))) {
-                                        createSelectableEntity('building', building.key, x * 600, y * 600, 0);
+                                        game.createObject(building, x * 600, y * 600, 0, 0, undefined, false);
                                         x++;
                                         if (x >= 10) {
                                             x = 0;
@@ -768,6 +801,22 @@ try {
         }
     });
 
+    game.isKeyDown = function(key) {
+        return keys[key];
+    }
+
+    game.setMouseDown = function(button) {
+        forceMouseDown[button] = true;
+    }
+
+    game.isMouseDown = function(button) {
+        return mouseDown[button];
+    }
+
+    game.isMovingSelected = function() {
+        return pickupSelectedEntities;
+    }
+
     game.activateToolbeltSlot = function(index, swapBelt = false) {
         if (game.toolbeltComponent) {
             game.toolbeltComponent.activateToolbeltSlot(index, swapBelt);
@@ -848,10 +897,10 @@ try {
     let normalGroupLayer;
     let lightGroupLayer;
     PIXI.Loader.shared.onComplete.once(function (loader, res) {
-        resources = res;
+        game.resources = res;
         console.info('Asset loading completed.');
 
-        background = new PIXI.TilingSprite(resources[game.settings.enableDarkMode ? 'background_dark' : 'background'].texture);
+        background = new PIXI.TilingSprite(game.resources[game.settings.enableDarkMode ? 'background_dark' : 'background'].texture);
         app.stage.addChild(background);
 
         app.cstage = new PIXI.Container();
@@ -955,34 +1004,6 @@ try {
         return running;
     };
 
-    function soundPlay(sound, entity, volume, fadein) {
-        let tso = {
-            id: -1,
-            entity: entity,
-            volume: volume,
-        };
-
-        let ttso = soundUpdate(tso);
-        if (ttso != null) {
-            let so = {
-                id: sound.play(),
-                sound: sound,
-                volume: volume,
-                entity: entity,
-                started: Date.now()
-            };
-
-            if (fadein) {
-                so.fadein = 600;
-            }
-
-            so = soundUpdate(so);
-            return so;
-        }
-
-        return null;
-    }
-
     function getListenerPos() {
         let zoomRatio = WIDTH/(WIDTH*camera.zoom);
         return {
@@ -991,8 +1012,8 @@ try {
             z: camera.z
         };
     }
-
-    function soundUpdate(so) {
+    
+    game.soundUpdate = function(so) {
         if (so.stopped) {
             return;
         }
@@ -1008,12 +1029,12 @@ try {
         }
         dist += zoomDiff;
         if (so.entity.z !== listener_pos.z) {
-            soundStop(so);
+            game.soundStop(so);
             return null;
         }
         /*
         if (dist >= 1200 || so.entity.z !== listener_pos.z) {
-            soundStop(so);
+            game.soundStop(so);
             return null;
         }
         */
@@ -1029,7 +1050,7 @@ try {
 
             if (percent <= 0.0001) {
                 vol = 0;
-                //soundStop(so);
+                //game.soundStop(so);
                 //return null;
             }
             final_vol = vol;
@@ -1059,7 +1080,7 @@ try {
         return so;
     }
 
-    function soundStop(so) {
+    game.soundStop = function(so) {
         if (so.sound && !so.stopped) {
             so.sound.stop(so.id);
             so.stopped = true;
@@ -1096,7 +1117,7 @@ try {
         for (let i = 0; i < saveEntities.length; i++) {
             let entity = saveEntities[i];
             if (entity.valid) {
-                let entityData = {
+                let objData = {
                     id: entity.id,
                     x: parseFloat(entity.x),
                     y: parseFloat(entity.y),
@@ -1106,8 +1127,8 @@ try {
                     type: entity.type,
                     subtype: entity.subtype
                 };
-                entity.onSave(entityData, isSelection);
-                saveObject.entities.push(entityData);
+                entity.onSave(objData, isSelection);
+                saveObject.entities.push(objData);
             }
         }
         saveObject.entities.sort((a, b) => a.id - b.id);
@@ -1170,25 +1191,15 @@ try {
         setTimeout(() => {
             let entityIdMap = {};
             for (let i = 0; i < saveObject.entities.length; i++) {
-                let entityData = saveObject.entities[i];
-                let entity;
-                switch (entityData.type) {
-                    case 'building':
-                    case 'text':
-                    case 'shape':
-                        entity = createSelectableEntity(entityData.type, entityData.subtype, parseFloat(entityData.x || 0), parseFloat(entityData.y || 0), parseInt(entityData.z || 0), entityData.rotation || 0);
-                        break;
-                    default:
-                        console.error('Attempted to load invalid entity:', entityData);
-                        continue;
-                }
+                let objData = saveObject.entities[i];
+                let entity = game.createObject(objData, parseFloat(objData.x || 0), parseFloat(objData.y || 0), parseInt(objData.z || 0), objData.rotation, undefined, false);
                 if (entity) {
-                    entityData.createdEntity = entity;
-                    if (entity.id !== entityData.id) {
-                        entityIdMap[entityData.id] = entity.id;
+                    objData.createdEntity = entity;
+                    if (entity.id !== objData.id) {
+                        entityIdMap[objData.id] = entity.id;
                     }
-                    entity.locked = entityData.locked;
-                    entity.onLoad(entityData);
+                    entity.locked = objData.locked;
+                    entity.onLoad(objData);
                     if (isSelection) {
                         game.addSelectedEntity(entity, true);
                     }
@@ -1196,8 +1207,8 @@ try {
             }
 
             for (let i = 0; i < saveObject.entities.length; i++) {
-                let entityData = saveObject.entities[i];
-                entityData.createdEntity?.afterLoad(entityData, entityIdMap);
+                let objData = saveObject.entities[i];
+                objData.createdEntity?.afterLoad(objData, entityIdMap);
             }
 
             if (!isSelection) {
@@ -1227,7 +1238,9 @@ try {
 
     game.refreshStats = function() {
         if (game.statisticsMenuComponent) {
-            game.statisticsMenuComponent.refresh();
+            setTimeout(() => {
+                game.statisticsMenuComponent.refresh();
+            }, 1);
         }
     }
 
@@ -1327,8 +1340,8 @@ try {
     }
 
     game.deselectHandle = function() {
-        if (selectedHandlePoint) {
-            selectedHandlePoint = null;
+        if (game.selectedHandlePoint) {
+            game.selectedHandlePoint = null;
             const selectedEntity = game.getSelectedEntity();
             if (selectedEntity?.subtype === 'image' && (selectedEntity.sprite.width < selectedEntity.sprite.texture.width || selectedEntity.sprite.height < selectedEntity.sprite.texture.height)) {
                 // Resize texture image?
@@ -1442,7 +1455,7 @@ try {
 
         mouseDown[mouseButton] = true;
         if (mouseButton === 0) {
-            if (!selectedHandlePoint) {
+            if (!game.selectedHandlePoint) {
                 if (pickupSelectedEntities) {
                     let selectedEntity = game.getSelectedEntity();
                     if (selectedEntity?.hasHandle && selectedEntity.shouldSelectLastHandlePoint) {
@@ -1456,13 +1469,16 @@ try {
                         gmxGrid = Math.round(gmxGrid / gridSize) * gridSize;
                         gmyGrid = Math.round(gmyGrid / gridSize) * gridSize;
                     }
-                    const entity = game.create(game.constructionMode.eType, game.constructionMode.eSubType, gmxGrid, gmyGrid);
+                    const entity = game.createObject({
+                        type: game.constructionMode.eType,
+                        subtype: game.constructionMode.eSubType
+                    }, gmxGrid, gmyGrid);
                     if (entity.hasHandle) {
                         entity.grabHandlePoint();
                     }
                 } else {
                     entities.sort(function (a, b) {
-                        return a.getZIndex() - b.getZIndex()
+                        return a.getZIndex() - b.getZIndex();
                     });
                     for (let i=0; i<entities.length; i++) {
                         let entity = entities[i];
@@ -1518,9 +1534,15 @@ try {
                         x: (camera.x + x) / camera.zoom,
                         y: (camera.y + y) / camera.zoom
                     };
-                    let entity = createSelectableEntity('shape', 'image', pos.x, pos.y);
+                    let objData = {
+                        type: 'shape',
+                        subtype: 'image',
+                        textureData: reader.result,
+                        imported: true
+                    }
+                    let entity = game.createObject(objData, pos.x, pos.y, 0, 0, undefined, false);
                     if (entity) {
-                        entity.onLoad({ textureData: reader.result, imported: true });
+                        entity.onLoad(objData);
                         game.selectEntity(entity);
                     }
                 }
@@ -1628,7 +1650,7 @@ try {
             if (pickupSelectedEntities) {
                 game.setPickupEntities(false);
             }
-            if (game.constructionMode.key !== 'select' && selectedHandlePoint) {
+            if (game.constructionMode.key !== 'select' && game.selectedHandlePoint) {
                 game.deselectHandle();
                 game.resetConstructionMode();
             }
@@ -1677,7 +1699,7 @@ try {
     }, 1);
 
     let spritesheetCache = {};
-    function loadSpritesheet(texture, width, height) {
+    game.loadSpritesheet = function(texture, width, height) {
         if (!spritesheetCache[texture.baseTexture.resource.url]) {
             let spritesheet = [];
             for (let w = 0; w < Math.round(texture.baseTexture.width / width); w++) {
@@ -1698,7 +1720,7 @@ try {
         }
     }
 
-    function createLight(entity, color, minBrightness, maxBrightness, duration) {
+    game.createLight = function(entity, color, minBrightness, maxBrightness, duration) {
         let light = new PIXI.lights.PointLight(color, minBrightness);
         light.createTime = Date.now();
         light.minBrightness = minBrightness;
@@ -1728,101 +1750,6 @@ try {
         }
 
         return light;
-    }
-
-    function createEntity(type, subtype, x, y, z, id, netData) {
-        let entity = new PIXI.Container();
-
-        if (typeof id === 'number' && id >= _entityIds) {
-            _entityIds = id + 1;
-        }
-
-        entity.id = id ?? _entityIds++;
-        entity.subtype = subtype;
-        entity.netData = netData;
-
-        entity.filterArea = app.screen;
-
-        entity.states = [];
-        entity.x = x;
-        entity.y = y;
-        entity.z = z;
-        entity.lastX = x;
-        entity.lastY = y;
-        entity.lastRotation = 0;
-        entity.dx = 0;
-        entity.dy = 0;
-        entity.drotation = 0;
-        entity.type = type;
-        entity.valid = true;
-        entity.lights = [];
-
-        entity.tick = function (delta) {
-            for (let i=0; i<entity.lights.length; i++) {
-                let light = entity.lights[i];
-                light.tick();
-            }
-
-            if (entity.sprite) {
-                entity.visible = entity.isVisible();
-            }
-
-            entity.dx = entity.x - entity.lastX;
-            entity.dy = entity.y - entity.lastY;
-            entity.drotation = entity.rotation - entity.lastRotation;
-            entity.lastX = entity.x;
-            entity.lastY = entity.y;
-            entity.lastRotation = entity.rotation;
-        };
-
-
-        entity.qualityChanged = function() {};
-
-
-        entity.soundPlay = function(data) {
-            if (data && data.sound && sounds[data.sound]) {
-                soundPlay(sounds[data.sound], entity, data.volume);
-            }
-        };
-
-        entity.getZIndex = function () {
-            return -entity.y;
-        };
-
-        entity.changeZLevel = function (newZ) {
-            entity.z = newZ;
-        };
-
-        entity.isVisible = function () {
-            return entity.z === camera.z && isOnScreen(entity);
-        };
-
-        entity.onSelect = function() {};
-        entity.onDeselect = function() {};
-
-        entity.onSave = function(entityData) {};
-        entity.onLoad = function() {};
-        entity.afterLoad = function() {};
-
-        entity.onRemove = function () {};
-        entity.afterRemove = function() {};
-
-        entity.createLight = function(color, minBrightness, maxBrightness, duration) {
-            return createLight(entity, color, minBrightness, maxBrightness, duration);
-        };
-
-        entity.remove = function () {
-            entity.valid = false;
-            entity.onRemove();
-            app.cstage.removeChild(entity);
-        };
-
-        app.cstage.addChild(entity);
-        entities.push(entity);
-
-        entityMap[entity.id] = entity;
-
-        return entity;
     }
 
     function getPositionAlongLine(x1, y1, x2, y2, percentage) {
@@ -1857,7 +1784,7 @@ try {
     let windAngle = (Math.PI*2) * Math.random();
     let windStrength = 0.01;
     let environmentUpdateTime = Date.now() + 5000;
-    function createEffect(type, x, y, z, width, height, data) {
+    game.createEffect = function(type, x, y, z, width, height, data) {
         if (beforeRecordingStart) {
             return {};
         }
@@ -1890,7 +1817,7 @@ try {
         }
 
         effect.createLight = function(color, minBrightness, maxBrightness, duration) {
-            return createLight(effect, color, minBrightness, maxBrightness, duration);
+            return game.createLight(effect, color, minBrightness, maxBrightness, duration);
         };
 
         let zOffset = 100;
@@ -1898,7 +1825,7 @@ try {
         let effectSound = null;
         let disableLighting = false;
         if (type === 'smoke') {
-            spritesheet = loadSpritesheet(resources['smoke_particles'].texture, 64, 64);
+            spritesheet = game.loadSpritesheet(game.resources['smoke_particles'].texture, 64, 64);
             effect.maxLifetime = 200 + Math.round(Math.random() * 50);
             effect.sprite = new PIXI.Sprite(spritesheet[Math.round(Math.random()*3)][Math.round(Math.random())]);
             effect.sprite.width = width;
@@ -1941,7 +1868,7 @@ try {
             }
 
             if (effectSound) {
-                soundUpdate(effectSound);
+                game.soundUpdate(effectSound);
             }
             if (effectSound && effectSound.stopped) {
                 effectSound = null;
@@ -1978,12 +1905,12 @@ try {
         };
 
         effect.isVisible = function () {
-            return effect.z === camera.z && isOnScreen(effect);
+            return effect.z === camera.z && game.isOnScreen(effect);
         };
 
         effect.onRemove = function () {
             if (effectSound) {
-                soundStop(effectSound);
+                game.soundStop(effectSound);
                 effectSound = null;
             }
         };
@@ -2016,7 +1943,7 @@ try {
     };
 
     let screenOffset = 250;
-    function isOnScreen(pos, bufferOverride) {
+    game.isOnScreen = function(pos, bufferOverride) {
         let buffer = screenOffset;
         if (bufferOverride) {
             buffer = bufferOverride;
@@ -2029,2244 +1956,6 @@ try {
             return 'Are you sure you want to leave?';
         }
     };
-
-    function createSelectableEntity(type, subtype, x, y, z, rotation, id, netData) {
-        let entity = createEntity(type, subtype, x, y, z, id, netData);
-        
-        entity.mid = {
-            x: entity.x,
-            y: entity.y
-        };
-
-        entity.rotation = rotation ?? 0;
-
-        // TODO: Change building to metaData.
-        let building;
-        if (type === 'building') {
-            building = window.objectData.buildings[subtype];
-            if (!building) {
-                console.error('Invalid building type:', subtype);
-                entity.remove();
-                return;
-            }
-            entity.building = building;
-        }
-
-        entity.sortLayer = building ? (building?.sortLayer ?? 'unspecified') : entity.type;
-        entity.sortOffset = game.constructionLayers[entity.sortLayer];
-
-        entity.selected = false;
-        entity.selectable = true;
-        entity.hasHandle = (type === 'shape' || entity.building?.hasHandle) ?? false;
-
-        entity.selectionArea = new PIXI.Graphics();
-        entity.selectionArea.visible = false;
-
-        // TODO: Clean up / combine these two functions.
-        entity.setSelectionColor = function(color) {
-            const width = building?.width ? building.width * METER_PIXEL_SIZE : entity.sprite?.width ?? 0;
-            const height = building?.length ? building.length * METER_PIXEL_SIZE : entity.sprite?.height ?? 0;
-            entity.setSelectionSize(width, height, color);
-        }
-
-        entity.setSelectionSize = function(width, height, color = COLOR_ORANGE) {
-            entity.selectionArea.clear();
-            entity.selectionArea.lineStyle(SELECTION_BORDER_WIDTH, color);
-            if (building?.radius) {
-                entity.selectionArea.drawCircle(0, 0, building.radius * METER_PIXEL_SIZE);
-            } else if (building?.hitArea && (game.settings.enableDebug || building.hitArea?.length === 1)) {
-                if (game.settings.enableDebug) {
-                    for (const poly of building.hitArea) {
-                        entity.selectionArea.drawPolygon(new PIXI.Polygon(poly.shape));
-                    }
-                } else {
-                    entity.selectionArea.drawPolygon(new PIXI.Polygon(building.hitArea[0].shape));
-                }
-            } else {
-                entity.selectionArea.drawRect(-(width/2)-SELECTION_BORDER_WIDTH, -(height/2)-SELECTION_BORDER_WIDTH, width+(SELECTION_BORDER_WIDTH*2), height+(SELECTION_BORDER_WIDTH*2));
-            }
-        }
-
-        entity.updateOverlays = function() {
-            if (entity.productionIcons) {
-                entity.productionIcons.visible = game.projectSettings.showProductionIcons;
-            }
-            if (entity.rangeSprite) {
-                const showWhenSelected = game.projectSettings.showRangeWhenSelected && entity.selected;
-                const rangeType = entity.building?.range?.type || (entity.baseUpgrades?.base && entity.building.baseUpgrades.base[entity.baseUpgrades.base].range?.type);
-                entity.rangeSprite.visible = showWhenSelected || (rangeType && game.projectSettings.ranges[rangeType]);
-                entity.updateRangeMask();
-            }
-        }
-
-        if (type === 'text') {
-            entity.labelStyle = Object.assign({}, game.settings.styles.label, DEFAULT_TEXT_STYLE);
-            entity.label = new PIXI.Text('', entity.labelStyle);
-            entity.label.anchor.set(0.5);
-            entity.setSelectionSize(entity.label.width, entity.label.height);
-            entity.addChild(entity.label);
-
-            entity.setLabel = function(text) {
-                if (entity.label.text !== text) {
-                    entity.label.text = text;
-                    entity.setSelectionSize(entity.label.width, entity.label.height);
-                }
-            }
-
-            entity.setLabelStyle = function(style) {
-                entity.labelStyle = style;
-                entity.label.style = style;
-                entity.setSelectionSize(entity.label.width, entity.label.height);
-            }
-
-            entity.onSave = function(entityData) {
-                entityData.sortOffset = entity.sortOffset - game.constructionLayers[entity.sortLayer];
-                entityData.label = entity.label.text;
-                for (const[key, value] of Object.entries(entity.labelStyle)) {
-                    if (!(key in DEFAULT_TEXT_STYLE) && value !== game.defaultSettings.styles.label[key]) {
-                        if (!entityData.labelStyle) {
-                            entityData.labelStyle = {};
-                        }
-                        entityData.labelStyle[key] = value;
-                    }
-                }
-            };
-
-            entity.onLoad = function(entityData) {
-                if (typeof entityData.sortOffset === 'number') {
-                    entity.sortOffset += entityData.sortOffset;
-                }
-                entity.label.text = entityData.label;
-                Object.assign(entity.labelStyle, game.defaultSettings.styles.label, entityData.labelStyle);
-                entity.setLabelStyle(entity.labelStyle);
-            };
-        }
-
-        let frameWidth = 0, frameHeight = 0;
-        let sheet = null;
-        if (type === 'building') {
-            if (building.texture && !building.hasHandle) {
-                let sprite;
-                if (typeof building.texture === 'object' && !Array.isArray(building.texture)) {
-                    sheet = loadSpritesheet(resources[building.texture.sheet].texture, building.texture.width, building.texture.height);
-                    frameWidth = Math.floor(resources[building.texture.sheet].texture.width/building.texture.width);
-                    frameHeight = Math.floor(resources[building.texture.sheet].texture.height/building.texture.height);
-                    sprite = new PIXI.Sprite(sheet[0][0]);
-                    sprite.width = building.width * METER_PIXEL_SIZE;
-                    sprite.height = building.length * METER_PIXEL_SIZE;
-                } else if (resources[building.texture]) {
-                    sprite = new PIXI.Sprite(resources[building.texture].texture);
-                    frameWidth = resources[building.texture].texture.width;
-                    frameHeight = resources[building.texture].texture.height;
-                    sprite.width = frameWidth / METER_PIXEL_SCALE;
-                    sprite.height = frameHeight / METER_PIXEL_SCALE;
-                }
-                if (!building.textureOffset) {
-                    sprite.anchor.set(0.5);
-                } else {
-                    // TODO: Add support for percentages. <= 1 could set anchor so we don't need exact pixels.
-                    sprite.x = (-building.textureOffset.x / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
-                    sprite.y = (-building.textureOffset.y / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
-                }
-                entity.sprite = sprite;
-            }
-            if (!entity.sprite) {
-                entity.sprite = new PIXI.Container();
-            }
-
-            if (building.hitArea) {
-                entity.sprite.hitArea = new HitAreaShapes({
-                    'polygon': building.hitArea
-                });
-            }
-
-            entity.addChild(entity.sprite);
-
-            if (entity.building.textureFrontCap) {
-                entity.frontCap = new PIXI.Sprite(resources[entity.building.textureFrontCap].texture);
-                entity.frontCap.anchor.set(0, 0.5);
-                entity.addChild(entity.frontCap);
-            }
-
-            if (entity.building.textureBackCap) {
-                entity.backCap = new PIXI.Sprite(resources[entity.building.textureBackCap].texture);
-                entity.backCap.anchor.set(1, 0.5);
-                entity.addChild(entity.backCap);
-            }
-
-            entity.assignRange = function(rangeData) {
-                entity.removeChild(entity.rangeSprite);
-                if (rangeData) {
-                    const rangeColor = COLOR_RANGES[rangeData.type] ?? COLOR_RANGES.default;
-                    entity.rangeSprite = new PIXI.Graphics();
-                    entity.rangeSprite.alpha = 0.15;
-                    entity.updateOverlays();
-                    if (!isNaN(rangeData.arc)) {
-                        entity.rangeSprite.beginFill(rangeColor);
-                        entity.rangeSprite.lineStyle(1, rangeColor);
-                        if(!isNaN(rangeData.min)) {
-                            const rangeArc = Math.deg2rad(rangeData.arc);
-                            entity.rangeSprite.arc(0, 0, rangeData.min * METER_PIXEL_SIZE, Math.PI/2 + rangeArc, Math.PI/2 - rangeArc, true);
-                        } else {
-                            entity.rangeSprite.moveTo(0, 0);
-                        }
-                        const rangeArc = Math.deg2rad(rangeData.arc);
-                        entity.rangeSprite.arc(0, 0, rangeData.max * METER_PIXEL_SIZE, Math.PI/2 - rangeArc, Math.PI/2 + rangeArc);
-                        if(isNaN(rangeData.min)) entity.rangeSprite.lineTo(0, 0);
-                        entity.rangeSprite.endFill();
-                    } else if (!isNaN(rangeData.min)) {
-                        entity.rangeSprite.lineStyle((rangeData.max - rangeData.min) * METER_PIXEL_SIZE, rangeColor, 1);
-                        entity.rangeSprite.drawCircle(0, 0, ((rangeData.min + rangeData.max) / 2) * METER_PIXEL_SIZE);
-                    } else {
-                        entity.rangeSprite.beginFill(rangeColor);
-                        entity.rangeSprite.drawCircle(0, 0, rangeData.max * METER_PIXEL_SIZE);
-                        entity.rangeSprite.endFill();
-                    }
-                    if (rangeData.overlap) {
-                        entity.rangeSprite.lineStyle(10, COLOR_RANGE_BORDER, 1);
-                        entity.rangeSprite.drawCircle(0, 0, rangeData.overlap * METER_PIXEL_SIZE);
-                    }
-                    entity.addChild(entity.rangeSprite);
-                }
-            }
-
-            entity.updateRangeMask = function() {
-                if (game.settings.enableExperimental && entity.building.range?.lineOfSight && entity.rangeSprite?.visible) {
-                    function rayCast(polygons, rayStart, rayEnd) {
-                        let closestIntersection = null;
-    
-                        for (let polygon of polygons) {
-                            for (let i = 0; i < polygon.length; i++) {
-                                let p1 = polygon[i];
-                                let p2 = polygon[(i + 1) % polygon.length];
-    
-                                let intersection = getLineIntersection(p1, p2, rayStart, rayEnd);
-                                if (!intersection) continue;
-    
-                                if (!closestIntersection || Math.distanceBetween(rayStart, intersection) < Math.distanceBetween(rayStart, closestIntersection)) {
-                                    closestIntersection = intersection;
-                                }
-                            }
-                        }
-    
-                        return closestIntersection;
-                    }
-
-                    function getLineIntersection(p1, p2, p3, p4) {
-                        let denominator = (p4.y - p3.y) * (p2.x - p1.x) - (p4.x - p3.x) * (p2.y - p1.y);
-                        if (denominator == 0) return null;
-    
-                        let ua = ((p4.x - p3.x) * (p1.y - p3.y) - (p4.y - p3.y) * (p1.x - p3.x)) / denominator;
-                        let ub = ((p2.x - p1.x) * (p1.y - p3.y) - (p2.y - p1.y) * (p1.x - p3.x)) / denominator;
-    
-                        if (ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1) {
-                            return {
-                                x: p1.x + ua * (p2.x - p1.x),
-                                y: p1.y + ua * (p2.y - p1.y)
-                            };
-                        }
-    
-                        return null;
-                    }
-                    
-                    const polygons = [], entitySortLayer = game.constructionLayers[entity.sortLayer];
-                    for (const e2 of entities) {
-                        if (!e2.valid || e2 === entity || !e2.building || e2.bezier) {
-                            continue;
-                        }
-                        if (game.constructionLayers[e2.sortLayer] >= entitySortLayer && Math.distanceBetween(entity, e2) < 1200) {
-                            if (e2.building?.hitArea) {
-                                for (const poly of e2.building.hitArea) {
-                                    if (poly.shape) {
-                                        const shapePoints = [];
-                                        for (let i = 0; i < poly.shape.length; i += 2) {
-                                            shapePoints.push(entity.toLocal({
-                                                x: poly.shape[i],
-                                                y: poly.shape[i + 1]
-                                            }, e2));
-                                        }
-                                        polygons.push(shapePoints);
-                                    }
-                                }
-                            } else {
-                                const w = ((e2.building?.width * METER_PIXEL_SIZE) || e2.sprite.width) / 2;
-                                const h = ((e2.building?.length * METER_PIXEL_SIZE) || e2.sprite.height) / 2;
-                                polygons.push([
-                                    entity.toLocal({ x: -w, y: -h }, e2),
-                                    entity.toLocal({ x: w, y: -h }, e2),
-                                    entity.toLocal({ x: w, y: h }, e2),
-                                    entity.toLocal({ x: -w, y: h }, e2)
-                                ]);
-                            }
-                        }
-                    }
-                    
-                    const maxDist = (entity.building.range.max * 2) * METER_PIXEL_SIZE, hitPoints = [];
-
-                    hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, { x: -maxDist, y: -maxDist }) || { x: -maxDist, y: -maxDist });
-                    hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, { x: maxDist, y: -maxDist }) || { x: maxDist, y: -maxDist });
-                    hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, { x: maxDist, y: maxDist }) || { x: maxDist, y: maxDist });
-                    hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, { x: -maxDist, y: maxDist }) || { x: -maxDist, y: maxDist });
-    
-                    for (const poly of polygons) {
-                        for (const p of poly) {
-                            hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, p));
-                        }
-                    }
-
-                    for (const poly of polygons) {
-                        for (const p of poly) {
-                            let angle = Math.angleBetween({ x: 0, y: 0 }, p);
-                            let p1 = Math.extendPoint({ x: 0, y: 0 }, maxDist, angle - 0.001);
-                            let p2 = Math.extendPoint({ x: 0, y: 0 }, maxDist, angle + 0.001);
-                            hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, p1) || p1);
-                            hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, p2) || p2);
-                        }
-                    }
-
-                    hitPoints.sort((p1, p2) => {
-                        return Math.angleBetween({ x: 0, y: 0}, p1) - Math.angleBetween({ x: 0, y: 0}, p2);
-                    });
-
-                    entity.removeChild(entity.lineOfSightRange);
-                    if (ENABLE_DEBUG) {
-                        entity.lineOfSightRange = new PIXI.Container();
-                        for (const p of hitPoints) {
-                            let line = new PIXI.Graphics();
-                            line.lineStyle(2, COLOR_GREEN).moveTo(0, 0).lineTo(p.x, p.y);
-                            entity.lineOfSightRange.addChild(line);
-                        }
-                        entity.addChild(entity.lineOfSightRange);
-                    }
-    
-                    if (!entity.rangeSpriteMask) {
-                        entity.rangeSpriteMask = new PIXI.Graphics();
-                        entity.addChild(entity.rangeSpriteMask);
-                        entity.rangeSprite.mask = entity.rangeSpriteMask;
-                    }
-
-                    entity.rangeSpriteMask.clear();
-                    entity.rangeSpriteMask.beginFill(0xFF3300);
-                    entity.rangeSpriteMask.drawPolygon(new PIXI.Polygon(hitPoints));
-                    entity.rangeSpriteMask.endFill();
-                }
-            }
-
-            if (building.range) {
-                entity.assignRange(building.range);
-            }
-
-            let buildingWidth, buildingLength;
-            if (!building.hasHandle) {
-                buildingWidth = building.width ? building.width * METER_PIXEL_SIZE : entity.sprite?.width ?? 0;
-                buildingLength = building.length ? building.length * METER_PIXEL_SIZE : entity.sprite?.height ?? 0;
-                entity.setSelectionSize(buildingWidth, buildingLength);
-            } else {
-                entity.selectionArea.clear();
-            }
-
-            if (building.vehicle) {
-                const vehicle = building.vehicle;
-                entity.isTrain = (vehicle.type === 'train' || vehicle.type === 'smalltrain') ?? false;
-                entity.mass = vehicle.mass ?? 25;
-    
-                if (entity.isTrain) {
-                    entity.trackVelocity = 0;
-                    entity.trackDirection = 1;
-                    if (vehicle.engine) {
-                        entity.userThrottle = 0;
-                    }
-                }
-            }
-
-            const socketWidth = 32, socketThickness = 6, powerSocketSize = 8;
-            entity.createSocket = function(socketData, x, y, rotation) {
-                if (!entity.sockets) {
-                    entity.sockets = [];
-                    entity.bottomSockets = new PIXI.Container();
-                    entity.bottomSockets.zIndex = -1;
-                    entity.addChild(entity.bottomSockets);
-                    // TODO: Sort top sockets above selectionArea.
-                    entity.topSockets = new PIXI.Container();
-                    entity.topSockets.zIndex = 1;
-                    entity.addChild(entity.topSockets);
-                    entity.sortChildren();
-                }
-
-                const socket = new PIXI.Container();
-                socket.connections = {};
-                socket.socketData = socketData;
-                socket.socketData.x = x ?? (isNaN(socket.socketData.x) ? 0 : (-buildingWidth/2) + ((socket.socketData.x / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE));
-                socket.socketData.y = y ?? (isNaN(socket.socketData.y) ? 0 : (-buildingLength/2) + ((socket.socketData.y / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE));
-                socket.socketData.rotation = rotation ?? socket.socketData.rotation;
-                socket.position.set(socket.socketData.x, socket.socketData.y);
-                socket.rotation = rotation ?? Math.deg2rad(socket.socketData.rotation);
-
-                if (ENABLE_DEBUG || !socketData.temp) {
-                    // Might want to add what kind of liquid it expects, water, oil, power, etc.
-                    if (socket.socketData.flow === 'in') {
-                        socket.pointer = new PIXI.Sprite(resources.pointer.texture);
-                        socket.pointer.anchor.set(0.5, -0.5);
-                        socket.pointer.rotation = Math.PI;
-                    } else if (socket.socketData.flow === 'out') {
-                        socket.pointer = new PIXI.Sprite(resources.pointer.texture);
-                        socket.pointer.anchor.set(0.5, 1.5);
-                    } else if (socket.socketData.flow === 'bi' && socket.socketData.cap !== 'left' && socket.socketData.cap !== 'right') {
-                        socket.pointer = new PIXI.Sprite(resources.bipointer.texture);
-                        socket.pointer.anchor.set(0.5, 1.5);
-                    } else if (socket.socketData.name === 'power') {
-                        socket.pointer = new PIXI.Sprite(resources.power.texture);
-                        socket.pointer.anchor.set(0.5, 1.5);
-                        socket.pointer.rotation = -(entity.rotation + socket.rotation);
-                        entity.handleTick = true;
-                    } else if (entity.building?.textureBorder && !entity.building.trenchConnector) {
-                        let textureBorder = resources[entity.building.textureBorder].texture;
-                        socket.pointer = new PIXI.Sprite(textureBorder);
-                        socket.pointer.width = textureBorder.width / METER_PIXEL_SCALE;
-                        socket.pointer.height = textureBorder.height / METER_PIXEL_SCALE;
-                        socket.pointer.anchor.set(0.5, 1.0);
-                    } else if (socket.socketData.temp) {
-                        socket.pointer = new PIXI.Sprite(resources.bipointer.texture);
-                        socket.pointer.anchor.set(0.5, 1.5);
-                    } else if (socket.socketData.texture) {
-                        socket.pointer = new PIXI.Sprite(resources[socket.socketData.texture].texture);
-                        socket.pointer.width = socket.pointer.width / METER_PIXEL_SCALE;
-                        socket.pointer.height = socket.pointer.height / METER_PIXEL_SCALE;
-                        socket.pointer.anchor.set(0.5, 0.5);
-                    }
-                    if (socket.pointer) {
-                        socket.addChild(socket.pointer);
-                    }
-
-                    function createSocketIndicator(color, width, length, center) {
-                        socket.indicator = new PIXI.Graphics();
-                        socket.indicator.beginFill(color ?? COLOR_ORANGE);
-                        socket.indicator.drawRect(-(width ?? socketWidth)/2, -(length ?? socketThickness) / (center ? 2 : 1), (width ?? socketWidth), (length ?? socketThickness));
-                        socket.indicator.endFill();
-                        socket.addChild(socket.indicator);
-                    }
-
-                    if (socket.socketData.flow === 'in') {
-                        createSocketIndicator(COLOR_RED);
-                    } else if (socket.socketData.flow === 'out') {
-                        createSocketIndicator(COLOR_GREEN);
-                    } else if (socket.socketData.flow === 'bi') {
-                        if (socket.socketData.cap !== 'left' && socket.socketData.cap !== 'right') {
-                            createSocketIndicator(COLOR_BLUE);
-                        }
-                    } else if (socket.socketData.name === 'power') {
-                        createSocketIndicator(COLOR_YELLOW, powerSocketSize, powerSocketSize, true);
-                    } else if (socket.socketData.type === 'traincar' || socket.socketData.type === 'smalltraincar' || entity.building?.hasHandle || game.settings.enableDebug) {
-                        createSocketIndicator(undefined, socketThickness, socketThickness, true);
-                    }
-                }
-                socket.setConnection = function(connectingEntityId, connectingSocket, connectingSocketId) {
-                    if (!isNaN(connectingEntityId) && (typeof connectingSocketId === 'number' || connectingSocket?.socketData) && (isNaN(socket.connections[connectingEntityId]) || socket.connections[connectingEntityId] !== (connectingSocketId ?? connectingSocket.socketData.id))) {
-                        if (connectingSocket) {
-                            socket.removeConnections();
-                            connectingSocket.connections[entity.id] = socket.socketData.id;
-                            connectingSocket.setVisible(false);
-                        } else if (typeof connectingSocketId === 'number') {
-                            const connectingEntity = game.getEntityById(connectingEntityId);
-                            if (connectingEntity?.sockets) {
-                                for (let i = 0; i < connectingEntity.sockets.length; i++) {
-                                    const connectingEntitySocket = connectingEntity.sockets[i];
-                                    if (connectingEntitySocket.socketData.id === connectingSocketId) {
-                                        connectingSocket = connectingEntitySocket;
-                                        break;
-                                    }
-                                }
-                                if (!connectingSocket && (entity.subtype === 'rail_large_gauge' || entity.subtype === 'rail_small_gauge')) {
-                                    const socketPosition = connectingEntity.toLocal(socket, entity);
-                                    connectingSocket = socket.createConnection(connectingEntity, socketPosition.x, socketPosition.y, ((entity.rotation + socket.rotation) - connectingEntity.rotation) + Math.PI, connectingSocketId);
-                                }
-                            }
-                        }
-                        socket.connections[connectingEntityId] = connectingSocketId ?? connectingSocket.socketData.id;
-                        socket.setVisible(false);
-                        if (building.canUnion) {
-                            entity.setUnion(game.getEntityById(connectingEntityId));
-                        }
-                        return connectingSocket;
-                    }
-                }
-                // This works for rails, unsure about anything else. Could just use the position of the socket, but we already have positional and rotation data from snapping.
-                socket.createConnection = function(connectingEntity, x, y, rotation, id) {
-                    if (connectingEntity?.sockets) {
-                        let connectingSocket = null;
-                        for (let i = 0; i < connectingEntity.sockets.length; i++) {
-                            const socket2 = connectingEntity.sockets[i];
-                            if (typeof socket2.connections[entity.id] === 'number') {
-                                connectingSocket = socket2;
-                                break;
-                            }
-                        }
-                        if (connectingSocket) {
-                            if (connectingSocket.socketData.cap) {
-                                socket.removeConnections();
-                                connectingSocket = null;
-                            } else {
-                                connectingSocket.position.set(x, y);
-                                connectingSocket.rotation = rotation;
-                            }
-                        }
-
-                        if (!connectingSocket) {
-                            let socketData = {
-                                'id': id ?? connectingEntity.sockets.length,
-                                'type': socket.socketData.type,
-                                'temp': true,
-                                'switch': 'rail'
-                            };
-                            connectingSocket = connectingEntity.createSocket(socketData, x, y, rotation);
-
-                            if (connectingSocket) {
-                                connectingSocket.connections[entity.id] = socket.socketData.id;
-                                if (Object.keys(socket.connections).length) {
-                                    socket.removeConnections();
-                                }
-                                socket.connections[connectingEntity.id] = connectingSocket.socketData.id;
-                                socket.setVisible(false);
-                            }
-                        }
-
-                        if (connectingSocket) {
-                            const projection = connectingEntity.bezier?.project({x: x, y: y});
-                            connectingSocket.switchT = projection.t;
-
-                            return connectingSocket;
-                        }
-                    }
-                    return false;
-                }
-                socket.canConnect = function(connectingSocket) {
-                    if (connectingSocket?.socketData?.type) {
-                        const socketType = socket.socketData.type, connectingSocketType = connectingSocket.socketData.type;
-                        if (typeof socketType === typeof connectingSocketType) {
-                            if (!socket.socketData.flow || (socket.socketData.flow === 'bi' || (socket.socketData.flow !== connectingSocket.socketData.flow))) {
-                                if (typeof connectingSocketType === 'object' && Array.isArray(connectingSocketType)) {
-                                    for (const socketTypeA of socketType) {
-                                        for (const socketTypeB of connectingSocketType) {
-                                            if ((socketTypeA.category & socketTypeB.mask) !== 0 && (socketTypeB.category & socketTypeA.mask) !== 0) {
-                                                return true;
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    return socketType === connectingSocketType;
-                                }
-                            }
-                        }
-                    }
-                    return false;
-                }
-                socket.remove = function() {
-                    if (socketData.temp) {
-                        if (socketData.below) {
-                            entity.bottomSockets.removeChild(socket);
-                        } else {
-                            entity.topSockets.removeChild(socket);
-                        }
-                        entity.sockets = entity.sockets.filter(obj => obj !== socket);
-                    }
-                }
-                socket.removeConnections = function(entityId, ignoreSelected) {
-                    if (Object.keys(socket.connections).length) {
-                        let connectionEstablished = false;
-                        for (const [connectedEntityId, connectedSocketId] of Object.entries(socket.connections)) {
-                            if (typeof entityId === 'number' && connectedEntityId === entityId) {
-                                connectionEstablished = true;
-                                continue;
-                            }
-                            const connectedEntity = game.getEntityById(connectedEntityId);
-                            if (connectedEntity) {
-                                if (ignoreSelected && connectedEntity.selected) {
-                                    connectionEstablished = true;
-                                    continue;
-                                }
-                                for (let k = 0; k < connectedEntity.sockets.length; k++) {
-                                    const connectedSocket = connectedEntity.sockets[k];
-                                    if (connectedSocket.socketData.id === connectedSocketId) {
-                                        delete connectedSocket.connections[entity.id];
-                                        if (Object.keys(connectedSocket.connections).length === 0) {
-                                            if (connectedEntity.building?.requireConnection) {
-                                                connectedEntity.remove();
-                                            } else if (connectedSocket.socketData.temp) {
-                                                connectedSocket.remove();
-                                            } else {
-                                                connectedSocket.setVisible(true);
-                                            }
-                                        }
-                                        break;
-                                    }
-                                }
-                            }
-                            delete socket.connections[connectedEntityId];
-                        }
-                        if (!connectionEstablished) {
-                            if (socket.socketData.temp) {
-                                socket.remove();
-                            } else {
-                                socket.setVisible(true);
-                            }
-                            if (building.canUnion) {
-                                game.updateEntityUnions();
-                            }
-                        }
-                    }
-                }
-                socket.setVisible = function(visible) {
-                    if (!ENABLE_DEBUG) {
-                        if (socket.indicator && socket.socketData.name !== 'power') {
-                            socket.indicator.visible = visible;
-                        }
-                        if (socket.pointer) {
-                            const connectedEntityIds = Object.keys(socket.connections);
-                            visible = visible ?? connectedEntityIds.length === 0;
-                            if (socket.socketData.textureAlt) {
-                                let texture = resources[visible ? socket.socketData.texture : socket.socketData.textureAlt].texture;
-                                socket.pointer.texture = texture;
-                                socket.pointer.width = texture.width / METER_PIXEL_SCALE;
-                                socket.pointer.height = texture.height / METER_PIXEL_SCALE;
-                                visible = true;
-                            } else if (socket.socketData.texture && !visible) {
-                                if (connectedEntityIds.length === 1) {
-                                    const e2 = game.getEntityById(connectedEntityIds[0]);
-                                    if (e2 && (game.constructionLayers[e2.sortLayer] < game.constructionLayers[entity.sortLayer])) {
-                                        visible = true;
-                                    }
-                                }
-                            }
-                            socket.pointer.visible = visible;
-                        }
-                    }
-                }
-
-                if (socketData.switch === 'rail') {
-                    let railSwitch = new PIXI.Sprite(resources['trackswitch_inactive'].texture);
-                    railSwitch.anchor.set(0.5);
-                    railSwitch.width = 32;
-                    railSwitch.height = 32;
-                    railSwitch.position.x += (entity.subtype === 'rail_large_gauge' ? 100 : 70);
-                    railSwitch.interactive = true;
-                    socket.switchEnabled = false;
-                    railSwitch.on('pointerdown', () => {
-                        socket.switchEnabled = !socket.switchEnabled;
-                        if (socket.switchEnabled) {
-                            railSwitch.texture = resources['trackswitch_active'].texture;
-                        } else {
-                            railSwitch.texture = resources['trackswitch_inactive'].texture;
-                        }
-                    });
-                    socket.addChild(railSwitch);
-                }
-
-                entity.sockets.push(socket);
-                if (socketData.below) {
-                    entity.bottomSockets.addChild(socket);
-                } else {
-                    entity.topSockets.addChild(socket);
-                }
-                return socket;
-            }
-
-            entity.getSocketById = function(id) {
-                for (let i = 0; i < entity.sockets.length; i++) {
-                    const socket = entity.sockets[i];
-                    if (socket.socketData?.id === id) {
-                        return socket;
-                    }
-                }
-                return null;
-            }
-
-            if (building.canUnion) {
-                entity.union = entity;
-                entity.unionRank = 0;
-
-                entity.getUnion = function() {
-                    if (entity.union !== entity) {
-                        entity.union = entity.union.getUnion();
-                    }
-                    return entity.union;
-                };
-
-                entity.getUnionEntities = function() {
-                    let union = entity.getUnion(), unionEntities = [];
-                    for (let unionEntity of entities) {
-                        if (unionEntity?.building?.canUnion && unionEntity.getUnion() === union) {
-                            unionEntities.push(unionEntity);
-                        }
-                    }
-                    return unionEntities;
-                };
-
-                entity.setUnion = function(unionEntity) {
-                    if (unionEntity?.building?.canUnion) {
-                        let unionEntityA = entity.getUnion(), unionEntityB = unionEntity.getUnion();
-                        if (unionEntityA === unionEntityB) {
-                            return;
-                        }
-                        if (unionEntityA.unionRank < unionEntityB.unionRank) {
-                            unionEntityA.union = unionEntityB;
-                        } else if (unionEntityA.unionRank > unionEntityB.unionRank) {
-                            unionEntityB.union = unionEntityA;
-                        } else {
-                            unionEntityB.union = unionEntityA;
-                            unionEntityA.unionRank++;
-                        }
-                        entity.setSelectionColor(COLOR_LIGHTBLUE);
-                        unionEntity.setSelectionColor(COLOR_LIGHTBLUE);
-                    }
-                };
-
-                entity.removeUnion = function() {
-                    entity.union = entity;
-                    entity.setSelectionColor();
-                };
-            }
-
-            if (building.sockets) {
-                for (let i = 0; i < building.sockets.length; i++) {
-                    entity.createSocket(Object.assign({}, building.sockets[i]));
-                }
-            }
-
-            if (building.baseUpgrades) {
-                entity.baseUpgrades = {};
-            }
-
-            /*
-            let buildingIcon = building.parent?.icon ?? building.icon;
-            if (sprite && buildingIcon && (!building.textureIcon || !building.textureIcon?.disabled)) {
-                let iconPadding = 28;
-                let iconWidth = sprite.width - iconPadding;
-                iconWidth = iconWidth > 128 ? 128 : iconWidth;
-                iconWidth = iconWidth > sprite.height ? sprite.height - iconPadding : iconWidth;
-                let iconHeight = iconWidth;
-                let iconYOffset = 0;
-                let iconTexture = resources[buildingIcon].texture;
-
-                if (building.textureIcon) {
-                    iconWidth = building.textureIcon.width ?? iconWidth;
-                    iconHeight = building.textureIcon.height ?? iconHeight;
-                    iconYOffset = building.textureIcon.y ?? iconYOffset;
-
-                    // Crop the icon if necessary. This icon / texture should be stored inside of resources and on building data in the future.
-                    if (iconWidth !== iconHeight) {
-                        let meterWidth = iconTexture.width;
-                        let meterHeight = iconTexture.height;
-                        if (iconWidth > iconHeight) {
-                            meterHeight = meterHeight * ((iconHeight / METER_PIXEL_SIZE) / (iconWidth / METER_PIXEL_SIZE));
-                        } else {
-                            meterWidth = meterWidth * ((iconWidth / METER_PIXEL_SIZE) / (iconHeight / METER_PIXEL_SIZE));
-                        }
-                        iconTexture = new PIXI.Texture(iconTexture, new PIXI.Rectangle(((iconTexture.width - meterWidth) / 2), ((iconTexture.height - meterHeight) / 2), meterWidth, meterHeight));
-                    }
-                }
-
-                if (iconWidth !== sprite.width && iconHeight !== sprite.height) {
-                    let iconBackground = new PIXI.Graphics();
-                    iconBackground.lineStyle(4, COLOR_WHITE);
-                    iconBackground.beginFill(COLOR_CHARCOAL);
-                    iconBackground.drawRect(-(iconWidth/2), -(iconHeight/2) + iconYOffset, iconWidth, iconHeight);
-                    iconBackground.endFill();
-                    entity.addChild(iconBackground);
-                }
-
-                let icon = new PIXI.Sprite(iconTexture);
-                icon.y = iconYOffset;
-                icon.width = iconWidth - 10;
-                icon.height = iconHeight - 10;
-                icon.anchor.set(0.5, 0.5);
-                entity.addChild(icon);
-            }
-            */
-
-            setTimeout(() => {
-                game.refreshStats();
-            }, 1);
-
-            entity.hasConnections = function() {
-                if (entity.sockets) {
-                    for (let i = 0; i < entity.sockets.length; i++) {
-                        const entitySocket = entity.sockets[i];
-                        if (Object.keys(entitySocket.connections).length > 0) {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            }
-
-            entity.hasConnectionToEntityId = function(entityId, ignoredSocket) {
-                if (entity.sockets) {
-                    for (let i = 0; i < entity.sockets.length; i++) {
-                        const entitySocket = entity.sockets[i];
-                        if ((!ignoredSocket || entitySocket !== ignoredSocket) && typeof entitySocket.connections[entityId] === 'number') {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            }
-
-            entity.hasConnectionToEntity = (connectingEntity, ignoredSocket) => entity.hasConnectionToEntityId(connectingEntity.id, ignoredSocket);
-
-            entity.attemptReconnections = function(removeConnections = true, ignoreSelected = true) {
-                if (removeConnections) {
-                    entity.removeConnections(undefined, ignoreSelected);
-                }
-                for (const e2 of entities) {
-                    if (e2 === entity || !e2.sockets || (ignoreSelected && e2.selected) || Math.distanceBetween(entity.mid ?? entity, e2.mid ?? e2) > 1000) {
-                        continue;
-                    }
-                    for (const eSocket of entity.sockets) {
-                        const eSocketPosition = app.cstage.toLocal({x: eSocket.x, y: eSocket.y}, entity);
-                        for (const e2Socket of e2.sockets) {
-                            const e2SocketPosition = app.cstage.toLocal({x: e2Socket.x, y: e2Socket.y}, e2);
-                            if (eSocket.canConnect(e2Socket) && (!e2Socket.socketData.connectionLimit || Object.keys(e2Socket.connections).length < e2Socket.socketData.connectionLimit) && (Math.distanceBetween(eSocketPosition, e2SocketPosition) < 3)) {
-                                let eSocketRotation = Math.angleNormalized((entity.rotation + eSocket.rotation) - Math.PI);
-                                let e2SocketRotation = Math.angleNormalized(e2.rotation + e2Socket.rotation);
-                                let angleDiff = Math.angleDifference(eSocketRotation, e2SocketRotation);
-                                if (angleDiff < 0.001 && angleDiff > -0.001) {
-                                    eSocket.setConnection(e2.id, e2Socket);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            entity.recoverConnections = function(recoveredEntities = [entity]) {
-                for (const eSocket of entity.sockets) {
-                    for (const [connectedEntityId, connectedSocketId] of Object.entries(eSocket.connections)) {
-                        const connectedEntity = game.getEntityById(connectedEntityId);
-                        if (connectedEntity && connectedEntity.sockets && !recoveredEntities.includes(connectedEntity)) {
-                            const e2Socket = connectedEntity.getSocketById(connectedSocketId);
-                            if (e2Socket) {
-                                recoveredEntities.push(connectedEntity);
-
-                                let connectedEntityPosition = app.cstage.toLocal({x: eSocket.x, y: eSocket.y}, entity);
-                                const connectedEntityRotation = Math.angleNormalized(-Math.angleDifference(entity.rotation + eSocket.rotation + Math.PI, e2Socket.rotation));
-                                if (e2Socket.x !== 0 || e2Socket.y !== 0) {
-                                    const e2SocketDist = Math.distanceBetween({ x: 0, y: 0 }, e2Socket);
-                                    const socketAngleDiff = Math.angleBetween({ x: 0, y: 0 }, e2Socket) + Math.PI;
-                                    connectedEntityPosition = Math.extendPoint(connectedEntityPosition, e2SocketDist, connectedEntityRotation + socketAngleDiff);
-                                }
-
-                                connectedEntity.position.set(connectedEntityPosition.x, connectedEntityPosition.y);
-                                connectedEntity.rotation = connectedEntityRotation;
-
-                                connectedEntity.recoverConnections(recoveredEntities);
-                            }
-                        }
-                    }
-                }
-            }
-
-            entity.removeConnections = function(socketId, ignoreSelected, ignoreSocket, entityId) {
-                if (entity.sockets) {
-                    // Iterate sockets to make sure we either remove the connections and update the socket or remove the entity altogether.
-                    for (let i = 0; i < entity.sockets.length; i++) {
-                        const entitySocket = entity.sockets[i];
-                        if (typeof socketId !== 'number' || (ignoreSocket ? entitySocket.socketData.id !== socketId : entitySocket.socketData.id === socketId)) {
-                            entitySocket.removeConnections(entityId, ignoreSelected);
-                        }
-                    }
-                }
-            }
-
-            entity.removeConnectionsToEntityId = (connectingEntityId) => entity.removeConnections(undefined, undefined, undefined, connectingEntityId);
-
-            entity.removeConnectionsToEntity = (connectingEntity) => entity.removeConnectionsToEntityId(connectingEntity.id);
-
-            entity.afterRemove = function() {
-                setTimeout(() => {
-                    game.refreshStats();
-                }, 1);
-            };
-
-            entity.afterLoad = function(entityData, entityIdMap) {
-                if (entity.sockets && entityData.connections) {
-                    for (let i = 0; i < entity.sockets.length; i++) {
-                        const socket = entity.sockets[i];
-                        const socketConnectionData = entityData.connections[socket.socketData.id];
-                        if (socketConnectionData) {
-                            for (const [connectedEntityId, connectedSocketId] of Object.entries(socketConnectionData)) {
-                                const remappedEntityId = (entityIdMap && typeof entityIdMap[connectedEntityId] === 'number') ? entityIdMap[connectedEntityId] : connectedEntityId;
-                                const connectedEntity = game.getEntityById(remappedEntityId);
-                                if (connectedEntity) {
-                                    socket.setConnection(remappedEntityId, undefined, connectedSocketId);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (entity.isTrain && typeof entityData.currentTrackId === 'number') {
-                    if (entityIdMap && typeof entityIdMap[entityData.currentTrackId] === 'number') {
-                        entity.currentTrack = game.getEntityById(entityIdMap[entityData.currentTrackId]);
-                    } else {
-                        entity.currentTrack = game.getEntityById(entityData.currentTrackId);
-                    }
-                    entity.currentTrackT = entityData.currentTrackT;
-                }
-
-                if (entity.rangeSprite) {
-                    entity.updateRangeMask();
-                }
-            }
-
-            function createProductionIcon(icon) {
-                let productionIcon = new PIXI.Graphics();
-                productionIcon.beginFill(COLOR_CHARCOAL);
-                productionIcon.lineStyle(3, COLOR_GREEN);
-                productionIcon.drawRect(-47, -47, 94, 94);
-                productionIcon.endFill();
-
-                productionIcon.icon = new PIXI.Sprite(icon);
-                productionIcon.icon.anchor.set(0.5);
-                productionIcon.icon.width = 84;
-                productionIcon.icon.height = 84;
-                productionIcon.addChild(productionIcon.icon);
-                entity.productionIcons.addChild(productionIcon);
-                return productionIcon;
-            }
-
-            entity.setProductionId = function(id, useBaseProduction = false) {
-                if (entity.building?.production && !(entity.baseProduction === useBaseProduction && entity.selectedProduction === id)) {
-                    entity.baseProduction = useBaseProduction;
-                    entity.selectedProduction = id;
-                    if (game.getSelectedEntity() === entity) {
-                        game.buildingSelectedMenuComponent?.updateProduction();
-                    }
-                    entity.removeChild(entity.productionIcons);
-                    if (typeof id === 'number') {
-                        entity.productionIcons = new PIXI.Container();
-                        entity.productionIcons.visible = game.projectSettings.showProductionIcons;
-                        entity.productionIcons.rotation = -entity.rotation;
-                        const productionList = (entity.baseProduction ? entity.building.parent : entity.building).production;
-                        for (let i = 0; i < productionList.length; i++) {
-                            const production = productionList[i];
-                            if (production.id === id) {
-                                if (production.output) {
-                                    for (const resource of Object.keys(production.output)) {
-                                        createProductionIcon(resources[window.objectData.resources[resource].icon].texture);
-                                    }
-                                }
-                                if (entity.building.power > 0 || production.power > 0) {
-                                    createProductionIcon(resources.power_x128.texture);
-                                }
-                                const productionIcons = entity.productionIcons.children;
-                                if (productionIcons.length) {
-                                    const productionIcon = productionIcons[0];
-                                    if (productionIcons.length > 1) {
-                                        productionIcon.x = -55;
-                                        productionIcons[1].x = 55;
-                                    } else if (entity.sprite.width < 125 && entity.sprite.height < 125) { // Small
-                                        productionIcon.width = 64;
-                                        productionIcon.height = 64;
-                                    } else if (entity.sprite.width < 200 && entity.sprite.height < 200) { // Medium
-                                        productionIcon.width = 80;
-                                        productionIcon.height = 80;
-                                    } else if (entity.sprite.width > 280 && entity.sprite.height > 280) { // Extra Large
-                                        productionIcon.width = 192;
-                                        productionIcon.height = 192;
-                                    } else {
-                                        productionIcon.width = 128;
-                                        productionIcon.height = 128;
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                        entity.addChild(entity.productionIcons);
-                    }
-                }
-            }
-
-            entity.setBaseUpgrade = function(tree, key = undefined) {
-                entity.baseUpgrades[tree] = key;
-                entity.assignRange(key && entity.building.baseUpgrades[tree][key].range ? entity.building.baseUpgrades[tree][key].range : entity.building.range);
-                if (entity.selected) {
-                    game.buildingSelectedMenuComponent?.refresh();
-                }
-                game.refreshStats();
-            };
-        }
-
-        let points;
-        if (entity.type === 'building' || entity.type === 'shape') {
-            points = [];
-            entity.updateHandles = function() {
-                for (let i = 0; i < points.length; i++) {
-                    let point = points[i];
-                    if (point.handle) {
-                        point.handle.visible = entity.selected;
-                        if (point.handle.visible) {
-                            point.handle.tint = entity.locked ? COLOR_RED : (point.index === 0 ? COLOR_ORANGE : COLOR_WHITE);
-                        }
-                    }
-                }
-            };
-
-            entity.grabHandlePoint = function() {
-                if (entity.selected && entity.hasHandle) {
-                    if (entity.shouldSelectLastHandlePoint) {
-                        entity.shouldSelectLastHandlePoint = false;
-                        forceMouseDown[0] = true;
-                        selectedHandlePoint = points[1];
-                        return true;
-                    } else {
-                        let mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
-                        for (let i = 1; i < points.length; i++) {
-                            let point = points[i];
-                            if (Math.distanceBetween(mousePos, point) < 20) {
-                                game.selectEntity(entity);
-                                selectedHandlePoint = point;
-                                return true;
-                            }
-                        }
-                    }
-                }
-                return false;
-            }
-
-            entity.onSave = function(entityData, isSelection) {
-                entityData.sortOffset = entity.sortOffset - game.constructionLayers[entity.sortLayer];
-
-                if (entity.properties) {
-                    entityData.properties = Object.assign({}, entity.properties);
-                }
-
-                if (entity.hasHandle) {
-                    entityData.railPoints = [];
-                    for (let i=0; i<points.length; i++) {
-                        let point = points[i];
-                        entityData.railPoints.push({
-                            x: point.x,
-                            y: point.y,
-                            rotation: point.rotation
-                        });
-                    }
-                }
-
-                if (entity.building && !entityData.upgrading) {
-                    if (typeof entity.productionScale === 'number') {
-                        entityData.productionScale = entity.productionScale;
-                    }
-                    if (entity.baseProduction) {
-                        entityData.baseProduction = entity.baseProduction;
-                    }
-                    entityData.selectedProduction = entity.selectedProduction;
-
-                    if (entity.baseUpgrades) {
-                        entityData.baseUpgrades = Object.assign({}, entity.baseUpgrades);
-                    }
-                }
-
-                if (entity.sockets) {
-                    for (let i = 0; i < entity.sockets.length; i++) {
-                        let socket = entity.sockets[i];
-                        let socketConnections = isSelection ? {} : socket.connections;
-                        if (isSelection) {
-                            for (const [connectedEntityId, connectedSocketId] of Object.entries(socket.connections)) {
-                                const connectedEntity = game.getEntityById(connectedEntityId);
-                                if (connectedEntity?.selected) {
-                                    socketConnections[connectedEntityId] = connectedSocketId;
-                                }
-                            }
-                        }
-                        if (Object.keys(socketConnections).length) {
-                            if (!entityData.connections) {
-                                entityData.connections = {};
-                            }
-                            entityData.connections[socket.socketData.id] = socketConnections;
-                        }
-                    }
-                }
-
-                if (entity.type === 'shape') {
-                    if (entity.subtype === 'image') {
-                        entityData.textureData = entity.textureData;
-                    }
-                    const defaultSettings = game.defaultSettings.styles[entity.subtype];
-                    for (const[key, value] of Object.entries(entity.shapeStyle)) {
-                        if (!defaultSettings || value !== defaultSettings[key]) {
-                            if (!entityData.shapeStyle) {
-                                entityData.shapeStyle = {};
-                            }
-                            entityData.shapeStyle[key] = value;
-                        }
-                    }
-                }
-
-                if (entity.isTrain && entity.currentTrack) {
-                    let trackFound = !isSelection;
-                    if (isSelection) {
-                        for (let i = 0; i < selectedEntities.length; i++) {
-                            const selectedEntity = selectedEntities[i];
-                            if (selectedEntity.id === entity.currentTrack.id) {
-                                trackFound = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (trackFound) {
-                        entityData.currentTrackId = entity.currentTrack.id;
-                        entityData.currentTrackT = entity.currentTrackT;
-
-                        if (typeof entity.trackDirection === 'number') {
-                            entityData.trackDirection = entity.trackDirection;
-                        }
-                    }
-                }
-            };
-
-            entity.onLoad = function(entityData) {
-                if (typeof entityData.sortOffset === 'number') {
-                    entity.sortOffset += entityData.sortOffset;
-                }
-
-                if (entityData.properties) {
-                    entity.properties = Object.assign({}, entity.properties, entityData.properties);
-                }
-
-                if (entity.building) {
-                    if (typeof entityData.selectedProduction === 'number') {
-                        if (typeof entityData.productionScale === 'number') {
-                            entity.productionScale = entityData.productionScale;
-                        }
-                        entity.setProductionId(entityData.selectedProduction, entityData.baseProduction);
-                    }
-                    if (entityData.baseUpgrades) {
-                        for (const [tree, key] of Object.entries(entityData.baseUpgrades)) {
-                            entity.setBaseUpgrade(tree, key);
-                        }
-                    }
-                }
-
-                if (entity.hasHandle && entityData.railPoints) {
-                    for (let i=0; i<points.length; i++) {
-                        let point = points[i];
-                        entity.removeChild(point.handle);
-                    }
-                    points = [];
-                    for (let i=0; i<entityData.railPoints.length; i++) {
-                        let point = entityData.railPoints[i];
-                        entity.addPoint(point.x, point.y, null, point.rotation);
-                    }
-                    entity.regenerate();
-                }
-
-                if (entity.type === 'shape') {
-                    if (entityData.textureData) {
-                        entity.textureData = entityData.textureData;
-                        if (!entity.sprite) {
-                            entity.sprite = new PIXI.Sprite();
-                            entity.addChild(entity.sprite);
-                        }
-                        const loader = new PIXI.Loader();
-                        loader.add(entity.textureData);
-                        loader.load(() => {
-                            const texture = loader.resources[entity.textureData].texture;
-                            entity.sprite.texture = texture;
-
-                            if (entityData.imported) {
-                                entity.x -= texture.width / 2;
-                                entity.y -= texture.height / 2;
-
-                                let handlePoint = points[points.length - 1];
-                                handlePoint.x = texture.width;
-                                handlePoint.y = texture.height;
-                                if (handlePoint.handle) {
-                                    handlePoint.handle.position.x = handlePoint.x;
-                                    handlePoint.handle.position.y = handlePoint.y;
-                                }
-                            }
-
-                            entity.regenerate();
-                        });
-                        loader.onError.add((error, resource) => {
-                            console.error('Failed to load image:', error.message);
-                            entity.remove();
-                            return;
-                        });
-                    }
-                    Object.assign(entity.shapeStyle, game.defaultSettings.styles[entity.subtype], entityData.shapeStyle);
-                    entity.setShapeStyle(entity.shapeStyle);
-                }
-
-                if (entity.isTrain && typeof entityData.trackDirection === 'number') {
-                    entity.trackDirection = entityData.trackDirection;
-                }
-            };
-
-            entity.addPoint = function(x, y, index, rotation) {
-                if (index == null) {
-                    index = points.length;
-                }
-
-                let newPoint = {
-                    index: index,
-                    points: 0,
-                    x: x,
-                    y: y,
-                    rotation: isNaN(rotation) ? Math.PI : rotation
-                };
-                points.splice(index, 0, newPoint);
-
-                let handle = new PIXI.Sprite(resources.white.texture);
-                handle.anchor.set(0.5);
-                handle.visible = entity.selected;
-                handle.width = 16;
-                handle.height = 16;
-                handle.position.x = newPoint.x;
-                handle.position.y = newPoint.y;
-                entity.addChild(handle);
-                newPoint.handle = handle;
-
-                if (index === 0) {
-                    handle.tint = COLOR_ORANGE;
-                }
-
-                entity.regenerate();
-                return newPoint;
-            };
-
-            entity.flipPoints = function(vertical = false) {
-                let backPoint = points[points.length - 1];
-                let dist;
-                if (!vertical) {
-                    dist = backPoint.x;
-                    backPoint.x = -dist;
-                    backPoint.handle.x = backPoint.x;
-                } else {
-                    dist = backPoint.y;
-                    backPoint.y = -dist;
-                    backPoint.handle.y = backPoint.y;
-                }
-                let position = Math.extendPoint(entity, dist, !vertical ? entity.rotation : entity.rotation + Math.PI/2);
-                entity.x = position.x;
-                entity.y = position.y;
-                entity.regenerate();
-            }
-
-            entity.regenerate = function() {
-                if (entity.sprite) {
-                    if (entity.sprite.rope) {
-                        entity.sprite.removeChild(entity.sprite.rope);
-                    }
-                    if (points.length >= 2) {
-                        const frontPoint = points[0], backPoint = points[points.length - 1];
-                        const updateTextureCap = function(sprite, point, rotationOffset) {
-                            if (sprite) {
-                                sprite.position.set(point.x, point.y);
-                                sprite.rotation = point.rotation + rotationOffset;
-                            }
-                        }
-                        if (entity.building) {
-                            if (entity.building?.trenchConnector) {
-                                entity.sprite.removeChild(entity.sprite.trapezoid);
-
-                                const floorHalfHeight = 57, floorTexturePadding = 100;
-                                const frontPoint = points[0], endPoint = points[points.length - 1];
-                                const frontPoint1 = { x: 0, y: -floorHalfHeight };
-                                const frontPoint2 = { x: 0, y: floorHalfHeight };
-                                const endPoint1 = Math.extendPoint(endPoint, floorHalfHeight, endPoint.rotation - Math.PI/2);
-                                const endPoint2 = Math.extendPoint(endPoint, floorHalfHeight, endPoint.rotation + Math.PI/2);
-
-                                const angle = Math.angleBetween({x: 0, y: 0}, endPoint);
-                                entity.sprite.trapezoid = new PIXI.Container();
-
-                                const trapezoid = new PIXI.Polygon([
-                                    frontPoint1.x, frontPoint1.y,
-                                    frontPoint2.x, frontPoint2.y,
-                                    endPoint1.x, endPoint1.y,
-                                    endPoint2.x, endPoint2.y
-                                ]);
-
-                                const floorMask = new PIXI.Graphics();
-                                floorMask.beginFill(0xFF3300);
-                                floorMask.drawPolygon(trapezoid);
-                                floorMask.endFill();
-                                entity.sprite.trapezoid.addChild(floorMask);
-
-                                entity.sprite.hitArea = trapezoid;
-
-                                entity.sprite.trapezoid.floor = new PIXI.TilingSprite(resources[entity.building.texture].texture, Math.distanceBetween(frontPoint, endPoint) + floorTexturePadding);
-                                entity.sprite.trapezoid.floor.anchor.set((floorTexturePadding / entity.sprite.trapezoid.floor.width) / 2, 0.5);
-                                entity.sprite.trapezoid.floor.mask = floorMask;
-                                entity.sprite.trapezoid.floor.rotation = angle;
-                                entity.sprite.trapezoid.addChild(entity.sprite.trapezoid.floor);
-
-                                const textureBorderHeight = resources[entity.building.textureBorder].texture.height;
-
-                                const connectorTopBorder = new PIXI.TilingSprite(resources[entity.building.textureBorder].texture, Math.distanceBetween(frontPoint1, endPoint2), textureBorderHeight);
-                                connectorTopBorder.y = -floorHalfHeight;
-                                connectorTopBorder.anchor.set(0, 0.5);
-                                connectorTopBorder.rotation = Math.angleBetween(frontPoint1, endPoint2);
-                                entity.sprite.trapezoid.addChild(connectorTopBorder);
-
-                                const connectorBottomBorder = new PIXI.TilingSprite(resources[entity.building.textureBorder].texture, Math.distanceBetween(frontPoint2, endPoint1), textureBorderHeight);
-                                connectorBottomBorder.y = floorHalfHeight;
-                                connectorBottomBorder.scale.y = -1;
-                                connectorBottomBorder.anchor.set(0, 0.5);
-                                connectorBottomBorder.rotation = Math.angleBetween(frontPoint2, endPoint1);
-                                entity.sprite.trapezoid.addChild(connectorBottomBorder);
-
-                                entity.sprite.addChild(entity.sprite.trapezoid);
-
-                                // TODO: Get the max rotation for a socket from the data.
-                                const maxAngle = Math.deg2rad((15 * 3) + 1), angleBetweenPoints = Math.angleBetween(frontPoint, endPoint);
-                                const limitReached = (entity.building?.minLength && (Math.distanceBetween(frontPoint, endPoint) < (entity.building.minLength * METER_PIXEL_SIZE))) || ((Math.abs(angleBetweenPoints) > maxAngle) || (Math.abs(Math.angleNormalized(-angleBetweenPoints + endPoint.rotation + Math.PI)) > maxAngle));
-                                if (limitReached) {
-                                    entity.sprite.trapezoid.floor.tint = COLOR_RED;
-                                    connectorTopBorder.tint = COLOR_RED;
-                                    connectorBottomBorder.tint = COLOR_RED;
-                                }
-
-                                for (let i = 0; i < entity.sockets.length; i++) {
-                                    let socket = entity.sockets[i];
-                                    if (socket.socketData.cap === 'back') {
-                                        socket.position.set(endPoint.x, endPoint.y);
-                                        socket.rotation = endPoint.rotation - Math.PI/2;
-                                    }
-                                    socket.pointer.tint = limitReached ? COLOR_RED : COLOR_WHITE;
-                                }
-                            } else {
-                                let bezierPoints = [];
-                                for (let i=0; i<points.length; i++) {
-                                    let point = points[i];
-                                    
-                                    if (entity.building?.simpleBezier) {
-                                        if (i < points.length - 1) {
-                                            bezierPoints.push({
-                                                x: point.x,
-                                                y: point.y
-                                            });
-
-                                            let point2 = points[i + 1];
-                                            if (point2) {
-                                                let dist = Math.distanceBetween(point, point2) * 0.1;
-                                                if (dist < 35) {
-                                                    dist = 35;
-                                                }
-                                                if (dist > 50) {
-                                                    dist = 50;
-                                                }
-                                                bezierPoints.push({
-                                                    x: point.x + dist,
-                                                    y: point.y
-                                                });
-                                                bezierPoints.push({
-                                                    x: point.x + dist,
-                                                    y: point.y
-                                                });
-                                                bezierPoints.push({
-                                                    x: point.x + dist,
-                                                    y: point.y
-                                                });
-                                            }
-                                        } else {
-                                            let point1 = points[i - 1];
-                                            if (point1) {
-                                                let dist = Math.distanceBetween(point, point1) * 0.1;
-                                                if (dist < 35) {
-                                                    dist = 35;
-                                                }
-                                                if (dist > 50) {
-                                                    dist = 50;
-                                                }
-                                                bezierPoints.push({
-                                                    x: point.x + (Math.cos(point.rotation) * dist),
-                                                    y: point.y + (Math.sin(point.rotation) * dist)
-                                                });
-                                                bezierPoints.push({
-                                                    x: point.x + (Math.cos(point.rotation) * dist),
-                                                    y: point.y + (Math.sin(point.rotation) * dist)
-                                                });
-                                                bezierPoints.push({
-                                                    x: point.x + (Math.cos(point.rotation) * dist),
-                                                    y: point.y + (Math.sin(point.rotation) * dist)
-                                                });
-                                            }
-
-                                            bezierPoints.push({
-                                                x: point.x,
-                                                y: point.y
-                                            });
-                                        }
-                                    } else {
-                                        if (i < points.length - 1) {
-                                            bezierPoints.push({
-                                                x: point.x,
-                                                y: point.y
-                                            });
-
-                                            let point2 = points[i + 1];
-                                            if (point2) {
-                                                let dist = Math.distanceBetween(point, point2) * 0.4;
-                                                bezierPoints.push({
-                                                    x: point.x + dist,
-                                                    y: point.y
-                                                });
-                                            }
-                                        } else {
-                                            let point1 = points[i - 1];
-                                            if (point1) {
-                                                let dist = Math.distanceBetween(point, point1) * 0.4;
-                                                bezierPoints.push({
-                                                    x: point.x + (Math.cos(point.rotation) * dist),
-                                                    y: point.y + (Math.sin(point.rotation) * dist)
-                                                });
-                                            }
-
-                                            bezierPoints.push({
-                                                x: point.x,
-                                                y: point.y
-                                            });
-                                        }
-                                    }
-                                }
-                                entity.bezier = new Bezier(bezierPoints);
-                                const lut = entity.bezier.getLUT(Math.round(entity.bezier.length()/TRACK_SEGMENT_LENGTH));
-                                if (entity.building.texture) {
-                                    resources[entity.building.texture].texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
-                                    entity.sprite.rope = new PIXI.SimpleRope(resources[entity.building.texture].texture, lut, 1);
-                                    if (typeof entity.building.color === 'number') {
-                                        entity.sprite.rope.tint = entity.building.color;
-                                    }
-                                    entity.sprite.addChild(entity.sprite.rope);
-                                }
-                                updateTextureCap(entity.frontCap, frontPoint, Math.PI);
-                                updateTextureCap(entity.backCap, backPoint, Math.PI);
-                                entity.bezier.mid = entity.bezier.get(0.5);
-                                if (entity.sockets) {
-                                    let midNormal = entity.bezier.normal(entity.bezier.mid.t);
-                                    let midAngle = Math.angleBetween({x: 0, y: 0}, midNormal) - Math.PI/2;
-                                    for (let i = 0; i < entity.sockets.length; i++) {
-                                        let socket = entity.sockets[i];
-                                        let socketPosition, socketRotation;
-                                        if (socket.socketData.cap === 'left' || socket.socketData.cap === 'right') {
-                                            socketRotation = midAngle + Math.deg2rad(socket.socketData.rotation);
-                                            socketPosition = Math.extendPoint(entity.bezier.mid, 8, socketRotation - Math.PI/2);
-                                        }
-                                        switch (socket.socketData.cap) {
-                                            case 'left':
-                                            case 'right':
-                                                socket.position.set(socketPosition.x, socketPosition.y);
-                                                socket.rotation = socketRotation;
-                                                break;
-                                            case 'back':
-                                                socket.position.set(backPoint.x, backPoint.y);
-                                                socket.rotation = backPoint.rotation - Math.PI/2;
-                                                break;
-                                        }
-                                    }
-                                }
-                                if (entity.building.hasOutline !== false) {
-                                    entity.sprite.removeChild(entity.sprite.outline);
-                                    entity.sprite.outline = new PIXI.SimpleRope(resources.white.texture, lut, 1);
-                                    entity.sprite.outline.visible = entity.selected;
-                                    entity.sprite.outline.tint = entity.locked ? COLOR_RED : COLOR_ORANGE;
-                                    entity.sprite.addChild(entity.sprite.outline);
-                                }
-                            }
-                        } else if (entity.type === 'shape') {
-                            entity.sprite.alpha = entity.shapeStyle.alpha;
-                            if (entity.subtype === 'image') {
-                                entity.sprite.scale.set(backPoint.x / entity.sprite.texture.width, backPoint.y / entity.sprite.texture.height);
-                            } else {
-                                entity.sprite.clear();
-                                if (entity.subtype === 'line') {
-                                    // TODO: The offset for arrows will have to be calculated based on rotation / angle here.
-                                    // TODO: Update selecting lines with multiple points. It's completely borked for more than 2 points.
-                                    const line = entity.sprite.lineStyle(entity.shapeStyle.lineWidth, entity.shapeStyle.fillColor).moveTo((entity.shapeStyle.frontArrow ? entity.shapeStyle.lineWidth * 1.875 : 0), 0);
-                                    let lastPoint;
-                                    for (let i = 1; i < points.length; i++) {
-                                        let point = points[i];
-                                        lastPoint = points[i - 1];
-                                        line.lineTo(point.x - ((entity.shapeStyle.backArrow && i === points.length - 1) ? entity.shapeStyle.lineWidth * 1.875 : 0), point.y);
-                                    }
-                                    updateTextureCap(entity.frontCap, frontPoint, Math.PI/2);
-                                    updateTextureCap(entity.backCap, backPoint, Math.angleBetween(lastPoint, backPoint) - Math.PI/2);
-                                } else if (entity.shapeStyle.border) {
-                                    entity.sprite.lineStyle(entity.shapeStyle.lineWidth, entity.shapeStyle.fillColor, 1);
-                                } else {
-                                    entity.sprite.beginFill(entity.shapeStyle.fillColor);
-                                }
-                                if (entity.subtype === 'rectangle') {
-                                    const p1 = { x: backPoint.x < 0 ? backPoint.x : 0, y: backPoint.y < 0 ? backPoint.y : 0 };
-                                    const w = backPoint.x > 0 ? backPoint.x : -backPoint.x;
-                                    const h = backPoint.y > 0 ? backPoint.y : -backPoint.y;
-                                    entity.sprite.drawRect(p1.x, p1.y, w, h);
-                                } else if (entity.subtype === 'circle') {
-                                    entity.sprite.drawCircle(0, 0, backPoint.x);
-                                }
-                                entity.sprite.endFill();
-                            }
-                        }
-                        entity.handleTick = true;
-                    }
-                }
-            };
-
-            if (entity.type ==='shape') {
-                if (entity.subtype !== 'image') {
-                    entity.sprite = new PIXI.Graphics();
-                    entity.addChild(entity.sprite);
-                }
-                entity.shapeStyle = Object.assign({}, entity.subtype === 'line' ? game.settings.styles.line : (entity.subtype === 'circle' ? game.settings.styles.circle : game.settings.styles.rectangle));
-
-                function updateArrow(sprite, visible) {
-                    if (visible) {
-                        if (!sprite) {
-                            sprite = new PIXI.Sprite(resources.point.texture);
-                            sprite.anchor.set(0.5, 0);
-                            entity.sprite.addChild(sprite);
-                        }
-                        sprite.width = entity.shapeStyle.lineWidth * 6;
-                        sprite.height = entity.shapeStyle.lineWidth * 6;
-                        sprite.tint = entity.shapeStyle.fillColor;
-                        return sprite;
-                    } else {
-                        entity.sprite.removeChild(sprite);
-                    }
-                    return null;
-                }
-
-                entity.setShapeStyle = function(style) {
-                    if (entity.subtype === 'image') {
-                        let sortLayer = style.sendToBackground ? 'background' : entity.type;
-                        if (entity.sortLayer !== sortLayer) {
-                            let sortOffset = entity.sortOffset - game.constructionLayers[entity.sortLayer];
-                            entity.sortLayer = sortLayer;
-                            entity.sortOffset = game.constructionLayers[entity.sortLayer] + sortOffset;
-                        }
-                    }
-                    entity.shapeStyle = style;
-                    if (entity.subtype === 'line') {
-                        entity.frontCap = updateArrow(entity.frontCap, entity.shapeStyle.frontArrow);
-                        entity.backCap = updateArrow(entity.backCap, entity.shapeStyle.backArrow);
-                        entity.updateHandles();
-                    }
-                    entity.regenerate();
-                }
-
-                entity.selectionArea.clear();
-            }
-
-            if (entity.hasHandle) {
-                entity.addPoint(0, 0);
-                entity.addPoint(entity.building ? (entity.building.minLength > 1 ? entity.building.minLength * METER_PIXEL_SIZE : 200) : 0, 0);
-                if (entity.shapeStyle) {
-                    entity.setShapeStyle(entity.shapeStyle);
-                }
-            }
-        }
-
-        entity.addChild(entity.selectionArea);
-
-        entity.onSelect = function() {
-            entity.selected = true;
-            entity.selectionArea.tint = entity.locked ? COLOR_RED : COLOR_WHITE;
-            entity.selectionArea.visible = true;
-
-            entity.updateOverlays();
-
-            if (entity.sprite?.outline) {
-                entity.sprite.outline.tint = entity.locked ? COLOR_RED : COLOR_ORANGE;
-            }
-
-            if (entity.hasHandle) {
-                entity.updateHandles();
-            }
-
-            if (keys[16] && entity.union) {
-                for (const unionEntity of entity.getUnionEntities()) {
-                    game.addSelectedEntity(unionEntity);
-                }
-            }
-        };
-
-        entity.onDeselect = function() {
-            entity.selected = false;
-            entity.selectionArea.visible = false;
-            delete entity.prevPosition;
-            delete entity.prevRotation;
-
-            entity.updateOverlays();
-
-            if (entity.building || entity.type === 'shape') {
-                if (entity.building) {
-                    if (entity.bezier && entity.bezier.length() <= entity.building.minLength) {
-                        entity.remove();
-                    } else if (entity.building.requireConnection) {
-                        // Requires all sockets have at least one connection. Mainly for power lines.
-                        for (let i = 0; i < entity.sockets.length; i++) {
-                            const socket = entity.sockets[i];
-                            if (Object.keys(socket.connections).length === 0) {
-                                entity.remove();
-                                break;
-                            }
-                        }
-                    }
-                } else if (entity.type === 'shape' && points && Math.distanceBetween(points[0], points[points.length - 1]) < (entity.subtype === 'circle' ? 16 : 32)) {
-                    entity.remove();
-                    return;
-                }
-                entity.updateHandles();
-            } else if (entity.type === 'text' && entity.label.text.length === 0) {
-                entity.remove();
-            }
-
-            if (keys[16] && entity.union) {
-                for (const unionEntity of entity.getUnionEntities()) {
-                    game.removeSelectedEntity(unionEntity);
-                }
-            }
-        };
-
-        entity.onRemove = function() {
-            if (entity.selected) {
-                game.removeSelectedEntity(entity);
-            }
-            if (entity.following) {
-                game.followEntity(null);
-            }
-            game.deselectHandle();
-            if (entity.sockets) {
-                entity.removeConnections();
-            }
-            if (sound) {
-                soundStop(sound);
-                sound = null;
-            }
-            if (entity.subtype === 'rail_large_gauge' || entity.subtype === 'rail_small_gauge') {
-                for (const entity2 of entities) {
-                    if (entity2.isTrain && entity2.currentTrack === entity) {
-                        entity2.currentTrack = null;
-                        entity2.currentTrackT = null;
-                        entity2.trackVelocity = 0;
-                    }
-                }
-            }
-        };
-
-        const boundsBuffer = 16, boundsPadding = boundsBuffer / 2;
-        entity.canGrab = function(ignoreMouse) {
-            const immovable = game.settings.disableLockedMouseEvents && entity.locked;
-            if (ignoreMouse || immovable) {
-                return !immovable;
-            }
-            if (entity.building?.radius || (entity.type === 'shape' && entity.subtype === 'circle')) {
-                const centerDist = Math.distanceBetween(entity, { x: gmx, y: gmy });
-                if (entity.building?.radius) {
-                    if (centerDist < (entity.building.radius * METER_PIXEL_SIZE)) {
-                        return true;
-                    }
-                } else if ((centerDist < ((entity.sprite.width/2) + boundsPadding)) && (!entity.shapeStyle?.border || (centerDist > (((entity.sprite.width/2) - entity.shapeStyle?.lineWidth) - boundsPadding)))) {
-                    return true;
-                }
-            } else {
-                let bounds = entity.getBounds(true);
-                let boundsAdjustedPos = app.cstage.toLocal({x: bounds.x, y: bounds.y}, app.stage, undefined, true);
-                bounds.x = boundsAdjustedPos.x - boundsBuffer;
-                bounds.y = boundsAdjustedPos.y - boundsBuffer;
-                bounds.width /= game.camera.zoom;
-                bounds.height /= game.camera.zoom;
-                bounds.bufferWidth = bounds.width + (boundsBuffer * 2);
-                bounds.bufferHeight = bounds.height + (boundsBuffer * 2);
-
-                if (gmx >= bounds.x && gmx <= bounds.x + bounds.bufferWidth && gmy >= bounds.y && gmy <= bounds.y + bounds.bufferHeight) {
-                    // TODO: Add padding around sprite so that it's easier to select.
-                    // Will need to check for entity.building?.isBezier and entity.bezier when that happens.
-                    if (entity.bezier) {
-                        let mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
-                        let projection = entity.bezier.project(mousePos);
-                        if (projection.d <= (entity.building?.lineWidth ?? 25)) {
-                            return true;
-                        }
-                    } else {
-                        if (entity.sprite?.hitArea) {
-                            const mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
-                            return entity.sprite.hitArea.contains(mousePos.x, mousePos.y);
-                        }
-
-                        // https://stackoverflow.com/a/67732811 <3
-                        let w = entity.selectionArea.width / 2;
-                        let h = entity.selectionArea.height / 2;
-                        const r = entity.rotation;
-
-                        const lineThickness = entity.shapeStyle?.lineWidth ? entity.shapeStyle.lineWidth / 2 : 0;
-
-                        const [ax, ay] = [Math.cos(r), Math.sin(r)];
-                        const t = (x, y) => ({x: x * ax - y * ay + entity.x, y: x * ay + y * ax + entity.y});
-                        let bBounds;
-                        if (entity.type === 'shape' && points) {
-                            let p1, p2, m1, m2;
-                            for (let i = 0; i < points.length; i++) {
-                                let point = points[i];
-                                if (point.index === 0) {
-                                    p1 = point;
-                                } else if (point.index === 1) {
-                                    p2 = point;
-                                }
-                            }
-                            if (entity.subtype === 'line') {
-                                m1 = {
-                                    x: p1.x - lineThickness - boundsPadding,
-                                    y: p1.y - lineThickness - boundsPadding
-                                };
-                                m2 = {
-                                    x: p2.x + lineThickness + boundsPadding,
-                                    y: p2.y + lineThickness + boundsPadding
-                                };
-                            } else {
-                                const borderPadding = (entity.shapeStyle.border ? lineThickness : 0) + boundsPadding;
-                                m1 = {
-                                    x: p1.x + (p2.x < p1.x ? borderPadding : -borderPadding),
-                                    y: p1.y + (p2.y < p1.y ? borderPadding : -borderPadding)
-                                };
-                                m2 = {
-                                    x: p2.x + (p1.x < p2.x ? borderPadding : -borderPadding),
-                                    y: p2.y + (p1.y < p2.y ? borderPadding : -borderPadding)
-                                };
-                            }
-                            bBounds = [t(m2.x, m2.y), t(m1.x, m2.y), t(m1.x, m1.y), t(m2.x, m1.y)];
-                        } else {
-                            bBounds = [t(w, h), t(-w, h), t(-w, -h), t(w, -h)];
-                        }
-                        return Math.isPointWithinBounds({ x: gmx, y: gmy }, bBounds, (entity.subtype === 'rectangle' && entity.shapeStyle.border ? (lineThickness + boundsPadding) * 2 : undefined));
-                    }
-                }
-            }
-            return false;
-        };
-
-        entity.bringToFront = function() {
-            let maxOffset = 0;
-            for (let i = 0; i < entities.length; i++) {
-                const ent = entities[i];
-                if (!ent.selected && ent !== entity && ent.sortLayer === entity.sortLayer) {
-                    maxOffset = Math.max(maxOffset, ent.sortOffset);
-                }
-            }
-            if (maxOffset) {
-                entity.sortOffset = maxOffset + 1;
-            }
-        };
-
-        entity.getZIndex = function() {
-            return -entity.sortOffset - ((game.settings.bringSelectedToFront && entity.selected && !entity.following) ? game.constructionLayers.selected : 0);
-        };
-
-        if (!entity.building || entity.building.isBezier) {
-            entity.isVisible = function () {
-                return true;
-            };
-        }
-
-        let frameX = 0, frameY = 0;
-        let sound = null;
-        entity.tick = function() {
-            if (entity.sprite) {
-                entity.visible = entity.isVisible();
-            }
-
-            if (entity.handleTick || entity.visible) {
-                if (entity.sprite?.outline && entity.sprite.outline.visible !== entity.selected) {
-                    entity.sprite.outline.visible = entity.selected;
-                }
-
-                if (selectedHandlePoint && entity.selected && !entity.locked && entity.hasHandle && mouseDown[0]) {
-                    let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
-                    let gmxGrid = gmx;
-                    let gmyGrid = gmy;
-                    if (!entity.building?.ignoreSnapSettings && (game.settings.enableGrid || keys[16])) {
-                        gmxGrid = Math.round(gmxGrid / gridSize) * gridSize;
-                        gmyGrid = Math.round(gmyGrid / gridSize) * gridSize;
-                    }
-                    let mousePos = entity.toLocal({x: gmxGrid, y: gmyGrid}, app.cstage, undefined, true);
-                    game.setPickupEntities(false);
-                    if (selectedHandlePoint.index === 0) {
-                        entity.x = gmx;
-                        entity.y = gmy;
-
-                        if (!entity.building?.ignoreSnapSettings && (game.settings.enableGrid || keys[16])) {
-                            entity.x = Math.round(entity.x / gridSize) * gridSize;
-                            entity.y = Math.round(entity.y / gridSize) * gridSize;
-                        }
-                    } else if (entity.type === 'shape' || entity.building) {
-                        if (mouseDown[2] && entity.building?.isBezier) {
-                            let angle = Math.angleBetween(selectedHandlePoint, mousePos);
-                            if (!entity.building?.ignoreSnapSettings && game.settings.enableSnapRotation) {
-                                let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ? game.settings.snapRotationDegrees : 15);
-                                angle = Math.floor(angle / snapRotationDegrees) * snapRotationDegrees;
-                            }
-                            selectedHandlePoint.rotation = angle + Math.PI;
-                        } else {
-                            selectedHandlePoint.x = mousePos.x;
-                            selectedHandlePoint.y = mousePos.y;
-                        }
-
-                        if (entity.type === 'shape') {
-                            if (entity.subtype === 'line' || entity.subtype === 'circle') {
-                                let angle = Math.angleBetween(entity, { x: gmx, y: gmy });
-                                if (game.settings.enableSnapRotation) {
-                                    let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ? game.settings.snapRotationDegrees : 15);
-                                    angle = Math.round(angle / snapRotationDegrees) * snapRotationDegrees;
-                                }
-                                entity.rotation = angle;
-                                selectedHandlePoint.y = 0;
-                            } else if (entity.subtype === 'image' && entity.shapeStyle?.maintainAspectRatio) {
-                                const textureAspectRatio = entity.sprite.texture.width / entity.sprite.texture.height;
-                                const pX = Math.abs(selectedHandlePoint.x), pY = Math.abs(selectedHandlePoint.y);
-                                const pointsAspectRatio = pX / pY;
-                                if (pointsAspectRatio > textureAspectRatio) {
-                                    selectedHandlePoint.x = Math.sign(selectedHandlePoint.x) * pY * textureAspectRatio;
-                                } else {
-                                    selectedHandlePoint.y = Math.sign(selectedHandlePoint.y) * pX / textureAspectRatio;
-                                }
-                            }
-                        }
-
-                        if (entity.building) {
-                            if (!entity.building.isBezier || Math.abs(selectedHandlePoint.y) < 25) {
-                                if (!entity.building.isBezier && (entity.building.canSnapRotate || !entity.hasConnections())) {
-                                    let angle = Math.angleBetween(entity, { x: gmx, y: gmy });
-                                    if (!entity.building.ignoreSnapSettings && game.settings.enableSnapRotation) {
-                                        let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ? game.settings.snapRotationDegrees : 15);
-                                        angle = Math.round(angle / snapRotationDegrees) * snapRotationDegrees;
-                                    }
-                                    entity.rotation = angle;
-                                }
-                                selectedHandlePoint.y = 0;
-                            }
-
-                            if (!entity.building.isBezier && entity.building.minLength) {
-                                const minLength = entity.building.minLength * METER_PIXEL_SIZE;
-                                if (selectedHandlePoint.x < minLength) {
-                                    selectedHandlePoint.x = minLength;
-                                }
-                            }
-                        }
-                    }
-
-                    if (entity.building && !mouseDown[2]) {
-                        let handleSocket;
-                        let connectionEstablished = false;
-                        if (entity.sockets) {
-                            // TODO: Store this somewhere in sockets.
-                            for (let i = 0; i < entity.sockets.length; i++) {
-                                const entitySocket = entity.sockets[i];
-                                if (entitySocket.socketData?.cap === 'back') {
-                                    handleSocket = entitySocket;
-                                    break;
-                                }
-                            }
-                            entity.removeConnections(0, false, true);
-                        }
-                        for (let i = 0; i < entities.length; i++) {
-                            let entity2 = entities[i];
-                            if (!entity2.visible || entity2 === entity || entity2.type !== 'building' || !(entity.sockets && entity2.sockets) || Math.distanceBetween({x: gmx, y: gmy}, entity2.mid) > 1000) {
-                                continue;
-                            }
-
-                            if (entity2.sockets) {
-                                if (entity.building?.canSnapStructureType !== false || entity.subtype !== entity2.subtype) {
-                                    const mousePos2 = entity2.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
-                                    let nearestSocket, nearestSocketPos, nearestSocketDist = null;
-                                    for (let i = 0; i < entity2.sockets.length; i++) {
-                                        const entitySocket = entity2.sockets[i];
-                                        if (handleSocket.canConnect(entitySocket) && !entitySocket.socketData.temp) {
-                                            const socketDistance = Math.distanceBetween(mousePos2, entitySocket);
-                                            if ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || entity.subtype === 'power_line' && entity2.canGrab()) {
-                                                const entityConnections = Object.keys(entitySocket.connections).length;
-                                                if (entitySocket.connections[entity.id] === handleSocket.socketData.id || (!entity.hasConnectionToEntity(entity2, handleSocket) && (entityConnections === 0 || (entitySocket.socketData.connectionLimit && entityConnections < entitySocket.socketData.connectionLimit)))) {
-                                                    nearestSocketPos = app.cstage.toLocal({x: entitySocket.x, y: entitySocket.y}, entity2, undefined, true);
-                                                    if (Math.floor(Math.distanceBetween(entity, nearestSocketPos)) <= (entity.building?.maxLength * METER_PIXEL_SIZE)) {
-                                                        nearestSocket = entitySocket;
-                                                        nearestSocketDist = socketDistance;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    if (nearestSocket) {
-                                        if (entity.building?.canSnapRotate) {
-                                            entity.rotation = Math.angleBetween(entity, nearestSocketPos);
-                                        }
-                                        nearestSocketPos = entity.toLocal(nearestSocketPos, app.cstage, undefined, true);
-                                        const socketRotation = Math.angleNormalized(((entity2.rotation + nearestSocket.rotation) - entity.rotation) - Math.deg2rad(handleSocket.socketData.rotation));
-                                        // TODO: Only force rotate snap constraint whenever the first socket is connected, otherwise the entity should be able to rotate and attempt snapping.
-                                        if (entity.building?.canSnapRotate || Math.angleDifference(Math.angleNormalized(selectedHandlePoint.rotation), socketRotation) === 0 && Math.round(nearestSocketPos.y) === 0 || entity.building?.isBezier || entity.building?.trenchConnector) {
-                                            handleSocket.setConnection(entity2.id, nearestSocket);
-                                            selectedHandlePoint.x = nearestSocketPos.x;
-                                            if (entity.building?.isBezier) {
-                                                selectedHandlePoint.y = nearestSocketPos.y;
-                                                selectedHandlePoint.rotation = socketRotation;
-                                            }
-                                            connectionEstablished = true;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                            
-                            if (!connectionEstablished && !entity.hasConnectionToEntity(entity2, handleSocket) && entity2.bezier && entity2.building?.isBezier && entity2.building?.canSnapAlongBezier && entity.subtype === entity2.subtype) {
-                                let selectedPointToEntity2Local = entity2.toLocal(selectedHandlePoint, entity, undefined, true);
-                                let projection = entity2.bezier.project(selectedPointToEntity2Local);
-                                if (projection.d <= (entity2.building?.lineWidth ?? 25) && (!entity.building?.maxLength || Math.distanceBetween(entity, {x: gmx, y: gmy}) <= entity.building.maxLength * METER_PIXEL_SIZE)) {
-                                    let local = entity.toLocal({x: projection.x, y: projection.y}, entity2, undefined, true);
-                                    let normal = entity2.bezier.normal(projection.t);
-                                    let angle = Math.angleBetween({x: 0, y: 0}, normal);
-                                    selectedHandlePoint.x = local.x;
-                                    selectedHandlePoint.y = local.y;
-
-                                    let currentRot = entity.rotation + selectedHandlePoint.rotation;
-                                    let angleRight = entity2.rotation + (angle - Math.PI/2) - Math.PI/2;
-                                    let angleLeft = entity2.rotation + (angle + Math.PI/2) - Math.PI/2;
-                                    let rightDiff = Math.angleNormalized(angleRight - currentRot);
-                                    let leftDiff = Math.angleNormalized(angleLeft - currentRot);
-
-                                    // TODO: Handle saving previous rotations of snapped handles as well.
-
-                                    if (rightDiff < leftDiff) {
-                                        selectedHandlePoint.rotation = (angleRight + Math.PI/2) - entity.rotation;
-                                    } else {
-                                        selectedHandlePoint.rotation = (angleLeft + Math.PI/2) - entity.rotation;
-                                    }
-
-                                    if (handleSocket && (entity.subtype === 'rail_large_gauge' || entity.subtype === 'rail_small_gauge')) {
-                                        handleSocket.createConnection(entity2, projection.x, projection.y, angle + Math.PI);
-                                    }
-
-                                    connectionEstablished = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if (handleSocket && !connectionEstablished) {
-                            handleSocket.removeConnections();
-                        }
-                    }
-
-                    const MIN_SEGMENT_DISTANCE = entity.building?.minLength * METER_PIXEL_SIZE;
-                    const MAX_SEGMENT_DISTANCE = entity.building?.maxLength * METER_PIXEL_SIZE;
-                    let dist = Math.distanceBetween({x: 0, y: 0}, selectedHandlePoint);
-                    if (selectedHandlePoint.index === 1) {
-                        let angle = Math.angleBetween({x: 0, y: 0}, selectedHandlePoint);
-                        if (dist > MAX_SEGMENT_DISTANCE) {
-                            dist = MAX_SEGMENT_DISTANCE;
-                        }
-                        selectedHandlePoint.x = Math.cos(angle) * dist;
-                        selectedHandlePoint.y = Math.sin(angle) * dist;
-                    }
-
-                    entity.regenerate();
-                    if (entity.building?.isBezier && entity.sprite?.rope) {
-                        if (entity.building.simpleBezier) {
-                            if (dist < 3*METER_PIXEL_SIZE) {
-                                entity.sprite.rope.tint = COLOR_RED;
-                            } else {
-                                entity.sprite.rope.tint = COLOR_WHITE;
-                            }
-                        } else {
-                            let curve1 = entity.bezier.curvature(0.25);
-                            let curve2 = entity.bezier.curvature(0.5);
-                            let curve3 = entity.bezier.curvature(0.75);
-                            if (dist < MIN_SEGMENT_DISTANCE || (curve1.r !== 0 && (Math.abs(curve1.r) < 100 || Math.abs(curve2.r) < 200 || Math.abs(curve3.r) < 100)) || selectedHandlePoint.x < 0) {
-                                entity.sprite.rope.tint = COLOR_RED;
-                            } else {
-                                entity.sprite.rope.tint = COLOR_WHITE;
-                            }
-                        }
-                    }
-
-                    if (selectedHandlePoint.handle) {
-                        selectedHandlePoint.handle.position.x = selectedHandlePoint.x;
-                        selectedHandlePoint.handle.position.y = selectedHandlePoint.y;
-                    }
-                }
-
-                if (entity.handleTick || entity.lastRotation !== entity.rotation) {
-                    if (entity.productionIcons) {
-                        entity.productionIcons.rotation = -entity.rotation;
-                    }
-
-                    if (entity.sockets) {
-                        for (let i = 0; i < entity.sockets.length; i++) {
-                            let socket = entity.sockets[i];
-                            if (socket.socketData.name === 'power') {
-                                socket.pointer.rotation = -(entity.rotation + socket.rotation);
-                            }
-                        }
-                    }
-
-                    if (selectedEntities.length === 1) {
-                        game.updateSelectedBuildingMenu();
-                    }
-                }
-
-                if (!pickupSelectedEntities && entity.selected && !entity.selectionArea.visible) {
-                    entity.selectionArea.visible = true;
-                }
-            }
-
-            if (entity.handleTick || entity.lastX !== entity.x || entity.lastY !== entity.y || entity.lastRotation !== entity.rotation) {
-                entity.lastX = entity.x;
-                entity.lastY = entity.y;
-                entity.lastRotation = entity.rotation;
-                entity.handleTick = false;
-
-                let mid;
-                if (entity.bezier) {
-                    mid = entity.bezier.mid;
-                } else if (points && (entity.building?.trenchConnector || (entity.type === 'shape' && (entity.subtype === 'rectangle' || entity.subtype === 'image' || entity.subtype === 'line')))) {
-                    mid = {
-                        x: (points[0].x + points[points.length - 1].x) / 2,
-                        y: (points[0].y + points[points.length - 1].y) / 2
-                    };
-                }
-
-                if (mid) {
-                    entity.mid = Math.rotateAround(entity, {
-                        x: entity.x + mid.x,
-                        y: entity.y + mid.y
-                    });
-                } else {
-                    entity.mid = {
-                        x: entity.x,
-                        y: entity.y
-                    };
-                }
-            }
-
-            if (entity.building) {
-                if (sheet && entity.visible) {
-                    frameX += entity.building.texture.speed ? entity.building.texture.speed : 0.1;
-                    if (frameX >= frameWidth) {
-                        frameX -= frameWidth;
-                    }
-                    if (frameY >= frameHeight) {
-                        frameY -= frameHeight;
-                    }
-                    entity.sprite.texture = sheet[Math.floor(frameX)][Math.floor(frameY)];
-                }
-
-                if (entity.building.sound) {
-                    if (!sound && entity.building.sound && sounds[entity.building.sound]) {
-                        sound = soundPlay(sounds[entity.building.sound], entity, 0.4);
-                    }
-
-                    if (sound) {
-                        soundUpdate(sound);
-                        if (sound.stopped) {
-                            sound = null;
-                        }
-                    }
-                } else if (entity.isTrain) {
-                    let rate = Math.abs(entity.trackVelocity)/6;
-                    if (rate < 0) {
-                        rate = 0;
-                    }
-                    if (rate > 1) {
-                        rate = 1;
-                    }
-
-                    if (game.playMode && entity.subtype === 'trainengine' && entity.currentTrack && Math.abs(entity.userThrottle) > 0) {
-                        if (game.settings.quality === 'auto' || game.settings.quality === 'high') {
-                            if (!entity.smokeTime || entity.smokeTime <= 0) {
-                                entity.smokeTime = 6 - Math.floor(Math.abs(entity.trackVelocity)*0.5);
-                                let angle = (Math.PI * 2) * Math.random();
-                                let size = 70 + Math.round(Math.random() * 10);
-                                let speed = 0.25 + (Math.random() * 0.2);
-                                createEffect('smoke', entity.x + Math.cos(entity.rotation) * 90, entity.y + Math.sin(entity.rotation) * 90, entity.z, size, size, {
-                                    dx: Math.cos(angle) * (speed * Math.random()),
-                                    dy: Math.sin(angle) * (speed * Math.random()),
-                                    tint: 0xCCCCCC
-                                });
-                            }
-                            entity.smokeTime--;
-                        }
-                    }
-
-                    if (game.playMode && rate > 0.15) {
-                        if (!sound) {
-                            let soundKey = 'train_wheel_loop';
-                            if (entity.subtype === 'trainengine' && Math.abs(entity.userThrottle) >= 0.05) {
-                                soundKey = 'train_engine';
-                            }
-                            sound = soundPlay(sounds[soundKey], entity, 0.4);
-                        }
-
-                        if (sound) {
-                            soundUpdate(sound);
-
-                            sound.sound.rate(rate, sound.id);
-                            if (sound.stopped) {
-                                sound = null;
-                            }
-                        }
-                    } else {
-                        if (sound) {
-                            soundStop(sound);
-                            sound = null;
-                        }
-                    }
-                }
-            }
-
-            if (game.playMode && entity.isTrain && entity.currentTrack && entity.currentTrack.bezier) {
-                if (entity.currentTrackT === null) {
-                    const projection = entity.currentTrack.bezier?.project(entity.currentTrack.toLocal({x: entity.x, y: entity.y}, app.cstage, undefined, true));
-                    entity.currentTrackT = projection.t;
-
-                    if (Math.abs(entity.lastTrackT - entity.currentTrackT) <= 0.1) {
-                        entity.trackDirection *= -1;
-                    }
-                }
-
-                let normal = entity.currentTrack.bezier.normal(entity.currentTrackT);
-                let angle = Math.angleBetween({x: 0, y: 0}, normal);
-                if (entity.trackDirection === -1) {
-                    angle += Math.PI;
-                }
-                entity.rotation = Math.normalizeAngleRadians(entity.currentTrack.rotation + (angle - Math.PI/2));
-
-                if (entity.building.vehicle.engine) {
-                    entity.throttle = 0.01 * entity.userThrottle;
-                }
-
-                entity.trackVelocity *= 0.999;
-                if (Math.abs(entity.trackVelocity) <= 0.0001) {
-                    entity.trackVelocity = 0;
-                }
-
-                let maxVelocity = entity.building.vehicle.maxSpeed;
-                if (entity.trackVelocity > maxVelocity) {
-                    entity.trackVelocity = maxVelocity;
-                } else if (entity.trackVelocity < -maxVelocity) {
-                    entity.trackVelocity = -maxVelocity;
-                }
-                entity.moveAlongBezier((entity.trackVelocity/entity.currentTrack.bezier.length()) * entity.trackDirection);
-
-                if (entity.throttle) {
-                    entity.trackVelocity += entity.throttle;
-                }
-            }
-        };
-
-        entity.moveAlongBezier = function(amount) {
-            let previousTrackT = entity.currentTrackT;
-            entity.currentTrackT += amount;
-            if (entity.currentTrackT < 0 || entity.currentTrackT > 1) {
-                let closestSocket = null;
-                let closestDist = 1000000;
-                for (let j = 0; j < entity.currentTrack.sockets.length; j++) {
-                    const socket = entity.currentTrack.sockets[j];
-                    let worldSocketPos = app.cstage.toLocal({
-                        x: socket.x,
-                        y: socket.y
-                    }, entity.currentTrack, undefined, true);
-                    let dist = Math.distanceBetween(entity, worldSocketPos);
-                    if (dist <= closestDist) {
-                        closestDist = dist;
-                        closestSocket = socket;
-                    }
-                }
-
-                if (closestSocket && closestSocket.connections && Object.keys(closestSocket.connections).length) {
-                    for (const [connectedEntityId] of Object.entries(closestSocket.connections)) {
-                        entity.currentTrack = game.getEntityById(connectedEntityId);
-                        entity.lastTrackT = entity.currentTrackT;
-                        entity.currentTrackT = null;
-                        break;
-                    }
-                } else {
-                    if (entity.currentTrackT >= 1) {
-                        entity.currentTrackT = 1;
-                    } else if (entity.currentTrackT <= 0) {
-                        entity.currentTrackT = 0;
-                    }
-                    entity.userThrottle = 0;
-                    entity.trackVelocity = 0;
-                }
-            } else {
-                let closeSocket = null;
-                for (let j = 0; j < entity.currentTrack.sockets.length; j++) {
-                    const socket = entity.currentTrack.sockets[j];
-                    if (socket.switchEnabled &&
-                        ((previousTrackT <= socket.switchT && entity.currentTrackT >= socket.switchT) ||
-                        (previousTrackT >= socket.switchT && entity.currentTrackT <= socket.switchT))
-                    ) {
-                        closeSocket = socket;
-                        break;
-                    }
-                }
-
-                if (closeSocket && closeSocket.socketData.switch === 'rail') {
-                    for (const [connectedEntityId] of Object.entries(closeSocket.connections)) {
-                        let projection1 = entity.currentTrack.bezier.get(entity.currentTrackT);
-                        let curTrackPos = app.cstage.toLocal({
-                            x: projection1.x,
-                            y: projection1.y
-                        }, entity.currentTrack, undefined, true);
-                        let angle1 = Math.angleBetween(entity, curTrackPos);
-
-                        let newTrack = game.getEntityById(connectedEntityId);
-                        let projection2 = newTrack.bezier?.project(newTrack.toLocal({x: entity.x, y: entity.y}, app.cstage, undefined, true));
-                        let newTrackGet = newTrack.bezier.get(projection2.t + (projection2.t > 0.5 ? -0.1 : 0.1));
-                        let newTrackPos = app.cstage.toLocal({
-                            x: newTrackGet.x,
-                            y: newTrackGet.y
-                        }, newTrack, undefined, true);
-                        let angle2 = Math.angleBetween(entity, newTrackPos);
-                        let angleDiff = Math.abs(Math.differenceBetweenAngles(angle1, angle2));
-                        if (angleDiff <= Math.PI/4) {
-                            entity.currentTrack = newTrack;
-                            entity.lastTrackT = entity.currentTrackT;
-                            entity.currentTrackT = null;
-                        }
-                        break;
-                    }
-                }
-            }
-
-            if (entity.currentTrackT === null) {
-                const projection = entity.currentTrack.bezier?.project(entity.currentTrack.toLocal({x: entity.x, y: entity.y}, app.cstage, undefined, true));
-                entity.currentTrackT = projection.t;
-
-                let normal = entity.currentTrack.bezier.normal(entity.currentTrackT);
-                let newAngle = Math.angleBetween({x: 0, y: 0}, normal);
-                if (entity.trackDirection === -1) {
-                    newAngle += Math.PI;
-                }
-                newAngle = Math.normalizeAngleRadians(entity.currentTrack.rotation + (newAngle - Math.PI / 2));
-                let currentAngle = Math.normalizeAngleRadians(entity.rotation);
-                if (Math.abs(Math.differenceBetweenAngles(currentAngle, newAngle)) >= Math.PI / 2) {
-                    entity.trackDirection *= -1;
-                }
-            }
-
-            let projection = entity.currentTrack.bezier.get(entity.currentTrackT);
-            let global = app.cstage.toLocal({
-                x: projection.x,
-                y: projection.y
-            }, entity.currentTrack, undefined, true);
-            entity.x = global.x;
-            entity.y = global.y;
-
-            if (game.getSelectedEntity() === entity) {
-                game.buildingSelectedMenuComponent?.refresh(true);
-            }
-        };
-
-        return entity;
-    }
 
     game.setPickupEntities = function(pickup, ignoreOffset, position, ignoreLock) {
         if (pickupSelectedEntities !== pickup) {
@@ -4307,45 +1996,63 @@ try {
                 pickupSelectedEntities = pickup;
             }
         }
-    }
+    };
 
-    game.create = function(type, subtype, x, y, z) {
-        if (type === 'preset') {
-            fetch(subtype).then(response => {
-                return response.json();
-            }).then(saveObject => {
-                try {
-                    game.loadSave(saveObject, true);
-                } catch (e) {
-                    console.error('Failed to load preset:', e);
+    game.createObject = function(dataKey, x = 0, y = 0, z = 0, rotation = 0, id, pickup = true) {
+        if (typeof dataKey === 'string') {
+            dataKey = gameData.buildings[dataKey];
+        }
+        if (dataKey) {
+            if (dataKey.preset) {
+                fetch(dataKey.dataFile).then(response => {
+                    return response.json();
+                }).then(saveObject => {
+                    try {
+                        game.loadSave(saveObject, true);
+                    } catch (e) {
+                        console.error('Failed to load preset:', e);
+                    }
+                }).catch(e => {
+                    console.info('Failed to load preset. This will typically occur if one doesn\'t exist.');
+                });
+                return true;
+            } else {
+                let type = dataKey.type ?? 'building', subtype = dataKey.subtype ?? dataKey.key;
+                if (typeof id === 'number' && id >= _entityIds) {
+                    _entityIds = id + 1;
                 }
-            }).catch(e => {
-                console.info('Failed to load preset. This will typically occur if one doesn\'t exist.');
-            });
-        } else {
-            game.updateConstructionMode(type, subtype);
-            let entity = createSelectableEntity(type, subtype, x ?? 0, y ?? 0, z ?? 0);
-            game.selectEntity(entity);
-            if (type === 'text') {
-                game.resetConstructionMode();
-                setTimeout(() => {
-                    // Unsure what's causing the text to unfocus, so added timeout here so it's forced.
-                    game.buildingSelectedMenuComponent?.focusText();
-                }, 150);
+                id = id ?? _entityIds++;
+
+                let entity = new (draggableTypes[type] ?? draggableTypes.default)(id, type, subtype, x, y, z, rotation);
+                app.cstage.addChild(entity);
+                entities.push(entity);
+                entityMap[entity.id] = entity;
+
+                if (pickup) {
+                    game.updateConstructionMode(type, subtype);
+                    game.selectEntity(entity);
+                    if (type === 'text') {
+                        game.resetConstructionMode();
+                        setTimeout(() => {
+                            // Unsure what's causing the text to unfocus, so added timeout here so it's forced.
+                            game.buildingSelectedMenuComponent?.focusText();
+                        }, 150);
+                    }
+                    game.setPickupEntities(true, true);
+                    if (entity.hasHandle) {
+                        entity.shouldSelectLastHandlePoint = true;
+                    }
+                }
+                return entity;
             }
-            game.setPickupEntities(true, true);
-            if (entity.hasHandle) {
-                entity.shouldSelectLastHandlePoint = true;
-            }
-            return entity;
         }
         return null;
-    }
+    };
 
-    game.createBuildingAtCenter = function(key) {
+    game.createBuildingAtCenter = function(dataKey) {
         let zoomRatio = WIDTH/(WIDTH*camera.zoom);
         game.resetConstructionMode();
-        return createSelectableEntity('building', key, (camera.x + WIDTH/2) * zoomRatio, (camera.y + HEIGHT/2) * zoomRatio, 0);
+        return game.createObject(dataKey, (camera.x + WIDTH/2) * zoomRatio, (camera.y + HEIGHT/2) * zoomRatio, 0, 0, undefined, false);
     };
 
     game.cloneSelected = function() {
@@ -4360,7 +2067,7 @@ try {
             if (upgradeKey && bData.parent?.key && upgradeKey === entity.building.key) {
                 upgradeKey = bData.parent.key;
             }
-            let clone = createSelectableEntity('building', upgradeKey ?? entity.building.key, entity.x, entity.y, entity.z, entity.rotation, entity.id);
+            let clone = game.createObject(upgradeKey ?? entity.building.key, entity.x, entity.y, entity.z, entity.rotation, entity.id, false);
             if (upgradeKey) {
                 let position = { x: clone.x, y: clone.y };
                 if (entity.building?.positionOffset) {
@@ -4376,12 +2083,12 @@ try {
             }
             clone.locked = entity.locked;
             clone.selectionArea.tint = clone.locked ? COLOR_RED : COLOR_WHITE;
-            let entityData = {
+            let objData = {
                 upgrading: true
             };
-            entity.onSave(entityData);
-            clone.onLoad(entityData);
-            clone.afterLoad(entityData);
+            entity.onSave(objData);
+            clone.onLoad(objData);
+            clone.afterLoad(objData);
             game.selectEntity(clone);
             if (entity.sockets) {
                 for (const entitySocket of entity.sockets) {
@@ -4836,7 +2543,7 @@ try {
             }
         }
 
-        if (mouseDown[2] && !selectedHandlePoint) {
+        if (mouseDown[2] && !game.selectedHandlePoint) {
             if (!selectionRotation && game.getSelectedLockState() === null) {
                 let rotationOffset = null;
                 selectedEntities.forEach(selectedEntity => {
@@ -4879,7 +2586,7 @@ try {
         // TODO: Check for mouse pickup but for right click instead.
         if (selectionRotation || pickupSelectedEntities) {
             game.buildingSelectedMenuComponent?.refresh(true);
-            if (!selectedHandlePoint && (!ignoreMousePickup || (Date.now()-pickupTime > 250 || Math.distanceBetween(pickupPosition, {x: gmx, y: gmy}) > 20))) {
+            if (!game.selectedHandlePoint && (!ignoreMousePickup || (Date.now()-pickupTime > 250 || Math.distanceBetween(pickupPosition, {x: gmx, y: gmy}) > 20))) {
                 if (ignoreMousePickup) {
                     if (followEntity) {
                         game.followEntity(null);
@@ -5186,7 +2893,7 @@ try {
             }
         }
 
-        if (game.saveStateChanged && game.settings.enableHistory && !pickupSelectedEntities && !selectedHandlePoint && !selectionRotation) {
+        if (game.saveStateChanged && game.settings.enableHistory && !pickupSelectedEntities && !game.selectedHandlePoint && !selectionRotation) {
             game.saveStateChanged = false;
             game.updateSave();
         }

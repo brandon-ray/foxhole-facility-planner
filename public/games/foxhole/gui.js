@@ -279,7 +279,7 @@ Vue.component('app-menu-statistics', {
                 bunker.structuralIntegrity = bunker.total === 1 ? 1 : bunker.structuralIntegrity;
                 bunker.maxHealth = Math.floor(bunker.maxHealth * bunker.structuralIntegrity);
                 bunker.class = bunker.structuralIntegrity >= 0.75 ? 'high' : (bunker.structuralIntegrity >= 0.5 ? 'medium' : (bunker.structuralIntegrity >= 0.25 ? 'low' : 'critical'));
-                for (const [weaponKey, weapon] of Object.entries(foxholeData.weapons)) {
+                for (const [weaponKey, weapon] of Object.entries(gameData.weapons)) {
                     if (weapon.damageType) {
                         let damageProfiles = {};
                         for (const [type, damage] of Object.entries(weapon.damageType.profiles)) {
@@ -315,7 +315,7 @@ Vue.component('app-menu-statistics', {
             <button class="btn-small m-0 mr-2 float-right" :class="{'btn-active': game.settings.enableSelectionStats}" title="Toggle Selection Stats" @click="game.settings.enableSelectionStats = !game.settings.enableSelectionStats; game.updateSettings(); game.refreshStats()"><i class="fa fa-mouse-pointer"></i></button>
         </div>
         <div class="board-panel-body">
-            <div v-if="!(cost || bunker?.total || displayTime || powerProduced || powerConsumed || powerTotal || garrisonSupplies || input || output)" class="text-center" style="color: #f0f0f0">Place buildings to see their stats here.</div>
+            <div v-if="!(cost || bunker?.total || displayTime || powerProduced || powerConsumed || powerTotal || garrisonSupplies || input || output)" class="text-center" style="color: #f0f0f0">{{game.settings.enableSelectionStats ? 'Select' : 'Place'}} buildings to see their stats here.</div>
             <div v-if="cost" class="construction-options-wrapper">
                 <h5 class="construction-options-header"><i class="fa fa-wrench"></i> {{selection && 'Selection ' || ''}}Construction Cost</h5>
                 <div>
@@ -349,10 +349,10 @@ Vue.component('app-menu-statistics', {
                             <div class="weapon-damage">T1/T2</div>
                             <div class="weapon-damage">T3</div>
                         </div>
-                        <div class="weapon-row d-flex" v-for="(damageProfile, weapon) in bunker?.damageProfiles" :title="foxholeData.weapons[weapon].name">
+                        <div class="weapon-row d-flex" v-for="(damageProfile, weapon) in bunker?.damageProfiles" :title="gameData.weapons[weapon].name">
                             <div class="weapon-name flex-grow-2">
-                                <div class="resource-icon mr-2" :style="{backgroundImage: 'url(' + foxholeData.weapons[weapon].icon + ')'}"></div>
-                                {{foxholeData.weapons[weapon].alias ?? foxholeData.weapons[weapon].name}}
+                                <div class="resource-icon mr-2" :style="{backgroundImage: 'url(' + gameData.weapons[weapon].icon + ')'}"></div>
+                                {{gameData.weapons[weapon].alias ?? gameData.weapons[weapon].name}}
                             </div>
                             <div class="weapon-damage">{{damageProfile.t2}}</div>
                             <div class="weapon-damage">{{damageProfile.t3}}</div>

@@ -1016,7 +1016,7 @@ Vue.component('app-game-building-list-icon', {
     methods: {
         buildBuilding: function(building) {
             this.bmc();
-            game.create((building.preset && 'preset') || 'building', building.preset ? building.dataFile : building.key);
+            game.createObject(building);
             game.sidebarMenuComponent.showHoverMenu(null);
         },
         buildingHover: function(building) {

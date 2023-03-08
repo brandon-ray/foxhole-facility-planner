@@ -10,10 +10,10 @@ const game_asset_list = {
 
 (function() {
     window.objectData = {
-        "categories": foxholeData.categories,
-        "tech": foxholeData.tech,
-        "resources": foxholeData.resources,
-        "buildings": foxholeData.buildings
+        "categories": gameData.categories,
+        "tech": gameData.tech,
+        "resources": gameData.resources,
+        "buildings": gameData.buildings
     };
 
     for (const building of Object.values(window.objectData.buildings)) {
@@ -201,7 +201,7 @@ const game_asset_list = {
         }
     }
 
-    for (const weapon of Object.values(foxholeData.weapons)) {
+    for (const weapon of Object.values(gameData.weapons)) {
         if (weapon.icon) {
             weapon.icon = assetDir(weapon.icon);
             game_asset_list[weapon.icon] = weapon.icon;
@@ -210,7 +210,7 @@ const game_asset_list = {
 
     window.objectData.categories.presets.buildings = [];
     window.objectData.categories.showcase.buildings = [];
-    for (const [key, data] of Object.entries(foxholeData.presets)) {
+    for (const [key, data] of Object.entries(gameData.presets)) {
         data.preset = true;
         data.category = (data.module && 'presets') || 'showcase';
         data.dataFile = assetDir(`presets/${key}/preset.json`);

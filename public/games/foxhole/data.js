@@ -1,4 +1,4 @@
-const foxholeData = {
+const gameData = {
 	"categories": {
 		"presets": {
 			"name": "Modules",
