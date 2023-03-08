@@ -203,11 +203,6 @@ const gameData = {
 			"description": "While the Noble Firebrand Mk. XVII is a deadly flamethrower tank, a more efficient means of employing flame weapons was needed. Enter the Wild Jack. Named for the fiery idols made by children for Dead Harvest, the Wild Jack is a variation of the Highlander.",
 			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarFlameWarVehicleIcon.webp"
 		},
-		"armoredcarmobilityc": {
-			"name": "T12 “Actaeon” Tankette",
-			"description": "This complete overhaul of the T3 Armoured Car is reinforced with tank armour. While these extra defenses lower the T12’s overall speed and handling, the addition of treads provide increased performance in less than ideal terrain.",
-			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarDefensiveVehicleIcon.webp"
-		},
 		"armoredcarmobilityw": {
 			"name": "O’Brien V.121 Highlander",
 			"description": "Fitted with all-terrain treads, the Highlander brings significant all-terrain mobility and performs especially well in snowy and mountainous environments. ",
@@ -301,7 +296,17 @@ const gameData = {
 		"concrete": {
 			"name": "Concrete Materials",
 			"description": "A concrete compound that is used to build heavily fortified structures.",
-			"icon": "game/Textures/UI/ItemIcons/CivicMaterialsIcon.webp"
+			"icon": "game/Textures/UI/ItemIcons/ConcreteBagIcon.webp"
+		},
+		"construction": {
+			"name": "BMS - Universal Assembly Rig",
+			"description": "A specialized vehicle designed by the Basset Motor Society used in the construction of large structures.",
+			"icon": "game/Textures/UI/VehicleIcons/ConstructionVehicleIcon.webp"
+		},
+		"constructionutility": {
+			"name": "BMS - Fabricator",
+			"description": "An advanced variant of the Universal Assembly Rig, the BMS - Fabricator is fitted with a unique kit designed to handle advanced or specialized construction and excavation jobs.",
+			"icon": "game/Textures/UI/VehicleIcons/AdvancedConstructionVehicleIcon.webp"
 		},
 		"destroyertankflamew": {
 			"name": "Noble Firebrand Mk. XVII",
@@ -451,11 +456,6 @@ const gameData = {
 			"description": "A drum containing fuel for use with flame weapons.",
 			"icon": "game/Textures/UI/ItemIcons/FlameAmmoIcon.webp"
 		},
-		"garrisonsupplies": {
-			"name": "Garrison Supplies",
-			"description": "Supplies for maintaining structures. Store at Bases to prevent decay on surrounding structures.",
-			"icon": "game/Textures/UI/ItemIcons/GarrisonSuppliesIcon.webp"
-		},
 		"grenadelaunchertc": {
 			"name": "Mounted Fissura gd.I",
 			"description": "Capable of firing different grenades, quickly and at long range, the Fissura gd.I is mobile enough for easy transport, while increasing the effectiveness of infantry ordinance. ",
@@ -580,6 +580,11 @@ const gameData = {
 			"name": "300mm",
 			"description": "Standard payload used with Storm Cannons.",
 			"icon": "game/Textures/UI/ItemIcons/LRArtilleryAmmoItemIcon.webp"
+		},
+		"maintenancesupplies": {
+			"name": "Maintenance Supplies",
+			"description": "Supplies for maintaining structures. Store at Bases or Maintenance Tunnels to prevent decay on surrounding structures.",
+			"icon": "game/Textures/UI/ItemIcons/MaintenanceSuppliesIcon.webp"
 		},
 		"materialplatform": {
 			"name": "Material Pallet",
@@ -711,12 +716,12 @@ const gameData = {
 		"scouttankoffensivew": {
 			"name": "King Gallant Mk. II",
 			"description": "A heavily armoured variant of the King Spire, the Gallant Mk. II boasts a weighty 30mm cannon at the cost of top speed.",
-			"icon": "game/Textures/UI/VehicleIcons/ScouTankOffensiveWIcon.webp"
+			"icon": "game/Textures/UI/VehicleIcons/ScoutTankOffensiveWIcon.webp"
 		},
 		"scouttankw": {
 			"name": "King Spire Mk. I",
 			"description": "This small tank has been recently recommissioned to the Warden arsenal. It boasts high maneuverability and an antenna that allows for long-range communications during high-stakes recon operations.",
-			"icon": "game/Textures/UI/VehicleIcons/ScoutVehicleWar.webp"
+			"icon": "game/Textures/UI/VehicleIcons/ScoutTankWIcon.webp"
 		},
 		"scoutvehiclemobilityc": {
 			"name": "UV-05a “Argonaut”",
@@ -758,6 +763,11 @@ const gameData = {
 			"description": "The Mineseeker is the Bassett Motor Society’s mechanized mule. This small 0-4-0 locomotive can haul tonnes of weight over short distances with little overhead. Ideal for a mining operation or short-range supply chains. ",
 			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeEngineVehicleIcon.webp"
 		},
+		"smalltrainfuelcontainer": {
+			"name": "BMS Tinderbox",
+			"description": "The Tinderbox is a simple car used for transporting liquids between facilities.",
+			"icon": "game/Textures/UI/VehicleIcons/SmallTrainFuelContainerIcon.webp"
+		},
 		"smalltrainresourceplatform": {
 			"name": "BMS Linerunner",
 			"description": "A low profile flatbed car for transporting large resources and munitions over short distances on small gauge tracks.",
@@ -777,6 +787,11 @@ const gameData = {
 			"name": "Cullen Predator Mk. III",
 			"description": "This gargantuan beast is the brainchild of Gray Cullen. Once thought impossible, the Predator was Cullen’s idea of how a great ship might operate on land. It boasts two sets of quad-barrelled grenade launches and a heavy-duty 94.5mm forward facing cannon. While limitations of ground-based travel posed certain restrictions on the scope of the project, Cullen wasn’t deterred and made necessary adjustments to meet his vision of the ideal land ship.",
 			"icon": "game/Textures/UI/VehicleIcons/SuperTankWVehicleIcon.webp"
+		},
+		"tankettec": {
+			"name": "T12 “Actaeon” Tankette",
+			"description": "This complete overhaul of the T3 Armoured Car is reinforced with tank armour. While these extra defenses lower the T12’s overall speed and handling, the addition of treads provide increased performance in less than ideal terrain.",
+			"icon": "game/Textures/UI/VehicleIcons/TanketteCVehicleIcon.webp"
 		},
 		"tanketteflamec": {
 			"name": "T14 “Vesta” Tankette",
@@ -924,7 +939,7 @@ const gameData = {
 					"t3": 0.25
 				}
 			},
-			"damage": 200
+			"damage": 400
 		},
 		"minitankammo": {
 			"name": "30mm",
@@ -1147,12 +1162,28 @@ const gameData = {
 				}
 			}
 		},
-		"satchelcharge": {
+		"satchelchargew": {
 			"name": "Alligator Charge",
 			"description": "Alligator Charge",
 			"icon": "game/Textures/UI/StructureIcons/SatchelCharge.webp",
-			"codeName": "satchelcharge",
+			"codeName": "satchelchargew",
 			"alias": "Satchel",
+			"damage": 300,
+			"damageType": {
+				"name": "Demolition",
+				"profiles": {
+					"t1": 1,
+					"t2": 1,
+					"t3": 1
+				}
+			}
+		},
+		"satchelcharget": {
+			"name": "Havoc Charge Detonator",
+			"description": "Havoc Charge Detonator",
+			"icon": "game/Textures/UI/ItemIcons/SatchelChargeTIcon.webp",
+			"codeName": "satchelcharget",
+			"alias": "Havoc",
 			"damage": 1500,
 			"damageType": {
 				"name": "Demolition",
@@ -1286,23 +1317,22 @@ const gameData = {
 					"_productionLength": 8,
 					"production": [
 						{
+							"id": 4,
+							"input": {
+								"facilitymaterials1": 2
+							},
+							"output": {
+								"tripod": 1
+							},
+							"time": 25
+						},
+						{
 							"id": 0,
 							"input": {
 								"facilitymaterials1": 3
 							},
 							"output": {
 								"isgtc": 1
-							},
-							"faction": "c",
-							"time": 25
-						},
-						{
-							"id": 1,
-							"input": {
-								"facilitymaterials1": 3
-							},
-							"output": {
-								"grenadelaunchertc": 1
 							},
 							"faction": "c",
 							"time": 25
@@ -1330,24 +1360,14 @@ const gameData = {
 							"time": 25
 						},
 						{
-							"id": 4,
-							"input": {
-								"facilitymaterials1": 2
-							},
-							"output": {
-								"tripod": 1
-							},
-							"time": 25
-						},
-						{
-							"id": 5,
+							"id": 1,
 							"input": {
 								"facilitymaterials1": 3
 							},
 							"output": {
-								"atrpgtw": 1
+								"grenadelaunchertc": 1
 							},
-							"faction": "w",
+							"faction": "c",
 							"time": 25
 						},
 						{
@@ -1357,6 +1377,17 @@ const gameData = {
 							},
 							"output": {
 								"rpgtw": 1
+							},
+							"faction": "w",
+							"time": 25
+						},
+						{
+							"id": 5,
+							"input": {
+								"facilitymaterials1": 3
+							},
+							"output": {
+								"atrpgtw": 1
 							},
 							"faction": "w",
 							"time": 25
@@ -1421,6 +1452,7 @@ const gameData = {
 							"output": {
 								"herocketammo": 1
 							},
+							"faction": "c",
 							"time": 25
 						},
 						{
@@ -1440,7 +1472,7 @@ const gameData = {
 				"large_shell_factory": {
 					"name": "Large Shell Factory",
 					"codeName": "LargeShellFactory",
-					"description": "Produces large calibre ordinance for use with tanks and artillery.",
+					"description": "Produces large calibre ordnance for use with tanks and artillery.",
 					"hitArea": [
 						{
 							"shape": [ 84.16,-153.28,26.56,-152,27.2,-203.2,54.08,-209.6,83.52,-203.2 ]
@@ -1993,7 +2025,7 @@ const gameData = {
 					"output": {
 						"facilitycoal1": 180
 					},
-					"time": 120
+					"time": 270
 				}
 			],
 			"upgrades": {
@@ -2040,7 +2072,7 @@ const gameData = {
 								"facilitycoal1": 165,
 								"sulfur": 15
 							},
-							"time": 120
+							"time": 270
 						}
 					]
 				},
@@ -2138,8 +2170,8 @@ const gameData = {
 								"concrete": 1,
 								"oil": 50
 							},
-							"time": 120,
-							"power": -4
+							"time": 270,
+							"power": -6
 						}
 					]
 				},
@@ -2243,8 +2275,8 @@ const gameData = {
 								"facilitycoal1": 260,
 								"facilityoil1": 60
 							},
-							"time": 180,
-							"power": -4
+							"time": 405,
+							"power": -6
 						}
 					]
 				}
@@ -2510,6 +2542,24 @@ const gameData = {
 							},
 							"time": 90,
 							"power": 12
+						}
+					]
+				},
+				"coal": {
+					"name": "Coal Power Plant",
+					"codeName": "Coal",
+					"description": "A generator that burns coal to generate power.",
+					"icon": "game/Textures/UI/ItemIcons/FacilityPowerDieselCoalIcon.webp",
+					"texture": "game/Textures/Structures/diesel_power_plant_undefined.webp",
+					"_productionLength": 1,
+					"production": [
+						{
+							"id": 0,
+							"input": {
+								"coal": 60
+							},
+							"time": 90,
+							"power": 5
 						}
 					]
 				}
@@ -2933,7 +2983,7 @@ const gameData = {
 			"maxHealth": 3500,
 			"structuralIntegrity": 0.75,
 			"cost": {
-				"concrete": 50
+				"concrete": 25
 			},
 			"repairCost": 200,
 			"upgrades": {
@@ -3195,7 +3245,7 @@ const gameData = {
 			"maxHealth": 2000,
 			"structuralIntegrity": 0.99,
 			"cost": {
-				"concrete": 30
+				"concrete": 15
 			},
 			"repairCost": 120,
 			"upgrades": {
@@ -3720,6 +3770,19 @@ const gameData = {
 						"cloth": 75
 					},
 					"repairCost": 75
+				},
+				"ammoroomt2": {
+					"name": "Storage Room (Tier 2)",
+					"codeName": "AmmoRoomT2",
+					"description": "A facility that stores equipment and ammunition for artillery. Retrieval is very quick for this structure.",
+					"icon": "game/Textures/UI/StructureIcons/AmmoRoomIcon.webp",
+					"texture": "game/Textures/Structures/ammoroomt2.webp",
+					"maxHealth": 1850,
+					"structuralIntegrity": 0.85,
+					"cost": {
+						"cloth": 35
+					},
+					"repairCost": 120
 				}
 			}
 		},
@@ -3808,14 +3871,14 @@ const gameData = {
 			"maxHealth": 2000,
 			"structuralIntegrity": 0.99,
 			"cost": {
-				"concrete": 30
+				"concrete": 15
 			},
 			"repairCost": 120,
 			"upgrades": {
 				"intelcenter": {
 					"name": "Intelligence Center",
 					"codeName": "IntelCenter",
-					"description": "A high-tech listening post designed to intercept and decode enemy transmissions. The intelligence Center can target distant locations and will continue to decipher sensitive transmissions over a sustained period.",
+					"description": "A high-tech listening post designed to intercept and decode enemy transmissions. The Intelligence Center can target distant locations and will continue to decipher sensitive transmissions over a sustained period.",
 					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/IntelligenceCenterIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_intelcenter.webp",
@@ -3823,14 +3886,14 @@ const gameData = {
 					"maxHealth": 2550,
 					"structuralIntegrity": 0.65,
 					"cost": {
-						"concrete": 250
+						"concrete": 125
 					},
 					"repairCost": 1200
 				},
 				"lrartillery": {
 					"name": "Storm Cannon",
 					"codeName": "LRArtillery",
-					"description": "A heavy fixed position artillery that can release devastating firepower on distant enemy targets.",
+					"description": "A heavy fixed position artillery piece that can release devastating firepower on distant enemy targets.",
 					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/LongRangedArtilleryIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_lrartillery.webp",
@@ -3841,14 +3904,14 @@ const gameData = {
 					"maxHealth": 2550,
 					"structuralIntegrity": 0.65,
 					"cost": {
-						"concrete": 400
+						"concrete": 200
 					},
-					"repairCost": 1600
+					"repairCost": 500
 				},
 				"ammoroomt3": {
-					"name": "Storage Room",
+					"name": "Storage Room (Tier 3)",
 					"codeName": "AmmoRoomT3",
-					"description": "A facility that stores equipment and ammunition for artillery. Retrieval is very quick for this structure.. ",
+					"description": "A facility that stores equipment and ammunition for artillery. Retrieval is very quick for this structure.",
 					"icon": "game/Textures/UI/StructureIcons/AmmoRoomIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_ammoroom.webp",
 					"maxHealth": 2000,
@@ -3856,7 +3919,7 @@ const gameData = {
 					"cost": {
 						"concrete": 10
 					},
-					"repairCost": 200
+					"repairCost": 160
 				},
 				"artilleryait3": {
 					"name": "Howitzer Garrison",
@@ -3889,7 +3952,7 @@ const gameData = {
 					"maxHealth": 1750,
 					"structuralIntegrity": 0.93,
 					"cost": {
-						"concrete": 40
+						"concrete": 20
 					},
 					"repairCost": 160
 				},
@@ -3928,7 +3991,7 @@ const gameData = {
 					"maxHealth": 1750,
 					"structuralIntegrity": 0.93,
 					"cost": {
-						"concrete": 40
+						"concrete": 20
 					},
 					"repairCost": 160
 				},
@@ -3942,7 +4005,7 @@ const gameData = {
 					"maxHealth": 1500,
 					"structuralIntegrity": 0.85,
 					"cost": {
-						"concrete": 50
+						"concrete": 25
 					},
 					"repairCost": 120
 				},
@@ -3964,7 +4027,7 @@ const gameData = {
 					"maxHealth": 3000,
 					"structuralIntegrity": 0.96,
 					"cost": {
-						"concrete": 30
+						"concrete": 15
 					},
 					"repairCost": 120
 				},
@@ -3991,7 +4054,7 @@ const gameData = {
 					"maxHealth": 1750,
 					"structuralIntegrity": 0.93,
 					"cost": {
-						"concrete": 20
+						"concrete": 10
 					},
 					"repairCost": 160
 				},
@@ -4075,7 +4138,7 @@ const gameData = {
 					"maxHealth": 2000,
 					"structuralIntegrity": 0.99,
 					"cost": {
-						"concrete": 20
+						"concrete": 10
 					},
 					"repairCost": 120
 				},
@@ -4096,7 +4159,7 @@ const gameData = {
 					"maxHealth": 2250,
 					"structuralIntegrity": 0.96,
 					"cost": {
-						"concrete": 30
+						"concrete": 15
 					},
 					"repairCost": 120
 				}
@@ -4105,7 +4168,7 @@ const gameData = {
 		"forwardbase1": {
 			"name": "Encampment",
 			"codeName": "ForwardBase1",
-			"description": "A temporary forward operating base. Players can spawn from here.",
+			"description": "A temporary forward operating base. Players can spawn and stockpile items here.",
 			"category": "misc",
 			"categoryOrder": 5,
 			"baseGarrisonRadius": 80,
@@ -4544,9 +4607,9 @@ const gameData = {
 			"texture": "game/Textures/Vehicles/freighter.webp"
 		},
 		"fuel_container": {
-			"name": "Fuel Container",
+			"name": "Liquid Container",
 			"codeName": "FuelContainer",
-			"description": "A container for storing high volumes of fuel. Nearby structures and vehicles can refuel directly from this container. ",
+			"description": "A container for storing high volumes of liquids. Nearby structures and vehicles can refill directly from this container. ",
 			"category": "misc",
 			"categoryOrder": 4,
 			"sortLayer": "container",
@@ -4755,7 +4818,7 @@ const gameData = {
 			"techId": "unlockharvester"
 		},
 		"large_assembly_factory": {
-			"name": "Large Assembly Factory",
+			"name": "Large Assembly Station",
 			"codeName": "FacilityVehicleFactory2",
 			"description": "A large Assembly Station for production of advanced vehicles and equipment, such as tanks and trains. Construction will take time and may be halted if resources are depleted.",
 			"category": "factories",
@@ -5007,7 +5070,7 @@ const gameData = {
 			}
 		},
 		"light_vehicle_assembly_station": {
-			"name": "Light Vehicle Assembly Station",
+			"name": "Small Assembly Station",
 			"codeName": "FacilityVehicleFactory1",
 			"description": "A standard Assembly Station for production of essential vehicles and equipment. Construction will take time and may be halted if resources are depleted. Some projects require a base vehicle to be present on the Assembly Station before production can begin.",
 			"category": "factories",
@@ -5040,7 +5103,7 @@ const gameData = {
 				"facilitymaterials1": 75
 			},
 			"repairCost": 150,
-			"_productionLength": 12,
+			"_productionLength": 13,
 			"production": [
 				{
 					"id": 0,
@@ -5173,6 +5236,18 @@ const gameData = {
 					},
 					"faction": "w",
 					"time": 300
+				},
+				{
+					"id": 12,
+					"input": {
+						"facilitymaterials1": 35,
+						"facilitymaterials4": 5,
+						"facilitymaterials5": 15
+					},
+					"output": {
+						"smalltrainfuelcontainer": 1
+					},
+					"time": 300
 				}
 			],
 			"upgrades": {
@@ -5216,7 +5291,7 @@ const gameData = {
 						{
 							"id": 2,
 							"input": {
-								"armoredcarmobilityc": 1,
+								"tankettec": 1,
 								"facilitymaterials1": 10,
 								"facilitymaterials4": 15
 							},
@@ -5229,7 +5304,7 @@ const gameData = {
 						{
 							"id": 3,
 							"input": {
-								"armoredcarmobilityc": 1,
+								"tankettec": 1,
 								"facilitymaterials2": 10,
 								"facilitymaterials4": 15
 							},
@@ -5463,7 +5538,7 @@ const gameData = {
 					"cost": {
 						"facilitymaterials2": 25
 					},
-					"_productionLength": 6,
+					"_productionLength": 7,
 					"production": [
 						{
 							"id": 0,
@@ -5473,6 +5548,17 @@ const gameData = {
 							},
 							"output": {
 								"harvester": 1
+							},
+							"time": 900
+						},
+						{
+							"id": 6,
+							"input": {
+								"construction": 1,
+								"facilitymaterials2": 10
+							},
+							"output": {
+								"constructionutility": 1
 							},
 							"time": 900
 						},
@@ -5882,20 +5968,7 @@ const gameData = {
 			"cost": {
 				"facilitymaterials1": 200
 			},
-			"repairCost": 100,
-			"_productionLength": 1,
-			"production": [
-				{
-					"id": 0,
-					"input": {
-						"facilitymaterials1": 1
-					},
-					"output": {
-						"garrisonsupplies": 10
-					},
-					"time": 225
-				}
-			]
+			"repairCost": 100
 		},
 		"material_transfer_station": {
 			"name": "Material Transfer Station",
@@ -5971,7 +6044,7 @@ const gameData = {
 				"cloth": 200
 			},
 			"repairCost": 150,
-			"_productionLength": 1,
+			"_productionLength": 2,
 			"production": [
 				{
 					"id": 0,
@@ -5982,6 +6055,17 @@ const gameData = {
 						"facilitymaterials1": 1
 					},
 					"time": 25
+				},
+				{
+					"id": 1,
+					"input": {
+						"metal": 100
+					},
+					"output": {
+						"maintenancesupplies": 20
+					},
+					"time": 25,
+					"power": -3
 				}
 			],
 			"upgrades": {
@@ -7726,7 +7810,7 @@ const gameData = {
 		"power_pole": {
 			"name": "Power Pole",
 			"codeName": "PowerPole",
-			"description": "Used to connect Power Lines. Up to 4 Power Lines can be attached to a singe pole.",
+			"description": "Used to connect Power Lines. Up to 4 Power Lines can be attached to a single pole.",
 			"category": "power",
 			"sortLayer": "power_pole",
 			"icon": "game/Textures/UI/StructureIcons/PowerLineB.webp",
@@ -7871,8 +7955,8 @@ const gameData = {
 				{
 					"id": 1,
 					"input": {
-						"coal": 60,
-						"water": 25
+						"coal": 30,
+						"water": 1
 					},
 					"time": 90,
 					"power": 10
@@ -7968,8 +8052,8 @@ const gameData = {
 						{
 							"id": 1,
 							"input": {
-								"facilitycoal1": 60,
-								"water": 25
+								"facilitycoal1": 30,
+								"water": 1
 							},
 							"output": {
 								"sulfur": 5
@@ -8199,7 +8283,7 @@ const gameData = {
 		"relicbase1": {
 			"name": "Relic Base",
 			"codeName": "RelicBase1",
-			"description": "A world base that players can respawn and rearm at. It can be destroyed and rebuilt to be claimed by a faction. It has garrison upgrades to supply local structures with garrison supplies. This structure cannot be placed by a player, and is entirely for your reference.",
+			"description": "An old fort. Players can spawn and stockpile items here.",
 			"category": "misc",
 			"categoryOrder": 6,
 			"baseGarrisonRadius": 150,
@@ -8574,7 +8658,7 @@ const gameData = {
 				{
 					"id": 0,
 					"input": {
-						"petrol": 4
+						"petrol": 1
 					},
 					"output": {
 						"coal": 50
@@ -8655,7 +8739,7 @@ const gameData = {
 				"excavator": {
 					"name": "Excavator",
 					"codeName": "Excavator",
-					"description": "Improves component excavation.",
+					"description": "An excavator that allows for the mining of Damaged Components when a Component Field is depleted",
 					"hitArea": [
 						{
 							"shape": [ 15.36,-131.84,19.84,-98.56,-16.64,-98.56,-12.16,-131.84 ]
@@ -8905,7 +8989,7 @@ const gameData = {
 		"townbase3": {
 			"name": "Town Base",
 			"codeName": "TownBase3",
-			"description": "A world base that players can respawn and rearm at. It can be destroyed and rebuilt to be claimed by a faction. It has garrison upgrades to supply local structures with garrison supplies. This structure cannot be placed by a player, and is entirely for your reference.",
+			"description": "A garrisoned focal building vital for the defence of a town. Players can spawn and stockpile items here.",
 			"category": "misc",
 			"categoryOrder": 7,
 			"baseGarrisonRadius": 150,
@@ -9326,7 +9410,7 @@ const gameData = {
 				}
 			],
 			"maxHealth": 1500,
-			"repairCost": 115,
+			"repairCost": 90,
 			"upgrades": {
 				"trenchconnectort1": {
 					"reference": "trenchconnectort1"
@@ -9376,9 +9460,9 @@ const gameData = {
 			],
 			"maxHealth": 1850,
 			"cost": {
-				"cloth": 75
+				"cloth": 60
 			},
-			"repairCost": 75
+			"repairCost": 60
 		},
 		"trenchconnectort3": {
 			"name": "Trench Connector (Tier 3)",
@@ -9417,7 +9501,7 @@ const gameData = {
 			],
 			"maxHealth": 3500,
 			"cost": {
-				"concrete": 30
+				"concrete": 15
 			},
 			"repairCost": 120
 		},
@@ -9819,7 +9903,7 @@ const gameData = {
 			],
 			"maxHealth": 3500,
 			"cost": {
-				"concrete": 20
+				"concrete": 10
 			},
 			"repairCost": 80
 		},
@@ -10054,7 +10138,7 @@ const gameData = {
 			],
 			"maxHealth": 3500,
 			"cost": {
-				"concrete": 20
+				"concrete": 10
 			},
 			"repairCost": 80,
 			"upgrades": {

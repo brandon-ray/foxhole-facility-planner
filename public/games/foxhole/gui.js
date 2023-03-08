@@ -92,7 +92,7 @@ Vue.component('app-menu-statistics', {
             powerProduced: 0,
             powerConsumed: 0,
             selection: false,
-            garrisonSupplies: 0
+            maintenanceSupplies: 0
         };
     },
     mounted() {
@@ -125,7 +125,7 @@ Vue.component('app-menu-statistics', {
             let powerTotal = 0;
             let powerProduced = 0;
             let powerConsumed = 0;
-            let garrisonSupplies = 0;
+            let maintenanceSupplies = 0;
             let garrisonConsumptionRate = Math.floor(this.time / 3600);
             let garrisonConsumptionReducers = [];
 
@@ -177,7 +177,7 @@ Vue.component('app-menu-statistics', {
                                     break;
                                 }
                             }
-                            garrisonSupplies += consumptionRate;
+                            maintenanceSupplies += consumptionRate;
                         }
 
                         let productionSelected = typeof entity.selectedProduction === 'number';
@@ -301,7 +301,7 @@ Vue.component('app-menu-statistics', {
             this.powerTotal = powerTotal;
             this.powerProduced = powerProduced;
             this.powerConsumed = powerConsumed;
-            this.garrisonSupplies = garrisonSupplies;
+            this.maintenanceSupplies = maintenanceSupplies;
 
             this.$forceUpdate();
         },
@@ -315,7 +315,7 @@ Vue.component('app-menu-statistics', {
             <button class="btn-small m-0 mr-2 float-right" :class="{'btn-active': game.settings.enableSelectionStats}" title="Toggle Selection Stats" @click="game.settings.enableSelectionStats = !game.settings.enableSelectionStats; game.updateSettings(); game.refreshStats()"><i class="fa fa-mouse-pointer"></i></button>
         </div>
         <div class="board-panel-body">
-            <div v-if="!(cost || bunker?.total || displayTime || powerProduced || powerConsumed || powerTotal || garrisonSupplies || input || output)" class="text-center" style="color: #f0f0f0">{{game.settings.enableSelectionStats ? 'Select' : 'Place'}} buildings to see their stats here.</div>
+            <div v-if="!(cost || bunker?.total || displayTime || powerProduced || powerConsumed || powerTotal || maintenanceSupplies || input || output)" class="text-center" style="color: #f0f0f0">{{game.settings.enableSelectionStats ? 'Select' : 'Place'}} buildings to see their stats here.</div>
             <div v-if="cost" class="construction-options-wrapper">
                 <h5 class="construction-options-header"><i class="fa fa-wrench"></i> {{selection && 'Selection ' || ''}}Construction Cost</h5>
                 <div>
@@ -392,10 +392,10 @@ Vue.component('app-menu-statistics', {
                     </select>
                 </div>
             </div>
-            <div v-if="garrisonSupplies || input" class="construction-options-wrapper">
+            <div v-if="maintenanceSupplies || input" class="construction-options-wrapper">
                 <h5 class="construction-options-header"><i class="fa fa-sign-in"></i> {{selection ? 'Selection' : 'Production'}} Input</h5>
                 <div class="statistics-panel-fac-input">
-                    <app-game-resource-icon v-if="garrisonSupplies" :resource="'garrisonsupplies'" :amount="garrisonSupplies"/>
+                    <app-game-resource-icon v-if="maintenanceSupplies" :resource="'maintenancesupplies'" :amount="maintenanceSupplies"/>
                     <app-game-resource-icon v-for="(value, key) in input" :resource="key" :amount="value"/>
                 </div>
             </div>
