@@ -2550,7 +2550,7 @@ const gameData = {
 					"codeName": "Coal",
 					"description": "A generator that burns coal to generate power.",
 					"icon": "game/Textures/UI/ItemIcons/FacilityPowerDieselCoalIcon.webp",
-					"texture": "game/Textures/Structures/diesel_power_plant_undefined.webp",
+					"texture": "game/Textures/Structures/diesel_power_plant_coal.webp",
 					"_productionLength": 1,
 					"production": [
 						{
@@ -3776,7 +3776,7 @@ const gameData = {
 					"codeName": "AmmoRoomT2",
 					"description": "A facility that stores equipment and ammunition for artillery. Retrieval is very quick for this structure.",
 					"icon": "game/Textures/UI/StructureIcons/AmmoRoomIcon.webp",
-					"texture": "game/Textures/Structures/ammoroomt2.webp",
+					"texture": "game/Textures/Structures/fortt2_ammoroom.webp",
 					"maxHealth": 1850,
 					"structuralIntegrity": 0.85,
 					"cost": {
@@ -3911,6 +3911,7 @@ const gameData = {
 				"ammoroomt3": {
 					"name": "Storage Room (Tier 3)",
 					"codeName": "AmmoRoomT3",
+					"prevUpgradeKey": "fortt2_ammoroomt2",
 					"description": "A facility that stores equipment and ammunition for artillery. Retrieval is very quick for this structure.",
 					"icon": "game/Textures/UI/StructureIcons/AmmoRoomIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_ammoroom.webp",
@@ -8550,6 +8551,37 @@ const gameData = {
 				"engine": true,
 				"mass": 500,
 				"maxSpeed": 2
+			}
+		},
+		"smalltrainfuelcontainer": {
+			"name": "BMS Tinderbox",
+			"codeName": "SmallTrainFuelContainer",
+			"description": "The Tinderbox is a simple car used for transporting liquids between facilities.",
+			"category": "trains",
+			"categoryOrder": 4,
+			"sortLayer": "vehicle",
+			"icon": "game/Textures/UI/VehicleIcons/SmallTrainFuelContainerIcon.webp",
+			"texture": "game/Textures/Vehicles/smalltrainfuelcontainer.webp",
+			"sockets": [
+				{
+					"id": 0,
+					"type": "smalltraincar",
+					"x": 468,
+					"y": 113,
+					"rotation": 90
+				},
+				{
+					"id": 1,
+					"type": "smalltraincar",
+					"x": 32,
+					"y": 113,
+					"rotation": 270
+				}
+			],
+			"vehicle": {
+				"type": "smalltrain",
+				"track": "rail_small_gauge",
+				"mass": 10
 			}
 		},
 		"smalltrainresourceplatform": {
