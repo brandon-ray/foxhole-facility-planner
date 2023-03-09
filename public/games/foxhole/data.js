@@ -2282,6 +2282,34 @@ const gameData = {
 				}
 			}
 		},
+		"concretemixer": {
+			"name": "Concrete Mixer",
+			"codeName": "ConcreteMixer",
+			"description": "A portable device that mixes various materials to form Concrete, which are used to build heavily fortified structures.",
+			"category": "misc",
+			"categoryOrder": 5,
+			"icon": "game/Textures/UI/StructureIcons/ConcreteMixerIcon.webp",
+			"texture": "game/Textures/Structures/concretemixer.webp",
+			"techId": "unlockconcretemixer",
+			"maxHealth": 1200,
+			"cost": {
+				"wood": 75
+			},
+			"repairCost": 75,
+			"_productionLength": 1,
+			"production": [
+				{
+					"id": 0,
+					"input": {
+						"components": 20
+					},
+					"output": {
+						"concrete": 1
+					},
+					"time": 20
+				}
+			]
+		},
 		"construction_vehicle": {
 			"name": "BMS - Universal Assembly Rig",
 			"codeName": "Construction",
@@ -2319,12 +2347,48 @@ const gameData = {
 			"texture": "game/Textures/Vehicles/construction_vehicle.webp",
 			"cost": false
 		},
+		"constructionutility": {
+			"name": "BMS - Fabricator",
+			"codeName": "ConstructionUtility",
+			"description": "An advanced variant of the Universal Assembly Rig, the BMS - Fabricator is fitted with a unique kit designed to handle advanced or specialized construction and excavation jobs.",
+			"category": "vehicles",
+			"categoryOrder": 10,
+			"hitArea": [
+				{
+					"shape": [ -109.76,19.52,-124.48,43.84,-124.48,20.16 ]
+				},
+				{
+					"shape": [ 27.84,-19.52,41.28,-43.84,41.92,-19.52 ]
+				},
+				{
+					"shape": [ 88.64,40.64,81.6,32.96,81.6,17.6,88.64,9.92,116.8,15.68,117.44,34.88 ]
+				},
+				{
+					"shape": [ -124.48,-43.84,41.28,-43.84,-110.4,-18.88,-124.48,-19.52 ]
+				},
+				{
+					"shape": [ 52.8,32.96,28.48,18.24,81.6,17.6,81.6,32.96 ]
+				},
+				{
+					"shape": [ 41.92,43.84,-124.48,43.84,28.48,18.24,52.8,32.96 ]
+				},
+				{
+					"shape": [ -124.48,43.84,-109.76,19.52,27.84,-19.52,28.48,18.24 ]
+				},
+				{
+					"shape": [ 41.28,-43.84,27.84,-19.52,-109.76,19.52,-110.4,-18.88 ]
+				}
+			],
+			"icon": "game/Textures/UI/VehicleIcons/AdvancedConstructionVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/advanced_construction_vehicle.webp",
+			"techId": "unlockconstructionutility"
+		},
 		"crane": {
 			"name": "BMS - Class 2 Mobile Auto-Crane",
 			"codeName": "Crane",
 			"description": "The Basset Motor Society’s Class 2 Mobile Auto-Crane is used to lift and reposition vehicles and very heavy equipment.",
 			"category": "vehicles",
-			"categoryOrder": 10,
+			"categoryOrder": 11,
 			"range": {
 				"type": "crane",
 				"min": null,
@@ -2631,6 +2695,34 @@ const gameData = {
 				"facilitymaterials2": 250
 			},
 			"repairCost": 100
+		},
+		"fieldhospital": {
+			"name": "Field Hospital",
+			"codeName": "FieldHospital",
+			"description": "A field medical facility used to treat critically wounded soldiers at the front line. ",
+			"category": "misc",
+			"categoryOrder": 6,
+			"hitArea": [
+				{
+					"shape": [ 39.36,-143.68,-38.72,-143.68,-34.88,-179.52,36.16,-179.52 ]
+				},
+				{
+					"shape": [ -34.88,178.88,-38.72,143.04,39.36,143.04,36.16,178.88 ]
+				},
+				{
+					"shape": [ 106.56,142.4,-38.72,143.04,-105.28,-142.4,106.56,-143.68 ]
+				},
+				{
+					"shape": [ -105.28,-142.4,-38.72,143.04,-105.28,142.4 ]
+				}
+			],
+			"icon": "game/Textures/UI/StructureIcons/FieldHospitalIcon.webp",
+			"texture": "game/Textures/Structures/fieldhospital.webp",
+			"maxHealth": 500,
+			"cost": {
+				"cloth": 200
+			},
+			"repairCost": 200
 		},
 		"flatbedtruck": {
 			"name": "BMS - Packmule Flatbed",
@@ -4191,7 +4283,7 @@ const gameData = {
 			"codeName": "ForwardBase1",
 			"description": "A temporary forward operating base. Players can spawn and stockpile items here.",
 			"category": "misc",
-			"categoryOrder": 5,
+			"categoryOrder": 7,
 			"baseGarrisonRadius": 80,
 			"icon": "game/Textures/UI/StructureIcons/EncampmentIcon.webp",
 			"texture": "game/Textures/Structures/forwardbase1.webp",
@@ -7432,6 +7524,17 @@ const gameData = {
 				}
 			}
 		},
+		"oilfield": {
+			"name": "Crude Oil Field",
+			"codeName": "OilField",
+			"description": "An Oil Field that can produce Oil for further refinement or for power production.",
+			"category": "misc",
+			"categoryOrder": 21,
+			"radius": 6,
+			"icon": "game/Textures/UI/ItemIcons/Facilities/OilIcon.webp",
+			"texture": "game/Textures/Structures/oilfield.webp",
+			"maxHealth": 2147483647
+		},
 		"oiltankerc": {
 			"name": "RR-3 “Stolon” Tanker.",
 			"codeName": "OilTankerC",
@@ -8306,7 +8409,7 @@ const gameData = {
 			"codeName": "RelicBase1",
 			"description": "An old fort. Players can spawn and stockpile items here.",
 			"category": "misc",
-			"categoryOrder": 6,
+			"categoryOrder": 8,
 			"baseGarrisonRadius": 150,
 			"hitArea": [
 				{
@@ -9038,12 +9141,30 @@ const gameData = {
 			},
 			"repairCost": 25
 		},
+		"tankstopsplinet3": {
+			"name": "Dragon's Teeth",
+			"codeName": "TankStopSplineT3",
+			"description": "An anti-tank obstacle that prevents vehicle access to an area, and is resistant to most types of damage.",
+			"category": "defenses",
+			"hasHandle": true,
+			"isBezier": true,
+			"minLength": 3,
+			"maxLength": 12.5,
+			"icon": "game/Textures/UI/StructureIcons/TankStopT3Icon.webp",
+			"texture": "game/Textures/Structures/tankstopsplinet3.webp",
+			"techId": "unlocktankstopsplinetier3",
+			"maxHealth": 3000,
+			"cost": {
+				"concrete": 10
+			},
+			"repairCost": 150
+		},
 		"townbase3": {
 			"name": "Town Base",
 			"codeName": "TownBase3",
 			"description": "A garrisoned focal building vital for the defence of a town. Players can spawn and stockpile items here.",
 			"category": "misc",
-			"categoryOrder": 7,
+			"categoryOrder": 9,
 			"baseGarrisonRadius": 150,
 			"hitArea": [
 				{
@@ -9110,7 +9231,7 @@ const gameData = {
 			"codeName": "TownCLargeGarrisonGS1",
 			"description": "A world base that players can respawn and rearm at. It can be destroyed and rebuilt to be claimed by a faction. It has garrison upgrades to supply local structures with garrison supplies. This structure cannot be placed by a player, and is entirely for your reference.",
 			"category": "misc",
-			"categoryOrder": 8,
+			"categoryOrder": 10,
 			"baseGarrisonRadius": 150,
 			"hitArea": [
 				{
@@ -10556,7 +10677,7 @@ const gameData = {
 			"name": "Public Road",
 			"description": "A public road featured throughout the world of Foxhole. This structure cannot be placed by a player, and is entirely for your reference.",
 			"category": "misc",
-			"categoryOrder": 8,
+			"categoryOrder": 11,
 			"sortLayer": "road",
 			"hasHandle": true,
 			"isBezier": true,
