@@ -2549,6 +2549,26 @@ const gameData = {
 					"name": "Coal Power Plant",
 					"codeName": "Coal",
 					"description": "A generator that burns coal to generate power.",
+					"hitArea": [
+						{
+							"shape": [ -108.8,-96.32,-83.2,-96.32,-122.88,63.68,-122.60571411132813,-81.23427734375,-117.76,-91.2 ]
+						},
+						{
+							"shape": [ -122.88,63.68,51.84,-125.12,91.52,-119.36,95.36,-107.2,-49.28,72.64,-58.88,77.76,-110.08,77.76,-118.4,72.64 ]
+						},
+						{
+							"shape": [ -49.28,72.64,95.36,-107.2,118.4,-105.28,119.04,118.72,-49.28,116.8 ]
+						},
+						{
+							"shape": [ 51.84,-125.12,-83.2,-96.32,-84.48,-127.68 ]
+						},
+						{
+							"shape": [ 51.84,-125.12,-122.88,63.68,-83.2,-96.32 ]
+						},
+						{
+							"shape": [ 134.4,98.88,119.04,98.88,119.04,17.6,134.4,17.6 ]
+						}
+					],
 					"icon": "game/Textures/UI/ItemIcons/FacilityPowerDieselCoalIcon.webp",
 					"texture": "game/Textures/Structures/diesel_power_plant_coal.webp",
 					"_productionLength": 1,
