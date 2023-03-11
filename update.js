@@ -3,12 +3,12 @@ const path = require('path');
 const sharp = require('sharp');
 
 const METER_UNREAL_UNITS = 100;
-const foxholeDataDirectory = 'dev/';
+const foxholeDataDirectory = 'dev/tools/Output/Exports/';
 const foxholeDataVariable = 'const gameData = ';
 let foxholeData = JSON.parse(fs.readFileSync('./public/games/foxhole/data.js').toString().substring(foxholeDataVariable.length));
 
 const stStructures = JSON.parse(fs.readFileSync(`${foxholeDataDirectory}War/Content/Blueprints/StringTables/STStructures.json`))[0].StringTable.KeysToMetaData;
-const structurePolygons = JSON.parse(fs.readFileSync(`${foxholeDataDirectory}polygons.json`));
+const structurePolygons = JSON.parse(fs.readFileSync(`dev/polygons.json`));
 
 let structureList = foxholeData.buildings;
 let upgradeList = {};
@@ -395,11 +395,9 @@ async function iterateStructures(dirPath) {
                                     techList[structureData.techId] = {};
                                 }
                                 if (structure.Modifications) {
-                                    for (const modEntry of structure.Modifications) {
-                                        for (const [id, modification] of Object.entries(modEntry)) {
-                                            modificationsData[id] = modification;
-                                            initializeStructureItems(modification);
-                                        }
+                                    for (const [id, modification] of Object.entries(structure.Modifications)) {
+                                        modificationsData[id] = modification;
+                                        initializeStructureItems(modification);
                                     }
                                 }
                                 if (parentCodeName) {
@@ -413,60 +411,58 @@ async function iterateStructures(dirPath) {
                     case 'ModificationSlotComponent':
                         if (structure && structureList[structureCodeName]) {
                             let modifications;
-                            for (const modEntry of uProperty.Properties.Modifications) {
-                                for (const [codeName, modification] of Object.entries(modEntry)) {
-                                    let modificationData = modificationsData[codeName];
-                                    if (codeName !== 'EFortModificationType::Default') {
-                                        const displayName = codeName.substring(23);
-                                        const modificationCodeName = displayName.toLowerCase();
-                                        let storedModData = structureData?.upgrades[modificationCodeName] ?? {};
-                                        if (!storedModData.reference) {
-                                            modifications = modifications ?? {};
-                                            modificationData = {
-                                                'id': storedModData?.id,
-                                                'name': modification.DisplayName?.SourceString ?? getTableString(modification.DisplayName) ?? displayName,
-                                                'codeName': displayName,
-                                                'prevUpgradeKey': storedModData?.prevUpgradeKey,
-                                                'description': modification.Description?.SourceString ?? getTableString(modification.Description) ?? 'No Description Provided.',
-                                                'range': storedModData?.range,
-                                                'hitArea': undefined,
-                                                'baseIcon': storedModData?.baseIcon,
-                                                'icon': getLocalIcon(modification),
-                                                'texture': typeof storedModData?.texture === 'string' || storedModData?.texture === null ? storedModData.texture : `game/Textures/Structures/${structureData.id}_${storedModData?.id}.webp`,
-                                                'textureBorder': storedModData?.textureBorder,
-                                                'textureFrontCap': storedModData?.textureFrontCap,
-                                                'textureBackCap': storedModData?.textureBackCap,
-                                                'positionOffset': storedModData?.positionOffset,
-                                                'sockets': storedModData?.sockets,
-                                                'techId': modification.TechID && (modification.TechID !== 'ETechID::None') ? modification.TechID.substring(9).toLowerCase() : undefined,
-                                                'maxHealth': storedModData?.maxHealth,
-                                                'structuralIntegrity': storedModData?.structuralIntegrity,
-                                                'cost': storedModData?.cost,
-                                                'repairCost': storedModData?.repairCost,
-                                                '_productionLength': storedModData?._productionLength,
-                                                'production': storedModData?.production,
-                                                'productionScaling': storedModData?.productionScaling,
-                                                'AssemblyItems': modificationData?.AssemblyItems,
-                                                'ConversionEntries': modificationData?.ConversionEntries
-                                                // There is a FuelCost variable which is never used here.
-                                            }
-                                            iterateSocketData(modificationData);
-                                            if (modificationData.texture) {
-                                                modificationData.hitArea = await getStructureHitArea(modificationData);
-                                            }
-                                            if (modificationData.techId) {
-                                                techList[modificationData.techId] = {};
-                                            }
-                                            if (modificationData.cost !== false && modification.Tiers) {
-                                                const tierData = modification.Tiers['EFortTier::T1'];
-                                                if (tierData) {
-                                                    modificationData.cost = getResourceCosts(tierData.ResourceAmounts);
-                                                }
-                                            }
-                                            modifications[modificationCodeName] = modificationData;
-                                        } else {
-                                            modifications[modificationCodeName] = storedModData;
+                            for (const [codeName, modification] of Object.entries(uProperty.Properties.Modifications)) {
+                                let modificationData = modificationsData[codeName];
+                                if (codeName !== 'EFortModificationType::Default') {
+                                    const displayName = codeName.substring(23);
+                                    const modificationCodeName = displayName.toLowerCase();
+                                    let storedModData = structureData?.upgrades[modificationCodeName] ?? {};
+                                    if (!storedModData.reference) {
+                                        modifications = modifications ?? {};
+                                        modificationData = {
+                                            'id': storedModData?.id,
+                                            'name': modification.DisplayName?.SourceString ?? getTableString(modification.DisplayName) ?? displayName,
+                                            'codeName': displayName,
+                                            'prevUpgradeKey': storedModData?.prevUpgradeKey,
+                                            'description': modification.Description?.SourceString ?? getTableString(modification.Description) ?? 'No Description Provided.',
+                                            'range': storedModData?.range,
+                                            'hitArea': undefined,
+                                            'baseIcon': storedModData?.baseIcon,
+                                            'icon': getLocalIcon(modification),
+                                            'texture': typeof storedModData?.texture === 'string' || storedModData?.texture === null ? storedModData.texture : `game/Textures/Structures/${structureData.id}_${storedModData?.id}.webp`,
+                                            'textureBorder': storedModData?.textureBorder,
+                                            'textureFrontCap': storedModData?.textureFrontCap,
+                                            'textureBackCap': storedModData?.textureBackCap,
+                                            'positionOffset': storedModData?.positionOffset,
+                                            'sockets': storedModData?.sockets,
+                                            'techId': modification.TechID && (modification.TechID !== 'ETechID::None') ? modification.TechID.substring(9).toLowerCase() : undefined,
+                                            'maxHealth': storedModData?.maxHealth,
+                                            'structuralIntegrity': storedModData?.structuralIntegrity,
+                                            'cost': storedModData?.cost,
+                                            'repairCost': storedModData?.repairCost,
+                                            '_productionLength': storedModData?._productionLength,
+                                            'production': storedModData?.production,
+                                            'productionScaling': storedModData?.productionScaling,
+                                            'AssemblyItems': modificationData?.AssemblyItems,
+                                            'ConversionEntries': modificationData?.ConversionEntries
+                                            // There is a FuelCost variable which is never used here.
                                         }
+                                        iterateSocketData(modificationData);
+                                        if (modificationData.texture) {
+                                            modificationData.hitArea = await getStructureHitArea(modificationData);
+                                        }
+                                        if (modificationData.techId) {
+                                            techList[modificationData.techId] = {};
+                                        }
+                                        if (modificationData.cost !== false && modification.Tiers) {
+                                            const tierData = modification.Tiers['EFortTier::T1'];
+                                            if (tierData) {
+                                                modificationData.cost = getResourceCosts(tierData.ResourceAmounts);
+                                            }
+                                        }
+                                        modifications[modificationCodeName] = modificationData;
+                                    } else {
+                                        modifications[modificationCodeName] = storedModData;
                                     }
                                 }
                             }
@@ -645,15 +641,13 @@ function iterateAssets(dirPath) {
                             }, weaponList[codeName]);
                         }
                     } else if (item.ItemInfo) {
-                        for (const itemEntry of item.ItemInfo) {
-                            for (const [codeName, techInfo] of Object.entries(itemEntry)) {
-                                let techCodeName = codeName.substring(9).toLowerCase();
-                                if (techList[techCodeName]) {
-                                    techList[techCodeName] = {
-                                        'name': techInfo.DisplayNameOverride?.SourceString,
-                                        'description': techInfo.DescriptionOverride?.SourceString,
-                                        'icon': getLocalIcon(techInfo)
-                                    }
+                        for (const [codeName, techInfo] of Object.entries(item.ItemInfo)) {
+                            let techCodeName = codeName.substring(9).toLowerCase();
+                            if (techList[techCodeName]) {
+                                techList[techCodeName] = {
+                                    'name': techInfo.DisplayNameOverride?.SourceString,
+                                    'description': techInfo.DescriptionOverride?.SourceString,
+                                    'icon': getLocalIcon(techInfo)
                                 }
                             }
                         }

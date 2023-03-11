@@ -616,6 +616,11 @@ const gameData = {
 			"description": "This evolution of the “Bardiche” is fitted quad-mounted RPG launchers paired with a high-velocity 12.7mm cannon. The “Ranseur” indicates progress in Kraunian design as they continue to leverage outdated equipment to create deadly, modern armour.",
 			"icon": "game/Textures/UI/VehicleIcons/MediumTank2TwinCVehicleIcon.webp"
 		},
+		"mediumtankatw": {
+			"name": "Silverhand Lordscar - Mk. X",
+			"description": "A cut down variation of the Silverhand Assault Tank that sacrifices armour and protection in favour of a high-powered 94.5mm cannon. This open-top weapon platform is uniquely designed to intercept enemy armour before they’re given time to retaliate. Its moniker is a tribute to the maiming of the great king the Silverhand is named for; while his title was stripped, and his pride damage, his rage was never quelled.",
+			"icon": "game/Textures/UI/VehicleIcons/MediumTankATWIcon.webp"
+		},
 		"mediumtankc": {
 			"name": "85K-b “Falchion”",
 			"description": "Designed for mass-production in Kraunia, this assault tank features a modular turret system for maximum versatility. The “Falchion” class features a powerful if understated, 40mm cannon.",
@@ -2635,6 +2640,9 @@ const gameData = {
 					],
 					"icon": "game/Textures/UI/ItemIcons/FacilityPowerDieselCoalIcon.webp",
 					"texture": "game/Textures/Structures/diesel_power_plant_coal.webp",
+					"cost": {
+						"facilitymaterials1": 100
+					},
 					"_productionLength": 1,
 					"production": [
 						{
@@ -5931,7 +5939,7 @@ const gameData = {
 					"cost": {
 						"facilitymaterials3": 20
 					},
-					"_productionLength": 4,
+					"_productionLength": 5,
 					"production": [
 						{
 							"id": 0,
@@ -5985,6 +5993,20 @@ const gameData = {
 							},
 							"output": {
 								"mediumtank2indirectw": 1
+							},
+							"faction": "w",
+							"time": 600
+						},
+						{
+							"id": 4,
+							"input": {
+								"mediumtankw": 1,
+								"facilitymaterials3": 35,
+								"facilitymaterials5": 15,
+								"facilitymaterials6": 25
+							},
+							"output": {
+								"mediumtankatw": 1
 							},
 							"faction": "w",
 							"time": 600
@@ -9148,8 +9170,8 @@ const gameData = {
 			"category": "defenses",
 			"hasHandle": true,
 			"isBezier": true,
-			"minLength": 3,
-			"maxLength": 12.5,
+			"minLength": 3.75,
+			"maxLength": 15.05,
 			"icon": "game/Textures/UI/StructureIcons/TankStopT3Icon.webp",
 			"texture": "game/Textures/Structures/tankstopsplinet3.webp",
 			"techId": "unlocktankstopsplinetier3",
