@@ -950,16 +950,3 @@ class DraggableShape extends DraggableContainer {
         }
     }
 }
-
-const draggableTypes = {
-    'default': DraggableContainer,
-    'text': DraggableText,
-    'shape': DraggableShape
-};
-
-game.addDraggableType = function(type, classObj) {
-    if (!draggableTypes[type]) {
-        draggableTypes[type] = classObj;
-    }
-    return false;
-}
