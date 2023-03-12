@@ -47,7 +47,6 @@ const game_asset_list = {
         }
         if (building.baseGarrisonRadius) {
             const garrisonData = {
-                sortLayer: 'range',
                 baseUpgrades: {
                     'base': {
                         'provisional_garrison': {
@@ -191,6 +190,13 @@ const game_asset_list = {
                     building.upgrades[upgradeKey] = window.objectData.buildings[upgradeData.reference];
                 }
             }
+        }
+    }
+
+    for (const category of Object.values(window.objectData.categories)) {
+        if (category.icon) {
+            category.icon = assetDir(category.icon);
+            game_asset_list[category.icon] = category.icon;
         }
     }
 

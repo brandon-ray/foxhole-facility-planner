@@ -84,7 +84,7 @@ if (isMobile && !isPhoneApp) {
                             </label>
                             <label class="btn-checkbox-wrapper d-block">
                                 <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.preventDecay }" @click="toggleProjectSetting('ranges', 'preventDecay')"></button>
-                                Garrison Supply Ranges
+                                Maintenance Ranges
                             </label>
                             <label class="btn-checkbox-wrapper d-block">
                                 <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.crane }" @click="toggleProjectSetting('ranges', 'crane')"></button>

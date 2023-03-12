@@ -2,40 +2,67 @@ const gameData = {
 	"categories": {
 		"presets": {
 			"name": "Modules",
-			"hideInBuildingList": true
-		},
-		"foundations": {
-			"name": "Foundations"
+			"hideInBuildingList": true,
+			"icon": "game/Textures/UI/Menus/IconFilterModules.webp"
 		},
 		"defenses": {
-			"name": "Defenses"
+			"name": "Defenses",
+			"buildCategory": "Defense",
+			"icon": "game/Textures/UI/Menus/IconFilterDefense.webp"
 		},
 		"entrenchments": {
-			"name": "Entrenchments"
+			"name": "Entrenchments",
+			"buildCategory": "Bunker",
+			"icon": "game/Textures/UI/Menus/IconFilterBunker.webp"
+		},
+		"misc": {
+			"name": "Utilities",
+			"buildCategory": true,
+			"icon": "game/Textures/UI/Menus/IconFilterGeneral.webp"
 		},
 		"factories": {
-			"name": "Facilities"
+			"name": "Facilities",
+			"buildCategory": "Facility",
+			"icon": "game/Textures/UI/Menus/IconFilterFacility.webp"
 		},
 		"harvesters": {
-			"name": "Harvesters"
+			"name": "Harvesters",
+			"buildCategory": "Mining",
+			"icon": "game/Textures/UI/Menus/IconFilterMining.webp"
 		},
 		"power": {
-			"name": "Power"
+			"name": "Power",
+			"buildCategory": "Power",
+			"icon": "game/Textures/UI/Menus/IconFilterPower.webp"
+		},
+		"foundations": {
+			"name": "Foundations",
+			"buildCategory": "Foundation",
+			"icon": "game/Textures/UI/Menus/IconFilterFoundation.webp"
+		},
+		"shippables": {
+			"name": "Shippables",
+			"buildCategory": "Shippables",
+			"icon": "game/Textures/UI/Menus/IconFilterShippingContainer.webp"
 		},
 		"vehicles": {
 			"name": "Vehicles",
-			"hideInBuildingList": true
+			"hideInBuildingList": true,
+			"icon": "game/Textures/UI/Menus/IconFilterVehicle.webp"
 		},
 		"trains": {
 			"name": "Locomotives",
-			"hideInBuildingList": true
+			"hideInBuildingList": true,
+			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeEngineVehicleIcon.webp"
 		},
-		"misc": {
-			"name": "Miscellaneous"
+		"world": {
+			"name": "References",
+			"icon": "game/Textures/UI/Menus/IconFilterGarrisonHouse.webp"
 		},
 		"showcase": {
 			"name": "Showcase",
-			"hideInBuildingList": true
+			"hideInBuildingList": true,
+			"icon": "game/Textures/UI/Menus/IconFilterShowcase.webp"
 		}
 	},
 	"presets": {
@@ -2291,7 +2318,7 @@ const gameData = {
 			"name": "Concrete Mixer",
 			"codeName": "ConcreteMixer",
 			"description": "A portable device that mixes various materials to form Concrete, which are used to build heavily fortified structures.",
-			"category": "misc",
+			"category": "shippables",
 			"categoryOrder": 5,
 			"icon": "game/Textures/UI/StructureIcons/ConcreteMixerIcon.webp",
 			"texture": "game/Textures/Structures/concretemixer.webp",
@@ -2749,7 +2776,7 @@ const gameData = {
 			"description": "A large forward operating base. Players can spawn and stockpile items here.",
 			"category": "entrenchments",
 			"baseGarrisonRadius": 80,
-			"sortLayer": "upgrade",
+			"sortLayer": "upgrade2",
 			"hitArea": [
 				{
 					"shape": [ 90.88,92.16,-85.12,91.52,-92.16,-88.32,88.96,-90.88 ]
@@ -4731,7 +4758,7 @@ const gameData = {
 			"name": "Liquid Container",
 			"codeName": "FuelContainer",
 			"description": "A container for storing high volumes of liquids. Nearby structures and vehicles can refill directly from this container. ",
-			"category": "misc",
+			"category": "shippables",
 			"categoryOrder": 4,
 			"sortLayer": "container",
 			"icon": "game/Textures/UI/StructureIcons/FuelTankIcon.webp",
@@ -6065,43 +6092,23 @@ const gameData = {
 		},
 		"maintenance_tunnel": {
 			"name": "Maintenance Tunnel",
-			"codeName": "FacilitySupplyStation",
-			"description": "A supply tunnel that provides Garrison Supplies to nearby Facilities and Railway Tracks. Garrison Supplies may also be produced on-site using Construction Materials. The rate of consumption is 2 Garrison Supplies per-hour per-structure once decay begins. Some structures have additional consumption requirements.",
-			"category": "factories",
+			"codeName": "MaintenanceTunnel",
+			"description": "Prevents the decay of nearby structures when supplied.",
+			"category": "misc",
 			"categoryOrder": 40,
 			"color": 1052688,
 			"radius": 2,
-			"range": {
-				"type": "preventDecay",
-				"max": 40,
-				"overlap": 65
-			},
-			"sortLayer": "range",
+			"sortLayer": "resource",
+			"maxRange": 100,
 			"icon": "game/Textures/UI/StructureIcons/TunnelNetworkStructureIcon.webp",
 			"texture": "game/Textures/Structures/maintenance_tunnel.webp",
 			"textureIcon": {
 				"width": 96,
 				"height": 96
 			},
-			"power": -2,
-			"sockets": [
-				{
-					"id": 0,
-					"name": "power",
-					"type": [
-						{
-							"mask": 131072,
-							"category": 1048576
-						}
-					],
-					"x": 310,
-					"y": 191,
-					"rotation": 90
-				}
-			],
 			"maxHealth": 3000,
 			"cost": {
-				"facilitymaterials1": 200
+				"cloth": 50
 			},
 			"repairCost": 100
 		},
@@ -6127,7 +6134,7 @@ const gameData = {
 			"name": "Material Pallet",
 			"codeName": "MaterialPlatform",
 			"description": "A material pallet.",
-			"category": "misc",
+			"category": "shippables",
 			"categoryOrder": 1,
 			"icon": "game/Textures/UI/ItemIcons/MaterialPlatformItemIcon.webp",
 			"texture": "game/Textures/Structures/material_platform.webp",
@@ -7550,7 +7557,7 @@ const gameData = {
 			"name": "Crude Oil Field",
 			"codeName": "OilField",
 			"description": "An Oil Field that can produce Oil for further refinement or for power production.",
-			"category": "misc",
+			"category": "world",
 			"categoryOrder": 21,
 			"radius": 6,
 			"icon": "game/Textures/UI/ItemIcons/Facilities/OilIcon.webp",
@@ -7851,7 +7858,7 @@ const gameData = {
 		"playerc": {
 			"name": "Player (Colonial)",
 			"description": "The Colonials are described as a faction of ingenuity and practicality. They are sometimes referred to as \"The Colonial Legion\" or \"Little Green Men\".",
-			"category": "misc",
+			"category": "world",
 			"categoryOrder": 50,
 			"faction": "c",
 			"sortLayer": "player",
@@ -7861,7 +7868,7 @@ const gameData = {
 		"playerw": {
 			"name": "Player (Warden)",
 			"description": "The Wardens are described to be a nation of honor and tradition. They are the native inhabitants of the region where the game takes place.",
-			"category": "misc",
+			"category": "world",
 			"categoryOrder": 51,
 			"faction": "w",
 			"sortLayer": "player",
@@ -8430,7 +8437,7 @@ const gameData = {
 			"name": "Relic Base",
 			"codeName": "RelicBase1",
 			"description": "An old fort. Players can spawn and stockpile items here.",
-			"category": "misc",
+			"category": "world",
 			"categoryOrder": 8,
 			"baseGarrisonRadius": 150,
 			"hitArea": [
@@ -8485,7 +8492,7 @@ const gameData = {
 			"name": "Resource Container",
 			"codeName": "ResourceContainer",
 			"description": "A container that can carry large quantities of resources and can be transported by certain vehicles.",
-			"category": "misc",
+			"category": "shippables",
 			"categoryOrder": 2,
 			"sortLayer": "container",
 			"icon": "game/Textures/UI/StructureIcons/ResourceContainerIcon.webp",
@@ -8499,8 +8506,8 @@ const gameData = {
 		"resourcefield": {
 			"name": "Resource Field",
 			"upgradeName": "Scrap Field",
-			"description": "This is a resource field. This can be mined by a player or with a stationary harvester. This structure cannot be placed by a player, and is entirely for your reference.",
-			"category": "misc",
+			"description": "This is a resource field. This can be mined by a player or with a stationary harvester.",
+			"category": "world",
 			"categoryOrder": 20,
 			"sortLayer": "resource",
 			"radius": 15,
@@ -8623,7 +8630,7 @@ const gameData = {
 			"name": "Shipping Container",
 			"codeName": "ShippingContainer",
 			"description": "A container for shipping very large quantities of Crates using Crane loaded vehicles. This type of container can only be unloaded at Storage Depots and Seaports.",
-			"category": "misc",
+			"category": "shippables",
 			"categoryOrder": 3,
 			"sortLayer": "container",
 			"icon": "game/Textures/UI/StructureIcons/ShippingContainerStructureIcon.webp",
@@ -8762,7 +8769,7 @@ const gameData = {
 		},
 		"sound_test": {
 			"name": "Sus",
-			"category": "misc",
+			"category": "world",
 			"hideInList": true,
 			"width": 2,
 			"length": 2,
@@ -9168,6 +9175,7 @@ const gameData = {
 			"codeName": "TankStopSplineT3",
 			"description": "An anti-tank obstacle that prevents vehicle access to an area, and is resistant to most types of damage.",
 			"category": "defenses",
+			"experimental": true,
 			"hasHandle": true,
 			"isBezier": true,
 			"minLength": 3.75,
@@ -9185,7 +9193,7 @@ const gameData = {
 			"name": "Town Base",
 			"codeName": "TownBase3",
 			"description": "A garrisoned focal building vital for the defence of a town. Players can spawn and stockpile items here.",
-			"category": "misc",
+			"category": "world",
 			"categoryOrder": 9,
 			"baseGarrisonRadius": 150,
 			"hitArea": [
@@ -9251,8 +9259,8 @@ const gameData = {
 		"townclargegarrisongs1": {
 			"name": "Safe House",
 			"codeName": "TownCLargeGarrisonGS1",
-			"description": "A world base that players can respawn and rearm at. It can be destroyed and rebuilt to be claimed by a faction. It has garrison upgrades to supply local structures with garrison supplies. This structure cannot be placed by a player, and is entirely for your reference.",
-			"category": "misc",
+			"description": "A world base that players can respawn and rearm at. It can be destroyed and rebuilt to be claimed by a faction. It has garrison upgrades to supply local structures with garrison supplies.",
+			"category": "world",
 			"categoryOrder": 10,
 			"baseGarrisonRadius": 150,
 			"hitArea": [
@@ -9552,8 +9560,8 @@ const gameData = {
 		},
 		"tree": {
 			"name": "Tree",
-			"description": "A tree featured throughout the world of Foxhole. This structure cannot be placed by a player, and is entirely for your reference.",
-			"category": "misc",
+			"description": "A tree featured throughout the world of Foxhole.",
+			"category": "world",
 			"categoryOrder": 10,
 			"sortLayer": "overhead",
 			"radius": 2,
@@ -10697,8 +10705,8 @@ const gameData = {
 		},
 		"world_road": {
 			"name": "Public Road",
-			"description": "A public road featured throughout the world of Foxhole. This structure cannot be placed by a player, and is entirely for your reference.",
-			"category": "misc",
+			"description": "A public road featured throughout the world of Foxhole.",
+			"category": "world",
 			"categoryOrder": 11,
 			"sortLayer": "road",
 			"hasHandle": true,

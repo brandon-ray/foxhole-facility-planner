@@ -140,6 +140,18 @@ function getQuery() {
 }
 game.queryData = getQuery();
 
+const draggableTypes = {
+    'default': DraggableContainer,
+    'text': DraggableText,
+    'shape': DraggableShape
+};
+
+game.addDraggableType = function(type, classObj) {
+    if (!draggableTypes[type]) {
+        draggableTypes[type] = classObj;
+    }
+    return false;
+}
 
 try {
     if (window.localStorage) {
@@ -294,6 +306,7 @@ try {
         pipe: 20000,
         building: 50000,
         upgrade: 75000,
+        upgrade2: 100000,
         vehicle: 120000,
         container: 150000,
         wall: 200000,
@@ -999,19 +1012,6 @@ try {
             game.updateHistory();
         }
     });
-
-    const draggableTypes = {
-        'default': DraggableContainer,
-        'text': DraggableText,
-        'shape': DraggableShape
-    };
-    
-    game.addDraggableType = function(type, classObj) {
-        if (!draggableTypes[type]) {
-            draggableTypes[type] = classObj;
-        }
-        return false;
-    }
 
     game.isRunning = function(){
         return running;

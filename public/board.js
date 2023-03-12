@@ -723,7 +723,7 @@ class DraggableContainer extends PIXI.Container {
         }
         if (this.rangeSprite) {
             const showWhenSelected = game.projectSettings.showRangeWhenSelected && this.selected;
-            const rangeType = this.building?.range?.type || (this.baseUpgrades?.base && this.building.baseUpgrades.base[this.baseUpgrades.base].range?.type);
+            const rangeType = this.building?.range?.type || (this.baseUpgrades?.base && this.building.baseUpgrades.base[this.baseUpgrades.base].range?.type) || (this.maintenanceFilters && 'preventDecay');
             this.rangeSprite.visible = showWhenSelected || (rangeType && game.projectSettings.ranges[rangeType]);
             this.updateRangeMask();
         }

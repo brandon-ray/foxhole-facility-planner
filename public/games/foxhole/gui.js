@@ -167,7 +167,7 @@ Vue.component('app-menu-statistics', {
 
                     if (entity.selected || !this.selection) {
                         // TODO: Need to actually get whether a structure decays or not from foxhole data.
-                        if (buildingData.category !== 'vehicles' && buildingData.category !== 'trains' && buildingData.category !== 'misc') {
+                        if (buildingData.category !== 'vehicles' && buildingData.category !== 'trains' && buildingData.category !== 'world') {
                             displayTime = true;
                             let consumptionRate = (2 * (buildingData.garrisonSupplyMultiplier ?? 1)) * garrisonConsumptionRate;
                             for (let j = 0; j < garrisonConsumptionReducers.length; j++) {

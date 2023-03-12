@@ -197,20 +197,22 @@ class FoxholeStructureSocket extends PIXI.Container {
                         connectionEstablished = true;
                         continue;
                     }
-                    for (let k = 0; k < connectedEntity.sockets.length; k++) {
-                        const connectedSocket = connectedEntity.sockets[k];
-                        if (connectedSocket.socketData.id === connectedSocketId) {
-                            delete connectedSocket.connections[this.structure.id];
-                            if (Object.keys(connectedSocket.connections).length === 0) {
-                                if (connectedEntity.building?.requireConnection) {
-                                    connectedEntity.remove();
-                                } else if (connectedSocket.socketData.temp) {
-                                    connectedSocket.remove();
-                                } else {
-                                    connectedSocket.setVisible(true);
+                    if (connectedEntity.sockets) {
+                        for (let k = 0; k < connectedEntity.sockets.length; k++) {
+                            const connectedSocket = connectedEntity.sockets[k];
+                            if (connectedSocket.socketData.id === connectedSocketId) {
+                                delete connectedSocket.connections[this.structure.id];
+                                if (Object.keys(connectedSocket.connections).length === 0) {
+                                    if (connectedEntity.building?.requireConnection) {
+                                        connectedEntity.remove();
+                                    } else if (connectedSocket.socketData.temp) {
+                                        connectedSocket.remove();
+                                    } else {
+                                        connectedSocket.setVisible(true);
+                                    }
                                 }
+                                break;
                             }
-                            break;
                         }
                     }
                 }
@@ -352,6 +354,10 @@ class FoxholeStructure extends DraggableContainer {
                     this.userThrottle = 0;
                 }
             }
+        }
+
+        if (this.building.key === 'maintenance_tunnel') {
+            this.setMaintenanceFilters();
         }
 
         if (this.building.sockets) {
@@ -558,6 +564,10 @@ class FoxholeStructure extends DraggableContainer {
             }
         }
 
+        if (this.maintenanceFilters) {
+            objData.maintenanceFilters = Object.assign({}, this.maintenanceFilters);
+        }
+
         if (this.sockets) {
             for (let i = 0; i < this.sockets.length; i++) {
                 let socket = this.sockets[i];
@@ -616,6 +626,10 @@ class FoxholeStructure extends DraggableContainer {
             }
         }
 
+        if (objData.maintenanceFilters) {
+            this.setMaintenanceFilters(objData.maintenanceFilters);
+        }
+
         if (this.isTrain && typeof objData.trackDirection === 'number') {
             this.trackDirection = objData.trackDirection;
         }
@@ -632,8 +646,11 @@ class FoxholeStructure extends DraggableContainer {
                     for (const [connectedEntityId, connectedSocketId] of Object.entries(socketConnectionData)) {
                         const remappedEntityId = (objIdMap && typeof objIdMap[connectedEntityId] === 'number') ? objIdMap[connectedEntityId] : connectedEntityId;
                         const connectedEntity = game.getEntityById(remappedEntityId);
-                        if (connectedEntity) {
+                        if (connectedEntity.sockets) {
                             socket.setConnection(remappedEntityId, undefined, connectedSocketId);
+                        } else if (this.building.requireConnection) {
+                            this.remove();
+                            break;
                         }
                     }
                 }
@@ -1164,7 +1181,18 @@ class FoxholeStructure extends DraggableContainer {
         }
         game.refreshStats();
     }
-    
+
+    setMaintenanceFilters(filters) {
+        this.maintenanceFilters = {
+            range: filters?.range ?? this.building.maxRange,
+            exclusions: filters?.exclusions ?? []
+        }
+        this.assignRange({
+            type: 'preventDecay',
+            max: this.maintenanceFilters.range
+        });
+    }
+
     getUnion() {
         if (this.union !== this) {
             this.union = this.union.getUnion();

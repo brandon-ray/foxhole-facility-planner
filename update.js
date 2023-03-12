@@ -105,7 +105,6 @@ let weaponList = {
         alias: 'Satchel'
     },
     satchelcharget: {
-        icon: 'game/Textures/UI/ItemIcons/SatchelChargeTIcon.webp',
         alias: 'Havoc'
     }
 };
@@ -278,6 +277,13 @@ function iterateSocketData(data) {
     }
 }
 
+const buildCategoryMap = {};
+for (const [key, category] of Object.entries(foxholeData.categories)) {
+    if (category.buildCategory) {
+        buildCategoryMap[category.buildCategory] = key;
+    }
+}
+
 async function iterateStructures(dirPath) {
     dirPath = dirPath ?? `${foxholeDataDirectory}War/Content/Blueprints/`;
     let files = fs.readdirSync(dirPath);
@@ -329,6 +335,7 @@ async function iterateStructures(dirPath) {
                                     'parentKey': structureData.parentKey,
                                     'prevUpgradeKey': structureData.prevUpgradeKey,
                                     'description': structure.Description?.SourceString ?? baseData.description ?? structureData.description,
+                                    //'category': buildCategoryMap[(structure.BuildCategory ?? baseData.BuildCategory)?.substring(16)] ?? structureData.category ?? 'misc',
                                     'category': structureData.category,
                                     'categoryOrder': structureData.categoryOrder ?? structure.BuildOrder ?? baseData.BuildOrder,
                                     'faction': structureData.faction,
@@ -354,6 +361,7 @@ async function iterateStructures(dirPath) {
                                     'lineWidth': structureData.lineWidth,
                                     'minLength': structure.ConnectorMinLength ? structure.ConnectorMinLength / METER_UNREAL_UNITS : structureData.minLength ?? baseData.minLength,
                                     'maxLength': structure.ConnectorMaxLength ? structure.ConnectorMaxLength / METER_UNREAL_UNITS : structureData.maxLength ?? baseData.maxLength,
+                                    'maxRange': structure.MaxRange ? structure.MaxRange / METER_UNREAL_UNITS : undefined,
                                     'icon': structureData.icon ?? getLocalIcon(structure) ?? baseData.icon,
                                     'texture': (typeof structureData.texture === 'string' || structureData.texture === null) ? structureData.texture : `game/Textures/Structures/${structureData.id}.webp`,
                                     'textureBorder': structureData.textureBorder,

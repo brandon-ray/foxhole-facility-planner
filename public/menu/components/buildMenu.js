@@ -217,6 +217,7 @@ Vue.component('app-menu-building-selected', {
                     productionScale: selectedEntity.productionScale,
                     properties: selectedEntity.properties,
                     baseUpgrades: selectedEntity.baseUpgrades,
+                    maintenanceFilters: selectedEntity.maintenanceFilters,
                     building: selectedEntity.building,
                     following: selectedEntity.following,
                     label: selectedEntity.label?.text,
@@ -262,6 +263,9 @@ Vue.component('app-menu-building-selected', {
                         if (typeof this.entity.userThrottle === 'number') {
                             selectedEntity.userThrottle = this.entity.userThrottle;
                         }
+                    }
+                    if (this.entity.maintenanceFilters) {
+                        selectedEntity.setMaintenanceFilters(this.entity.maintenanceFilters);
                     }
                     this.updateProperties(selectedEntity, false);
                     game.refreshStats();
@@ -412,6 +416,19 @@ Vue.component('app-menu-building-selected', {
             if (selectedEntity && selectedEntity.type === 'building') {
                 selectedEntity.setBaseUpgrade(tree, (selectedEntity.baseUpgrades[tree] !== key && key) || undefined);
                 game.saveStateChanged = true;
+            }
+        },
+        toggleMaintenanceExclusion: function(key) {
+            this.bmc();
+            const selectedEntity = game.getSelectedEntity();
+            if (selectedEntity && selectedEntity.type === 'building') {
+                const index = selectedEntity.maintenanceFilters.exclusions.indexOf(key);
+                if (index >= 0) {
+                    selectedEntity.maintenanceFilters.exclusions.splice(index, 1);
+                } else {
+                    selectedEntity.maintenanceFilters.exclusions.push(key);
+                }
+                this.updateEntity();
             }
         },
         cloneBuildings: function() {
@@ -646,6 +663,29 @@ Vue.component('app-menu-building-selected', {
                     <div class="resource-icon" :title="upgrade.name" :style="{backgroundImage:'url(' + (upgrade.icon ?? entity.building.icon) + ')'}"></div>
                 </button>
             </div>
+            <template v-if="entity.maintenanceFilters">
+                <div class="settings-option-wrapper">
+                    <div class="settings-title">Maintained Structures</div>
+                    <div class="upgrade-buttons-small d-flex justify-content-center">
+                        <template v-for="(category, key) in gameData.categories">
+                            <button v-if="category.buildCategory" class="upgrade-button" :class="{'btn-inactive': entity.maintenanceFilters.exclusions.includes(key)}" @click="toggleMaintenanceExclusion(key)">
+                                <div class="resource-icon" :title="category.name" :style="{backgroundImage:'url(' + (category.icon) + ')'}"></div>
+                            </button>
+                        </template>
+                    </div>
+                </div>
+                <div class="settings-option-wrapper upgrade-list">
+                    <div class="settings-title">Maintenance Range</div>
+                    <div class="text-center">{{entity.maintenanceFilters.range}}m</div>
+                    <div class="d-flex">
+                        <div class="col-2 p-0">0m</div>
+                        <div class="col-8 p-0">
+                            <input type="range" class="slider w-100" style="height: 32px;" v-model.number="entity.maintenanceFilters.range" min="0" :max="entity.building.maxRange" step="1" @input="updateEntity()">
+                        </div>
+                        <div class="col-2 p-0">{{entity.building.maxRange}}m</div>
+                    </div>
+                </div>
+            </template>
             <div v-if="productionData" class="settings-option-wrapper">
                 <div class="settings-title">
                     <button type="button" class="title-button return-button" v-on:click="changeProduction(null)" title="Back" @mouseenter="bme()" style="padding: 1px 2px;">
@@ -899,7 +939,7 @@ Vue.component('app-menu-construction-list', {
                     <template v-for="(category, key) in window.objectData.categories">
                         <template v-if="!category.hideInList && (game.settings.showCollapsibleBuildingList || !category.hideInBuildingList) && (game.settings.enableExperimental || !category.experimental)">
                             <div v-if="game.settings.showCollapsibleBuildingList" class="construction-item-category" @click="category.visible = !category.visible; refresh()">
-                                {{category.name}}{{category.experimental && ' (Preview)'}}<i class="fa float-right" :class="{'fa-angle-down': category.visible, 'fa-angle-right': !category.visible}" style="margin-top: 2px;" aria-hidden="true"></i>
+                                <div class="construction-item-category-icon" :style="{backgroundImage: 'url(' + category.icon + ')'}"></div>{{category.name}}{{category.experimental && ' (Preview)'}}<i class="fa float-right" :class="{'fa-angle-down': category.visible, 'fa-angle-right': !category.visible}" style="margin-top: 2px;" aria-hidden="true"></i>
                             </div>
                             <div v-if="(!game.settings.showCollapsibleBuildingList || category.visible)">
                                 <app-game-building-list-icon v-for="building in category.buildings" :building="building"/>
