@@ -2731,12 +2731,68 @@ const gameData = {
 			},
 			"repairCost": 100
 		},
+		"fieldbridge": {
+			"name": "Field Bridge",
+			"codeName": "FieldBridge",
+			"description": "A makeshift bridge for transporting light equipment over a short distance. Will take damage when vehicles drive across.",
+			"category": "misc",
+			"categoryOrder": 8,
+			"hasHandle": true,
+			"hasOutline": false,
+			"minLength": 4,
+			"maxLength": 25,
+			"icon": "game/Textures/UI/StructureIcons/FieldBridgeItemIcon.webp",
+			"texture": "game/Textures/Structures/fieldbridge.webp",
+			"canSnap": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 8192,
+							"category": 8192
+						},
+						{
+							"mask": 8192,
+							"category": 8192
+						}
+					],
+					"texture": "game/Textures/Structures/fieldbridge_end.webp",
+					"textureAlt": "game/Textures/Structures/fieldbridge_connector.webp",
+					"cap": "front",
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": [
+						{
+							"mask": 8192,
+							"category": 8192
+						},
+						{
+							"mask": 8192,
+							"category": 8192
+						}
+					],
+					"texture": "game/Textures/Structures/fieldbridge_end.webp",
+					"textureAlt": "game/Textures/Structures/fieldbridge_connector.webp",
+					"cap": "back",
+					"rotation": 90
+				}
+			],
+			"techId": "unlockfieldbridge",
+			"maxHealth": 1500,
+			"cost": {
+				"metalbeammaterials": 5
+			},
+			"repairCost": 100
+		},
 		"fieldhospital": {
 			"name": "Field Hospital",
 			"codeName": "FieldHospital",
 			"description": "A field medical facility used to treat critically wounded soldiers at the front line. ",
 			"category": "misc",
-			"categoryOrder": 6,
+			"categoryOrder": 1,
 			"hitArea": [
 				{
 					"shape": [ 39.36,-143.68,-38.72,-143.68,-34.88,-179.52,36.16,-179.52 ]
@@ -4318,7 +4374,6 @@ const gameData = {
 			"codeName": "ForwardBase1",
 			"description": "A temporary forward operating base. Players can spawn and stockpile items here.",
 			"category": "misc",
-			"categoryOrder": 7,
 			"baseGarrisonRadius": 80,
 			"icon": "game/Textures/UI/StructureIcons/EncampmentIcon.webp",
 			"texture": "game/Textures/Structures/forwardbase1.webp",
@@ -6095,7 +6150,6 @@ const gameData = {
 			"codeName": "MaintenanceTunnel",
 			"description": "Prevents the decay of nearby structures when supplied.",
 			"category": "misc",
-			"categoryOrder": 40,
 			"color": 1052688,
 			"radius": 2,
 			"sortLayer": "resource",
