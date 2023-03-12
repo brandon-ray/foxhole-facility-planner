@@ -218,6 +218,8 @@ Vue.component('app-menu-building-selected', {
                     properties: selectedEntity.properties,
                     baseUpgrades: selectedEntity.baseUpgrades,
                     maintenanceFilters: selectedEntity.maintenanceFilters,
+                    maintainedStructures: selectedEntity.maintainedStructures,
+                    maintainedConsumptionRate: selectedEntity.maintainedConsumptionRate,
                     building: selectedEntity.building,
                     following: selectedEntity.following,
                     label: selectedEntity.label?.text,
@@ -684,6 +686,8 @@ Vue.component('app-menu-building-selected', {
                         </div>
                         <div class="col-2 p-0">{{entity.building.maxRange}}m</div>
                     </div>
+                    <div>These settings apply to {{entity.maintainedStructures}} nearby structures.</div>
+                    <div>x{{entity.maintainedConsumptionRate}} Maintenance Supplies</div>
                 </div>
             </template>
             <div v-if="productionData" class="settings-option-wrapper">

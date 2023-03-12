@@ -127,7 +127,8 @@ Vue.component('app-menu-statistics', {
             let powerConsumed = 0;
             let maintenanceSupplies = 0;
             let garrisonConsumptionRate = Math.floor(this.time / 3600);
-            let garrisonConsumptionReducers = [];
+            let maintenanceTunnels = [];
+            //let garrisonConsumptionReducers = [];
 
             this.selection = game.settings.enableSelectionStats && game.getSelectedEntities().length;
 
@@ -136,9 +137,16 @@ Vue.component('app-menu-statistics', {
             for (let i = 0; i < entities.length; i++) {
                 let entity = entities[i];
                 if (entity.building) {
+                    if (entity.building.key === 'maintenance_tunnel') {
+                        maintenanceTunnels.push(entity);
+                        entity.maintainedConsumptionRate = 0;
+                        entity.maintainedStructures = 0;
+                    }
+                    /*
                     if (entity.baseUpgrades?.base === 'large_garrison') {
                         garrisonConsumptionReducers.push(entity);
                     }
+                    */
                     if (this.selection && selectedBunker !== false && entity.building.canUnion && entity.selected) {
                         if (selectedBunker === null) {
                             selectedBunker = entity;
@@ -165,11 +173,21 @@ Vue.component('app-menu-statistics', {
                         bunker.structuralIntegrity *= buildingData.structuralIntegrity;
                     }
 
+                    let consumptionRate = (2 * (buildingData.garrisonSupplyMultiplier ?? 1)) * garrisonConsumptionRate;
+                    for (const maintenanceTunnel of maintenanceTunnels) {
+                        if (consumptionRate > 0 && (buildingData.category !== 'vehicles' && buildingData.category !== 'trains' && buildingData.category !== 'world') &&
+                            (maintenanceTunnel === entity || (Math.distanceBetween(entity, maintenanceTunnel) < (maintenanceTunnel.maintenanceFilters.range * METER_PIXEL_SIZE))) &&
+                            !maintenanceTunnel.maintenanceFilters.exclusions.includes(buildingData.category)) {
+                            maintenanceTunnel.maintainedConsumptionRate += consumptionRate;
+                            maintenanceTunnel.maintainedStructures += 1;
+                        }
+                    }
+
                     if (entity.selected || !this.selection) {
                         // TODO: Need to actually get whether a structure decays or not from foxhole data.
                         if (buildingData.category !== 'vehicles' && buildingData.category !== 'trains' && buildingData.category !== 'world') {
                             displayTime = true;
-                            let consumptionRate = (2 * (buildingData.garrisonSupplyMultiplier ?? 1)) * garrisonConsumptionRate;
+                            /*
                             for (let j = 0; j < garrisonConsumptionReducers.length; j++) {
                                 const garrison = garrisonConsumptionReducers[j];
                                 if (Math.distanceBetween(entity.mid, garrison) < (garrison.building.baseUpgrades.base['large_garrison'].range.max * 32)) {
@@ -177,6 +195,7 @@ Vue.component('app-menu-statistics', {
                                     break;
                                 }
                             }
+                            */
                             maintenanceSupplies += consumptionRate;
                         }
 
@@ -302,6 +321,11 @@ Vue.component('app-menu-statistics', {
             this.powerProduced = powerProduced;
             this.powerConsumed = powerConsumed;
             this.maintenanceSupplies = maintenanceSupplies;
+
+            const selectedEntity = game.getSelectedEntity();
+            if (game.buildingSelectedMenuComponent && selectedEntity?.building?.key === 'maintenance_tunnel') {
+                game.buildingSelectedMenuComponent.refresh();
+            }
 
             this.$forceUpdate();
         },
