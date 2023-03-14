@@ -261,7 +261,7 @@ class FoxholeStructure extends DraggableContainer {
     constructor(id, type, subtype, x, y, z, rotation) {
         super(id, type, subtype, x, y, z, rotation);
 
-        if (type === 'building') {
+        if (type === 'building' || type === 'locomotive' || type === 'locomotive_undercarriage') {
             this.building = window.objectData.buildings[subtype];
             if (!this.building) {
                 console.error('Invalid building type:', subtype);
@@ -1462,4 +1462,157 @@ class FoxholeStructure extends DraggableContainer {
     }
 }
 
+class FoxholeLocomotive extends FoxholeStructure {
+    constructor(id, type, subtype, x, y, z, rotation) {
+        super(id, type, subtype, x, y, z, rotation);
+
+        this.front_undercarriage = game.createObject('trainlrartillery_undercarriage', x + 284, y, undefined, 0, undefined, false);
+        this.back_undercarriage = game.createObject('trainlrartillery_undercarriage', x - 284, y, undefined, Math.PI, undefined, false);
+        
+        this.front_undercarriage.car_linkage = this;
+        this.back_undercarriage.car_linkage = this;
+
+        const frontSocket = this.front_undercarriage.getSocketById(1);
+        frontSocket.removeConnections = () => {};
+
+        const backSocket = this.back_undercarriage.getSocketById(1);
+        backSocket.removeConnections = () => {};
+
+        frontSocket.setConnection(this.back_undercarriage.id, undefined, 1);
+        backSocket.setConnection(this.front_undercarriage.id, undefined, 1);
+        
+        this.back_undercarriage.trackDirection *= -1;
+    }
+
+    tick() {
+        super.tick();
+
+        if (game.isMovingSelected() && this.selected) {
+            let frontTrack, frontProj, backTrack, backProj;
+            for (const entity of game.getEntities()) {
+                if (entity.building?.key === 'rail_large_gauge' && Math.distanceBetween(entity.mid, this) < 1500) {
+                    let pos = entity.toLocal({x: 284, y: 0}, this, undefined, true);
+                    let projection = entity.bezier.project(pos);
+                    if (projection.d <= 60) {
+                        frontTrack = entity;
+                        frontProj = projection;
+                    }
+                    pos = entity.toLocal({x: -284, y: 0}, this, undefined, true);
+                    projection = entity.bezier.project(pos);
+                    if (projection.d <= 60) {
+                        backTrack = entity;
+                        backProj = projection;
+                    }
+                }
+                if (frontTrack && backTrack) {
+                    let rotation = Math.angleNormalized(this.rotation), maxAngleDiff = Math.PI / 2;
+                    this.front_undercarriage.currentTrack = frontTrack;
+                    this.front_undercarriage.currentTrackT = frontProj.t;
+                    if (!Math.anglesWithinRange(rotation, Math.angleNormalized(this.front_undercarriage.rotation), maxAngleDiff)) {
+                        this.front_undercarriage.trackDirection *= -1;
+                    }
+
+                    this.back_undercarriage.currentTrack = backTrack;
+                    this.back_undercarriage.currentTrackT = backProj.t;
+                    if (!Math.anglesWithinRange(rotation, Math.angleNormalized(this.back_undercarriage.rotation - Math.PI), maxAngleDiff)) {
+                        this.back_undercarriage.trackDirection *= -1;
+                    }
+
+                    if (!game.playMode) {
+                        this.front_undercarriage.updatePosition();
+                        this.back_undercarriage.updatePosition();
+                    }
+                    break;
+                }
+            }
+
+            if (!frontTrack || !backTrack) {
+                const frontPos = game.app.cstage.toLocal({x: 284, y: 0}, this, undefined, true);
+                this.front_undercarriage.position.set(frontPos.x, frontPos.y);
+                this.front_undercarriage.rotation = this.rotation;
+                this.front_undercarriage.currentTrack = null;
+                this.front_undercarriage.currentTrackT = null;
+                this.front_undercarriage.removeConnections();
+
+                const backPos = game.app.cstage.toLocal({x: -284, y: 0}, this, undefined, true);
+                this.back_undercarriage.position.set(backPos.x, backPos.y);
+                this.back_undercarriage.rotation = Math.angleNormalized(this.rotation + Math.PI);
+                this.back_undercarriage.currentTrack = null;
+                this.back_undercarriage.currentTrackT = null;
+                this.back_undercarriage.removeConnections();
+            }
+
+            this.front_undercarriage.trackVelocity = 0;
+            this.back_undercarriage.trackVelocity = 0;
+        } else {
+            const getMidPoint = (p1, p2) => {
+                return {
+                    x: (p1.x + p2.x) / 2,
+                    y: (p1.y + p2.y) / 2
+                };
+            }
+
+            let midPoint = getMidPoint(this.front_undercarriage, this.back_undercarriage);
+            this.position.set(midPoint.x, midPoint.y);
+            this.rotation = Math.angleNormalized(Math.angleBetween(midPoint, this.front_undercarriage));
+        }
+    }
+
+    onRemove() {
+        super.onRemove();
+
+        this.front_undercarriage.remove();
+        this.back_undercarriage.remove();
+    }
+
+    setUndercarriage(type, entity) {
+        if (type === 'front') {
+            this.front_undercarriage.remove();
+            this.front_undercarriage = entity;
+        } else if (type === 'back') {
+            this.back_undercarriage.remove();
+            this.back_undercarriage = entity;
+        }
+        const insideSocket = entity.getSocketById(1);
+        insideSocket.removeConnections = () => {};
+        entity.car_linkage = this;
+    }
+}
+
+class FoxholeLocomotiveUndercarriage extends FoxholeStructure {
+    constructor(id, type, subtype, x, y, z, rotation) {
+        super(id, type, subtype, x, y, z, rotation);
+
+        this.selectable = false;
+    }
+
+    afterLoad(objData, objIdMap) {
+        super.afterLoad(objData, objIdMap);
+
+        if (objData.trainCarId) {
+            const remappedEntityId = (objIdMap && typeof objIdMap[objData.trainCarId] === 'number') ? objIdMap[objData.trainCarId] : objData.trainCarId;
+            game.getEntityById(remappedEntityId).setUndercarriage(objData.carriageType, this);
+        }
+    }
+
+    onSave(objData, isSelection) {
+        super.onSave(objData, isSelection);
+        
+        objData.trainCarId = this.car_linkage.id;
+        objData.carriageType = this.car_linkage.front_undercarriage === this ? 'front' : 'back';
+    }
+
+    updatePosition() {
+        let normal = this.currentTrack.bezier.normal(this.currentTrackT);
+        let angle = Math.angleBetween({x: 0, y: 0}, normal);
+        if (this.trackDirection === -1) {
+            angle += Math.PI;
+        }
+        this.rotation = Math.normalizeAngleRadians(this.currentTrack.rotation + (angle - Math.PI/2));
+        this.moveAlongBezier(0);
+    }
+}
+
 game.addDraggableType('building', FoxholeStructure);
+game.addDraggableType('locomotive', FoxholeLocomotive);
+game.addDraggableType('locomotive_undercarriage', FoxholeLocomotiveUndercarriage);

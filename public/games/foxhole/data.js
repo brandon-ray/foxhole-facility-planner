@@ -9576,24 +9576,66 @@ const gameData = {
 		},
 		"trainlrartillery": {
 			"name": "Tempest Cannon RA-2",
+			"className": "locomotive",
 			"codeName": "TrainLRArtillery",
 			"description": "All the power of a stationary Storm Cannon, but easily relocated via rails. This devastating cannon is capable of leveling enemy fortifications at very large distances.",
 			"category": "trains",
 			"categoryOrder": 10,
-			"hideInList": true,
 			"length": 3.74,
 			"sortLayer": "vehicle",
+			"hitArea": [
+				{
+					"shape": [ 285.12,26.56,284.48,-26.56,294.08,15.04,294.72,26.56 ]
+				},
+				{
+					"shape": [ 294.08,15.04,284.48,-26.56,294.08,-26.56 ]
+				},
+				{
+					"shape": [ -301.12,-45.76,-251.2,-45.76,-251.2,46.4,-301.12,46.4 ]
+				},
+				{
+					"shape": [ 376.64,13.12,294.08,15.04,294.08,-14.4,376.64,-13.12 ]
+				},
+				{
+					"shape": [ -251.2,-45.76,-75.2,51.52,-75.2,69.44,-251.2,69.44 ]
+				},
+				{
+					"shape": [ 47.68,46.4,-75.2834765625,-50.406953125,47.68,-45.76,284.48,-26.56,285.12,46.4 ]
+				},
+				{
+					"shape": [ 284.48,-26.56,47.68,-45.76,285.12,-45.76 ]
+				},
+				{
+					"shape": [ -251.2,-45.76,-75.2834765625,-50.406953125,47.68,46.4,47.04,50.88,-75.2,51.52 ]
+				},
+				{
+					"shape": [ -75.56173828125,-53.746083984375,-75.2834765625,-50.406953125,-251.2,-45.76,-251.2,-53.44 ]
+				},
+				{
+					"shape": [ 47.68,-45.76,-75.2834765625,-50.406953125,47.04,-50.88 ]
+				}
+			],
 			"icon": "game/Textures/UI/VehicleIcons/TrainLRArtilleryVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/trainlrartillery_full.webp",
+			"texture": "game/Textures/Vehicles/trainlrartillery.webp",
 			"textureOffset": {
 				"x": 1197,
 				"y": 187
 			},
+			"canSnap": true,
+			"canSnapAlongBezier": "rail_large_gauge",
+			"techId": "unlockfacilitytier3"
+		},
+		"trainlrartillery_undercarriage": {
+			"className": "locomotive_undercarriage",
+			"category": "trains",
+			"sortLayer": "vehicle",
+			"hideInList": true,
+			"texture": "game/Textures/Vehicles/trainlrartillery_undercarriage.webp",
 			"sockets": [
 				{
 					"id": 0,
 					"type": "traincar",
-					"x": 2394,
+					"x": 620,
 					"y": 186,
 					"rotation": 90
 				},
@@ -9608,9 +9650,8 @@ const gameData = {
 			"vehicle": {
 				"type": "train",
 				"track": "rail_large_gauge",
-				"mass": 25
-			},
-			"techId": "unlockfacilitytier3"
+				"mass": 250
+			}
 		},
 		"tree": {
 			"name": "Tree",

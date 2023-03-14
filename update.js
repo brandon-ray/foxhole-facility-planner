@@ -331,6 +331,7 @@ async function iterateStructures(dirPath) {
                                 structureData = {
                                     'id': structureData.id,
                                     'name': structure.DisplayName?.SourceString ?? (baseData.name ?? structure.CodeName),
+                                    'className': structureData.className,
                                     'codeName': structure.CodeName,
                                     'parentKey': structureData.parentKey,
                                     'prevUpgradeKey': structureData.prevUpgradeKey,

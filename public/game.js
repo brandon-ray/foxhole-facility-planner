@@ -827,7 +827,7 @@ try {
     }
 
     game.isMovingSelected = function() {
-        return pickupSelectedEntities;
+        return pickupSelectedEntities && !ignoreMousePickup;
     }
 
     game.activateToolbeltSlot = function(index, swapBelt = false) {
@@ -1318,7 +1318,7 @@ try {
 
     game.addSelectedEntity = function(entity, noMenuUpdate) {
         game.setPickupEntities(false);
-        if (entity?.selected === false) {
+        if (entity.selectable && entity?.selected === false) {
             selectedEntities.push(entity);
             entity.onSelect();
             if (!noMenuUpdate) {
@@ -2030,7 +2030,7 @@ try {
                 });
                 return true;
             } else {
-                let type = dataKey.type ?? 'building', subtype = dataKey.subtype ?? dataKey.key;
+                let type = dataKey.className ?? dataKey.type ?? 'building', subtype = dataKey.subtype ?? dataKey.key;
                 if (typeof id === 'number' && id >= _entityIds) {
                     _entityIds = id + 1;
                 }
@@ -2521,15 +2521,22 @@ try {
                                     }
                                 }
 
-                                if (entity.hasConnectionToEntity(entity2) && dist > entity.sprite.width/2+entity2.sprite.width/2+5) {
-                                    if (dist > entity.sprite.width/2+entity2.sprite.width/2+30) {
+                                let disableMaxCarDist = false;
+                                let carDistOffset = 0;
+                                if (entity.car_linkage && entity2.car_linkage && entity.car_linkage === entity2.car_linkage) {
+                                    disableMaxCarDist = true;
+                                    carDistOffset = 358;
+                                }
+
+                                if (entity.hasConnectionToEntity(entity2) && (disableMaxCarDist || dist > entity.sprite.width/2+entity2.sprite.width/2+5+carDistOffset)) {
+                                    if (!disableMaxCarDist && dist > entity.sprite.width/2+entity2.sprite.width/2+30+carDistOffset) {
                                         entity.removeConnectionsToEntity(entity2);
                                         continue;
                                     }
                                     let pPos = app.cstage.toLocal(entity.currentTrack.bezier.get(entity.currentTrackT + (0.05 * entity.trackDirection)), entity.currentTrack, undefined, true);
                                     let pNeg = app.cstage.toLocal(entity.currentTrack.bezier.get(entity.currentTrackT - (0.05 * entity.trackDirection)), entity.currentTrack, undefined, true);
 
-                                    let distDiff = dist-(entity.sprite.width/2+entity2.sprite.width/2+10);
+                                    let distDiff = dist-(entity.sprite.width/2+entity2.sprite.width/2+10+carDistOffset);
                                     let distDiffScaled = (distDiff / entity.currentTrack.bezier.length()) * entity.trackDirection;
                                     if (Math.distanceBetween(entity2, pPos) >= Math.distanceBetween(entity2, pNeg)) {
                                         entity.trackVelocity -= distDiff/entity.mass;
@@ -2664,10 +2671,10 @@ try {
                         if (selectedEntity.building?.canSnap || selectedEntity.isTrain) {
                             for (let j = 0; j < entities.length; j++) {
                                 let entity = entities[j];
-                                if (!entity.visible || entity === selectedEntity || entity.type !== 'building' || entity.selected || !((selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain) || Math.distanceBetween(selectedEntity, entity.mid) > 1000) {
+                                if (!entity.visible || entity === selectedEntity || entity.type !== 'building' || entity.selected || !((selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain || pickupEntity?.building?.canSnapAlongBezier) || Math.distanceBetween(selectedEntity, entity.mid) > 1000) {
                                     continue;
                                 }
-                                if (selectedEntity.subtype === entity.subtype || (selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain) {
+                                if (selectedEntity.subtype === entity.subtype || (selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain || (pickupEntity && entity.subtype && pickupEntity.building?.canSnapAlongBezier === entity.subtype)) {
                                     const mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
                                     const projection = selectedEntities.length === 1 && entity.bezier?.project(mousePos);
                                     if (!projection || projection.d <= Math.max(entity.building?.lineWidth ?? 0, 25)) {
@@ -2764,7 +2771,7 @@ try {
                                                 i = -1;
                                             }
                                         }
-                                        if (pickupEntity && projection && ((!connectionEstablished && entity.bezier && entity.building?.isBezier && entity.building?.canSnapAlongBezier && selectedEntity.subtype === entity.subtype) || (selectedEntity.isTrain && entity.subtype === selectedEntity.building.vehicle.track))) {
+                                        if (pickupEntity && projection && ((!connectionEstablished && entity.bezier && entity.building?.isBezier && entity.building?.canSnapAlongBezier && selectedEntity.subtype === entity.subtype) || (selectedEntity.isTrain && entity.subtype === selectedEntity.building.vehicle.track) || pickupEntity?.building?.canSnapAlongBezier)) {
                                             let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity, undefined, true);
                                             let normal = entity.bezier.normal(projection.t);
                                             let angle = Math.angleBetween({x: 0, y: 0}, normal);
