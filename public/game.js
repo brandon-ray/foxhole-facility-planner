@@ -827,7 +827,7 @@ try {
     }
 
     game.isMovingSelected = function() {
-        return pickupSelectedEntities && !ignoreMousePickup;
+        return (pickupSelectedEntities && !ignoreMousePickup) || selectionRotation;
     }
 
     game.activateToolbeltSlot = function(index, swapBelt = false) {
@@ -2771,7 +2771,7 @@ try {
                                                 i = -1;
                                             }
                                         }
-                                        if (pickupEntity && projection && ((!connectionEstablished && entity.bezier && entity.building?.isBezier && entity.building?.canSnapAlongBezier && selectedEntity.subtype === entity.subtype) || (selectedEntity.isTrain && entity.subtype === selectedEntity.building.vehicle.track) || pickupEntity?.building?.canSnapAlongBezier)) {
+                                        if (pickupEntity && projection && ((!connectionEstablished && entity.bezier && entity.building.isBezier && entity.building.canSnapAlongBezier && selectedEntity.subtype === entity.subtype) || (selectedEntity.isTrain && entity.subtype === selectedEntity.building.vehicle.track) || (!pickupEntity.building?.isBezier && pickupEntity.building?.canSnapAlongBezier))) {
                                             let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity, undefined, true);
                                             let normal = entity.bezier.normal(projection.t);
                                             let angle = Math.angleBetween({x: 0, y: 0}, normal);
