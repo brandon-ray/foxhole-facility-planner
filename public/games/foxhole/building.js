@@ -1586,20 +1586,37 @@ class FoxholeLocomotiveUndercarriage extends FoxholeStructure {
         this.selectable = false;
     }
 
+    tick(delta) {
+        super.tick(delta);
+
+        if (!this.car_linkage) {
+            console.error('Tick occurred with no car linkage. Removing undercarriage.');
+            this.remove();
+        }
+    }
+
     afterLoad(objData, objIdMap) {
         super.afterLoad(objData, objIdMap);
 
         if (objData.trainCarId) {
             const remappedEntityId = (objIdMap && typeof objIdMap[objData.trainCarId] === 'number') ? objIdMap[objData.trainCarId] : objData.trainCarId;
-            game.getEntityById(remappedEntityId).setUndercarriage(objData.carriageType, this);
+            const trainCar = game.getEntityById(remappedEntityId);
+            if (trainCar?.building?.className === 'locomotive') {
+                trainCar.setUndercarriage(objData.carriageType, this);
+            } else {
+                console.error('Loading failed to find train car. Removing undercarriage.');
+                this.remove();
+            }
         }
     }
 
     onSave(objData, isSelection) {
         super.onSave(objData, isSelection);
         
-        objData.trainCarId = this.car_linkage.id;
-        objData.carriageType = this.car_linkage.front_undercarriage === this ? 'front' : 'back';
+        if (this.car_linkage?.valid) {
+            objData.trainCarId = this.car_linkage.id;
+            objData.carriageType = this.car_linkage.front_undercarriage === this ? 'front' : 'back';
+        }
     }
 
     updatePosition() {
