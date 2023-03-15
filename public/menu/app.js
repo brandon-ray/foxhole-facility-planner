@@ -116,7 +116,7 @@ if (isMobile && !isPhoneApp) {
                     </div>
                 </div>
 
-                <app-menu-statistics v-if="game.settings.enableStats"></app-menu-statistics>
+                <app-menu-statistics></app-menu-statistics>
 
                 <app-game-toolbelt></app-game-toolbelt>
 

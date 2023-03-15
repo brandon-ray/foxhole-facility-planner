@@ -331,7 +331,7 @@ Vue.component('app-menu-statistics', {
         },
     },
     template: html`
-    <div class="board-panel statistics-panel">
+    <div v-if="game.settings.enableStats" class="board-panel statistics-panel">
         <div class="board-panel-header">
             <h4 class="float-left m-0" style="color: #eee"><i class="fa fa-bar-chart"></i> {{selection ? 'Selection' : 'Global'}} Statistics</h4>
             <!--<button class="btn-small m-0 float-right" title="Maximize Stats"><i class="fa fa-window-maximize"></i></button>-->

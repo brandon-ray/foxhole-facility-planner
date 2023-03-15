@@ -805,7 +805,7 @@ Vue.component('app-menu-construction-list', {
                 for (const category of Object.values(window.objectData.categories)) {
                     if (game.settings.enableExperimental || !category.experimental) {
                         for (const building of category.buildings) {
-                            if (building.name.toLowerCase().includes(this.searchQuery.toLowerCase()) && game.canShowListItem(building, true)) {
+                            if (building.name && building.name.toLowerCase().includes(this.searchQuery.toLowerCase()) && game.canShowListItem(building, true)) {
                                 results.push(building);
                             }
                         }
