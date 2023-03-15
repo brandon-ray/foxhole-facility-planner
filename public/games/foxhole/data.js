@@ -645,7 +645,7 @@ const gameData = {
 		},
 		"mediumtankatw": {
 			"name": "Silverhand Lordscar - Mk. X",
-			"description": "A cut down variation of the Silverhand Assault Tank that sacrifices armour and protection in favour of a high-powered 94.5mm cannon. This open-top weapon platform is uniquely designed to intercept enemy armour before they’re given time to retaliate. Its moniker is a tribute to the maiming of the great king the Silverhand is named for; while his title was stripped, and his pride damage, his rage was never quelled.",
+			"description": "A cut down variation of the Silverhand Assault Tank that sacrifices armour and protection in favour of a high-powered 94.5mm cannon. This open-top weapon platform is uniquely designed to intercept enemy armour before they’re given time to retaliate. Its moniker is a tribute to the maiming of the great king the Silverhand is named for; while his title was stripped, and his pride damaged, his rage was never quelled.",
 			"icon": "game/Textures/UI/VehicleIcons/MediumTankATWIcon.webp"
 		},
 		"mediumtankc": {
@@ -1216,7 +1216,7 @@ const gameData = {
 			"icon": "game/Textures/UI/ItemIcons/SatchelChargeTIcon.webp",
 			"codeName": "satchelcharget",
 			"alias": "Havoc",
-			"damage": 1500,
+			"damage": 1850,
 			"damageType": {
 				"name": "Demolition",
 				"profiles": {
@@ -4464,8 +4464,10 @@ const gameData = {
 					"textureBorder": "game/Textures/Structures/concrete_foundation_border.webp",
 					"garrisonSupplyMultiplier": 2,
 					"cost": {
-						"concrete": 15
-					}
+						"concrete": 5
+					},
+					"maxHealth": 3850,
+					"repairCost": 100
 				}
 			}
 		},
@@ -4574,8 +4576,10 @@ const gameData = {
 					"textureBorder": "game/Textures/Structures/concrete_foundation_border.webp",
 					"garrisonSupplyMultiplier": 2,
 					"cost": {
-						"concrete": 20
-					}
+						"concrete": 10
+					},
+					"maxHealth": 3850,
+					"repairCost": 100
 				}
 			}
 		},
@@ -4707,8 +4711,10 @@ const gameData = {
 					"textureBorder": "game/Textures/Structures/concrete_foundation_border.webp",
 					"garrisonSupplyMultiplier": 2,
 					"cost": {
-						"concrete": 30
-					}
+						"concrete": 15
+					},
+					"maxHealth": 3850,
+					"repairCost": 100
 				}
 			}
 		},
@@ -4780,8 +4786,10 @@ const gameData = {
 					"textureBorder": "game/Textures/Structures/concrete_foundation_border.webp",
 					"garrisonSupplyMultiplier": 2,
 					"cost": {
-						"concrete": 15
-					}
+						"concrete": 5
+					},
+					"maxHealth": 3850,
+					"repairCost": 100
 				}
 			}
 		},
@@ -4964,7 +4972,9 @@ const gameData = {
 					],
 					"cost": {
 						"cloth": 50
-					}
+					},
+					"maxHealth": 1000,
+					"repairCost": 50
 				},
 				"gatet3": {
 					"name": "Gate (Tier 3)",
@@ -5004,8 +5014,10 @@ const gameData = {
 						}
 					],
 					"cost": {
-						"wood": 30
-					}
+						"concrete": 15
+					},
+					"maxHealth": 3000,
+					"repairCost": 75
 				}
 			}
 		},
@@ -8676,7 +8688,9 @@ const gameData = {
 					"texture": "game/Textures/Structures/sandbagfullspline.webp",
 					"cost": {
 						"sandbagmaterials": 3
-					}
+					},
+					"maxHealth": 1600,
+					"repairCost": 30
 				}
 			}
 		},
@@ -10594,7 +10608,9 @@ const gameData = {
 					],
 					"cost": {
 						"cloth": 30
-					}
+					},
+					"maxHealth": 1000,
+					"repairCost": 30
 				},
 				"wallsplinet3": {
 					"name": "Wall (Tier 3)",
@@ -10634,8 +10650,10 @@ const gameData = {
 						}
 					],
 					"cost": {
-						"concrete": 25
-					}
+						"concrete": 15
+					},
+					"maxHealth": 3000,
+					"repairCost": 75
 				}
 			}
 		},

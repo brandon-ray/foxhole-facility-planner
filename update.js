@@ -540,7 +540,15 @@ function iterateData(filePath, list, type) {
     if (uAsset.Rows) {
         for (let [codeName, data] of Object.entries(uAsset.Rows)) {
             codeName = codeName.toLowerCase();
-            const listItem = list[codeName];
+            let listItem = list[codeName];
+            if (!listItem && !type) {
+                for (const v of Object.values(list)) {
+                    if (v.upgrades && v.upgrades[codeName]) {
+                        listItem = v.upgrades[codeName];
+                        break;
+                    }
+                }
+            }
             if (listItem && type === 'weapon') {
                 if (data.Damage) {
                     let weapon = Object.assign({
