@@ -686,8 +686,29 @@ Vue.component('app-menu-building-selected', {
                         </div>
                         <div class="col-2 p-0">{{entity.building.maxRange}}m</div>
                     </div>
-                    <div>These settings apply to {{entity.maintainedStructures}} nearby structures.</div>
-                    <div>x{{entity.maintainedConsumptionRate}} Maintenance Supplies</div>
+                    <span style="font-size: 15px;">These settings apply to {{entity.maintainedStructures.toLocaleString()}}&nbsp;nearby&nbsp;structures.</span>
+                </div>
+                <div v-if="entity.maintainedConsumptionRate" class="settings-option-wrapper text-center">
+                    <div class="settings-title">Maintenance Supply Upkeep<span style="color: #b5b5b5;">/hr</span></div>
+                    <div class="construction-options row d-flex justify-content-center">
+                        <div class="btn-small no-button col" style="color: #00ca00;">
+                            <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate * 0.5}}</span>
+                            <span class="label">very good</span>
+                        </div>
+                        <div class="btn-small no-button col" style="color: #74d004;">
+                            <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate}}</span>
+                            <span class="label">good</span>
+                        </div>
+                        <div class="btn-small no-button col" style="color: #ffa500;">
+                            <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate * 2}}</span>
+                            <span class="label">poor</span>
+                        </div>
+                        <div class="btn-small no-button col" style="color: #ff0d0d;">
+                            <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate * 3}}</span>
+                            <span class="label">very poor</span>
+                        </div>
+                    </div>
+                    <small style="color: #d9d9d9;">Note: These values do not account for overlapping MTs.</small>
                 </div>
             </template>
             <div v-if="productionData" class="settings-option-wrapper">

@@ -23,7 +23,7 @@ Access the tool at: https://foxholeplanner.com
     - Total Construction Cost
     - Bunker Health, Repair Cost, and Structural Integrity
     - Production Limits & Time Filtering
-    - Garrison / Bunker Supply Consumption
+    - Maintenance Supply Consumption
     - Facility Power and Resource Production Input / Output
 
 ## Tool Preview

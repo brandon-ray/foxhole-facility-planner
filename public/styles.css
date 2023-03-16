@@ -269,6 +269,13 @@ p {
     outline: none;
 }
 
+.btn-small.header-icon {
+    width: 15px;
+    height: 28px;
+    background: none;
+    border: none;
+}
+
 /* Chrome, Safari, Edge, Opera */
 input.btn-small::-webkit-outer-spin-button,
 input.btn-small::-webkit-inner-spin-button {
@@ -293,6 +300,11 @@ input[type=number].btn-small {
     position: absolute;
     inset: 4px;
     border-radius: 1px;
+}
+
+.btn-small.no-button {
+    cursor: initial;
+    border-color: black !important;
 }
 
 .btn-checkbox-wrapper {
@@ -588,6 +600,16 @@ input[type=number].btn-small {
     color: #eee;
 }
 
+.construction-options-header .inline-resource-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    vertical-align: middle;
+}
+
 .construction-options {
     height: 40px;
     position: relative;
@@ -634,7 +656,7 @@ input[type=number].btn-small {
     line-height: 12px;
     margin: 0;
     position: absolute;
-    bottom: 0;
+    bottom: 1px;
     left: 0;
     right: 0;
 }

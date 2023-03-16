@@ -126,7 +126,7 @@ Vue.component('app-menu-statistics', {
             let powerProduced = 0;
             let powerConsumed = 0;
             let maintenanceSupplies = 0;
-            let garrisonConsumptionRate = Math.floor(this.time / 3600);
+            let maintenanceConsumptionRate = Math.floor(this.time / 3600);
             let maintenanceTunnels = [];
             //let garrisonConsumptionReducers = [];
 
@@ -173,9 +173,10 @@ Vue.component('app-menu-statistics', {
                         bunker.structuralIntegrity *= buildingData.structuralIntegrity;
                     }
 
-                    let consumptionRate = (2 * (buildingData.garrisonSupplyMultiplier ?? 1)) * garrisonConsumptionRate;
+                    let consumptionRate = 2 * (buildingData.garrisonSupplyMultiplier ?? 1);
+                    let totalConsumptionRate = consumptionRate * maintenanceConsumptionRate;
                     for (const maintenanceTunnel of maintenanceTunnels) {
-                        if (consumptionRate > 0 && (buildingData.category !== 'vehicles' && buildingData.category !== 'trains' && buildingData.category !== 'world') &&
+                        if (totalConsumptionRate > 0 && (buildingData.category !== 'vehicles' && buildingData.category !== 'trains' && buildingData.category !== 'world') &&
                             (maintenanceTunnel === entity || (Math.distanceBetween(entity, maintenanceTunnel) < (maintenanceTunnel.maintenanceFilters.range * METER_PIXEL_SIZE))) &&
                             !maintenanceTunnel.maintenanceFilters.exclusions.includes(buildingData.category)) {
                             maintenanceTunnel.maintainedConsumptionRate += consumptionRate;
@@ -196,7 +197,7 @@ Vue.component('app-menu-statistics', {
                                 }
                             }
                             */
-                            maintenanceSupplies += consumptionRate;
+                            maintenanceSupplies += totalConsumptionRate;
                         }
 
                         let productionSelected = typeof entity.selectedProduction === 'number';
@@ -302,8 +303,11 @@ Vue.component('app-menu-statistics', {
                     if (weapon.damageType) {
                         let damageProfiles = {};
                         for (const [type, damage] of Object.entries(weapon.damageType.profiles)) {
-                            let damageMultiplier = (weapon.damageType.multipliers && weapon.damageType.multipliers[type]) || 1;
-                            damageProfiles[type] = damage ? Math.ceil(bunker.maxHealth / (weapon.damage * damage * damageMultiplier)) : 0;
+                            let dryingMultiplier = 1, damageMultiplier = (weapon.damageType.multipliers && weapon.damageType.multipliers[type]) || 1;
+                            if (game.settings.enableBunkerDryingStats && type === 't3' && this.time < 86400) {
+                                dryingMultiplier = this.time < 8640 ? 10 : 86400 / this.time;
+                            }
+                            damageProfiles[type] = damage ? Math.ceil(bunker.maxHealth / (weapon.damage * damage * dryingMultiplier * damageMultiplier)) : 0;
                         }
                         bunker.damageProfiles[weaponKey] = damageProfiles;
                     }
@@ -346,44 +350,24 @@ Vue.component('app-menu-statistics', {
                     <app-game-resource-icon v-for="(value, key) in cost" :resource="key" :amount="value"/>
                 </div>
             </div>
-            <template v-if="selection && bunker?.total">
-                <div class="construction-options-wrapper">
-                    <h5 class="construction-options-header"><i class="fa fa-shield" aria-hidden="true"></i> Selected Bunker Stats</h5>
-                    <div class="construction-options row d-flex justify-content-center">
-                        <div class="btn-small col" style="color: #00ca00;">
-                            <span style="font-size: 18px;">{{bunker.maxHealth.toLocaleString()}}</span>
-                            <span class="label">health</span>
-                        </div>
-                        <div class="btn-small col" style="color: #d0d004;">
-                            <span style="font-size: 18px;">{{bunker.repairCost.toLocaleString()}}</span>
-                            <span class="label">repair</span>
-                        </div>
-                        <div class="btn-small col" :class="bunker.class + '-structural-integrity'">
-                            <span style="font-size: 18px;">{{Math.floor(bunker.structuralIntegrity * 100)}} <small>%</small></span>
-                            <!--<span class="label">{{bunker.structuralIntegrity.toFixed(4)}}</span>-->
-                            <span class="label">{{bunker.class}}</span>
-                        </div>
+            <div v-if="selection && bunker?.total" class="construction-options-wrapper">
+                <h5 class="construction-options-header"><i class="fa fa-shield" aria-hidden="true"></i> Selected Bunker Stats</h5>
+                <div class="construction-options row d-flex justify-content-center">
+                    <div class="btn-small col" style="color: #00ca00;">
+                        <span style="font-size: 18px;">{{bunker.maxHealth.toLocaleString()}}</span>
+                        <span class="label">health</span>
+                    </div>
+                    <div class="btn-small col" style="color: #d0d004;">
+                        <span style="font-size: 18px;">{{bunker.repairCost.toLocaleString()}}</span>
+                        <span class="label">repair</span>
+                    </div>
+                    <div class="btn-small col" :class="bunker.class + '-structural-integrity'">
+                        <span style="font-size: 18px;">{{Math.floor(bunker.structuralIntegrity * 100)}} <small>%</small></span>
+                        <!--<span class="label">{{bunker.structuralIntegrity.toFixed(4)}}</span>-->
+                        <span class="label">{{bunker.class}}</span>
                     </div>
                 </div>
-                <div v-if="game.settings.enableExperimental" class="construction-options-wrapper">
-                    <h5 class="construction-options-header"><i class="fa fa-shield"></i> Bunker Destruction Req's</h5>
-                    <div class="bunker-damage-profile-stats">
-                        <div class="weapon-row d-flex table-heading">
-                            <div class="weapon-name flex-grow-2 px-2">Weapon</div>
-                            <div class="weapon-damage">T1/T2</div>
-                            <div class="weapon-damage">T3</div>
-                        </div>
-                        <div class="weapon-row d-flex" v-for="(damageProfile, weapon) in bunker?.damageProfiles" :title="gameData.weapons[weapon].name">
-                            <div class="weapon-name flex-grow-2">
-                                <div class="resource-icon mr-2" :style="{backgroundImage: 'url(' + gameData.weapons[weapon].icon + ')'}"></div>
-                                {{gameData.weapons[weapon].alias ?? gameData.weapons[weapon].name}}
-                            </div>
-                            <div class="weapon-damage">{{damageProfile.t2}}</div>
-                            <div class="weapon-damage">{{damageProfile.t3}}</div>
-                        </div>
-                    </div>
-                </div>
-            </template>
+            </div>
             <div v-if="powerProduced || powerConsumed || powerTotal" class="construction-options-wrapper">
                 <h5 class="construction-options-header"><i class="fa fa-bolt"></i> {{selection ? 'Selection' : 'Facility'}} Power</h5>
                 <div class="construction-options row d-flex justify-content-center">
@@ -416,10 +400,53 @@ Vue.component('app-menu-statistics', {
                     </select>
                 </div>
             </div>
-            <div v-if="maintenanceSupplies || input" class="construction-options-wrapper">
+            <div v-if="maintenanceSupplies" class="construction-options-wrapper" title="Maintenance Supplies are required to prevent structures from decaying. The following information indicates how much structures will cost based on the performance of the sub-region's consumption modifier.">
+                <h5 class="construction-options-header">
+                    <i class="inline-resource-icon" style="width: 18px;" :style="{backgroundImage: 'url(games/foxhole/assets/game/Textures/UI/ItemIcons/MaintenanceSuppliesIcon.webp)'}"></i> {{selection ? 'Selection Maintenance' : 'Maintenance Supplies'}}
+                </h5>
+                <div class="construction-options row d-flex justify-content-center">
+                    <div class="btn-small col" style="color: #00ca00;">
+                        <span style="font-size: 17px;"><small>x</small>{{maintenanceSupplies * 0.5}}</span>
+                        <span class="label">very good</span>
+                    </div>
+                    <div class="btn-small col" style="color: #74d004;">
+                        <span style="font-size: 17px;"><small>x</small>{{maintenanceSupplies}}</span>
+                        <span class="label">good</span>
+                    </div>
+                    <div class="btn-small col" style="color: #ffa500;">
+                        <span style="font-size: 17px;"><small>x</small>{{maintenanceSupplies * 2}}</span>
+                        <span class="label">poor</span>
+                    </div>
+                    <div class="btn-small col" style="color: #ff0d0d;">
+                        <span style="font-size: 17px;"><small>x</small>{{maintenanceSupplies * 3}}</span>
+                        <span class="label">very poor</span>
+                    </div>
+                </div>
+            </div>
+            <div v-if="game.settings.enableExperimental && selection && bunker?.total" class="construction-options-wrapper">
+                <h5 class="construction-options-header">
+                    <i class="fa fa-shield"></i> Bunker Destruction Stats
+                    <button class="btn-small m-0 float-right header-icon" :class="{'btn-active': game.settings.enableBunkerDryingStats}" title="Toggle Wet Concrete Drying Time" @click="game.settings.enableBunkerDryingStats = !game.settings.enableBunkerDryingStats; game.updateSettings(); game.refreshStats()"><i class="fa fa-tint"></i></button>
+                </h5>
+                <div class="bunker-damage-profile-stats">
+                    <div class="weapon-row d-flex table-heading">
+                        <div class="weapon-name flex-grow-2 px-2">Weapon</div>
+                        <div class="weapon-damage">T1/T2</div>
+                        <div class="weapon-damage">T3 {{(!game.settings.enableBunkerDryingStats || time == 86400) ? 'DRY' : 'WET'}}</div>
+                    </div>
+                    <div class="weapon-row d-flex" v-for="(damageProfile, weapon) in bunker?.damageProfiles" :title="gameData.weapons[weapon].name">
+                        <div class="weapon-name flex-grow-2">
+                            <div class="resource-icon mr-2" :style="{backgroundImage: 'url(' + gameData.weapons[weapon].icon + ')'}"></div>
+                            {{gameData.weapons[weapon].alias ?? gameData.weapons[weapon].name}}
+                        </div>
+                        <div class="weapon-damage">{{damageProfile.t2}}</div>
+                        <div class="weapon-damage">{{damageProfile.t3}}</div>
+                    </div>
+                </div>
+            </div>
+            <div v-if="input" class="construction-options-wrapper">
                 <h5 class="construction-options-header"><i class="fa fa-sign-in"></i> {{selection ? 'Selection' : 'Production'}} Input</h5>
                 <div class="statistics-panel-fac-input">
-                    <app-game-resource-icon v-if="maintenanceSupplies" :resource="'maintenancesupplies'" :amount="maintenanceSupplies"/>
                     <app-game-resource-icon v-for="(value, key) in input" :resource="key" :amount="value"/>
                 </div>
             </div>

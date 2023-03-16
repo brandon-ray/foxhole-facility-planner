@@ -66,6 +66,7 @@ const game = {
         enableGrid: true,
         enableStats: true,
         enableSelectionStats: true,
+        enableBunkerDryingStats: false,
         gridSize: 16,
         enableSnapRotation: true,
         snapRotationDegrees: 15,
