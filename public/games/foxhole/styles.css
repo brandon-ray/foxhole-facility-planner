@@ -126,7 +126,7 @@ body {
 }
 
 .statistics-panel-fac-output .resource-amount {
-    color: #03b003;
+    color: #00ca00;
 }
 
 .statistics-panel .construction-options .btn-small {
@@ -196,12 +196,40 @@ body {
     border-color: white;
 }
 
-.layer-selection {
-    width: 500px;
-    bottom: 59px;
-    left: 365px;
+.statistics-panel .bunker-damage-profile-stats .weapon-row {
+    background: #0b0b0b;
+    line-height: 32px;
 }
 
-.layer-selection .btn-checkbox-wrapper {
-    margin: 5px;
+.statistics-panel .bunker-damage-profile-stats .weapon-row:nth-child(odd) {
+    background: #0d0d0d;
+}
+
+/*
+.statistics-panel .bunker-damage-profile-stats .weapon-row:hover {
+    background: #1a1a1a;
+}
+*/
+
+.statistics-panel .bunker-damage-profile-stats .weapon-row.table-heading {
+    background: #121212;
+}
+
+.statistics-panel .bunker-damage-profile-stats .weapon-row > div {
+    border: 1px solid black;
+}
+
+.statistics-panel .bunker-damage-profile-stats .weapon-row .weapon-name {
+    flex-grow: 1;
+}
+
+.statistics-panel .bunker-damage-profile-stats .weapon-row .weapon-name .resource-icon {
+    width: 32px;
+    height: 32px;
+    background-size: 92%;
+}
+
+.statistics-panel .bunker-damage-profile-stats .weapon-row .weapon-damage {
+    width: 68px;
+    text-align: center;
 }

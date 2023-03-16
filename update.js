@@ -3,17 +3,111 @@ const path = require('path');
 const sharp = require('sharp');
 
 const METER_UNREAL_UNITS = 100;
-const foxholeDataDirectory = 'dev/';
-const foxholeDataVariable = 'const foxholeData = ';
+const foxholeDataDirectory = 'dev/tools/Output/Exports/';
+const foxholeDataVariable = 'const gameData = ';
 let foxholeData = JSON.parse(fs.readFileSync('./public/games/foxhole/data.js').toString().substring(foxholeDataVariable.length));
 
 const stStructures = JSON.parse(fs.readFileSync(`${foxholeDataDirectory}War/Content/Blueprints/StringTables/STStructures.json`))[0].StringTable.KeysToMetaData;
-const structurePolygons = JSON.parse(fs.readFileSync(`${foxholeDataDirectory}polygons.json`));
+const structurePolygons = JSON.parse(fs.readFileSync(`dev/polygons.json`));
 
 let structureList = foxholeData.buildings;
 let upgradeList = {};
 let techList = {};
-let itemList = {};
+let itemList = {
+    "facilitymaterials4": {
+        "icon": "game/Textures/UI/ItemIcons/AssemblyMaterials1Icon.webp"
+    },
+    "facilitymaterials5": {
+        "icon": "game/Textures/UI/ItemIcons/AssemblyMaterials2Icon.webp"
+    },
+    "facilitymaterials6": {
+        "icon": "game/Textures/UI/ItemIcons/AssemblyMaterials3Icon.webp"
+    },
+    "facilitymaterials7": {
+        "icon": "game/Textures/UI/ItemIcons/AssemblyMaterials4Icon.webp"
+    },
+    "facilitymaterials8": {
+        "icon": "game/Textures/UI/ItemIcons/AssemblyMaterials5Icon.webp"
+    },
+    "oilcan": {
+        "name": "Oil (Canned)",
+        "description": "A raw viscous liquid that must be refined into fuel at Facilities.",
+        "icon": "game/Textures/UI/ItemIcons/Facilities/OilIcon.webp"
+    },
+    "watercan": {
+        "name": "Water (Canned)",
+        "description": "Water... in a can!",
+        "icon": "game/Textures/UI/ItemIcons/WaterIcon.webp"
+    },
+    "wood": {
+        "name": "Refined Materials",
+        "description": "Resource used for building advanced structures and producing special items.",
+        "icon": "game/Textures/UI/ItemIcons/RefinedMaterialsIcon.webp"
+    }
+};
+
+// TODO: Add weapon damage variants. HV, HVFC, Spatha, etc. If there's a lot of entries, adding a search function might be nice.
+let weaponList = {
+    hegrenade: { // Mammon
+        alias: 'HE Grenade',
+        damageType: {
+            multipliers: {
+                't2': 0.95,
+                't3': 0.95
+            }
+        }
+    },
+    helaunchedgrenade: { // Tremola Launched Grenade
+        alias: 'HE Launcher',
+        damageType: {
+            multipliers: {
+                't2': 0.95,
+                't3': 0.95
+            }
+        }
+    },
+    minitankammo: { // 30mm
+        damageType: {
+            multipliers: {
+                't2': 0.99,
+                't3': 0.99
+            }
+        }
+    },
+    rpgammo: { // RPG
+        damageType: {
+            multipliers: {
+                't3': 0.99
+            }
+        }
+    },
+    lighttankammo: {}, // 40mm
+    battletankammo: {}, // 75mm
+    atammo: {}, // 68mm
+    atlargeammo: {}, // 94.5mm
+    mortarammo: { // Mortar
+        alias: 'Mortar'
+    },
+    lightartilleryammo: {}, // 120mm
+    heavyartilleryammo: {}, // 150mm
+    herocketammo: { // Rocket / 3C-High Explosive Rocket
+        alias: 'Rocket'
+    },
+    firerocketammo: { // Flame Rocket / 4C-Fire Rocket
+        alias: 'Fire Rocket'
+    },
+    explosivelightc: { // Hydras
+        alias: 'Hydras'
+    },
+    mortartankammo: {}, // 250mm
+    lrartilleryammo: {}, // 300mm
+    satchelchargew: { // Satchels / Alligator Charge
+        alias: 'Satchel'
+    },
+    satchelcharget: {
+        alias: 'Havoc'
+    }
+};
 
 const conversionEntriesMap = {
     'Input': 'input',
@@ -21,11 +115,6 @@ const conversionEntriesMap = {
     'Output': 'output',
     'FuelOutput': 'output'
 };
-
-const liquidResourceMap = {
-    'Oil': 50,
-    'Water': 50
-}
 
 function getLocalIcon(component) {
     let iconPath = component?.Icon?.ObjectPath ?? component?.Icon?.ResourceObject?.ObjectPath ?? component?.BrushOverride?.ResourceObject?.ObjectPath;
@@ -40,10 +129,16 @@ function getTableString(entry) {
     }
 }
 
+function createItemEntry(codeName) {
+    if (!itemList[codeName]) {
+        itemList[codeName] = {};
+    }
+}
+
 function iterateItemList(resourceList) {
     if (resourceList) {
         resourceList.forEach(resource => {
-            itemList[resource.CodeName.toLowerCase()] = {};
+            createItemEntry(resource.CodeName.toLowerCase());
         });
     }
 }
@@ -52,9 +147,9 @@ function iterateItemList(resourceList) {
 function initializeStructureItems(component) {
     if (component.AssemblyItems) {
         for (const [id, recipe] of Object.entries(component.AssemblyItems)) {
-            itemList[recipe.CodeName.toLowerCase()] = {};
+            createItemEntry(recipe.CodeName.toLowerCase());
             if (recipe.RequiredCodeName !== 'None') {
-                itemList[recipe.RequiredCodeName.toLowerCase()] = {};
+                createItemEntry(recipe.RequiredCodeName.toLowerCase());
             }
         }
     }
@@ -182,6 +277,13 @@ function iterateSocketData(data) {
     }
 }
 
+const buildCategoryMap = {};
+for (const [key, category] of Object.entries(foxholeData.categories)) {
+    if (category.buildCategory) {
+        buildCategoryMap[category.buildCategory] = key;
+    }
+}
+
 async function iterateStructures(dirPath) {
     dirPath = dirPath ?? `${foxholeDataDirectory}War/Content/Blueprints/`;
     let files = fs.readdirSync(dirPath);
@@ -195,7 +297,7 @@ async function iterateStructures(dirPath) {
             let structure = null;
             let structureData;
             let baseData = {};
-            let modificationsData = [];
+            let modificationsData = {};
             for await (const uProperty of uAsset) {
                 switch(uProperty.Type) {
                     case 'BlueprintGeneratedClass':
@@ -218,7 +320,7 @@ async function iterateStructures(dirPath) {
                                     if (!structureList[upgradingCodeName].upgrades) {
                                         structureList[upgradingCodeName].upgrades = {};
                                     }
-                                    if (!structureList[upgradingCodeName].upgrades[structureCodeName].reference) {
+                                    if (!structureList[upgradingCodeName].upgrades[structureCodeName]?.reference) {
                                         parentCodeName = upgradingCodeName;
                                         structureData = structureList[parentCodeName].upgrades[structureCodeName] ?? { 'id': structureCodeName };
                                     }
@@ -229,9 +331,12 @@ async function iterateStructures(dirPath) {
                                 structureData = {
                                     'id': structureData.id,
                                     'name': structure.DisplayName?.SourceString ?? (baseData.name ?? structure.CodeName),
+                                    'className': structureData.className,
                                     'codeName': structure.CodeName,
                                     'parentKey': structureData.parentKey,
+                                    'prevUpgradeKey': structureData.prevUpgradeKey,
                                     'description': structure.Description?.SourceString ?? baseData.description ?? structureData.description,
+                                    //'category': buildCategoryMap[(structure.BuildCategory ?? baseData.BuildCategory)?.substring(16)] ?? structureData.category ?? 'misc',
                                     'category': structureData.category,
                                     'categoryOrder': structureData.categoryOrder ?? structure.BuildOrder ?? baseData.BuildOrder,
                                     'faction': structureData.faction,
@@ -257,6 +362,7 @@ async function iterateStructures(dirPath) {
                                     'lineWidth': structureData.lineWidth,
                                     'minLength': structure.ConnectorMinLength ? structure.ConnectorMinLength / METER_UNREAL_UNITS : structureData.minLength ?? baseData.minLength,
                                     'maxLength': structure.ConnectorMaxLength ? structure.ConnectorMaxLength / METER_UNREAL_UNITS : structureData.maxLength ?? baseData.maxLength,
+                                    'maxRange': structure.MaxRange ? structure.MaxRange / METER_UNREAL_UNITS : undefined,
                                     'icon': structureData.icon ?? getLocalIcon(structure) ?? baseData.icon,
                                     'texture': (typeof structureData.texture === 'string' || structureData.texture === null) ? structureData.texture : `game/Textures/Structures/${structureData.id}.webp`,
                                     'textureBorder': structureData.textureBorder,
@@ -299,9 +405,9 @@ async function iterateStructures(dirPath) {
                                 }
                                 if (structure.Modifications) {
                                     for (const [id, modification] of Object.entries(structure.Modifications)) {
+                                        modificationsData[id] = modification;
                                         initializeStructureItems(modification);
                                     }
-                                    modificationsData = structure.Modifications;
                                 }
                                 if (parentCodeName) {
                                     structureList[parentCodeName].upgrades[structureCodeName] = structureData;
@@ -312,23 +418,21 @@ async function iterateStructures(dirPath) {
                         }
                         break;
                     case 'ModificationSlotComponent':
-                        if (structure) {
+                        if (structure && structureList[structureCodeName]) {
                             let modifications;
                             for (const [codeName, modification] of Object.entries(uProperty.Properties.Modifications)) {
                                 let modificationData = modificationsData[codeName];
                                 if (codeName !== 'EFortModificationType::Default') {
                                     const displayName = codeName.substring(23);
                                     const modificationCodeName = displayName.toLowerCase();
-                                    let storedModData;
-                                    if (structureData?.upgrades) {
-                                        storedModData = structureData.upgrades[modificationCodeName];
-                                    }
+                                    let storedModData = structureData?.upgrades[modificationCodeName] ?? {};
                                     if (!storedModData.reference) {
                                         modifications = modifications ?? {};
                                         modificationData = {
                                             'id': storedModData?.id,
                                             'name': modification.DisplayName?.SourceString ?? getTableString(modification.DisplayName) ?? displayName,
                                             'codeName': displayName,
+                                            'prevUpgradeKey': storedModData?.prevUpgradeKey,
                                             'description': modification.Description?.SourceString ?? getTableString(modification.Description) ?? 'No Description Provided.',
                                             'range': storedModData?.range,
                                             'hitArea': undefined,
@@ -417,12 +521,12 @@ function getResourceCosts(resources) {
     if (resources && resources.Resource.CodeName !== 'None' && resources.Resource.CodeName !== 'Excavation') {
         let resourceCost = {};
         let resourceCodeName = resources.Resource.CodeName.toLowerCase();
-        itemList[resourceCodeName] = {};
+        createItemEntry(resourceCodeName);
         resourceCost[resourceCodeName] = resources.Resource.Quantity;
         if (resources.OtherResources) {
             resources.OtherResources.forEach(resource => {
                 resourceCodeName = resource.CodeName.toLowerCase();
-                itemList[resourceCodeName] = {};
+                createItemEntry(resourceCodeName);
                 resourceCost[resourceCodeName] = resource.Quantity;
             });
         }
@@ -430,14 +534,55 @@ function getResourceCosts(resources) {
     }
 }
 
-function iterateData(filePath, list, isItem) {
+function iterateData(filePath, list, type) {
     let rawdata = fs.readFileSync(filePath);
     let uAsset = JSON.parse(rawdata)[0];
     if (uAsset.Rows) {
         for (let [codeName, data] of Object.entries(uAsset.Rows)) {
             codeName = codeName.toLowerCase();
-            const listItem = list[codeName];
-            if (listItem && listItem.cost !== false && !listItem.reference) {
+            let listItem = list[codeName];
+            if (!listItem && !type) {
+                for (const v of Object.values(list)) {
+                    if (v.upgrades && v.upgrades[codeName]) {
+                        listItem = v.upgrades[codeName];
+                        break;
+                    }
+                }
+            }
+            if (listItem && type === 'weapon') {
+                if (data.Damage) {
+                    let weapon = Object.assign({
+                        codeName: codeName
+                    }, weaponList[codeName], {
+                        damage: data.Damage
+                    });
+                    if (data.DamageType.ObjectName.startsWith('BlueprintGeneratedClass')) {
+                        let rawDamageData = fs.readFileSync(foxholeDataDirectory + data.DamageType.ObjectPath.split('.')[0] + '.json');
+                        let damageTypeProperties = JSON.parse(rawDamageData)[1].Properties;
+                        weapon.damageType = Object.assign({
+                            name: damageTypeProperties.DisplayName.SourceString,
+                            type: damageTypeProperties.Type.replace('EDamageType::', '').toLowerCase(),
+                            description: damageTypeProperties.DescriptionDetails?.Text?.SourceString
+                        }, weaponList[codeName]?.damageType);
+                    }
+                    weaponList[codeName] = weapon;
+                }
+            } else if (type === 'damageType') {
+                for (const [key, weapon] of Object.entries(weaponList)) {
+                    if (weapon.damageType?.type === codeName) {
+                        delete weapon.damageType.type;
+                        if (data.Tier1Structure !== 1 || data.Tier2Structure !== 1 || data.Tier3Structure !== 1) {
+                            weapon.damageType.profiles = {
+                                't1': 1 - data.Tier1Structure,
+                                't2': 1 - data.Tier2Structure,
+                                't3': 1 - data.Tier3Structure
+                            };
+                        } else {
+                            delete weaponList[key];
+                        }
+                    }
+                }
+            } else if (listItem && listItem.cost !== false && !listItem.reference) {
                 /*
                 This seems to be where Field Modification Center pulls its data from.
                 if (data.bHasTierUpgrades) {
@@ -446,7 +591,7 @@ function iterateData(filePath, list, isItem) {
                     }
                 }
                 */
-                if (isItem) {
+                if (type === 'item') {
                     if (data.AltResourceAmounts && data.AltResourceAmounts.Resource.CodeName !== 'None') {
                         listItem.cost = getResourceCosts(data.AltResourceAmounts);
                     }
@@ -499,11 +644,18 @@ function iterateAssets(dirPath) {
                             itemList[codeName] = {
                                 'name': item.DisplayName?.SourceString ?? (baseData.name ?? item.CodeName),
                                 'description': item.Description?.SourceString ?? baseData.description,
-                                'icon': getLocalIcon(item) ?? baseData.icon,
+                                'icon': itemList[codeName]?.icon ?? getLocalIcon(item) ?? baseData.icon,
                                 'faction': item.FactionVariant === 'EFactionId::Wardens' ? 'w' : item.FactionVariant === 'EFactionId::Colonials' ? 'c' : baseData.faction,
                                 'isLiquid': item.bIsLiquid ?? baseData.isLiquid,
                                 'cost': itemList[codeName]?.cost
                             };
+                        }
+                        if (weaponList[codeName]) {
+                            weaponList[codeName] = Object.assign({
+                                name: item.DisplayName?.SourceString,
+                                description: item.DisplayName?.SourceString,
+                                icon: getLocalIcon(item)
+                            }, weaponList[codeName]);
                         }
                     } else if (item.ItemInfo) {
                         for (const [codeName, techInfo] of Object.entries(item.ItemInfo)) {
@@ -550,6 +702,11 @@ function compareRecipe(oldRecipe, newRecipe) {
     return compareItems(oldRecipe?.input, newRecipe?.input) && compareItems(oldRecipe?.output, newRecipe?.output) && (oldRecipe?.faction === newRecipe?.faction) && (oldRecipe?.time === newRecipe?.time) && (oldRecipe?.power === newRecipe?.power);
 }
 
+const liquidResourceMap = {
+    'Oil': 'oilcan',
+    'Water': 'watercan'
+};
+
 function updateProductionRecipes(component) {
     let id = component._productionLength ?? 0;
     let constructionRecipes = [];
@@ -567,15 +724,16 @@ function updateProductionRecipes(component) {
                 if (entry[from]?.length) {
                     constructionRecipe[to] = constructionRecipe[to] ?? {};
                     entry[from].forEach(resource => {
+                        let resourceCodeName = resource.CodeName.toLowerCase();
                         let resourceQuantity = resource.Quantity;
                         if ((from === 'Input' || from === 'Output') && itemList[resource.CodeName.toLowerCase()].isLiquid) {
                             if (liquidResourceMap[resource.CodeName]) {
-                                resourceQuantity *= liquidResourceMap[resource.CodeName];
+                                resourceCodeName = liquidResourceMap[resource.CodeName];
                             } else {
-                                console.error('Unknown liquid type. Update script to include liters for:', resource.CodeName);
+                                console.error('Unknown liquid type. Update script for:', resource.CodeName);
                             }
                         }
-                        constructionRecipe[to][resource.CodeName.toLowerCase()] = resourceQuantity;
+                        constructionRecipe[to][resourceCodeName] = resourceQuantity;
                     });
                 }
             }
@@ -700,8 +858,10 @@ async function updateData() {
 
     await iterateStructures(`${foxholeDataDirectory}War/Content/Blueprints/`);
 
-    iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPVehicleDynamicData.json`, itemList, true);
-    iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, itemList, true); // Check for items in the structure data... Yes, Material Pallet is stored here.
+    iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPVehicleDynamicData.json`, itemList, 'item');
+    iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, itemList, 'item'); // Check for items in the structure data... Yes, Material Pallet is stored here.
+    iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPAmmoDynamicData.json`, weaponList, 'weapon');
+    iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/DTDamageProfiles.json`, weaponList, 'damageType');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, structureList);
 
     for (const [codeName, structureData] of Object.entries(structureList)) {
@@ -752,6 +912,7 @@ async function updateData() {
         'presets': foxholeData.presets,
         'tech': sortList(techList),
         'resources': sortList(itemList),
+        'weapons': weaponList,
         'buildings': sortList(structureList)
     }, null, '\t');
     foxholeDataStr = foxholeDataStr.replaceAll('"[ ', '[ ').replaceAll(' ]"', ' ]');

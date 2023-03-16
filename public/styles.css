@@ -139,17 +139,6 @@ p {
     color: white;
 }
 
-.loading-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 100000;
-    background-color: rgba(0, 0, 0, 0.6);
-}
-
 .loading-overlay-text {
     position: relative;
     color: white;
@@ -280,6 +269,13 @@ p {
     outline: none;
 }
 
+.btn-small.header-icon {
+    width: 15px;
+    height: 28px;
+    background: none;
+    border: none;
+}
+
 /* Chrome, Safari, Edge, Opera */
 input.btn-small::-webkit-outer-spin-button,
 input.btn-small::-webkit-inner-spin-button {
@@ -304,6 +300,11 @@ input[type=number].btn-small {
     position: absolute;
     inset: 4px;
     border-radius: 1px;
+}
+
+.btn-small.no-button {
+    cursor: initial;
+    border-color: black !important;
 }
 
 .btn-checkbox-wrapper {
@@ -599,6 +600,16 @@ input[type=number].btn-small {
     color: #eee;
 }
 
+.construction-options-header .inline-resource-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    vertical-align: middle;
+}
+
 .construction-options {
     height: 40px;
     position: relative;
@@ -645,7 +656,7 @@ input[type=number].btn-small {
     line-height: 12px;
     margin: 0;
     position: absolute;
-    bottom: 0;
+    bottom: 1px;
     left: 0;
     right: 0;
 }
@@ -748,28 +759,32 @@ input[type=number].btn-small {
 }
 
 #construction-page .construction-item-category {
+    height: 34px;
     background: #0f0f0f;
-    padding: 4px 8px;
+    padding: 4px 8px 4px 34px;
     border: 1px solid black;
     cursor: pointer;
     clear: both;
+    position: relative;
 }
 
 #construction-page .construction-item-category:hover {
     background: #1b1b1b;
 }
 
-/*
 #construction-page .construction-item-category-icon {
     display: inline-block;
-    width: 20px;
-    height: 20px;
-    background-size: 22px;
+    width: 34px;
+    height: 33px;
+    background-size: 75%;
     background-repeat: no-repeat;
     background-position: center;
     vertical-align: middle;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0.75;
 }
-*/
 
 #about-page > .about-section {
     margin-bottom: 20px;
@@ -962,9 +977,12 @@ input[type=number].btn-small {
 }
 
 .resource-col > .resource-amount {
+    background: rgba(0, 0, 0, 0.65);
     position: absolute;
-    bottom: 0;
-    right: 0;
+    bottom: -5px;
+    right: -4px;
+    border-radius: 3px;
+    padding: 1px;
 }
 
 .resource-row > .resource-icon {
@@ -979,9 +997,13 @@ input[type=number].btn-small {
 }
 
 .resource-row > .resource-amount, .resource-col > .resource-amount {
-    color: #d50101;
+    color: #ff0d0d;
     line-height: 16px;
     pointer-events: none;
+}
+
+.resource-row > .resource-amount small {
+    font-size: 90%;
 }
 
 .resource-col.power-production .resource-icon {
@@ -998,7 +1020,7 @@ input[type=number].btn-small {
     margin-bottom: 8px;
 }
 
-.upgrade-list > .upgrade-button {
+.upgrade-button {
     display: inline-block;
     background: none;
     border: none;
@@ -1006,7 +1028,7 @@ input[type=number].btn-small {
     padding: 2px;
 }
 
-.upgrade-list > .upgrade-button > .resource-icon {
+.upgrade-button > .resource-icon {
     width: 52px;
     height: 52px;
     background-color: #151515;
@@ -1014,14 +1036,32 @@ input[type=number].btn-small {
     float: none;
 }
 
-.upgrade-list > .upgrade-button:not(.selected-upgrade) > .resource-icon:hover {
+.upgrade-button:not(.selected-upgrade) > .resource-icon:hover {
     background-color: black;
     border-color: white;
 }
 
-.upgrade-list > .upgrade-button.selected-upgrade > .resource-icon {
+.upgrade-button.selected-upgrade > .resource-icon {
     background-color: #2c1407;
     border-color: #ff8f00;
+}
+
+.upgrade-buttons-small {
+    padding: 6px;
+}
+
+.upgrade-buttons-small .upgrade-button {
+    width: 42px;
+    height: 42px;
+}
+
+.upgrade-buttons-small .upgrade-button > .resource-icon {
+    width: 100%;
+    height: 100%;
+}
+
+.upgrade-button.btn-inactive > .resource-icon {
+    opacity: 0.25;
 }
 
 .production-stats {
@@ -1069,14 +1109,14 @@ input[type=number].btn-small {
 }
 
 .production-list > .select-production > .production-enabled {
-    color: #d50101;
+    color: #ff0d0d;
     position: absolute;
     bottom: 0;
     right: 8px;
 }
 
 .production-list > .select-production.selected-production > .production-enabled {
-    color: #03b003;
+    color: #00ca00;
 }
 
 .production-list > .select-production h6 {
@@ -1084,7 +1124,7 @@ input[type=number].btn-small {
 }
 
 .production-list > .select-production.selected-production {
-    border-color: #03b003;
+    border-color: #00ca00;
 }
 
 .delete-button:hover {
@@ -1098,6 +1138,10 @@ input[type=number].btn-small {
     font-size: 1.8em;
     text-shadow: 0 2px 3px #2d2d2d;
     pointer-events: none;
+}
+
+.no-sidebar .project-banner {
+    left: 15px;
 }
 
 .btn-small {
@@ -1120,6 +1164,10 @@ input[type=number].btn-small {
     text-align: left;
     z-index: 100;
     pointer-events: none;
+}
+
+.no-sidebar #hover-building-info {
+    left: 15px;
 }
 
 #hover-building-info > .building-info-name {
@@ -1184,7 +1232,7 @@ input[type=number].btn-small {
 
 .produced-resource-row .production-recipe {
     display: inline-block;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .produced-resource-row .production-recipe * {
@@ -1211,7 +1259,7 @@ input[type=number].btn-small {
 }
 
 .produced-resource-row .produced-resource-output .resource-amount {
-    color: #03b003;
+    color: #00ca00;
 }
 
 .produced-resource-row .production-pointer {
@@ -1259,7 +1307,7 @@ input[type=number].btn-small {
 }
 
 #hover-building-info > .building-info-body > .power-cost, #hover-building-info > .building-info-body > .power-produced {
-    color: #d50101;
+    color: #ff0d0d;
     font-size: 1.2em;
     position: absolute;
     bottom: 0;
@@ -1349,6 +1397,10 @@ input[type=number].btn-small {
     left: 350px;
     text-align: left;
     /*border-top: 1px solid #1e1e1e;*/
+}
+
+.no-sidebar .footer {
+    left: 0;
 }
 
 .title-button {
@@ -1639,6 +1691,298 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
     background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
 }
 */
+
+.layer-selection {
+    width: 500px;
+    bottom: 59px;
+    left: 365px;
+}
+
+.no-sidebar .layer-selection {
+    left: 15px;
+}
+
+.layer-selection .btn-checkbox-wrapper {
+    margin: 5px;
+}
+
+#toolbelt-panel {
+    width: 550px;
+    /* background: linear-gradient(rgb(24, 24, 24), rgb(12, 12, 12)); */
+    top: 15px;
+    left: 50%;
+    margin-left: -275px;
+    padding: 1px 3px 3px;
+}
+
+#toolbelt-panel .toolbelt-header {
+    margin-top: -2px;
+}
+
+#toolbelt-panel .toolbelt-tabs {
+    width: 100%;
+    padding: 0 1px;
+}
+
+#toolbelt-panel .toolbelt-tab {
+    width: 10%;
+    padding: 4px 2px;
+    cursor: pointer;
+}
+
+#toolbelt-panel .toolbelt-tab::after {
+    content: '';
+    display: block;
+    height: 7px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid transparent;
+}
+
+#toolbelt-panel.toolbelt-swapping .toolbelt-tab::after {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+#toolbelt-panel .toolbelt-tab:hover::after {
+    background: white;
+}
+
+#toolbelt-panel .toolbelt-tab.active:nth-child(1)::after,
+#toolbelt-panel .toolbelt-tab:hover:nth-child(1)::after {
+    background-color: #FF8F00; /* vibrant orange */
+}
+
+#toolbelt-panel .toolbelt-tab.active:nth-child(2)::after,
+#toolbelt-panel .toolbelt-tab:hover:nth-child(2)::after {
+    background-color: #FFFF00; /* vibrant yellow */
+}
+
+#toolbelt-panel .toolbelt-tab.active:nth-child(3)::after,
+#toolbelt-panel .toolbelt-tab:hover:nth-child(3)::after {
+    background-color: #00FF7F; /* vibrant green */
+}
+
+#toolbelt-panel .toolbelt-tab.active:nth-child(4)::after,
+#toolbelt-panel .toolbelt-tab:hover:nth-child(4)::after {
+    background-color: #00fff2; /* vibrant cyan */
+}
+
+#toolbelt-panel .toolbelt-tab.active:nth-child(5)::after,
+#toolbelt-panel .toolbelt-tab:hover:nth-child(5)::after {
+    background-color: #00BFFF; /* vibrant blue */
+}
+
+#toolbelt-panel .toolbelt-tab.active:nth-child(6)::after,
+#toolbelt-panel .toolbelt-tab:hover:nth-child(6)::after {
+    background-color: #9400D3; /* vibrant violet */
+}
+
+#toolbelt-panel .toolbelt-tab.active:nth-child(7)::after,
+#toolbelt-panel .toolbelt-tab:hover:nth-child(7)::after {
+    background-color: #FF00FF; /* vibrant magenta */
+}
+
+#toolbelt-panel .toolbelt-tab.active:nth-child(8)::after,
+#toolbelt-panel .toolbelt-tab:hover:nth-child(8)::after {
+    background-color: #FF1493; /* vibrant pink */
+}
+
+#toolbelt-panel .toolbelt-tab.active:nth-child(9)::after,
+#toolbelt-panel .toolbelt-tab:hover:nth-child(9)::after {
+    background-color: #CE0074; /* vibrant purple */
+}
+
+#toolbelt-panel .toolbelt-tab.active:nth-child(10)::after,
+#toolbelt-panel .toolbelt-tab:hover:nth-child(10)::after {
+    background-color: #FF4500; /* vibrant red */
+}
+
+/*
+#toolbelt-panel .toolbelt-tab.active:hover::after {
+    border-color: white;
+}
+*/
+
+#toolbelt-panel .toolbelt-buttons div {
+    width: 10%;
+    height: 52px;
+    background-color: rgba(0, 0, 0, 0.25);
+    background-size: 94%;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 2px;
+    border: 1px solid transparent;
+    position: relative;
+    cursor: pointer;
+    box-shadow: inset -1px -1px 4px black;
+    text-align: center;
+    transition-duration: 0.075s;
+}
+
+#toolbelt-panel .toolbelt-buttons div:not(.deletion):hover,
+#toolbelt-panel .toolbelt-buttons div.item-selected {
+    background-color: rgba(0, 0, 0, 0.5);
+    background-position: center 2px;
+    border-color: white;
+}
+
+#toolbelt-panel .toolbelt-buttons div i {
+    opacity: 0;
+    font-size: 1.5em;
+    line-height: 52px;
+    /* transition-duration: 0.1s; */
+}
+
+#toolbelt-panel .toolbelt-buttons div:hover i,
+#toolbelt-panel .toolbelt-buttons div.item-selected i {
+    opacity: 1;
+}
+
+#toolbelt-panel .toolbelt-buttons div small {
+    position: absolute;
+    top: 0;
+    left: 5px;
+    color: gray;
+}
+
+#toolbelt-panel .toolbelt-buttons div:hover small,
+#toolbelt-panel .toolbelt-buttons div.item-selected small,
+#toolbelt-panel .toolbelt-buttons div.anim-active small,
+#toolbelt-panel.toolbelt-swapping .toolbelt-buttons div small {
+    color: white;
+}
+
+#toolbelt-panel .toolbelt-buttons div.item-selected {
+    background-color: #303030;
+}
+
+#toolbelt-panel .toolbelt-buttons div.anim-active {
+    background-color: #ff8f00 !important;
+}
+
+#toolbelt-panel .toolbelt-buttons div.deletion:hover {
+    border-color: red;
+}
+
+#toolbelt-panel .toolbelt-buttons .fa-trash {
+    opacity: 0.75;
+    color: red;
+    line-height: initial;
+    font-size: 1em;
+    position: absolute;
+    bottom: 0;
+    right: 1px;
+}
+
+#toolbelt-panel .toolbelt-buttons div:hover .fa-trash {
+    opacity: 1;
+}
+
+#toolbelt-panel .toolbelt-end-buttons {
+    width: 30px;
+}
+
+#toolbelt-panel .toolbelt-header .btn-small {
+    display: block;
+    background-color: rgba(0, 0, 0, 0.25);
+    width: 25px;
+    height: 25px;
+    font-size: 1em;
+    line-height: 23px;
+    border-width: 1px;
+    box-shadow: inset 0 0 3px black;
+    margin: 2px 0 0 2px;
+    float: none;
+}
+
+#toolbelt-panel .toolbelt-selection-wrapper {
+    background: black;
+    margin: 3px;
+    overflow: auto;
+}
+
+#toolbelt-panel .toolbelt-selection-wrapper.no-slot-selected {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+#toolbelt-panel .toolbelt-selection-filters {
+    height: 38px;
+}
+
+#toolbelt-panel .toolbelt-selection-filters > * {
+    height: 100%;
+}
+
+#toolbelt-panel .toolbelt-selection-filters .construction-tech-button {
+    width: 20%;
+    background: #090909;
+    margin: 0;
+    line-height: initial;
+    border: 1px solid black;
+}
+
+#toolbelt-panel .toolbelt-selection-filters .construction-tech-button:hover {
+    border-color: white;
+}
+
+#toolbelt-panel .toolbelt-selection {
+    background: black;
+    min-height: 150px;
+    max-height: 350px;
+    overflow-y: auto;
+    border: 1px solid black;
+}
+
+#toolbelt-panel .toolbelt-selection .build-icon {
+    width: 10%;
+    padding-top: 10%;
+}
+
+#toolbelt-panel .hover-building-info {
+    padding: 4px 10px;
+    text-align: center;
+}
+
+.custom-properties-panel .settings-option-row {
+    padding: 0 8px;
+}
+
+.custom-property-row {
+    height: 30px;
+    margin: 9px 0;
+}
+
+.custom-property-row > * {
+    margin: 0 3px;
+}
+
+.custom-property-row > input,
+.custom-property-row > select,
+.custom-property-row > button {
+    width: 45% !important;
+    height: 100%;
+    background: #131313;
+    border: 1px solid black !important;
+    border-radius: 0 !important;
+    outline: none !important;
+}
+
+.custom-property-row > input:first-of-type {
+    width: 45% !important;
+}
+
+.custom-property-row > button {
+    width: 10% !important;
+}
+
+.custom-property-row > select,
+.custom-property-row > input[type=color] {
+    cursor: pointer;
+}
+
+.custom-property-row > *:hover, .custom-property-row > *:active {
+    border-color: white;
+}
 
 /* Scrollbars */
 

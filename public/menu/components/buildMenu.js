@@ -163,6 +163,7 @@ Vue.component('app-menu-building-selected', {
                 baseProduction: false,
                 selectedProduction: null,
                 productionScale: null,
+                properties: {},
                 following: false,
                 label: null,
                 style: null
@@ -172,6 +173,15 @@ Vue.component('app-menu-building-selected', {
             },
             productionData: null,
             hoverUpgradeName: null,
+            propertyKey: null,
+            propertyType: 'bool',
+            defaultPropertyTypes: {
+                bool: false,
+                color: '#ffffff',
+                float: 0.0,
+                int: 0,
+                string: ''
+            },
             lockState: 0
         };
     },
@@ -180,7 +190,7 @@ Vue.component('app-menu-building-selected', {
         this.refresh();
     },
     methods: {
-        refresh: function(noForce) {
+        refresh: function(noForce = false) {
             this.lockState = game.getSelectedLockState();
             let selectedEntity = game.getSelectedEntity();
             if (selectedEntity) {
@@ -205,7 +215,11 @@ Vue.component('app-menu-building-selected', {
                     baseProduction: selectedEntity.baseProduction,
                     selectedProduction: selectedEntity.selectedProduction,
                     productionScale: selectedEntity.productionScale,
+                    properties: selectedEntity.properties,
                     baseUpgrades: selectedEntity.baseUpgrades,
+                    maintenanceFilters: selectedEntity.maintenanceFilters,
+                    maintainedStructures: selectedEntity.maintainedStructures,
+                    maintainedConsumptionRate: selectedEntity.maintainedConsumptionRate,
                     building: selectedEntity.building,
                     following: selectedEntity.following,
                     label: selectedEntity.label?.text,
@@ -252,9 +266,11 @@ Vue.component('app-menu-building-selected', {
                             selectedEntity.userThrottle = this.entity.userThrottle;
                         }
                     }
-                    if (game.statisticsMenuComponent) {
-                        game.statisticsMenuComponent.refresh();
+                    if (this.entity.maintenanceFilters) {
+                        selectedEntity.setMaintenanceFilters(this.entity.maintenanceFilters);
                     }
+                    this.updateProperties(selectedEntity, false);
+                    game.refreshStats();
                     this.$forceUpdate();
                 } else {
                     this.refresh();
@@ -295,6 +311,59 @@ Vue.component('app-menu-building-selected', {
             this.entity.style = Object.assign({}, game.defaultSettings.styles[this.entity.type === 'text' ? 'label' : this.entity.subtype]);
             this.updateStyleOptions(true);
         },
+        updateProperties: function(selectedEntity = game.getSelectedEntity(), forceRefresh = true) {
+            if (selectedEntity) {
+                selectedEntity.properties = this.entity.properties;
+            }
+            if (forceRefresh) {
+                this.refresh();
+            }
+        },
+        addProperty: function(key = this.propertyKey, type = this.propertyType, value = this.defaultPropertyTypes[type]) {
+            if (this.entity && key) {
+                if (!this.entity.properties) {
+                    this.entity.properties = {};
+                }
+                if (!this.entity.properties.hasOwnProperty(key)) {
+                    this.entity.properties[key] = {
+                        key: key,
+                        type: type,
+                        value: value
+                    };
+                    this.updateProperties();
+                    this.propertyKey = null;
+                    return true;
+                }
+            }
+            return false;
+        },
+        updateProperty: function(key) {
+            if (this.entity?.properties && this.entity.properties.hasOwnProperty(key)) {
+                let property = this.entity.properties[key];
+                if (property.key !== key) {
+                    if (property.key !== '' && !this.entity.properties[property.key]) {
+                        this.entity.properties[property.key] = property;
+                        delete this.entity.properties[key];
+                    } else {
+                        property.key = key;
+                    }
+                }
+                if (property.type === 'int') {
+                    property.value = Math.round(property.value);
+                }
+                this.updateProperties();
+                return true;
+            }
+            return false;
+        },
+        removeProperty: function(key) {
+            if (this.entity?.properties && this.entity.properties.hasOwnProperty(key)) {
+                delete this.entity.properties[key];
+                this.updateProperties();
+                return true;
+            }
+            return false;
+        },
         /*
         addRail: function() {
             this.bmc();
@@ -330,7 +399,7 @@ Vue.component('app-menu-building-selected', {
                                 this.entity.productionScale = this.entity.productionScale ?? this.productionData.max;
                                 if (selectedEntity.productionScale !== this.entity.productionScale) {
                                     selectedEntity.productionScale = this.entity.productionScale;
-                                    game.statisticsMenuComponent?.refresh();
+                                    game.refreshStats();
                                 }
                             }
                             break;
@@ -349,6 +418,19 @@ Vue.component('app-menu-building-selected', {
             if (selectedEntity && selectedEntity.type === 'building') {
                 selectedEntity.setBaseUpgrade(tree, (selectedEntity.baseUpgrades[tree] !== key && key) || undefined);
                 game.saveStateChanged = true;
+            }
+        },
+        toggleMaintenanceExclusion: function(key) {
+            this.bmc();
+            const selectedEntity = game.getSelectedEntity();
+            if (selectedEntity && selectedEntity.type === 'building') {
+                const index = selectedEntity.maintenanceFilters.exclusions.indexOf(key);
+                if (index >= 0) {
+                    selectedEntity.maintenanceFilters.exclusions.splice(index, 1);
+                } else {
+                    selectedEntity.maintenanceFilters.exclusions.push(key);
+                }
+                this.updateEntity();
             }
         },
         cloneBuildings: function() {
@@ -510,6 +592,34 @@ Vue.component('app-menu-building-selected', {
                     <input class="app-input" type="number" v-model.number="debug.textureOffset.y" @input="updateDebugProps()">
                 </label>
             </div>
+            <div v-if="game.settings.enableAdvanced" class="settings-option-wrapper custom-properties-panel">
+                <div class="settings-title">
+                    Custom Properties
+                </div>
+                <div v-if="entity.properties && Object.keys(entity.properties).length" class="settings-option-row">
+                    <div v-for="(property, key) in entity.properties" class="custom-property-row d-flex justify-content-center">
+                        <input class="app-input" type="text" placeholder="Key" v-model="property.key" @change="updateProperty(key)">
+                        <select v-if="property.type === 'bool'" class="app-input" v-model="property.value" @change="updateProperty(key)">
+                            <option :value="true">true</option>
+                            <option :value="false">false</option>
+                        </select>
+                        <input v-else-if="property.type === 'color'" type="color" v-model="property.value" @change="updateProperty(key)">
+                        <input v-else-if="property.type === 'float' || property.type === 'int'" class="app-input" type="number" v-model="property.value" @change="updateProperty(key)">
+                        <input v-else class="app-input" type="text" :placeholder="property.type" v-model="property.value" @change="updateProperty(key)">
+                        <button class="btn-small" type="button" @click="removeProperty(key)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+                <div class="settings-option-row">
+                    <div class="custom-property-row d-flex justify-content-center">
+                        <input class="app-input" type="text" v-model="propertyKey" placeholder="Key">
+                        <select class="app-input" v-model="propertyType">
+                            <!-- <option :value="null">Type</option> -->
+                            <option v-for="(value, key) in defaultPropertyTypes" :value="key">{{key}}</option>
+                        </select>
+                        <button class="btn-small" type="button" @click="addProperty()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+            </div>
             <div v-if="entity.building?.vehicle?.engine" class="settings-option-wrapper">
                 <div class="settings-title">
                     Train Controls
@@ -555,6 +665,52 @@ Vue.component('app-menu-building-selected', {
                     <div class="resource-icon" :title="upgrade.name" :style="{backgroundImage:'url(' + (upgrade.icon ?? entity.building.icon) + ')'}"></div>
                 </button>
             </div>
+            <template v-if="entity.maintenanceFilters">
+                <div class="settings-option-wrapper">
+                    <div class="settings-title">Maintained Structures</div>
+                    <div class="upgrade-buttons-small d-flex justify-content-center">
+                        <template v-for="(category, key) in gameData.categories">
+                            <button v-if="category.buildCategory" class="upgrade-button" :class="{'btn-inactive': entity.maintenanceFilters.exclusions.includes(key)}" @click="toggleMaintenanceExclusion(key)">
+                                <div class="resource-icon" :title="category.name" :style="{backgroundImage:'url(' + (category.icon) + ')'}"></div>
+                            </button>
+                        </template>
+                    </div>
+                </div>
+                <div class="settings-option-wrapper upgrade-list">
+                    <div class="settings-title">Maintenance Range</div>
+                    <div class="text-center">{{entity.maintenanceFilters.range}}m</div>
+                    <div class="d-flex">
+                        <div class="col-2 p-0">0m</div>
+                        <div class="col-8 p-0">
+                            <input type="range" class="slider w-100" style="height: 32px;" v-model.number="entity.maintenanceFilters.range" min="0" :max="entity.building.maxRange" step="1" @input="updateEntity()">
+                        </div>
+                        <div class="col-2 p-0">{{entity.building.maxRange}}m</div>
+                    </div>
+                    <span style="font-size: 15px;">These settings apply to {{entity.maintainedStructures.toLocaleString()}}&nbsp;nearby&nbsp;structures.</span>
+                </div>
+                <div v-if="entity.maintainedConsumptionRate" class="settings-option-wrapper text-center">
+                    <div class="settings-title">Maintenance Supply Upkeep<span style="color: #b5b5b5;">/hr</span></div>
+                    <div class="construction-options row d-flex justify-content-center">
+                        <div class="btn-small no-button col" style="color: #00ca00;">
+                            <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate * 0.5}}</span>
+                            <span class="label">very good</span>
+                        </div>
+                        <div class="btn-small no-button col" style="color: #74d004;">
+                            <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate}}</span>
+                            <span class="label">good</span>
+                        </div>
+                        <div class="btn-small no-button col" style="color: #ffa500;">
+                            <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate * 2}}</span>
+                            <span class="label">poor</span>
+                        </div>
+                        <div class="btn-small no-button col" style="color: #ff0d0d;">
+                            <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate * 3}}</span>
+                            <span class="label">very poor</span>
+                        </div>
+                    </div>
+                    <small style="color: #d9d9d9;">Note: These values do not account for overlapping MTs.</small>
+                </div>
+            </template>
             <div v-if="productionData" class="settings-option-wrapper">
                 <div class="settings-title">
                     <button type="button" class="title-button return-button" v-on:click="changeProduction(null)" title="Back" @mouseenter="bme()" style="padding: 1px 2px;">
@@ -670,7 +826,7 @@ Vue.component('app-menu-construction-list', {
                 for (const category of Object.values(window.objectData.categories)) {
                     if (game.settings.enableExperimental || !category.experimental) {
                         for (const building of category.buildings) {
-                            if (building.name.toLowerCase().includes(this.searchQuery.toLowerCase()) && game.canShowListItem(building, true)) {
+                            if (building.name && building.name.toLowerCase().includes(this.searchQuery.toLowerCase()) && game.canShowListItem(building, true)) {
                                 results.push(building);
                             }
                         }
@@ -808,7 +964,7 @@ Vue.component('app-menu-construction-list', {
                     <template v-for="(category, key) in window.objectData.categories">
                         <template v-if="!category.hideInList && (game.settings.showCollapsibleBuildingList || !category.hideInBuildingList) && (game.settings.enableExperimental || !category.experimental)">
                             <div v-if="game.settings.showCollapsibleBuildingList" class="construction-item-category" @click="category.visible = !category.visible; refresh()">
-                                {{category.name}}{{category.experimental && ' (Preview)'}}<i class="fa float-right" :class="{'fa-angle-down': category.visible, 'fa-angle-right': !category.visible}" style="margin-top: 2px;" aria-hidden="true"></i>
+                                <div class="construction-item-category-icon" :style="{backgroundImage: 'url(' + category.icon + ')'}"></div>{{category.name}}{{category.experimental && ' (Preview)'}}<i class="fa float-right" :class="{'fa-angle-down': category.visible, 'fa-angle-right': !category.visible}" style="margin-top: 2px;" aria-hidden="true"></i>
                             </div>
                             <div v-if="(!game.settings.showCollapsibleBuildingList || category.visible)">
                                 <app-game-building-list-icon v-for="building in category.buildings" :building="building"/>
@@ -925,7 +1081,7 @@ Vue.component('app-game-building-list-icon', {
     methods: {
         buildBuilding: function(building) {
             this.bmc();
-            game.create((building.preset && 'preset') || 'building', building.preset ? building.dataFile : building.key);
+            game.createObject(building);
             game.sidebarMenuComponent.showHoverMenu(null);
         },
         buildingHover: function(building) {
@@ -1164,7 +1320,7 @@ Vue.component('app-menu-about', {
             </p>
         </div>
         <div class="about-section">
-            <div class="about-section-header"><i class="fa fa-keyboard-o " aria-hidden="true"></i> Controls + Hotkeys</div>
+            <div class="about-section-header"><i class="fa fa-keyboard-o" aria-hidden="true"></i> Controls + Hotkeys</div>
             <div class="controls-section-body">
                 <div class="middle-mouse-button"></div> Move board position.<br>
                 <div class="middle-mouse-button"></div> Scroll to zoom in/out board.
@@ -1177,12 +1333,25 @@ Vue.component('app-menu-about', {
                 <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">A</div> Select all structures.<br>
                 <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">C</div> Clone selection.
                 <hr>
+                <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">Z</div> Undo previous action.<br>
+                <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">Y</div> Redo previous action.<br>
+                <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">shift</div> + <div class="keyboard-key">Z</div> Redo previous action.
+                <hr>
                 <div class="keyboard-key">shift</div> + <div class="left-mouse-button"></div> Add structure to selection.<br>
                 <div class="keyboard-key">shift</div> + <div class="left-mouse-button"></div> Add bunker to selection.<br>
                 <div class="keyboard-key">shift</div> + <div class="left-mouse-button"></div> Snap structure to grid.
                 <hr>
+                <div class="keyboard-key">number</div> Select toolbelt slot. (0-9)<br>
+                <i class="fa fa-reply fa-rotate-180" aria-hidden="true"></i> <div class="keyboard-key">shift</div> Swap toolbelt. (0-9)
+                <hr>
                 <div class="keyboard-key"><i class="fa fa-angle-up" aria-hidden="true"></i></div> <div class="keyboard-key"><i class="fa fa-angle-down" aria-hidden="true"></i></div> Move selection up / down.<br>
                 <div class="keyboard-key"><i class="fa fa-angle-left" aria-hidden="true"></i></div> <div class="keyboard-key"><i class="fa fa-angle-right" aria-hidden="true"></i></div> Move selection left / right.
+                <hr>
+                <div class="keyboard-key">W, A, S, D</div> Move selection along grid.<br>
+                <i class="fa fa-reply fa-rotate-180" aria-hidden="true"></i> <div class="keyboard-key">shift</div> Halve selection movement.
+                <hr>
+                <div class="keyboard-key">Q, E</div> Rotate selection by degrees. ({{game.settings.keySnapRotationDegrees}}°)<br>
+                <i class="fa fa-reply fa-rotate-180" aria-hidden="true"></i> <div class="keyboard-key">shift</div> Double selection rotation. ({{game.settings.keySnapRotationDegrees * 2}}°)
                 <hr>
                 <div class="keyboard-key">space</div> Pause / Resume physics.<br>
                 <div class="keyboard-key">L</div> Toggle lock for selected structures.<br>

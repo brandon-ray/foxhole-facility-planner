@@ -10,10 +10,10 @@ const game_asset_list = {
 
 (function() {
     window.objectData = {
-        "categories": foxholeData.categories,
-        "tech": foxholeData.tech,
-        "resources": foxholeData.resources,
-        "buildings": foxholeData.buildings
+        "categories": gameData.categories,
+        "tech": gameData.tech,
+        "resources": gameData.resources,
+        "buildings": gameData.buildings
     };
 
     for (const building of Object.values(window.objectData.buildings)) {
@@ -47,7 +47,6 @@ const game_asset_list = {
         }
         if (building.baseGarrisonRadius) {
             const garrisonData = {
-                sortLayer: 'range',
                 baseUpgrades: {
                     'base': {
                         'provisional_garrison': {
@@ -61,7 +60,7 @@ const game_asset_list = {
                         },
                         'small_garrison': {
                             name: 'Small Garrison',
-                            description: 'A Small Garrison permanently connects this base to nearby defensive structures. In addition, structure decay for surrounding structures can be prevented when Garrison Supplies exist in the stockpile. The rate of Garrison Supplies consumption is 2 per hour per structure once decay has begun.',
+                            description: 'A Small Garrison permanently connects this base to nearby defensive structures. In addition, structure decay for surrounding structures can be prevented when Garrison Supplies exist in the stockpile. The rate of Garrison Supplies consumption is 2 per hour per structure once decay has begun. Some structures have additional consumption requirements. A Small Garrison is required for upgrading the base to Tier 2.',
                             icon: assetDir('game/Textures/UI/Menus/IconFacilitiesSmallGarrison.webp'),
                             range: {
                                 type: 'preventDecay',
@@ -70,7 +69,7 @@ const game_asset_list = {
                         },
                         'large_garrison': {
                             name: 'Large Garrison',
-                            description: 'A Large Garrison permanently connects this base to nearby defensive structures. The cost of Garrison Supplies for preventing structure decay is further reduced. The rate of Garrison Supplies consumption is 1 per hour per structure once decay has begun.',
+                            description: 'A Large Garrison permanently connects this base to nearby defensive structures. The cost of Garrison Supplies for preventing structure decay is further reduced. The rate of Garrison Supplies consumption is 1 per hour per structure once decay has begun. Some structures have additional consumption requirements. A Large Garrison required for upgrading the base to Tier 3.',
                             icon: assetDir('game/Textures/UI/Menus/IconFacilitiesLargeGarrison.webp'),
                             range: {
                                 type: 'preventDecay',
@@ -159,13 +158,14 @@ const game_asset_list = {
                     upgradeBuilding.upgradeName = upgrade.name;
                     upgradeBuilding.name = building.name + ' (' + upgrade.name + ')';
 
-                    let upgradeBuildingCost = Object.assign({}, building.cost);
+                    let parentCost = upgradeBuilding.prevUpgradeKey ? window.objectData.buildings[upgradeBuilding.prevUpgradeKey]?.cost : building.cost;
+                    let upgradeBuildingCost = Object.assign({}, parentCost);
                     if (upgradeBuilding.cost) {
                         for (const [resource, amount] of Object.entries(upgradeBuilding.cost)) {
-                            if (building.cost) {
-                                upgradeBuildingCost[resource] = (building.cost[resource] ?? 0) + amount;
-                            } else {
+                            if (!upgradeBuildingCost[resource]) {
                                 upgradeBuildingCost[resource] = amount;
+                            } else {
+                                upgradeBuildingCost[resource] += amount;
                             }
                         }
                     }
@@ -193,6 +193,13 @@ const game_asset_list = {
         }
     }
 
+    for (const category of Object.values(window.objectData.categories)) {
+        if (category.icon) {
+            category.icon = assetDir(category.icon);
+            game_asset_list[category.icon] = category.icon;
+        }
+    }
+
     for (const resource of Object.values(window.objectData.resources)) {
         if (resource.icon) {
             resource.icon = assetDir(resource.icon);
@@ -200,9 +207,16 @@ const game_asset_list = {
         }
     }
 
+    for (const weapon of Object.values(gameData.weapons)) {
+        if (weapon.icon) {
+            weapon.icon = assetDir(weapon.icon);
+            game_asset_list[weapon.icon] = weapon.icon;
+        }
+    }
+
     window.objectData.categories.presets.buildings = [];
     window.objectData.categories.showcase.buildings = [];
-    for (const [key, data] of Object.entries(foxholeData.presets)) {
+    for (const [key, data] of Object.entries(gameData.presets)) {
         data.preset = true;
         data.category = (data.module && 'presets') || 'showcase';
         data.dataFile = assetDir(`presets/${key}/preset.json`);

@@ -1,44 +1,68 @@
-const foxholeData = {
+const gameData = {
 	"categories": {
 		"presets": {
 			"name": "Modules",
 			"hideInBuildingList": true,
-			"experimental": true
-		},
-		"foundations": {
-			"name": "Foundations"
+			"icon": "game/Textures/UI/Menus/IconFilterModules.webp"
 		},
 		"defenses": {
-			"name": "Defenses"
+			"name": "Defenses",
+			"buildCategory": "Defense",
+			"icon": "game/Textures/UI/Menus/IconFilterDefense.webp"
 		},
 		"entrenchments": {
 			"name": "Entrenchments",
-			"experimental": true
+			"buildCategory": "Bunker",
+			"icon": "game/Textures/UI/Menus/IconFilterBunker.webp"
+		},
+		"misc": {
+			"name": "Utilities",
+			"buildCategory": true,
+			"icon": "game/Textures/UI/Menus/IconFilterGeneral.webp"
 		},
 		"factories": {
-			"name": "Facilities"
+			"name": "Facilities",
+			"buildCategory": "Facility",
+			"icon": "game/Textures/UI/Menus/IconFilterFacility.webp"
 		},
 		"harvesters": {
-			"name": "Harvesters"
+			"name": "Harvesters",
+			"buildCategory": "Mining",
+			"icon": "game/Textures/UI/Menus/IconFilterMining.webp"
 		},
 		"power": {
-			"name": "Power"
+			"name": "Power",
+			"buildCategory": "Power",
+			"icon": "game/Textures/UI/Menus/IconFilterPower.webp"
+		},
+		"foundations": {
+			"name": "Foundations",
+			"buildCategory": "Foundation",
+			"icon": "game/Textures/UI/Menus/IconFilterFoundation.webp"
+		},
+		"shippables": {
+			"name": "Shippables",
+			"buildCategory": "Shippables",
+			"icon": "game/Textures/UI/Menus/IconFilterShippingContainer.webp"
 		},
 		"vehicles": {
 			"name": "Vehicles",
-			"hideInBuildingList": true
+			"hideInBuildingList": true,
+			"icon": "game/Textures/UI/Menus/IconFilterVehicle.webp"
 		},
 		"trains": {
 			"name": "Locomotives",
-			"hideInBuildingList": true
+			"hideInBuildingList": true,
+			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeEngineVehicleIcon.webp"
 		},
-		"misc": {
-			"name": "Miscellaneous"
+		"world": {
+			"name": "References",
+			"icon": "game/Textures/UI/Menus/IconFilterGarrisonHouse.webp"
 		},
 		"showcase": {
 			"name": "Showcase",
 			"hideInBuildingList": true,
-			"experimental": true
+			"icon": "game/Textures/UI/Menus/IconFilterShowcase.webp"
 		}
 	},
 	"presets": {
@@ -206,11 +230,6 @@ const foxholeData = {
 			"description": "While the Noble Firebrand Mk. XVII is a deadly flamethrower tank, a more efficient means of employing flame weapons was needed. Enter the Wild Jack. Named for the fiery idols made by children for Dead Harvest, the Wild Jack is a variation of the Highlander.",
 			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarFlameWarVehicleIcon.webp"
 		},
-		"armoredcarmobilityc": {
-			"name": "T12 “Actaeon” Tankette",
-			"description": "This complete overhaul of the T3 Armoured Car is reinforced with tank armour. While these extra defenses lower the T12’s overall speed and handling, the addition of treads provide increased performance in less than ideal terrain.",
-			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarDefensiveVehicleIcon.webp"
-		},
 		"armoredcarmobilityw": {
 			"name": "O’Brien V.121 Highlander",
 			"description": "Fitted with all-terrain treads, the Highlander brings significant all-terrain mobility and performs especially well in snowy and mountainous environments. ",
@@ -304,7 +323,17 @@ const foxholeData = {
 		"concrete": {
 			"name": "Concrete Materials",
 			"description": "A concrete compound that is used to build heavily fortified structures.",
-			"icon": "game/Textures/UI/ItemIcons/CivicMaterialsIcon.webp"
+			"icon": "game/Textures/UI/ItemIcons/ConcreteBagIcon.webp"
+		},
+		"construction": {
+			"name": "BMS - Universal Assembly Rig",
+			"description": "A specialized vehicle designed by the Basset Motor Society used in the construction of large structures.",
+			"icon": "game/Textures/UI/VehicleIcons/ConstructionVehicleIcon.webp"
+		},
+		"constructionutility": {
+			"name": "BMS - Fabricator",
+			"description": "An advanced variant of the Universal Assembly Rig, the BMS - Fabricator is fitted with a unique kit designed to handle advanced or specialized construction and excavation jobs.",
+			"icon": "game/Textures/UI/VehicleIcons/AdvancedConstructionVehicleIcon.webp"
 		},
 		"destroyertankflamew": {
 			"name": "Noble Firebrand Mk. XVII",
@@ -370,27 +399,27 @@ const foxholeData = {
 		"facilitymaterials4": {
 			"name": "Assembly Materials I",
 			"description": "Specialized metal sheets forged using Coal that are required to assemble advanced vehicles and equipment.",
-			"icon": "game/Textures/UI/ItemIcons/FacilityMaterials4Icon.webp"
+			"icon": "game/Textures/UI/ItemIcons/AssemblyMaterials1Icon.webp"
 		},
 		"facilitymaterials5": {
 			"name": "Assembly Materials II",
 			"description": "Specialized metallic bars fortified with Petrol that are required to assemble advanced vehicles and equipment.",
-			"icon": "game/Textures/UI/ItemIcons/FacilityMaterials4Icon.webp"
+			"icon": "game/Textures/UI/ItemIcons/AssemblyMaterials2Icon.webp"
 		},
 		"facilitymaterials6": {
 			"name": "Assembly Materials III",
 			"description": "Sulfur-enriched metallic bars that are required to assemble advanced vehicles and equipment.",
-			"icon": "game/Textures/UI/ItemIcons/FacilityMaterials4Icon.webp"
+			"icon": "game/Textures/UI/ItemIcons/AssemblyMaterials3Icon.webp"
 		},
 		"facilitymaterials7": {
 			"name": "Assembly Materials IV",
 			"description": "High-end steel bars, fortified with Heavy Oil that are required to assemble advanced vehicles and equipment.",
-			"icon": "game/Textures/UI/ItemIcons/FacilityMaterials4Icon.webp"
+			"icon": "game/Textures/UI/ItemIcons/AssemblyMaterials4Icon.webp"
 		},
 		"facilitymaterials8": {
 			"name": "Assembly Materials V",
 			"description": "Meticulously engineered alloy beams that are required to assemble advanced vehicles and equipment.",
-			"icon": "game/Textures/UI/ItemIcons/FacilityMaterials4Icon.webp"
+			"icon": "game/Textures/UI/ItemIcons/AssemblyMaterials5Icon.webp"
 		},
 		"facilityoil1": {
 			"name": "Heavy Oil",
@@ -453,11 +482,6 @@ const foxholeData = {
 			"name": "Flame Ammo",
 			"description": "A drum containing fuel for use with flame weapons.",
 			"icon": "game/Textures/UI/ItemIcons/FlameAmmoIcon.webp"
-		},
-		"garrisonsupplies": {
-			"name": "Garrison Supplies",
-			"description": "Supplies for maintaining structures. Store at Bases to prevent decay on surrounding structures.",
-			"icon": "game/Textures/UI/ItemIcons/GarrisonSuppliesIcon.webp"
 		},
 		"grenadelaunchertc": {
 			"name": "Mounted Fissura gd.I",
@@ -584,6 +608,11 @@ const foxholeData = {
 			"description": "Standard payload used with Storm Cannons.",
 			"icon": "game/Textures/UI/ItemIcons/LRArtilleryAmmoItemIcon.webp"
 		},
+		"maintenancesupplies": {
+			"name": "Maintenance Supplies",
+			"description": "Supplies for maintaining structures. Store at Bases or Maintenance Tunnels to prevent decay on surrounding structures.",
+			"icon": "game/Textures/UI/ItemIcons/MaintenanceSuppliesIcon.webp"
+		},
 		"materialplatform": {
 			"name": "Material Pallet",
 			"description": "A material pallet.",
@@ -613,6 +642,11 @@ const foxholeData = {
 			"name": "86K-c “Ranseur”",
 			"description": "This evolution of the “Bardiche” is fitted quad-mounted RPG launchers paired with a high-velocity 12.7mm cannon. The “Ranseur” indicates progress in Kraunian design as they continue to leverage outdated equipment to create deadly, modern armour.",
 			"icon": "game/Textures/UI/VehicleIcons/MediumTank2TwinCVehicleIcon.webp"
+		},
+		"mediumtankatw": {
+			"name": "Silverhand Lordscar - Mk. X",
+			"description": "A cut down variation of the Silverhand Assault Tank that sacrifices armour and protection in favour of a high-powered 94.5mm cannon. This open-top weapon platform is uniquely designed to intercept enemy armour before they’re given time to retaliate. Its moniker is a tribute to the maiming of the great king the Silverhand is named for; while his title was stripped, and his pride damaged, his rage was never quelled.",
+			"icon": "game/Textures/UI/VehicleIcons/MediumTankATWIcon.webp"
 		},
 		"mediumtankc": {
 			"name": "85K-b “Falchion”",
@@ -685,6 +719,11 @@ const foxholeData = {
 			"icon": "game/Textures/UI/ItemIcons/Facilities/OilIcon.webp",
 			"isLiquid": true
 		},
+		"oilcan": {
+			"name": "Oil (Canned)",
+			"description": "A raw viscous liquid that must be refined into fuel at Facilities.",
+			"icon": "game/Textures/UI/ItemIcons/Facilities/OilIcon.webp"
+		},
 		"petrol": {
 			"name": "Petrol",
 			"description": "A medium grade fuel that's refined from Oil. Used as a higher end fuel for vehicles and in various applications at Facilities.",
@@ -709,12 +748,12 @@ const foxholeData = {
 		"scouttankoffensivew": {
 			"name": "King Gallant Mk. II",
 			"description": "A heavily armoured variant of the King Spire, the Gallant Mk. II boasts a weighty 30mm cannon at the cost of top speed.",
-			"icon": "game/Textures/UI/VehicleIcons/ScouTankOffensiveWIcon.webp"
+			"icon": "game/Textures/UI/VehicleIcons/ScoutTankOffensiveWIcon.webp"
 		},
 		"scouttankw": {
 			"name": "King Spire Mk. I",
 			"description": "This small tank has been recently recommissioned to the Warden arsenal. It boasts high maneuverability and an antenna that allows for long-range communications during high-stakes recon operations.",
-			"icon": "game/Textures/UI/VehicleIcons/ScoutVehicleWar.webp"
+			"icon": "game/Textures/UI/VehicleIcons/ScoutTankWIcon.webp"
 		},
 		"scoutvehiclemobilityc": {
 			"name": "UV-05a “Argonaut”",
@@ -756,6 +795,11 @@ const foxholeData = {
 			"description": "The Mineseeker is the Bassett Motor Society’s mechanized mule. This small 0-4-0 locomotive can haul tonnes of weight over short distances with little overhead. Ideal for a mining operation or short-range supply chains. ",
 			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeEngineVehicleIcon.webp"
 		},
+		"smalltrainfuelcontainer": {
+			"name": "BMS Tinderbox",
+			"description": "The Tinderbox is a simple car used for transporting liquids between facilities.",
+			"icon": "game/Textures/UI/VehicleIcons/SmallTrainFuelContainerIcon.webp"
+		},
 		"smalltrainresourceplatform": {
 			"name": "BMS Linerunner",
 			"description": "A low profile flatbed car for transporting large resources and munitions over short distances on small gauge tracks.",
@@ -775,6 +819,11 @@ const foxholeData = {
 			"name": "Cullen Predator Mk. III",
 			"description": "This gargantuan beast is the brainchild of Gray Cullen. Once thought impossible, the Predator was Cullen’s idea of how a great ship might operate on land. It boasts two sets of quad-barrelled grenade launches and a heavy-duty 94.5mm forward facing cannon. While limitations of ground-based travel posed certain restrictions on the scope of the project, Cullen wasn’t deterred and made necessary adjustments to meet his vision of the ideal land ship.",
 			"icon": "game/Textures/UI/VehicleIcons/SuperTankWVehicleIcon.webp"
+		},
+		"tankettec": {
+			"name": "T12 “Actaeon” Tankette",
+			"description": "This complete overhaul of the T3 Armoured Car is reinforced with tank armour. While these extra defenses lower the T12’s overall speed and handling, the addition of treads provide increased performance in less than ideal terrain.",
+			"icon": "game/Textures/UI/VehicleIcons/TanketteCVehicleIcon.webp"
 		},
 		"tanketteflamec": {
 			"name": "T14 “Vesta” Tankette",
@@ -871,6 +920,311 @@ const foxholeData = {
 			"description": "Water... in a can!",
 			"icon": "game/Textures/UI/ItemIcons/WaterIcon.webp",
 			"isLiquid": true
+		},
+		"watercan": {
+			"name": "Water (Canned)",
+			"description": "Water... in a can!",
+			"icon": "game/Textures/UI/ItemIcons/WaterIcon.webp"
+		},
+		"wood": {
+			"name": "Refined Materials",
+			"description": "Resource used for building advanced structures and producing special items.",
+			"icon": "game/Textures/UI/ItemIcons/RefinedMaterialsIcon.webp"
+		}
+	},
+	"weapons": {
+		"hegrenade": {
+			"name": "Mammon 91-b",
+			"description": "Mammon 91-b",
+			"icon": "game/Textures/UI/ItemIcons/HEGrenadeItemIcon.webp",
+			"codeName": "hegrenade",
+			"alias": "HE Grenade",
+			"damageType": {
+				"name": "Explosive",
+				"multipliers": {
+					"t2": 0.95,
+					"t3": 0.95
+				},
+				"profiles": {
+					"t1": 0.75,
+					"t2": 0.75,
+					"t3": 0.25
+				}
+			},
+			"damage": 240
+		},
+		"helaunchedgrenade": {
+			"name": "Tremola Grenade GPb-1",
+			"description": "Tremola Grenade GPb-1",
+			"icon": "game/Textures/UI/ItemIcons/HELaunchedGrenadeItemIcon.webp",
+			"codeName": "helaunchedgrenade",
+			"alias": "HE Launcher",
+			"damageType": {
+				"name": "Explosive",
+				"multipliers": {
+					"t2": 0.95,
+					"t3": 0.95
+				},
+				"profiles": {
+					"t1": 0.75,
+					"t2": 0.75,
+					"t3": 0.25
+				}
+			},
+			"damage": 400
+		},
+		"minitankammo": {
+			"name": "30mm",
+			"description": "30mm",
+			"icon": "game/Textures/UI/ItemIcons/MiniTankAmmoItemIcon.webp",
+			"codeName": "minitankammo",
+			"damageType": {
+				"name": "Explosive",
+				"multipliers": {
+					"t2": 0.99,
+					"t3": 0.99
+				},
+				"profiles": {
+					"t1": 0.75,
+					"t2": 0.75,
+					"t3": 0.25
+				}
+			},
+			"damage": 400
+		},
+		"rpgammo": {
+			"name": "RPG",
+			"description": "RPG",
+			"icon": "game/Textures/UI/ItemIcons/RpgAmmoItemIcon.webp",
+			"codeName": "rpgammo",
+			"damageType": {
+				"name": "Explosive",
+				"multipliers": {
+					"t3": 0.99
+				},
+				"profiles": {
+					"t1": 0.75,
+					"t2": 0.75,
+					"t3": 0.25
+				}
+			},
+			"damage": 550
+		},
+		"lighttankammo": {
+			"name": "40mm",
+			"description": "40mm",
+			"icon": "game/Textures/UI/ItemIcons/LightTankAmmoItemIcon.webp",
+			"codeName": "lighttankammo",
+			"damage": 600,
+			"damageType": {
+				"name": "Explosive",
+				"profiles": {
+					"t1": 0.75,
+					"t2": 0.75,
+					"t3": 0.25
+				}
+			}
+		},
+		"battletankammo": {
+			"name": "75mm",
+			"description": "75mm",
+			"icon": "game/Textures/UI/ItemIcons/BattleTankAmmoItemIcon.webp",
+			"codeName": "battletankammo",
+			"damage": 1750,
+			"damageType": {
+				"name": "Explosive",
+				"profiles": {
+					"t1": 0.75,
+					"t2": 0.75,
+					"t3": 0.25
+				}
+			}
+		},
+		"atammo": {
+			"name": "68mm",
+			"description": "68mm",
+			"icon": "game/Textures/UI/ItemIcons/ATAmmoIcon.webp",
+			"codeName": "atammo",
+			"damage": 600,
+			"damageType": {
+				"name": "Armour Piercing",
+				"profiles": {
+					"t1": 0.25,
+					"t2": 0.25,
+					"t3": 0.06999999999999995
+				}
+			}
+		},
+		"atlargeammo": {
+			"name": "94.5mm",
+			"description": "94.5mm",
+			"icon": "game/Textures/UI/ATLargeAmmoIcon.webp",
+			"codeName": "atlargeammo",
+			"damage": 1750,
+			"damageType": {
+				"name": "Armour Piercing",
+				"profiles": {
+					"t1": 0.25,
+					"t2": 0.25,
+					"t3": 0.06999999999999995
+				}
+			}
+		},
+		"mortarammo": {
+			"name": "Mortar Shell",
+			"description": "Mortar Shell",
+			"icon": "game/Textures/UI/ItemIcons/MortarAmmoIcon.webp",
+			"codeName": "mortarammo",
+			"alias": "Mortar",
+			"damage": 300,
+			"damageType": {
+				"name": "High Explosive",
+				"profiles": {
+					"t1": 0.75,
+					"t2": 0.75,
+					"t3": 0.25
+				}
+			}
+		},
+		"lightartilleryammo": {
+			"name": "120mm",
+			"description": "120mm",
+			"icon": "game/Textures/UI/ItemIcons/LightArtilleryAmmoItemIcon.webp",
+			"codeName": "lightartilleryammo",
+			"damage": 400,
+			"damageType": {
+				"name": "High Explosive",
+				"profiles": {
+					"t1": 0.75,
+					"t2": 0.75,
+					"t3": 0.25
+				}
+			}
+		},
+		"heavyartilleryammo": {
+			"name": "150mm",
+			"description": "150mm",
+			"icon": "game/Textures/UI/ItemIcons/HeavyArtilleryAmmoItemIcon.webp",
+			"codeName": "heavyartilleryammo",
+			"damage": 900,
+			"damageType": {
+				"name": "High Explosive",
+				"profiles": {
+					"t1": 0.75,
+					"t2": 0.75,
+					"t3": 0.25
+				}
+			}
+		},
+		"herocketammo": {
+			"name": "3C-High Explosive Rocket",
+			"description": "3C-High Explosive Rocket",
+			"icon": "game/Textures/UI/ItemIcons/HERocketAmmoIcon.webp",
+			"codeName": "herocketammo",
+			"alias": "Rocket",
+			"damage": 300,
+			"damageType": {
+				"name": "Incendiary",
+				"profiles": {
+					"t1": 0.75,
+					"t2": 0.75,
+					"t3": 0.25
+				}
+			}
+		},
+		"firerocketammo": {
+			"name": "4C-Fire Rocket",
+			"description": "4C-Fire Rocket",
+			"icon": "game/Textures/UI/ItemIcons/FlameRocketAmmoIcon.webp",
+			"codeName": "firerocketammo",
+			"alias": "Fire Rocket",
+			"damage": 145,
+			"damageType": {
+				"name": "Incendiary",
+				"profiles": {
+					"t1": 0.75,
+					"t2": 0.75,
+					"t3": 0.25
+				}
+			}
+		},
+		"explosivelightc": {
+			"name": "Hydra’s Whisper",
+			"description": "Hydra’s Whisper",
+			"icon": "game/Textures/UI/Menus/BangaloreItemIcon.webp",
+			"codeName": "explosivelightc",
+			"alias": "Hydras",
+			"damage": 350,
+			"damageType": {
+				"name": "Demolition",
+				"profiles": {
+					"t1": 1,
+					"t2": 1,
+					"t3": 1
+				}
+			}
+		},
+		"mortartankammo": {
+			"name": "250mm",
+			"description": "250mm",
+			"icon": "game/Textures/UI/ItemIcons/MortarTankIcon.webp",
+			"codeName": "mortartankammo",
+			"damage": 1000,
+			"damageType": {
+				"name": "Demolition",
+				"profiles": {
+					"t1": 1,
+					"t2": 1,
+					"t3": 1
+				}
+			}
+		},
+		"lrartilleryammo": {
+			"name": "300mm",
+			"description": "300mm",
+			"icon": "game/Textures/UI/ItemIcons/LRArtilleryAmmoItemIcon.webp",
+			"codeName": "lrartilleryammo",
+			"damage": 1500,
+			"damageType": {
+				"name": "High Explosive",
+				"profiles": {
+					"t1": 0.75,
+					"t2": 0.75,
+					"t3": 0.25
+				}
+			}
+		},
+		"satchelchargew": {
+			"name": "Alligator Charge",
+			"description": "Alligator Charge",
+			"icon": "game/Textures/UI/StructureIcons/SatchelCharge.webp",
+			"codeName": "satchelchargew",
+			"alias": "Satchel",
+			"damage": 300,
+			"damageType": {
+				"name": "Demolition",
+				"profiles": {
+					"t1": 1,
+					"t2": 1,
+					"t3": 1
+				}
+			}
+		},
+		"satchelcharget": {
+			"name": "Havoc Charge Detonator",
+			"description": "Havoc Charge Detonator",
+			"icon": "game/Textures/UI/ItemIcons/SatchelChargeTIcon.webp",
+			"codeName": "satchelcharget",
+			"alias": "Havoc",
+			"damage": 1850,
+			"damageType": {
+				"name": "Demolition",
+				"profiles": {
+					"t1": 1,
+					"t2": 1,
+					"t3": 1
+				}
+			}
 		}
 	},
 	"buildings": {
@@ -995,23 +1349,22 @@ const foxholeData = {
 					"_productionLength": 8,
 					"production": [
 						{
+							"id": 4,
+							"input": {
+								"facilitymaterials1": 2
+							},
+							"output": {
+								"tripod": 1
+							},
+							"time": 25
+						},
+						{
 							"id": 0,
 							"input": {
 								"facilitymaterials1": 3
 							},
 							"output": {
 								"isgtc": 1
-							},
-							"faction": "c",
-							"time": 25
-						},
-						{
-							"id": 1,
-							"input": {
-								"facilitymaterials1": 3
-							},
-							"output": {
-								"grenadelaunchertc": 1
 							},
 							"faction": "c",
 							"time": 25
@@ -1039,24 +1392,14 @@ const foxholeData = {
 							"time": 25
 						},
 						{
-							"id": 4,
-							"input": {
-								"facilitymaterials1": 2
-							},
-							"output": {
-								"tripod": 1
-							},
-							"time": 25
-						},
-						{
-							"id": 5,
+							"id": 1,
 							"input": {
 								"facilitymaterials1": 3
 							},
 							"output": {
-								"atrpgtw": 1
+								"grenadelaunchertc": 1
 							},
-							"faction": "w",
+							"faction": "c",
 							"time": 25
 						},
 						{
@@ -1066,6 +1409,17 @@ const foxholeData = {
 							},
 							"output": {
 								"rpgtw": 1
+							},
+							"faction": "w",
+							"time": 25
+						},
+						{
+							"id": 5,
+							"input": {
+								"facilitymaterials1": 3
+							},
+							"output": {
+								"atrpgtw": 1
 							},
 							"faction": "w",
 							"time": 25
@@ -1130,6 +1484,7 @@ const foxholeData = {
 							"output": {
 								"herocketammo": 1
 							},
+							"faction": "c",
 							"time": 25
 						},
 						{
@@ -1149,7 +1504,7 @@ const foxholeData = {
 				"large_shell_factory": {
 					"name": "Large Shell Factory",
 					"codeName": "LargeShellFactory",
-					"description": "Produces large calibre ordinance for use with tanks and artillery.",
+					"description": "Produces large calibre ordnance for use with tanks and artillery.",
 					"hitArea": [
 						{
 							"shape": [ 84.16,-153.28,26.56,-152,27.2,-203.2,54.08,-209.6,83.52,-203.2 ]
@@ -1373,6 +1728,7 @@ const foxholeData = {
 			"description": "A large shipping vessel, the Aquatipper is used to transport vehicles, equipment, and personnel over large bodies of water.",
 			"category": "vehicles",
 			"categoryOrder": 20,
+			"sortLayer": "vehicle",
 			"hitArea": [
 				{
 					"shape": [ -191.36,103.68,-192.64,-103.04,196.48,-103.68,197.12,101.12 ]
@@ -1701,7 +2057,7 @@ const foxholeData = {
 					"output": {
 						"facilitycoal1": 180
 					},
-					"time": 120
+					"time": 270
 				}
 			],
 			"upgrades": {
@@ -1748,7 +2104,7 @@ const foxholeData = {
 								"facilitycoal1": 165,
 								"sulfur": 15
 							},
-							"time": 120
+							"time": 270
 						}
 					]
 				},
@@ -1846,8 +2202,8 @@ const foxholeData = {
 								"concrete": 1,
 								"oil": 50
 							},
-							"time": 120,
-							"power": -4
+							"time": 270,
+							"power": -6
 						}
 					]
 				},
@@ -1951,12 +2307,40 @@ const foxholeData = {
 								"facilitycoal1": 260,
 								"facilityoil1": 60
 							},
-							"time": 180,
-							"power": -4
+							"time": 405,
+							"power": -6
 						}
 					]
 				}
 			}
+		},
+		"concretemixer": {
+			"name": "Concrete Mixer",
+			"codeName": "ConcreteMixer",
+			"description": "A portable device that mixes various materials to form Concrete, which are used to build heavily fortified structures.",
+			"category": "shippables",
+			"categoryOrder": 5,
+			"icon": "game/Textures/UI/StructureIcons/ConcreteMixerIcon.webp",
+			"texture": "game/Textures/Structures/concretemixer.webp",
+			"techId": "unlockconcretemixer",
+			"maxHealth": 1200,
+			"cost": {
+				"wood": 75
+			},
+			"repairCost": 75,
+			"_productionLength": 1,
+			"production": [
+				{
+					"id": 0,
+					"input": {
+						"components": 20
+					},
+					"output": {
+						"concrete": 1
+					},
+					"time": 20
+				}
+			]
 		},
 		"construction_vehicle": {
 			"name": "BMS - Universal Assembly Rig",
@@ -1995,12 +2379,48 @@ const foxholeData = {
 			"texture": "game/Textures/Vehicles/construction_vehicle.webp",
 			"cost": false
 		},
+		"constructionutility": {
+			"name": "BMS - Fabricator",
+			"codeName": "ConstructionUtility",
+			"description": "An advanced variant of the Universal Assembly Rig, the BMS - Fabricator is fitted with a unique kit designed to handle advanced or specialized construction and excavation jobs.",
+			"category": "vehicles",
+			"categoryOrder": 10,
+			"hitArea": [
+				{
+					"shape": [ -109.76,19.52,-124.48,43.84,-124.48,20.16 ]
+				},
+				{
+					"shape": [ 27.84,-19.52,41.28,-43.84,41.92,-19.52 ]
+				},
+				{
+					"shape": [ 88.64,40.64,81.6,32.96,81.6,17.6,88.64,9.92,116.8,15.68,117.44,34.88 ]
+				},
+				{
+					"shape": [ -124.48,-43.84,41.28,-43.84,-110.4,-18.88,-124.48,-19.52 ]
+				},
+				{
+					"shape": [ 52.8,32.96,28.48,18.24,81.6,17.6,81.6,32.96 ]
+				},
+				{
+					"shape": [ 41.92,43.84,-124.48,43.84,28.48,18.24,52.8,32.96 ]
+				},
+				{
+					"shape": [ -124.48,43.84,-109.76,19.52,27.84,-19.52,28.48,18.24 ]
+				},
+				{
+					"shape": [ 41.28,-43.84,27.84,-19.52,-109.76,19.52,-110.4,-18.88 ]
+				}
+			],
+			"icon": "game/Textures/UI/VehicleIcons/AdvancedConstructionVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/advanced_construction_vehicle.webp",
+			"techId": "unlockconstructionutility"
+		},
 		"crane": {
 			"name": "BMS - Class 2 Mobile Auto-Crane",
 			"codeName": "Crane",
 			"description": "The Basset Motor Society’s Class 2 Mobile Auto-Crane is used to lift and reposition vehicles and very heavy equipment.",
 			"category": "vehicles",
-			"categoryOrder": 10,
+			"categoryOrder": 11,
 			"range": {
 				"type": "crane",
 				"min": null,
@@ -2220,6 +2640,47 @@ const foxholeData = {
 							"power": 12
 						}
 					]
+				},
+				"coal": {
+					"name": "Coal Power Plant",
+					"codeName": "Coal",
+					"description": "A generator that burns coal to generate power.",
+					"hitArea": [
+						{
+							"shape": [ -108.8,-96.32,-83.2,-96.32,-122.88,63.68,-122.60571411132813,-81.23427734375,-117.76,-91.2 ]
+						},
+						{
+							"shape": [ -122.88,63.68,51.84,-125.12,91.52,-119.36,95.36,-107.2,-49.28,72.64,-58.88,77.76,-110.08,77.76,-118.4,72.64 ]
+						},
+						{
+							"shape": [ -49.28,72.64,95.36,-107.2,118.4,-105.28,119.04,118.72,-49.28,116.8 ]
+						},
+						{
+							"shape": [ 51.84,-125.12,-83.2,-96.32,-84.48,-127.68 ]
+						},
+						{
+							"shape": [ 51.84,-125.12,-122.88,63.68,-83.2,-96.32 ]
+						},
+						{
+							"shape": [ 134.4,98.88,119.04,98.88,119.04,17.6,134.4,17.6 ]
+						}
+					],
+					"icon": "game/Textures/UI/ItemIcons/FacilityPowerDieselCoalIcon.webp",
+					"texture": "game/Textures/Structures/diesel_power_plant_coal.webp",
+					"cost": {
+						"facilitymaterials1": 100
+					},
+					"_productionLength": 1,
+					"production": [
+						{
+							"id": 0,
+							"input": {
+								"coal": 60
+							},
+							"time": 90,
+							"power": 5
+						}
+					]
 				}
 			}
 		},
@@ -2270,6 +2731,90 @@ const foxholeData = {
 			},
 			"repairCost": 100
 		},
+		"fieldbridge": {
+			"name": "Field Bridge",
+			"codeName": "FieldBridge",
+			"description": "A makeshift bridge for transporting light equipment over a short distance. Will take damage when vehicles drive across.",
+			"category": "misc",
+			"categoryOrder": 8,
+			"hasHandle": true,
+			"hasOutline": false,
+			"minLength": 4,
+			"maxLength": 25,
+			"icon": "game/Textures/UI/StructureIcons/FieldBridgeItemIcon.webp",
+			"texture": "game/Textures/Structures/fieldbridge.webp",
+			"canSnap": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 8192,
+							"category": 8192
+						},
+						{
+							"mask": 8192,
+							"category": 8192
+						}
+					],
+					"texture": "game/Textures/Structures/fieldbridge_end.webp",
+					"textureAlt": "game/Textures/Structures/fieldbridge_connector.webp",
+					"cap": "front",
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": [
+						{
+							"mask": 8192,
+							"category": 8192
+						},
+						{
+							"mask": 8192,
+							"category": 8192
+						}
+					],
+					"texture": "game/Textures/Structures/fieldbridge_end.webp",
+					"textureAlt": "game/Textures/Structures/fieldbridge_connector.webp",
+					"cap": "back",
+					"rotation": 90
+				}
+			],
+			"techId": "unlockfieldbridge",
+			"maxHealth": 1500,
+			"cost": {
+				"metalbeammaterials": 5
+			},
+			"repairCost": 100
+		},
+		"fieldhospital": {
+			"name": "Field Hospital",
+			"codeName": "FieldHospital",
+			"description": "A field medical facility used to treat critically wounded soldiers at the front line. ",
+			"category": "misc",
+			"categoryOrder": 1,
+			"hitArea": [
+				{
+					"shape": [ 39.36,-143.68,-38.72,-143.68,-34.88,-179.52,36.16,-179.52 ]
+				},
+				{
+					"shape": [ -34.88,178.88,-38.72,143.04,39.36,143.04,36.16,178.88 ]
+				},
+				{
+					"shape": [ 106.56,142.4,-38.72,143.04,-105.28,-142.4,106.56,-143.68 ]
+				},
+				{
+					"shape": [ -105.28,-142.4,-38.72,143.04,-105.28,142.4 ]
+				}
+			],
+			"icon": "game/Textures/UI/StructureIcons/FieldHospitalIcon.webp",
+			"texture": "game/Textures/Structures/fieldhospital.webp",
+			"maxHealth": 500,
+			"cost": {
+				"cloth": 200
+			},
+			"repairCost": 200
+		},
 		"flatbedtruck": {
 			"name": "BMS - Packmule Flatbed",
 			"codeName": "FlatbedTruck",
@@ -2287,7 +2832,7 @@ const foxholeData = {
 			"description": "A large forward operating base. Players can spawn and stockpile items here.",
 			"category": "entrenchments",
 			"baseGarrisonRadius": 80,
-			"sortLayer": "upgrade",
+			"sortLayer": "upgrade2",
 			"hitArea": [
 				{
 					"shape": [ 90.88,92.16,-85.12,91.52,-92.16,-88.32,88.96,-90.88 ]
@@ -2354,6 +2899,38 @@ const foxholeData = {
 					],
 					"x": 0,
 					"y": 264,
+					"rotation": 270
+				},
+				{
+					"id": 4,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 528,
+					"y": 792,
+					"rotation": 90
+				},
+				{
+					"id": 5,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 0,
+					"y": 792,
 					"rotation": 270
 				}
 			],
@@ -2445,6 +3022,38 @@ const foxholeData = {
 					],
 					"x": 0,
 					"y": 264,
+					"rotation": 270
+				},
+				{
+					"id": 4,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 528,
+					"y": 792,
+					"rotation": 90
+				},
+				{
+					"id": 5,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 0,
+					"y": 792,
 					"rotation": 270
 				}
 			],
@@ -2540,12 +3149,44 @@ const foxholeData = {
 					"x": 0,
 					"y": 264,
 					"rotation": 270
+				},
+				{
+					"id": 4,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 528,
+					"y": 792,
+					"rotation": 90
+				},
+				{
+					"id": 5,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 0,
+					"y": 792,
+					"rotation": 270
 				}
 			],
 			"maxHealth": 3500,
 			"structuralIntegrity": 0.75,
 			"cost": {
-				"concrete": 50
+				"concrete": 25
 			},
 			"repairCost": 200,
 			"upgrades": {
@@ -2595,7 +3236,7 @@ const foxholeData = {
 					"rotation": 0
 				},
 				{
-					"id": 1,
+					"id": 6,
 					"type": [
 						{
 							"mask": 2,
@@ -2612,7 +3253,7 @@ const foxholeData = {
 					"rotation": 135
 				},
 				{
-					"id": 2,
+					"id": 3,
 					"type": [
 						{
 							"mask": 2,
@@ -2681,7 +3322,7 @@ const foxholeData = {
 					"rotation": 0
 				},
 				{
-					"id": 1,
+					"id": 6,
 					"type": [
 						{
 							"mask": 2,
@@ -2698,7 +3339,7 @@ const foxholeData = {
 					"rotation": 135
 				},
 				{
-					"id": 2,
+					"id": 3,
 					"type": [
 						{
 							"mask": 2,
@@ -2739,6 +3380,7 @@ const foxholeData = {
 			"codeName": "FortCornerT3",
 			"parentKey": "fortt2",
 			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
+			"categoryOrder": 5,
 			"tier": 3,
 			"hitArea": [
 				{
@@ -2768,7 +3410,7 @@ const foxholeData = {
 					"rotation": 0
 				},
 				{
-					"id": 1,
+					"id": 6,
 					"type": [
 						{
 							"mask": 2,
@@ -2785,7 +3427,7 @@ const foxholeData = {
 					"rotation": 135
 				},
 				{
-					"id": 2,
+					"id": 3,
 					"type": [
 						{
 							"mask": 2,
@@ -2806,7 +3448,7 @@ const foxholeData = {
 			"maxHealth": 2000,
 			"structuralIntegrity": 0.99,
 			"cost": {
-				"concrete": 30
+				"concrete": 15
 			},
 			"repairCost": 120,
 			"upgrades": {
@@ -2988,6 +3630,22 @@ const foxholeData = {
 							"x": 528,
 							"y": 264,
 							"rotation": 90
+						},
+						{
+							"id": 2,
+							"type": [
+								{
+									"mask": 2,
+									"category": 4
+								},
+								{
+									"mask": 4,
+									"category": 4
+								}
+							],
+							"x": 264,
+							"y": 528,
+							"rotation": 180
 						},
 						{
 							"id": 3,
@@ -3258,6 +3916,22 @@ const foxholeData = {
 							"rotation": 90
 						},
 						{
+							"id": 2,
+							"type": [
+								{
+									"mask": 2,
+									"category": 4
+								},
+								{
+									"mask": 4,
+									"category": 4
+								}
+							],
+							"x": 264,
+							"y": 528,
+							"rotation": 180
+						},
+						{
 							"id": 3,
 							"type": [
 								{
@@ -3299,6 +3973,19 @@ const foxholeData = {
 						"cloth": 75
 					},
 					"repairCost": 75
+				},
+				"ammoroomt2": {
+					"name": "Storage Room (Tier 2)",
+					"codeName": "AmmoRoomT2",
+					"description": "A facility that stores equipment and ammunition for artillery. Retrieval is very quick for this structure.",
+					"icon": "game/Textures/UI/StructureIcons/AmmoRoomIcon.webp",
+					"texture": "game/Textures/Structures/fortt2_ammoroom.webp",
+					"maxHealth": 1850,
+					"structuralIntegrity": 0.85,
+					"cost": {
+						"cloth": 35
+					},
+					"repairCost": 120
 				}
 			}
 		},
@@ -3387,14 +4074,14 @@ const foxholeData = {
 			"maxHealth": 2000,
 			"structuralIntegrity": 0.99,
 			"cost": {
-				"concrete": 30
+				"concrete": 15
 			},
 			"repairCost": 120,
 			"upgrades": {
 				"intelcenter": {
 					"name": "Intelligence Center",
 					"codeName": "IntelCenter",
-					"description": "A high-tech listening post designed to intercept and decode enemy transmissions. The intelligence Center can target distant locations and will continue to decipher sensitive transmissions over a sustained period.",
+					"description": "A high-tech listening post designed to intercept and decode enemy transmissions. The Intelligence Center can target distant locations and will continue to decipher sensitive transmissions over a sustained period.",
 					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/IntelligenceCenterIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_intelcenter.webp",
@@ -3402,14 +4089,14 @@ const foxholeData = {
 					"maxHealth": 2550,
 					"structuralIntegrity": 0.65,
 					"cost": {
-						"concrete": 250
+						"concrete": 125
 					},
 					"repairCost": 1200
 				},
 				"lrartillery": {
 					"name": "Storm Cannon",
 					"codeName": "LRArtillery",
-					"description": "A heavy fixed position artillery that can release devastating firepower on distant enemy targets.",
+					"description": "A heavy fixed position artillery piece that can release devastating firepower on distant enemy targets.",
 					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/LongRangedArtilleryIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_lrartillery.webp",
@@ -3420,14 +4107,15 @@ const foxholeData = {
 					"maxHealth": 2550,
 					"structuralIntegrity": 0.65,
 					"cost": {
-						"concrete": 400
+						"concrete": 200
 					},
-					"repairCost": 1600
+					"repairCost": 500
 				},
 				"ammoroomt3": {
-					"name": "Storage Room",
+					"name": "Storage Room (Tier 3)",
 					"codeName": "AmmoRoomT3",
-					"description": "A facility that stores equipment and ammunition for artillery. Retrieval is very quick for this structure.. ",
+					"prevUpgradeKey": "fortt2_ammoroomt2",
+					"description": "A facility that stores equipment and ammunition for artillery. Retrieval is very quick for this structure.",
 					"icon": "game/Textures/UI/StructureIcons/AmmoRoomIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_ammoroom.webp",
 					"maxHealth": 2000,
@@ -3435,7 +4123,7 @@ const foxholeData = {
 					"cost": {
 						"concrete": 10
 					},
-					"repairCost": 200
+					"repairCost": 160
 				},
 				"artilleryait3": {
 					"name": "Howitzer Garrison",
@@ -3468,13 +4156,14 @@ const foxholeData = {
 					"maxHealth": 1750,
 					"structuralIntegrity": 0.93,
 					"cost": {
-						"concrete": 40
+						"concrete": 20
 					},
 					"repairCost": 160
 				},
 				"atgunait3": {
 					"name": "AT Gun Garrison (Tier 3)",
 					"codeName": "ATGunAIT3",
+					"prevUpgradeKey": "fortt2_atgunait2",
 					"description": "An entrenched AT gun manned by stationed troops.",
 					"range": {
 						"type": "killboxAT",
@@ -3506,26 +4195,28 @@ const foxholeData = {
 					"maxHealth": 1750,
 					"structuralIntegrity": 0.93,
 					"cost": {
-						"concrete": 40
+						"concrete": 20
 					},
 					"repairCost": 160
 				},
 				"engineroomt3": {
 					"name": "Engine Room (Tier 3)",
 					"codeName": "EngineRoomT3",
+					"prevUpgradeKey": "fortt2_engineroomt2",
 					"description": "A engineering facility that provides power to Bunker structures using pipe connections.",
 					"icon": "game/Textures/UI/StructureIcons/EngineRoomIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_engineroom.webp",
 					"maxHealth": 1500,
 					"structuralIntegrity": 0.85,
 					"cost": {
-						"concrete": 50
+						"concrete": 25
 					},
 					"repairCost": 120
 				},
 				"mgait3": {
 					"name": "Machine Gun Garrison (Tier 3)",
 					"codeName": "MGAIT3",
+					"prevUpgradeKey": "fortt2_mgait2",
 					"description": "An entrenched machine gun manned by stationed troops.",
 					"range": {
 						"type": "killboxMG",
@@ -3540,13 +4231,14 @@ const foxholeData = {
 					"maxHealth": 3000,
 					"structuralIntegrity": 0.96,
 					"cost": {
-						"concrete": 30
+						"concrete": 15
 					},
 					"repairCost": 120
 				},
 				"observationbunkert3": {
 					"name": "Observation Bunker (Tier 3)",
 					"codeName": "ObservationBunkerT3",
+					"prevUpgradeKey": "fortt2_observationbunkert2",
 					"description": "A radio bunker that provides intel to friendly units about the surrounding area. Built from solid concrete, this reliable structure can push its effective range beyond lesser fortified radio structures.",
 					"range": {
 						"type": "radio",
@@ -3566,13 +4258,14 @@ const foxholeData = {
 					"maxHealth": 1750,
 					"structuralIntegrity": 0.93,
 					"cost": {
-						"concrete": 20
+						"concrete": 10
 					},
 					"repairCost": 160
 				},
 				"fortrampt3": {
 					"name": "Bunker Ramp (Tier 3)",
 					"codeName": "FortRampT3",
+					"prevUpgradeKey": "fortt2_fortrampt2",
 					"description": "A ramp that enables access to underground Bunkers.",
 					"icon": "game/Textures/UI/StructureIcons/FortT3RampIcon.webp",
 					"texture": "game/Textures/Structures/fortt3_ramp.webp",
@@ -3614,6 +4307,22 @@ const foxholeData = {
 							"rotation": 90
 						},
 						{
+							"id": 2,
+							"type": [
+								{
+									"mask": 2,
+									"category": 4
+								},
+								{
+									"mask": 4,
+									"category": 4
+								}
+							],
+							"x": 264,
+							"y": 528,
+							"rotation": 180
+						},
+						{
 							"id": 3,
 							"type": [
 								{
@@ -3633,13 +4342,14 @@ const foxholeData = {
 					"maxHealth": 2000,
 					"structuralIntegrity": 0.99,
 					"cost": {
-						"concrete": 20
+						"concrete": 10
 					},
 					"repairCost": 120
 				},
 				"rifleait3": {
 					"name": "Rifle Garrison (Tier 3)",
 					"codeName": "RifleAIT3",
+					"prevUpgradeKey": "fortt2_rifleait2",
 					"description": "An entrenched bunker manned by stationed troops armed with Rifles.",
 					"range": {
 						"type": "killbox",
@@ -3653,7 +4363,7 @@ const foxholeData = {
 					"maxHealth": 2250,
 					"structuralIntegrity": 0.96,
 					"cost": {
-						"concrete": 30
+						"concrete": 15
 					},
 					"repairCost": 120
 				}
@@ -3662,9 +4372,8 @@ const foxholeData = {
 		"forwardbase1": {
 			"name": "Encampment",
 			"codeName": "ForwardBase1",
-			"description": "A temporary forward operating base. Players can spawn from here.",
+			"description": "A temporary forward operating base. Players can spawn and stockpile items here.",
 			"category": "misc",
-			"categoryOrder": 5,
 			"baseGarrisonRadius": 80,
 			"icon": "game/Textures/UI/StructureIcons/EncampmentIcon.webp",
 			"texture": "game/Textures/Structures/forwardbase1.webp",
@@ -3755,8 +4464,10 @@ const foxholeData = {
 					"textureBorder": "game/Textures/Structures/concrete_foundation_border.webp",
 					"garrisonSupplyMultiplier": 2,
 					"cost": {
-						"concrete": 15
-					}
+						"concrete": 5
+					},
+					"maxHealth": 3850,
+					"repairCost": 100
 				}
 			}
 		},
@@ -3865,8 +4576,10 @@ const foxholeData = {
 					"textureBorder": "game/Textures/Structures/concrete_foundation_border.webp",
 					"garrisonSupplyMultiplier": 2,
 					"cost": {
-						"concrete": 20
-					}
+						"concrete": 10
+					},
+					"maxHealth": 3850,
+					"repairCost": 100
 				}
 			}
 		},
@@ -3998,8 +4711,10 @@ const foxholeData = {
 					"textureBorder": "game/Textures/Structures/concrete_foundation_border.webp",
 					"garrisonSupplyMultiplier": 2,
 					"cost": {
-						"concrete": 30
-					}
+						"concrete": 15
+					},
+					"maxHealth": 3850,
+					"repairCost": 100
 				}
 			}
 		},
@@ -4071,8 +4786,10 @@ const foxholeData = {
 					"textureBorder": "game/Textures/Structures/concrete_foundation_border.webp",
 					"garrisonSupplyMultiplier": 2,
 					"cost": {
-						"concrete": 15
-					}
+						"concrete": 5
+					},
+					"maxHealth": 3850,
+					"repairCost": 100
 				}
 			}
 		},
@@ -4082,6 +4799,7 @@ const foxholeData = {
 			"description": "The Basset Motor Society’s Ironship-class shipping vessel is used to freight shippable goods and heavy vehicles.",
 			"category": "vehicles",
 			"categoryOrder": 21,
+			"sortLayer": "vehicle",
 			"hitArea": [
 				{
 					"shape": [ 319.36,49.28,293.12,72.96,298.24,-69.76,322.56,-44.8,356.48,0.64 ]
@@ -4100,10 +4818,10 @@ const foxholeData = {
 			"texture": "game/Textures/Vehicles/freighter.webp"
 		},
 		"fuel_container": {
-			"name": "Fuel Container",
+			"name": "Liquid Container",
 			"codeName": "FuelContainer",
-			"description": "A container for storing high volumes of fuel. Nearby structures and vehicles can refuel directly from this container. ",
-			"category": "misc",
+			"description": "A container for storing high volumes of liquids. Nearby structures and vehicles can refill directly from this container. ",
+			"category": "shippables",
 			"categoryOrder": 4,
 			"sortLayer": "container",
 			"icon": "game/Textures/UI/StructureIcons/FuelTankIcon.webp",
@@ -4174,7 +4892,6 @@ const foxholeData = {
 			"description": "A gate that provides access to a walled off area.",
 			"category": "defenses",
 			"categoryOrder": 4,
-			"hideInList": true,
 			"sortLayer": "wall",
 			"icon": "game/Textures/UI/StructureIcons/Gate-T1Icon.webp",
 			"texture": "game/Textures/Structures/gatet1.webp",
@@ -4189,8 +4906,10 @@ const foxholeData = {
 							"category": 512
 						}
 					],
+					"texture": "game/Textures/Structures/wallsplinet1_post.webp",
+					"textureAlt": "game/Textures/Structures/wallsplinet1_post.webp",
 					"x": 18,
-					"y": 42,
+					"y": 40,
 					"rotation": 270
 				},
 				{
@@ -4201,8 +4920,10 @@ const foxholeData = {
 							"category": 512
 						}
 					],
+					"texture": "game/Textures/Structures/wallsplinet1_post.webp",
+					"textureAlt": "game/Textures/Structures/wallsplinet1_post.webp",
 					"x": 1552,
-					"y": 42,
+					"y": 40,
 					"rotation": 90
 				}
 			],
@@ -4219,9 +4940,41 @@ const foxholeData = {
 					"icon": "game/Textures/UI/StructureIcons/Gate-T2Icon.webp",
 					"texture": "game/Textures/Structures/gatet2.webp",
 					"techId": "unlockgatetier2",
+					"sockets": [
+						{
+							"id": 0,
+							"type": [
+								{
+									"mask": 512,
+									"category": 512
+								}
+							],
+							"texture": "game/Textures/Structures/wallsplinet2_post.webp",
+							"textureAlt": "game/Textures/Structures/wallsplinet2_post.webp",
+							"x": 18,
+							"y": 22,
+							"rotation": 270
+						},
+						{
+							"id": 1,
+							"type": [
+								{
+									"mask": 512,
+									"category": 512
+								}
+							],
+							"texture": "game/Textures/Structures/wallsplinet2_post.webp",
+							"textureAlt": "game/Textures/Structures/wallsplinet2_post.webp",
+							"x": 1552,
+							"y": 22,
+							"rotation": 90
+						}
+					],
 					"cost": {
 						"cloth": 50
-					}
+					},
+					"maxHealth": 1000,
+					"repairCost": 50
 				},
 				"gatet3": {
 					"name": "Gate (Tier 3)",
@@ -4230,9 +4983,41 @@ const foxholeData = {
 					"icon": "game/Textures/UI/StructureIcons/Gate-T3Icon.webp",
 					"texture": "game/Textures/Structures/gatet3.webp",
 					"techId": "unlockgatetier3",
+					"sockets": [
+						{
+							"id": 0,
+							"type": [
+								{
+									"mask": 512,
+									"category": 512
+								}
+							],
+							"texture": "game/Textures/Structures/wallsplinet3_post.webp",
+							"textureAlt": "game/Textures/Structures/wallsplinet3_post.webp",
+							"x": 18,
+							"y": 38,
+							"rotation": 270
+						},
+						{
+							"id": 1,
+							"type": [
+								{
+									"mask": 512,
+									"category": 512
+								}
+							],
+							"texture": "game/Textures/Structures/wallsplinet3_post.webp",
+							"textureAlt": "game/Textures/Structures/wallsplinet3_post.webp",
+							"x": 1552,
+							"y": 38,
+							"rotation": 90
+						}
+					],
 					"cost": {
-						"wood": 30
-					}
+						"concrete": 15
+					},
+					"maxHealth": 3000,
+					"repairCost": 75
 				}
 			}
 		},
@@ -4248,7 +5033,7 @@ const foxholeData = {
 			"techId": "unlockharvester"
 		},
 		"large_assembly_factory": {
-			"name": "Large Assembly Factory",
+			"name": "Large Assembly Station",
 			"codeName": "FacilityVehicleFactory2",
 			"description": "A large Assembly Station for production of advanced vehicles and equipment, such as tanks and trains. Construction will take time and may be halted if resources are depleted.",
 			"category": "factories",
@@ -4500,7 +5285,7 @@ const foxholeData = {
 			}
 		},
 		"light_vehicle_assembly_station": {
-			"name": "Light Vehicle Assembly Station",
+			"name": "Small Assembly Station",
 			"codeName": "FacilityVehicleFactory1",
 			"description": "A standard Assembly Station for production of essential vehicles and equipment. Construction will take time and may be halted if resources are depleted. Some projects require a base vehicle to be present on the Assembly Station before production can begin.",
 			"category": "factories",
@@ -4533,7 +5318,7 @@ const foxholeData = {
 				"facilitymaterials1": 75
 			},
 			"repairCost": 150,
-			"_productionLength": 12,
+			"_productionLength": 13,
 			"production": [
 				{
 					"id": 0,
@@ -4666,6 +5451,18 @@ const foxholeData = {
 					},
 					"faction": "w",
 					"time": 300
+				},
+				{
+					"id": 12,
+					"input": {
+						"facilitymaterials1": 35,
+						"facilitymaterials4": 5,
+						"facilitymaterials5": 15
+					},
+					"output": {
+						"smalltrainfuelcontainer": 1
+					},
+					"time": 300
 				}
 			],
 			"upgrades": {
@@ -4709,7 +5506,7 @@ const foxholeData = {
 						{
 							"id": 2,
 							"input": {
-								"armoredcarmobilityc": 1,
+								"tankettec": 1,
 								"facilitymaterials1": 10,
 								"facilitymaterials4": 15
 							},
@@ -4722,7 +5519,7 @@ const foxholeData = {
 						{
 							"id": 3,
 							"input": {
-								"armoredcarmobilityc": 1,
+								"tankettec": 1,
 								"facilitymaterials2": 10,
 								"facilitymaterials4": 15
 							},
@@ -4956,7 +5753,7 @@ const foxholeData = {
 					"cost": {
 						"facilitymaterials2": 25
 					},
-					"_productionLength": 6,
+					"_productionLength": 7,
 					"production": [
 						{
 							"id": 0,
@@ -4966,6 +5763,17 @@ const foxholeData = {
 							},
 							"output": {
 								"harvester": 1
+							},
+							"time": 900
+						},
+						{
+							"id": 6,
+							"input": {
+								"construction": 1,
+								"facilitymaterials2": 10
+							},
+							"output": {
+								"constructionutility": 1
 							},
 							"time": 900
 						},
@@ -5225,7 +6033,7 @@ const foxholeData = {
 					"cost": {
 						"facilitymaterials3": 20
 					},
-					"_productionLength": 4,
+					"_productionLength": 5,
 					"production": [
 						{
 							"id": 0,
@@ -5279,6 +6087,20 @@ const foxholeData = {
 							},
 							"output": {
 								"mediumtank2indirectw": 1
+							},
+							"faction": "w",
+							"time": 600
+						},
+						{
+							"id": 4,
+							"input": {
+								"mediumtankw": 1,
+								"facilitymaterials3": 35,
+								"facilitymaterials5": 15,
+								"facilitymaterials6": 25
+							},
+							"output": {
+								"mediumtankatw": 1
 							},
 							"faction": "w",
 							"time": 600
@@ -5337,58 +6159,24 @@ const foxholeData = {
 		},
 		"maintenance_tunnel": {
 			"name": "Maintenance Tunnel",
-			"codeName": "FacilitySupplyStation",
-			"description": "A supply tunnel that provides Garrison Supplies to nearby Facilities and Railway Tracks. Garrison Supplies may also be produced on-site using Construction Materials. The rate of consumption is 2 Garrison Supplies per-hour per-structure once decay begins. Some structures have additional consumption requirements.",
-			"category": "factories",
-			"categoryOrder": 40,
+			"codeName": "MaintenanceTunnel",
+			"description": "Prevents the decay of nearby structures when supplied.",
+			"category": "misc",
 			"color": 1052688,
 			"radius": 2,
-			"range": {
-				"type": "preventDecay",
-				"max": 40,
-				"overlap": 65
-			},
-			"sortLayer": "range",
+			"sortLayer": "resource",
+			"maxRange": 100,
 			"icon": "game/Textures/UI/StructureIcons/TunnelNetworkStructureIcon.webp",
 			"texture": "game/Textures/Structures/maintenance_tunnel.webp",
 			"textureIcon": {
 				"width": 96,
 				"height": 96
 			},
-			"power": -2,
-			"sockets": [
-				{
-					"id": 0,
-					"name": "power",
-					"type": [
-						{
-							"mask": 131072,
-							"category": 1048576
-						}
-					],
-					"x": 310,
-					"y": 191,
-					"rotation": 90
-				}
-			],
 			"maxHealth": 3000,
 			"cost": {
-				"facilitymaterials1": 200
+				"cloth": 50
 			},
-			"repairCost": 100,
-			"_productionLength": 1,
-			"production": [
-				{
-					"id": 0,
-					"input": {
-						"facilitymaterials1": 1
-					},
-					"output": {
-						"garrisonsupplies": 10
-					},
-					"time": 225
-				}
-			]
+			"repairCost": 100
 		},
 		"material_transfer_station": {
 			"name": "Material Transfer Station",
@@ -5412,7 +6200,7 @@ const foxholeData = {
 			"name": "Material Pallet",
 			"codeName": "MaterialPlatform",
 			"description": "A material pallet.",
-			"category": "misc",
+			"category": "shippables",
 			"categoryOrder": 1,
 			"icon": "game/Textures/UI/ItemIcons/MaterialPlatformItemIcon.webp",
 			"texture": "game/Textures/Structures/material_platform.webp",
@@ -5464,7 +6252,7 @@ const foxholeData = {
 				"cloth": 200
 			},
 			"repairCost": 150,
-			"_productionLength": 1,
+			"_productionLength": 2,
 			"production": [
 				{
 					"id": 0,
@@ -5475,6 +6263,17 @@ const foxholeData = {
 						"facilitymaterials1": 1
 					},
 					"time": 25
+				},
+				{
+					"id": 1,
+					"input": {
+						"metal": 100
+					},
+					"output": {
+						"maintenancesupplies": 20
+					},
+					"time": 25,
+					"power": -3
 				}
 			],
 			"upgrades": {
@@ -6616,7 +7415,7 @@ const foxholeData = {
 				{
 					"id": 0,
 					"output": {
-						"oil": 50
+						"oilcan": 1
 					},
 					"time": 50
 				}
@@ -6689,7 +7488,7 @@ const foxholeData = {
 						{
 							"id": 0,
 							"output": {
-								"oil": 50
+								"oilcan": 1
 							},
 							"time": 26,
 							"power": -2
@@ -6799,7 +7598,7 @@ const foxholeData = {
 								"water": 25
 							},
 							"output": {
-								"oil": 100
+								"oilcan": 2
 							},
 							"time": 40,
 							"power": -3
@@ -6819,6 +7618,17 @@ const foxholeData = {
 					"productionScaling": true
 				}
 			}
+		},
+		"oilfield": {
+			"name": "Crude Oil Field",
+			"codeName": "OilField",
+			"description": "An Oil Field that can produce Oil for further refinement or for power production.",
+			"category": "world",
+			"categoryOrder": 21,
+			"radius": 6,
+			"icon": "game/Textures/UI/ItemIcons/Facilities/OilIcon.webp",
+			"texture": "game/Textures/Structures/oilfield.webp",
+			"maxHealth": 2147483647
 		},
 		"oiltankerc": {
 			"name": "RR-3 “Stolon” Tanker.",
@@ -7114,7 +7924,7 @@ const foxholeData = {
 		"playerc": {
 			"name": "Player (Colonial)",
 			"description": "The Colonials are described as a faction of ingenuity and practicality. They are sometimes referred to as \"The Colonial Legion\" or \"Little Green Men\".",
-			"category": "misc",
+			"category": "world",
 			"categoryOrder": 50,
 			"faction": "c",
 			"sortLayer": "player",
@@ -7124,7 +7934,7 @@ const foxholeData = {
 		"playerw": {
 			"name": "Player (Warden)",
 			"description": "The Wardens are described to be a nation of honor and tradition. They are the native inhabitants of the region where the game takes place.",
-			"category": "misc",
+			"category": "world",
 			"categoryOrder": 51,
 			"faction": "w",
 			"sortLayer": "player",
@@ -7219,7 +8029,7 @@ const foxholeData = {
 		"power_pole": {
 			"name": "Power Pole",
 			"codeName": "PowerPole",
-			"description": "Used to connect Power Lines. Up to 4 Power Lines can be attached to a singe pole.",
+			"description": "Used to connect Power Lines. Up to 4 Power Lines can be attached to a single pole.",
 			"category": "power",
 			"sortLayer": "power_pole",
 			"icon": "game/Textures/UI/StructureIcons/PowerLineB.webp",
@@ -7364,8 +8174,8 @@ const foxholeData = {
 				{
 					"id": 1,
 					"input": {
-						"coal": 60,
-						"water": 25
+						"coal": 30,
+						"water": 1
 					},
 					"time": 90,
 					"power": 10
@@ -7461,8 +8271,8 @@ const foxholeData = {
 						{
 							"id": 1,
 							"input": {
-								"facilitycoal1": 60,
-								"water": 25
+								"facilitycoal1": 30,
+								"water": 1
 							},
 							"output": {
 								"sulfur": 5
@@ -7692,9 +8502,9 @@ const foxholeData = {
 		"relicbase1": {
 			"name": "Relic Base",
 			"codeName": "RelicBase1",
-			"description": "A world base that players can respawn and rearm at. It can be destroyed and rebuilt to be claimed by a faction. It has garrison upgrades to supply local structures with garrison supplies. This structure cannot be placed by a player, and is entirely for your reference.",
-			"category": "misc",
-			"categoryOrder": 6,
+			"description": "An old fort. Players can spawn and stockpile items here.",
+			"category": "world",
+			"categoryOrder": 8,
 			"baseGarrisonRadius": 150,
 			"hitArea": [
 				{
@@ -7748,7 +8558,7 @@ const foxholeData = {
 			"name": "Resource Container",
 			"codeName": "ResourceContainer",
 			"description": "A container that can carry large quantities of resources and can be transported by certain vehicles.",
-			"category": "misc",
+			"category": "shippables",
 			"categoryOrder": 2,
 			"sortLayer": "container",
 			"icon": "game/Textures/UI/StructureIcons/ResourceContainerIcon.webp",
@@ -7762,8 +8572,8 @@ const foxholeData = {
 		"resourcefield": {
 			"name": "Resource Field",
 			"upgradeName": "Scrap Field",
-			"description": "This is a resource field. This can be mined by a player or with a stationary harvester. This structure cannot be placed by a player, and is entirely for your reference.",
-			"category": "misc",
+			"description": "This is a resource field. This can be mined by a player or with a stationary harvester.",
+			"category": "world",
 			"categoryOrder": 20,
 			"sortLayer": "resource",
 			"radius": 15,
@@ -7878,7 +8688,9 @@ const foxholeData = {
 					"texture": "game/Textures/Structures/sandbagfullspline.webp",
 					"cost": {
 						"sandbagmaterials": 3
-					}
+					},
+					"maxHealth": 1600,
+					"repairCost": 30
 				}
 			}
 		},
@@ -7886,7 +8698,7 @@ const foxholeData = {
 			"name": "Shipping Container",
 			"codeName": "ShippingContainer",
 			"description": "A container for shipping very large quantities of Crates using Crane loaded vehicles. This type of container can only be unloaded at Storage Depots and Seaports.",
-			"category": "misc",
+			"category": "shippables",
 			"categoryOrder": 3,
 			"sortLayer": "container",
 			"icon": "game/Textures/UI/StructureIcons/ShippingContainerStructureIcon.webp",
@@ -7961,6 +8773,37 @@ const foxholeData = {
 				"maxSpeed": 2
 			}
 		},
+		"smalltrainfuelcontainer": {
+			"name": "BMS Tinderbox",
+			"codeName": "SmallTrainFuelContainer",
+			"description": "The Tinderbox is a simple car used for transporting liquids between facilities.",
+			"category": "trains",
+			"categoryOrder": 4,
+			"sortLayer": "vehicle",
+			"icon": "game/Textures/UI/VehicleIcons/SmallTrainFuelContainerIcon.webp",
+			"texture": "game/Textures/Vehicles/smalltrainfuelcontainer.webp",
+			"sockets": [
+				{
+					"id": 0,
+					"type": "smalltraincar",
+					"x": 468,
+					"y": 113,
+					"rotation": 90
+				},
+				{
+					"id": 1,
+					"type": "smalltraincar",
+					"x": 32,
+					"y": 113,
+					"rotation": 270
+				}
+			],
+			"vehicle": {
+				"type": "smalltrain",
+				"track": "rail_small_gauge",
+				"mass": 10
+			}
+		},
 		"smalltrainresourceplatform": {
 			"name": "BMS Linerunner",
 			"codeName": "SmallTrainResourcePlatform",
@@ -7994,7 +8837,7 @@ const foxholeData = {
 		},
 		"sound_test": {
 			"name": "Sus",
-			"category": "misc",
+			"category": "world",
 			"hideInList": true,
 			"width": 2,
 			"length": 2,
@@ -8067,7 +8910,7 @@ const foxholeData = {
 				{
 					"id": 0,
 					"input": {
-						"petrol": 4
+						"petrol": 1
 					},
 					"output": {
 						"coal": 50
@@ -8148,7 +8991,7 @@ const foxholeData = {
 				"excavator": {
 					"name": "Excavator",
 					"codeName": "Excavator",
-					"description": "Improves component excavation.",
+					"description": "An excavator that allows for the mining of Damaged Components when a Component Field is depleted",
 					"hitArea": [
 						{
 							"shape": [ 15.36,-131.84,19.84,-98.56,-16.64,-98.56,-12.16,-131.84 ]
@@ -8395,12 +9238,31 @@ const foxholeData = {
 			},
 			"repairCost": 25
 		},
+		"tankstopsplinet3": {
+			"name": "Dragon's Teeth",
+			"codeName": "TankStopSplineT3",
+			"description": "An anti-tank obstacle that prevents vehicle access to an area, and is resistant to most types of damage.",
+			"category": "defenses",
+			"experimental": true,
+			"hasHandle": true,
+			"isBezier": true,
+			"minLength": 3.75,
+			"maxLength": 15.05,
+			"icon": "game/Textures/UI/StructureIcons/TankStopT3Icon.webp",
+			"texture": "game/Textures/Structures/tankstopsplinet3.webp",
+			"techId": "unlocktankstopsplinetier3",
+			"maxHealth": 3000,
+			"cost": {
+				"concrete": 10
+			},
+			"repairCost": 150
+		},
 		"townbase3": {
 			"name": "Town Base",
 			"codeName": "TownBase3",
-			"description": "A world base that players can respawn and rearm at. It can be destroyed and rebuilt to be claimed by a faction. It has garrison upgrades to supply local structures with garrison supplies. This structure cannot be placed by a player, and is entirely for your reference.",
-			"category": "misc",
-			"categoryOrder": 7,
+			"description": "A garrisoned focal building vital for the defence of a town. Players can spawn and stockpile items here.",
+			"category": "world",
+			"categoryOrder": 9,
 			"baseGarrisonRadius": 150,
 			"hitArea": [
 				{
@@ -8465,9 +9327,9 @@ const foxholeData = {
 		"townclargegarrisongs1": {
 			"name": "Safe House",
 			"codeName": "TownCLargeGarrisonGS1",
-			"description": "A world base that players can respawn and rearm at. It can be destroyed and rebuilt to be claimed by a faction. It has garrison upgrades to supply local structures with garrison supplies. This structure cannot be placed by a player, and is entirely for your reference.",
-			"category": "misc",
-			"categoryOrder": 8,
+			"description": "A world base that players can respawn and rearm at. It can be destroyed and rebuilt to be claimed by a faction. It has garrison upgrades to supply local structures with garrison supplies.",
+			"category": "world",
+			"categoryOrder": 10,
 			"baseGarrisonRadius": 150,
 			"hitArea": [
 				{
@@ -8728,24 +9590,66 @@ const foxholeData = {
 		},
 		"trainlrartillery": {
 			"name": "Tempest Cannon RA-2",
+			"className": "locomotive",
 			"codeName": "TrainLRArtillery",
 			"description": "All the power of a stationary Storm Cannon, but easily relocated via rails. This devastating cannon is capable of leveling enemy fortifications at very large distances.",
 			"category": "trains",
 			"categoryOrder": 10,
-			"hideInList": true,
 			"length": 3.74,
 			"sortLayer": "vehicle",
+			"hitArea": [
+				{
+					"shape": [ 285.12,26.56,284.48,-26.56,294.08,15.04,294.72,26.56 ]
+				},
+				{
+					"shape": [ 294.08,15.04,284.48,-26.56,294.08,-26.56 ]
+				},
+				{
+					"shape": [ -301.12,-45.76,-251.2,-45.76,-251.2,46.4,-301.12,46.4 ]
+				},
+				{
+					"shape": [ 376.64,13.12,294.08,15.04,294.08,-14.4,376.64,-13.12 ]
+				},
+				{
+					"shape": [ -251.2,-45.76,-75.2,51.52,-75.2,69.44,-251.2,69.44 ]
+				},
+				{
+					"shape": [ 47.68,46.4,-75.2834765625,-50.406953125,47.68,-45.76,284.48,-26.56,285.12,46.4 ]
+				},
+				{
+					"shape": [ 284.48,-26.56,47.68,-45.76,285.12,-45.76 ]
+				},
+				{
+					"shape": [ -251.2,-45.76,-75.2834765625,-50.406953125,47.68,46.4,47.04,50.88,-75.2,51.52 ]
+				},
+				{
+					"shape": [ -75.56173828125,-53.746083984375,-75.2834765625,-50.406953125,-251.2,-45.76,-251.2,-53.44 ]
+				},
+				{
+					"shape": [ 47.68,-45.76,-75.2834765625,-50.406953125,47.04,-50.88 ]
+				}
+			],
 			"icon": "game/Textures/UI/VehicleIcons/TrainLRArtilleryVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/trainlrartillery.webp",
 			"textureOffset": {
 				"x": 1197,
 				"y": 187
 			},
+			"canSnap": true,
+			"canSnapAlongBezier": "rail_large_gauge",
+			"techId": "unlockfacilitytier3"
+		},
+		"trainlrartillery_undercarriage": {
+			"className": "locomotive_undercarriage",
+			"category": "trains",
+			"sortLayer": "vehicle",
+			"hideInList": true,
+			"texture": "game/Textures/Vehicles/trainlrartillery_undercarriage.webp",
 			"sockets": [
 				{
 					"id": 0,
 					"type": "traincar",
-					"x": 2394,
+					"x": 620,
 					"y": 186,
 					"rotation": 90
 				},
@@ -8760,14 +9664,13 @@ const foxholeData = {
 			"vehicle": {
 				"type": "train",
 				"track": "rail_large_gauge",
-				"mass": 25
-			},
-			"techId": "unlockfacilitytier3"
+				"mass": 250
+			}
 		},
 		"tree": {
 			"name": "Tree",
-			"description": "A tree featured throughout the world of Foxhole. This structure cannot be placed by a player, and is entirely for your reference.",
-			"category": "misc",
+			"description": "A tree featured throughout the world of Foxhole.",
+			"category": "world",
 			"categoryOrder": 10,
 			"sortLayer": "overhead",
 			"radius": 2,
@@ -8819,7 +9722,7 @@ const foxholeData = {
 				}
 			],
 			"maxHealth": 1500,
-			"repairCost": 115,
+			"repairCost": 90,
 			"upgrades": {
 				"trenchconnectort1": {
 					"reference": "trenchconnectort1"
@@ -8869,9 +9772,9 @@ const foxholeData = {
 			],
 			"maxHealth": 1850,
 			"cost": {
-				"cloth": 75
+				"cloth": 60
 			},
-			"repairCost": 75
+			"repairCost": 60
 		},
 		"trenchconnectort3": {
 			"name": "Trench Connector (Tier 3)",
@@ -8910,7 +9813,7 @@ const foxholeData = {
 			],
 			"maxHealth": 3500,
 			"cost": {
-				"concrete": 30
+				"concrete": 15
 			},
 			"repairCost": 120
 		},
@@ -8921,12 +9824,11 @@ const foxholeData = {
 			"category": "entrenchments",
 			"categoryOrder": 5,
 			"tier": 1,
-			"width": 12.3,
-			"length": 12.3,
-			"sortLayer": "foundation",
+			"width": 10.56,
+			"length": 10.56,
 			"hitArea": [
 				{
-					"shape": [ 195.52,-77.12,194.24,80.32,82.24,193.6,-80.96,195.52,-196.16,76.48,-194.88,-82.88,-82.24,-194.88,81.6,-196.16 ]
+					"shape": [ -57.6,-141.44,58.24,-141.44,141.44,-57.6,141.44,58.24,58.24,141.44,-57.6,141.44,-140.8,57.6,-140.8,-58.88 ]
 				}
 			],
 			"icon": "game/Textures/UI/StructureIcons/TrenchT1EmplacementIcon.webp",
@@ -8942,8 +9844,10 @@ const foxholeData = {
 							"category": 2
 						}
 					],
-					"x": 615,
-					"y": 6,
+					"texture": "game/Textures/Structures/trenchempt1_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt1_side_open.webp",
+					"x": 528,
+					"y": 0,
 					"rotation": 0
 				},
 				{
@@ -8954,8 +9858,10 @@ const foxholeData = {
 							"category": 2
 						}
 					],
-					"x": 1046,
-					"y": 186,
+					"texture": "game/Textures/Structures/trenchempt1_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt1_side_open.webp",
+					"x": 901,
+					"y": 155,
 					"rotation": 45
 				},
 				{
@@ -8966,8 +9872,10 @@ const foxholeData = {
 							"category": 2
 						}
 					],
-					"x": 1224,
-					"y": 615,
+					"texture": "game/Textures/Structures/trenchempt1_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt1_side_open.webp",
+					"x": 1056,
+					"y": 528,
 					"rotation": 90
 				},
 				{
@@ -8978,8 +9886,10 @@ const foxholeData = {
 							"category": 2
 						}
 					],
-					"x": 1046,
-					"y": 1046,
+					"texture": "game/Textures/Structures/trenchempt1_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt1_side_open.webp",
+					"x": 901,
+					"y": 901,
 					"rotation": 135
 				},
 				{
@@ -8990,8 +9900,10 @@ const foxholeData = {
 							"category": 2
 						}
 					],
-					"x": 616,
-					"y": 1228,
+					"texture": "game/Textures/Structures/trenchempt1_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt1_side_open.webp",
+					"x": 528,
+					"y": 1056,
 					"rotation": 180
 				},
 				{
@@ -9002,8 +9914,10 @@ const foxholeData = {
 							"category": 2
 						}
 					],
-					"x": 186,
-					"y": 1048,
+					"texture": "game/Textures/Structures/trenchempt1_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt1_side_open.webp",
+					"x": 155,
+					"y": 901,
 					"rotation": 225
 				},
 				{
@@ -9014,8 +9928,10 @@ const foxholeData = {
 							"category": 2
 						}
 					],
-					"x": 7,
-					"y": 617,
+					"texture": "game/Textures/Structures/trenchempt1_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt1_side_open.webp",
+					"x": 0,
+					"y": 528,
 					"rotation": 270
 				},
 				{
@@ -9026,8 +9942,10 @@ const foxholeData = {
 							"category": 2
 						}
 					],
-					"x": 182,
-					"y": 185,
+					"texture": "game/Textures/Structures/trenchempt1_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt1_side_open.webp",
+					"x": 155,
+					"y": 155,
 					"rotation": 315
 				}
 			],
@@ -9053,6 +9971,120 @@ const foxholeData = {
 			"tier": 2,
 			"icon": "game/Textures/UI/StructureIcons/TrenchT2EmplacementIcon.webp",
 			"texture": "game/Textures/Structures/trenchempt2.webp",
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt2_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt2_side_open.webp",
+					"x": 528,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 1,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt2_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt2_side_open.webp",
+					"x": 901,
+					"y": 155,
+					"rotation": 45
+				},
+				{
+					"id": 2,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt2_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt2_side_open.webp",
+					"x": 1056,
+					"y": 528,
+					"rotation": 90
+				},
+				{
+					"id": 3,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt2_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt2_side_open.webp",
+					"x": 901,
+					"y": 901,
+					"rotation": 135
+				},
+				{
+					"id": 4,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt2_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt2_side_open.webp",
+					"x": 528,
+					"y": 1056,
+					"rotation": 180
+				},
+				{
+					"id": 5,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt2_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt2_side_open.webp",
+					"x": 155,
+					"y": 901,
+					"rotation": 225
+				},
+				{
+					"id": 6,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt2_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt2_side_open.webp",
+					"x": 0,
+					"y": 528,
+					"rotation": 270
+				},
+				{
+					"id": 7,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt2_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt2_side_open.webp",
+					"x": 155,
+					"y": 155,
+					"rotation": 315
+				}
+			],
 			"maxHealth": 1850,
 			"cost": {
 				"cloth": 50
@@ -9067,9 +10099,123 @@ const foxholeData = {
 			"tier": 3,
 			"icon": "game/Textures/UI/StructureIcons/TrenchT3EmplacementIcon.webp",
 			"texture": "game/Textures/Structures/trenchempt3.webp",
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt3_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt3_side_open.webp",
+					"x": 528,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 1,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt3_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt3_side_open.webp",
+					"x": 901,
+					"y": 155,
+					"rotation": 45
+				},
+				{
+					"id": 2,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt3_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt3_side_open.webp",
+					"x": 1056,
+					"y": 528,
+					"rotation": 90
+				},
+				{
+					"id": 3,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt3_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt3_side_open.webp",
+					"x": 901,
+					"y": 901,
+					"rotation": 135
+				},
+				{
+					"id": 4,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt3_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt3_side_open.webp",
+					"x": 528,
+					"y": 1056,
+					"rotation": 180
+				},
+				{
+					"id": 5,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt3_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt3_side_open.webp",
+					"x": 155,
+					"y": 901,
+					"rotation": 225
+				},
+				{
+					"id": 6,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt3_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt3_side_open.webp",
+					"x": 0,
+					"y": 528,
+					"rotation": 270
+				},
+				{
+					"id": 7,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"texture": "game/Textures/Structures/trenchempt3_side_closed.webp",
+					"textureAlt": "game/Textures/Structures/trenchempt3_side_open.webp",
+					"x": 155,
+					"y": 155,
+					"rotation": 315
+				}
+			],
 			"maxHealth": 3500,
 			"cost": {
-				"concrete": 20
+				"concrete": 10
 			},
 			"repairCost": 80
 		},
@@ -9304,7 +10450,7 @@ const foxholeData = {
 			],
 			"maxHealth": 3500,
 			"cost": {
-				"concrete": 20
+				"concrete": 10
 			},
 			"repairCost": 80,
 			"upgrades": {
@@ -9318,6 +10464,40 @@ const foxholeData = {
 					"reference": "trencht3"
 				}
 			}
+		},
+		"troopship": {
+			"name": "BMS - White Whale",
+			"codeName": "TroopShip",
+			"description": "A heavily armoured vessel, the Basset Motor Society’s White Whale-class troop transports can deploy on faraway beaches to function as a permanent forward operating base.",
+			"category": "vehicles",
+			"categoryOrder": 22,
+			"sortLayer": "vehicle",
+			"hitArea": [
+				{
+					"shape": [ 327.36,-61.76,344,-31.68,344,31.04,16.96,92.48,-255.68,-89.92,275.52,-93.12,304.96,-82.88 ]
+				},
+				{
+					"shape": [ 278.08,93.12,16.96,92.48,344,31.04,328.64,60.48,304.96,82.88 ]
+				},
+				{
+					"shape": [ -338.24,64.96,-347.2,50.88,-347.2,-54.72,-256.32,89.92,-280,89.28,-309.44,83.52 ]
+				},
+				{
+					"shape": [ 344,31.04,344,-31.68,349.12,0.32 ]
+				},
+				{
+					"shape": [ -280,-89.28,-255.68,-89.92,16.96,92.48,9.28,118.08,-256.32,89.92,-347.2,-54.72,-334.4,-68.16,-305.6,-83.52 ]
+				},
+				{
+					"shape": [ 8.64,-118.08,16.96,-92.48,-255.68,-89.92,-240.96,-118.08 ]
+				},
+				{
+					"shape": [ -256.32,89.92,9.28,118.08,-241.6,118.08 ]
+				}
+			],
+			"icon": "game/Textures/UI/VehicleIcons/TroopShipVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/troopship.webp",
+			"techId": "unlocktroopship"
 		},
 		"truckc": {
 			"name": "R-1 Hauler",
@@ -9347,15 +10527,12 @@ const foxholeData = {
 			"description": "A basic barrier that is used to prevent passage through an area.",
 			"category": "defenses",
 			"categoryOrder": 3,
-			"hideInList": true,
 			"sortLayer": "wall",
 			"hasHandle": true,
 			"minLength": 3,
 			"maxLength": 10,
 			"icon": "game/Textures/UI/ItemIcons/Wall-T1Icon.webp",
 			"texture": "game/Textures/Structures/wallsplinet1.webp",
-			"textureFrontCap": "game/Textures/Structures/wallsplinet1_post.webp",
-			"textureBackCap": "game/Textures/Structures/wallsplinet1_post.webp",
 			"canSnap": true,
 			"canSnapRotate": true,
 			"sockets": [
@@ -9367,6 +10544,8 @@ const foxholeData = {
 							"category": 512
 						}
 					],
+					"texture": "game/Textures/Structures/wallsplinet1_post.webp",
+					"textureAlt": "game/Textures/Structures/wallsplinet1_post.webp",
 					"cap": "front",
 					"rotation": 270
 				},
@@ -9378,6 +10557,8 @@ const foxholeData = {
 							"category": 512
 						}
 					],
+					"texture": "game/Textures/Structures/wallsplinet1_post.webp",
+					"textureAlt": "game/Textures/Structures/wallsplinet1_post.webp",
 					"cap": "back",
 					"rotation": 90
 				}
@@ -9396,12 +10577,40 @@ const foxholeData = {
 					"maxLength": 10,
 					"icon": "game/Textures/UI/ItemIcons/Wall-T2Icon.webp",
 					"texture": "game/Textures/Structures/wallsplinet2.webp",
-					"textureFrontCap": "game/Textures/Structures/wallsplinet2_post.webp",
-					"textureBackCap": "game/Textures/Structures/wallsplinet2_post.webp",
 					"techId": "unlockwalltier2",
+					"sockets": [
+						{
+							"id": 0,
+							"type": [
+								{
+									"mask": 4608,
+									"category": 512
+								}
+							],
+							"texture": "game/Textures/Structures/wallsplinet2_post.webp",
+							"textureAlt": "game/Textures/Structures/wallsplinet2_post.webp",
+							"cap": "front",
+							"rotation": 270
+						},
+						{
+							"id": 1,
+							"type": [
+								{
+									"mask": 4608,
+									"category": 512
+								}
+							],
+							"texture": "game/Textures/Structures/wallsplinet2_post.webp",
+							"textureAlt": "game/Textures/Structures/wallsplinet2_post.webp",
+							"cap": "back",
+							"rotation": 90
+						}
+					],
 					"cost": {
 						"cloth": 30
-					}
+					},
+					"maxHealth": 1000,
+					"repairCost": 30
 				},
 				"wallsplinet3": {
 					"name": "Wall (Tier 3)",
@@ -9411,12 +10620,40 @@ const foxholeData = {
 					"maxLength": 10,
 					"icon": "game/Textures/UI/ItemIcons/Wall-T3Icon.webp",
 					"texture": "game/Textures/Structures/wallsplinet3.webp",
-					"textureFrontCap": "game/Textures/Structures/wallsplinet3_post.webp",
-					"textureBackCap": "game/Textures/Structures/wallsplinet3_post.webp",
 					"techId": "unlockwalltier3",
+					"sockets": [
+						{
+							"id": 0,
+							"type": [
+								{
+									"mask": 4608,
+									"category": 512
+								}
+							],
+							"texture": "game/Textures/Structures/wallsplinet3_post.webp",
+							"textureAlt": "game/Textures/Structures/wallsplinet3_post.webp",
+							"cap": "front",
+							"rotation": 270
+						},
+						{
+							"id": 1,
+							"type": [
+								{
+									"mask": 4608,
+									"category": 512
+								}
+							],
+							"texture": "game/Textures/Structures/wallsplinet3_post.webp",
+							"textureAlt": "game/Textures/Structures/wallsplinet3_post.webp",
+							"cap": "back",
+							"rotation": 90
+						}
+					],
 					"cost": {
-						"concrete": 25
-					}
+						"concrete": 15
+					},
+					"maxHealth": 3000,
+					"repairCost": 75
 				}
 			}
 		},
@@ -9473,7 +10710,7 @@ const foxholeData = {
 				{
 					"id": 0,
 					"output": {
-						"water": 50
+						"watercan": 1
 					},
 					"time": 50
 				}
@@ -9571,7 +10808,7 @@ const foxholeData = {
 						{
 							"id": 1,
 							"output": {
-								"water": 50
+								"watercan": 1
 							},
 							"time": 40
 						}
@@ -9581,9 +10818,9 @@ const foxholeData = {
 		},
 		"world_road": {
 			"name": "Public Road",
-			"description": "A public road featured throughout the world of Foxhole. This structure cannot be placed by a player, and is entirely for your reference.",
-			"category": "misc",
-			"categoryOrder": 8,
+			"description": "A public road featured throughout the world of Foxhole.",
+			"category": "world",
+			"categoryOrder": 11,
 			"sortLayer": "road",
 			"hasHandle": true,
 			"isBezier": true,

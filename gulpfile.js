@@ -52,7 +52,7 @@ gulp.task('vendor', function(){
 });
 
 gulp.task('js', function(){
-    return gulp.src(['public/games/**/*.js', 'public/data.js', 'public/*.js', 'public/menu/services/**/*.js', 'public/menu/components/**/*.js', 'public/menu/states/**/*.js', 'public/menu/app.js'])
+    return gulp.src(['public/board.js', 'public/*.js', 'public/games/**/*.js', 'public/menu/services/**/*.js', 'public/menu/components/**/*.js', 'public/menu/states/**/*.js', 'public/menu/app.js'])
         .pipe(sourcemaps.init())
         .pipe(concat('app.js'))
         .pipe(babel({
