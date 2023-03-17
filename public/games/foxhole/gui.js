@@ -400,25 +400,25 @@ Vue.component('app-menu-statistics', {
                     </select>
                 </div>
             </div>
-            <div v-if="maintenanceSupplies" class="construction-options-wrapper" title="Maintenance Supplies are required to prevent structures from decaying. The following information indicates how much structures will cost based on the performance of the sub-region's consumption modifier.">
+            <div v-if="game.settings.enableExperimental && maintenanceSupplies" class="construction-options-wrapper" title="Maintenance Supplies are required to prevent structures from decaying. The following information indicates how much structures will cost based on the performance of the sub-region's consumption modifier.">
                 <h5 class="construction-options-header">
                     <i class="inline-resource-icon" style="width: 18px;" :style="{backgroundImage: 'url(games/foxhole/assets/game/Textures/UI/ItemIcons/MaintenanceSuppliesIcon.webp)'}"></i> {{selection ? 'Selection Maintenance' : 'Maintenance Supplies'}}
                 </h5>
                 <div class="construction-options row d-flex justify-content-center">
                     <div class="btn-small col" style="color: #00ca00;">
-                        <span style="font-size: 17px;"><small>x</small>{{maintenanceSupplies * 0.5}}</span>
+                        <span style="font-size: 17px;"><small>x</small>{{maintenanceSupplies * 0.25}}</span>
                         <span class="label">very good</span>
                     </div>
                     <div class="btn-small col" style="color: #74d004;">
-                        <span style="font-size: 17px;"><small>x</small>{{maintenanceSupplies}}</span>
+                        <span style="font-size: 17px;"><small>x</small>{{maintenanceSupplies * 0.5}}</span>
                         <span class="label">good</span>
                     </div>
                     <div class="btn-small col" style="color: #ffa500;">
-                        <span style="font-size: 17px;"><small>x</small>{{maintenanceSupplies * 2}}</span>
+                        <span style="font-size: 17px;"><small>x</small>{{maintenanceSupplies}}</span>
                         <span class="label">poor</span>
                     </div>
                     <div class="btn-small col" style="color: #ff0d0d;">
-                        <span style="font-size: 17px;"><small>x</small>{{maintenanceSupplies * 3}}</span>
+                        <span style="font-size: 17px;"><small>x</small>{{maintenanceSupplies * 2}}</span>
                         <span class="label">very poor</span>
                     </div>
                 </div>

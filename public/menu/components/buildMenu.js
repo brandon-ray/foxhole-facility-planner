@@ -686,25 +686,25 @@ Vue.component('app-menu-building-selected', {
                         </div>
                         <div class="col-2 p-0">{{entity.building.maxRange}}m</div>
                     </div>
-                    <span style="font-size: 15px;">These settings apply to {{entity.maintainedStructures.toLocaleString()}}&nbsp;nearby&nbsp;structures.</span>
+                    <span v-if="entity.maintainedStructures" style="font-size: 15px;">These settings apply to {{entity.maintainedStructures.toLocaleString()}}&nbsp;nearby&nbsp;structures.</span>
                 </div>
-                <div v-if="entity.maintainedConsumptionRate" class="settings-option-wrapper text-center">
+                <div v-if="game.settings.enableExperimental && entity.maintainedConsumptionRate" class="settings-option-wrapper text-center">
                     <div class="settings-title">Maintenance Supply Upkeep<span style="color: #b5b5b5;">/hr</span></div>
                     <div class="construction-options row d-flex justify-content-center">
                         <div class="btn-small no-button col" style="color: #00ca00;">
-                            <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate * 0.5}}</span>
+                            <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate * 0.25}}</span>
                             <span class="label">very good</span>
                         </div>
                         <div class="btn-small no-button col" style="color: #74d004;">
-                            <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate}}</span>
+                            <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate * 0.5}}</span>
                             <span class="label">good</span>
                         </div>
                         <div class="btn-small no-button col" style="color: #ffa500;">
-                            <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate * 2}}</span>
+                            <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate}}</span>
                             <span class="label">poor</span>
                         </div>
                         <div class="btn-small no-button col" style="color: #ff0d0d;">
-                            <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate * 3}}</span>
+                            <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate * 2}}</span>
                             <span class="label">very poor</span>
                         </div>
                     </div>
