@@ -242,6 +242,8 @@ try {
     game.selectedHandlePoint = null;
 
     game.projectName = 'Unnamed Project';
+    game.projectDescription = '';
+    game.projectAuthors = '';
     game.projectSettings = {
         showProductionIcons: true,
         showRangeWhenSelected: true,
@@ -1123,6 +1125,8 @@ try {
         let saveObject = {
             version: SAVE_VERSION,
             name: (game.projectName !== 'Unnamed Project' && game.projectName) || undefined,
+            description: game.projectDescription || undefined,
+            authors: game.projectAuthors || undefined,
             faction: game.settings.selectedFaction || undefined,
             projectSettings: game.projectSettings,
             entities: []
@@ -1206,6 +1210,8 @@ try {
                 game.removeEntities(true);
             }
             game.projectName = saveObject.name || 'Unnamed Project';
+            game.projectDescription = saveObject.description || '';
+            game.projectAuthors = saveObject.authors || '';
             game.setFaction(saveObject.faction, true);
             if (saveObject.projectSettings) {
                 Object.assign(game.projectSettings, saveObject.projectSettings);

@@ -1237,7 +1237,7 @@ Vue.component('app-menu-save-load', {
         };
     },
     methods: {
-        openFileBrowser: function(importAsSelection) {
+        openFileBrowser: function(importAsSelection = false) {
             this.importAsSelection = importAsSelection;
             document.getElementById('fileUpload').click();
         },
@@ -1263,7 +1263,7 @@ Vue.component('app-menu-save-load', {
             };
             reader.readAsArrayBuffer(file);
         },
-        updateName: function() {
+        updateProjectProperties: function() {
             if (game.projectName === '') {
                 game.projectName = 'Unnamed Project';
             }
@@ -1277,9 +1277,17 @@ Vue.component('app-menu-save-load', {
         <input id="fileUpload" @change="loadFile()" type="file" ref="file" hidden>
         <div class="settings-option-wrapper">
             <div class="settings-title">Project Properties</div>
-            <label class="app-input-label project-name-input">
-                <i class="fa fa-pencil-square edit-icon" aria-hidden="true"></i>
-                <input class="app-input" type="text" v-model="game.projectName" @change="updateName()">
+            <label class="app-input-label project-name-input pt-0">
+                <small class="mx-1">Name</small>
+                <input class="app-input text-left" type="text" v-model="game.projectName" placeholder="Unnamed Project" @change="updateProjectProperties()">
+            </label>
+            <label class="app-input-label project-name-input pt-0">
+                <small class="mx-1">Description</small>
+                <textarea class="app-input text-left" maxlength="500" v-model="game.projectDescription" placeholder="No description provided." @change="updateProjectProperties()"></textarea>
+            </label>
+            <label class="app-input-label project-name-input pt-0">
+                <small class="mx-1">Author(s)</small>
+                <input class="app-input text-left" type="text" v-model="game.projectAuthors" placeholder="Anonymous" @change="updateProjectProperties()">
             </label>
             <div class="text-center">
                 <button class="app-btn app-btn-primary load-button" type="button" @click="openFileBrowser()" @mouseenter="bme()">
@@ -1293,12 +1301,10 @@ Vue.component('app-menu-save-load', {
         <div class="settings-option-wrapper">
             <div class="settings-title">Selection Options</div>
             <div class="text-button-wrapper">
-                <button class="text-button" type="button" @click="openFileBrowser(true)" @mouseenter="bme()">
-                    <i class="fa fa-upload"></i> Import Selection
+                <button class="text-button mb-0" type="button" @click="openFileBrowser(true)" @mouseenter="bme()">
+                    <i class="fa fa-mouse-pointer"></i> Import Project <small>(Objects)</small>
                 </button>
-                <button v-if="game.getSelectedEntities().length > 1" class="text-button" type="button" @click="game.downloadSave(true)" @mouseenter="bme()">
-                    <i class="fa fa-save"></i> Export Selection
-                </button>
+                <small style="color: #d9d9d9;">Note: Importing only loads objects from a project.</small>
             </div>
         </div>
         <div v-if="game.settings.enableExperimental" class="settings-option-wrapper">
@@ -1315,6 +1321,7 @@ Vue.component('app-menu-save-load', {
                 <button class="text-button" type="button" @click="game.downloadImage('screenshot', centerImageOnObjects, showImageBackground)" @mouseenter="bme()">
                     <i class="fa fa-camera"></i> Export Screenshot
                 </button>
+                <small style="color: #d9d9d9;">Note: Exporting an image does not save your project.</small>
             </div>
         </div>
     </div>
