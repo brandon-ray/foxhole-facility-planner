@@ -1296,13 +1296,37 @@ try {
         }
         if (entities?.length) {
             const centerPos = game.getEntitiesCenter(entities);
-            camera.x = centerPos.x - WIDTH/2;
-            camera.y = centerPos.y - HEIGHT/2;
+
+            let x1, y1, x2, y2;
+            for (const entity of entities) {
+                const max = Math.max(entity.width, entity.height) / 2;
+                const eX1 = entity.mid.x - max, eX2 = entity.mid.x + max;
+                const eY1 = entity.mid.y - max, eY2 = entity.mid.y + max;
+                if (x1 === undefined || eX1 < x1) {
+                    x1 = eX1;
+                }
+                if (y1 === undefined || eY1 < y1) {
+                    y1 = eY1;
+                }
+                if (x2 === undefined || eX2 > x2) {
+                    x2 = eX2;
+                }
+                if (y2 === undefined || eY2 > y2) {
+                    y2 = eY2;
+                }
+            }
+
+            const padding = 100;
+            const width = (x2 - x1) + (padding * 2), height = (y2 - y1) + (padding * 2);
+            const ratio = Math.min(app.view.width, app.view.height) / Math.max(width, height);
+            camera.zoom = Math.max(0.01, Math.min(1.6, ratio));
+            camera.x = (centerPos.x * camera.zoom) - (app.view.width / 2);
+            camera.y = (centerPos.y * camera.zoom) - (app.view.height / 2);
         } else {
+            game.resetZoom();
             camera.x = (GRID_WIDTH/2) - WIDTH/2;
             camera.y = (GRID_HEIGHT/2) - HEIGHT/2;
         }
-        game.resetZoom();
     }
     game.zoomToEntitiesCenter();
 
@@ -1682,6 +1706,63 @@ try {
         }
     });
 
+    let fetchedPresetImages = [];
+    game.downloadPresetImages = function() {
+        for (const [key, preset] of Object.entries(gameData.presets)) {
+            if (!fetchedPresetImages.includes(key)) {
+                fetchedPresetImages.push(key);
+                game.removeEntities();
+                game.createObject(preset, 0, 0, 0, 0, undefined, false, false);
+                setTimeout(() => {
+                    game.downloadImage(key, true, false);
+                }, 750);
+                break;
+            }
+        }
+    }
+
+    game.downloadImage = function(fileName = 'fullres', centerObjects = true, showBackground = true) {
+        if (!showBackground) {
+            background.visible = false;
+        }
+
+        if (centerObjects) {
+            game.zoomToEntitiesCenter();
+        }
+
+        setTimeout(() => {
+            var renderTexture = PIXI.RenderTexture.create(app.renderer.width, app.renderer.height);
+            app.renderer.render(background, renderTexture);
+
+            const renderEntities = [...entities];
+            renderEntities.sort(function (a, b) {
+                return b.getZIndex() - a.getZIndex();
+            });
+
+            for (const entity of renderEntities) {
+                app.renderer.render(entity, {
+                    renderTexture: renderTexture,
+                    clear: false,
+                    skipUpdateTransform: true
+                });
+            }
+        
+            var sprite = new PIXI.Sprite(renderTexture);
+            sprite.setTransform(0, 0, 1, 1, 0, 0, 0, 0, 0);
+            app.renderer.render(sprite);
+            var dataURI = app.renderer.extract.canvas(sprite).toDataURL('image/png');
+
+            if (!showBackground) {
+                background.visible = true;
+            }
+        
+            var link = document.createElement('a');
+            link.download = fileName + '.png';
+            link.href = dataURI;
+            link.click();
+        }, 150);
+    };
+
     game.tryFullscreen = function() {
         try {
             let fullscreenElement = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
@@ -2021,7 +2102,7 @@ try {
         }
     };
 
-    game.createObject = function(dataKey, x = 0, y = 0, z = 0, rotation = 0, id, pickup = true) {
+    game.createObject = function(dataKey, x = 0, y = 0, z = 0, rotation = 0, id, pickup = true, isSelection = true) {
         if (typeof dataKey === 'string') {
             dataKey = gameData.buildings[dataKey];
         }
@@ -2031,7 +2112,7 @@ try {
                     return response.json();
                 }).then(saveObject => {
                     try {
-                        game.loadSave(saveObject, true);
+                        game.loadSave(saveObject, isSelection);
                     } catch (e) {
                         console.error('Failed to load preset:', e);
                     }

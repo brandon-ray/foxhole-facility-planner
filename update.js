@@ -838,6 +838,78 @@ async function getStructureHitArea(structureData) {
 }
 
 async function updateData() {
+    const presetsDir = './public/games/foxhole/assets/presets/';
+    Object.entries(foxholeData.presets).forEach(([key, preset]) => {
+        const fullresPrePath = presetsDir + key + '.png';
+        const directoryPath = presetsDir + key + '/';
+        const fullresPath = directoryPath + 'fullres.png';
+        const previewPath = directoryPath + 'preview.webp';
+        const iconPath = directoryPath + 'icon.webp';
+
+        if (fs.existsSync(fullresPrePath)) {
+            fs.renameSync(fullresPrePath, fullresPath);
+        }
+
+        if (preset.file) {
+            const sourceFilePath = presetsDir + preset.file + '.json';
+            const newFilePath = path.join(directoryPath, 'preset.json');
+
+            if (fs.existsSync(directoryPath)) {
+                console.error(`Error: Subdirectory "${directoryPath}" already exists.`);
+                return;
+            }
+
+            fs.mkdirSync(directoryPath);
+            fs.renameSync(sourceFilePath, newFilePath);
+
+            delete preset.file;
+        }
+
+        const padding = 50; // trim({ threshold: 50 })
+        sharp(fullresPath).metadata().then(metadata => {
+            const resizeWidth = Math.max(metadata.width + (padding * 2), metadata.height + (padding * 2));
+            sharp(fullresPath)
+            .extend({ top: resizeWidth - metadata.width / 2, bottom: resizeWidth - metadata.width / 2, left: resizeWidth - metadata.height / 2, right: resizeWidth - metadata.height / 2, background: { r: 0, g: 0, b: 0, alpha: 0 } })
+            .toBuffer((err, resizedImage, resizeInfo) => {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+                sharp(resizedImage).trim().toBuffer((err, buffer, trimInfo) => {
+                    if (err) {
+                        console.error(err);
+                        return;
+                    }
+                    let leftOffset = Math.max(-trimInfo.trimOffsetLeft - padding, 0);
+                    let topOffset = Math.max(-trimInfo.trimOffsetTop - padding, 0);
+    
+                    let width = Math.min(trimInfo.width + (padding * 2), resizeInfo.width);
+                    let height = Math.min(trimInfo.height + (padding * 2), resizeInfo.height);
+
+                    sharp(resizedImage).extract({ left: leftOffset, top: topOffset, width: width, height: height }).resize({ width: 512 }).webp({ quality: 90 }).toFile(previewPath, (err, info) => {
+                        if (err) {
+                            console.error(err, fullresPath, metadata, resizeInfo, resizeWidth, leftOffset, topOffset, width, height);
+                            return;
+                        }
+                    });
+    
+                    const maxSize = Math.max(width, height);
+                    leftOffset += width / 2;
+                    topOffset += height / 2;
+                    leftOffset -= maxSize / 2;
+                    topOffset -= maxSize / 2;
+    
+                    sharp(resizedImage).extract({ left: Math.round(leftOffset), top: Math.round(topOffset), width: maxSize, height: maxSize }).resize({ width: 256 }).webp({ quality: 90 }).toFile(iconPath, (err, info) => {
+                        if (err) {
+                            console.error(err);
+                            return;
+                        }
+                    });
+                });
+            });
+        });
+    });
+
     // Switch IDs for CodeNames so the parser has an easier time identifying entries as their Foxhole counterpart.
     structureList = Object.keys(structureList).reduce((structures, id) => {
         let structure = structureList[id];

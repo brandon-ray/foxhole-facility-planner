@@ -78,6 +78,42 @@ const gameData = {
 			"author": "Stonefox",
 			"module": true
 		},
+		"360_zero": {
+			"name": "360 ZERO",
+			"description": "Cheap, Effective, Practical.",
+			"author": "Unknown",
+			"module": true
+		},
+		"360_one": {
+			"name": "360 ONE",
+			"description": "The older brother of the zero, more expensive, but more aggressive.",
+			"author": "Unknown",
+			"module": true
+		},
+		"360_dual": {
+			"name": "360 DUAL",
+			"description": "Retains compactness while significantly augmenting resistance to artillery.",
+			"author": "AllShallKneel",
+			"module": true
+		},
+		"long_shall": {
+			"name": "LongShall",
+			"description": "Did somebody say compact? While this bunker sacrifices some coverage for extreme density, it does so marvelously.",
+			"author": "AllShallKneel",
+			"module": true
+		},
+		"inique": {
+			"name": "Inique",
+			"description": "Hard hitting, compact, great coverage, this bunker proves that absolute efficiency is indifferent to symmetry.",
+			"author": "AllShallKneel",
+			"module": true
+		},
+		"mini_obs": {
+			"name": "miniObs",
+			"description": "Extremely lightweight, but provides RG coverage at the bare minimum cost.",
+			"author": "AllShallKneel",
+			"module": true
+		},
 		"halberd_bunker": {
 			"name": "\"Halberd\" Bunker",
 			"description": "A common reliable defensive bunker pattern.",
@@ -8584,7 +8620,6 @@ const gameData = {
 			},
 			"icon": "game/Textures/UI/ItemIcons/SalvageIcon.webp",
 			"texture": "game/Textures/Structures/scrap_field.webp",
-			"garrisonSupplyMultiplier": 0,
 			"maxHealth": 2147483647,
 			"upgrades": {
 				"resourcefield": {
@@ -9675,8 +9710,7 @@ const gameData = {
 			"sortLayer": "overhead",
 			"radius": 2,
 			"icon": "game/Textures/UI/CustomIcons/TreeIcon.webp",
-			"texture": "game/Textures/Structures/tree.webp",
-			"garrisonSupplyMultiplier": 0
+			"texture": "game/Textures/Structures/tree.webp"
 		},
 		"trenchconnectort1": {
 			"name": "Trench Connector (Tier 1)",
@@ -10828,7 +10862,6 @@ const gameData = {
 			"maxLength": 48,
 			"icon": "game/Textures/UI/ItemIcons/FacilityRoadItemIcon.webp",
 			"texture": "game/Textures/Structures/road_dirt.webp",
-			"garrisonSupplyMultiplier": 0,
 			"canSnap": true,
 			"canSnapAlongBezier": true,
 			"sockets": [

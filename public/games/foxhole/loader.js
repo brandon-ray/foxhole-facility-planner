@@ -60,19 +60,19 @@ const game_asset_list = {
                         },
                         'small_garrison': {
                             name: 'Small Garrison',
-                            description: 'A Small Garrison permanently connects this base to nearby defensive structures. In addition, structure decay for surrounding structures can be prevented when Garrison Supplies exist in the stockpile. The rate of Garrison Supplies consumption is 2 per hour per structure once decay has begun. Some structures have additional consumption requirements. A Small Garrison is required for upgrading the base to Tier 2.',
+                            description: 'A Small Garrison permanently connects this base to nearby defensive structures. A Small Garrison is required for upgrading the base to Tier 2.',
                             icon: assetDir('game/Textures/UI/Menus/IconFacilitiesSmallGarrison.webp'),
                             range: {
-                                type: 'preventDecay',
+                                type: 'garrison',
                                 max: building.baseGarrisonRadius
                             }
                         },
                         'large_garrison': {
                             name: 'Large Garrison',
-                            description: 'A Large Garrison permanently connects this base to nearby defensive structures. The cost of Garrison Supplies for preventing structure decay is further reduced. The rate of Garrison Supplies consumption is 1 per hour per structure once decay has begun. Some structures have additional consumption requirements. A Large Garrison required for upgrading the base to Tier 3.',
+                            description: 'A Large Garrison permanently connects this base to nearby defensive structures. A Large Garrison required for upgrading the base to Tier 3.',
                             icon: assetDir('game/Textures/UI/Menus/IconFacilitiesLargeGarrison.webp'),
                             range: {
-                                type: 'preventDecay',
+                                type: 'garrison',
                                 max: building.baseGarrisonRadius
                             }
                         }

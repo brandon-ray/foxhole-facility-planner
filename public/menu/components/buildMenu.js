@@ -1231,7 +1231,9 @@ Vue.component('app-menu-save-load', {
     props: ['menuData'],
     data() {
         return {
-            importAsSelection: false
+            importAsSelection: false,
+            showImageBackground: true,
+            centerImageOnObjects: false
         };
     },
     methods: {
@@ -1296,6 +1298,22 @@ Vue.component('app-menu-save-load', {
                 </button>
                 <button v-if="game.getSelectedEntities().length > 1" class="text-button" type="button" @click="game.downloadSave(true)" @mouseenter="bme()">
                     <i class="fa fa-save"></i> Export Selection
+                </button>
+            </div>
+        </div>
+        <div v-if="game.settings.enableExperimental" class="settings-option-wrapper">
+            <div class="settings-title">Image Export Options</div>
+            <label class="app-input-label">
+                <i class="fa fa-th-large" aria-hidden="true"></i> Include Background Grid
+                <input class="app-input" type="checkbox" v-model="showImageBackground">
+            </label>
+            <label class="app-input-label">
+                <i class="fa fa-crosshairs" aria-hidden="true"></i> Center Image on Objects
+                <input class="app-input" type="checkbox" v-model="centerImageOnObjects">
+            </label>
+            <div class="text-button-wrapper">
+                <button class="text-button" type="button" @click="game.downloadImage('screenshot', centerImageOnObjects, showImageBackground)" @mouseenter="bme()">
+                    <i class="fa fa-camera"></i> Export Screenshot
                 </button>
             </div>
         </div>
