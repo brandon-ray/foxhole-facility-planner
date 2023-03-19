@@ -1714,6 +1714,88 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
     margin: 5px;
 }
 
+.world-region-selection {
+    width: 900px;
+    height: 860px;
+    top: 50%;
+    left: 50%;
+    margin-top: -430px;
+    margin-left: -450px;
+}
+
+.world-region-selection .board-panel-body {
+    background-image: url('/games/foxhole/assets/game/Textures/UI/WorldMap/WorldMapBG.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-shadow: inset 0 0 200px black;
+    position: absolute;
+    inset: 0;
+    top: 42px;
+}
+
+.region-map-hex {
+    width: 128px;
+    height: 110px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -55px;
+    margin-left: -55px;
+    cursor: pointer;
+    overflow: visible;
+    border-radius: 50%;
+}
+
+.region-map-hex:hover {
+    z-index: 100;
+}
+
+.region-map-hex > div {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    transition-duration: 0.125s;
+}
+
+.region-map-hex > div::after {
+    content: '';
+    display: block;
+    opacity: 0.3;
+    width: 100%;
+    height: 100%;
+    background-image: url('/games/foxhole/assets/game/Textures/UI/HexMaps/MapHexBorder.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    position: absolute;
+}
+
+.region-map-hex > div > div {
+    width: 150px;
+    position: absolute;
+    pointer-events: none;
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    transition-duration: 0.125s;
+}
+
+.region-map-hex:hover > div {
+    filter: brightness(1.1);
+}
+
+.region-map-hex:hover > div > div {
+    transform: scale(1.25);
+}
+
+.no-sidebar .world-region-selection {
+    left: 15px;
+}
+
 #toolbelt-panel {
     width: 550px;
     /* background: linear-gradient(rgb(24, 24, 24), rgb(12, 12, 12)); */

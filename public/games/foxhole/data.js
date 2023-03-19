@@ -218,6 +218,378 @@ const gameData = {
 			"author": "Jimbo"
 		}
 	},
+	"maps": {
+		"acrithiahex": {
+			"name": "Acrithia",
+			"regionId": 30,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapAcrithiaHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapAcrithiaHex.png",
+			"gridCoord": {
+				"x": 1,
+				"y": 2
+			}
+		},
+		"allodsbighthex": {
+			"name": "Allod's Bight",
+			"regionId": 21,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapAllodsBightHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapAllodsBightHex.png",
+			"gridCoord": {
+				"x": 2,
+				"y": 0
+			}
+		},
+		"ashfieldshex": {
+			"name": "Ash Fields",
+			"regionId": 41,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapAshFieldsHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapAshFieldsHex.png",
+			"gridCoord": {
+				"x": -2,
+				"y": 3
+			}
+		},
+		"basinsionnachhex": {
+			"name": "Basin Sionnach",
+			"regionId": 34,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapBasinSionnachHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapBasinSionnachHex.png",
+			"gridCoord": {
+				"x": 0,
+				"y": -3
+			}
+		},
+		"callahanspassagehex": {
+			"name": "Callahan's Passage",
+			"regionId": 4,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapCallahansPassageHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapCallahansPassageHex.png",
+			"gridCoord": {
+				"x": 0,
+				"y": -1
+			}
+		},
+		"callumscapehex": {
+			"name": "Callum's Cape",
+			"regionId": 32,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapCallumsCapeHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapCallumsCapeHex.png",
+			"gridCoord": {
+				"x": -2,
+				"y": -1
+			}
+		},
+		"clansheadvalleyhex": {
+			"name": "Clanshead Valley",
+			"regionId": 36,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapClansheadValleyHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapClansheadValleyHex.png",
+			"gridCoord": {
+				"x": 2,
+				"y": -3
+			}
+		},
+		"deadlandshex": {
+			"name": "Deadlands",
+			"regionId": 3,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapDeadlandsHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapDeadlandsHex.png",
+			"gridCoord": {
+				"x": 0,
+				"y": 0
+			}
+		},
+		"drownedvalehex": {
+			"name": "The Drowned Vale",
+			"regionId": 23,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapDrownedValeHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapDrownedValeHex.png",
+			"gridCoord": {
+				"x": 1,
+				"y": 0
+			}
+		},
+		"endlessshorehex": {
+			"name": "Endless Shore",
+			"regionId": 20,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapEndlessShoreHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapEndlessShoreHex.png",
+			"gridCoord": {
+				"x": 2,
+				"y": -1
+			}
+		},
+		"farranaccoasthex": {
+			"name": "Farranac Coast",
+			"regionId": 13,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapFarranacCoastHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapFarranacCoastHex.png",
+			"gridCoord": {
+				"x": -2,
+				"y": 1
+			}
+		},
+		"fishermansrowhex": {
+			"name": "Fisherman's Row",
+			"regionId": 15,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapFishermansRowHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapFishermansRowHex.png",
+			"gridCoord": {
+				"x": -3,
+				"y": 2
+			}
+		},
+		"godcroftshex": {
+			"name": "Godcrofts",
+			"regionId": 19,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapGodcroftsHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapGodcroftsHex.png",
+			"gridCoord": {
+				"x": 3,
+				"y": -2
+			}
+		},
+		"greatmarchhex": {
+			"name": "Great March",
+			"regionId": 17,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapGreatMarchHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapGreatMarchHex.png",
+			"gridCoord": {
+				"x": 0,
+				"y": 2
+			}
+		},
+		"heartlandshex": {
+			"name": "The Heartlands",
+			"regionId": 8,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapHeartlandsHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapHeartlandsHex.png",
+			"gridCoord": {
+				"x": -1,
+				"y": 2
+			}
+		},
+		"howlcountyhex": {
+			"name": "Howl County",
+			"regionId": 35,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapHowlCountyHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapHowlCountyHex.png",
+			"gridCoord": {
+				"x": 1,
+				"y": -3
+			}
+		},
+		"kalokaihex": {
+			"name": "Kalokai",
+			"regionId": 40,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapKalokaiHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapKalokaiHex.png",
+			"gridCoord": {
+				"x": 0,
+				"y": 3
+			}
+		},
+		"linnmercyhex": {
+			"name": "The Linn of Mercy",
+			"regionId": 10,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapLinnMercyHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapLinnMercyHex.png",
+			"gridCoord": {
+				"x": -1,
+				"y": 0
+			}
+		},
+		"lochmorhex": {
+			"name": "Loch Mór",
+			"regionId": 9,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapLochMorHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapLochMorHex.png",
+			"gridCoord": {
+				"x": -1,
+				"y": 1
+			}
+		},
+		"marbanhollow": {
+			"name": "Marban Hollow",
+			"regionId": 5,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapMarbanHollow.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapMarbanHollow.png",
+			"gridCoord": {
+				"x": 1,
+				"y": -1
+			}
+		},
+		"mooringcountyhex": {
+			"name": "The Moors",
+			"regionId": 7,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapMooringCountyHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapMooringCountyHex.png",
+			"gridCoord": {
+				"x": -1,
+				"y": -1
+			}
+		},
+		"morgenscrossinghex": {
+			"name": "Morgen's Crossing",
+			"regionId": 37,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapMorgensCrossingHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapMorgensCrossingHex.png",
+			"gridCoord": {
+				"x": 3,
+				"y": -3
+			}
+		},
+		"nevishlinehex": {
+			"name": "Nevish Line",
+			"regionId": 29,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapNevishLineHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapNevishLineHex.png",
+			"gridCoord": {
+				"x": -3,
+				"y": 0
+			}
+		},
+		"oarbreakerhex": {
+			"name": "The Oarbreaker Isles",
+			"regionId": 16,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapOarbreakerHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapOarbreakerHex.png",
+			"gridCoord": {
+				"x": -3,
+				"y": 1
+			}
+		},
+		"originhex": {
+			"name": "Origin",
+			"regionId": 42,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapOriginHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapOriginHex.png",
+			"gridCoord": {
+				"x": -3,
+				"y": 3
+			}
+		},
+		"reachingtrailhex": {
+			"name": "Reaching Trail",
+			"regionId": 11,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapReachingTrailHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapReachingTrailHex.png",
+			"gridCoord": {
+				"x": 0,
+				"y": -2
+			}
+		},
+		"redriverhex": {
+			"name": "Red River",
+			"regionId": 31,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapRedRiverHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapRedRiverHex.png",
+			"gridCoord": {
+				"x": -1,
+				"y": 3
+			}
+		},
+		"shackledchasmhex": {
+			"name": "Shackled Chasm",
+			"regionId": 24,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapShackledChasmHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapShackledChasmHex.png",
+			"gridCoord": {
+				"x": 1,
+				"y": 1
+			}
+		},
+		"speakingwoodshex": {
+			"name": "Speaking Woods",
+			"regionId": 33,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapSpeakingWoodsHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapSpeakingWoodsHex.png",
+			"gridCoord": {
+				"x": -1,
+				"y": -2
+			}
+		},
+		"stonecradlehex": {
+			"name": "Stonecradle",
+			"regionId": 12,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapStonecradleHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapStonecradleHex.png",
+			"gridCoord": {
+				"x": -2,
+				"y": 0
+			}
+		},
+		"tempestislandhex": {
+			"name": "Tempest Island",
+			"regionId": 18,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapTempestIslandHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapTempestIslandHex.png",
+			"gridCoord": {
+				"x": 3,
+				"y": -1
+			}
+		},
+		"terminushex": {
+			"name": "Terminus",
+			"regionId": 39,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapTerminusHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapTerminusHex.png",
+			"gridCoord": {
+				"x": 2,
+				"y": 1
+			}
+		},
+		"thefingershex": {
+			"name": "The Fingers",
+			"regionId": 38,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapTheFingersHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapTheFingersHex.png",
+			"gridCoord": {
+				"x": 3,
+				"y": 0
+			}
+		},
+		"umbralwildwoodhex": {
+			"name": "Umbral Wildwood",
+			"regionId": 6,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapUmbralWildwoodHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapUmbralWildwoodHex.png",
+			"gridCoord": {
+				"x": 0,
+				"y": 1
+			}
+		},
+		"viperpithex": {
+			"name": "Viper Pit",
+			"regionId": 25,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapViperPitHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapViperPitHex.png",
+			"gridCoord": {
+				"x": 1,
+				"y": -2
+			}
+		},
+		"weatheredexpansehex": {
+			"name": "Weathered Expanse",
+			"regionId": 22,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapWeatheredExpanseHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapWeatheredExpanseHex.png",
+			"gridCoord": {
+				"x": 2,
+				"y": -2
+			}
+		},
+		"westgatehex": {
+			"name": "Westgate",
+			"regionId": 14,
+			"icon": "game/Textures/UI/HexMaps/Icons/MapWestgateHex.webp",
+			"texture": "game/Textures/UI/HexMaps/Processed/MapWestgateHex.png",
+			"gridCoord": {
+				"x": -2,
+				"y": 2
+			}
+		}
+	},
 	"tech": {
 		"unlockfacilitytier2": {
 			"name": "Facilities (Tier 2)",

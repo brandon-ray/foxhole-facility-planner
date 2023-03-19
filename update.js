@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
+const fetch = require('node-fetch');
 
 const METER_UNREAL_UNITS = 100;
 const foxholeDataDirectory = 'dev/tools/Output/Exports/';
@@ -536,77 +537,101 @@ function getResourceCosts(resources) {
 
 function iterateData(filePath, list, type) {
     let rawdata = fs.readFileSync(filePath);
-    let uAsset = JSON.parse(rawdata)[0];
-    if (uAsset.Rows) {
-        for (let [codeName, data] of Object.entries(uAsset.Rows)) {
-            codeName = codeName.toLowerCase();
-            let listItem = list[codeName];
-            if (!listItem && !type) {
-                for (const v of Object.values(list)) {
-                    if (v.upgrades && v.upgrades[codeName]) {
-                        listItem = v.upgrades[codeName];
-                        break;
-                    }
-                }
-            }
-            if (listItem && type === 'weapon') {
-                if (data.Damage) {
-                    let weapon = Object.assign({
-                        codeName: codeName
-                    }, weaponList[codeName], {
-                        damage: data.Damage
-                    });
-                    if (data.DamageType.ObjectName.startsWith('BlueprintGeneratedClass')) {
-                        let rawDamageData = fs.readFileSync(foxholeDataDirectory + data.DamageType.ObjectPath.split('.')[0] + '.json');
-                        let damageTypeProperties = JSON.parse(rawDamageData)[1].Properties;
-                        weapon.damageType = Object.assign({
-                            name: damageTypeProperties.DisplayName.SourceString,
-                            type: damageTypeProperties.Type.replace('EDamageType::', '').toLowerCase(),
-                            description: damageTypeProperties.DescriptionDetails?.Text?.SourceString
-                        }, weaponList[codeName]?.damageType);
-                    }
-                    weaponList[codeName] = weapon;
-                }
-            } else if (type === 'damageType') {
-                for (const [key, weapon] of Object.entries(weaponList)) {
-                    if (weapon.damageType?.type === codeName) {
-                        delete weapon.damageType.type;
-                        if (data.Tier1Structure !== 1 || data.Tier2Structure !== 1 || data.Tier3Structure !== 1) {
-                            weapon.damageType.profiles = {
-                                't1': 1 - data.Tier1Structure,
-                                't2': 1 - data.Tier2Structure,
-                                't3': 1 - data.Tier3Structure
-                            };
-                        } else {
-                            delete weaponList[key];
+    let uAsset = JSON.parse(rawdata);
+    for (const uProperty of uAsset) {
+        if (uProperty.Type === 'DataTable' && uProperty.Rows) {
+            for (let [codeName, data] of Object.entries(uProperty.Rows)) {
+                codeName = codeName.toLowerCase();
+                let listItem = list[codeName];
+                if (!listItem && !type) {
+                    for (const v of Object.values(list)) {
+                        if (v.upgrades && v.upgrades[codeName]) {
+                            listItem = v.upgrades[codeName];
+                            break;
                         }
                     }
                 }
-            } else if (listItem && listItem.cost !== false && !listItem.reference) {
-                /*
-                This seems to be where Field Modification Center pulls its data from.
-                if (data.bHasTierUpgrades) {
-                    if (data.UpgradeResourceAmounts && data.UpgradeResourceAmounts.Resource.CodeName !== 'None') {
-                        list[codeName].UpgradeResourceAmounts = data.UpgradeResourceAmounts;
+                if (listItem && type === 'weapon') {
+                    if (data.Damage) {
+                        let weapon = Object.assign({
+                            codeName: codeName
+                        }, weaponList[codeName], {
+                            damage: data.Damage
+                        });
+                        if (data.DamageType.ObjectName.startsWith('BlueprintGeneratedClass')) {
+                            let rawDamageData = fs.readFileSync(foxholeDataDirectory + data.DamageType.ObjectPath.split('.')[0] + '.json');
+                            let damageTypeProperties = JSON.parse(rawDamageData)[1].Properties;
+                            weapon.damageType = Object.assign({
+                                name: damageTypeProperties.DisplayName.SourceString,
+                                type: damageTypeProperties.Type.replace('EDamageType::', '').toLowerCase(),
+                                description: damageTypeProperties.DescriptionDetails?.Text?.SourceString
+                            }, weaponList[codeName]?.damageType);
+                        }
+                        weaponList[codeName] = weapon;
+                    }
+                } else if (type === 'damageType') {
+                    for (const [key, weapon] of Object.entries(weaponList)) {
+                        if (weapon.damageType?.type === codeName) {
+                            delete weapon.damageType.type;
+                            if (data.Tier1Structure !== 1 || data.Tier2Structure !== 1 || data.Tier3Structure !== 1) {
+                                weapon.damageType.profiles = {
+                                    't1': 1 - data.Tier1Structure,
+                                    't2': 1 - data.Tier2Structure,
+                                    't3': 1 - data.Tier3Structure
+                                };
+                            } else {
+                                delete weaponList[key];
+                            }
+                        }
+                    }
+                } else if (listItem && listItem.cost !== false && !listItem.reference) {
+                    /*
+                    This seems to be where Field Modification Center pulls its data from.
+                    if (data.bHasTierUpgrades) {
+                        if (data.UpgradeResourceAmounts && data.UpgradeResourceAmounts.Resource.CodeName !== 'None') {
+                            list[codeName].UpgradeResourceAmounts = data.UpgradeResourceAmounts;
+                        }
+                    }
+                    */
+                    if (type === 'item') {
+                        if (data.AltResourceAmounts && data.AltResourceAmounts.Resource.CodeName !== 'None') {
+                            listItem.cost = getResourceCosts(data.AltResourceAmounts);
+                        }
+                    } else {
+                        if (data.MaxHealth !== 0) {
+                            listItem.maxHealth = data.MaxHealth;
+                        }
+                        if (data.StructuralIntegrity !== 1) {
+                            listItem.structuralIntegrity = data.StructuralIntegrity;
+                        }
+                        if (data.RepairCost !== 0) {
+                            listItem.repairCost = data.RepairCost;
+                        }
+                        if (data.ResourceAmounts && data.ResourceAmounts.Resource.CodeName !== 'None') {
+                            listItem.cost = getResourceCosts(data.ResourceAmounts);
+                        }
                     }
                 }
-                */
-                if (type === 'item') {
-                    if (data.AltResourceAmounts && data.AltResourceAmounts.Resource.CodeName !== 'None') {
-                        listItem.cost = getResourceCosts(data.AltResourceAmounts);
-                    }
-                } else {
-                    if (data.MaxHealth !== 0) {
-                        listItem.maxHealth = data.MaxHealth;
-                    }
-                    if (data.StructuralIntegrity !== 1) {
-                        listItem.structuralIntegrity = data.StructuralIntegrity;
-                    }
-                    if (data.RepairCost !== 0) {
-                        listItem.repairCost = data.RepairCost;
-                    }
-                    if (data.ResourceAmounts && data.ResourceAmounts.Resource.CodeName !== 'None') {
-                        listItem.cost = getResourceCosts(data.ResourceAmounts);
+            }
+        } else if (type === 'map' && uProperty.Type === 'BPMapList_C' && uProperty?.Properties?.MapDatabase) {
+            for (let [codeName, data] of Object.entries(uProperty.Properties.MapDatabase)) {
+                codeName = codeName.toLowerCase();
+                let listItem = list[codeName];
+                if (listItem) {
+                    if (!data.bIsInHexGrid) {
+                        delete list[codeName];
+                    } else {
+                        list[codeName] = {
+                            name: data.DisplayName?.SourceString,
+                            regionId: listItem.regionId,
+                            icon: `game/${data.Image.ObjectPath.replace('/Processed/', '/Icons/').slice(12, -1)}webp`,
+                            texture: `game/${data.Image.ObjectPath.slice(12, -1)}png`,
+                            gridCoord: {
+                                x: data.GridCoord.X > 10 ? data.GridCoord.X - 4294967296 : data.GridCoord.X,
+                                y: data.GridCoord.Y > 10 ? data.GridCoord.Y - 4294967296 : data.GridCoord.Y
+                            },
+                            //mapTextItems: listItem.mapTextItems
+                        };
                     }
                 }
             }
@@ -838,6 +863,7 @@ async function getStructureHitArea(structureData) {
 }
 
 async function updateData() {
+    /*
     const presetsDir = './public/games/foxhole/assets/presets/';
     Object.entries(foxholeData.presets).forEach(([key, preset]) => {
         const fullresPrePath = presetsDir + key + '.png';
@@ -909,6 +935,7 @@ async function updateData() {
             });
         });
     });
+    */
 
     // Switch IDs for CodeNames so the parser has an easier time identifying entries as their Foxhole counterpart.
     structureList = Object.keys(structureList).reduce((structures, id) => {
@@ -926,6 +953,22 @@ async function updateData() {
         return structures;
     }, {});
 
+    /*
+    foxholeData.maps = {};
+    await fetch('https://war-service-live.foxholeservices.com/api/worldconquest/maps')
+    .then(response => response.json())
+    .then(async data => {
+        for await (const map of data) {
+            await fetch('https://war-service-live.foxholeservices.com/api/worldconquest/maps/' + map + '/static')
+            .then(response => response.json())
+            .then(data => {
+                foxholeData.maps[map.toLowerCase()] = data;
+            }).catch(error => console.error(error));
+        }
+    })
+    .catch(error => console.error(error));
+    */
+
     iterateUpgradeCodeNames(`${foxholeDataDirectory}War/Content/Blueprints/`);
 
     await iterateStructures(`${foxholeDataDirectory}War/Content/Blueprints/`);
@@ -934,6 +977,7 @@ async function updateData() {
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, itemList, 'item'); // Check for items in the structure data... Yes, Material Pallet is stored here.
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPAmmoDynamicData.json`, weaponList, 'weapon');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/DTDamageProfiles.json`, weaponList, 'damageType');
+    iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPMapList.json`, foxholeData.maps, 'map');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, structureList);
 
     for (const [codeName, structureData] of Object.entries(structureList)) {
@@ -982,6 +1026,7 @@ async function updateData() {
     let foxholeDataStr = JSON.stringify({
         'categories': foxholeData.categories,
         'presets': foxholeData.presets,
+        'maps': sortList(foxholeData.maps),
         'tech': sortList(techList),
         'resources': sortList(itemList),
         'weapons': weaponList,

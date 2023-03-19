@@ -23,6 +23,7 @@
     "gulp-minify": "^3.0.0",
     "gulp-rename": "^2.0.0",
     "gulp-sourcemaps": "^2.6.5",
+    "node-fetch": "^2.6.1",
     "sharp": "^0.31.3"
   }
 }

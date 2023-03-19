@@ -245,8 +245,10 @@ try {
     game.projectDescription = '';
     game.projectAuthors = '';
     game.projectSettings = {
+        showWorldRegion: true,
         showProductionIcons: true,
         showRangeWhenSelected: true,
+        regionKey: '',
         ranges: {
             crane: false,
             radio: false,
@@ -540,6 +542,8 @@ try {
     };
 
     game.updateEntityOverlays = function() {
+        mapRegion.texture = game.projectSettings.regionKey ? game.resources[gameData.maps[game.projectSettings.regionKey].texture].texture : undefined;
+        mapRegion.visible = game.projectSettings.showWorldRegion;
         for (const entity of entities) {
             entity.updateOverlays();
         }
@@ -869,6 +873,7 @@ try {
     }
 
     let background = null;
+    let mapRegion = null;
     let selectionArea = null;
 
     function onWindowResize() {
@@ -922,6 +927,19 @@ try {
         app.cstage = new PIXI.Container();
         app.stage.addChild(app.cstage);
         app.stage.filterArea = app.renderer.screen;
+
+        mapRegion = new PIXI.Sprite(game.projectSettings.regionKey ? game.resources[gameData.maps[game.projectSettings.regionKey].texture].texture : undefined);
+        // mapRegion.width = 1024; // 2162m x 32?
+        // mapRegion.height = 888; // 1875m x 32?
+        mapRegion.width = 2162 * METER_PIXEL_SIZE;
+        mapRegion.height = 1875 * METER_PIXEL_SIZE; // 125m x 15u
+        mapRegion.x = GRID_WIDTH/2;
+        mapRegion.y = GRID_HEIGHT/2;
+        mapRegion.anchor.set(0.5);
+        mapRegion.getZIndex = () => {
+            return 1;
+        };
+        app.cstage.addChild(mapRegion);
 
         diffuseGroupLayer = new PIXI.display.Layer(PIXI.lights.diffuseGroup);
         PIXI.lights.diffuseGroup.zIndex = 1;
@@ -1262,6 +1280,8 @@ try {
             } else if (!ignoreConfirmation) {
                 game.zoomToEntitiesCenter();
             }
+            
+            game.updateEntityOverlays();
         }, 1);
     };
 
@@ -1271,7 +1291,17 @@ try {
                 game.statisticsMenuComponent.refresh();
             }, 1);
         }
-    }
+    };
+
+    game.setMapRegion = function(regionKey) {
+        if (game.projectSettings.regionKey === regionKey) {
+            regionKey = null;
+        }
+        game.projectSettings.regionKey = regionKey;
+        game.updateEntityOverlays();
+        game.updateSave();
+        game.appComponent?.$forceUpdate();
+    };
 
     game.getEntitiesCenter = function(ents, isSelection) {
         const count = ents?.length ?? 1;

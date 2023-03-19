@@ -17,7 +17,8 @@ if (isMobile && !isPhoneApp) {
                     isInMenu: game.isInMenu,
                     settings: game.settings,
                     sidebarVisible: true,
-                    layerSelectionVisible: false
+                    layerSelectionVisible: false,
+                    regionSelectionVisible: false
                 };
             },
             methods: {
@@ -52,6 +53,11 @@ if (isMobile && !isPhoneApp) {
                     game.updateEntityOverlays();
                     game.updateSave();
                     game.appComponent.$forceUpdate();
+                },
+                selectMapRegion: function(key) {
+                    game.setMapRegion(key);
+                    this.regionSelectionVisible = false;
+                    game.appComponent.$forceUpdate();
                 }
             },
             template: html`
@@ -70,6 +76,10 @@ if (isMobile && !isPhoneApp) {
                     </div>
                     <div class="board-panel-body row p-1">
                         <div class="col">
+                            <label v-if="game.settings.enableExperimental" class="btn-checkbox-wrapper d-block">
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.showWorldRegion }" @click="toggleProjectSetting('showWorldRegion')"></button>
+                                World Region
+                            </label>
                             <label class="btn-checkbox-wrapper d-block">
                                 <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.showProductionIcons }" @click="toggleProjectSetting('showProductionIcons')"></button>
                                 Production Icons
@@ -118,6 +128,25 @@ if (isMobile && !isPhoneApp) {
 
                 <app-menu-statistics></app-menu-statistics>
 
+                <div v-if="regionSelectionVisible" class="board-panel world-region-selection" style="transform: scale(0.95)">
+                    <div class="board-panel-header">
+                        <h4 class="float-left m-0" style="color: #eee"><i class="fa fa-map-o"></i> Select Map Region</h4>
+                        <button class="btn-small m-0 mr-1 float-right" title="Minimize Layers" @click="regionSelectionVisible = false"><i class="fa fa-window-minimize" aria-hidden="true"></i></button>
+                    </div>
+                    <div class="board-panel-body">
+                        <template v-for="(map, key) in gameData.maps">
+                            <div class="region-map-hex" :style="{
+                                    marginTop: ((-55 + (map.gridCoord.y * 110)) + (map.gridCoord.x * 55)) + 'px',
+                                    marginLeft: (-50 + (map.gridCoord.x * 96)) + 'px'
+                                }" @click="selectMapRegion(key)">
+                                <div class="d-flex justify-content-center align-items-center text-center" :style="{backgroundImage: 'url(' + map.icon + ')'}">
+                                    <div>{{map.name}}</div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
                 <app-game-toolbelt></app-game-toolbelt>
 
                 <app-game-confirmation-popup></app-game-confirmation-popup>
@@ -145,6 +174,10 @@ if (isMobile && !isPhoneApp) {
                     <label class="btn-checkbox-wrapper">
                         <button class="btn-small btn-float-left" :class="{ 'btn-active': settings.enableStats }" @click="settings.enableStats = !settings.enableStats; game.updateSettings()"><i class="fa fa-bar-chart" aria-hidden="true"></i></button>
                         Stats
+                    </label>
+                    <label v-if="game.settings.enableExperimental" class="btn-checkbox-wrapper">
+                        <button class="btn-small btn-float-left" :class="{ 'btn-active': regionSelectionVisible }" title="Toggle Region Selection" @click="regionSelectionVisible = !regionSelectionVisible"><i class="fa fa-map-o" aria-hidden="true"></i></button>
+                        Map
                     </label>
                     <button class="btn-small" title="Toggle Fullscreen" @click="game.tryFullscreen()">
                         <i class="fa fa-arrows-alt" aria-hidden="true"></i>

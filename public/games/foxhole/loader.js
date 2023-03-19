@@ -200,6 +200,16 @@ const game_asset_list = {
         }
     }
 
+    for (const map of Object.values(gameData.maps)) {
+        if (map.texture) {
+            if (map.icon) {
+                map.icon = assetDir(map.icon);
+            }
+            map.texture = assetDir(map.texture);
+            game_asset_list[map.texture] = map.texture;
+        }
+    }
+
     for (const resource of Object.values(window.objectData.resources)) {
         if (resource.icon) {
             resource.icon = assetDir(resource.icon);
