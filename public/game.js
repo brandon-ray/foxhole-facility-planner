@@ -542,8 +542,23 @@ try {
     };
 
     game.updateEntityOverlays = function() {
-        mapRegion.texture = game.projectSettings.regionKey ? game.resources[gameData.maps[game.projectSettings.regionKey].texture].texture : undefined;
-        mapRegion.visible = game.projectSettings.showWorldRegion;
+        const mapTexture = game.projectSettings.regionKey ? gameData.maps[game.projectSettings.regionKey].texture : null;
+        if (mapTexture && (!mapRegion.texture || !mapRegion.texture.textureCacheIds?.length || mapRegion.texture.textureCacheIds[0] !== mapTexture)) {
+            if (game.resources[mapTexture]) {
+                mapRegion.texture = game.resources[mapTexture].texture;
+            } else {
+                const loader = new PIXI.Loader();
+                loader.add(mapTexture);
+                loader.load((loader, res) => {
+                    game.resources[mapTexture] = res[mapTexture];
+                    mapRegion.texture = game.resources[mapTexture].texture;
+                });
+                loader.onError.add((error, resource) => {
+                    console.error('Failed to load region image:', error.message);
+                });
+            }
+        }
+        mapRegion.visible = mapTexture && game.projectSettings.showWorldRegion;
         for (const entity of entities) {
             entity.updateOverlays();
         }
@@ -928,7 +943,7 @@ try {
         app.stage.addChild(app.cstage);
         app.stage.filterArea = app.renderer.screen;
 
-        mapRegion = new PIXI.Sprite(game.projectSettings.regionKey ? game.resources[gameData.maps[game.projectSettings.regionKey].texture].texture : undefined);
+        mapRegion = new PIXI.Sprite();
         // mapRegion.width = 1024; // 2162m x 32?
         // mapRegion.height = 888; // 1875m x 32?
         mapRegion.width = 2162 * METER_PIXEL_SIZE;
@@ -1768,7 +1783,19 @@ try {
 
         setTimeout(() => {
             var renderTexture = PIXI.RenderTexture.create(app.renderer.width, app.renderer.height);
-            app.renderer.render(background, renderTexture);
+            app.renderer.render(background, mapRegion, renderTexture);
+
+            const addObjectToRender = (obj) => {
+                app.renderer.render(obj, {
+                    renderTexture: renderTexture,
+                    clear: false,
+                    skipUpdateTransform: true
+                });
+            }
+
+            if (mapRegion.visible) {
+                addObjectToRender(mapRegion);
+            }
 
             const renderEntities = [...entities];
             renderEntities.sort(function (a, b) {
@@ -1776,11 +1803,7 @@ try {
             });
 
             for (const entity of renderEntities) {
-                app.renderer.render(entity, {
-                    renderTexture: renderTexture,
-                    clear: false,
-                    skipUpdateTransform: true
-                });
+                addObjectToRender(entity);
             }
         
             var sprite = new PIXI.Sprite(renderTexture);
