@@ -1792,10 +1792,6 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
     transform: scale(1.25);
 }
 
-.no-sidebar .world-region-selection {
-    left: 15px;
-}
-
 #toolbelt-panel {
     width: 550px;
     /* background: linear-gradient(rgb(24, 24, 24), rgb(12, 12, 12)); */

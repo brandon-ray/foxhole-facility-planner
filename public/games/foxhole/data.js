@@ -216,6 +216,16 @@ const gameData = {
 			"name": "Simple Vehicle Factory (Example)",
 			"description": "A simple vehicle factory to output upgraded vehicles per hour. This is an example of a preset for the planner. Contribute your own saves to our Discord!",
 			"author": "Jimbo"
+		},
+		"panzer_snares": {
+			"name": "Panzer Snares",
+			"author": "KitsunePanzer",
+			"module": true
+		},
+		"small_artillery_facility": {
+			"name": "Small Artillery Facility",
+			"description": "A small and simple design that doesn't take up much space or Msupps.",
+			"author": "Trooper"
 		}
 	},
 	"maps": {
@@ -2721,6 +2731,17 @@ const gameData = {
 					]
 				}
 			}
+		},
+		"componentmine": {
+			"name": "Component Mine",
+			"codeName": "ComponentMine",
+			"description": "An old mine that automatically gathers Components using Fuel.",
+			"category": "world",
+			"icon": "game/Textures/UI/StructureIcons/ComponentMineIcon.webp",
+			"texture": "game/Textures/Structures/componentmine.webp",
+			"maxHealth": 1000,
+			"cost": false,
+			"repairCost": 200
 		},
 		"concretemixer": {
 			"name": "Concrete Mixer",
@@ -9101,6 +9122,17 @@ const gameData = {
 				}
 			}
 		},
+		"scrapmine": {
+			"name": "Salvage Mine",
+			"codeName": "ScrapMine",
+			"description": "An old mine that automatically gathers Salvage using Fuel.",
+			"category": "world",
+			"icon": "game/Textures/UI/StructureIcons/ScrapMineIcon.webp",
+			"texture": "game/Textures/Structures/scrapmine.webp",
+			"maxHealth": 1000,
+			"cost": false,
+			"repairCost": 200
+		},
 		"shippingcontainer": {
 			"name": "Shipping Container",
 			"codeName": "ShippingContainer",
@@ -9605,6 +9637,17 @@ const gameData = {
 					"time": 12
 				}
 			]
+		},
+		"sulfurmine": {
+			"name": "Sulfur Mine",
+			"codeName": "SulfurMine",
+			"description": "An old mine that automatically gathers Sulfur using Fuel.",
+			"category": "world",
+			"icon": "game/Textures/UI/StructureIcons/SulfurMineStructureIcon.webp",
+			"texture": "game/Textures/Structures/sulfurmine.webp",
+			"maxHealth": 1000,
+			"cost": false,
+			"repairCost": 200
 		},
 		"tankstop": {
 			"name": "Tank Trap",

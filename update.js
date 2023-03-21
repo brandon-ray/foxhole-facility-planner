@@ -340,7 +340,7 @@ async function iterateStructures(dirPath) {
                                     //'category': buildCategoryMap[(structure.BuildCategory ?? baseData.BuildCategory)?.substring(16)] ?? structureData.category ?? 'misc',
                                     'category': structureData.category,
                                     'categoryOrder': structureData.categoryOrder ?? structure.BuildOrder ?? baseData.BuildOrder,
-                                    'faction': structureData.faction,
+                                    'faction': structure.FactionVariant === 'EFactionId::Colonials' ? 'c' : (structure.FactionVariant === 'EFactionId::Wardens' ? 'w' : structureData.faction),
                                     'color': structureData.color,
                                     'experimental': structureData.experimental,
                                     'hideInList': structureData.hideInList,
