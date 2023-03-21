@@ -274,7 +274,7 @@ Vue.component('app-game-toolbelt', {
                 for (const category of Object.values(window.objectData.categories)) {
                     if (game.settings.enableExperimental || !category.experimental) {
                         for (const building of category.buildings) {
-                            if (!building.preset && building.name.toLowerCase().includes(this.searchQuery.toLowerCase()) && game.canShowListItem(building, true)) {
+                            if (!building.preset && building.name && building.name.toLowerCase().includes(this.searchQuery.toLowerCase()) && game.canShowListItem(building, true)) {
                                 results.push(building);
                             }
                         }
