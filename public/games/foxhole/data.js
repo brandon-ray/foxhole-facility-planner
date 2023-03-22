@@ -226,6 +226,11 @@ const gameData = {
 			"name": "Small Artillery Facility",
 			"description": "A small and simple design that doesn't take up much space or Msupps.",
 			"author": "Trooper"
+		},
+		"small_tripod_facility": {
+			"name": "Small Tripod Facility",
+			"description": "A variant to the Small Artillery Facility I made, this one allows you to mass produce tripod weapons",
+			"author": "Trooper"
 		}
 	},
 	"maps": {
