@@ -130,7 +130,7 @@ class DraggableContainer extends PIXI.Container {
                         }
 
                         if (!this.building.isBezier && this.building.minLength) {
-                            const minLength = this.building.minLength * METER_PIXEL_SIZE;
+                            const minLength = this.building.minLength * METER_BOARD_PIXEL_SIZE;
                             if (game.selectedHandlePoint.x < minLength) {
                                 game.selectedHandlePoint.x = minLength;
                             }
@@ -169,7 +169,7 @@ class DraggableContainer extends PIXI.Container {
                                             const entityConnections = Object.keys(entitySocket.connections).length;
                                             if (entitySocket.connections[this.id] === handleSocket.socketData.id || (!this.hasConnectionToEntity(entity2, handleSocket) && (entityConnections === 0 || (entitySocket.socketData.connectionLimit && entityConnections < entitySocket.socketData.connectionLimit)))) {
                                                 nearestSocketPos = game.app.cstage.toLocal({x: entitySocket.x, y: entitySocket.y}, entity2, undefined, true);
-                                                if (Math.floor(Math.distanceBetween(this, nearestSocketPos)) <= (this.building?.maxLength * METER_PIXEL_SIZE)) {
+                                                if (Math.floor(Math.distanceBetween(this, nearestSocketPos)) <= (this.building?.maxLength * METER_BOARD_PIXEL_SIZE)) {
                                                     nearestSocket = entitySocket;
                                                     nearestSocketDist = socketDistance;
                                                 }
@@ -201,7 +201,7 @@ class DraggableContainer extends PIXI.Container {
                         if (!connectionEstablished && !this.hasConnectionToEntity(entity2, handleSocket) && entity2.bezier && entity2.building?.isBezier && entity2.building?.canSnapAlongBezier && this.subtype === entity2.subtype) {
                             let selectedPointToEntity2Local = entity2.toLocal(game.selectedHandlePoint, this, undefined, true);
                             let projection = entity2.bezier.project(selectedPointToEntity2Local);
-                            if (projection.d <= (entity2.building?.lineWidth ?? 25) && (!this.building?.maxLength || Math.distanceBetween(this, gmpGrid) <= this.building.maxLength * METER_PIXEL_SIZE)) {
+                            if (projection.d <= (entity2.building?.lineWidth ?? 25) && (!this.building?.maxLength || Math.distanceBetween(this, gmpGrid) <= this.building.maxLength * METER_BOARD_PIXEL_SIZE)) {
                                 let local = this.toLocal({x: projection.x, y: projection.y}, entity2, undefined, true);
                                 let normal = entity2.bezier.normal(projection.t);
                                 let angle = Math.angleBetween({x: 0, y: 0}, normal);
@@ -236,8 +236,8 @@ class DraggableContainer extends PIXI.Container {
                     }
                 }
 
-                const MIN_SEGMENT_DISTANCE = this.building?.minLength * METER_PIXEL_SIZE;
-                const MAX_SEGMENT_DISTANCE = this.building?.maxLength * METER_PIXEL_SIZE;
+                const MIN_SEGMENT_DISTANCE = this.building?.minLength * METER_BOARD_PIXEL_SIZE;
+                const MAX_SEGMENT_DISTANCE = this.building?.maxLength * METER_BOARD_PIXEL_SIZE;
                 let dist = Math.distanceBetween({x: 0, y: 0}, game.selectedHandlePoint);
                 if (game.selectedHandlePoint.index === 1) {
                     let angle = Math.angleBetween({x: 0, y: 0}, game.selectedHandlePoint);
@@ -251,7 +251,7 @@ class DraggableContainer extends PIXI.Container {
                 this.regenerate();
                 if (this.building?.isBezier && this.sprite?.rope) {
                     if (this.building.simpleBezier) {
-                        if (dist < 3*METER_PIXEL_SIZE) {
+                        if (dist < 3*METER_BOARD_PIXEL_SIZE) {
                             this.sprite.rope.tint = COLOR_RED;
                         } else {
                             this.sprite.rope.tint = COLOR_WHITE;
@@ -435,7 +435,7 @@ class DraggableContainer extends PIXI.Container {
         if (this.building?.radius || (this.type === 'shape' && this.subtype === 'circle')) {
             const centerDist = Math.distanceBetween(this, gmp);
             if (this.building?.radius) {
-                if (centerDist < (this.building.radius * METER_PIXEL_SIZE)) {
+                if (centerDist < (this.building.radius * METER_BOARD_PIXEL_SIZE)) {
                     return true;
                 }
             } else if ((centerDist < ((this.sprite.width/2) + boundsPadding)) && (!this.shapeStyle?.border || (centerDist > (((this.sprite.width/2) - this.shapeStyle?.lineWidth) - boundsPadding)))) {
@@ -694,16 +694,17 @@ class DraggableContainer extends PIXI.Container {
 
     // TODO: Clean up / combine these two functions.
     setSelectionColor(color) {
-        const width = this.building?.width ? this.building.width * METER_PIXEL_SIZE : this.sprite?.width ?? 0;
-        const height = this.building?.length ? this.building.length * METER_PIXEL_SIZE : this.sprite?.height ?? 0;
+        const width = this.building?.width ? this.building.width * METER_BOARD_PIXEL_SIZE : this.sprite?.width ?? 0;
+        const height = this.building?.length ? this.building.length * METER_BOARD_PIXEL_SIZE : this.sprite?.height ?? 0;
         this.setSelectionSize(width, height, color);
     }
     
     setSelectionSize(width, height, color = COLOR_ORANGE) {
+        const borderWidth = 6;
         this.selectionArea.clear();
-        this.selectionArea.lineStyle(SELECTION_BORDER_WIDTH, color);
+        this.selectionArea.lineStyle(borderWidth, color);
         if (this.building?.radius) {
-            this.selectionArea.drawCircle(0, 0, this.building.radius * METER_PIXEL_SIZE);
+            this.selectionArea.drawCircle(0, 0, this.building.radius * METER_BOARD_PIXEL_SIZE);
         } else if (this.building?.hitArea && (game.settings.enableDebug || this.building.hitArea?.length === 1)) {
             if (game.settings.enableDebug) {
                 for (const poly of this.building.hitArea) {
@@ -713,7 +714,7 @@ class DraggableContainer extends PIXI.Container {
                 this.selectionArea.drawPolygon(new PIXI.Polygon(this.building.hitArea[0].shape));
             }
         } else {
-            this.selectionArea.drawRect(-(width/2)-SELECTION_BORDER_WIDTH, -(height/2)-SELECTION_BORDER_WIDTH, width+(SELECTION_BORDER_WIDTH*2), height+(SELECTION_BORDER_WIDTH*2));
+            this.selectionArea.drawRect(-(width/2)-borderWidth, -(height/2)-borderWidth, width+(borderWidth*2), height+(borderWidth*2));
         }
     }
     

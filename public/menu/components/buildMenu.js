@@ -509,8 +509,8 @@ Vue.component('app-menu-building-selected', {
         updateDebugProps: function() {
             const selectedEntity = game.getSelectedEntity();
             if (selectedEntity && this.debug?.textureOffset) {
-                selectedEntity.sprite.x = (-this.debug.textureOffset.x / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
-                selectedEntity.sprite.y = (-this.debug.textureOffset.y / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
+                selectedEntity.sprite.x = (-this.debug.textureOffset.x * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
+                selectedEntity.sprite.y = (-this.debug.textureOffset.y * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
             }
         },
         recoverConnections: function() {

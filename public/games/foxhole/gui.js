@@ -177,7 +177,7 @@ Vue.component('app-menu-statistics', {
                     let totalConsumptionRate = consumptionRate * maintenanceConsumptionRate;
                     for (const maintenanceTunnel of maintenanceTunnels) {
                         if (totalConsumptionRate > 0 && (buildingData.category !== 'vehicles' && buildingData.category !== 'trains' && buildingData.category !== 'world') &&
-                            (maintenanceTunnel === entity || (Math.distanceBetween(entity, maintenanceTunnel) < (maintenanceTunnel.maintenanceFilters.range * METER_PIXEL_SIZE))) &&
+                            (maintenanceTunnel === entity || (Math.distanceBetween(entity, maintenanceTunnel) < (maintenanceTunnel.maintenanceFilters.range * METER_BOARD_PIXEL_SIZE))) &&
                             !maintenanceTunnel.maintenanceFilters.exclusions.includes(buildingData.category)) {
                             maintenanceTunnel.maintainedConsumptionRate += consumptionRate;
                             maintenanceTunnel.maintainedStructures += 1;

@@ -5,8 +5,8 @@ class FoxholeStructureSocket extends PIXI.Container {
         this.structure = parent;
         this.connections = {};
         this.socketData = socketData;
-        this.socketData.x = x ?? (isNaN(this.socketData.x) ? 0 : (-parent.building.pxWidth/2) + ((this.socketData.x / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE));
-        this.socketData.y = y ?? (isNaN(this.socketData.y) ? 0 : (-parent.building.pxLength/2) + ((this.socketData.y / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE));
+        this.socketData.x = x ?? (isNaN(this.socketData.x) ? 0 : (-parent.building.pxWidth/2) + (this.socketData.x * METER_BOARD_PIXEL_SIZE));
+        this.socketData.y = y ?? (isNaN(this.socketData.y) ? 0 : (-parent.building.pxLength/2) + (this.socketData.y * METER_BOARD_PIXEL_SIZE));
         this.socketData.rotation = rotation ?? this.socketData.rotation;
         this.position.set(this.socketData.x, this.socketData.y);
         this.rotation = rotation ?? Math.deg2rad(this.socketData.rotation);
@@ -32,13 +32,13 @@ class FoxholeStructureSocket extends PIXI.Container {
             } else if (parent.building?.textureBorder && !parent.building.trenchConnector) {
                 let textureBorder = game.resources[parent.building.textureBorder].texture;
                 this.pointer = new PIXI.Sprite(textureBorder);
-                this.pointer.width = textureBorder.width / METER_PIXEL_SCALE;
-                this.pointer.height = textureBorder.height / METER_PIXEL_SCALE;
+                this.pointer.width = textureBorder.width / METER_TEXTURE_PIXEL_SCALE;
+                this.pointer.height = textureBorder.height / METER_TEXTURE_PIXEL_SCALE;
                 this.pointer.anchor.set(0.5, 1.0);
             } else if (this.socketData.texture) {
                 this.pointer = new PIXI.Sprite(game.resources[this.socketData.texture].texture);
-                this.pointer.width = this.pointer.width / METER_PIXEL_SCALE;
-                this.pointer.height = this.pointer.height / METER_PIXEL_SCALE;
+                this.pointer.width = this.pointer.width / METER_TEXTURE_PIXEL_SCALE;
+                this.pointer.height = this.pointer.height / METER_TEXTURE_PIXEL_SCALE;
                 this.pointer.anchor.set(0.5, 0.5);
             }
             if (this.pointer) {
@@ -241,8 +241,8 @@ class FoxholeStructureSocket extends PIXI.Container {
             if (this.socketData.textureAlt) {
                 let texture = game.resources[visible ? this.socketData.texture : this.socketData.textureAlt].texture;
                 this.pointer.texture = texture;
-                this.pointer.width = texture.width / METER_PIXEL_SCALE;
-                this.pointer.height = texture.height / METER_PIXEL_SCALE;
+                this.pointer.width = texture.width / METER_TEXTURE_PIXEL_SCALE;
+                this.pointer.height = texture.height / METER_TEXTURE_PIXEL_SCALE;
                 visible = true;
             } else if (this.socketData.texture && !visible) {
                 if (connectedEntityIds.length === 1) {
@@ -275,7 +275,7 @@ class FoxholeStructure extends DraggableContainer {
         }
 
         if (this.building.hasHandle) {
-            this.addHandle(this.building.minLength > 1 ? this.building.minLength * METER_PIXEL_SIZE : 200);
+            this.addHandle(this.building.minLength > 1 ? this.building.minLength * METER_BOARD_PIXEL_SIZE : 200);
         }
 
         if (this.building.texture && !this.hasHandle) {
@@ -287,21 +287,21 @@ class FoxholeStructure extends DraggableContainer {
                 sprite.frameY = 0;
                 sprite.frameWidth = Math.floor(game.resources[this.building.texture.sheet].texture.width/this.building.texture.width);
                 sprite.frameHeight = Math.floor(game.resources[this.building.texture.sheet].texture.height/this.building.texture.height);
-                sprite.width = this.building.width * METER_PIXEL_SIZE;
-                sprite.height = this.building.length * METER_PIXEL_SIZE;
+                sprite.width = this.building.width * METER_BOARD_PIXEL_SIZE;
+                sprite.height = this.building.length * METER_BOARD_PIXEL_SIZE;
             } else if (game.resources[this.building.texture]) {
                 sprite = new PIXI.Sprite(game.resources[this.building.texture].texture);
                 sprite.frameWidth = game.resources[this.building.texture].texture.width;
                 sprite.frameHeight = game.resources[this.building.texture].texture.height;
-                sprite.width = sprite.frameWidth / METER_PIXEL_SCALE;
-                sprite.height = sprite.frameHeight / METER_PIXEL_SCALE;
+                sprite.width = sprite.frameWidth / METER_TEXTURE_PIXEL_SCALE;
+                sprite.height = sprite.frameHeight / METER_TEXTURE_PIXEL_SCALE;
             }
             if (!this.building.textureOffset) {
                 sprite.anchor.set(0.5);
             } else {
                 // TODO: Add support for percentages. <= 1 could set anchor so we don't need exact pixels.
-                sprite.x = (-this.building.textureOffset.x / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
-                sprite.y = (-this.building.textureOffset.y / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
+                sprite.x = (-this.building.textureOffset.x * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
+                sprite.y = (-this.building.textureOffset.y * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
             }
             this.sprite = sprite;
         }
@@ -335,8 +335,8 @@ class FoxholeStructure extends DraggableContainer {
         }
 
         if (!this.building.hasHandle) {
-            this.building.pxWidth = this.building.width ? this.building.width * METER_PIXEL_SIZE : this.sprite?.width ?? 0;
-            this.building.pxLength = this.building.length ? this.building.length * METER_PIXEL_SIZE : this.sprite?.height ?? 0;
+            this.building.pxWidth = this.building.width ? this.building.width * METER_BOARD_PIXEL_SIZE : this.sprite?.width ?? 0;
+            this.building.pxLength = this.building.length ? this.building.length * METER_BOARD_PIXEL_SIZE : this.sprite?.height ?? 0;
             this.setSelectionSize(this.building.pxWidth, this.building.pxLength);
         } else {
             this.selectionArea.clear();
@@ -707,25 +707,25 @@ class FoxholeStructure extends DraggableContainer {
                 this.rangeSprite.lineStyle(1, rangeColor);
                 if(!isNaN(rangeData.min)) {
                     const rangeArc = Math.deg2rad(rangeData.arc);
-                    this.rangeSprite.arc(0, 0, rangeData.min * METER_PIXEL_SIZE, Math.PI/2 + rangeArc, Math.PI/2 - rangeArc, true);
+                    this.rangeSprite.arc(0, 0, rangeData.min * METER_BOARD_PIXEL_SIZE, Math.PI/2 + rangeArc, Math.PI/2 - rangeArc, true);
                 } else {
                     this.rangeSprite.moveTo(0, 0);
                 }
                 const rangeArc = Math.deg2rad(rangeData.arc);
-                this.rangeSprite.arc(0, 0, rangeData.max * METER_PIXEL_SIZE, Math.PI/2 - rangeArc, Math.PI/2 + rangeArc);
+                this.rangeSprite.arc(0, 0, rangeData.max * METER_BOARD_PIXEL_SIZE, Math.PI/2 - rangeArc, Math.PI/2 + rangeArc);
                 if(isNaN(rangeData.min)) this.rangeSprite.lineTo(0, 0);
                 this.rangeSprite.endFill();
             } else if (!isNaN(rangeData.min)) {
-                this.rangeSprite.lineStyle((rangeData.max - rangeData.min) * METER_PIXEL_SIZE, rangeColor, 1);
-                this.rangeSprite.drawCircle(0, 0, ((rangeData.min + rangeData.max) / 2) * METER_PIXEL_SIZE);
+                this.rangeSprite.lineStyle((rangeData.max - rangeData.min) * METER_BOARD_PIXEL_SIZE, rangeColor, 1);
+                this.rangeSprite.drawCircle(0, 0, ((rangeData.min + rangeData.max) / 2) * METER_BOARD_PIXEL_SIZE);
             } else {
                 this.rangeSprite.beginFill(rangeColor);
-                this.rangeSprite.drawCircle(0, 0, rangeData.max * METER_PIXEL_SIZE);
+                this.rangeSprite.drawCircle(0, 0, rangeData.max * METER_BOARD_PIXEL_SIZE);
                 this.rangeSprite.endFill();
             }
             if (rangeData.overlap) {
                 this.rangeSprite.lineStyle(10, COLOR_RANGE_BORDER, 1);
-                this.rangeSprite.drawCircle(0, 0, rangeData.overlap * METER_PIXEL_SIZE);
+                this.rangeSprite.drawCircle(0, 0, rangeData.overlap * METER_BOARD_PIXEL_SIZE);
             }
             this.addChild(this.rangeSprite);
         }
@@ -790,8 +790,8 @@ class FoxholeStructure extends DraggableContainer {
                             }
                         }
                     } else {
-                        const w = ((e2.building?.width * METER_PIXEL_SIZE) || e2.sprite.width) / 2;
-                        const h = ((e2.building?.length * METER_PIXEL_SIZE) || e2.sprite.height) / 2;
+                        const w = ((e2.building?.width * METER_BOARD_PIXEL_SIZE) || e2.sprite.width) / 2;
+                        const h = ((e2.building?.length * METER_BOARD_PIXEL_SIZE) || e2.sprite.height) / 2;
                         polygons.push([
                             this.toLocal({ x: -w, y: -h }, e2),
                             this.toLocal({ x: w, y: -h }, e2),
@@ -802,7 +802,7 @@ class FoxholeStructure extends DraggableContainer {
                 }
             }
             
-            const maxDist = (this.building.range.max * 2) * METER_PIXEL_SIZE, hitPoints = [];
+            const maxDist = (this.building.range.max * 2) * METER_BOARD_PIXEL_SIZE, hitPoints = [];
 
             hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, { x: -maxDist, y: -maxDist }) || { x: -maxDist, y: -maxDist });
             hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, { x: maxDist, y: -maxDist }) || { x: maxDist, y: -maxDist });
@@ -1300,7 +1300,7 @@ class FoxholeStructure extends DraggableContainer {
 
                     // TODO: Get the max rotation for a socket from the data.
                     const maxAngle = Math.deg2rad((15 * 3) + 1), angleBetweenPoints = Math.angleBetween(frontPoint, endPoint);
-                    const limitReached = (this.building?.minLength && (Math.distanceBetween(frontPoint, endPoint) < (this.building.minLength * METER_PIXEL_SIZE))) || ((Math.abs(angleBetweenPoints) > maxAngle) || (Math.abs(Math.angleNormalized(-angleBetweenPoints + endPoint.rotation + Math.PI)) > maxAngle));
+                    const limitReached = (this.building?.minLength && (Math.distanceBetween(frontPoint, endPoint) < (this.building.minLength * METER_BOARD_PIXEL_SIZE))) || ((Math.abs(angleBetweenPoints) > maxAngle) || (Math.abs(Math.angleNormalized(-angleBetweenPoints + endPoint.rotation + Math.PI)) > maxAngle));
                     if (limitReached) {
                         this.sprite.trapezoid.floor.tint = COLOR_RED;
                         connectorTopBorder.tint = COLOR_RED;
@@ -1413,7 +1413,7 @@ class FoxholeStructure extends DraggableContainer {
                         }
                     }
                     this.bezier = new Bezier(bezierPoints);
-                    const lut = this.bezier.getLUT(Math.round(this.bezier.length()/TRACK_SEGMENT_LENGTH));
+                    const lut = this.bezier.getLUT(Math.round(this.bezier.length()/16));
                     if (this.building.texture) {
                         game.resources[this.building.texture].texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
                         this.sprite.rope = new PIXI.SimpleRope(game.resources[this.building.texture].texture, lut, 1);

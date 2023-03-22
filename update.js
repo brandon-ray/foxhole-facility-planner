@@ -269,6 +269,11 @@ function iterateSocketData(data) {
             const socketCopy = {};
             for (const key of socketDataKeys) {
                 if (socket[key] !== undefined) {
+                    /*
+                    if (key === 'x' || key === 'y') {
+                        socket[key] = ((socket[key] / 1.056) / 100).round(2);
+                    }
+                    */
                     socketCopy[key] = socket[key];
                 }
             }
@@ -350,8 +355,6 @@ async function iterateStructures(dirPath) {
                                     'length': structureData.length,
                                     'radius': structureData.radius,
                                     'range': structureData.range,
-                                    //'overlapDist': structure.MinDistanceToSameStructure ? structure.MinDistanceToSameStructure / METER_UNREAL_UNITS : undefined,
-                                    'overlapDist': structureData.overlapDist,
                                     'sortLayer': structureData.sortLayer,
                                     'sortOffset': structureData.sortOffset,
                                     'hitArea': undefined,
@@ -369,7 +372,6 @@ async function iterateStructures(dirPath) {
                                     'textureBorder': structureData.textureBorder,
                                     'textureFrontCap': structureData.textureFrontCap,
                                     'textureBackCap': structureData.textureBackCap,
-                                    'textureIcon': structureData.textureIcon,
                                     'textureOffset': structureData.textureOffset,
                                     'garrisonSupplyMultiplier': structure.DecaySupplyDrain ?? baseData.garrisonSupplyMultiplier ?? structureData.garrisonSupplyMultiplier,
                                     'power': (structure.PowerGridInfo?.PowerDelta ?? baseData.power) / 1000 || undefined,
@@ -399,7 +401,6 @@ async function iterateStructures(dirPath) {
                                 if (structureData.texture) {
                                     structureData.hitArea = await getStructureHitArea(structureData);
                                 }
-                                iterateSocketData(structureData);
                                 initializeStructureItems(structure);
                                 if (structureData.techId) {
                                     techList[structureData.techId] = {};
@@ -457,7 +458,6 @@ async function iterateStructures(dirPath) {
                                             'ConversionEntries': modificationData?.ConversionEntries
                                             // There is a FuelCost variable which is never used here.
                                         }
-                                        iterateSocketData(modificationData);
                                         if (modificationData.texture) {
                                             modificationData.hitArea = await getStructureHitArea(modificationData);
                                         }
@@ -840,7 +840,7 @@ function findFile(directory, fileName) {
     return null;
 }
 
-const METER_PIXEL_SCALE = 1.5625; // 50 / 32
+const METER_PIXEL_SCALE = 52.8 / 32; // Meter in pixels of a texture divided by the width of a meter on the grid / board.
 async function getStructureHitArea(structureData) {
     const shapes = structurePolygons[path.basename(structureData.texture, '.webp')];
     if (shapes) {
@@ -851,8 +851,8 @@ async function getStructureHitArea(structureData) {
                 const shape = shapes[i].shape;
                 let adjustedShape = [];
                 for (let i = 0; i < shape.length; i += 2) {
-                    adjustedShape.push((shape[i] - ((structureData.textureOffset?.x ?? texture.width) / 2)) / METER_PIXEL_SCALE);
-                    adjustedShape.push((shape[i + 1] - ((structureData.textureOffset?.y ?? texture.height) / 2)) / METER_PIXEL_SCALE);
+                    adjustedShape.push(((shape[i] - ((structureData.textureOffset?.x ?? texture.width) / 2)) / METER_PIXEL_SCALE).round(2));
+                    adjustedShape.push(((shape[i + 1] - ((structureData.textureOffset?.y ?? texture.height) / 2)) / METER_PIXEL_SCALE).round(2));
                 }
                 hitAreaPolygons.push({ 'shape': `[ ${adjustedShape.join()} ]` });
             }
@@ -860,6 +860,11 @@ async function getStructureHitArea(structureData) {
         }
     }
     return undefined;
+}
+
+Number.prototype.round = function(n) {
+    const d = Math.pow(10, n);
+    return Math.round((this + Number.EPSILON) * d) / d;
 }
 
 async function updateData() {
@@ -1010,9 +1015,11 @@ async function updateData() {
 
     structureList = Object.keys(structureList).reduce((structures, codeName) => {
         let structure = structureList[codeName];
+        iterateSocketData(structure);
         if (structure.upgrades) {
             structure.upgrades = Object.keys(structure.upgrades).reduce((upgrades, codeName) => {
                 let upgrade = structure.upgrades[codeName];
+                iterateSocketData(upgrade);
                 upgrades[upgrade.id ?? codeName] = structure.upgrades[codeName];
                 delete upgrade.id;
                 return upgrades;

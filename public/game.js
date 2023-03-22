@@ -1,4 +1,4 @@
-const SAVE_VERSION = '1.0.0';
+const SAVE_VERSION = '1.0.1';
 
 const COLOR_WHITE = 0xFFFFFF; // Also resets tint.
 const COLOR_DARKGREY = 0x505050;
@@ -44,11 +44,11 @@ const DEFAULT_SHAPE_STYLE = {
     lineColor: COLOR_WHITE
 };
 
-const METER_PIXEL_SIZE = 32;
-const METER_UNREAL_UNITS = 100, METER_PIXEL_UNIT = 50; // 100 Unreal Units = 50 Pixels // Both equivalent to one meter.
-const METER_TEXTURE_SCALE = METER_UNREAL_UNITS / METER_PIXEL_UNIT;
-const METER_PIXEL_SCALE = METER_PIXEL_UNIT / METER_PIXEL_SIZE;
-const SELECTION_BORDER_WIDTH = 6, TRACK_SEGMENT_LENGTH = 16;
+const TEXTURE_SCALE = 0.5; // Scale for textures to adjust values after the texture has been resized.
+
+const METER_BOARD_PIXEL_SIZE = 32; // Size of a grid square in pixels.
+const METER_TEXTURE_PIXEL_SIZE = 52.8; // Size of a meter in pixels from a texture generated with Blender that's resized by 0.5.
+const METER_TEXTURE_PIXEL_SCALE = METER_TEXTURE_PIXEL_SIZE / METER_BOARD_PIXEL_SIZE;
 
 const game = {
     services: {},
@@ -946,8 +946,8 @@ try {
         mapRegion = new PIXI.Sprite();
         // mapRegion.width = 1024; // 2162m x 32?
         // mapRegion.height = 888; // 1875m x 32?
-        mapRegion.width = 2162 * METER_PIXEL_SIZE;
-        mapRegion.height = 1875 * METER_PIXEL_SIZE; // 125m x 15u
+        mapRegion.width = 2162 * METER_BOARD_PIXEL_SIZE;
+        mapRegion.height = 1875 * METER_BOARD_PIXEL_SIZE; // 125m x 15u
         mapRegion.x = GRID_WIDTH/2;
         mapRegion.y = GRID_HEIGHT/2;
         mapRegion.anchor.set(0.5);
@@ -1228,6 +1228,24 @@ try {
                     remapSocketIdTo(2, 3);
                 }
             }
+            saveObject.version = '1.0.0';
+        }
+        if (saveObject.version === '1.0.0') {
+            console.log('Upgrading save from v1.0.0 => v1.0.1');
+            const scalePositionData = function(obj) {
+                for (const key in obj) {
+                    const value = obj[key];
+                    if (typeof value === 'object' && value !== null) {
+                        scalePositionData(value);
+                    } else if (key === 'x' || key === 'y') {
+                        obj[key] /= 1.056;
+                    }
+                }
+            }
+            for (const entity of saveObject.entities) {
+                scalePositionData(entity);
+            }
+            saveObject.version = '1.0.1';
         }
         if (isSelection) {
             game.deselectEntities(false, true);
@@ -2136,7 +2154,7 @@ try {
                     let offsetX = 0, offsetY = 0;
                     if (ignoreOffset) {
                         if (entity.building?.hasHandle) {
-                            offsetX = entity.building.minLength > 1 ? (entity.building.minLength * METER_PIXEL_SIZE) / 2 : 100;
+                            offsetX = entity.building.minLength > 1 ? (entity.building.minLength * METER_BOARD_PIXEL_SIZE) / 2 : 100;
                         } else if (entity.subtype === 'rectangle' || entity.subtype === 'image' || entity.subtype === 'line') {
                             offsetX = entity.mid.x;
                             offsetY = entity.mid.y;
@@ -2234,12 +2252,12 @@ try {
             if (upgradeKey) {
                 let position = { x: clone.x, y: clone.y };
                 if (entity.building?.positionOffset) {
-                    position.x -= ((entity.building.positionOffset.x ?? 0) / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
-                    position.y -= ((entity.building.positionOffset.y ?? 0) / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
+                    position.x -= ((entity.building.positionOffset.x ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
+                    position.y -= ((entity.building.positionOffset.y ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
                 }
                 if (clone.building?.positionOffset) {
-                    position.x += ((clone.building.positionOffset.x ?? 0) / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
-                    position.y += ((clone.building.positionOffset.y ?? 0) / METER_TEXTURE_SCALE) / METER_PIXEL_SCALE;
+                    position.x += ((clone.building.positionOffset.x ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
+                    position.y += ((clone.building.positionOffset.y ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
                 }
                 position = Math.rotateAround(clone, position);
                 clone.position.set(position.x, position.y);
