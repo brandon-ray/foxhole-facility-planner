@@ -398,6 +398,9 @@ async function iterateStructures(dirPath) {
                                     'ConversionEntries': structure.ConversionEntries,
                                     'upgrades': structureData.upgrades
                                 }
+                                if (structure.MaximumRange) {
+                                    structureData.range.max = structure.MaximumRange / METER_UNREAL_UNITS;
+                                }
                                 if (structureData.texture) {
                                     structureData.hitArea = await getStructureHitArea(structureData);
                                 }

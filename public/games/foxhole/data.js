@@ -4104,7 +4104,7 @@ const gameData = {
 					"range": {
 						"type": "killbox",
 						"lineOfSight": true,
-						"max": 25
+						"max": 29
 					},
 					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/FortT1GunAIIcon.webp",

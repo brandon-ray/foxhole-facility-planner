@@ -1231,7 +1231,7 @@ try {
             saveObject.version = '1.0.0';
         }
         if (saveObject.version === '1.0.0') {
-            console.log('Upgrading save from v1.0.0 => v1.0.1');
+            console.info('Upgrading save from v1.0.0 => v1.0.1');
             const scalePositionData = function(obj) {
                 for (const key in obj) {
                     const value = obj[key];
