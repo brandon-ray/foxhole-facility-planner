@@ -269,19 +269,7 @@ Vue.component('app-game-confirmation-popup', {
 Vue.component('app-game-toolbelt', {
     computed: {
         getSearchResults() {
-            let results = [];
-            if (this.searchQuery) {
-                for (const category of Object.values(window.objectData.categories)) {
-                    if (game.settings.enableExperimental || !category.experimental) {
-                        for (const building of category.buildings) {
-                            if (!building.preset && building.name && building.name.toLowerCase().includes(this.searchQuery.toLowerCase()) && game.canShowListItem(building, true)) {
-                                results.push(building);
-                            }
-                        }
-                    }
-                }
-            }
-            return results;
+            return game.getSearchResults(this.searchQuery, false);
         }
     },
     mounted: function() {
