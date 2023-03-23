@@ -2504,31 +2504,33 @@ try {
     
     let fuse;
     function updateBuildingDB() {
-        let searchBuildings = Object.values(window.objectData.categories).reduce((acc, category) => {
-            if (game.settings.enableExperimental || !category.experimental) {
-                acc.push(...category.buildings);
-            }
-            return acc;
-        }, []);
-        fuse = new Fuse(searchBuildings, {
-            keys: [
-                { name: 'name', weight: 0.8 },
-                { name: 'aliases', weight: 0.7 },
-                { name: 'upgradeName', weight: 0.6 },
-                { name: 'key', weight: 0.4 },
-                { name: 'category', weight: 0.3 },
-                { name: 'description', weight: 0.2 },
-                { name: 'author', weight: 0.2 }
-            ],
-            includeMatches: true,
-            threshold: 0.4,
-            distance: 100
-        });
+        if (window.objectData) {
+            let searchBuildings = Object.values(window.objectData.categories).reduce((acc, category) => {
+                if (game.settings.enableExperimental || !category.experimental) {
+                    acc.push(...category.buildings);
+                }
+                return acc;
+            }, []);
+            fuse = new Fuse(searchBuildings, {
+                keys: [
+                    { name: 'name', weight: 0.8 },
+                    { name: 'aliases', weight: 0.7 },
+                    { name: 'upgradeName', weight: 0.6 },
+                    { name: 'key', weight: 0.4 },
+                    { name: 'category', weight: 0.3 },
+                    { name: 'description', weight: 0.2 },
+                    { name: 'author', weight: 0.2 }
+                ],
+                includeMatches: true,
+                threshold: 0.4,
+                distance: 100
+            });
+        }
     }
     updateBuildingDB();
 
     game.getSearchResults = function(query, presets = true) {
-        return fuse.search(query).map(result => result.item).filter(building => (presets || !building.preset) && game.canShowListItem(building, true));
+        return fuse ? fuse.search(query).map(result => result.item).filter(building => (presets || !building.preset) && game.canShowListItem(building, true)) : [];
     };
 
     game.canShowListItem = function(building, search = false, filters = game.settings) {
