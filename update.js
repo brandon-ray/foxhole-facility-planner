@@ -626,6 +626,8 @@ function iterateData(filePath, list, type) {
                         }
                         if (data.ResourceAmounts && data.ResourceAmounts.Resource.CodeName !== 'None') {
                             listItem.cost = getResourceCosts(data.ResourceAmounts);
+                        } else if (data.AltResourceAmounts && data.AltResourceAmounts.Resource.CodeName !== 'None') {
+                            listItem.cost = getResourceCosts(data.AltResourceAmounts);
                         }
                     }
                 }

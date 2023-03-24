@@ -3151,6 +3151,11 @@ const gameData = {
 			],
 			"techId": "unlockemplacedatlarge",
 			"maxHealth": 2650,
+			"cost": {
+				"facilitymaterials2": 135,
+				"facilitymaterials4": 10,
+				"facilitymaterials7": 15
+			},
 			"repairCost": 300
 		},
 		"emplacedatw": {
@@ -3232,6 +3237,11 @@ const gameData = {
 			],
 			"techId": "unlockemplacedcannonlarge",
 			"maxHealth": 2650,
+			"cost": {
+				"facilitymaterials2": 135,
+				"facilitymaterials4": 10,
+				"facilitymaterials7": 15
+			},
 			"repairCost": 300
 		},
 		"emplacedheavyartilleryc": {
