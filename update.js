@@ -259,7 +259,7 @@ function iterateUpgradeCodeNames(dirPath) {
     });
 }
 
-const socketDataKeys = ['id', 'name', 'type', 'texture', 'textureAlt', 'below', 'flow', 'cap', 'x', 'y', 'rotation', 'connectionLimit'];
+const socketDataKeys = ['id', 'name', 'type', 'texture', 'textureAlt', 'below', 'flow', 'cap', 'x', 'y', 'rotation', 'ignoreSnap', 'connectionLimit'];
 
 // TODO: sortUpdateData(keys, data, base)
 function iterateSocketData(data) {
@@ -337,7 +337,7 @@ async function iterateStructures(dirPath) {
                                 structureData = {
                                     'id': structureData.id,
                                     'name': structure.DisplayName?.SourceString ?? (baseData.name ?? structure.CodeName),
-                                    'aliases': structureData.className,
+                                    'aliases': structureData.aliases,
                                     'className': structureData.className,
                                     'codeName': structure.CodeName,
                                     'parentKey': structureData.parentKey,
@@ -382,7 +382,9 @@ async function iterateStructures(dirPath) {
                                     'canSnapAlongBezier': structureData.canSnapAlongBezier,
                                     'canUnion': structureData.canUnion,
                                     'ignoreSnapSettings': structureData.ignoreSnapSettings,
+                                    'snapGrab': structureData.snapGrab,
                                     'snapNearest': structureData.snapNearest,
+                                    'emplaced': structureData.emplaced,
                                     'requireConnection': structureData.requireConnection,
                                     'sockets': structureData.sockets,
                                     'vehicle': structureData.vehicle,
@@ -573,6 +575,17 @@ function iterateData(filePath, list, type) {
                         }
                         weaponList[codeName] = weapon;
                     }
+                } else if (type === 'gunner' && codeName.endsWith('gunner') && list[codeName.slice(0, -6)]) {
+                    listItem = list[codeName.slice(0, -6)];
+                    if (!listItem.range) {
+                        listItem.range = {
+                            type: '',
+                            min: 0,
+                            max: 0
+                        };
+                    }
+                    listItem.range.min = data.MinDistance / 100; // ArtilleryAccuracyMinDist
+                    listItem.range.max = data.MaxDistance / 100; // ArtilleryAccuracyMaxDist / MaxReachability
                 } else if (type === 'damageType') {
                     for (const [key, weapon] of Object.entries(weaponList)) {
                         if (weapon.damageType?.type === codeName) {
@@ -872,8 +885,47 @@ Number.prototype.round = function(n) {
 }
 
 async function updateData() {
-    /*
     const presetsDir = './public/games/foxhole/assets/presets/';
+    fs.readdir(presetsDir, (err, files) => {
+        if (err) {
+            console.error('Error reading directory:', err);
+            return;
+        }
+        files.forEach(file => {
+            if (path.extname(file) === '.json') {
+                const filePath = path.join(presetsDir, file);
+                fs.readFile(filePath, 'utf8', (err, data) => {
+                    if (err) {
+                        console.error('Error reading file:', filePath, err);
+                        return;
+                    }
+                    try {
+                        const preset = JSON.parse(data);
+                        let subDirName = path.basename(file, '.json');
+                        let subDirPath = path.join(presetsDir, subDirName);
+                        let subDirIndex = 0;
+                        while (fs.existsSync(subDirPath)) {
+                            subDirIndex++;
+                            subDirName = path.basename(file, '.json') + subDirIndex;
+                            subDirPath = path.join(presetsDir, subDirName);
+                        }
+
+                        fs.mkdirSync(subDirPath);
+                        fs.renameSync(filePath, path.join(subDirPath, 'preset.json'));
+
+                        foxholeData.presets[subDirName] = {
+                            name: preset.name,
+                            description: preset.description,
+                            author: preset.authors
+                        }
+                    } catch (e) {
+                        console.error('Error processing file:', filePath, e);
+                    }
+                });
+            }
+        });
+    });
+
     Object.entries(foxholeData.presets).forEach(([key, preset]) => {
         const fullresPrePath = presetsDir + key + '.png';
         const directoryPath = presetsDir + key + '/';
@@ -883,68 +935,113 @@ async function updateData() {
 
         if (fs.existsSync(fullresPrePath)) {
             fs.renameSync(fullresPrePath, fullresPath);
-        }
 
-        if (preset.file) {
-            const sourceFilePath = presetsDir + preset.file + '.json';
-            const newFilePath = path.join(directoryPath, 'preset.json');
+            /*
+            if (preset.file) {
+                const sourceFilePath = presetsDir + preset.file + '.json';
+                const newFilePath = path.join(directoryPath, 'preset.json');
 
-            if (fs.existsSync(directoryPath)) {
-                console.error(`Error: Subdirectory "${directoryPath}" already exists.`);
-                return;
-            }
-
-            fs.mkdirSync(directoryPath);
-            fs.renameSync(sourceFilePath, newFilePath);
-
-            delete preset.file;
-        }
-
-        const padding = 50; // trim({ threshold: 50 })
-        sharp(fullresPath).metadata().then(metadata => {
-            const resizeWidth = Math.max(metadata.width + (padding * 2), metadata.height + (padding * 2));
-            sharp(fullresPath)
-            .extend({ top: resizeWidth - metadata.width / 2, bottom: resizeWidth - metadata.width / 2, left: resizeWidth - metadata.height / 2, right: resizeWidth - metadata.height / 2, background: { r: 0, g: 0, b: 0, alpha: 0 } })
-            .toBuffer((err, resizedImage, resizeInfo) => {
-                if (err) {
-                    console.error(err);
+                if (fs.existsSync(directoryPath)) {
+                    console.error(`Error: Subdirectory "${directoryPath}" already exists.`);
                     return;
                 }
-                sharp(resizedImage).trim().toBuffer((err, buffer, trimInfo) => {
+
+                fs.mkdirSync(directoryPath);
+                fs.renameSync(sourceFilePath, newFilePath);
+
+                delete preset.file;
+            }
+            */
+
+            const padding = 50; // trim({ threshold: 50 })
+            sharp(fullresPath).metadata().then(metadata => {
+                const resizeWidth = Math.max(metadata.width + (padding * 2), metadata.height + (padding * 2));
+                sharp(fullresPath)
+                .extend({ top: resizeWidth - metadata.width / 2, bottom: resizeWidth - metadata.width / 2, left: resizeWidth - metadata.height / 2, right: resizeWidth - metadata.height / 2, background: { r: 0, g: 0, b: 0, alpha: 0 } })
+                .toBuffer((err, resizedImage, resizeInfo) => {
                     if (err) {
                         console.error(err);
                         return;
                     }
-                    let leftOffset = Math.max(-trimInfo.trimOffsetLeft - padding, 0);
-                    let topOffset = Math.max(-trimInfo.trimOffsetTop - padding, 0);
-    
-                    let width = Math.min(trimInfo.width + (padding * 2), resizeInfo.width);
-                    let height = Math.min(trimInfo.height + (padding * 2), resizeInfo.height);
-
-                    sharp(resizedImage).extract({ left: leftOffset, top: topOffset, width: width, height: height }).resize({ width: 512 }).webp({ quality: 90 }).toFile(previewPath, (err, info) => {
-                        if (err) {
-                            console.error(err, fullresPath, metadata, resizeInfo, resizeWidth, leftOffset, topOffset, width, height);
-                            return;
-                        }
-                    });
-    
-                    const maxSize = Math.max(width, height);
-                    leftOffset += width / 2;
-                    topOffset += height / 2;
-                    leftOffset -= maxSize / 2;
-                    topOffset -= maxSize / 2;
-    
-                    sharp(resizedImage).extract({ left: Math.round(leftOffset), top: Math.round(topOffset), width: maxSize, height: maxSize }).resize({ width: 256 }).webp({ quality: 90 }).toFile(iconPath, (err, info) => {
+                    sharp(resizedImage).trim().toBuffer((err, buffer, trimInfo) => {
                         if (err) {
                             console.error(err);
                             return;
                         }
+                        let leftOffset = Math.max(-trimInfo.trimOffsetLeft - padding, 0);
+                        let topOffset = Math.max(-trimInfo.trimOffsetTop - padding, 0);
+        
+                        let width = Math.min(trimInfo.width + (padding * 2), resizeInfo.width);
+                        let height = Math.min(trimInfo.height + (padding * 2), resizeInfo.height);
+
+                        sharp(resizedImage).extract({ left: leftOffset, top: topOffset, width: width, height: height }).resize({ width: 512 }).webp({ quality: 90 }).toFile(previewPath, (err, info) => {
+                            if (err) {
+                                console.error(err, fullresPath, metadata, resizeInfo, resizeWidth, leftOffset, topOffset, width, height);
+                                return;
+                            }
+                        });
+        
+                        const maxSize = Math.max(width, height);
+                        leftOffset += width / 2;
+                        topOffset += height / 2;
+                        leftOffset -= maxSize / 2;
+                        topOffset -= maxSize / 2;
+        
+                        sharp(resizedImage).extract({ left: Math.round(leftOffset), top: Math.round(topOffset), width: maxSize, height: maxSize }).resize({ width: 256 }).webp({ quality: 90 }).toFile(iconPath, (err, info) => {
+                            if (err) {
+                                console.error(err);
+                                return;
+                            }
+                        });
                     });
                 });
             });
-        });
+        }
     });
-    */
+
+    const importDirectory = './public/games/foxhole/assets/game/Textures/Import';
+    const exportDirectory = './public/games/foxhole/assets/game/Textures/Structures';
+
+    fs.readdirSync(importDirectory).forEach(file => {
+        if (file.endsWith('.png')) {
+            sharp(`${importDirectory}/${file}`).metadata((err, metadata) => {
+                if (err) {
+                    throw err;
+                }
+
+                sharp(`${importDirectory}/${file}`).trim().toBuffer((err, data, info) => {
+                    if (err) {
+                        throw err;
+                    }
+
+                    const origin = {
+                        x: Math.round(metadata.width / 2) + info.trimOffsetLeft,
+                        y: Math.round(metadata.height / 2) + info.trimOffsetTop
+                    }
+
+                    const trimOrigin = {
+                        x: Math.round(info.width / 2),
+                        y: Math.round(info.height / 2)
+                    }
+
+                    const structureName = file.split('.')[0].toLowerCase();
+                    if (structureList[structureName]) {
+                        sharp(data).resize(Math.round(info.width / 2), Math.round(info.height / 2)).webp({ quality: 90 }).toFile(`${exportDirectory}/${structureName}.webp`, (err) => {
+                            if (err) {
+                                throw err;
+                            }
+                        });
+                        structureList[structureName].textureOffset = {
+                            x: trimOrigin.x - (trimOrigin.x - origin.x),
+                            y: trimOrigin.y - (trimOrigin.y - origin.y)
+                        };
+                    } else {
+                        console.info('Could not find structure for imported image in list: ', structureName);
+                    }
+                });
+            });
+        }
+    });
 
     // Switch IDs for CodeNames so the parser has an easier time identifying entries as their Foxhole counterpart.
     structureList = Object.keys(structureList).reduce((structures, id) => {
@@ -987,6 +1084,7 @@ async function updateData() {
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPAmmoDynamicData.json`, weaponList, 'weapon');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/DTDamageProfiles.json`, weaponList, 'damageType');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPMapList.json`, foxholeData.maps, 'map');
+    iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPMountDynamicData.json`, structureList, 'gunner');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, structureList);
 
     for (const [codeName, structureData] of Object.entries(structureList)) {

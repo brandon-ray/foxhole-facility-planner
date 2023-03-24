@@ -3114,6 +3114,416 @@ const gameData = {
 				}
 			}
 		},
+		"emplacedatlargew": {
+			"name": "Huber Starbreaker 94.5mm",
+			"codeName": "EmplacedATLargeW",
+			"description": "Built to compliment other free-standing artillery pieces, the emplaced Huber Starbreaker launches 94.5mm shells over very long distances. A necessary tool for infantry to knock back armoured Colonial advances.",
+			"category": "shippables",
+			"categoryOrder": 50,
+			"faction": "w",
+			"width": 4,
+			"length": 4,
+			"radius": 2,
+			"range": {
+				"type": "killboxAT",
+				"lineOfSight": true,
+				"min": 1.5,
+				"max": 45
+			},
+			"icon": "game/Textures/UI/StructureIcons/EmplacedATLargeWIcon.webp",
+			"texture": "game/Textures/Structures/emplacedatlargew.webp",
+			"textureOffset": {
+				"x": 203,
+				"y": 248
+			},
+			"canSnap": true,
+			"canSnapRotate": true,
+			"snapGrab": true,
+			"emplaced": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "emplacement",
+					"x": 2,
+					"y": 2,
+					"rotation": 0
+				}
+			],
+			"techId": "unlockemplacedatlarge",
+			"maxHealth": 2650,
+			"repairCost": 300
+		},
+		"emplacedatw": {
+			"name": "Leary Shellbore 68mm",
+			"codeName": "EmplacedATW",
+			"description": "A defensive emplacement with a 68mm Anti-tank cannon. This rudimentary weapon was once built to fit onto the hull of large naval vessels, but was eventually phased out and repurposed.",
+			"category": "shippables",
+			"categoryOrder": 50,
+			"faction": "w",
+			"width": 4,
+			"length": 4,
+			"radius": 2,
+			"range": {
+				"type": "killboxAT",
+				"lineOfSight": true,
+				"min": 1.5,
+				"max": 45
+			},
+			"icon": "game/Textures/UI/StructureIcons/EmplacedATIcon.webp",
+			"texture": "game/Textures/Structures/emplacedatw.webp",
+			"textureOffset": {
+				"x": 203,
+				"y": 203
+			},
+			"canSnap": true,
+			"canSnapRotate": true,
+			"snapGrab": true,
+			"emplaced": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "emplacement",
+					"x": 2,
+					"y": 2,
+					"rotation": 0
+				}
+			],
+			"techId": "unlockemplacedatgun",
+			"maxHealth": 1500,
+			"cost": {
+				"cloth": 150
+			},
+			"repairCost": 100
+		},
+		"emplacedcannonlargec": {
+			"name": "DAE 2a-1 “Ruptura”",
+			"codeName": "EmplacedCannonLargeC",
+			"description": "Not to be outdone by its counterparts, the 2a-1 “Ruptura” is fitted with a 75mm cannon. Designed to aid in holding ground for longer durations, the “Ruptura” is a strong, efficient anti-armour tool.",
+			"category": "shippables",
+			"categoryOrder": 50,
+			"faction": "c",
+			"width": 4,
+			"length": 4,
+			"radius": 2,
+			"range": {
+				"type": "killboxAT",
+				"lineOfSight": true,
+				"min": 1.5,
+				"max": 45
+			},
+			"icon": "game/Textures/UI/StructureIcons/EmplacedCannonLargeC.webp",
+			"texture": "game/Textures/Structures/emplacedcannonlargec.webp",
+			"textureOffset": {
+				"x": 203,
+				"y": 252
+			},
+			"canSnap": true,
+			"canSnapRotate": true,
+			"snapGrab": true,
+			"emplaced": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "emplacement",
+					"x": 2,
+					"y": 2,
+					"rotation": 0
+				}
+			],
+			"techId": "unlockemplacedcannonlarge",
+			"maxHealth": 2650,
+			"repairCost": 300
+		},
+		"emplacedheavyartilleryc": {
+			"name": "50-500 “Thunderbolt” Cannon",
+			"codeName": "EmplacedHeavyArtilleryC",
+			"description": "This heavy artillery cannon is designed to cripple enemy fortifications from an entrenched position. Its long heavy barrel gives the \"Thunderbolt\" outstanding range.",
+			"category": "shippables",
+			"categoryOrder": 50,
+			"faction": "c",
+			"width": 4,
+			"length": 4,
+			"radius": 2,
+			"range": {
+				"type": "killboxArty",
+				"min": 200,
+				"max": 350
+			},
+			"icon": "game/Textures/UI/StructureIcons/HeavyArtilleryCIcon.webp",
+			"texture": "game/Textures/Structures/emplacedheavyartilleryc.webp",
+			"textureOffset": {
+				"x": 203,
+				"y": 303
+			},
+			"canSnap": true,
+			"canSnapRotate": true,
+			"snapGrab": true,
+			"emplaced": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "emplacement",
+					"x": 2,
+					"y": 2,
+					"rotation": 0
+				}
+			],
+			"techId": "unlockemplacedheavyartillery",
+			"maxHealth": 1000,
+			"cost": {
+				"wood": 195
+			},
+			"repairCost": 100
+		},
+		"emplacedheavyartilleryw": {
+			"name": "Huber Exalt 150mm",
+			"codeName": "EmplacedHeavyArtilleryW",
+			"description": "A heavy cannon designed to shatter the garrisons and fortifications of advancing forces. The Exalt is best utilized when emplaced into a defensive position to take advantage of its impressive range.",
+			"category": "shippables",
+			"categoryOrder": 50,
+			"faction": "w",
+			"width": 4,
+			"length": 4,
+			"radius": 2,
+			"range": {
+				"type": "killboxArty",
+				"min": 100,
+				"max": 300
+			},
+			"icon": "game/Textures/UI/StructureIcons/HeavyArtilleryW.webp",
+			"texture": "game/Textures/Structures/emplacedheavyartilleryw.webp",
+			"textureOffset": {
+				"x": 203,
+				"y": 220
+			},
+			"canSnap": true,
+			"canSnapRotate": true,
+			"snapGrab": true,
+			"emplaced": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "emplacement",
+					"x": 2,
+					"y": 2,
+					"rotation": 0
+				}
+			],
+			"techId": "unlockemplacedheavyartillery",
+			"maxHealth": 1250,
+			"cost": {
+				"wood": 175
+			},
+			"repairCost": 100
+		},
+		"emplacedindirectc": {
+			"name": "DAE 1o-3 “Polybolos”",
+			"codeName": "EmplacedIndirectC",
+			"description": "To combat Caoivish ingenuity, the Meseans developed their own indirect RPG propulsion system. Dual launchers are fitted on a large emplacement platform to maximize coverage in an established position, rather than being relegated to a guerrilla warfare tool.",
+			"category": "shippables",
+			"categoryOrder": 50,
+			"faction": "c",
+			"width": 4,
+			"length": 4,
+			"radius": 2,
+			"range": {
+				"type": "killboxRocket",
+				"lineOfSight": true,
+				"min": 3.5,
+				"max": 45
+			},
+			"icon": "game/Textures/UI/VehicleIcons/EmplacedIndirectCIcon.webp",
+			"texture": "game/Textures/Structures/emplacedindirectc.webp",
+			"textureOffset": {
+				"x": 203,
+				"y": 224
+			},
+			"canSnap": true,
+			"canSnapRotate": true,
+			"snapGrab": true,
+			"emplaced": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "emplacement",
+					"x": 2,
+					"y": 2,
+					"rotation": 0
+				}
+			],
+			"techId": "unlockemplacedindirect",
+			"maxHealth": 1500,
+			"cost": {
+				"cloth": 125
+			},
+			"repairCost": 115
+		},
+		"emplacedinfantryc": {
+			"name": "DAE 1b-2 “Serra”",
+			"codeName": "EmplacedInfantryC",
+			"description": "Built like a saw blade, the DAE 1b-2 emplacement gun is fitted with three cascading machine gun turrets. What the \"Serra\" lacks in power, it makes up for in sheer rate of fire for a weapon of its size.",
+			"category": "shippables",
+			"categoryOrder": 50,
+			"faction": "c",
+			"width": 4,
+			"length": 4,
+			"radius": 2,
+			"range": {
+				"type": "killboxMG",
+				"lineOfSight": true,
+				"min": 1.5,
+				"max": 35
+			},
+			"icon": "game/Textures/UI/VehicleIcons/EmplacedInfantryCIcon.webp",
+			"texture": "game/Textures/Structures/emplacedinfantryc.webp",
+			"textureOffset": {
+				"x": 203,
+				"y": 224
+			},
+			"canSnap": true,
+			"canSnapRotate": true,
+			"snapGrab": true,
+			"emplaced": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "emplacement",
+					"x": 2,
+					"y": 2,
+					"rotation": 0
+				}
+			],
+			"techId": "unlockfacilitytier2",
+			"maxHealth": 1650,
+			"cost": {
+				"cloth": 100
+			},
+			"repairCost": 100
+		},
+		"emplacedinfantryw": {
+			"name": "Leary Snare Trap 127",
+			"codeName": "EmplacedInfantryW",
+			"description": "The Snare Trap is a repurposed anti-aircraft flak cannon used to fortify emplaced positions with twin anti-infantry machine guns.",
+			"category": "shippables",
+			"categoryOrder": 50,
+			"faction": "w",
+			"width": 4,
+			"length": 4,
+			"radius": 2,
+			"range": {
+				"type": "killboxMG",
+				"lineOfSight": true,
+				"min": 1.5,
+				"max": 35
+			},
+			"icon": "game/Textures/UI/StructureIcons/EmplacedMGIcon.webp",
+			"texture": "game/Textures/Structures/emplacedinfantryw.webp",
+			"textureOffset": {
+				"x": 203,
+				"y": 203
+			},
+			"canSnap": true,
+			"canSnapRotate": true,
+			"snapGrab": true,
+			"emplaced": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "emplacement",
+					"x": 2,
+					"y": 2,
+					"rotation": 0
+				}
+			],
+			"techId": "unlockemplacedfieldmg",
+			"maxHealth": 1500,
+			"cost": {
+				"cloth": 75
+			},
+			"repairCost": 100
+		},
+		"emplacedlightartilleryw": {
+			"name": "Huber Lariat 120mm",
+			"codeName": "EmplacedLightArtilleryW",
+			"description": "A light artillery cannon designed to be a fixture in defensive fortifications. The Lariat sports a formidable long-range 120mm cannon designed to put immense pressure on enemy infantry.",
+			"category": "shippables",
+			"categoryOrder": 50,
+			"faction": "w",
+			"width": 4,
+			"length": 4,
+			"radius": 2,
+			"range": {
+				"type": "killboxArty",
+				"min": 100,
+				"max": 300
+			},
+			"icon": "game/Textures/UI/StructureIcons/EmplacedHowitzerIcon.webp",
+			"texture": "game/Textures/Structures/emplacedlightartilleryw.webp",
+			"textureOffset": {
+				"x": 203,
+				"y": 203
+			},
+			"canSnap": true,
+			"canSnapRotate": true,
+			"snapGrab": true,
+			"emplaced": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "emplacement",
+					"x": 2,
+					"y": 2,
+					"rotation": 0
+				}
+			],
+			"techId": "unlockemplacedlightartillery",
+			"maxHealth": 750,
+			"cost": {
+				"wood": 35
+			},
+			"repairCost": 100
+		},
+		"emplacedmultic": {
+			"name": "DAE 3b-2 “Hades’ Net”",
+			"codeName": "EmplacedMultiC",
+			"description": "The DAE 3b-2 fires rockets over long distances from a safe, emplaced position. This unique weapon was given its name due to the screams heard across the battlefield during its first deployment, with some referring to the barrage as a “web of death.”",
+			"category": "shippables",
+			"categoryOrder": 50,
+			"faction": "c",
+			"width": 4,
+			"length": 4,
+			"radius": 2,
+			"range": {
+				"type": "killboxRocket",
+				"min": 175,
+				"max": 275
+			},
+			"icon": "game/Textures/UI/StructureIcons/EmplacedMultiCStructureIcon.webp",
+			"texture": "game/Textures/Structures/emplacedmultic.webp",
+			"textureOffset": {
+				"x": 203,
+				"y": 224
+			},
+			"canSnap": true,
+			"canSnapRotate": true,
+			"snapGrab": true,
+			"emplaced": true,
+			"sockets": [
+				{
+					"id": 0,
+					"type": "emplacement",
+					"x": 2,
+					"y": 2,
+					"rotation": 0
+				}
+			],
+			"techId": "unlockfacilitytier2",
+			"maxHealth": 750,
+			"cost": {
+				"wood": 35
+			},
+			"repairCost": 100
+		},
 		"field_modification_center": {
 			"name": "Field Modification Center",
 			"codeName": "FacilityModificationCenter",
@@ -8380,6 +8790,7 @@ const gameData = {
 			"canSnapRotate": true,
 			"canSnapStructureType": false,
 			"ignoreSnapSettings": true,
+			"snapGrab": true,
 			"requireConnection": true,
 			"sockets": [
 				{
@@ -10212,6 +10623,7 @@ const gameData = {
 			"tier": 1,
 			"width": 10,
 			"length": 10,
+			"sortLayer": "foundation",
 			"hitArea": [
 				{
 					"shape": [ -54.55,-133.94,55.15,-133.94,133.94,-54.55,133.94,55.15,55.15,133.94,-54.55,133.94,-133.33,54.55,-133.33,-55.76 ]
@@ -10333,6 +10745,14 @@ const gameData = {
 					"x": 1.47,
 					"y": 1.47,
 					"rotation": 315
+				},
+				{
+					"id": 8,
+					"type": "emplacement",
+					"x": 5,
+					"y": 5,
+					"rotation": 180,
+					"ignoreSnap": true
 				}
 			],
 			"maxHealth": 1500,
@@ -10469,6 +10889,14 @@ const gameData = {
 					"x": 1.47,
 					"y": 1.47,
 					"rotation": 315
+				},
+				{
+					"id": 8,
+					"type": "emplacement",
+					"x": 5,
+					"y": 5,
+					"rotation": 180,
+					"ignoreSnap": true
 				}
 			],
 			"maxHealth": 1850,
@@ -10597,6 +11025,14 @@ const gameData = {
 					"x": 1.47,
 					"y": 1.47,
 					"rotation": 315
+				},
+				{
+					"id": 8,
+					"type": "emplacement",
+					"x": 5,
+					"y": 5,
+					"rotation": 180,
+					"ignoreSnap": true
 				}
 			],
 			"maxHealth": 3500,
@@ -10614,7 +11050,7 @@ const gameData = {
 			"tier": 1,
 			"width": 10,
 			"length": 3,
-			"sortLayer": "foundation",
+			"sortLayer": "trench",
 			"icon": "game/Textures/UI/StructureIcons/TrenchT1Icon.webp",
 			"texture": "game/Textures/Structures/trencht1.webp",
 			"canSnap": true,

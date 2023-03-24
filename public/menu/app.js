@@ -115,6 +115,10 @@ if (isMobile && !isPhoneApp) {
                                 Anti Tank Ranges
                             </label>
                             <label class="btn-checkbox-wrapper d-block">
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.killboxRocket }" @click="toggleProjectSetting('ranges', 'killboxRocket')"></button>
+                                Rocket Ranges
+                            </label>
+                            <label class="btn-checkbox-wrapper d-block">
                                 <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.killboxArty }" @click="toggleProjectSetting('ranges', 'killboxArty')"></button>
                                 Artillery Ranges
                             </label>

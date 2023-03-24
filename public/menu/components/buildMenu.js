@@ -118,7 +118,7 @@ Vue.component('app-game-sidebar', {
                 <i class="fa fa-check-circle" aria-hidden="true"></i> {{hoverData.upgradeName}} Upgrade
             </div>
             <div class="building-info-body">
-                <p class="building-info-description">{{hoverData.description}}</p>
+                <p class="building-info-description" v-if="hoverData.description">{{hoverData.description}}</p>
                 <p class="building-tech-description" v-if="hoverData.author">
                     <span>Author:</span> {{hoverData.author}}
                 </p>

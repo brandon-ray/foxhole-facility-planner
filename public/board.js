@@ -165,7 +165,7 @@ class DraggableContainer extends PIXI.Container {
                                     const entitySocket = entity2.sockets[i];
                                     if (handleSocket.canConnect(entitySocket) && !entitySocket.socketData.temp) {
                                         const socketDistance = Math.distanceBetween(mousePos2, entitySocket);
-                                        if ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || this.subtype === 'power_line' && entity2.canGrab()) {
+                                        if ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || this.building?.snapGrab && entity2.canGrab()) {
                                             const entityConnections = Object.keys(entitySocket.connections).length;
                                             if (entitySocket.connections[this.id] === handleSocket.socketData.id || (!this.hasConnectionToEntity(entity2, handleSocket) && (entityConnections === 0 || (entitySocket.socketData.connectionLimit && entityConnections < entitySocket.socketData.connectionLimit)))) {
                                                 nearestSocketPos = game.app.cstage.toLocal({x: entitySocket.x, y: entitySocket.y}, entity2, undefined, true);

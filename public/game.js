@@ -20,6 +20,7 @@ const COLOR_RANGES = {
     killbox: COLOR_ORANGE,
     killboxMG: COLOR_BLUE,
     killboxAT: COLOR_RED,
+    killboxRocket: COLOR_ORANGE,
     killboxArty: COLOR_YELLOW,
     radio: COLOR_PURPLE,
     crane: COLOR_LIGHTBLUE
@@ -257,6 +258,7 @@ try {
             killbox: false,
             killboxMG: false,
             killboxAT: false,
+            killboxRocket: false,
             killboxArty: false
         }
     };
@@ -305,6 +307,7 @@ try {
     game.constructionLayers = {
         background: 0,
         road: 1000,
+        trench: 2500,
         foundation: 5000,
         rail: 15000,
         resource: 17500,
@@ -1018,6 +1021,7 @@ try {
         update();
 
         onWindowResize();
+        updateBuildingDB();
         
         if (game.settings.enableDebug) {
             fetch(`/games/foxhole/assets/presets/debug.json`).then(response => {
@@ -2504,7 +2508,7 @@ try {
     
     let fuse;
     function updateBuildingDB() {
-        if (window.objectData) {
+        if (window.objectData?.categories) {
             let searchBuildings = Object.values(window.objectData.categories).reduce((acc, category) => {
                 if (game.settings.enableExperimental || !category.experimental) {
                     acc.push(...category.buildings);
@@ -2527,7 +2531,6 @@ try {
             });
         }
     }
-    updateBuildingDB();
 
     game.getSearchResults = function(query, presets = true) {
         return fuse ? fuse.search(query).map(result => result.item).filter(building => (presets || !building.preset) && game.canShowListItem(building, true)) : [];
@@ -2775,7 +2778,7 @@ try {
                             rotationOffset = false;
                         }
                     }
-                    if (selectedEntity.sockets) {
+                    if (selectedEntity.sockets && !selectedEntity.building?.emplaced) {
                         selectedEntity.removeConnections(undefined, true);
                     }
                     selectedEntity.rotationData = {
@@ -2819,7 +2822,7 @@ try {
                             if (game.settings.bringSelectedToFront) {
                                 pickupEntity.bringToFront();
                             }
-                            if (pickupEntity.building) {
+                            if (pickupEntity.building && !pickupEntity.building.emplaced) {
                                 pickupEntity.removeConnections(undefined, true);
                             }
                         }
@@ -2872,7 +2875,7 @@ try {
                         if (selectedEntity.building?.canSnap || selectedEntity.isTrain) {
                             for (let j = 0; j < entities.length; j++) {
                                 let entity = entities[j];
-                                if (!entity.valid || !entity.visible || entity === selectedEntity || entity.type !== 'building' || entity.selected || !((selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain || pickupEntity?.building?.canSnapAlongBezier) || Math.distanceBetween(selectedEntity, entity.mid) > 1000) {
+                                if (!entity.valid || !entity.visible || entity === selectedEntity || entity.type !== 'building' || entity.selected || !((selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain || pickupEntity?.building?.canSnapAlongBezier) || (selectedEntity.building?.emplaced && entity.building?.emplaced) || Math.distanceBetween(selectedEntity, entity.mid) > 1000) {
                                     continue;
                                 }
                                 if (selectedEntity.subtype === entity.subtype || (selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain || (pickupEntity && entity.subtype && pickupEntity.building?.canSnapAlongBezier === entity.subtype)) {
@@ -2907,7 +2910,9 @@ try {
                                                     }
     
                                                     selectedEntity.position.set(selectedEntityPosition.x, selectedEntityPosition.y);
-                                                    selectedEntity.rotation = selectedEntityRotation;
+                                                    if (!selectedEntity.building?.emplaced) {
+                                                        selectedEntity.rotation = selectedEntityRotation;
+                                                    }
     
                                                     connectionEstablished = selectedEntity;
                                                     return true;
@@ -2918,10 +2923,10 @@ try {
                                                 if (!entitySocket.socketData.temp) {
                                                     let socketDistance = Math.distanceBetween(mousePos, entitySocket);
                                                     // Checks socket distance is close, closer than previous socket distance, or hovering a building with a power socket.
-                                                    if (selectedEntity.building?.snapNearest || ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || selectedEntity.subtype === 'power_line' && entity.canGrab())) {
+                                                    if (selectedEntity.building?.snapNearest || ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || selectedEntity.building?.snapGrab && entity.canGrab())) {
                                                         for (let l = 0; l < selectedEntity.sockets.length; l++) {
                                                             let selectedSocket = selectedEntity.sockets[l];
-                                                            if (selectedEntities.length === 1 && selectedEntity.building?.hasHandle && selectedSocket.socketData.id !== 0) {
+                                                            if (selectedSocket.socketData.ignoreSnap || (selectedEntities.length === 1 && selectedEntity.building?.hasHandle && selectedSocket.socketData.id !== 0)) {
                                                                 continue;
                                                             }
                                                             if (entitySocket.canConnect(selectedSocket)) {
