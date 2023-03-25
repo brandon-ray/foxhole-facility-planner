@@ -45,6 +45,11 @@ const gameData = {
 			"buildCategory": "Shippables",
 			"icon": "game/Textures/UI/Menus/IconFilterShippingContainer.webp"
 		},
+		"weaponry": {
+			"name": "Weaponry",
+			"hideInBuildingList": true,
+			"icon": "game/Textures/UI/VehicleIcons/FieldArtilleryColVehicleIcon.webp"
+		},
 		"vehicles": {
 			"name": "Vehicles",
 			"hideInBuildingList": true,
@@ -3577,6 +3582,93 @@ const gameData = {
 			},
 			"repairCost": 100
 		},
+		"fieldatc": {
+			"name": "AA-2 \"Battering Ram\"",
+			"codeName": "FieldATC",
+			"description": "The \"Battering Ram\" is a mobile Anti-Tank field gun firing 68mm armour-piercing rounds.",
+			"category": "weaponry",
+			"icon": "game/Textures/UI/VehicleIcons/FieldAntiTankColVehicleIcon.webp",
+			"texture": "game/Textures/Structures/fieldatc.webp",
+			"textureOffset": {
+				"x": 158,
+				"y": 295
+			},
+			"techId": "unlockfieldatgun",
+			"maxHealth": 2850,
+			"cost": {
+				"wood": 20
+			},
+			"repairCost": 100
+		},
+		"fieldatdamagew": {
+			"name": "Balfour Rampart 68mm",
+			"codeName": "FieldATDamageW",
+			"description": "The Rampart is a powerful field cannon capable of dealing devastating damage to all but the heaviest of armoured vehicles while providing its crew with comprehensive ballistic shielding.",
+			"category": "weaponry",
+			"faction": "w",
+			"range": {
+				"type": "",
+				"min": 1.5,
+				"max": 45
+			},
+			"icon": "game/Textures/UI/VehicleIcons/FieldCannonOffensiveWIcon.webp",
+			"texture": "game/Textures/Structures/fieldatdamagew.webp",
+			"textureOffset": {
+				"x": 158,
+				"y": 298
+			},
+			"techId": "unlockfieldatdamagegun",
+			"maxHealth": 4000,
+			"cost": {
+				"facilitymaterials2": 5,
+				"facilitymaterials7": 5
+			},
+			"repairCost": 100
+		},
+		"fieldatlargec": {
+			"name": "945g “Stygian Bolt”",
+			"codeName": "FieldATLargeC",
+			"description": "The “Stygian Bolt” Heavy Field Gun is fitted with a monstrous 94.5mm cannon paired with heavy angled blast shielding. Inspired by the rows of narrow canyons in their homeland of the Lacrista province, Mesean engineers designed this field weapon to keep its crew as safe from ancillary fire as possible while maintaining forward momentum.",
+			"category": "weaponry",
+			"range": {
+				"type": "",
+				"min": 1.5,
+				"max": 40
+			},
+			"icon": "game/Textures/UI/VehicleIcons/FieldATHeavyCIcon.webp",
+			"texture": "game/Textures/Structures/fieldatlargec.webp",
+			"textureOffset": {
+				"x": 171,
+				"y": 295
+			},
+			"techId": "unlockfacilitytier3",
+			"maxHealth": 5000,
+			"cost": {
+				"facilitymaterials3": 15,
+				"facilitymaterials5": 20,
+				"facilitymaterials6": 15
+			},
+			"repairCost": 125
+		},
+		"fieldatw": {
+			"name": "Collins Cannon 68mm",
+			"codeName": "FieldATW",
+			"description": "The Collins Cannon is a mobile Anti-Tank field gun firing 68mm armour-piercing rounds.",
+			"category": "weaponry",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/FieldAntiTankWarVehicleIcon.webp",
+			"texture": "game/Textures/Structures/fieldatw.webp",
+			"textureOffset": {
+				"x": 158,
+				"y": 298
+			},
+			"techId": "unlockfieldatgun",
+			"maxHealth": 2850,
+			"cost": {
+				"wood": 20
+			},
+			"repairCost": 100
+		},
 		"fieldbridge": {
 			"name": "Field Bridge",
 			"codeName": "FieldBridge",
@@ -3633,6 +3725,70 @@ const gameData = {
 			},
 			"repairCost": 100
 		},
+		"fieldcannondamagec": {
+			"name": "40-45 “Smelter”",
+			"codeName": "FieldCannonDamageC",
+			"description": "Armed with explosive 40mm rounds, the Smelter is perfect for engaging enemy armour. The frontal blast shielding provides operators with ample cover during heated skirmishes.",
+			"category": "weaponry",
+			"icon": "game/Textures/UI/VehicleIcons/FieldATOffensiveCIcon.webp",
+			"texture": "game/Textures/Structures/fieldcannondamagec.webp",
+			"textureOffset": {
+				"x": 191,
+				"y": 295
+			},
+			"techId": "unlockfieldcannondamage",
+			"maxHealth": 4000,
+			"cost": {
+				"facilitymaterials2": 5,
+				"facilitymaterials7": 5
+			},
+			"repairCost": 100
+		},
+		"fieldcannonlargew": {
+			"name": "Balfour Stockade 75mm",
+			"codeName": "FieldCannonLargeW",
+			"description": "This robust field cannon not only allows infantry to fire heavy 75mm shells with ease, but it provides state-of-the-art curved blast shielding for maximum protection from crossfire.",
+			"category": "weaponry",
+			"faction": "w",
+			"range": {
+				"type": "",
+				"min": 1.5,
+				"max": 35
+			},
+			"icon": "game/Textures/UI/VehicleIcons/FieldCannonHeavyWIcon.webp",
+			"texture": "game/Textures/Structures/fieldcannonlargew.webp",
+			"textureOffset": {
+				"x": 158,
+				"y": 298
+			},
+			"techId": "unlockfacilitytier3",
+			"maxHealth": 5000,
+			"cost": {
+				"facilitymaterials3": 15,
+				"facilitymaterials5": 20,
+				"facilitymaterials6": 15
+			},
+			"repairCost": 125
+		},
+		"fieldcannonw": {
+			"name": "Balfour Wolfhound 40mm",
+			"codeName": "FieldCannonW",
+			"description": "This destructive short-ranged cannon is designed for direct engagement with enemy fortifications. The Wolfhound is fitted with reinforced shielding and a 40mm barrel. ",
+			"category": "weaponry",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/FieldCannonWVehicleIcon.webp",
+			"texture": "game/Textures/Structures/fieldcannonw.webp",
+			"textureOffset": {
+				"x": 158,
+				"y": 298
+			},
+			"techId": "unlockfieldcannon",
+			"maxHealth": 2850,
+			"cost": {
+				"wood": 20
+			},
+			"repairCost": 100
+		},
 		"fieldhospital": {
 			"name": "Field Hospital",
 			"codeName": "FieldHospital",
@@ -3660,6 +3816,105 @@ const gameData = {
 				"cloth": 200
 			},
 			"repairCost": 200
+		},
+		"fieldlightartilleryc": {
+			"name": "120-68 “Koronides” Field Gun",
+			"codeName": "FieldLightArtilleryC",
+			"description": "A long range Colonial mobile artillery used to lay siege to fortified positions.",
+			"category": "weaponry",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/FieldArtilleryColVehicleIcon.webp",
+			"texture": "game/Textures/Structures/fieldlightartilleryc.webp",
+			"textureOffset": {
+				"x": 158,
+				"y": 295
+			},
+			"techId": "unlockfieldartillery",
+			"maxHealth": 1000,
+			"cost": {
+				"wood": 25
+			},
+			"repairCost": 120
+		},
+		"fieldmgc": {
+			"name": "G40 “Sagittarii”",
+			"codeName": "FieldMGC",
+			"description": "A dual barrelled, high calibre anti-infantry machine gun. The “Sagittarii” is fitted with forward-facing armour plating and is excellent for suppression. ",
+			"category": "weaponry",
+			"icon": "game/Textures/UI/VehicleIcons/FieldMachineGun.webp",
+			"texture": "game/Textures/Structures/fieldmgc.webp",
+			"textureOffset": {
+				"x": 164,
+				"y": 311
+			},
+			"maxHealth": 1850,
+			"cost": {
+				"wood": 20
+			},
+			"repairCost": 100
+		},
+		"fieldmgw": {
+			"name": "Swallowtail 988/127-2 ",
+			"codeName": "FieldMGW",
+			"description": "A dual barrelled, high calibre anti-infantry machine gun. The Swallowtail is fitted with forward-facing armour plating and is excellent for suppression. ",
+			"category": "weaponry",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/FieldMachineGunWar.webp",
+			"texture": "game/Textures/Structures/fieldmgw.webp",
+			"textureOffset": {
+				"x": 162,
+				"y": 303
+			},
+			"maxHealth": 1850,
+			"cost": {
+				"wood": 20
+			},
+			"repairCost": 100
+		},
+		"fieldmortarw": {
+			"name": "Balfour Falconer 250mm",
+			"codeName": "FieldMortarW",
+			"description": "A heavy mobile mortar platform fitted with a thick frontal shield for assaulting fortified locations.",
+			"category": "weaponry",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/FieldMortarWIcon.webp",
+			"texture": "game/Textures/Structures/fieldmortarw.webp",
+			"textureOffset": {
+				"x": 158,
+				"y": 298
+			},
+			"techId": "unlockfieldmortar",
+			"maxHealth": 2850,
+			"cost": {
+				"wood": 35
+			},
+			"repairCost": 100
+		},
+		"fieldmultiw": {
+			"name": "Rycker 4/3-F Wasp Nest",
+			"codeName": "FieldMultiW",
+			"description": "Lyle Rycker first built a prototype of the Wasp Nest as a test for his rack mounted rocket batteries that would eventually find their way onto armoured vehicles. Capable of firing twelve compact rockets in quick succession, the Wasp Nest became a quick favourite of the Warden infantry testing it, so an official design was requisitioned.",
+			"category": "weaponry",
+			"faction": "w",
+			"range": {
+				"type": "",
+				"min": 200,
+				"max": 225
+			},
+			"icon": "game/Textures/UI/VehicleIcons/FieldMultiWItemIcon.webp",
+			"texture": "game/Textures/Structures/fieldmultiw.webp",
+			"textureOffset": {
+				"x": 163,
+				"y": 337
+			},
+			"techId": "unlockfacilitytier2",
+			"maxHealth": 1000,
+			"cost": {
+				"facilitymaterials2": 20,
+				"facilitymaterials5": 15,
+				"facilitymaterials7": 3
+			},
+			"repairCost": 100
 		},
 		"flatbedtruck": {
 			"name": "BMS - Packmule Flatbed",
