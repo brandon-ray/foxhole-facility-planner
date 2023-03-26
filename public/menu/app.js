@@ -56,7 +56,9 @@ if (isMobile && !isPhoneApp) {
                 },
                 selectMapRegion: function(key) {
                     game.setMapRegion(key);
-                    this.regionSelectionVisible = false;
+                    if (game.projectSettings.regionKey) {
+                        this.regionSelectionVisible = false;
+                    }
                     game.appComponent.$forceUpdate();
                 }
             },
@@ -134,26 +136,36 @@ if (isMobile && !isPhoneApp) {
 
                 <div v-if="regionSelectionVisible" class="board-panel world-region-selection" style="transform: scale(0.95)">
                     <div class="board-panel-header">
-                        <h4 class="float-left m-0" style="color: #eee"><i class="fa fa-map-o"></i> Select Map Region</h4>
-                        <button class="btn-small m-0 mr-1 float-right" title="Minimize Layers" @click="regionSelectionVisible = false"><i class="fa fa-window-minimize" aria-hidden="true"></i></button>
+                        <h4 class="float-left m-0" style="color: #eee"><i class="fa fa-map-o"></i> Select Map Region (Preview)</h4>
+                        <button class="btn-small m-0 mr-1 float-right" title="Minimize Map" @click="regionSelectionVisible = false"><i class="fa fa-window-minimize" aria-hidden="true"></i></button>
                     </div>
                     <div class="board-panel-body">
+                        <div class="region-selection-info info-tooltip top-left">Select a region and it will become the backdrop for your project.</div>
+                        <div class="region-selection-info info-tooltip top-left-2">Select a region again to deselect it.</div>
+                        <div class="region-selection-info info-tooltip top-right">Regions will have a white border around them when they are selected.</div>
                         <template v-for="(map, key) in gameData.maps">
                             <div class="region-map-hex" :style="{
                                     marginTop: ((-55 + (map.gridCoord.y * 110)) + (map.gridCoord.x * 55)) + 'px',
-                                    marginLeft: (-50 + (map.gridCoord.x * 96)) + 'px'
-                                }" @click="selectMapRegion(key)">
+                                    marginLeft: (-64 + (map.gridCoord.x * 96)) + 'px'
+                                }" :title="'Select ' + map.name" :class="{'hex-selected': key === game.projectSettings.regionKey }" @click="selectMapRegion(key)">
                                 <div class="d-flex justify-content-center align-items-center text-center" :style="{backgroundImage: 'url(' + map.icon + ')'}">
                                     <div>{{map.name}}</div>
                                 </div>
                             </div>
                         </template>
+                        <div class="region-selection-info bottom-right">Early Preview</div>
                     </div>
                 </div>
 
                 <app-game-toolbelt></app-game-toolbelt>
 
                 <app-game-confirmation-popup></app-game-confirmation-popup>
+
+                <div class="board-scale-ui">
+                    <div v-if="game.projectSettings.regionKey">Region: {{gameData.maps[game.projectSettings.regionKey].name}}</div>
+                    <!-- Scale: {{game.camera.zoom}}m -->
+                    <!-- <div class="board-scale-tile"></div> -->
+                </div>
 
                 <div class="footer">
                     <button class="btn-small btn-float-left" :class="{ 'btn-active': !sidebarVisible }" title="Toggle Sidebar Menu" @click="sidebarVisible = !sidebarVisible">
@@ -180,6 +192,7 @@ if (isMobile && !isPhoneApp) {
                         Stats
                     </label>
                     <label v-if="game.settings.enableExperimental" class="btn-checkbox-wrapper">
+                        <!--⬣-->
                         <button class="btn-small btn-float-left" :class="{ 'btn-active': regionSelectionVisible }" title="Toggle Region Selection" @click="regionSelectionVisible = !regionSelectionVisible"><i class="fa fa-map-o" aria-hidden="true"></i></button>
                         Map (Preview)
                     </label>

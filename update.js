@@ -182,7 +182,7 @@ function getValidMesh(meshes = {}, property) {
 }
 
 function fetchTextureMeshes(objData, codeName, meshProperty, meshes) {
-    if (objData && codeName && (meshProperty || meshes)) {
+    if (objData && objData.texture && codeName && (meshProperty || meshes)) {
         try {
             fs.accessSync('public/games/foxhole/assets/' + objData.texture, fs.constants.F_OK);
         } catch (err) {

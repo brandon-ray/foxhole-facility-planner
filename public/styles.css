@@ -1391,6 +1391,25 @@ input[type=number].btn-small {
     border: 2px solid white;
 }
 
+.board-scale-ui {
+    position: fixed;
+    bottom: 50px;
+    right: 0;
+}
+
+.board-scale-ui > div {
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.board-scale-ui > .board-scale-tile {
+    width: 32px;
+    height: 10px;
+    border: 2px solid white;
+    border-top: 0 none;
+    vertical-align: middle;
+}
+
 .footer {
     /*
     background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 1));
@@ -1734,6 +1753,43 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
     top: 42px;
 }
 
+.region-selection-info {
+    background: rgba(0, 0, 0, 0.5);
+    max-width: 275px;
+    position: absolute;
+    padding: 6px 12px;
+}
+
+.region-selection-info.info-tooltip::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-bottom: 16px solid transparent;
+    border-left: 16px solid #ff8f00;
+}
+
+.region-selection-info.top-left {
+    top: 12px;
+    left: 12px;
+}
+
+.region-selection-info.top-left-2 {
+    top: 82px;
+    left: 12px;
+}
+
+.region-selection-info.top-right {
+    top: 12px;
+    right: 12px;
+}
+
+.region-selection-info.bottom-right {
+    bottom: 12px;
+    right: 12px;
+}
+
 .region-map-hex {
     width: 128px;
     height: 110px;
@@ -1747,8 +1803,12 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
     border-radius: 50%;
 }
 
-.region-map-hex:hover {
+.region-map-hex.hex-selected {
     z-index: 100;
+}
+
+.region-map-hex:hover {
+    z-index: 200;
 }
 
 .region-map-hex > div {
@@ -1775,20 +1835,26 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
     position: absolute;
 }
 
+.region-map-hex.hex-selected > div::after {
+    opacity: 0.5;
+    background-image: url('/games/foxhole/assets/game/Textures/UI/HexMaps/MapHexSelection.webp');
+}
+
 .region-map-hex > div > div {
     width: 150px;
     position: absolute;
     pointer-events: none;
-    text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
-    z-index: 100;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.75);
     transition-duration: 0.125s;
 }
 
-.region-map-hex:hover > div {
+.region-map-hex:hover > div,
+.region-map-hex.hex-selected > div {
     filter: brightness(1.1);
 }
 
-.region-map-hex:hover > div > div {
+.region-map-hex:hover > div > div,
+.region-map-hex.hex-selected > div > div {
     transform: scale(1.25);
 }
 

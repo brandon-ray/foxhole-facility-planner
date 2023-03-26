@@ -2107,7 +2107,6 @@ const gameData = {
 			"codeName": "ArmoredCarATW",
 			"description": "A slight variation of the V.110, the Gravekeeper comes fitted with an embedded Bonesaw launcher, transforming the humble armoured car into an effective indirect anti-armour vehicle.",
 			"category": "armory",
-			"sortOrder": 100,
 			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarATWVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/armoredcaratw.webp",
 			"techId": "unlockfacilitytier2"
