@@ -216,6 +216,12 @@ const gameData = {
 			"name": "Simple Vehicle Factory (Example)",
 			"description": "A simple vehicle factory to output upgraded vehicles per hour. This is an example of a preset for the planner. Contribute your own saves to our Discord!",
 			"author": "Jimbo"
+		},
+		"eat_maker": {
+			"name": "EAT Maker",
+			"description": "Small EAT making facility\na train will make imports/exports easier but is not necessary",
+			"author": "maverick0537",
+			"module": true
 		}
 	},
 	"tech": {
