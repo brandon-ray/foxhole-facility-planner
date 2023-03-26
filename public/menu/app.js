@@ -181,7 +181,7 @@ if (isMobile && !isPhoneApp) {
                     </label>
                     <label v-if="game.settings.enableExperimental" class="btn-checkbox-wrapper">
                         <button class="btn-small btn-float-left" :class="{ 'btn-active': regionSelectionVisible }" title="Toggle Region Selection" @click="regionSelectionVisible = !regionSelectionVisible"><i class="fa fa-map-o" aria-hidden="true"></i></button>
-                        Map
+                        Map (Preview)
                     </label>
                     <button class="btn-small" title="Toggle Fullscreen" @click="game.tryFullscreen()">
                         <i class="fa fa-arrows-alt" aria-hidden="true"></i>

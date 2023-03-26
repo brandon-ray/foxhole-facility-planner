@@ -163,6 +163,34 @@ function initializeStructureItems(component) {
     }
 }
 
+const requiredMeshes = {};
+const ignoredMeshes = ['Headlight', 'Sphere', 'Destroyed'];
+function getValidMesh(meshes = {}, property) {
+    if (property?.Properties) {
+        const meshObj = property.Properties.StaticMesh ?? property.Properties.SkeletalMesh;
+        if (meshObj?.ObjectPath) {
+            const baseName = path.parse(meshObj.ObjectPath).name;
+            for (const ignoredMesh of ignoredMeshes) {
+                if (baseName.includes(ignoredMesh)) {
+                    return meshes;
+                }
+            }
+            meshes[property.Name] = baseName;
+        }
+    }
+    return meshes;
+}
+
+function fetchTextureMeshes(objData, codeName, meshProperty, meshes) {
+    if (objData && codeName && (meshProperty || meshes)) {
+        try {
+            fs.accessSync('public/games/foxhole/assets/' + objData.texture, fs.constants.F_OK);
+        } catch (err) {
+            requiredMeshes[codeName] = meshes ?? getValidMesh(requiredMeshes[codeName], meshProperty);
+        }
+    }
+}
+
 function iterateBaseStructures(uProperty, baseData) {
     let basePath = `${foxholeDataDirectory}${uProperty.SuperStruct.ObjectPath.slice(0, -1)}json`;
     let baseAsset = fs.readFileSync(basePath);
@@ -190,6 +218,12 @@ function iterateBaseStructures(uProperty, baseData) {
                     baseData.garrisonSupplyMultiplier = structure.DecaySupplyDrain ?? baseData.garrisonSupplyMultiplier;
                     baseData.power = structure.PowerGridInfo?.PowerDelta ?? baseData.power;
                 }
+                break;
+            case 'SkeletalMeshComponent':
+                baseData.meshes = getValidMesh(baseData.meshes, uProperty);
+                break;
+            case 'StaticMeshComponent':
+                baseData.meshes = getValidMesh(baseData.meshes, uProperty);
                 break;
         }
     });
@@ -333,6 +367,25 @@ async function iterateStructures(dirPath) {
                                     break;
                                 }
                             }
+                            /*
+                            if (!structureData && dirPath.startsWith('dev\\tools\\Output\\Exports\\War\\Content\\Blueprints\\Vehicles')) {
+                                let containsIgnoredStr = false;
+                                const ignoredStrings = [
+                                    'buildsite',
+                                    'destroyed',
+                                    'fill'
+                                ];
+                                for (const ignoredStr of ignoredStrings) {
+                                    if (structureCodeName.includes(ignoredStr)) {
+                                        containsIgnoredStr = true;
+                                        break;
+                                    }
+                                }
+                                if (!containsIgnoredStr) {
+                                    console.info(`"${structureCodeName}": {},`);
+                                }
+                            }
+                            */
                             if (structureData && !structureData.reference) {
                                 structureData = {
                                     'id': structureData.id,
@@ -417,6 +470,7 @@ async function iterateStructures(dirPath) {
                                         initializeStructureItems(modification);
                                     }
                                 }
+                                fetchTextureMeshes(structureData, structureCodeName, undefined, baseData.meshes);
                                 if (parentCodeName) {
                                     structureList[parentCodeName].upgrades[structureCodeName] = structureData;
                                 } else {
@@ -493,6 +547,12 @@ async function iterateStructures(dirPath) {
                                 "max": uProperty.Properties.Config.MaxHorizontalDistanceToTarget / METER_UNREAL_UNITS
                             };
                         }
+                        break;
+                    case 'SkeletalMeshComponent':
+                        fetchTextureMeshes(structureData, structureCodeName, uProperty);
+                        break;
+                    case 'StaticMeshComponent':
+                        fetchTextureMeshes(structureData, structureCodeName, uProperty);
                         break;
                 }
             }
@@ -1016,6 +1076,7 @@ async function updateData() {
                         throw err;
                     }
 
+                    /* Uncomment for structures that have predefined width/length/radius like bunkers, trenches, etc.
                     const origin = {
                         x: Math.round(metadata.width / 2) + info.trimOffsetLeft,
                         y: Math.round(metadata.height / 2) + info.trimOffsetTop
@@ -1025,6 +1086,7 @@ async function updateData() {
                         x: Math.round(info.width / 2),
                         y: Math.round(info.height / 2)
                     }
+                    */
 
                     const structureName = file.split('.')[0].toLowerCase();
                     if (structureList[structureName]) {
@@ -1033,10 +1095,12 @@ async function updateData() {
                                 throw err;
                             }
                         });
+                        /* Uncomment for structures that have predefined width/length/radius like bunkers, trenches, etc.
                         structureList[structureName].textureOffset = {
                             x: trimOrigin.x - (trimOrigin.x - origin.x),
                             y: trimOrigin.y - (trimOrigin.y - origin.y)
                         };
+                        */
                     } else {
                         console.info('Could not find structure for imported image in list: ', structureName);
                     }
@@ -1081,11 +1145,16 @@ async function updateData() {
 
     await iterateStructures(`${foxholeDataDirectory}War/Content/Blueprints/`);
 
+    for (const [codeName, meshes] of Object.entries(requiredMeshes)) {
+        console.info(`"${codeName}":`, Object.values(meshes), ",");
+    }
+
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPVehicleDynamicData.json`, itemList, 'item');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, itemList, 'item'); // Check for items in the structure data... Yes, Material Pallet is stored here.
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPAmmoDynamicData.json`, weaponList, 'weapon');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/DTDamageProfiles.json`, weaponList, 'damageType');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPMapList.json`, foxholeData.maps, 'map');
+    //iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPVehicleDynamicData.json`, structureList, 'item');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPMountDynamicData.json`, structureList, 'gunner');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, structureList);
 

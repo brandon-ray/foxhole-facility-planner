@@ -2526,7 +2526,7 @@ try {
                     { name: 'author', weight: 0.2 }
                 ],
                 includeMatches: true,
-                threshold: 0.4,
+                threshold: 0.3,
                 distance: 100
             });
         }

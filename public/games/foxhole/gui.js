@@ -92,7 +92,16 @@ Vue.component('app-menu-statistics', {
             powerProduced: 0,
             powerConsumed: 0,
             selection: false,
-            maintenanceSupplies: 0
+            maintenanceSupplies: 0,
+            ignoredCategories: [
+                'vehicles',
+                'trains',
+                'world',
+                'naval',
+                'tank',
+                'armor',
+                'weaponry'
+            ]
         };
     },
     mounted() {
@@ -176,7 +185,7 @@ Vue.component('app-menu-statistics', {
                     let consumptionRate = 2 * (buildingData.garrisonSupplyMultiplier ?? 1);
                     let totalConsumptionRate = consumptionRate * maintenanceConsumptionRate;
                     for (const maintenanceTunnel of maintenanceTunnels) {
-                        if (totalConsumptionRate > 0 && (buildingData.category !== 'vehicles' && buildingData.category !== 'trains' && buildingData.category !== 'world') &&
+                        if (totalConsumptionRate > 0 && !this.ignoredCategories.includes(buildingData.category) &&
                             (maintenanceTunnel === entity || (Math.distanceBetween(entity, maintenanceTunnel) < (maintenanceTunnel.maintenanceFilters.range * METER_BOARD_PIXEL_SIZE))) &&
                             !maintenanceTunnel.maintenanceFilters.exclusions.includes(buildingData.category)) {
                             maintenanceTunnel.maintainedConsumptionRate += consumptionRate;
@@ -186,7 +195,7 @@ Vue.component('app-menu-statistics', {
 
                     if (entity.selected || !this.selection) {
                         // TODO: Need to actually get whether a structure decays or not from foxhole data.
-                        if (buildingData.category !== 'vehicles' && buildingData.category !== 'trains' && buildingData.category !== 'world') {
+                        if (!this.ignoredCategories.includes(buildingData.category)) {
                             displayTime = true;
                             /*
                             for (let j = 0; j < garrisonConsumptionReducers.length; j++) {
