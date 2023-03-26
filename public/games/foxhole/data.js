@@ -251,6 +251,12 @@ const gameData = {
 			"name": "Small Tripod Facility",
 			"description": "A variant to the Small Artillery Facility I made, this one allows you to mass produce tripod weapons",
 			"author": "Trooper"
+		},
+		"eat_maker": {
+			"name": "EAT Maker",
+			"description": "Small EAT making facility\na train will make imports/exports easier but is not necessary",
+			"author": "maverick0537",
+			"module": true
 		}
 	},
 	"maps": {
