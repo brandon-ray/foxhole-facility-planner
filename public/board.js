@@ -307,7 +307,7 @@ class DraggableContainer extends PIXI.Container {
             let mid;
             if (this.bezier) {
                 mid = this.bezier.mid;
-            } else if (this.points && (this.building?.trenchConnector || (this.type === 'shape' && (this.subtype === 'rectangle' || this.subtype === 'image' || this.subtype === 'line')))) {
+            } else if (this.points && (this.building?.isBezier || this.building?.trenchConnector || (this.type === 'shape' && (this.subtype === 'rectangle' || this.subtype === 'image' || this.subtype === 'line')))) {
                 mid = {
                     x: (this.points[0].x + this.points[this.points.length - 1].x) / 2,
                     y: (this.points[0].y + this.points[this.points.length - 1].y) / 2
@@ -454,15 +454,14 @@ class DraggableContainer extends PIXI.Container {
             if (gmp.x >= bounds.x && gmp.x <= bounds.x + bounds.bufferWidth && gmp.y >= bounds.y && gmp.y <= bounds.y + bounds.bufferHeight) {
                 // TODO: Add padding around sprite so that it's easier to select.
                 // Will need to check for entity.building?.isBezier and entity.bezier when that happens.
+                const mousePos = this.toLocal(gmp, game.app.cstage, undefined, true);
                 if (this.bezier) {
-                    let mousePos = this.toLocal(gmp, game.app.cstage, undefined, true);
                     let projection = this.bezier.project(mousePos);
                     if (projection.d <= (this.building?.lineWidth ?? 25)) {
                         return true;
                     }
                 } else {
                     if (this.sprite?.hitArea) {
-                        const mousePos = this.toLocal(gmp, game.app.cstage, undefined, true);
                         return this.sprite.hitArea.contains(mousePos.x, mousePos.y);
                     }
 
@@ -476,7 +475,7 @@ class DraggableContainer extends PIXI.Container {
                     const [ax, ay] = [Math.cos(r), Math.sin(r)];
                     const t = (x, y) => ({x: x * ax - y * ay + this.x, y: x * ay + y * ax + this.y});
                     let bBounds;
-                    if (this.type === 'shape' && this.points) {
+                    if ((this.type === 'shape' || this.building?.isBezier) && this.points) {
                         let p1, p2, m1, m2;
                         for (let i = 0; i < this.points.length; i++) {
                             let point = this.points[i];
@@ -486,7 +485,16 @@ class DraggableContainer extends PIXI.Container {
                                 p2 = point;
                             }
                         }
-                        if (this.subtype === 'line') {
+                        if (this.building?.isBezier) {
+                            const postExtension = (this.postExtension ?? 1) * METER_BOARD_PIXEL_SIZE;
+                            const line = [p1, Math.extendPoint(p1, postExtension, 0), Math.extendPoint(p2, postExtension, p2.rotation), p2];
+                            for (let i = 0; i < line.length - 1; i++) {
+                                if (Math.distanceToLine(mousePos, line[i], line[i+1]) < 16) {
+                                    return true;
+                                }
+                            }
+                            return false;
+                        } else if (this.subtype === 'line') {
                             m1 = {
                                 x: p1.x - lineThickness - boundsPadding,
                                 y: p1.y - lineThickness - boundsPadding

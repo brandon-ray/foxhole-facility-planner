@@ -568,6 +568,10 @@ class FoxholeStructure extends DraggableContainer {
             objData.maintenanceFilters = Object.assign({}, this.maintenanceFilters);
         }
 
+        if (this.postExtension) {
+            objData.postExtension = this.postExtension;
+        }
+
         if (this.sockets) {
             for (let i = 0; i < this.sockets.length; i++) {
                 let socket = this.sockets[i];
@@ -628,6 +632,11 @@ class FoxholeStructure extends DraggableContainer {
 
         if (objData.maintenanceFilters) {
             this.setMaintenanceFilters(objData.maintenanceFilters);
+        }
+
+        if (objData.postExtension) {
+            this.postExtension = objData.postExtension;
+            this.regenerate();
         }
 
         if (this.isTrain && typeof objData.trackDirection === 'number') {
@@ -1317,6 +1326,90 @@ class FoxholeStructure extends DraggableContainer {
                             socket.pointer.tint = limitReached ? COLOR_RED : COLOR_WHITE;
                         }
                     }
+                } else if (this.building.key === 'barbedwirewallspline') {
+                    const postExtension = (this.postExtension ?? 1) * METER_BOARD_PIXEL_SIZE;
+                    const frontExtPoint = { x: postExtension, y: 0, rotation: 0 };
+                    const backExtPoint = Math.extendPoint(backPoint, postExtension, backPoint.rotation);
+                    backExtPoint.rotation = backPoint.rotation;
+
+                    const midPoints = [];
+                    const dist = Math.distanceBetween(frontExtPoint, backExtPoint);
+                    const childSpacing = this.building.texturePostDist * METER_BOARD_PIXEL_SIZE;
+                    if (dist > childSpacing) {
+                        const numChildren = Math.floor(dist / childSpacing) - 1;
+                        const dx = (backExtPoint.x - frontExtPoint.x) / (numChildren + 1);
+                        const dy = (backExtPoint.y - frontExtPoint.y) / (numChildren + 1);
+
+                        for (let i = 0; i < numChildren; i++) {
+                            const childPoint = {
+                                x: frontExtPoint.x + dx * (i + 1),
+                                y: frontExtPoint.y + dy * (i + 1),
+                                rotation: Math.angleBetween(frontExtPoint, backExtPoint)
+                            };
+                            midPoints.push(childPoint);
+                        }
+                    }
+
+                    if (!this.posts) {
+                        this.posts = new PIXI.Container;
+                        this.sprite.addChild(this.posts);
+                    }
+
+                    this.posts.removeChildren();
+
+                    const postRotation = Math.angleBetween(frontExtPoint, backExtPoint);
+                    const createPost = (point, rotation = postRotation) => {
+                        const post = new PIXI.Sprite(game.resources[this.building.texturePost].texture);
+                        post.anchor.set(0.5);
+                        this.posts.addChild(post);
+                        if (point.rotation === undefined) {
+                            point.rotation = rotation;
+                        }
+                        updateTextureCap(post, point, Math.PI);
+                        return post;
+                    }
+
+                    const endPoints = [frontPoint, frontExtPoint, backExtPoint, backPoint];
+                    for (const point of endPoints.concat(midPoints)) {
+                        createPost(point);
+                    }
+
+                    const generatePoints = (points = [], startPoint, endPoint, numPoints, rotation = 0) => {
+                        points.push(startPoint);
+                        const xStep = (endPoint.x - startPoint.x) / (numPoints - 1);
+                        const yStep = (endPoint.y - startPoint.y) / (numPoints - 1);
+                        for (let i = 0; i < numPoints; i++) {
+                            const point = {
+                                x: startPoint.x + (xStep * i),
+                                y: startPoint.y + (yStep * i)
+                            }
+                            if (i === (Math.ceil(numPoints / 2) - 1)) {
+                                const dist = Math.distanceBetween(startPoint, endPoint);
+                                if (dist > childSpacing) {
+                                    createPost(point, rotation);
+                                }
+                            }
+                            points.push(point);
+                        }
+                        points.push(endPoint);
+                        return points;
+                    }
+
+                    const ropePoints = [];
+                    generatePoints(ropePoints, frontPoint, frontExtPoint, 3);
+                    generatePoints(ropePoints, backExtPoint, backPoint, 3, backPoint.rotation);
+                    this.sprite.rope = new PIXI.SimpleRope(game.resources[this.building.texture].texture, ropePoints, 1);
+                    this.sprite.addChild(this.sprite.rope);
+
+                    if (this.sockets) {
+                        for (const socket of this.sockets) {
+                            if (socket.socketData.cap === 'back') {
+                                socket.position.set(backPoint.x, backPoint.y);
+                                socket.rotation = backPoint.rotation - Math.PI / 2;
+                                break;
+                            }
+                        }
+                    }
                 } else {
                     let bezierPoints = [];
                     for (let i = 0; i < this.points.length; i++) {
@@ -1545,14 +1638,7 @@ class FoxholeLocomotive extends FoxholeStructure {
             this.front_undercarriage.trackVelocity = 0;
             this.back_undercarriage.trackVelocity = 0;
         } else {
-            const getMidPoint = (p1, p2) => {
-                return {
-                    x: (p1.x + p2.x) / 2,
-                    y: (p1.y + p2.y) / 2
-                };
-            }
-
-            let midPoint = getMidPoint(this.front_undercarriage, this.back_undercarriage);
+            let midPoint = Math.pointBetween(this.front_undercarriage, this.back_undercarriage);
             this.position.set(midPoint.x, midPoint.y);
             this.rotation = Math.angleNormalized(Math.angleBetween(midPoint, this.front_undercarriage));
         }

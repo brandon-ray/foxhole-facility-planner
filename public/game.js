@@ -1527,6 +1527,8 @@ try {
     let mouseDown = {};
     let forceMouseDown = {};
     mouseEventListenerObject.addEventListener('wheel', (e) => {
+        e.preventDefault();
+
         if (!e.ctrlKey) {
             let lastZoom = camera.zoom;
             camera.zoom *= (1 - e.deltaY * (game.settings.zoomSpeed * 0.000225));
@@ -1551,6 +1553,13 @@ try {
             let angle = Math.angleBetween(pos2, {x: gmx, y: gmy});
             camera.x += Math.cos(angle) * dist;
             camera.y += Math.sin(angle) * dist;
+        } else {
+            for (const selectedEntity of selectedEntities) {
+                if (selectedEntity.building?.maxExtLength) {
+                    selectedEntity.postExtension = Math.max(Math.min((selectedEntity.postExtension ?? 1) - (e.deltaY / 200), selectedEntity.building.maxExtLength), selectedEntity.building.minExtLength);
+                    selectedEntity.regenerate();
+                }
+            }
         }
     });
     mouseEventListenerObject.addEventListener('contextmenu', (e) => {
@@ -2976,7 +2985,7 @@ try {
                                                 i = -1;
                                             }
                                         }
-                                        if (!connectionEstablished && pickupEntity && entity.building?.isBezier && ((pickupEntity.building?.isBezier && pickupEntity.building?.canSnapAlongBezier && entity.subtype === pickupEntity.subtype) || pickupEntity.isTrain || pickupEntity.building?.canSnapAlongBezier === entity.subtype)) {
+                                        if (!connectionEstablished && pickupEntity && entity.building?.isBezier && entity.bezier && ((pickupEntity.building?.isBezier && pickupEntity.building?.canSnapAlongBezier && entity.subtype === pickupEntity.subtype) || pickupEntity.isTrain || pickupEntity.building?.canSnapAlongBezier === entity.subtype)) {
                                             const projection = entity.bezier?.project(mousePos);
                                             if (projection.d <= Math.max(entity.building?.lineWidth ?? 0, 25)) {
                                                 if (pickupEntity && projection && ((!connectionEstablished && entity.bezier && entity.building.isBezier && entity.building.canSnapAlongBezier && selectedEntity.subtype === entity.subtype) ||
@@ -3138,6 +3147,12 @@ try {
     }, 60000);
 
     Math.PI2 = Math.PI * 2;
+    Math.pointBetween = function (p1, p2) {
+        return {
+            x: (p1.x + p2.x) / 2,
+            y: (p1.y + p2.y) / 2
+        };
+    };
     Math.angleBetween = function (p1, p2) {
         return Math.atan2(p2.y - p1.y, p2.x - p1.x);
     };
@@ -3248,8 +3263,13 @@ try {
 
         return false;
     };
+    Math.distanceToLine = function(point, lineStart, lineEnd) {
+        const { x: x1, y: y1 } = lineStart;
+        const { x: x2, y: y2 } = lineEnd;
+        return Math.abs((y2 - y1) * point.x - (x2 - x1) * point.y + x2 * y1 - y2 * x1) / Math.sqrt(Math.pow(y2 - y1, 2) + Math.pow(x2 - x1, 2));
+    }
     Number.prototype.round = function(n) {
         const d = Math.pow(10, n);
         return Math.round((this + Number.EPSILON) * d) / d;
-    }
+    };
 })();

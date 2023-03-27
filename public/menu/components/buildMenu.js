@@ -1343,6 +1343,7 @@ Vue.component('app-menu-about', {
                 <div class="right-mouse-button"></div> Rotate selected structures.
                 <hr>
                 <div class="keyboard-key">ctrl</div> + <div class="left-mouse-button"></div> Add structure to selection.<br>
+                <div class="keyboard-key">ctrl</div> + <div class="middle-mouse-button"></div> Adjust selected spline length.<br>
                 <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">A</div> Select all structures.<br>
                 <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">C</div> Clone selection.
                 <hr>

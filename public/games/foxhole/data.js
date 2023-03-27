@@ -2276,12 +2276,17 @@ const gameData = {
 			"description": "Used to prevent enemy infantry movement through an area. This structure is difficult to destroy with conventional weapons and must be dismantled with a Wrench.",
 			"category": "defenses",
 			"categoryOrder": 2,
-			"hideInList": true,
+			"hasHandle": true,
+			"isBezier": true,
 			"simpleBezier": true,
 			"minLength": 4,
 			"maxLength": 10,
+			"minExtLength": 1,
+			"maxExtLength": 4,
 			"icon": "game/Textures/UI/ItemIcons/BarbedWireFenceStructureIcon.webp",
-			"texture": null,
+			"texture": "game/Textures/Structures/barbedwirewallspline.webp",
+			"texturePost": "game/Textures/Structures/barbedwirewallsplinepost.webp",
+			"texturePostDist": 1.75,
 			"canSnap": true,
 			"sockets": [
 				{
@@ -2963,7 +2968,7 @@ const gameData = {
 			"codeName": "ConcreteMixer",
 			"description": "A portable device that mixes various materials to form Concrete, which are used to build heavily fortified structures.",
 			"category": "shippables",
-			"categoryOrder": 5,
+			"categoryOrder": 10,
 			"icon": "game/Textures/UI/StructureIcons/ConcreteMixerIcon.webp",
 			"texture": "game/Textures/Structures/concretemixer.webp",
 			"techId": "unlockconcretemixer",
@@ -6094,7 +6099,7 @@ const gameData = {
 			"codeName": "FuelContainer",
 			"description": "A container for storing high volumes of liquids. Nearby structures and vehicles can refill directly from this container. ",
 			"category": "shippables",
-			"categoryOrder": 4,
+			"categoryOrder": 5,
 			"sortLayer": "container",
 			"icon": "game/Textures/UI/StructureIcons/FuelTankIcon.webp",
 			"texture": "game/Textures/Structures/fuel_container.webp",
@@ -10495,6 +10500,17 @@ const gameData = {
 				"cloth": 100
 			},
 			"repairCost": 100
+		},
+		"shippingcrate": {
+			"name": "Shipping Crate",
+			"description": "A crate of packed items.",
+			"category": "shippables",
+			"categoryOrder": 4,
+			"icon": "game/Textures/UI/StructureIcons/ProductionPartsStructureIcon.webp",
+			"texture": "game/Textures/Structures/shippingcrate.webp",
+			"maxHealth": 800,
+			"cost": false,
+			"repairCost": 50
 		},
 		"smalltraindump": {
 			"name": "BMS Railtruck",
