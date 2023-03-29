@@ -51,6 +51,7 @@
     </script>
 
     <script>
+        let WINDOW_SCALE = 1;
         window.addEventListener('resize', onResize);
         function onResize() {
             var container = document.getElementById('ui');
@@ -62,14 +63,17 @@
                 var widthScale = width / maxWidth;
                 var heightScale = height / maxHeight;
                 if (heightScale < widthScale) {
-                    container.style.transform = 'scale(' + heightScale.toFixed(3) + ')';
+                    WINDOW_SCALE = heightScale.toFixed(3);
+                    container.style.transform = 'scale(' + WINDOW_SCALE + ')';
                     container.style.width = ((width / heightScale) + 2).toFixed(3) + 'px';
                     container.style.height = (maxHeight + 2) + 'px';
                 } else {
-                    container.style.transform = 'scale(' + widthScale.toFixed(3) + ')';
+                    WINDOW_SCALE = widthScale.toFixed(3);
+                    container.style.transform = 'scale(' + WINDOW_SCALE + ')';
                     container.style.width = (maxWidth + 2) + 'px';
                     container.style.height = ((height / widthScale) + 2).toFixed(3) + 'px';
                 }
+                game?.boardUIComponent?.refresh();
             }
         }
         setTimeout(function() {

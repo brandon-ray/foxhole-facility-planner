@@ -85,6 +85,7 @@ const game = {
         showUpgradesAsBuildings: false,
         showFacilityName: true,
         showToolbelt: true,
+        showFooterInfo: false,
         selectedToolbelt: 0,
         toolbelts: {},
         toolbeltFilters: {
@@ -382,7 +383,7 @@ try {
     game.setPlaying = function(playing) {
         if (game.playMode !== playing) {
             game.playMode = playing;
-            game.appComponent.$forceUpdate();
+            game.appComponent?.refresh();
         }
     }
 
@@ -578,10 +579,7 @@ try {
         }
 
         game.reloadSettings();
-
-        if (game.appComponent) {
-            game.appComponent.$forceUpdate();
-        }
+        game.appComponent?.refresh();
     };
 
     game.reloadSettings = () => {
@@ -1339,7 +1337,7 @@ try {
         game.projectSettings.regionKey = regionKey;
         game.updateEntityOverlays();
         game.updateSave();
-        game.appComponent?.$forceUpdate();
+        game.appComponent?.refresh();
     };
 
     game.getEntitiesCenter = function(ents, isSelection) {
@@ -2561,6 +2559,7 @@ try {
     let fpsCheck = null;
     let menuInit = false;
     let lastTick = Date.now();
+    let lastCameraZoom;
     let g_TICK = 10;
     let g_Time = 0;
     let selectionRotation = null;
@@ -2577,6 +2576,11 @@ try {
 
         let delta = Date.now() - lastTick;
         lastTick = Date.now();
+
+        if (lastCameraZoom !== game.camera.zoom) {
+            lastCameraZoom = game.camera.zoom;
+            game.boardUIComponent?.refresh();
+        }
 
         game.tryGameFocus();
 

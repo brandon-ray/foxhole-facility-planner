@@ -1392,14 +1392,20 @@ input[type=number].btn-small {
 }
 
 .board-scale-ui {
-    position: fixed;
-    bottom: 50px;
+    line-height: 32px;
+    position: absolute;
+    bottom: 44px;
+    left: 0;
     right: 0;
+    pointer-events: none;
+    /* text-align: right; */
+    text-align: center;
+    text-shadow: 0 2px 3px rgba(45, 45, 45, 0.5);
+    padding: 0 20px;
 }
 
 .board-scale-ui > div {
     display: inline-block;
-    margin-right: 15px;
 }
 
 .board-scale-ui > .board-scale-tile {

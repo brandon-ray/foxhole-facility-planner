@@ -22,6 +22,10 @@ if (isMobile && !isPhoneApp) {
                 };
             },
             methods: {
+                refresh: function() {
+                    this.$forceUpdate();
+                    game.boardUIComponent?.$forceUpdate();
+                },
                 updateIsPlayScreen: function (disableFullLoad) {
                     this.isPlayScreen = game.isPlayScreen;
                     this.isInMenu = game.isInMenu;
@@ -52,14 +56,14 @@ if (isMobile && !isPhoneApp) {
                     }
                     game.updateEntityOverlays();
                     game.updateSave();
-                    game.appComponent.$forceUpdate();
+                    this.refresh();
                 },
                 selectMapRegion: function(key) {
                     game.setMapRegion(key);
                     if (game.projectSettings.regionKey) {
                         this.regionSelectionVisible = false;
                     }
-                    game.appComponent.$forceUpdate();
+                    this.refresh();
                 }
             },
             template: html`
@@ -161,13 +165,8 @@ if (isMobile && !isPhoneApp) {
 
                 <app-game-confirmation-popup></app-game-confirmation-popup>
 
-                <div class="board-scale-ui">
-                    <div v-if="game.projectSettings.regionKey">Region: {{gameData.maps[game.projectSettings.regionKey].name}}</div>
-                    <!-- Scale: {{game.camera.zoom}}m -->
-                    <!-- <div class="board-scale-tile"></div> -->
-                </div>
-
                 <div class="footer">
+                    <app-board-ui></app-board-ui>
                     <button class="btn-small btn-float-left" :class="{ 'btn-active': !sidebarVisible }" title="Toggle Sidebar Menu" @click="sidebarVisible = !sidebarVisible">
                         <i class="fa" :class="{'fa-chevron-left': sidebarVisible, 'fa-chevron-right': !sidebarVisible}" aria-hidden="true"></i>
                     </button>
@@ -208,6 +207,9 @@ if (isMobile && !isPhoneApp) {
                     <button class="btn-small" title="Center Board" @click="game.zoomToEntitiesCenter()">
                         <i class="fa fa-crosshairs" aria-hidden="true"></i>
                     </button>
+                    <button class="btn-small" :class="{'btn-active': game.settings.showFooterInfo}" title="Toggle Board Info" @click="game.settings.showFooterInfo = !game.settings.showFooterInfo; game.updateSettings()">
+                        <i class="fa fa-info" aria-hidden="true"></i>
+                    </button>
                     <button v-if="game.settings.enableHistory" class="btn-small" title="Redo" @click="game.redo()">
                         <i class="fa fa-repeat" aria-hidden="true"></i>
                     </button>
@@ -223,6 +225,35 @@ if (isMobile && !isPhoneApp) {
         });
     }
 }
+
+Vue.component('app-board-ui', {
+    mounted: function () {
+        game.boardUIComponent = this;
+    },
+    data: function () {
+        return {
+            scaleUnits: 1,
+            boardScale: 1
+        };
+    },
+    methods: {
+        refresh: function() {
+            this.scaleUnits = 1;
+            this.boardScale = METER_BOARD_PIXEL_SIZE * game.camera.zoom;
+            while (this.boardScale < (METER_BOARD_PIXEL_SIZE / this.scaleUnits)) {
+                this.scaleUnits += 1;
+            }
+            this.$forceUpdate();
+        }
+    },
+    template: html`
+    <div v-if="game.settings.showFooterInfo" class="board-scale-ui">
+        <div v-if="game.projectSettings.regionKey" class="mr-2">{{gameData.maps[game.projectSettings.regionKey].name}}</div>
+        {{scaleUnits}}m
+        <div class="board-scale-tile" :style="{ width: ((scaleUnits * boardScale) / WINDOW_SCALE) + 'px' }"></div>
+    </div>
+    `
+});
 
 Vue.component('app-game-confirmation-popup', {
     mounted: function() {

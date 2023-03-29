@@ -1257,7 +1257,7 @@ Vue.component('app-menu-save-load', {
             }
             game.updateSave();
             this.$forceUpdate();
-            game.appComponent.$forceUpdate();
+            game.appComponent?.refresh();
         }
     },
     template: html`
