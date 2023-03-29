@@ -2403,7 +2403,7 @@ const gameData = {
 			"icon": "game/Textures/UI/FacilityCraneIcon.webp",
 			"texture": "game/Textures/Structures/bms_foreman_stacker.webp",
 			"textureOffset": {
-				"x": 445,
+				"x": 428,
 				"y": 258
 			},
 			"buildOnFoundation": true,
