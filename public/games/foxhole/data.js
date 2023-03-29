@@ -4104,6 +4104,20 @@ const gameData = {
 			},
 			"repairCost": 100
 		},
+		"firepit": {
+			"name": "Fire Pit",
+			"codeName": "FirePit",
+			"description": "A pit of fire used to keep soldiers warm during Snow Storms. Requires Diesel to fuel.",
+			"category": "misc",
+			"categoryOrder": 7,
+			"icon": "game/Textures/UI/StructureIcons/FirePitIcon.webp",
+			"texture": "game/Textures/Structures/firepit.webp",
+			"maxHealth": 400,
+			"cost": {
+				"cloth": 35
+			},
+			"repairCost": 35
+		},
 		"flatbedtruck": {
 			"name": "BMS - Packmule Flatbed",
 			"codeName": "FlatbedTruck",
@@ -11001,6 +11015,20 @@ const gameData = {
 					"time": 12
 				}
 			]
+		},
+		"storagebox": {
+			"name": "Storage Box",
+			"codeName": "StorageBox",
+			"description": "A shared storage container that can be used to stash item.",
+			"category": "misc",
+			"categoryOrder": 2,
+			"icon": "game/Textures/UI/StructureIcons/StorageItemIcon.webp",
+			"texture": "game/Textures/Structures/storagebox.webp",
+			"maxHealth": 400,
+			"cost": {
+				"cloth": 25
+			},
+			"repairCost": 25
 		},
 		"sulfurmine": {
 			"name": "Sulfur Mine",
