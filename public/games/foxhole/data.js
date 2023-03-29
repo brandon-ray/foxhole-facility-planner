@@ -1765,6 +1765,7 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/ItemIcons/AmmoFactoryBaseIcon.webp",
 			"texture": "game/Textures/Structures/ammunition_factory.webp",
+			"preventOnLandscape": true,
 			"power": -4,
 			"sockets": [
 				{
@@ -2231,6 +2232,7 @@ const gameData = {
 			"texture": "game/Textures/Structures/barbedwirespline.webp",
 			"textureFrontCap": "game/Textures/Structures/barbedwirespline_front.webp",
 			"textureBackCap": "game/Textures/Structures/barbedwirespline_back.webp",
+			"buildOnFoundation": true,
 			"canSnap": true,
 			"sockets": [
 				{
@@ -2287,6 +2289,7 @@ const gameData = {
 			"texture": "game/Textures/Structures/barbedwirewallspline.webp",
 			"texturePost": "game/Textures/Structures/barbedwirewallsplinepost.webp",
 			"texturePostDist": 1.75,
+			"buildOnFoundation": true,
 			"canSnap": true,
 			"sockets": [
 				{
@@ -2403,6 +2406,8 @@ const gameData = {
 				"x": 445,
 				"y": 258
 			},
+			"buildOnFoundation": true,
+			"preventOnLandscape": true,
 			"power": -0.5,
 			"sockets": [
 				{
@@ -2490,6 +2495,8 @@ const gameData = {
 			"maxLength": 20,
 			"icon": "game/Textures/UI/ItemIcons/facilitieCatwalkPlatfromIcon.webp",
 			"texture": "game/Textures/Structures/catwalk_bridge.webp",
+			"buildOnFoundation": true,
+			"preventOnLandscape": true,
 			"canSnap": true,
 			"sockets": [
 				{
@@ -2539,6 +2546,8 @@ const gameData = {
 			"sortLayer": "overhead",
 			"icon": "game/Textures/UI/ItemIcons/FacilityCatwalkRampConnectorIcon.webp",
 			"texture": "game/Textures/Structures/catwalk_platform.webp",
+			"buildOnFoundation": true,
+			"preventOnLandscape": true,
 			"canSnap": true,
 			"snapNearest": true,
 			"sockets": [
@@ -2607,6 +2616,8 @@ const gameData = {
 			"sortLayer": "overhead",
 			"icon": "game/Textures/UI/ItemIcons/FacilityCatwalkRampIcon.webp",
 			"texture": "game/Textures/Structures/catwalk_stairs.webp",
+			"buildOnFoundation": true,
+			"preventOnLandscape": true,
 			"canSnap": true,
 			"sockets": [
 				{
@@ -2664,6 +2675,7 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/ItemIcons/FacilitiesCoolRefineryBaseIcon.webp",
 			"texture": "game/Textures/Structures/coal_refinery.webp",
+			"preventOnLandscape": true,
 			"power": -3,
 			"sockets": [
 				{
@@ -2993,10 +3005,13 @@ const gameData = {
 		},
 		"construction_vehicle": {
 			"name": "BMS - Universal Assembly Rig",
+			"aliases": [
+				"CV"
+			],
 			"codeName": "Construction",
 			"description": "A specialized vehicle designed by the Basset Motor Society used in the construction of large structures.",
-			"category": "vehicles",
-			"categoryOrder": 20,
+			"category": "misc",
+			"categoryOrder": 3,
 			"sortLayer": "vehicle",
 			"hitArea": [
 				{
@@ -3026,14 +3041,21 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/VehicleIcons/ConstructionVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/construction_vehicle.webp",
-			"cost": false
+			"maxHealth": 20,
+			"cost": {
+				"cloth": 100
+			},
+			"repairCost": 100
 		},
 		"constructionutility": {
 			"name": "BMS - Fabricator",
+			"aliases": [
+				"Advanced Construction Vehicle"
+			],
 			"codeName": "ConstructionUtility",
 			"description": "An advanced variant of the Universal Assembly Rig, the BMS - Fabricator is fitted with a unique kit designed to handle advanced or specialized construction and excavation jobs.",
-			"category": "vehicles",
-			"categoryOrder": 20,
+			"category": "misc",
+			"categoryOrder": 3,
 			"hitArea": [
 				{
 					"shape": [ -103.94,18.48,-117.88,41.52,-117.88,19.09 ]
@@ -3062,14 +3084,18 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/VehicleIcons/AdvancedConstructionVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/advanced_construction_vehicle.webp",
-			"techId": "unlockconstructionutility"
+			"techId": "unlockconstructionutility",
+			"cost": {
+				"construction": 1,
+				"facilitymaterials2": 10
+			}
 		},
 		"crane": {
 			"name": "BMS - Class 2 Mobile Auto-Crane",
 			"codeName": "Crane",
 			"description": "The Basset Motor Society’s Class 2 Mobile Auto-Crane is used to lift and reposition vehicles and very heavy equipment.",
-			"category": "vehicles",
-			"categoryOrder": 25,
+			"category": "misc",
+			"categoryOrder": 4,
 			"range": {
 				"type": "crane",
 				"min": null,
@@ -3107,7 +3133,11 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/VehicleIcons/CraneVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/crane.webp",
-			"cost": false
+			"maxHealth": 20,
+			"cost": {
+				"cloth": 125
+			},
+			"repairCost": 125
 		},
 		"destroyertankflamew": {
 			"name": "Noble Firebrand Mk. XVII",
@@ -3171,6 +3201,7 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/ItemIcons/DiesePowerPlanetBaseIcon.webp",
 			"texture": "game/Textures/Structures/diesel_power_plant.webp",
+			"preventOnLandscape": true,
 			"power": 5,
 			"sockets": [
 				{
@@ -3795,6 +3826,7 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/StructureIcons/FacilityModificationCenterIcon.webp",
 			"texture": "game/Textures/Structures/field_modification_center.webp",
+			"preventOnLandscape": true,
 			"power": -8,
 			"sockets": [
 				{
@@ -3901,6 +3933,7 @@ const gameData = {
 			"maxLength": 25,
 			"icon": "game/Textures/UI/StructureIcons/FieldBridgeItemIcon.webp",
 			"texture": "game/Textures/Structures/fieldbridge.webp",
+			"buildOnWater": true,
 			"canSnap": true,
 			"sockets": [
 				{
@@ -4112,6 +4145,7 @@ const gameData = {
 			"categoryOrder": 7,
 			"icon": "game/Textures/UI/StructureIcons/FirePitIcon.webp",
 			"texture": "game/Textures/Structures/firepit.webp",
+			"buildOnFoundation": true,
 			"maxHealth": 400,
 			"cost": {
 				"cloth": 35
@@ -5696,6 +5730,7 @@ const gameData = {
 			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation01Icon.webp",
 			"texture": "game/Textures/Structures/foundation_1x1.webp",
 			"textureBorder": "game/Textures/Structures/foundation_border.webp",
+			"buildOnWater": true,
 			"garrisonSupplyMultiplier": 2,
 			"canSnap": true,
 			"snapNearest": true,
@@ -5781,6 +5816,7 @@ const gameData = {
 			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation03Icon.webp",
 			"texture": "game/Textures/Structures/foundation_1x2.webp",
 			"textureBorder": "game/Textures/Structures/foundation_border.webp",
+			"buildOnWater": true,
 			"garrisonSupplyMultiplier": 2,
 			"canSnap": true,
 			"snapNearest": true,
@@ -5889,6 +5925,7 @@ const gameData = {
 			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation04Icon.webp",
 			"texture": "game/Textures/Structures/foundation_2x2.webp",
 			"textureBorder": "game/Textures/Structures/foundation_border.webp",
+			"buildOnWater": true,
 			"garrisonSupplyMultiplier": 2,
 			"canSnap": true,
 			"snapNearest": true,
@@ -6033,6 +6070,7 @@ const gameData = {
 				"x": 288,
 				"y": 288
 			},
+			"buildOnWater": true,
 			"garrisonSupplyMultiplier": 2,
 			"canSnap": true,
 			"snapNearest": true,
@@ -6117,6 +6155,7 @@ const gameData = {
 			"sortLayer": "container",
 			"icon": "game/Textures/UI/StructureIcons/FuelTankIcon.webp",
 			"texture": "game/Textures/Structures/fuel_container.webp",
+			"buildOnFoundation": true,
 			"maxHealth": 1000,
 			"cost": {
 				"cloth": 100
@@ -6182,6 +6221,7 @@ const gameData = {
 			"sortLayer": "wall",
 			"icon": "game/Textures/UI/StructureIcons/Gate-T1Icon.webp",
 			"texture": "game/Textures/Structures/gatet1.webp",
+			"buildOnFoundation": true,
 			"canSnap": true,
 			"canSnapRotate": true,
 			"sockets": [
@@ -6449,6 +6489,7 @@ const gameData = {
 			"color": 8184298,
 			"icon": "game/Textures/UI/ItemIcons/LargeAssemblyStationIcon.webp",
 			"texture": "game/Textures/Structures/large_assembly_factory.webp",
+			"preventOnLandscape": true,
 			"power": -8,
 			"sockets": [
 				{
@@ -6697,6 +6738,7 @@ const gameData = {
 			"color": 8184298,
 			"icon": "game/Textures/UI/ItemIcons/AssemblyStationIcon.webp",
 			"texture": "game/Textures/Structures/light_vehicle_assembly_station.webp",
+			"preventOnLandscape": true,
 			"power": -2,
 			"sockets": [
 				{
@@ -7599,6 +7641,7 @@ const gameData = {
 			"color": 8186514,
 			"icon": "game/Textures/UI/ItemIcons/MaterialTransferStationLiquidIcon.webp",
 			"texture": "game/Textures/Structures/liquid_transfer_station.webp",
+			"preventOnLandscape": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -7661,6 +7704,7 @@ const gameData = {
 			"color": 8186514,
 			"icon": "game/Textures/UI/ItemIcons/FacilityResourceTransfer3Icon.webp",
 			"texture": "game/Textures/Structures/material_transfer_station.webp",
+			"preventOnLandscape": true,
 			"maxHealth": 2200,
 			"cost": {
 				"facilitymaterials1": 35
@@ -7675,6 +7719,7 @@ const gameData = {
 			"categoryOrder": 1,
 			"icon": "game/Textures/UI/ItemIcons/MaterialPlatformItemIcon.webp",
 			"texture": "game/Textures/Structures/material_platform.webp",
+			"buildOnFoundation": true,
 			"maxHealth": 1000,
 			"cost": {
 				"cloth": 25
@@ -7702,6 +7747,7 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/StructureIcons/MetalworksFactoryBase.webp",
 			"texture": "game/Textures/Structures/materials_factory.webp",
+			"preventOnLandscape": true,
 			"power": -2,
 			"sockets": [
 				{
@@ -8239,6 +8285,7 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/StructureIcons/FacilityRefinery2Icon.webp",
 			"texture": "game/Textures/Structures/metalworks_factory.webp",
+			"preventOnLandscape": true,
 			"power": -5,
 			"sockets": [
 				{
@@ -8637,7 +8684,7 @@ const gameData = {
 			"name": "BMS - Grouper",
 			"codeName": "Motorboat",
 			"description": "Powered by the Basset Motor Society’s lightweight Grouper engine, this simple wooden boat is ideal for ferrying small groups of infantry across rivers and between islands.",
-			"category": "naval",
+			"category": "misc",
 			"categoryOrder": 5,
 			"icon": "game/Textures/UI/VehicleIcons/Motorboat.webp",
 			"texture": "game/Textures/Vehicles/motorboat.webp",
@@ -8702,6 +8749,7 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/ItemIcons/OilRefineryBaseIcon.webp",
 			"texture": "game/Textures/Structures/oil_refinery.webp",
+			"preventOnLandscape": true,
 			"power": -1,
 			"sockets": [
 				{
@@ -9330,6 +9378,7 @@ const gameData = {
 			"texture": "game/Textures/Structures/pipeline.webp",
 			"textureFrontCap": "game/Textures/Structures/pipeline_front.webp",
 			"textureBackCap": "game/Textures/Structures/pipeline_back.webp",
+			"buildOnFoundation": true,
 			"canSnap": true,
 			"sockets": [
 				{
@@ -9416,6 +9465,8 @@ const gameData = {
 			"texture": "game/Textures/Structures/pipeline_overhead.webp",
 			"textureFrontCap": "game/Textures/Structures/pipeline_overhead_front.webp",
 			"textureBackCap": "game/Textures/Structures/pipeline_overhead_back.webp",
+			"buildOnFoundation": true,
+			"preventOnLandscape": true,
 			"canSnap": true,
 			"sockets": [
 				{
@@ -9487,6 +9538,7 @@ const gameData = {
 			"texture": null,
 			"textureFrontCap": "game/Textures/Structures/pipeline_underground_front.webp",
 			"textureBackCap": "game/Textures/Structures/pipeline_underground_back.webp",
+			"buildOnFoundation": true,
 			"garrisonSupplyMultiplier": 4,
 			"canSnap": true,
 			"sockets": [
@@ -9546,6 +9598,7 @@ const gameData = {
 			"sortLayer": "pipe",
 			"icon": "game/Textures/UI/ItemIcons/FacilityPipeValveIcon.webp",
 			"texture": "game/Textures/Structures/pipeline_valve.webp",
+			"buildOnFoundation": true,
 			"canSnap": true,
 			"sockets": [
 				{
@@ -9611,6 +9664,7 @@ const gameData = {
 			"sortLayer": "power_pole",
 			"icon": "game/Textures/UI/StructureIcons/FacilityPowerBoxIcon.webp",
 			"texture": "game/Textures/Structures/power_box.webp",
+			"preventOnLandscape": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -9648,6 +9702,7 @@ const gameData = {
 			"maxLength": 25,
 			"icon": "game/Textures/UI/StructureIcons/PowelineIcon.webp",
 			"texture": "game/Textures/Structures/power_line.webp",
+			"buildOnFoundation": true,
 			"garrisonSupplyMultiplier": 0,
 			"canSnap": true,
 			"canSnapRotate": true,
@@ -9777,6 +9832,7 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/StructureIcons/FacilityPowerOilIcon.webp",
 			"texture": "game/Textures/Structures/power_station.webp",
+			"preventOnLandscape": true,
 			"power": 15,
 			"sockets": [
 				{
@@ -10002,6 +10058,8 @@ const gameData = {
 			"maxLength": 30,
 			"icon": "game/Textures/UI/StructureIcons/CraneRailTrackIcon.webp",
 			"texture": "game/Textures/Structures/rail_large_crane.webp",
+			"buildOnFoundation": true,
+			"preventOnLandscape": true,
 			"canSnap": true,
 			"sockets": [
 				{
@@ -10047,6 +10105,7 @@ const gameData = {
 			"maxLength": 30,
 			"icon": "game/Textures/UI/StructureIcons/BiarcRailTrackIcon.webp",
 			"texture": "game/Textures/Structures/rail_large_gauge.webp",
+			"buildOnFoundation": true,
 			"canSnap": true,
 			"canSnapAlongBezier": true,
 			"sockets": [
@@ -10102,6 +10161,7 @@ const gameData = {
 			"maxLength": 30,
 			"icon": "game/Textures/UI/StructureIcons/BiarcSmallRailTrackIcon.webp",
 			"texture": "game/Textures/Structures/rail_small_gauge.webp",
+			"buildOnFoundation": true,
 			"canSnap": true,
 			"canSnapAlongBezier": true,
 			"sockets": [
@@ -10252,6 +10312,7 @@ const gameData = {
 			"color": 8186514,
 			"icon": "game/Textures/UI/ItemIcons/MaterialTransferStationIcon.webp",
 			"texture": "game/Textures/Structures/resource_transfer_station.webp",
+			"preventOnLandscape": true,
 			"maxHealth": 2200,
 			"cost": {
 				"facilitymaterials1": 35
@@ -10351,6 +10412,7 @@ const gameData = {
 			"maxLength": 10,
 			"icon": "game/Textures/UI/StructureIcons/SandbagsStructureIcon.webp",
 			"texture": "game/Textures/Structures/sandbaghalfspline.webp",
+			"buildOnFoundation": true,
 			"canSnap": true,
 			"sockets": [
 				{
@@ -11024,6 +11086,7 @@ const gameData = {
 			"categoryOrder": 2,
 			"icon": "game/Textures/UI/StructureIcons/StorageItemIcon.webp",
 			"texture": "game/Textures/Structures/storagebox.webp",
+			"buildOnFoundation": true,
 			"maxHealth": 400,
 			"cost": {
 				"cloth": 25
@@ -11143,6 +11206,7 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/StructureIcons/TankStopIcon.webp",
 			"texture": "game/Textures/Structures/tankstop.webp",
+			"buildOnFoundation": true,
 			"techId": "unlocktankstop",
 			"maxHealth": 2000,
 			"cost": {
@@ -12533,6 +12597,7 @@ const gameData = {
 			"maxLength": 10,
 			"icon": "game/Textures/UI/ItemIcons/Wall-T1Icon.webp",
 			"texture": "game/Textures/Structures/wallsplinet1.webp",
+			"buildOnFoundation": true,
 			"canSnap": true,
 			"canSnapRotate": true,
 			"sockets": [
@@ -12669,6 +12734,7 @@ const gameData = {
 			},
 			"icon": "game/Textures/UI/StructureIcons/WatchTowerStructureIcon.webp",
 			"texture": "game/Textures/Structures/watchtower.webp",
+			"buildOnFoundation": true,
 			"maxHealth": 350,
 			"cost": {
 				"cloth": 60
@@ -12700,6 +12766,8 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/StructureIcons/FacilityMineWaterIcon.webp",
 			"texture": "game/Textures/Structures/water_pump.webp",
+			"buildOnWater": true,
+			"preventOnLandscape": true,
 			"maxHealth": 850,
 			"cost": {
 				"facilitymaterials1": 35

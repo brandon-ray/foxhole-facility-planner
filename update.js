@@ -212,6 +212,9 @@ function iterateBaseStructures(uProperty, baseData) {
                     baseData.description = structure.Description?.SourceString ?? baseData.description;
                     baseData.BuildCategory = structure.BuildCategory ?? baseData.BuildCategory;
                     baseData.BuildOrder = structure.BuildOrder ?? baseData.BuildOrder;
+                    baseData.bIsBuiltOnFoundation = structure.bIsBuiltOnFoundation ?? baseData.bIsBuiltOnFoundation,
+                    baseData.bIsBuiltOnLandscape = structure.bIsBuiltOnLandscape ?? baseData.bIsBuiltOnLandscape,
+                    baseData.bBuildOnWater = structure.bBuildOnWater ?? baseData.bBuildOnWater,
                     baseData.minLength = structure.ConnectorMinLength ? structure.ConnectorMinLength / METER_UNREAL_UNITS : undefined ?? baseData.minLength;
                     baseData.maxLength = structure.ConnectorMaxLength ? structure.ConnectorMaxLength / METER_UNREAL_UNITS : undefined ?? baseData.maxLength;
                     baseData.icon = getLocalIcon(structure) ?? baseData.icon;
@@ -431,6 +434,9 @@ async function iterateStructures(dirPath) {
                                     'texturePost': structureData.texturePost,
                                     'texturePostDist': structureData.texturePostDist,
                                     'textureOffset': structureData.textureOffset,
+                                    'buildOnFoundation': (structure.bIsBuiltOnFoundation ?? baseData.bIsBuiltOnFoundation) === true || undefined,
+                                    'buildOnWater': (structure.bBuildOnWater ?? baseData.bBuildOnWater),
+                                    'preventOnLandscape': (structure.bIsBuiltOnLandscape ?? baseData.bIsBuiltOnLandscape) === false || undefined,
                                     'garrisonSupplyMultiplier': structure.DecaySupplyDrain ?? baseData.garrisonSupplyMultiplier ?? structureData.garrisonSupplyMultiplier,
                                     'power': (structure.PowerGridInfo?.PowerDelta ?? baseData.power) / 1000 || undefined,
                                     'canSnap': structureData.canSnap,
