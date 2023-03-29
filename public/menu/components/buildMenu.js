@@ -1020,6 +1020,10 @@ Vue.component('app-game-shape-options', {
                 <i class="fa fa-caret-left" aria-hidden="true"></i>
                 <span class="label">arrow</span>
             </div>
+            <div class="btn-small col" title="Distance" :class="{ 'btn-active': shapeOptions.showDist }" @click="shapeOptions.showDist = !shapeOptions.showDist; container.updateStyleOptions()">
+                <i class="fa fa-sort-numeric-asc" aria-hidden="true"></i>
+                <span class="label">meters</span>
+            </div>
             <div class="btn-small col" title="Back Arrow" :class="{ 'btn-active': shapeOptions.backArrow }" @click="shapeOptions.backArrow = !shapeOptions.backArrow; container.updateStyleOptions()">
                 <i class="fa fa-caret-right" aria-hidden="true"></i>
                 <span class="label">arrow</span>

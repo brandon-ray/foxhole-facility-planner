@@ -110,7 +110,8 @@ const game = {
             line: Object.assign({}, DEFAULT_SHAPE_STYLE, {
                 lineWidth: 14,
                 frontArrow: true,
-                backArrow: true
+                backArrow: true,
+                showDist: false
             })
         },
         volume: 0.2
@@ -3130,10 +3131,15 @@ try {
             }
         }
 
-        if (game.settings.enableExperimental && (game.saveStateChanged || pickupSelectedEntities)) {
+        if (game.saveStateChanged || pickupSelectedEntities) {
             for (const entity of entities) {
-                if (entity.valid && entity.rangeSprite) {
-                    entity.updateRangeMask();
+                if (entity.valid) {
+                    if (game.settings.enableExperimental && entity.rangeSprite) {
+                        entity.updateRangeMask();
+                    }
+                    if (entity.type === 'shape' && entity.subtype === 'line' && entity.shapeStyle?.showDist) {
+                        entity.regenerate();
+                    }
                 }
             }
         }

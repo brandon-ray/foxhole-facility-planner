@@ -929,6 +929,23 @@ class DraggableShape extends DraggableContainer {
             } else {
                 this.sprite.clear();
                 if (this.subtype === 'line') {
+                    this.removeChild(this.distInfo);
+                    if (this.shapeStyle.showDist) {
+                        if (!this.distInfo) {
+                            this.distInfo = new PIXI.Text('', Object.assign({}, game.defaultSettings.styles.label, DEFAULT_TEXT_STYLE));
+                            this.distInfo.anchor.set(0.5);
+                            this.sprite.addChild(this.distInfo);
+                        }
+                        this.distInfo.text = (Math.distanceBetween(frontPoint, backPoint) / METER_BOARD_PIXEL_SIZE).round(3) + 'm';
+                        let midPoint = Math.pointBetween(frontPoint, backPoint);
+                        this.distInfo.rotation = Math.angleNormalized(this.rotation + Math.PI/2) < 0 ? Math.PI : 0;
+                        midPoint = Math.extendPoint(midPoint, (this.shapeStyle.lineWidth/2) + 40, this.distInfo.rotation - Math.PI/2);
+                        this.distInfo.x = midPoint.x;
+                        this.distInfo.y = midPoint.y;
+                    } else if (this.distInfo) {
+                        this.sprite.removeChild(this.distInfo);
+                        this.distInfo = null;
+                    }
                     // TODO: The offset for arrows will have to be calculated based on rotation / angle here.
                     // TODO: Update selecting lines with multiple points. It's completely borked for more than 2 points.
                     const line = this.sprite.lineStyle(this.shapeStyle.lineWidth, this.shapeStyle.fillColor).moveTo((this.shapeStyle.frontArrow ? this.shapeStyle.lineWidth * 1.875 : 0), 0);
