@@ -555,8 +555,8 @@ async function iterateStructures(dirPath) {
                         if (structure && structureData && uProperty.Properties?.Config) {
                             structureList[structureCodeName]['range'] = {
                                 "type": "crane",
-                                "min": uProperty.Properties.Config.MinHorizontalDistanceToTarget / METER_UNREAL_UNITS,
-                                "max": uProperty.Properties.Config.MaxHorizontalDistanceToTarget / METER_UNREAL_UNITS
+                                "min": (uProperty.Properties.Config.MinHorizontalDistanceToTarget ?? 600) / METER_UNREAL_UNITS,
+                                "max": (uProperty.Properties.Config.MaxHorizontalDistanceToTarget ?? 1750) / METER_UNREAL_UNITS
                             };
                         }
                         break;

@@ -1,4 +1,4 @@
-const SAVE_VERSION = '1.0.1';
+const SAVE_VERSION = '1.0.2';
 
 const COLOR_WHITE = 0xFFFFFF; // Also resets tint.
 const COLOR_DARKGREY = 0x505050;
@@ -929,6 +929,8 @@ try {
         if (debugText) {
             debugText.x = WIDTH*0.22;
         }
+        
+        game?.boardUIComponent?.refresh();
     }
     window.addEventListener('resize', onWindowResize);
 
@@ -1251,6 +1253,17 @@ try {
                 scalePositionData(entity);
             }
             saveObject.version = '1.0.1';
+        }
+        if (saveObject.version === '1.0.1') {
+            console.info('Upgrading save from v1.0.1 => v1.0.2');
+            for (const entity of saveObject.entities) {
+                if (entity.type === 'building' && entity.subtype === 'crane') {
+                    const position = Math.extendPoint(entity, 215 / METER_TEXTURE_PIXEL_SCALE, Math.angleNormalized(entity.rotation + Math.PI));
+                    entity.x = position.x;
+                    entity.y = position.y;
+                }
+            }
+            saveObject.version = '1.0.2';
         }
         if (isSelection) {
             game.deselectEntities(false, true);
