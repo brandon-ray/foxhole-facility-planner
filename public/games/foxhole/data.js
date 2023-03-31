@@ -1720,11 +1720,6 @@ const gameData = {
 			"category": "vehicles",
 			"categoryOrder": 5,
 			"faction": "c",
-			"range": {
-				"type": "",
-				"min": 3,
-				"max": 15
-			},
 			"icon": "game/Textures/UI/VehicleIcons/AmbulanceFlameC.webp",
 			"texture": "game/Textures/Vehicles/ambulanceflamec.webp",
 			"techId": "unlockambulance"
@@ -1736,11 +1731,6 @@ const gameData = {
 			"category": "vehicles",
 			"categoryOrder": 5,
 			"faction": "w",
-			"range": {
-				"type": "",
-				"min": 3,
-				"max": 15
-			},
 			"icon": "game/Textures/UI/VehicleIcons/AmbulanceFlameW.webp",
 			"texture": "game/Textures/Vehicles/ambulanceflamew.webp",
 			"techId": "unlockambulance"
@@ -2150,11 +2140,6 @@ const gameData = {
 			"codeName": "ArmoredCarFlameW",
 			"description": "While the Noble Firebrand Mk. XVII is a deadly flamethrower tank, a more efficient means of employing flame weapons was needed. Enter the Wild Jack. Named for the fiery idols made by children for Dead Harvest, the Wild Jack is a variation of the Highlander.",
 			"category": "tank",
-			"range": {
-				"type": "",
-				"min": 2.5,
-				"max": 15
-			},
 			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarFlameWarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/armoredcarflamew.webp",
 			"techId": "unlockfacilitytier2"
@@ -2199,11 +2184,6 @@ const gameData = {
 			"codeName": "ArmoredCarTwinW",
 			"description": "One of Conor O’Brien’s best traits was his ability to modernize and make use of older technology in his designs. The v.190 Knave is the perfect example of this philosophy. Fitted with a modified, outdated twin-grenade launcher turret, the Knave is a surprising combination of speed and subterfuge that quickly routs the enemy, leaving them befuddled.",
 			"category": "armor",
-			"range": {
-				"type": "",
-				"min": 0,
-				"max": 0
-			},
 			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarTwinWIcon.webp",
 			"texture": "game/Textures/Vehicles/armoredcartwinw.webp",
 			"techId": "unlockarmoredcartwin"
@@ -2369,11 +2349,6 @@ const gameData = {
 			"codeName": "BattleTankATC",
 			"description": "A heavy Lance variation, the 25, or “Hasta”, was employed in the first siege on Brightwall, a city now colloquially referred to as, “The Blemish”. Bombarded by heavy, armoured resistance in northern Veli, Colonial tank regiments requested a heavy vehicle with more effective search and destroy capabilities. Fitted with a front-facing 94.5mm cannon, the “Hasta” is a more than capable tank destroyer.",
 			"category": "tank",
-			"range": {
-				"type": "",
-				"min": 4,
-				"max": 40
-			},
 			"icon": "game/Textures/UI/VehicleIcons/BattleTankATCIcon.webp",
 			"texture": "game/Textures/Vehicles/battletankatc.webp",
 			"techId": "unlockbattletank"
@@ -3181,11 +3156,6 @@ const gameData = {
 			"codeName": "DestroyerTankW",
 			"description": "This deadly tank turns predator into prey. A tank Destroyer, the Noble Widow specializes in ambush tactics, waiting for its quarry and striking with destructive high-velocity shells.",
 			"category": "tank",
-			"range": {
-				"type": "",
-				"min": 2.5,
-				"max": 40
-			},
 			"icon": "game/Textures/UI/VehicleIcons/DestroyerTankWVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/destroyertankw.webp"
 		},
@@ -3898,11 +3868,6 @@ const gameData = {
 			"description": "The Rampart is a powerful field cannon capable of dealing devastating damage to all but the heaviest of armoured vehicles while providing its crew with comprehensive ballistic shielding.",
 			"category": "weaponry",
 			"faction": "w",
-			"range": {
-				"type": "",
-				"min": 1.5,
-				"max": 45
-			},
 			"icon": "game/Textures/UI/VehicleIcons/FieldCannonOffensiveWIcon.webp",
 			"texture": "game/Textures/Structures/fieldatdamagew.webp",
 			"techId": "unlockfieldatdamagegun",
@@ -3918,11 +3883,6 @@ const gameData = {
 			"codeName": "FieldATLargeC",
 			"description": "The “Stygian Bolt” Heavy Field Gun is fitted with a monstrous 94.5mm cannon paired with heavy angled blast shielding. Inspired by the rows of narrow canyons in their homeland of the Lacrista province, Mesean engineers designed this field weapon to keep its crew as safe from ancillary fire as possible while maintaining forward momentum.",
 			"category": "weaponry",
-			"range": {
-				"type": "",
-				"min": 1.5,
-				"max": 40
-			},
 			"icon": "game/Textures/UI/VehicleIcons/FieldATHeavyCIcon.webp",
 			"texture": "game/Textures/Structures/fieldatlargec.webp",
 			"techId": "unlockfacilitytier3",
@@ -4027,11 +3987,6 @@ const gameData = {
 			"description": "This robust field cannon not only allows infantry to fire heavy 75mm shells with ease, but it provides state-of-the-art curved blast shielding for maximum protection from crossfire.",
 			"category": "weaponry",
 			"faction": "w",
-			"range": {
-				"type": "",
-				"min": 1.5,
-				"max": 35
-			},
 			"icon": "game/Textures/UI/VehicleIcons/FieldCannonHeavyWIcon.webp",
 			"texture": "game/Textures/Structures/fieldcannonlargew.webp",
 			"techId": "unlockfacilitytier3",
@@ -4149,11 +4104,6 @@ const gameData = {
 			"description": "Lyle Rycker first built a prototype of the Wasp Nest as a test for his rack mounted rocket batteries that would eventually find their way onto armoured vehicles. Capable of firing twelve compact rockets in quick succession, the Wasp Nest became a quick favourite of the Warden infantry testing it, so an official design was requisitioned.",
 			"category": "weaponry",
 			"faction": "w",
-			"range": {
-				"type": "",
-				"min": 200,
-				"max": 225
-			},
 			"icon": "game/Textures/UI/VehicleIcons/FieldMultiWItemIcon.webp",
 			"texture": "game/Textures/Structures/fieldmultiw.webp",
 			"techId": "unlockfacilitytier2",
@@ -6438,11 +6388,6 @@ const gameData = {
 			"description": "A first of its kind, the Skycaller is a variation of the Niska Motor Carriage with a Rycker designed rocket battery fitted in the rear bed. This unique armoured vehicle quickly fires rockets over long distances with ease, and can be rearmed and relocated at the drop of a hat. The Skycaller is the deadly result of combined Nevish and Caoivish engineering.",
 			"category": "armor",
 			"faction": "w",
-			"range": {
-				"type": "",
-				"min": 200,
-				"max": 225
-			},
 			"icon": "game/Textures/UI/VehicleIcons/HalftrackMultiWIcon.webp",
 			"texture": "game/Textures/Vehicles/halftrackmultiw.webp",
 			"techId": "unlockhalftrackmulti"
@@ -6490,11 +6435,6 @@ const gameData = {
 			"description": "With its mounted machinegun, the \"Doru\" is the perfect addition to any shoreline assault. ",
 			"category": "naval",
 			"categoryOrder": 50,
-			"range": {
-				"type": "",
-				"min": 1.5,
-				"max": 40
-			},
 			"icon": "game/Textures/UI/VehicleIcons/LandingCraftOffensiveVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/landingcraftoffensivec.webp",
 			"techId": "unlockfacilitytier2"
@@ -7594,11 +7534,6 @@ const gameData = {
 			"codeName": "LightTankArtilleryW",
 			"description": "A modified Devitt fitted with a specialized Caine mortar turret at the expense of top speed.",
 			"category": "tank",
-			"range": {
-				"type": "",
-				"min": 45,
-				"max": 80
-			},
 			"icon": "game/Textures/UI/VehicleIcons/LightTankArtilleryWar.webp",
 			"texture": "game/Textures/Vehicles/lighttankartilleryw.webp",
 			"techId": "unlockfacilitytier2"
@@ -7625,11 +7560,6 @@ const gameData = {
 			"codeName": "LightTankFlameC",
 			"description": "This modified “Hatchet” features a reinforced fuel cell fixed to its rear alongside a flamethrower turret. This light tank can launch litres of burning fuel a fair distance, while its crew remains protected behind light armour plating.",
 			"category": "tank",
-			"range": {
-				"type": "",
-				"min": 3,
-				"max": 18
-			},
 			"icon": "game/Textures/UI/VehicleIcons/LightTankFlameCIcon.webp",
 			"texture": "game/Textures/Vehicles/lighttankflamec.webp",
 			"techId": "unlocklighttankflame"
@@ -8158,11 +8088,6 @@ const gameData = {
 			"codeName": "MediumTank2IndirectW",
 			"description": "Armed with a rack of Bonesaw mortar launchers, the Thornfall is designed to launch an indirect mechanized assault on enemy armour. This unique vehicle supports an allied assault and cannot withstand large amounts of punishment.",
 			"category": "tank",
-			"range": {
-				"type": "",
-				"min": 1.5,
-				"max": 40
-			},
 			"icon": "game/Textures/UI/VehicleIcons/MediumTank2IndirectWIcon.webp",
 			"texture": "game/Textures/Vehicles/mediumtank2indirectw.webp",
 			"techId": "unlockfacilitytier3"
@@ -8172,11 +8097,6 @@ const gameData = {
 			"codeName": "MediumTank2MultiW",
 			"description": "Colm Gallagher’s engineers designed a variation of the Outlaw that features an independently rotating MG turret sitting atop the main armament of twin anti-tank cannons. What it lacks in raw firepower compared to its older sibling, the Highwayman more than makes up for it with versatility.",
 			"category": "tank",
-			"range": {
-				"type": "",
-				"min": 2.5,
-				"max": 30
-			},
 			"icon": "game/Textures/UI/VehicleIcons/MediumTank2MultiWIcon.webp",
 			"texture": "game/Textures/Vehicles/mediumtank2multiw.webp",
 			"techId": "unlockfacilitytier2"
@@ -8186,11 +8106,6 @@ const gameData = {
 			"codeName": "MediumTank2RangeW",
 			"description": "Originally designed in response to increasing swarms of Mesean armour, the Outlaw is an exceptionally capable medium tank armed with a long-range 40mm turret and includes a built-in storm rifle support position.",
 			"category": "tank",
-			"range": {
-				"type": "",
-				"min": 2.5,
-				"max": 45
-			},
 			"icon": "game/Textures/UI/VehicleIcons/MediumTank2RangeWIcon.webp",
 			"texture": "game/Textures/Vehicles/mediumtank2rangew.webp",
 			"techId": "unlockmediumtank2range"
@@ -8201,11 +8116,6 @@ const gameData = {
 			"description": "This evolution of the “Bardiche” is fitted quad-mounted RPG launchers paired with a high-velocity 12.7mm cannon. The “Ranseur” indicates progress in Kraunian design as they continue to leverage outdated equipment to create deadly, modern armour.",
 			"category": "tank",
 			"faction": "c",
-			"range": {
-				"type": "",
-				"min": 2.5,
-				"max": 35
-			},
 			"icon": "game/Textures/UI/VehicleIcons/MediumTank2TwinCVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/mediumtank2twinc.webp",
 			"techId": "unlockfacilitytier2"
@@ -8215,11 +8125,6 @@ const gameData = {
 			"codeName": "MediumTankATW",
 			"description": "A cut down variation of the Silverhand Assault Tank that sacrifices armour and protection in favour of a high-powered 94.5mm cannon. This open-top weapon platform is uniquely designed to intercept enemy armour before they’re given time to retaliate. Its moniker is a tribute to the maiming of the great king the Silverhand is named for; while his title was stripped, and his pride damaged, his rage was never quelled.",
 			"category": "tank",
-			"range": {
-				"type": "",
-				"min": 4,
-				"max": 40
-			},
 			"icon": "game/Textures/UI/VehicleIcons/MediumTankATWIcon.webp",
 			"texture": "game/Textures/Vehicles/mediumtankatw.webp",
 			"techId": "unlockfacilitytier3"
@@ -8229,11 +8134,6 @@ const gameData = {
 			"codeName": "MediumTankC",
 			"description": "Designed for mass-production in Kraunia, this assault tank features a modular turret system for maximum versatility. The “Falchion” class features a powerful if understated, 40mm cannon.",
 			"category": "tank",
-			"range": {
-				"type": "",
-				"min": 2.5,
-				"max": 40
-			},
 			"icon": "game/Textures/UI/VehicleIcons/ColonialMediumTankIcon.webp",
 			"texture": "game/Textures/Vehicles/mediumtankc.webp"
 		},
@@ -8242,11 +8142,6 @@ const gameData = {
 			"codeName": "MediumTankLargeC",
 			"description": "The \"Talos\" is a Velian modification to the 85-series, fitted with an oversized 75mm cannon. Knowing that such a heavy cannon would likely not be suitable, the engineers built it to disperse weight in such a manner that the 85-series chassis could bear it.",
 			"category": "tank",
-			"range": {
-				"type": "",
-				"min": 2.5,
-				"max": 35
-			},
 			"icon": "game/Textures/UI/VehicleIcons/MediumTankLargeCIcon.webp",
 			"texture": "game/Textures/Vehicles/mediumtanklargec.webp",
 			"techId": "unlockfacilitytier3"
@@ -8256,11 +8151,6 @@ const gameData = {
 			"codeName": "MediumTankOffensiveC",
 			"description": "The “Spatha” assault tank features a unique and destructive 40mm turret that fires high-velocity shells. This specialized turret is not as well suited to mass-production as its more refined counterpart, the “Falchion.”",
 			"category": "tank",
-			"range": {
-				"type": "",
-				"min": 2.5,
-				"max": 40
-			},
 			"icon": "game/Textures/UI/VehicleIcons/ColonialMediumTankOffensive.webp",
 			"texture": "game/Textures/Vehicles/mediumtankoffensivec.webp",
 			"techId": "unlockfacilitytier2"
@@ -8279,11 +8169,6 @@ const gameData = {
 			"codeName": "MediumTankW",
 			"description": "The Silverhand assault tank is fitted with destructive dual-barrel armaments, and heavy frontal and rear armour. Its 68mm frontal cannon is paired with a lighter 40mm turret. ",
 			"category": "tank",
-			"range": {
-				"type": "",
-				"min": 2.5,
-				"max": 40
-			},
 			"icon": "game/Textures/UI/VehicleIcons/WardenMediumTankIcon.webp",
 			"texture": "game/Textures/Vehicles/mediumtankw.webp",
 			"techId": "unlockmediumtank"
@@ -10292,11 +10177,6 @@ const gameData = {
 			"description": "A light armoured mechanized vehicle first seen in early border skirmishes between Caoiva and Veli. With its thin frame, it was deployed in wide formations, often overwhelming enemy forces.",
 			"category": "vehicles",
 			"hideInList": true,
-			"range": {
-				"type": "",
-				"min": 2.5,
-				"max": 40
-			},
 			"icon": "game/Textures/UI/VehicleIcons/RelicLightTankVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/reliclighttank.webp",
 			"techId": "unlockreliclighttank"
@@ -10492,11 +10372,6 @@ const gameData = {
 			"codeName": "ScoutTankOffensiveW",
 			"description": "A heavily armoured variant of the King Spire, the Gallant Mk. II boasts a weighty 30mm cannon at the cost of top speed.",
 			"category": "tank",
-			"range": {
-				"type": "",
-				"min": 1.5,
-				"max": 35
-			},
 			"icon": "game/Textures/UI/VehicleIcons/ScoutTankOffensiveWIcon.webp",
 			"texture": "game/Textures/Vehicles/scouttankoffensivew.webp",
 			"techId": "unlockfacilitytier2"
@@ -10506,11 +10381,6 @@ const gameData = {
 			"codeName": "ScoutTankW",
 			"description": "This small tank has been recently recommissioned to the Warden arsenal. It boasts high maneuverability and an antenna that allows for long-range communications during high-stakes recon operations.",
 			"category": "tank",
-			"range": {
-				"type": "",
-				"min": 0.25,
-				"max": 35
-			},
 			"icon": "game/Textures/UI/VehicleIcons/ScoutTankWIcon.webp",
 			"texture": "game/Textures/Vehicles/scouttankw.webp",
 			"techId": "unlockscouttank"
@@ -10529,11 +10399,6 @@ const gameData = {
 			"codeName": "ScoutVehicleOffensiveC",
 			"description": "This RPG-mounted Light Utility Vehicle provides a heavy-duty weapons platform with superior speed. Perfectly suited for assaulting enemy structures and vehicles, or supporting an armoured assault.",
 			"category": "vehicles",
-			"range": {
-				"type": "",
-				"min": 3,
-				"max": 27
-			},
 			"icon": "game/Textures/UI/VehicleIcons/ScoutVehicleOffensiveVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/scoutvehicleoffensivec.webp",
 			"techId": "unlockscoutvehicleoffensive"
@@ -10543,11 +10408,6 @@ const gameData = {
 			"codeName": "ScoutVehicleOffensiveW",
 			"description": "This LMG-mounted Light Utility Vehicle provides a heavy-duty weapons platform with superior speed. Perfectly suited for supporting flanking infantry or an armoured assault.",
 			"category": "armor",
-			"range": {
-				"type": "",
-				"min": 3,
-				"max": 27
-			},
 			"icon": "game/Textures/UI/VehicleIcons/ScoutVehicleOffensiveWarVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/scoutvehicleoffensivew.webp",
 			"techId": "unlockscoutvehicleoffensive"
@@ -11137,11 +10997,6 @@ const gameData = {
 			"codeName": "SuperTankC",
 			"description": "Armed with a dual 75mm turret, what the “Ares” lacks in speed and versatility, it more than makes up for with raw destructive power. Development of the “Ares” was fraught with strife, and its history is intertwined with a period of several riots erupting on the streets of Dimiourg. Rebels commandeered the first “Ares” Prototype, the O-75a, and turned it against Colonial forces in the region, ultimately leading to its destruction—albeit not without great effort. This event wove the great behemoth into the tapestry of Colonial legend.",
 			"category": "tank",
-			"range": {
-				"type": "",
-				"min": 4.5,
-				"max": 40
-			},
 			"icon": "game/Textures/UI/VehicleIcons/SuperTankCtemIcon.webp",
 			"texture": "game/Textures/Vehicles/supertankc.webp",
 			"techId": "unlocksupertank"
@@ -11151,11 +11006,6 @@ const gameData = {
 			"codeName": "SuperTankW",
 			"description": "This gargantuan beast is the brainchild of Gray Cullen. Once thought impossible, the Predator was Cullen’s idea of how a great ship might operate on land. It boasts two sets of quad-barrelled grenade launches and a heavy-duty 94.5mm forward facing cannon. While limitations of ground-based travel posed certain restrictions on the scope of the project, Cullen wasn’t deterred and made necessary adjustments to meet his vision of the ideal land ship.",
 			"category": "tank",
-			"range": {
-				"type": "",
-				"min": 2.5,
-				"max": 40
-			},
 			"icon": "game/Textures/UI/VehicleIcons/SuperTankWVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/supertankw.webp",
 			"techId": "unlocksupertank"
@@ -11165,11 +11015,6 @@ const gameData = {
 			"codeName": "TanketteC",
 			"description": "This complete overhaul of the T3 Armoured Car is reinforced with tank armour. While these extra defenses lower the T12’s overall speed and handling, the addition of treads provide increased performance in less than ideal terrain.",
 			"category": "tank",
-			"range": {
-				"type": "",
-				"min": 1.5,
-				"max": 40
-			},
 			"icon": "game/Textures/UI/VehicleIcons/TanketteCVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/tankettec.webp",
 			"techId": "unlocktankette"
@@ -11179,11 +11024,6 @@ const gameData = {
 			"codeName": "TanketteFlameC",
 			"description": "The first T-class tankette to utilize this sturdier frame and versatile treads, the Vesta also represents the Velian’s first foray into fire weapons. The “Vesta” boasts a light flame turret and ample storage for the additional fuel supply required.",
 			"category": "tank",
-			"range": {
-				"type": "",
-				"min": 2.5,
-				"max": 15
-			},
 			"icon": "game/Textures/UI/VehicleIcons/TanketteFlameCIcon.webp",
 			"texture": "game/Textures/Vehicles/tanketteflamec.webp",
 			"techId": "unlockfacilitytier2"
@@ -11193,11 +11033,6 @@ const gameData = {
 			"codeName": "TanketteOffensiveC",
 			"description": "A bombastic variant of the T12 Tankette, the “Ixion” provides its crew with more support and a mounted Infantry Support Gun. Added weight from the armour results in reduced overall speed.",
 			"category": "tank",
-			"range": {
-				"type": "",
-				"min": 2.5,
-				"max": 35
-			},
 			"icon": "game/Textures/UI/VehicleIcons/TanketteOffensiveCVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/tanketteoffensivec.webp",
 			"techId": "unlocktanketteoffensive"
