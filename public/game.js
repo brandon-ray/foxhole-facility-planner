@@ -50,6 +50,7 @@ const TEXTURE_SCALE = 0.5; // Scale for textures to adjust values after the text
 const METER_BOARD_PIXEL_SIZE = 32; // Size of a grid square in pixels.
 const METER_TEXTURE_PIXEL_SIZE = 52.8; // Size of a meter in pixels from a texture generated with Blender that's resized by 0.5.
 const METER_TEXTURE_PIXEL_SCALE = METER_TEXTURE_PIXEL_SIZE / METER_BOARD_PIXEL_SIZE;
+const METER_INVERSE_PIXEL_SCALE = METER_BOARD_PIXEL_SIZE / METER_TEXTURE_PIXEL_SIZE; // Scale used for bezier objects.
 
 const game = {
     services: {},

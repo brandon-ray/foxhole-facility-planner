@@ -1398,7 +1398,7 @@ class FoxholeStructure extends DraggableContainer {
                     const ropePoints = [];
                     generatePoints(ropePoints, frontPoint, frontExtPoint, 3);
                     generatePoints(ropePoints, backExtPoint, backPoint, 3, backPoint.rotation);
-                    this.sprite.rope = new PIXI.SimpleRope(game.resources[this.building.texture].texture, ropePoints, 1);
+                    this.sprite.rope = new PIXI.SimpleRope(game.resources[this.building.texture].texture, ropePoints, METER_INVERSE_PIXEL_SCALE);
                     this.sprite.addChild(this.sprite.rope);
 
                     if (this.sockets) {
@@ -1509,7 +1509,7 @@ class FoxholeStructure extends DraggableContainer {
                     const lut = this.bezier.getLUT(Math.round(this.bezier.length()/16));
                     if (this.building.texture) {
                         game.resources[this.building.texture].texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
-                        this.sprite.rope = new PIXI.SimpleRope(game.resources[this.building.texture].texture, lut, 1);
+                        this.sprite.rope = new PIXI.SimpleRope(game.resources[this.building.texture].texture, lut, METER_INVERSE_PIXEL_SCALE);
                         if (typeof this.building.color === 'number') {
                             this.sprite.rope.tint = this.building.color;
                         }
