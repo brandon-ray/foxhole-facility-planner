@@ -1071,6 +1071,30 @@ async function updateData() {
                 });
             });
         }
+
+        /*
+        const presetPath = path.join(directoryPath, 'preset.json');
+        fs.readFile(presetPath, 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading file:', presetPath, err);
+                return;
+            }
+            try {
+                const saveObject = JSON.parse(data);
+                
+                // Run save version updates.
+                
+                fs.writeFile(presetPath, JSON.stringify(saveObject), 'utf8', (err) => {
+                    if (err) {
+                        console.error('Error writing file:', presetPath, err);
+                        return;
+                    }
+                });
+            } catch (e) {
+                console.error('Error processing file:', presetPath, e);
+            }
+        });
+        */
     });
 
     const importDirectory = './public/games/foxhole/assets/game/Textures/Import';
