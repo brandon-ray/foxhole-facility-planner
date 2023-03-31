@@ -1259,7 +1259,7 @@ class FoxholeStructure extends DraggableContainer {
                 if (this.building.trenchConnector) {
                     this.sprite.removeChild(this.sprite.trapezoid);
 
-                    const floorHalfHeight = 57, floorTexturePadding = 100;
+                    const floorHalfHeight = 51.65, floorTexturePadding = 100;
                     const frontPoint = this.points[0], endPoint = this.points[this.points.length - 1];
                     const frontPoint1 = { x: 0, y: -floorHalfHeight };
                     const frontPoint2 = { x: 0, y: floorHalfHeight };

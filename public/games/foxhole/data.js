@@ -11663,7 +11663,7 @@ const gameData = {
 			"category": "entrenchments",
 			"categoryOrder": 2,
 			"tier": 1,
-			"sortLayer": "foundation",
+			"sortLayer": "trench",
 			"hasHandle": true,
 			"isBezier": true,
 			"trenchConnector": true,
