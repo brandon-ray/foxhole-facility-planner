@@ -1031,7 +1031,7 @@ async function updateData() {
             sharp(fullresPath).metadata().then(metadata => {
                 const resizeWidth = Math.max(metadata.width + (padding * 2), metadata.height + (padding * 2));
                 sharp(fullresPath)
-                .extend({ top: resizeWidth - metadata.width / 2, bottom: resizeWidth - metadata.width / 2, left: resizeWidth - metadata.height / 2, right: resizeWidth - metadata.height / 2, background: { r: 0, g: 0, b: 0, alpha: 0 } })
+                .extend({ top: resizeWidth - Math.round(metadata.width / 2), bottom: resizeWidth - Math.round(metadata.width / 2), left: resizeWidth - Math.round(metadata.height / 2), right: resizeWidth - Math.round(metadata.height / 2), background: { r: 0, g: 0, b: 0, alpha: 0 } })
                 .toBuffer((err, resizedImage, resizeInfo) => {
                     if (err) {
                         console.error(err);

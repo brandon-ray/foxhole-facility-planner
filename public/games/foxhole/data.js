@@ -257,6 +257,31 @@ const gameData = {
 			"description": "Small EAT making facility\na train will make imports/exports easier but is not necessary",
 			"author": "maverick0537",
 			"module": true
+		},
+		"msupps_facility": {
+			"name": "Msupps Facility",
+			"description": "Best if built next to bunker bases, these facilities makes Msupps production easy and quick.",
+			"author": "Trooper"
+		},
+		"t1_oil_field_refinement": {
+			"name": "T1 Oil field refinement",
+			"description": "Basic T1 oil field setup, water is optional. I highly recommend adding a 4th oil refinary to consume oil faster when it backs up.",
+			"author": "[5th] Menxs",
+			"module": true
+		},
+		"t3_core": {
+			"name": "\"X\" Core",
+			"description": "A simple Bunker Base design that offers 360° Howitzer coverage ideal for late war.",
+			"author": [
+				":: TØMM¥6ÜN ::",
+				"maverick0537"
+			],
+			"module": true
+		},
+		"bad_idea_inc": {
+			"name": "Bad Idea INC.™",
+			"description": "Field mod facility, PLS DONT BUILD",
+			"author": "maverick0537(im sorry)"
 		}
 	},
 	"maps": {
