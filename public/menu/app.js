@@ -361,7 +361,7 @@ Vue.component('app-game-hub-popup', {
             this.showPopup(true, key);
         },
         showPopup: function(visible = !this.visible, key = 'home') {
-            for (tab in this.tabContent) {
+            for (const tab in this.tabContent) {
                 if (this.tabContent[tab].key === key) {
                     this.selectedTab = this.tabContent[tab];
                     break;
