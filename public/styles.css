@@ -514,16 +514,6 @@ input[type=number].btn-small {
     background: #222;
 }
 
-.construction-tabs {
-    height: 34px !important;
-}
-
-.construction-tabs .btn-small {
-    width: 33.33% !important;
-    line-height: 32px !important;
-    text-transform: capitalize;
-}
-
 .construction-search {
     display: block;
     height: 38px;
@@ -795,6 +785,18 @@ input[type=number].btn-small {
     top: 0;
     left: 0;
     opacity: 0.75;
+}
+
+.construction-tabs {
+    height: 34px;
+}
+
+.construction-tabs .btn-small {
+    width: 33.33%;
+    line-height: 32px;
+    background: #0f0f0f;
+    text-transform: capitalize;
+    color: white;
 }
 
 #about-page > .about-section {
