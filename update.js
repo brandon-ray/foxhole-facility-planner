@@ -212,6 +212,7 @@ function iterateBaseStructures(uProperty, baseData) {
                     baseData.description = structure.Description?.SourceString ?? baseData.description;
                     baseData.BuildCategory = structure.BuildCategory ?? baseData.BuildCategory;
                     baseData.BuildOrder = structure.BuildOrder ?? baseData.BuildOrder;
+                    baseData.FactionVariant = structure.FactionVariant ?? baseData.FactionVariant;
                     baseData.bIsBuiltOnFoundation = structure.bIsBuiltOnFoundation ?? baseData.bIsBuiltOnFoundation,
                     baseData.bIsBuiltOnLandscape = structure.bIsBuiltOnLandscape ?? baseData.bIsBuiltOnLandscape,
                     baseData.bBuildOnWater = structure.bBuildOnWater ?? baseData.bBuildOnWater,
@@ -402,7 +403,7 @@ async function iterateStructures(dirPath) {
                                     //'category': buildCategoryMap[(structure.BuildCategory ?? baseData.BuildCategory)?.substring(16)] ?? structureData.category ?? 'misc',
                                     'category': structureData.category,
                                     'categoryOrder': structureData.categoryOrder ?? structure.BuildOrder ?? baseData.BuildOrder,
-                                    'faction': structure.FactionVariant === 'EFactionId::Colonials' ? 'c' : (structure.FactionVariant === 'EFactionId::Wardens' ? 'w' : structureData.faction),
+                                    'faction': (structure.FactionVariant ?? baseData.FactionVariant) === 'EFactionId::Colonials' ? 'c' : ((structure.FactionVariant ?? baseData.FactionVariant) === 'EFactionId::Wardens' ? 'w' : structureData.faction),
                                     'color': structureData.color,
                                     'experimental': structureData.experimental,
                                     'hideInList': structureData.hideInList,
