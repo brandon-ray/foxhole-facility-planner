@@ -897,6 +897,12 @@ Vue.component('app-menu-construction-list', {
                 game.updateSettings();
                 this.refresh();
             }
+        },
+        toggleBuildingFilter: function(key) {
+            this.bmc();
+            game.settings.buildingListFilters[key] = !game.settings.buildingListFilters[key];
+            game.updateSettings();
+            this.refresh();
         }
     },
     template: html`
@@ -921,7 +927,7 @@ Vue.component('app-menu-construction-list', {
                     <select class="btn-small app-input construction-category" @click="bmc()" title="Filter by Category" v-model="game.selectedBuildingCategory" @change="refresh()">
                         <option value="all">All Buildings</option>
                         <template v-for="(category, key) in window.objectData.categories">
-                            <option v-if="!category.experimental || game.settings.enableExperimental" :value="key">{{category.name}}</option>
+                            <option v-if="game.canShowListCategory(category, true)" :value="key">{{category.name}}</option>
                         </template>
                     </select>
                 </div>
@@ -933,6 +939,11 @@ Vue.component('app-menu-construction-list', {
             </div>
         </div>
         <div class="menu-page">
+            <div class="construction-tabs construction-options d-flex justify-content-center justify-content-between">
+                <template v-for="(filter, key) in game.settings.buildingListFilters">
+                    <div class="btn-small" :class="{'btn-inactive': !filter }" @click="toggleBuildingFilter(key)">{{key}}</div>
+                </template>
+            </div>
             <label class="construction-search" title="Search">
                 <i class="fa fa-search" aria-hidden="true"></i>
                 <div class="input-wrapper">
@@ -949,8 +960,9 @@ Vue.component('app-menu-construction-list', {
                     <app-game-building-list-icon v-for="building in window.objectData.categories[game.selectedBuildingCategory].buildings" :building="building"/>
                 </template>
                 <template v-else>
+                    <p v-if="!Object.values(game.settings.buildingListFilters).some(value => value)" class="px-2 py-1 text-center">Show categories by selecting the tabs above.</p>
                     <template v-for="(category, key) in window.objectData.categories">
-                        <template v-if="!category.hideInList && (game.settings.showCollapsibleBuildingList || !category.hideInBuildingList) && (game.settings.enableExperimental || !category.experimental)">
+                        <template v-if="game.canShowListCategory(category) && (game.settings.showCollapsibleBuildingList || !category.hideInBuildingList)">
                             <div v-if="game.settings.showCollapsibleBuildingList" class="construction-item-category" @click="category.visible = !category.visible; refresh()">
                                 <div class="construction-item-category-icon" :style="{backgroundImage: 'url(' + category.icon + ')'}"></div>{{category.name}}{{category.experimental && ' (Preview)'}}<i class="fa float-right" :class="{'fa-angle-down': category.visible, 'fa-angle-right': !category.visible}" style="margin-top: 2px;" aria-hidden="true"></i>
                             </div>
@@ -1175,7 +1187,7 @@ Vue.component('app-menu-settings', {
                 <select class="app-input" v-model="game.settings.defaultBuildingCategory" @change="game.updateSettings()">
                     <option value="all">All Buildings</option>
                     <template v-for="(category, key) in window.objectData.categories">
-                        <option v-if="!category.experimental || game.settings.enableExperimental" :value="key">{{category.name}}</option>
+                        <option v-if="game.canShowListCategory(category, true)" :value="key">{{category.name}}</option>
                     </template>
                 </select>
             </label>

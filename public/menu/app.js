@@ -316,6 +316,7 @@ Vue.component('app-game-hub-popup', {
                                 <li>Added toggleable distance to line tool, aka measuring / ruler tool.</li>
                                 <li>Added toggleable board info such as region and scale.</li>
                                 <li>Added costs for Construction Vehicle, Advanced Construction Vehicle, and Crane. Also moved to Utilities for game parity.</li>
+                                <li>Added tabs to the construction menu for filtering bunkers, facilities, vehicles.</li>
                                 <li>Added range to BMS - Class 2 Mobile Auto-Crane and fixed hitbox.</li>
                                 <li>Updated texture for BMS Foreman Stacker.</li>
                                 <li>Updated range for T1 Rifle Garrison.</li>
@@ -636,7 +637,7 @@ Vue.component('app-game-toolbelt', {
                     </template>
                     <template v-else>
                         <template v-for="(category, key) in window.objectData.categories">
-                            <template v-if="!category.hideInList && (game.settings.enableExperimental || !category.experimental)">
+                            <template v-if="game.canShowListCategory(category, true)">
                                 <template v-for="building in category.buildings">
                                     <app-game-building-list-icon-v2 v-if="!building.preset" :container="game.toolbeltComponent" :building="building" :filters="game.settings.toolbeltFilters"/>
                                 </template>

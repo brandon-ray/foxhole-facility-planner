@@ -84,6 +84,11 @@ const game = {
         showParentProductionList: true,
         showCollapsibleBuildingList: true,
         showUpgradesAsBuildings: false,
+        buildingListFilters: {
+            bunkers: true,
+            facilities: true,
+            vehicles: true
+        },
         showFacilityName: true,
         showToolbelt: true,
         showFooterInfo: false,
@@ -691,7 +696,7 @@ try {
                     setTimeout(() => {
                         let x = 0, y = 0;
                         for (const [key, category] of Object.entries(window.objectData.categories)) {
-                            if (game.settings.enableExperimental || !category.experimental) {
+                            if (game.canShowListCategory(category, true)) {
                                 for (let i = 0; i < category.buildings.length; i++) {
                                     const building = category.buildings[i];
                                     if (!building.preset && (game.settings.enableDebug || (!building.hideInList && (!building.parent || !building.parent.hideInList)))) {
@@ -2532,7 +2537,7 @@ try {
     function updateBuildingDB() {
         if (window.objectData?.categories) {
             let searchBuildings = Object.values(window.objectData.categories).reduce((acc, category) => {
-                if (game.settings.enableExperimental || !category.experimental) {
+                if (game.canShowListCategory(category, true)) {
                     acc.push(...category.buildings);
                 }
                 return acc;
@@ -2562,6 +2567,7 @@ try {
         if (building && (!building.hideInList || game.settings.enableDebug) &&
             (!building.experimental || game.settings.enableExperimental) &&
             (search || ((!building.parent || building.parentKey || filters.showUpgradesAsBuildings) &&
+            (!building.filters || building.filters.some(filter => { return game.settings.buildingListFilters[filter]; })) &&
             ((!building.tier || (!filters.showSelectedTierOnly && (building.tier <= filters.selectedTier))) || building.tier === filters.selectedTier) &&
             ((!building.techId || !window.objectData.tech[building.techId]) || ((building.techId === 'unlockfacilitytier2' && filters.selectedTier >= 2) || (building.techId === 'unlockfacilitytier3' && filters.selectedTier >= 3))) &&
             (!game.settings.selectedFaction || (!building.faction || building.faction === game.settings.selectedFaction))))) {
@@ -2569,6 +2575,13 @@ try {
         }
         return false;
     }
+
+    game.canShowListCategory = function(category, ignoreFilters = false) {
+        return !category.hideInList && (game.settings.enableExperimental || !category.experimental) &&
+        ignoreFilters || (!category.filters || category.filters.some(filter => {
+            return game.settings.buildingListFilters[filter];
+        }));
+    };
 
     const FPSMIN = 30;
     let fpsCheck = null;

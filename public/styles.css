@@ -514,6 +514,16 @@ input[type=number].btn-small {
     background: #222;
 }
 
+.construction-tabs {
+    height: 34px !important;
+}
+
+.construction-tabs .btn-small {
+    width: 33.33% !important;
+    line-height: 32px !important;
+    text-transform: capitalize;
+}
+
 .construction-search {
     display: block;
     height: 38px;
@@ -582,7 +592,7 @@ input[type=number].btn-small {
 .construction-list-wrapper {
     position: absolute;
     inset: 0;
-    top: 38px;
+    top: 72px;
     overflow-y: auto;
 }
 
@@ -1706,6 +1716,12 @@ input[type=number].btn-small {
 
 .btn-small.btn-active {
     color: #ff8034;
+}
+
+.btn-small.btn-inactive,
+.btn-small.btn-inactive:hover {
+    background: black;
+    color: #757575;
 }
 
 .settings-option-wrapper .settings-option .btn-right {

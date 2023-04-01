@@ -3,86 +3,97 @@ const gameData = {
 		"presets": {
 			"name": "Modules",
 			"hideInBuildingList": true,
-			"icon": "game/Textures/UI/Menus/IconFilterModules.webp"
+			"icon": "game/Textures/UI/Menus/IconFilterModules.webp",
+			"filters": ['bunkers', 'facilities']
 		},
 		"defenses": {
 			"name": "Defenses",
 			"buildCategory": "Defense",
-			"icon": "game/Textures/UI/Menus/IconFilterDefense.webp"
+			"icon": "game/Textures/UI/Menus/IconFilterDefense.webp",
+			"filters": ['bunkers', 'facilities']
 		},
 		"entrenchments": {
 			"name": "Entrenchments",
 			"buildCategory": "Bunker",
-			"icon": "game/Textures/UI/Menus/IconFilterBunker.webp"
+			"icon": "game/Textures/UI/Menus/IconFilterBunker.webp",
+			"filters": ['bunkers']
 		},
 		"misc": {
 			"name": "Utilities",
 			"buildCategory": true,
-			"icon": "game/Textures/UI/Menus/IconFilterGeneral.webp"
+			"icon": "game/Textures/UI/Menus/IconFilterGeneral.webp",
+			"filters": ['bunkers', 'facilities', 'vehicles']
 		},
 		"factories": {
 			"name": "Facilities",
 			"buildCategory": "Facility",
-			"icon": "game/Textures/UI/Menus/IconFilterFacility.webp"
+			"icon": "game/Textures/UI/Menus/IconFilterFacility.webp",
+			"filters": ['facilities']
 		},
 		"harvesters": {
 			"name": "Harvesters",
 			"buildCategory": "Mining",
-			"icon": "game/Textures/UI/Menus/IconFilterMining.webp"
+			"icon": "game/Textures/UI/Menus/IconFilterMining.webp",
+			"filters": ['facilities']
 		},
 		"power": {
 			"name": "Power",
 			"buildCategory": "Power",
-			"icon": "game/Textures/UI/Menus/IconFilterPower.webp"
+			"icon": "game/Textures/UI/Menus/IconFilterPower.webp",
+			"filters": ['facilities']
 		},
 		"foundations": {
 			"name": "Foundations",
 			"buildCategory": "Foundation",
-			"icon": "game/Textures/UI/Menus/IconFilterFoundation.webp"
+			"icon": "game/Textures/UI/Menus/IconFilterFoundation.webp",
+			"filters": ['facilities']
 		},
 		"shippables": {
 			"name": "Shippables",
 			"buildCategory": "Shippables",
-			"icon": "game/Textures/UI/Menus/IconFilterShippingContainer.webp"
+			"icon": "game/Textures/UI/Menus/IconFilterShippingContainer.webp",
+			"filters": ['bunkers', 'facilities']
 		},
 		"weaponry": {
 			"name": "Weaponry",
-			"hideInBuildingList": true,
-			"icon": "game/Textures/UI/VehicleIcons/FieldArtilleryColVehicleIcon.webp"
+			"icon": "game/Textures/UI/VehicleIcons/FieldArtilleryColVehicleIcon.webp",
+			"filters": ['vehicles']
 		},
 		"vehicles": {
 			"name": "Vehicles",
-			"hideInBuildingList": true,
-			"icon": "game/Textures/UI/Menus/IconFilterVehicle.webp"
+			"icon": "game/Textures/UI/Menus/IconFilterVehicle.webp",
+			"filters": ['vehicles']
 		},
 		"armor": {
 			"name": "Armory",
-			"hideInBuildingList": true,
-			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarVehicleIcon.webp"
+			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarVehicleIcon.webp",
+			"filters": ['vehicles']
 		},
 		"tank": {
 			"name": "Tanks",
-			"hideInBuildingList": true,
-			"icon": "game/Textures/UI/VehicleIcons/BattleTankWarDefensiveVehicleIcon.webp"
+			"icon": "game/Textures/UI/VehicleIcons/BattleTankWarDefensiveVehicleIcon.webp",
+			"filters": ['vehicles']
 		},
 		"trains": {
 			"name": "Locomotives",
-			"hideInBuildingList": true,
-			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeEngineVehicleIcon.webp"
+			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeEngineVehicleIcon.webp",
+			"filters": ['facilities', 'vehicles']
 		},
 		"naval": {
 			"name": "Aquatic",
-			"hideInBuildingList": true,
-			"icon": "game/Textures/UI/VehicleIcons/Motorboat.webp"
+			"icon": "game/Textures/UI/VehicleIcons/Motorboat.webp",
+			"filters": ['vehicles']
 		},
 		"world": {
 			"name": "References",
-			"icon": "game/Textures/UI/Menus/IconFilterGarrisonHouse.webp"
+			"icon": "game/Textures/UI/Menus/IconFilterGarrisonHouse.webp",
+			"filters": ['bunkers', 'facilities']
 		},
 		"showcase": {
 			"name": "Showcase",
 			"hideInBuildingList": true,
-			"icon": "game/Textures/UI/Menus/IconFilterShowcase.webp"
+			"icon": "game/Textures/UI/Menus/IconFilterShowcase.webp",
+			"filters": ['bunkers', 'facilities']
 		}
 	},
 	"presets": {
@@ -90,184 +101,217 @@ const gameData = {
 			"name": "Classic Storm Cannon",
 			"description": "Storm Cannon setup with corner howitzers.",
 			"author": "Stonefox",
+			"filters": ['bunkers'],
 			"module": true
 		},
 		"classic_intel_center": {
 			"name": "Classic Intelligence Center",
 			"description": "Intelligence Center setup with corner howitzers.",
 			"author": "Stonefox",
+			"filters": ['bunkers'],
 			"module": true
 		},
 		"360_zero": {
 			"name": "360 ZERO",
 			"description": "Cheap, Effective, Practical.",
 			"author": "Unknown",
+			"filters": ['bunkers'],
 			"module": true
 		},
 		"360_one": {
 			"name": "360 ONE",
 			"description": "The older brother of the zero, more expensive, but more aggressive.",
 			"author": "Unknown",
+			"filters": ['bunkers'],
 			"module": true
 		},
 		"360_dual": {
 			"name": "360 DUAL",
 			"description": "Retains compactness while significantly augmenting resistance to artillery.",
 			"author": "AllShallKneel",
+			"filters": ['bunkers'],
 			"module": true
 		},
 		"long_shall": {
 			"name": "LongShall",
 			"description": "Did somebody say compact? While this bunker sacrifices some coverage for extreme density, it does so marvelously.",
 			"author": "AllShallKneel",
+			"filters": ['bunkers'],
 			"module": true
 		},
 		"inique": {
 			"name": "Inique",
 			"description": "Hard hitting, compact, great coverage, this bunker proves that absolute efficiency is indifferent to symmetry.",
 			"author": "AllShallKneel",
+			"filters": ['bunkers'],
 			"module": true
 		},
 		"mini_obs": {
 			"name": "miniObs",
 			"description": "Extremely lightweight, but provides RG coverage at the bare minimum cost.",
 			"author": "AllShallKneel",
+			"filters": ['bunkers'],
 			"module": true
 		},
 		"halberd_bunker": {
 			"name": "\"Halberd\" Bunker",
 			"description": "A common reliable defensive bunker pattern.",
 			"author": "Unknown",
+			"filters": ['bunkers'],
 			"module": true
 		},
 		"xi_observation_bunker1": {
 			"name": "XI Observation Bunker",
 			"description": "Simple observation bunker split into two pieces to help with integrity (especially if left T2). Only 2 RGs can be lit, but that should be enough to prevent anyone from slipping into the bunker without suppression.",
 			"author": "nondidjos",
+			"filters": ['bunkers'],
 			"module": true
 		},
 		"m_bunker_t3": {
 			"name": "\"M\" Bunker T3",
 			"description": "Wide concrete bunker. This bunker has a lower garrison density but is better for wide fronts.",
 			"author": "Stonefox",
+			"filters": ['bunkers'],
 			"module": true
 		},
 		"squid_bunker_t2_1": {
 			"name": "\"Squid\" Bunker T2",
 			"description": "Fragile but hard hitting T2 bunker.",
 			"author": "Stonefox",
+			"filters": ['bunkers'],
 			"module": true
 		},
 		"squid_bunker_t3": {
 			"name": "\"Squid\" Bunker T3",
 			"description": "Conversion for T2 version but not purpose built concrete structure. This is more an upgrade for the T2 \"Squid\", not recommended if you plan for concrete.",
 			"author": "Stonefox",
+			"filters": ['bunkers'],
 			"module": true
 		},
 		"bunker_w_module": {
 			"name": "\"W\" Bunker",
 			"description": "A meta bunker design that has lots of health with great structural integrity and defenses.",
 			"author": "Unknown",
+			"filters": ['bunkers'],
 			"module": true
 		},
 		"compact_corner_bunker": {
 			"name": "Compact Corner Bunker",
 			"description": "This is a compact AT, MG and HG corner design that covers a 90 degree angle. This design is meant to be integrated into a straight line defence without wasting any space, or making any concessions on defence. Corner cutting is needed in the middle where 4 corner cuts are needed, but are easy to do. Do note that this design is only viable at the concrete tier.",
 			"author": "Danetello",
+			"filters": ['bunkers'],
 			"module": true
 		},
 		"obs_bunker": {
 			"name": "OBS Bunker",
 			"description": "Standard observation bunker. Power only 2 rifle garrisons and the OBS bunker.",
 			"author": "Unknown",
+			"filters": ['bunkers'],
 			"module": true
 		},
 		"locomotive_factory_by_eg0611": {
 			"name": "Locomotive Factory",
 			"description": "A facility that is capable to build Black Bolt, Longrider, Holdout, Rockhold and Roadhouse and their necessary manufacturing materials. 4 independent power systems allow facility to be functional 7/24.",
-			"author": "EG0611"
+			"author": "EG0611",
+			"filters": ['facilities']
 		},
 		"m_bunker_w_trenches": {
 			"name": "\"M\" Bunker w/ Trenches",
 			"description": "Wide concrete bunker with trench support.",
-			"author": "Stonefox"
+			"author": "Stonefox",
+			"filters": ['bunkers']
 		},
 		"t2_courtyard": {
 			"name": "T2 Courtyard",
 			"description": "A courtyard T2 bunker layout for early - mid war.",
-			"author": "Stonefox"
+			"author": "Stonefox",
+			"filters": ['bunkers']
 		},
 		"t2_or_t3_halberd_trench_designs": {
 			"name": "T2 / T3 Halberd Trench Designs",
 			"description": "Using the Halberd bunker design here are some trenches you can use to connect them, varying in amount of emplacements.",
-			"author": "Stonefox"
+			"author": "Stonefox",
+			"filters": ['bunkers']
 		},
 		"t2_oil_field": {
 			"name": "T2 Oil Field",
 			"description": "Supply the whole back line with petrol! Basic Oil field at tier 2 facilities with 6 oil reformer and 1 cracking unit, never waste a drop of oil anymore.",
-			"author": "[5th] Menxs"
+			"author": "[5th] Menxs",
+			"filters": ['facilities']
 		},
 		"small_munition_factory": {
 			"name": "Small Munition Factory",
 			"description": "Small one man Facility with Low Gsupps cost of 432 for 24h when the lvl 3 Encampment is reached.",
-			"author": "Oberst_Den"
+			"author": "Oberst_Den",
+			"filters": ['facilities']
 		},
 		"frontline_sandbag_factory": {
 			"name": "Frontline Sandbag Factory",
 			"description": "Simple, easy to maintain frontline sandbag factory. Heavily based off of Small Munition Factory by Oberst_Den",
-			"author": "runningpeanuts"
+			"author": "runningpeanuts",
+			"filters": ['facilities']
 		},
 		"compact_coal_liquefaction": {
 			"name": "Compact Coal Liquefaction",
 			"description": "Produce coal with the power of coal! You can easily power this setup with a coal power station and an extra water pump for \"automatic\" coal. The coal to coal conversion factor is of ≃2.6. Taking into account power the multiplier is of ≃2.286",
-			"author": "[5th] Menxs"
+			"author": "[5th] Menxs",
+			"filters": ['facilities']
 		},
 		"5mw_80h_drip_power": {
 			"name": "5mw 80h Drip Power",
 			"description": "Very useful to ease maintenance. This Design will be producing power ≃50% of the time, maintenance tunnels on its grid will be generating ≃80 Gsups/h and fuel will last twice as much (80h)",
-			"author": "[5th] Menxs"
+			"author": "[5th] Menxs",
+			"filters": ['facilities']
 		},
 		"coastal_storage_facility_by_eg0611": {
 			"name": "Coastal Storage Facility",
 			"description": "A small facility with only purpose of storing items. No power production and consumption. It depends nearby bunker base for GSUPS usage.",
-			"author": "EG0611"
+			"author": "EG0611",
+			"filters": ['facilities']
 		},
 		"simple_vehicle_factory": {
 			"name": "Simple Vehicle Factory (Example)",
 			"description": "A simple vehicle factory to output upgraded vehicles per hour. This is an example of a preset for the planner. Contribute your own saves to our Discord!",
-			"author": "Jimbo"
+			"author": "Jimbo",
+			"filters": ['facilities']
 		},
 		"panzer_snares": {
 			"name": "Panzer Snares",
 			"author": "KitsunePanzer",
-			"module": true
+			"module": true,
+			"filters": ['bunkers', 'facilities']
 		},
 		"small_artillery_facility": {
 			"name": "Small Artillery Facility",
 			"description": "A small and simple design that doesn't take up much space or Msupps.",
-			"author": "Trooper"
+			"author": "Trooper",
+			"filters": ['facilities']
 		},
 		"small_tripod_facility": {
 			"name": "Small Tripod Facility",
 			"description": "A variant to the Small Artillery Facility I made, this one allows you to mass produce tripod weapons",
-			"author": "Trooper"
+			"author": "Trooper",
+			"filters": ['facilities']
 		},
 		"eat_maker": {
 			"name": "EAT Maker",
 			"description": "Small EAT making facility\na train will make imports/exports easier but is not necessary",
 			"author": "maverick0537",
-			"module": true
+			"module": true,
+			"filters": ['facilities']
 		},
 		"msupps_facility": {
 			"name": "Msupps Facility",
 			"description": "Best if built next to bunker bases, these facilities makes Msupps production easy and quick.",
-			"author": "Trooper"
+			"author": "Trooper",
+			"filters": ['facilities']
 		},
 		"t1_oil_field_refinement": {
 			"name": "T1 Oil field refinement",
 			"description": "Basic T1 oil field setup, water is optional. I highly recommend adding a 4th oil refinary to consume oil faster when it backs up.",
 			"author": "[5th] Menxs",
-			"module": true
+			"module": true,
+			"filters": ['facilities']
 		},
 		"t3_core": {
 			"name": "\"X\" Core",
@@ -276,12 +320,14 @@ const gameData = {
 				":: TØMM¥6ÜN ::",
 				"maverick0537"
 			],
+			"filters": ['bunkers'],
 			"module": true
 		},
 		"bad_idea_inc": {
 			"name": "Bad Idea INC.™",
 			"description": "Field mod facility, PLS DONT BUILD",
-			"author": "maverick0537(im sorry)"
+			"author": "maverick0537(im sorry)",
+			"filters": ['facilities']
 		}
 	},
 	"maps": {
