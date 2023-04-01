@@ -77,7 +77,7 @@ gulp.task('js', function(){
 });
 
 gulp.task('copy', function () {
-    return gulp.src(['public/index.html', 'public/favicon.ico', 'public/robots.txt'])
+    return gulp.src(['public/index.html', 'public/favicon.ico', 'public/favicon_white.ico', 'public/robots.txt'])
         .pipe(gulp.dest('distNew/'));
 });
 
