@@ -162,6 +162,8 @@ if (isMobile && !isPhoneApp) {
                 </div>
 
                 <app-game-toolbelt></app-game-toolbelt>
+                
+                <app-game-hub-popup></app-game-hub-popup>
 
                 <app-game-confirmation-popup></app-game-confirmation-popup>
 
@@ -170,31 +172,36 @@ if (isMobile && !isPhoneApp) {
                     <button class="btn-small btn-float-left" :class="{ 'btn-active': !sidebarVisible }" title="Toggle Sidebar Menu" @click="sidebarVisible = !sidebarVisible">
                         <i class="fa" :class="{'fa-chevron-left': sidebarVisible, 'fa-chevron-right': !sidebarVisible}" aria-hidden="true"></i>
                     </button>
-                    <label class="btn-checkbox-wrapper">
+                    <label class="btn-checkbox-wrapper float-left">
                         <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': settings.enableGrid }" @click="settings.enableGrid = !settings.enableGrid; game.updateSettings()"></button>
                         Snap to Grid
                     </label>
-                    <label class="btn-checkbox-wrapper">
+                    <label class="btn-checkbox-wrapper float-left">
                         <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': settings.enableSnapRotation }" @click="settings.enableSnapRotation = !settings.enableSnapRotation; game.updateSettings()"></button>
                         Snap Rotation
                     </label>
-                    <label class="btn-checkbox-wrapper">
-                        <button class="btn-small btn-float-left" :class="{ 'btn-active': layerSelectionVisible }" title="Toggle Visual Layers" @click="layerSelectionVisible = !layerSelectionVisible"><i class="fa fa-cogs" aria-hidden="true"></i></button>
-                        Layers
-                    </label>
-                    <label class="btn-checkbox-wrapper">
-                        <button class="btn-small btn-float-left" :class="{ 'btn-active': settings.showToolbelt }" @click="settings.showToolbelt = !settings.showToolbelt; game.updateSettings()"><i class="fa fa-wrench" aria-hidden="true"></i></button>
-                        Toolbelt
-                    </label>
-                    <label class="btn-checkbox-wrapper">
-                        <button class="btn-small btn-float-left" :class="{ 'btn-active': settings.enableStats }" @click="settings.enableStats = !settings.enableStats; game.updateSettings()"><i class="fa fa-bar-chart" aria-hidden="true"></i></button>
-                        Stats
-                    </label>
-                    <label v-if="game.settings.enableExperimental" class="btn-checkbox-wrapper">
-                        <!--⬣-->
-                        <button class="btn-small btn-float-left" :class="{ 'btn-active': regionSelectionVisible }" title="Toggle Region Selection" @click="regionSelectionVisible = !regionSelectionVisible"><i class="fa fa-map-o" aria-hidden="true"></i></button>
-                        Map (Preview)
-                    </label>
+                    <div class="panel-toolbar">
+                        <label class="btn-checkbox-wrapper">
+                            <button class="btn-small btn-float-left" :class="{ 'btn-active': game.hubPopup?.visible }" @click="game.hubPopup.showPopup()"><i class="fa fa-home" aria-hidden="true"></i></button>
+                            Hub
+                        </label>
+                        <label class="btn-checkbox-wrapper">
+                            <button class="btn-small btn-float-left" :class="{ 'btn-active': layerSelectionVisible }" title="Toggle Visual Layers" @click="layerSelectionVisible = !layerSelectionVisible"><i class="fa fa-cogs" aria-hidden="true"></i></button>
+                            Layers
+                        </label>
+                        <label class="btn-checkbox-wrapper">
+                            <button class="btn-small btn-float-left" :class="{ 'btn-active': settings.showToolbelt }" @click="settings.showToolbelt = !settings.showToolbelt; game.updateSettings()"><i class="fa fa-wrench" aria-hidden="true"></i></button>
+                            Toolbelt
+                        </label>
+                        <label class="btn-checkbox-wrapper">
+                            <button class="btn-small btn-float-left" :class="{ 'btn-active': settings.enableStats }" @click="settings.enableStats = !settings.enableStats; game.updateSettings()"><i class="fa fa-bar-chart" aria-hidden="true"></i></button>
+                            Stats
+                        </label>
+                        <label v-if="game.settings.enableExperimental" class="btn-checkbox-wrapper">
+                            <button class="btn-small btn-float-left" :class="{ 'btn-active': regionSelectionVisible }" title="Toggle Region Selection" @click="regionSelectionVisible = !regionSelectionVisible"><i class="fa fa-map-o" aria-hidden="true"></i></button>
+                            Map
+                        </label>
+                    </div>
                     <button class="btn-small" title="Toggle Fullscreen" @click="game.tryFullscreen()">
                         <i class="fa fa-arrows-alt" aria-hidden="true"></i>
                     </button>
@@ -251,6 +258,153 @@ Vue.component('app-board-ui', {
         <div v-if="game.projectSettings.regionKey" class="mr-2">{{gameData.maps[game.projectSettings.regionKey].name}}</div>
         {{scaleUnits}}m
         <div class="board-scale-tile" :style="{ width: ((scaleUnits * boardScale) / WINDOW_SCALE) + 'px' }"></div>
+    </div>
+    `
+});
+
+Vue.component('app-game-hub-popup', {
+    mounted: function() {
+        game.hubPopup = this;
+        this.selectedTab = this.tabContent[0];
+    },
+    data: function() {
+        return {
+            visible: false,
+            hoverData: null,
+            selectedTab: null,
+            tabContent: [
+                {
+                    key: 'home',
+                    title: 'Home',
+                    icon: 'fa-home',
+                    content: html`
+                    <div class="fall-in-item">
+                        <div class="tab-content-header">
+                            Welcome to the Planner Hub!
+                        </div>
+                        <p class="tab-content-body">
+                            The Planner Hub is a new feature that will give you easy access to changelogs, presets, settings, and more in the future.<br><br>
+                            Check out the updates tab to see what's new in the latest update!
+                        </p>
+                    </div>
+                    `
+                },
+                {
+                    key: 'updates',
+                    title: 'Updates',
+                    icon: 'fa-bullhorn', // fa-newspaper-o
+                    content: html`
+                    <div class="fall-in-item">
+                        <div class="tab-content-header">
+                            Motorcycles Update? 🤔
+                            <small class="float-right">April 1st, 2023</small>
+                        </div>
+                        <div class="tab-content-body">
+                            <div class="tab-content-body-img-wrapper">
+                                <img src="/assets/updates/04012023.jpg">
+                            </div>
+                            <h4>Major Changes</h4>
+                            <ul>
+                                <li>Added 100+ new placeable objects including: <i><b>Tanks, Armored Vehicles, Field Weapons, Ships, Emplaced Weapons, and more!</b></i></li>
+                                <li>Added Barbed Wire Fence, Shipping Crate, Storage Box, and Fire Pit.</li>
+                                <li>Added references for Sulfur, Salvage, and Component Mines.</li>
+                                <li>Updated scale of buildings to better reflect distances on the grid. One meter is now equal to one grid square.</li>
+                                <li>Updated searching to use the Fuse.js library with the ability to search by name, category, descriptions, and even preset creators!</li>
+                            </ul>
+                            <h4>Other Changes</h4>
+                            <ul>
+                                <li>Added toggleable distance to line tool, aka measuring / ruler tool.</li>
+                                <li>Added toggleable board info such as region and scale.</li>
+                                <li>Added costs for Construction Vehicle, Advanced Construction Vehicle, and Crane. Also moved to Utilities for game parity.</li>
+                                <li>Added range to BMS - Class 2 Mobile Auto-Crane and fixed hitbox.</li>
+                                <li>Updated texture for BMS Foreman Stacker.</li>
+                                <li>Updated range for T1 Rifle Garrison.</li>
+                                <li>Fixed trench connector visual issues. (Dev Branch)</li>
+                                <li>Updated all presets to the latest save version.</li>
+                            </ul>
+                            <h4>Experimental Changes</h4>
+                            <ul>
+                                <li>Added experimental map region selection / backdrop.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    `
+                },
+                /*
+                {
+                    key: 'saves',
+                    title: 'Load/Save',
+                    icon: 'fa-upload',
+                    content: html``
+                },
+                {
+                    key: 'presets',
+                    title: 'Presets',
+                    icon: 'fa-th' // fa-cubes
+                },
+                {
+                    key: 'settings',
+                    title: 'Settings',
+                    icon: 'fa-cog',
+                    content: html``
+                }
+                */
+            ]
+        };
+    },
+    methods: {
+        refresh: function() {
+            this.$forceUpdate();
+        },
+        showTab: function(key) {
+            this.showPopup(true, key);
+        },
+        showPopup: function(visible = !this.visible, key = 'home') {
+            for (tab in this.tabContent) {
+                if (this.tabContent[tab].key === key) {
+                    this.selectedTab = this.tabContent[tab];
+                    break;
+                }
+            }
+            this.visible = visible;
+            this.refresh();
+        }
+        /*
+        buildBuilding: function(building) {
+            this.bmc();
+            game.createObject(building);
+            game.sidebarMenuComponent.showHoverMenu(null);
+            this.showPopup(false);
+        },
+        buildingHover: function(building) {
+            game.sidebarMenuComponent.showHoverMenu(building);
+        }
+        */
+    },
+    template: html`
+    <div v-if="visible" class="board-panel hub-dialog">
+        <div class="board-panel-header">
+            <h4 class="float-left m-0" style="color: #eee"><img src="/favicon_white.ico" height="28px" style="vertical-align: top; opacity: 0.25"> Planner Hub <span class="text-muted">/</span> {{selectedTab.title}}</h4>
+            <button class="btn-small m-0 mr-1 float-right" title="Close Hub" @click="showPopup(false)"><i class="fa fa-times" aria-hidden="true"></i></button>
+        </div>
+        <div class="d-flex board-panel-body">
+            <div class="hub-sidebar col-2 h-100 text-center p-0 justify-content-center align-items-center">
+                <div v-for="tab in tabContent" class="hub-sidebar-tab" :class="{ 'selected': selectedTab.key === tab.key }" @click="showTab(tab.key)">
+                    <i class="fa fa-2x" :class="tab.icon"></i><br>
+                    <span>{{tab.title}}</span>
+                </div>
+            </div>
+            <div v-if="selectedTab" class="col-10 hub-body">
+                <transition name="fall-in" mode="out-in">
+                    <!--
+                    <div v-if="selectedTab.key === 'presets'" class="tab-content" :key="selectedTab.key">
+                        <app-game-building-list-icon-v2 v-for="preset in window.objectData.categories.showcase.buildings" :container="game.hubPopup" :building="preset" />
+                    </div>
+                    -->
+                    <div class="tab-content" :key="selectedTab.key" v-html="selectedTab.content"></div>
+                </transition>
+            </div>
+        </div>
     </div>
     `
 });

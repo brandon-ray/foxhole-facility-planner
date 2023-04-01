@@ -309,7 +309,7 @@ input[type=number].btn-small {
 
 .btn-checkbox-wrapper {
     line-height: 28px;
-    margin: 6px 40px 6px 6px;
+    margin: 6px 26px 6px 6px;
     font-size: 1.05em;
     color: #777;
     cursor: pointer;
@@ -1346,6 +1346,7 @@ input[type=number].btn-small {
 }
 
 .board-panel-header {
+    height: 42px;
     background: linear-gradient(rgb(24, 24, 24), rgb(12, 12, 12));
     padding: 6px 6px 6px 12px;
     position: relative;
@@ -1358,6 +1359,164 @@ input[type=number].btn-small {
 
 .board-panel-body {
     overflow: auto;
+}
+
+.hub-dialog {
+    width: 800px;
+    height: 550px;
+    top: 50%;
+    left: 50%;
+    margin-top: -275px;
+    margin-left: -400px;
+}
+
+.hub-dialog .hub-sidebar {
+    background: rgb(12, 12, 12);
+    border-right: 1px solid black;
+}
+
+.hub-dialog .hub-sidebar-tab {
+    height: 20%;
+    color: rgb(110, 110, 110);
+    cursor: pointer;
+    padding: 20px;
+}
+
+.hub-dialog .hub-sidebar-tab:hover,
+.hub-dialog .hub-sidebar-tab.selected {
+    background: rgb(22, 22, 22);
+    color: white;
+}
+
+/*
+.hub-dialog .hub-sidebar-tab.home-tab:hover i,
+.hub-dialog .hub-sidebar-tab.home-tab.selected i {
+    color: #ff8f00;
+}
+
+.hub-dialog .hub-sidebar-tab.updates-tab:hover i,
+.hub-dialog .hub-sidebar-tab.updates-tab.selected i {
+    color: #00ff7f;
+}
+
+.hub-dialog .hub-sidebar-tab.load-save-tab:hover i,
+.hub-dialog .hub-sidebar-tab.load-save-tab.selected i {
+    color: #00bfff;
+}
+
+.hub-dialog .hub-sidebar-tab.presets-tab:hover i,
+.hub-dialog .hub-sidebar-tab.presets-tab.selected i {
+    color: #ff00ff;
+}
+
+.hub-dialog .hub-sidebar-tab.settings-tab:hover i,
+.hub-dialog .hub-sidebar-tab.settings-tab.selected i {
+    color: #ce0074;
+}
+*/
+
+.hub-dialog .hub-sidebar-tab span {
+    transition-duration: 0.125s;
+}
+
+.hub-dialog .hub-sidebar-tab:hover span {
+    font-size: 1.05em;
+}
+
+.hub-dialog > .board-panel-body {
+    position: absolute;
+    inset: 0;
+    top: 42px;
+}
+
+.hub-body {
+    padding: 20px 30px;
+    overflow-y: auto;
+}
+
+.fall-in-item {
+    margin-bottom: 20px;
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.5);
+}
+
+.tab-content-header {
+    background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
+    border-bottom: 1px solid black;
+    height: auto;
+    font-size: 1.3em;
+    margin: 0;
+    padding: 6px 12px;
+    /* position: sticky; */
+    /* top: -20px; */
+}
+
+.tab-content-body {
+    background: #1c1c1c;
+    /* padding: 8px 14px; */
+    padding: 15px 30px;
+    font-size: 0.95em;
+    color: #f7f6f6;
+}
+
+.tab-content-body-img-wrapper {
+    margin-bottom: 25px;
+    padding: 8px 0;
+}
+
+.tab-content-body-img-wrapper img {
+    width: 100%;
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.5);
+}
+
+.tab-content-body h4 {
+    font-weight: bold;
+    margin-bottom: 14px;
+}
+
+.tab-content-body ul {
+    margin-bottom: 40px;
+    padding-left: 24px;
+}
+
+.tab-content-body li {
+    margin-bottom: 15px;
+    line-height: 24px;
+}
+
+/*
+.hub-tab-content {
+    opacity: 0;
+    transition: opacity 1s ease-in-out, transform 0.5s ease-in-out;
+    transform: translateY(40px);
+}
+
+.hub-tab-content.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+*/
+
+/* Transition classes */
+.fall-in-enter-active {
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+}
+
+/* Starting position */
+.fall-in-enter {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+/* Ending position */
+.fall-in-enter-to {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Leaving position */
+.fall-in-leave-to {
+    opacity: 0;
+    transition: none;
 }
 
 .confirmation-dialog {
@@ -1434,6 +1593,10 @@ input[type=number].btn-small {
 
 .no-sidebar .footer {
     left: 0;
+}
+
+.panel-toolbar {
+    display: inline-block;
 }
 
 .title-button {
@@ -1605,6 +1768,7 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
 .settings-option-wrapper .text-button-wrapper {
     padding: 6px 10px;
     text-align: center;
+    overflow: auto;
 }
 
 .settings-option-wrapper button.text-button {
