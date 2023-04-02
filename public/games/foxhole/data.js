@@ -5060,6 +5060,8 @@ const gameData = {
 				"mgait1": {
 					"name": "Machine Gun Garrison (Tier 1)",
 					"codeName": "MGAIT1",
+					"category" : "gearPower",
+					"gearPower" : -600,
 					"description": "An entrenched machine gun manned by stationed troops.",
 					"range": {
 						"type": "killboxMG",
@@ -5167,6 +5169,8 @@ const gameData = {
 				"rifleait1": {
 					"name": "Rifle Garrison (Tier 1)",
 					"codeName": "RifleAIT1",
+					"category" : "gearPower",
+					"gearPower" : -600,
 					"description": "An entrenched bunker manned by stationed troops armed with Rifles.",
 					"range": {
 						"type": "killbox",
@@ -5284,6 +5288,8 @@ const gameData = {
 				"atgunait2": {
 					"name": "AT Gun Garrison (Tier 2)",
 					"codeName": "ATGunAIT2",
+					"category" : "gearPower",
+					"gearPower" : -600,
 					"description": "An entrenched AT gun manned by stationed troops.",
 					"range": {
 						"type": "killboxAT",
@@ -5312,6 +5318,8 @@ const gameData = {
 				"engineroomt2": {
 					"name": "Engine Room (Tier 2)",
 					"codeName": "EngineRoomT2",
+					"category" : "gearPower",
+					"gearPower" : 3000,
 					"description": "A engineering facility that provides power to Bunker structures using pipe connections.",
 					"icon": "game/Textures/UI/StructureIcons/EngineRoomIcon.webp",
 					"texture": "game/Textures/Structures/fortt2_engineroom.webp",
@@ -5325,6 +5333,8 @@ const gameData = {
 				"mgait2": {
 					"name": "Machine Gun Garrison (Tier 2)",
 					"codeName": "MGAIT2",
+					"category": "gearPower",
+					"gearPower" : -600,
 					"description": "An entrenched machine gun manned by stationed troops.",
 					"range": {
 						"type": "killboxMG",
@@ -5345,6 +5355,8 @@ const gameData = {
 				"observationbunkert2": {
 					"name": "Observation Bunker (Tier 2)",
 					"codeName": "ObservationBunkerT2",
+					"category" : "gearPower",
+					"gearPower" : -1000,
 					"description": "A radio bunker that provides intel to friendly units about the surrounding area. Reinforced with wood, it can withstand more punishment than a standard radio tower, and therefore is capable of increased effectiveness.",
 					"range": {
 						"type": "radio",
@@ -5451,6 +5463,8 @@ const gameData = {
 				"rifleait2": {
 					"name": "Rifle Garrison (Tier 2)",
 					"codeName": "RifleAIT2",
+					"category" : "gearPower",
+					"gearPower" : -600,
 					"description": "An entrenched bunker manned by stationed troops armed with Rifles.",
 					"range": {
 						"type": "killbox",
@@ -5574,6 +5588,8 @@ const gameData = {
 				"intelcenter": {
 					"name": "Intelligence Center",
 					"codeName": "IntelCenter",
+					"category" : "gearPower",
+					"gearPower" : -35000,
 					"description": "A high-tech listening post designed to intercept and decode enemy transmissions. The Intelligence Center can target distant locations and will continue to decipher sensitive transmissions over a sustained period.",
 					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/IntelligenceCenterIcon.webp",
@@ -5589,6 +5605,8 @@ const gameData = {
 				"lrartillery": {
 					"name": "Storm Cannon",
 					"codeName": "LRArtillery",
+					"category" : "gearPower",
+					"gearPower" : -35000,
 					"description": "A heavy fixed position artillery piece that can release devastating firepower on distant enemy targets.",
 					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/LongRangedArtilleryIcon.webp",
@@ -5656,6 +5674,8 @@ const gameData = {
 				"atgunait3": {
 					"name": "AT Gun Garrison (Tier 3)",
 					"codeName": "ATGunAIT3",
+					"category" : "gearPower",
+					"gearPower" : -600,
 					"prevUpgradeKey": "fortt2_atgunait2",
 					"description": "An entrenched AT gun manned by stationed troops.",
 					"range": {
@@ -5695,6 +5715,8 @@ const gameData = {
 				"engineroomt3": {
 					"name": "Engine Room (Tier 3)",
 					"codeName": "EngineRoomT3",
+					"category" : "gearPower",
+					"gearPower": 3000,
 					"prevUpgradeKey": "fortt2_engineroomt2",
 					"description": "A engineering facility that provides power to Bunker structures using pipe connections.",
 					"icon": "game/Textures/UI/StructureIcons/EngineRoomIcon.webp",
@@ -5709,6 +5731,8 @@ const gameData = {
 				"mgait3": {
 					"name": "Machine Gun Garrison (Tier 3)",
 					"codeName": "MGAIT3",
+					"category" : "gearPower",
+					"gearPower" : -600,
 					"prevUpgradeKey": "fortt2_mgait2",
 					"description": "An entrenched machine gun manned by stationed troops.",
 					"range": {
@@ -5731,6 +5755,8 @@ const gameData = {
 				"observationbunkert3": {
 					"name": "Observation Bunker (Tier 3)",
 					"codeName": "ObservationBunkerT3",
+					"category" : "gearPower",
+					"gearPower": -1000,
 					"prevUpgradeKey": "fortt2_observationbunkert2",
 					"description": "A radio bunker that provides intel to friendly units about the surrounding area. Built from solid concrete, this reliable structure can push its effective range beyond lesser fortified radio structures.",
 					"range": {
@@ -5842,6 +5868,8 @@ const gameData = {
 				"rifleait3": {
 					"name": "Rifle Garrison (Tier 3)",
 					"codeName": "RifleAIT3",
+					"category" : "gearPower",
+					"gearPower" : -600,
 					"prevUpgradeKey": "fortt2_rifleait2",
 					"description": "An entrenched bunker manned by stationed troops armed with Rifles.",
 					"range": {
