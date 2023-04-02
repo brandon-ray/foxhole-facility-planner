@@ -441,6 +441,14 @@ const gameData = {
 			"filters": [
 				"facilities"
 			]
+		},
+		"antoines_train_station": {
+			"name": "Antoine's Train Station",
+			"description": "This is a train station for 3 trains.",
+			"author": "Antoine",
+			"filters": [
+				"facilities"
+			]
 		}
 	},
 	"maps": {
