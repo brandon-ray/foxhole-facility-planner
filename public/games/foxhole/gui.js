@@ -88,6 +88,9 @@ Vue.component('app-menu-statistics', {
             displayTime: false,
             time: 3600,
             bunker: null,
+            gearPowerTotal: 0,
+            gearPowerProduced: 0,
+            gearPowerConsumed: 0,
             powerTotal: 0,
             powerProduced: 0,
             powerConsumed: 0,
@@ -122,6 +125,14 @@ Vue.component('app-menu-statistics', {
                 damageProfiles: {}
             };
             let displayTime = false;
+            let hasObs = false;
+            let hasEng = false;
+            let hasMultEng = false;
+            let gearPower = 0;
+            let gearPowerTotal = 0;
+            let gearPowerProduced = 0;
+            let gearPowerConsumed = 0;
+            let debug = 0;
             let powerTotal = 0;
             let powerProduced = 0;
             let powerConsumed = 0;
@@ -161,6 +172,7 @@ Vue.component('app-menu-statistics', {
             for (let i = 0; i < entities.length; i++) {
                 let entity = entities[i];
                 if (entity.type === 'building') {
+
                     let buildingData = window.objectData.buildings[entity.subtype];
                     if (!buildingData) {
                         continue;
@@ -207,6 +219,7 @@ Vue.component('app-menu-statistics', {
                         }
 
                         let power = productionSelected && buildingData.power ? buildingData.power : 0;
+
                         if (buildingData.cost) {
                             let costKeys = Object.keys(buildingData.cost);
                             for (let j = 0; j < costKeys.length; j++) {
@@ -291,6 +304,31 @@ Vue.component('app-menu-statistics', {
                         } else {
                             powerConsumed += power;
                         }
+
+                    }
+
+                    if (buildingData.category==='gearPower') {
+                        gearPower = buildingData.gearPower;
+                    }
+                    
+                    gearPowerTotal += gearPower;
+                    
+                    if (gearPower > 0) {
+                        gearPowerProduced += gearPower;
+                    } else {
+                        gearPowerConsumed += gearPower;
+                    }
+
+                    gearPower = 0;
+                    
+                    if(buildingData.codeName === 'ObservationBunkerT2' || buildingData.codeName === 'ObservationBunkerT3')
+                        hasObs=true;
+                    
+                    if(buildingData.codeName === 'EngineRoomT2' || buildingData.codeName === 'EngineRoomT3'){
+                        if(hasEng)
+                            hasMultEng = true:
+                        else
+                            hasEng = true;
                     }
                 }
             }
@@ -324,6 +362,14 @@ Vue.component('app-menu-statistics', {
             this.powerTotal = powerTotal;
             this.powerProduced = powerProduced;
             this.powerConsumed = powerConsumed;
+
+            if(hasObs && hasMultEng && gearPowerTotal == 1000)
+                this.gearPowerTotal = 999;
+            else
+                this.gearPowerTotal = gearPowerTotal;
+
+            this.gearPowerProduced = gearPowerProduced;
+            this.gearPowerConsumed = gearPowerConsumed;
             this.maintenanceSupplies = maintenanceSupplies;
 
             const selectedEntity = game.getSelectedEntity();
@@ -343,7 +389,7 @@ Vue.component('app-menu-statistics', {
             <button class="btn-small m-0 mr-2 float-right" :class="{'btn-active': game.settings.enableSelectionStats}" title="Toggle Selection Stats" @click="game.settings.enableSelectionStats = !game.settings.enableSelectionStats; game.updateSettings(); game.refreshStats()"><i class="fa fa-mouse-pointer"></i></button>
         </div>
         <div class="board-panel-body">
-            <div v-if="!(cost || bunker?.total || displayTime || powerProduced || powerConsumed || powerTotal || maintenanceSupplies || input || output)" class="text-center" style="color: #f0f0f0">{{game.settings.enableSelectionStats ? 'Select' : 'Place'}} buildings to see their stats here.</div>
+            <div v-if="!(cost || bunker?.total || displayTime || gearPowerProduced || gearPowerConsumed || gearPowerTotal || powerProduced || powerConsumed || powerTotal || maintenanceSupplies || input || output)" class="text-center" style="color: #f0f0f0">{{game.settings.enableSelectionStats ? 'Select' : 'Place'}} buildings to see their stats here.</div>
             <div v-if="cost" class="construction-options-wrapper">
                 <h5 class="construction-options-header"><i class="fa fa-wrench"></i> {{selection && 'Selection ' || ''}}Construction Cost</h5>
                 <div>
@@ -365,6 +411,23 @@ Vue.component('app-menu-statistics', {
                         <span style="font-size: 18px;">{{Math.floor(bunker.structuralIntegrity * 100)}} <small>%</small></span>
                         <!--<span class="label">{{bunker.structuralIntegrity.toFixed(4)}}</span>-->
                         <span class="label">{{bunker.class}}</span>
+                    </div>
+                </div>
+            </div>
+            <div v-if="gearPowerProduced || gearPowerConsumed || gearPowerTotal class="construction-options-wrapper">
+                <h5 class="construction-options-header"><i class="fa fa-bolt"></i> {{selection ? 'Selection' : 'Bunker'}} Gear Power</h5>
+                <div class="construction-options row d-flex justify-content-center">
+                    <div class="btn-small col" style="color: #00ca00;">
+                        <span style="font-size: 18px;">{{gearPowerProduced}} <small>Unit</small></span>
+                        <span class="label">produced</span>
+                    </div>
+                    <div class="btn-small col" style="color: #ff0d0d;">
+                        <span style="font-size: 18px;">{{gearPowerConsumed}} <small>Unit</small></span>
+                        <span class="label">consumed</span>
+                    </div>
+                    <div class="btn-small col" style="color: #d0d004;">
+                        <span style="font-size: 18px;">{{gearPowerTotal}} <small>Unit</small></span>
+                        <span class="label">total</span>
                     </div>
                 </div>
             </div>
