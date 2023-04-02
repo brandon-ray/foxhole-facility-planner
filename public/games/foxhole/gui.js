@@ -332,10 +332,10 @@ Vue.component('app-menu-statistics', {
                     
                     if(buildingData.codeName === 'ObservationBunkerT2' || buildingData.codeName === 'ObservationBunkerT3')
                         hasObs=true;
-                    
+
                     if(buildingData.codeName === 'EngineRoomT2' || buildingData.codeName === 'EngineRoomT3'){
                         if(hasEng)
-                            hasMultEng = true:
+                            hasMultEng = true;
                         else
                             hasEng = true;
                     }
