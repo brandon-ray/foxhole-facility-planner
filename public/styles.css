@@ -1388,10 +1388,10 @@ input[type=number].btn-small {
 }
 
 .hub-dialog .hub-sidebar-tab {
-    height: 20%;
+    height: 16.66%;
     color: rgb(110, 110, 110);
     cursor: pointer;
-    padding: 20px;
+    padding: 12px;
 }
 
 .hub-dialog .hub-sidebar-tab:hover,
@@ -1644,12 +1644,12 @@ input[type=number].btn-small {
     left: 42px;
 }
 
-.title-button.clone-button, .title-button.lock-button {
+.title-button.clone-button, .title-button.lock-button, .title-button.attach-right {
     left: auto;
     right: 42px;
 }
 
-.title-button.lock-button {
+.title-button.lock-button, .title-button.attach-right {
     right: 0;
 }
 

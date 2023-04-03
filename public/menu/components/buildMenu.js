@@ -1240,7 +1240,13 @@ Vue.component('app-menu-save-load', {
             centerImageOnObjects: false
         };
     },
+    mounted: function () {
+        game.loadSaveMenuComponent = this;
+    },
     methods: {
+        refresh: function() {
+            this.$forceUpdate();
+        },
         openFileBrowser: function(importAsSelection = false) {
             this.importAsSelection = importAsSelection;
             document.getElementById('fileUpload').click();
@@ -1268,8 +1274,8 @@ Vue.component('app-menu-save-load', {
             reader.readAsArrayBuffer(file);
         },
         updateProjectProperties: function() {
-            if (game.projectName === '') {
-                game.projectName = 'Unnamed Project';
+            if (game.project.name === '') {
+                game.project.name = 'Unnamed Project';
             }
             game.updateSave();
             this.$forceUpdate();
@@ -1278,20 +1284,24 @@ Vue.component('app-menu-save-load', {
     },
     template: html`
     <div id="save-load-page">
+        <button type="button" class="title-button trash-button attach-right" v-on:click="game.confirmNewProject()" title="Delete Project" @mouseenter="bme()">
+            <div class="inner-button"><i class="fa fa-trash"></i></div>
+        </button>
         <input id="fileUpload" @change="loadFile()" type="file" ref="file" hidden>
         <div class="settings-option-wrapper">
             <div class="settings-title">Project Properties</div>
             <label class="app-input-label project-name-input pt-0">
                 <small class="mx-1">Name</small>
-                <input class="app-input text-left" type="text" v-model="game.projectName" placeholder="Unnamed Project" @change="updateProjectProperties()">
+                <input class="app-input text-left" type="text" v-model="game.project.name" placeholder="Unnamed Project" @change="updateProjectProperties()">
             </label>
             <label class="app-input-label project-name-input pt-0">
                 <small class="mx-1">Description</small>
-                <textarea class="app-input text-left" maxlength="500" v-model="game.projectDescription" placeholder="No description provided." @change="updateProjectProperties()"></textarea>
+                <textarea class="app-input text-left" maxlength="500" v-model="game.project.description" placeholder="No description provided." @change="updateProjectProperties()"></textarea>
             </label>
             <label class="app-input-label project-name-input pt-0">
                 <small class="mx-1">Author(s)</small>
-                <input class="app-input text-left" type="text" v-model="game.projectAuthors" placeholder="Anonymous" @change="updateProjectProperties()">
+                <input class="app-input text-left" type="text" v-model="game.project.authors" placeholder="Anonymous" @change="updateProjectProperties()">
+            </label>
             </label>
             <div class="text-center">
                 <button class="app-btn app-btn-primary load-button" type="button" @click="openFileBrowser()" @mouseenter="bme()">

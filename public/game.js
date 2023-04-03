@@ -122,10 +122,34 @@ const game = {
         },
         volume: 0.2
     },
+    project: {
+        name: 'Unnamed Project',
+        description: '',
+        authors: '',
+        settings: {
+            showWorldRegion: true,
+            showProductionIcons: true,
+            showRangeWhenSelected: true,
+            regionKey: '',
+            ranges: {
+                crane: false,
+                radio: false,
+                resourceField: false,
+                preventDecay: false,
+                killbox: false,
+                killboxMG: false,
+                killboxAT: false,
+                killboxRocket: false,
+                killboxArty: false
+            }
+        }
+    },
     isPlayScreen: false
 };
 
 game.defaultSettings = JSON.parse(JSON.stringify(game.settings));
+game.defaultProject = JSON.parse(JSON.stringify(game.project));
+
 game.playMode = false;
 
 function escapeHtml(str) {
@@ -249,28 +273,6 @@ try {
     let effects = [];
 
     game.selectedHandlePoint = null;
-
-    game.projectName = 'Unnamed Project';
-    game.projectDescription = '';
-    game.projectAuthors = '';
-    game.projectSettings = {
-        showWorldRegion: true,
-        showProductionIcons: true,
-        showRangeWhenSelected: true,
-        regionKey: '',
-        ranges: {
-            crane: false,
-            radio: false,
-            resourceField: false,
-            preventDecay: false,
-            killbox: false,
-            killboxMG: false,
-            killboxAT: false,
-            killboxRocket: false,
-            killboxArty: false
-        }
-    };
-
     game.selectedBuildingCategory = game.settings.defaultBuildingCategory;
 
     game.constructionModes = [
@@ -553,7 +555,7 @@ try {
     };
 
     game.updateEntityOverlays = function() {
-        const mapTexture = game.projectSettings.regionKey ? gameData.maps[game.projectSettings.regionKey].texture : null;
+        const mapTexture = game.project.settings.regionKey ? gameData.maps[game.project.settings.regionKey].texture : null;
         if (mapTexture && (!mapRegion.texture || !mapRegion.texture.textureCacheIds?.length || mapRegion.texture.textureCacheIds[0] !== mapTexture)) {
             if (game.resources[mapTexture]) {
                 mapRegion.texture = game.resources[mapTexture].texture;
@@ -569,7 +571,7 @@ try {
                 });
             }
         }
-        mapRegion.visible = mapTexture && game.projectSettings.showWorldRegion;
+        mapRegion.visible = mapTexture && game.project.settings.showWorldRegion;
         for (const entity of entities) {
             entity.updateOverlays();
         }
@@ -820,7 +822,7 @@ try {
                         game.lockSelected();
                         break;
                     case 80: // P
-                        game.projectSettings.showProductionIcons = !game.projectSettings.showProductionIcons;
+                        game.project.settings.showProductionIcons = !game.project.settings.showProductionIcons;
                         game.updateEntityOverlays();
                         break;
                     case 81: // Q
@@ -1170,11 +1172,11 @@ try {
     game.getSaveData = function(isSelection) {
         let saveObject = {
             version: SAVE_VERSION,
-            name: (game.projectName !== 'Unnamed Project' && game.projectName) || undefined,
-            description: game.projectDescription || undefined,
-            authors: game.projectAuthors || undefined,
+            name: (game.project.name !== 'Unnamed Project' && game.project.name) || undefined,
+            description: game.project.description || undefined,
+            authors: game.project.authors || undefined,
             faction: game.settings.selectedFaction || undefined,
-            projectSettings: game.projectSettings,
+            projectSettings: game.project.settings,
             entities: []
         };
         let saveEntities = isSelection ? selectedEntities : entities;
@@ -1209,7 +1211,7 @@ try {
             }
             return value;
         });
-        let fileName = game.projectName.toLowerCase().trim()
+        let fileName = game.project.name.toLowerCase().trim()
             .replace(/[^\w\s-]/g, '')
             .replace(/[\s_-]+/g, '_')
             .replace(/^-+|-+$/g, '');
@@ -1284,12 +1286,12 @@ try {
             } else {
                 game.removeEntities(true);
             }
-            game.projectName = saveObject.name || 'Unnamed Project';
-            game.projectDescription = saveObject.description || '';
-            game.projectAuthors = saveObject.authors || '';
+            game.project.name = saveObject.name || 'Unnamed Project';
+            game.project.description = saveObject.description || '';
+            game.project.authors = saveObject.authors || '';
             game.setFaction(saveObject.faction, true);
             if (saveObject.projectSettings) {
-                Object.assign(game.projectSettings, saveObject.projectSettings);
+                Object.assign(game.project.settings, saveObject.projectSettings);
             }
         }
         setTimeout(() => {
@@ -1351,10 +1353,10 @@ try {
     };
 
     game.setMapRegion = function(regionKey) {
-        if (game.projectSettings.regionKey === regionKey) {
+        if (game.project.settings.regionKey === regionKey) {
             regionKey = null;
         }
-        game.projectSettings.regionKey = regionKey;
+        game.project.settings.regionKey = regionKey;
         game.updateEntityOverlays();
         game.updateSave();
         game.appComponent?.refresh();
@@ -2464,6 +2466,21 @@ try {
         game.confirmationPopup.showPopup(loading ? 'save-work' : 'delete', confirmed => {
             if (confirmed) {
                 game.removeEntities();
+            }
+            if (typeof callback === 'function') {
+                callback(confirmed);
+            }
+        });
+    };
+
+    game.confirmNewProject = function(callback) {
+        game.confirmationPopup.showPopup('new-project', confirmed => {
+            if (confirmed) {
+                game.removeEntities();
+                game.project = JSON.parse(JSON.stringify(game.defaultProject));
+                game.saveStateChanged = true;
+                game.appComponent?.refresh();
+                game.loadSaveMenuComponent?.refresh();
             }
             if (typeof callback === 'function') {
                 callback(confirmed);

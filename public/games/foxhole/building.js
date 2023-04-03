@@ -1140,7 +1140,7 @@ class FoxholeStructure extends DraggableContainer {
             this.removeChild(this.productionIcons);
             if (typeof id === 'number') {
                 this.productionIcons = new PIXI.Container();
-                this.productionIcons.visible = game.projectSettings.showProductionIcons;
+                this.productionIcons.visible = game.project.settings.showProductionIcons;
                 this.productionIcons.rotation = -this.rotation;
                 const productionList = (this.baseProduction ? this.building.parent : this.building).production;
                 for (let i = 0; i < productionList.length; i++) {

@@ -50,9 +50,9 @@ if (isMobile && !isPhoneApp) {
                 },
                 toggleProjectSetting: function(type, subtype) {
                     if (subtype) {
-                        game.projectSettings[type][subtype] = !game.projectSettings[type][subtype];
+                        game.project.settings[type][subtype] = !game.project.settings[type][subtype];
                     } else {
-                        game.projectSettings[type] = !game.projectSettings[type];
+                        game.project.settings[type] = !game.project.settings[type];
                     }
                     game.updateEntityOverlays();
                     game.updateSave();
@@ -60,7 +60,7 @@ if (isMobile && !isPhoneApp) {
                 },
                 selectMapRegion: function(key) {
                     game.setMapRegion(key);
-                    if (game.projectSettings.regionKey) {
+                    if (game.project.settings.regionKey) {
                         this.regionSelectionVisible = false;
                     }
                     this.refresh();
@@ -71,8 +71,8 @@ if (isMobile && !isPhoneApp) {
                 <app-game-game-menu></app-game-game-menu>
                 <app-game-sidebar v-if="sidebarVisible"></app-game-sidebar>
                 
-                <div v-if="game.settings.showFacilityName && game.projectName && game.projectName !== 'Unnamed Facility' && game.projectName !== 'Unnamed Project'" class="project-banner">
-                    <i class="fa fa-wrench" aria-hidden="true"></i> {{game.projectName}}
+                <div v-if="game.settings.showFacilityName && game.project.name && game.project.name !== 'Unnamed Facility' && game.project.name !== 'Unnamed Project'" class="project-banner">
+                    <i class="fa fa-wrench" aria-hidden="true"></i> {{game.project.name}}
                 </div>
 
                 <div v-if="layerSelectionVisible" class="board-panel layer-selection">
@@ -83,53 +83,53 @@ if (isMobile && !isPhoneApp) {
                     <div class="board-panel-body row p-1">
                         <div class="col">
                             <label v-if="game.settings.enableExperimental" class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.showWorldRegion }" @click="toggleProjectSetting('showWorldRegion')"></button>
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.showWorldRegion }" @click="toggleProjectSetting('showWorldRegion')"></button>
                                 World Region
                             </label>
                             <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.showProductionIcons }" @click="toggleProjectSetting('showProductionIcons')"></button>
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.showProductionIcons }" @click="toggleProjectSetting('showProductionIcons')"></button>
                                 Production Icons
                             </label>
                             <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.showRangeWhenSelected }" @click="toggleProjectSetting('showRangeWhenSelected')"></button>
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.showRangeWhenSelected }" @click="toggleProjectSetting('showRangeWhenSelected')"></button>
                                 Selection Ranges
                             </label>
                             <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.resourceField }" @click="toggleProjectSetting('ranges', 'resourceField')"></button>
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.ranges.resourceField }" @click="toggleProjectSetting('ranges', 'resourceField')"></button>
                                 Resource Field Ranges
                             </label>
                             <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.preventDecay }" @click="toggleProjectSetting('ranges', 'preventDecay')"></button>
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.ranges.preventDecay }" @click="toggleProjectSetting('ranges', 'preventDecay')"></button>
                                 Maintenance Ranges
                             </label>
                             <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.crane }" @click="toggleProjectSetting('ranges', 'crane')"></button>
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.ranges.crane }" @click="toggleProjectSetting('ranges', 'crane')"></button>
                                 Crane Ranges
                             </label>
                         </div>
                         <div class="col">
                             <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.killbox }" @click="toggleProjectSetting('ranges', 'killbox')"></button>
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.ranges.killbox }" @click="toggleProjectSetting('ranges', 'killbox')"></button>
                                 Rifle Ranges
                             </label>
                             <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.killboxMG }" @click="toggleProjectSetting('ranges', 'killboxMG')"></button>
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.ranges.killboxMG }" @click="toggleProjectSetting('ranges', 'killboxMG')"></button>
                                 Machine Gun Ranges
                             </label>
                             <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.killboxAT }" @click="toggleProjectSetting('ranges', 'killboxAT')"></button>
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.ranges.killboxAT }" @click="toggleProjectSetting('ranges', 'killboxAT')"></button>
                                 Anti Tank Ranges
                             </label>
                             <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.killboxRocket }" @click="toggleProjectSetting('ranges', 'killboxRocket')"></button>
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.ranges.killboxRocket }" @click="toggleProjectSetting('ranges', 'killboxRocket')"></button>
                                 Rocket Ranges
                             </label>
                             <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.killboxArty }" @click="toggleProjectSetting('ranges', 'killboxArty')"></button>
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.ranges.killboxArty }" @click="toggleProjectSetting('ranges', 'killboxArty')"></button>
                                 Artillery Ranges
                             </label>
                             <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.projectSettings.ranges.radio }" @click="toggleProjectSetting('ranges', 'radio')"></button>
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.ranges.radio }" @click="toggleProjectSetting('ranges', 'radio')"></button>
                                 Radio Ranges
                             </label>
                         </div>
@@ -151,7 +151,7 @@ if (isMobile && !isPhoneApp) {
                             <div class="region-map-hex" :style="{
                                     marginTop: ((-55 + (map.gridCoord.y * 110)) + (map.gridCoord.x * 55)) + 'px',
                                     marginLeft: (-64 + (map.gridCoord.x * 96)) + 'px'
-                                }" :title="'Select ' + map.name" :class="{'hex-selected': key === game.projectSettings.regionKey }" @click="selectMapRegion(key)">
+                                }" :title="'Select ' + map.name" :class="{'hex-selected': key === game.project.settings.regionKey }" @click="selectMapRegion(key)">
                                 <div class="d-flex justify-content-center align-items-center text-center" :style="{backgroundImage: 'url(' + map.icon + ')'}">
                                     <div>{{map.name}}</div>
                                 </div>
@@ -255,7 +255,7 @@ Vue.component('app-board-ui', {
     },
     template: html`
     <div v-if="game.settings.showFooterInfo" class="board-scale-ui">
-        <div v-if="game.projectSettings.regionKey" class="mr-2">{{gameData.maps[game.projectSettings.regionKey].name}}</div>
+        <div v-if="game.project.settings.regionKey" class="mr-2">{{gameData.maps[game.project.settings.regionKey].name}}</div>
         {{scaleUnits}}m
         <div class="board-scale-tile" :style="{ width: ((scaleUnits * boardScale) / WINDOW_SCALE) + 'px' }"></div>
     </div>
@@ -463,6 +463,17 @@ Vue.component('app-game-confirmation-popup', {
                 Your current work will be lost if you don't save.<br>
                 Note: This <u>cannot</u> be undone.
                 <button @click="closePopup(true)">Erase Board</button>
+            </p>
+        </template>
+        <template v-else-if="type === 'new-project'">
+            <div class="board-panel-header">
+                <h4 class="float-left m-0" style="color: #eee"><i class="fa fa-trash"></i> Delete Project</h4>
+                <button class="btn-small m-0 mr-1 float-right" title="Close" @click="closePopup(false)"><i class="fa fa-times" aria-hidden="true"></i></button>
+            </div>
+            <p class="board-panel-body">
+                This will delete project settings, layers, and objects.<br>
+                Note: This <u>cannot</u> be undone.
+                <button @click="closePopup(true)">Erase Project & Board</button>
             </p>
         </template>
     </div>
