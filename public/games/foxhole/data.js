@@ -3,66 +3,139 @@ const gameData = {
 		"presets": {
 			"name": "Modules",
 			"hideInBuildingList": true,
-			"icon": "game/Textures/UI/Menus/IconFilterModules.webp"
+			"icon": "game/Textures/UI/Menus/IconFilterModules.webp",
+			"filters": [
+				"bunkers",
+				"facilities"
+			]
 		},
 		"defenses": {
 			"name": "Defenses",
 			"buildCategory": "Defense",
-			"icon": "game/Textures/UI/Menus/IconFilterDefense.webp"
+			"icon": "game/Textures/UI/Menus/IconFilterDefense.webp",
+			"filters": [
+				"bunkers",
+				"facilities"
+			]
 		},
 		"entrenchments": {
 			"name": "Entrenchments",
 			"buildCategory": "Bunker",
-			"icon": "game/Textures/UI/Menus/IconFilterBunker.webp"
+			"icon": "game/Textures/UI/Menus/IconFilterBunker.webp",
+			"filters": [
+				"bunkers"
+			]
 		},
 		"misc": {
 			"name": "Utilities",
 			"buildCategory": true,
-			"icon": "game/Textures/UI/Menus/IconFilterGeneral.webp"
+			"icon": "game/Textures/UI/Menus/IconFilterGeneral.webp",
+			"filters": [
+				"bunkers",
+				"facilities",
+				"vehicles"
+			]
 		},
 		"factories": {
 			"name": "Facilities",
 			"buildCategory": "Facility",
-			"icon": "game/Textures/UI/Menus/IconFilterFacility.webp"
+			"icon": "game/Textures/UI/Menus/IconFilterFacility.webp",
+			"filters": [
+				"facilities"
+			]
 		},
 		"harvesters": {
 			"name": "Harvesters",
 			"buildCategory": "Mining",
-			"icon": "game/Textures/UI/Menus/IconFilterMining.webp"
+			"icon": "game/Textures/UI/Menus/IconFilterMining.webp",
+			"filters": [
+				"facilities"
+			]
 		},
 		"power": {
 			"name": "Power",
 			"buildCategory": "Power",
-			"icon": "game/Textures/UI/Menus/IconFilterPower.webp"
+			"icon": "game/Textures/UI/Menus/IconFilterPower.webp",
+			"filters": [
+				"facilities"
+			]
 		},
 		"foundations": {
 			"name": "Foundations",
 			"buildCategory": "Foundation",
-			"icon": "game/Textures/UI/Menus/IconFilterFoundation.webp"
+			"icon": "game/Textures/UI/Menus/IconFilterFoundation.webp",
+			"filters": [
+				"facilities"
+			]
 		},
 		"shippables": {
 			"name": "Shippables",
 			"buildCategory": "Shippables",
-			"icon": "game/Textures/UI/Menus/IconFilterShippingContainer.webp"
+			"icon": "game/Textures/UI/Menus/IconFilterShippingContainer.webp",
+			"filters": [
+				"bunkers",
+				"facilities"
+			]
+		},
+		"weaponry": {
+			"name": "Weaponry",
+			"icon": "game/Textures/UI/VehicleIcons/FieldArtilleryColVehicleIcon.webp",
+			"filters": [
+				"vehicles"
+			]
 		},
 		"vehicles": {
 			"name": "Vehicles",
-			"hideInBuildingList": true,
-			"icon": "game/Textures/UI/Menus/IconFilterVehicle.webp"
+			"icon": "game/Textures/UI/Menus/IconFilterVehicle.webp",
+			"filters": [
+				"vehicles"
+			]
+		},
+		"armor": {
+			"name": "Armory",
+			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarVehicleIcon.webp",
+			"filters": [
+				"vehicles"
+			]
+		},
+		"tank": {
+			"name": "Tanks",
+			"icon": "game/Textures/UI/VehicleIcons/BattleTankWarDefensiveVehicleIcon.webp",
+			"filters": [
+				"vehicles"
+			]
 		},
 		"trains": {
 			"name": "Locomotives",
-			"hideInBuildingList": true,
-			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeEngineVehicleIcon.webp"
+			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeEngineVehicleIcon.webp",
+			"filters": [
+				"facilities",
+				"vehicles"
+			]
+		},
+		"naval": {
+			"name": "Aquatic",
+			"icon": "game/Textures/UI/VehicleIcons/Motorboat.webp",
+			"filters": [
+				"vehicles"
+			]
 		},
 		"world": {
 			"name": "References",
-			"icon": "game/Textures/UI/Menus/IconFilterGarrisonHouse.webp"
+			"icon": "game/Textures/UI/Menus/IconFilterGarrisonHouse.webp",
+			"filters": [
+				"bunkers",
+				"facilities"
+			]
 		},
 		"showcase": {
 			"name": "Showcase",
 			"hideInBuildingList": true,
-			"icon": "game/Textures/UI/Menus/IconFilterShowcase.webp"
+			"icon": "game/Textures/UI/Menus/IconFilterShowcase.webp",
+			"filters": [
+				"bunkers",
+				"facilities"
+			]
 		}
 	},
 	"presets": {
@@ -70,167 +143,304 @@ const gameData = {
 			"name": "Classic Storm Cannon",
 			"description": "Storm Cannon setup with corner howitzers.",
 			"author": "Stonefox",
+			"filters": [
+				"bunkers"
+			],
 			"module": true
 		},
 		"classic_intel_center": {
 			"name": "Classic Intelligence Center",
 			"description": "Intelligence Center setup with corner howitzers.",
 			"author": "Stonefox",
+			"filters": [
+				"bunkers"
+			],
 			"module": true
 		},
 		"360_zero": {
 			"name": "360 ZERO",
 			"description": "Cheap, Effective, Practical.",
 			"author": "Unknown",
+			"filters": [
+				"bunkers"
+			],
 			"module": true
 		},
 		"360_one": {
 			"name": "360 ONE",
 			"description": "The older brother of the zero, more expensive, but more aggressive.",
 			"author": "Unknown",
+			"filters": [
+				"bunkers"
+			],
 			"module": true
 		},
 		"360_dual": {
 			"name": "360 DUAL",
 			"description": "Retains compactness while significantly augmenting resistance to artillery.",
 			"author": "AllShallKneel",
+			"filters": [
+				"bunkers"
+			],
 			"module": true
 		},
 		"long_shall": {
 			"name": "LongShall",
 			"description": "Did somebody say compact? While this bunker sacrifices some coverage for extreme density, it does so marvelously.",
 			"author": "AllShallKneel",
+			"filters": [
+				"bunkers"
+			],
 			"module": true
 		},
 		"inique": {
 			"name": "Inique",
 			"description": "Hard hitting, compact, great coverage, this bunker proves that absolute efficiency is indifferent to symmetry.",
 			"author": "AllShallKneel",
+			"filters": [
+				"bunkers"
+			],
 			"module": true
 		},
 		"mini_obs": {
 			"name": "miniObs",
 			"description": "Extremely lightweight, but provides RG coverage at the bare minimum cost.",
 			"author": "AllShallKneel",
+			"filters": [
+				"bunkers"
+			],
 			"module": true
 		},
 		"halberd_bunker": {
 			"name": "\"Halberd\" Bunker",
 			"description": "A common reliable defensive bunker pattern.",
 			"author": "Unknown",
+			"filters": [
+				"bunkers"
+			],
 			"module": true
 		},
 		"xi_observation_bunker1": {
 			"name": "XI Observation Bunker",
 			"description": "Simple observation bunker split into two pieces to help with integrity (especially if left T2). Only 2 RGs can be lit, but that should be enough to prevent anyone from slipping into the bunker without suppression.",
 			"author": "nondidjos",
+			"filters": [
+				"bunkers"
+			],
 			"module": true
 		},
 		"m_bunker_t3": {
 			"name": "\"M\" Bunker T3",
 			"description": "Wide concrete bunker. This bunker has a lower garrison density but is better for wide fronts.",
 			"author": "Stonefox",
+			"filters": [
+				"bunkers"
+			],
 			"module": true
 		},
 		"squid_bunker_t2_1": {
 			"name": "\"Squid\" Bunker T2",
 			"description": "Fragile but hard hitting T2 bunker.",
 			"author": "Stonefox",
+			"filters": [
+				"bunkers"
+			],
 			"module": true
 		},
 		"squid_bunker_t3": {
 			"name": "\"Squid\" Bunker T3",
 			"description": "Conversion for T2 version but not purpose built concrete structure. This is more an upgrade for the T2 \"Squid\", not recommended if you plan for concrete.",
 			"author": "Stonefox",
+			"filters": [
+				"bunkers"
+			],
 			"module": true
 		},
 		"bunker_w_module": {
 			"name": "\"W\" Bunker",
 			"description": "A meta bunker design that has lots of health with great structural integrity and defenses.",
 			"author": "Unknown",
+			"filters": [
+				"bunkers"
+			],
 			"module": true
 		},
 		"compact_corner_bunker": {
 			"name": "Compact Corner Bunker",
 			"description": "This is a compact AT, MG and HG corner design that covers a 90 degree angle. This design is meant to be integrated into a straight line defence without wasting any space, or making any concessions on defence. Corner cutting is needed in the middle where 4 corner cuts are needed, but are easy to do. Do note that this design is only viable at the concrete tier.",
 			"author": "Danetello",
+			"filters": [
+				"bunkers"
+			],
 			"module": true
 		},
 		"obs_bunker": {
 			"name": "OBS Bunker",
 			"description": "Standard observation bunker. Power only 2 rifle garrisons and the OBS bunker.",
 			"author": "Unknown",
+			"filters": [
+				"bunkers"
+			],
 			"module": true
 		},
 		"locomotive_factory_by_eg0611": {
 			"name": "Locomotive Factory",
 			"description": "A facility that is capable to build Black Bolt, Longrider, Holdout, Rockhold and Roadhouse and their necessary manufacturing materials. 4 independent power systems allow facility to be functional 7/24.",
-			"author": "EG0611"
+			"author": "EG0611",
+			"filters": [
+				"facilities"
+			]
 		},
 		"m_bunker_w_trenches": {
 			"name": "\"M\" Bunker w/ Trenches",
 			"description": "Wide concrete bunker with trench support.",
-			"author": "Stonefox"
+			"author": "Stonefox",
+			"filters": [
+				"bunkers"
+			]
 		},
 		"t2_courtyard": {
 			"name": "T2 Courtyard",
 			"description": "A courtyard T2 bunker layout for early - mid war.",
-			"author": "Stonefox"
+			"author": "Stonefox",
+			"filters": [
+				"bunkers"
+			]
 		},
 		"t2_or_t3_halberd_trench_designs": {
 			"name": "T2 / T3 Halberd Trench Designs",
 			"description": "Using the Halberd bunker design here are some trenches you can use to connect them, varying in amount of emplacements.",
-			"author": "Stonefox"
+			"author": "Stonefox",
+			"filters": [
+				"bunkers"
+			]
 		},
 		"t2_oil_field": {
 			"name": "T2 Oil Field",
 			"description": "Supply the whole back line with petrol! Basic Oil field at tier 2 facilities with 6 oil reformer and 1 cracking unit, never waste a drop of oil anymore.",
-			"author": "[5th] Menxs"
+			"author": "[5th] Menxs",
+			"filters": [
+				"facilities"
+			]
 		},
 		"small_munition_factory": {
 			"name": "Small Munition Factory",
 			"description": "Small one man Facility with Low Gsupps cost of 432 for 24h when the lvl 3 Encampment is reached.",
-			"author": "Oberst_Den"
+			"author": "Oberst_Den",
+			"filters": [
+				"facilities"
+			]
 		},
 		"frontline_sandbag_factory": {
 			"name": "Frontline Sandbag Factory",
 			"description": "Simple, easy to maintain frontline sandbag factory. Heavily based off of Small Munition Factory by Oberst_Den",
-			"author": "runningpeanuts"
+			"author": "runningpeanuts",
+			"filters": [
+				"facilities"
+			]
 		},
 		"compact_coal_liquefaction": {
 			"name": "Compact Coal Liquefaction",
 			"description": "Produce coal with the power of coal! You can easily power this setup with a coal power station and an extra water pump for \"automatic\" coal. The coal to coal conversion factor is of ≃2.6. Taking into account power the multiplier is of ≃2.286",
-			"author": "[5th] Menxs"
+			"author": "[5th] Menxs",
+			"filters": [
+				"facilities"
+			]
 		},
 		"5mw_80h_drip_power": {
 			"name": "5mw 80h Drip Power",
 			"description": "Very useful to ease maintenance. This Design will be producing power ≃50% of the time, maintenance tunnels on its grid will be generating ≃80 Gsups/h and fuel will last twice as much (80h)",
-			"author": "[5th] Menxs"
+			"author": "[5th] Menxs",
+			"filters": [
+				"facilities"
+			]
 		},
 		"coastal_storage_facility_by_eg0611": {
 			"name": "Coastal Storage Facility",
 			"description": "A small facility with only purpose of storing items. No power production and consumption. It depends nearby bunker base for GSUPS usage.",
-			"author": "EG0611"
+			"author": "EG0611",
+			"filters": [
+				"facilities"
+			]
 		},
 		"simple_vehicle_factory": {
 			"name": "Simple Vehicle Factory (Example)",
 			"description": "A simple vehicle factory to output upgraded vehicles per hour. This is an example of a preset for the planner. Contribute your own saves to our Discord!",
-			"author": "Jimbo"
+			"author": "Jimbo",
+			"filters": [
+				"facilities"
+			]
 		},
 		"panzer_snares": {
 			"name": "Panzer Snares",
 			"author": "KitsunePanzer",
-			"module": true
+			"module": true,
+			"filters": [
+				"bunkers",
+				"facilities"
+			]
 		},
 		"small_artillery_facility": {
 			"name": "Small Artillery Facility",
 			"description": "A small and simple design that doesn't take up much space or Msupps.",
-			"author": "Trooper"
+			"author": "Trooper",
+			"filters": [
+				"facilities"
+			]
 		},
 		"small_tripod_facility": {
 			"name": "Small Tripod Facility",
 			"description": "A variant to the Small Artillery Facility I made, this one allows you to mass produce tripod weapons",
-			"author": "Trooper"
+			"author": "Trooper",
+			"filters": [
+				"facilities"
+			]
+		},
+		"eat_maker": {
+			"name": "EAT Maker",
+			"description": "Small EAT making facility\na train will make imports/exports easier but is not necessary",
+			"author": "maverick0537",
+			"module": true,
+			"filters": [
+				"facilities"
+			]
+		},
+		"msupps_facility": {
+			"name": "Msupps Facility",
+			"description": "Best if built next to bunker bases, these facilities makes Msupps production easy and quick.",
+			"author": "Trooper",
+			"filters": [
+				"facilities"
+			]
+		},
+		"t1_oil_field_refinement": {
+			"name": "T1 Oil field refinement",
+			"description": "Basic T1 oil field setup, water is optional. I highly recommend adding a 4th oil refinary to consume oil faster when it backs up.",
+			"author": "[5th] Menxs",
+			"module": true,
+			"filters": [
+				"facilities"
+			]
+		},
+		"t3_core": {
+			"name": "\"X\" Core",
+			"description": "A simple Bunker Base design that offers 360° Howitzer coverage ideal for late war.",
+			"author": [
+				":: TØMM¥6ÜN ::",
+				"maverick0537"
+			],
+			"filters": [
+				"bunkers"
+			],
+			"module": true
+		},
+		"bad_idea_inc": {
+			"name": "Bad Idea INC.™",
+			"description": "Field mod facility, PLS DONT BUILD",
+			"author": "maverick0537(im sorry)",
+			"filters": [
+				"facilities"
+			]
 		}
 	},
 	"maps": {
@@ -1651,6 +1861,50 @@ const gameData = {
 		}
 	},
 	"buildings": {
+		"ambulancec": {
+			"name": "R-12 - “Salus” Ambulance",
+			"codeName": "AmbulanceC",
+			"description": "The “Salus” Ambulance is efficient at transporting Critically Wounded Soldiers and carrying medical supplies.",
+			"category": "vehicles",
+			"categoryOrder": 5,
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/Ambulance.webp",
+			"texture": "game/Textures/Vehicles/ambulancec.webp",
+			"techId": "unlockambulance"
+		},
+		"ambulanceflamec": {
+			"name": "R-12b - “Salva” Flame Truck",
+			"codeName": "AmbulanceFlameC",
+			"description": "This simple variant of the “Salus” ambulance is fitted with a high-powered hose designed to quell wildfires.",
+			"category": "vehicles",
+			"categoryOrder": 5,
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/AmbulanceFlameC.webp",
+			"texture": "game/Textures/Vehicles/ambulanceflamec.webp",
+			"techId": "unlockambulance"
+		},
+		"ambulanceflamew": {
+			"name": "Dunne Dousing Engine 3r",
+			"codeName": "AmbulanceFlameW",
+			"description": "A simple variant of the Dunne Responder 3e that’s fitted with a high-powered hose designed to extinguish raging flames.",
+			"category": "vehicles",
+			"categoryOrder": 5,
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/AmbulanceFlameW.webp",
+			"texture": "game/Textures/Vehicles/ambulanceflamew.webp",
+			"techId": "unlockambulance"
+		},
+		"ambulancew": {
+			"name": "Dunne Responder 3e",
+			"codeName": "AmbulanceW",
+			"description": "The Responder Ambulance is efficient at transporting Critically Wounded Soldiers and carrying medical supplies.",
+			"category": "vehicles",
+			"categoryOrder": 5,
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/AmbulanceWar.webp",
+			"texture": "game/Textures/Vehicles/ambulancew.webp",
+			"techId": "unlockambulance"
+		},
 		"ammunition_factory": {
 			"name": "Ammunition Factory",
 			"codeName": "FacilityFactoryAmmo",
@@ -1685,6 +1939,7 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/ItemIcons/AmmoFactoryBaseIcon.webp",
 			"texture": "game/Textures/Structures/ammunition_factory.webp",
+			"preventOnLandscape": true,
 			"power": -4,
 			"sockets": [
 				{
@@ -2022,6 +2277,93 @@ const gameData = {
 				}
 			}
 		},
+		"armoredcaratw": {
+			"name": "O’Brien V.113 Gravekeeper",
+			"codeName": "ArmoredCarATW",
+			"description": "A slight variation of the V.110, the Gravekeeper comes fitted with an embedded Bonesaw launcher, transforming the humble armoured car into an effective indirect anti-armour vehicle.",
+			"category": "armory",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarATWVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/armoredcaratw.webp",
+			"techId": "unlockfacilitytier2"
+		},
+		"armoredcarc": {
+			"name": "T3 “Xiphos”",
+			"codeName": "ArmoredCarC",
+			"description": "Colonial Armoured Cars are quick, well-rounded urban assault platforms. These anti-infantry vehicles are equipped with twin-barrelled machineguns.",
+			"category": "armor",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/armoredcarc.webp"
+		},
+		"armoredcarflamew": {
+			"name": "O’Brien V.130 Wild Jack",
+			"codeName": "ArmoredCarFlameW",
+			"description": "While the Noble Firebrand Mk. XVII is a deadly flamethrower tank, a more efficient means of employing flame weapons was needed. Enter the Wild Jack. Named for the fiery idols made by children for Dead Harvest, the Wild Jack is a variation of the Highlander.",
+			"category": "tank",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarFlameWarVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/armoredcarflamew.webp",
+			"techId": "unlockfacilitytier2"
+		},
+		"armoredcarmobilityw": {
+			"name": "O’Brien V.121 Highlander",
+			"codeName": "ArmoredCarMobilityW",
+			"description": "Fitted with all-terrain treads, the Highlander brings significant all-terrain mobility and performs especially well in snowy and mountainous environments. ",
+			"category": "tank",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarMobilityWarVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/armoredcarmobilityw.webp"
+		},
+		"armoredcaroffensivec": {
+			"name": "T5 “Percutio”",
+			"codeName": "ArmoredCarOffensiveC",
+			"description": "This “Xiphos” variant is fitted with a high-powered anti-tank turret in place of the twin machine gun platform.",
+			"category": "armor",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarOffensiveCVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/armoredcaroffensivec.webp",
+			"techId": "unlockfacilitytier2"
+		},
+		"armoredcaroffensivew": {
+			"name": "O’Brien V.101 Freeman",
+			"codeName": "ArmoredCarOffensiveW",
+			"description": "This early O’Brien variant, the V.101 Freeman is fitted with a 360 degree ballistics cannon turret at the expense of top speed.",
+			"category": "armor",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarOffensiveWVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/armoredcaroffensivew.webp",
+			"techId": "unlockarmoredcaroffensive"
+		},
+		"armoredcartwinc": {
+			"name": "T8 “Gemini”",
+			"codeName": "ArmoredCarTwinC",
+			"description": "Fitted with twin RPG launchers, the T8 employs hit-and-run assaults against enemy structures and emplacements.",
+			"category": "armor",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarTwinCItemIcon.webp",
+			"texture": "game/Textures/Vehicles/armoredcartwinc.webp",
+			"techId": "unlockarmoredcartwin"
+		},
+		"armoredcartwinw": {
+			"name": "O’Brien v.190 Knave",
+			"codeName": "ArmoredCarTwinW",
+			"description": "One of Conor O’Brien’s best traits was his ability to modernize and make use of older technology in his designs. The v.190 Knave is the perfect example of this philosophy. Fitted with a modified, outdated twin-grenade launcher turret, the Knave is a surprising combination of speed and subterfuge that quickly routs the enemy, leaving them befuddled.",
+			"category": "armor",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarTwinWIcon.webp",
+			"texture": "game/Textures/Vehicles/armoredcartwinw.webp",
+			"techId": "unlockarmoredcartwin"
+		},
+		"armoredcarw": {
+			"name": "O’Brien V.110",
+			"codeName": "ArmoredCarW",
+			"description": "Warden Armoured Cars are quick, well-rounded urban assault platforms. These anti-infantry vehicles are equipped with twin-barrelled machineguns.",
+			"category": "armor",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarWarVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/armoredcarw.webp"
+		},
 		"atpillbox": {
 			"name": "Anti-Tank Pillbox",
 			"codeName": "ATPillbox",
@@ -2063,6 +2405,7 @@ const gameData = {
 			"texture": "game/Textures/Structures/barbedwirespline.webp",
 			"textureFrontCap": "game/Textures/Structures/barbedwirespline_front.webp",
 			"textureBackCap": "game/Textures/Structures/barbedwirespline_back.webp",
+			"buildOnFoundation": true,
 			"canSnap": true,
 			"sockets": [
 				{
@@ -2108,12 +2451,18 @@ const gameData = {
 			"description": "Used to prevent enemy infantry movement through an area. This structure is difficult to destroy with conventional weapons and must be dismantled with a Wrench.",
 			"category": "defenses",
 			"categoryOrder": 2,
-			"hideInList": true,
+			"hasHandle": true,
+			"isBezier": true,
 			"simpleBezier": true,
 			"minLength": 4,
 			"maxLength": 10,
+			"minExtLength": 1,
+			"maxExtLength": 4,
 			"icon": "game/Textures/UI/ItemIcons/BarbedWireFenceStructureIcon.webp",
-			"texture": null,
+			"texture": "game/Textures/Structures/barbedwirewallspline.webp",
+			"texturePost": "game/Textures/Structures/barbedwirewallsplinepost.webp",
+			"texturePostDist": 1.75,
+			"buildOnFoundation": true,
 			"canSnap": true,
 			"sockets": [
 				{
@@ -2149,7 +2498,7 @@ const gameData = {
 			"name": "BMS - Aquatipper",
 			"codeName": "Barge",
 			"description": "A large shipping vessel, the Aquatipper is used to transport vehicles, equipment, and personnel over large bodies of water.",
-			"category": "vehicles",
+			"category": "naval",
 			"categoryOrder": 20,
 			"sortLayer": "vehicle",
 			"hitArea": [
@@ -2162,6 +2511,51 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/VehicleIcons/BargeVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/barge.webp"
+		},
+		"battletankatc": {
+			"name": "Lance-25 “Hasta”",
+			"codeName": "BattleTankATC",
+			"description": "A heavy Lance variation, the 25, or “Hasta”, was employed in the first siege on Brightwall, a city now colloquially referred to as, “The Blemish”. Bombarded by heavy, armoured resistance in northern Veli, Colonial tank regiments requested a heavy vehicle with more effective search and destroy capabilities. Fitted with a front-facing 94.5mm cannon, the “Hasta” is a more than capable tank destroyer.",
+			"category": "tank",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/BattleTankATCIcon.webp",
+			"texture": "game/Textures/Vehicles/battletankatc.webp",
+			"techId": "unlockbattletank"
+		},
+		"battletankc": {
+			"name": "Lance-36",
+			"codeName": "BattleTankC",
+			"description": "A heavy-duty Battle Tank with thick armour plating and destructive firepower. The Lance is fitted with a 75mm turret and a front-facing 12.7mm anti-infantry machine gun. The heavy armour limits top speed, but in exchange it can take a lot of punishment.",
+			"category": "tank",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/BattleTank.webp",
+			"texture": "game/Textures/Vehicles/battletankc.webp"
+		},
+		"battletankdefensivew": {
+			"name": "Flood Juggernaut Mk. VII",
+			"codeName": "BattleTankDefensiveW",
+			"description": "The Juggernaut is a heavily armoured Flood variant fitted with a heavy flamethrower turret that fires an advanced adhesive propellant. Its shovel-like treads may hinder top speeds, but this beast is quite capable in extreme weather conditions.",
+			"category": "tank",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/BattleTankWarDefensiveVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/battletankdefensivew.webp"
+		},
+		"battletankw": {
+			"name": "Flood Mk. I",
+			"codeName": "BattleTankW",
+			"description": "A heavy-duty Battle Tank with thick armour plating and destructive firepower. The Flood is fitted with a 75mm turret and a front-facing 12.7mm anti-infantry machine gun. The heavy armour limits top speed, but in exchange it can take a lot of punishment.",
+			"category": "tank",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/BattleTankWar.webp",
+			"texture": "game/Textures/Vehicles/battletankw.webp"
+		},
+		"bicycle": {
+			"name": "Blumfield LK205",
+			"codeName": "Bicycle",
+			"description": "A simple, old-style Blumfield bicycle. This is a smaller recreation model, designed for short-distance sprints.",
+			"category": "vehicles",
+			"icon": "game/Textures/UI/VehicleIcons/RelicBicycleVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/bicycle.webp"
 		},
 		"bms_foreman_stacker": {
 			"name": "BMS Foreman Stacker",
@@ -2181,9 +2575,11 @@ const gameData = {
 			"icon": "game/Textures/UI/FacilityCraneIcon.webp",
 			"texture": "game/Textures/Structures/bms_foreman_stacker.webp",
 			"textureOffset": {
-				"x": 445,
+				"x": 428,
 				"y": 258
 			},
+			"buildOnFoundation": true,
+			"preventOnLandscape": true,
 			"power": -0.5,
 			"sockets": [
 				{
@@ -2240,7 +2636,7 @@ const gameData = {
 			"codeName": "BusC",
 			"description": "The “Chariot” is a transport vehicle used to shuttle personnel to the front line.",
 			"category": "vehicles",
-			"categoryOrder": 5,
+			"categoryOrder": 10,
 			"faction": "c",
 			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/BusIcon.webp",
@@ -2252,7 +2648,7 @@ const gameData = {
 			"codeName": "BusW",
 			"description": "The Caravaner is a transport vehicle used to shuttle personnel to the front line.",
 			"category": "vehicles",
-			"categoryOrder": 6,
+			"categoryOrder": 10,
 			"faction": "w",
 			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/BusWarIcon.webp",
@@ -2271,6 +2667,8 @@ const gameData = {
 			"maxLength": 20,
 			"icon": "game/Textures/UI/ItemIcons/facilitieCatwalkPlatfromIcon.webp",
 			"texture": "game/Textures/Structures/catwalk_bridge.webp",
+			"buildOnFoundation": true,
+			"preventOnLandscape": true,
 			"canSnap": true,
 			"sockets": [
 				{
@@ -2320,6 +2718,8 @@ const gameData = {
 			"sortLayer": "overhead",
 			"icon": "game/Textures/UI/ItemIcons/FacilityCatwalkRampConnectorIcon.webp",
 			"texture": "game/Textures/Structures/catwalk_platform.webp",
+			"buildOnFoundation": true,
+			"preventOnLandscape": true,
 			"canSnap": true,
 			"snapNearest": true,
 			"sockets": [
@@ -2388,6 +2788,8 @@ const gameData = {
 			"sortLayer": "overhead",
 			"icon": "game/Textures/UI/ItemIcons/FacilityCatwalkRampIcon.webp",
 			"texture": "game/Textures/Structures/catwalk_stairs.webp",
+			"buildOnFoundation": true,
+			"preventOnLandscape": true,
 			"canSnap": true,
 			"sockets": [
 				{
@@ -2445,6 +2847,7 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/ItemIcons/FacilitiesCoolRefineryBaseIcon.webp",
 			"texture": "game/Textures/Structures/coal_refinery.webp",
+			"preventOnLandscape": true,
 			"power": -3,
 			"sockets": [
 				{
@@ -2749,7 +3152,7 @@ const gameData = {
 			"codeName": "ConcreteMixer",
 			"description": "A portable device that mixes various materials to form Concrete, which are used to build heavily fortified structures.",
 			"category": "shippables",
-			"categoryOrder": 5,
+			"categoryOrder": 10,
 			"icon": "game/Textures/UI/StructureIcons/ConcreteMixerIcon.webp",
 			"texture": "game/Textures/Structures/concretemixer.webp",
 			"techId": "unlockconcretemixer",
@@ -2774,10 +3177,13 @@ const gameData = {
 		},
 		"construction_vehicle": {
 			"name": "BMS - Universal Assembly Rig",
+			"aliases": [
+				"CV"
+			],
 			"codeName": "Construction",
 			"description": "A specialized vehicle designed by the Basset Motor Society used in the construction of large structures.",
-			"category": "vehicles",
-			"categoryOrder": 9,
+			"category": "misc",
+			"categoryOrder": 3,
 			"sortLayer": "vehicle",
 			"hitArea": [
 				{
@@ -2807,14 +3213,21 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/VehicleIcons/ConstructionVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/construction_vehicle.webp",
-			"cost": false
+			"maxHealth": 20,
+			"cost": {
+				"cloth": 100
+			},
+			"repairCost": 100
 		},
 		"constructionutility": {
 			"name": "BMS - Fabricator",
+			"aliases": [
+				"Advanced Construction Vehicle"
+			],
 			"codeName": "ConstructionUtility",
 			"description": "An advanced variant of the Universal Assembly Rig, the BMS - Fabricator is fitted with a unique kit designed to handle advanced or specialized construction and excavation jobs.",
-			"category": "vehicles",
-			"categoryOrder": 10,
+			"category": "misc",
+			"categoryOrder": 3,
 			"hitArea": [
 				{
 					"shape": [ -103.94,18.48,-117.88,41.52,-117.88,19.09 ]
@@ -2843,52 +3256,82 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/VehicleIcons/AdvancedConstructionVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/advanced_construction_vehicle.webp",
-			"techId": "unlockconstructionutility"
+			"techId": "unlockconstructionutility",
+			"cost": {
+				"construction": 1,
+				"facilitymaterials2": 10
+			}
 		},
 		"crane": {
 			"name": "BMS - Class 2 Mobile Auto-Crane",
 			"codeName": "Crane",
 			"description": "The Basset Motor Society’s Class 2 Mobile Auto-Crane is used to lift and reposition vehicles and very heavy equipment.",
-			"category": "vehicles",
-			"categoryOrder": 11,
+			"category": "misc",
+			"categoryOrder": 4,
+			"width": 7,
+			"length": 5,
 			"range": {
 				"type": "crane",
-				"min": null,
-				"max": null
+				"min": 6,
+				"max": 17.5
 			},
 			"sortLayer": "vehicle",
 			"hitArea": [
 				{
-					"shape": [ -25.15,73.64,-58.48,42.12,-25.15,42.73 ]
+					"shape": [ 105.45,73.64,72.12,42.12,105.45,42.73 ]
 				},
 				{
-					"shape": [ -59.09,-42.73,-25.15,-73.64,-25.15,-42.73 ]
+					"shape": [ 71.52,-42.73,105.45,-73.64,105.45,-42.73 ]
 				},
 				{
-					"shape": [ -236.67,-73.64,-25.15,-73.64,-59.09,-42.73,-221.52,-36.67,-236.67,-42.73 ]
+					"shape": [ -106.06,-73.64,105.45,-73.64,71.52,-42.73,-90.91,-36.67,-106.06,-42.73 ]
 				},
 				{
-					"shape": [ -220.91,34.85,-25.15,73.64,-236.67,73.64,-236.67,42.73 ]
+					"shape": [ -90.3,34.85,105.45,73.64,-106.06,73.64,-106.06,42.73 ]
 				},
 				{
-					"shape": [ 235.45,9.39,192.42,19.7,-65.76,19.7,-65.76,-19.7,191.82,-19.7,236.67,-10 ]
+					"shape": [ -90.91,-36.67,72.12,42.12,105.45,73.64,-90.3,34.85 ]
 				},
 				{
-					"shape": [ -221.52,-36.67,-58.48,42.12,-25.15,73.64,-220.91,34.85 ]
+					"shape": [ 64.85,-19.7,-90.91,-36.67,71.52,-42.73 ]
 				},
 				{
-					"shape": [ -65.76,-19.7,-221.52,-36.67,-59.09,-42.73 ]
+					"shape": [ 64.85,19.7,-90.91,-36.67,64.85,-19.7 ]
 				},
 				{
-					"shape": [ -65.76,19.7,-221.52,-36.67,-65.76,-19.7 ]
-				},
-				{
-					"shape": [ -58.48,42.12,-221.52,-36.67,-65.76,19.7 ]
+					"shape": [ 72.12,42.12,-90.91,-36.67,64.85,19.7 ]
 				}
 			],
 			"icon": "game/Textures/UI/VehicleIcons/CraneVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/crane.webp",
-			"cost": false
+			"textureOffset": {
+				"x": 350,
+				"y": 245
+			},
+			"maxHealth": 20,
+			"cost": {
+				"cloth": 125
+			},
+			"repairCost": 125
+		},
+		"destroyertankflamew": {
+			"name": "Noble Firebrand Mk. XVII",
+			"codeName": "DestroyerTankFlameW",
+			"description": "In response to the Legion embarking on aggressive northern offensives, the Firebrand is designed to conflagrate and eradicate their garrisons with ease. Built using the aggressive frame of the Widow, the Firebrand is a pure force of nature when paired with a secondary armoured escort.",
+			"category": "tank",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/DestroyerTankFlameWIcon.webp",
+			"texture": "game/Textures/Vehicles/destroyertankflamew.webp",
+			"techId": "unlockdestroyertankflame"
+		},
+		"destroyertankw": {
+			"name": "Noble Widow MK. XIV",
+			"codeName": "DestroyerTankW",
+			"description": "This deadly tank turns predator into prey. A tank Destroyer, the Noble Widow specializes in ambush tactics, waiting for its quarry and striking with destructive high-velocity shells.",
+			"category": "tank",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/DestroyerTankWVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/destroyertankw.webp"
 		},
 		"diesel_power_plant": {
 			"name": "Diesel Power Plant",
@@ -2930,6 +3373,7 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/ItemIcons/DiesePowerPlanetBaseIcon.webp",
 			"texture": "game/Textures/Structures/diesel_power_plant.webp",
+			"preventOnLandscape": true,
 			"power": 5,
 			"sockets": [
 				{
@@ -3554,6 +3998,7 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/StructureIcons/FacilityModificationCenterIcon.webp",
 			"texture": "game/Textures/Structures/field_modification_center.webp",
+			"preventOnLandscape": true,
 			"power": -8,
 			"sockets": [
 				{
@@ -3577,6 +4022,69 @@ const gameData = {
 			},
 			"repairCost": 100
 		},
+		"fieldatc": {
+			"name": "AA-2 \"Battering Ram\"",
+			"codeName": "FieldATC",
+			"description": "The \"Battering Ram\" is a mobile Anti-Tank field gun firing 68mm armour-piercing rounds.",
+			"category": "weaponry",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/FieldAntiTankColVehicleIcon.webp",
+			"texture": "game/Textures/Structures/fieldatc.webp",
+			"techId": "unlockfieldatgun",
+			"maxHealth": 2850,
+			"cost": {
+				"wood": 20
+			},
+			"repairCost": 100
+		},
+		"fieldatdamagew": {
+			"name": "Balfour Rampart 68mm",
+			"codeName": "FieldATDamageW",
+			"description": "The Rampart is a powerful field cannon capable of dealing devastating damage to all but the heaviest of armoured vehicles while providing its crew with comprehensive ballistic shielding.",
+			"category": "weaponry",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/FieldCannonOffensiveWIcon.webp",
+			"texture": "game/Textures/Structures/fieldatdamagew.webp",
+			"techId": "unlockfieldatdamagegun",
+			"maxHealth": 4000,
+			"cost": {
+				"facilitymaterials2": 5,
+				"facilitymaterials7": 5
+			},
+			"repairCost": 100
+		},
+		"fieldatlargec": {
+			"name": "945g “Stygian Bolt”",
+			"codeName": "FieldATLargeC",
+			"description": "The “Stygian Bolt” Heavy Field Gun is fitted with a monstrous 94.5mm cannon paired with heavy angled blast shielding. Inspired by the rows of narrow canyons in their homeland of the Lacrista province, Mesean engineers designed this field weapon to keep its crew as safe from ancillary fire as possible while maintaining forward momentum.",
+			"category": "weaponry",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/FieldATHeavyCIcon.webp",
+			"texture": "game/Textures/Structures/fieldatlargec.webp",
+			"techId": "unlockfacilitytier3",
+			"maxHealth": 5000,
+			"cost": {
+				"facilitymaterials3": 15,
+				"facilitymaterials5": 20,
+				"facilitymaterials6": 15
+			},
+			"repairCost": 125
+		},
+		"fieldatw": {
+			"name": "Collins Cannon 68mm",
+			"codeName": "FieldATW",
+			"description": "The Collins Cannon is a mobile Anti-Tank field gun firing 68mm armour-piercing rounds.",
+			"category": "weaponry",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/FieldAntiTankWarVehicleIcon.webp",
+			"texture": "game/Textures/Structures/fieldatw.webp",
+			"techId": "unlockfieldatgun",
+			"maxHealth": 2850,
+			"cost": {
+				"wood": 20
+			},
+			"repairCost": 100
+		},
 		"fieldbridge": {
 			"name": "Field Bridge",
 			"codeName": "FieldBridge",
@@ -3589,6 +4097,7 @@ const gameData = {
 			"maxLength": 25,
 			"icon": "game/Textures/UI/StructureIcons/FieldBridgeItemIcon.webp",
 			"texture": "game/Textures/Structures/fieldbridge.webp",
+			"buildOnWater": true,
 			"canSnap": true,
 			"sockets": [
 				{
@@ -3633,6 +4142,54 @@ const gameData = {
 			},
 			"repairCost": 100
 		},
+		"fieldcannondamagec": {
+			"name": "40-45 “Smelter”",
+			"codeName": "FieldCannonDamageC",
+			"description": "Armed with explosive 40mm rounds, the Smelter is perfect for engaging enemy armour. The frontal blast shielding provides operators with ample cover during heated skirmishes.",
+			"category": "weaponry",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/FieldATOffensiveCIcon.webp",
+			"texture": "game/Textures/Structures/fieldcannondamagec.webp",
+			"techId": "unlockfieldcannondamage",
+			"maxHealth": 4000,
+			"cost": {
+				"facilitymaterials2": 5,
+				"facilitymaterials7": 5
+			},
+			"repairCost": 100
+		},
+		"fieldcannonlargew": {
+			"name": "Balfour Stockade 75mm",
+			"codeName": "FieldCannonLargeW",
+			"description": "This robust field cannon not only allows infantry to fire heavy 75mm shells with ease, but it provides state-of-the-art curved blast shielding for maximum protection from crossfire.",
+			"category": "weaponry",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/FieldCannonHeavyWIcon.webp",
+			"texture": "game/Textures/Structures/fieldcannonlargew.webp",
+			"techId": "unlockfacilitytier3",
+			"maxHealth": 5000,
+			"cost": {
+				"facilitymaterials3": 15,
+				"facilitymaterials5": 20,
+				"facilitymaterials6": 15
+			},
+			"repairCost": 125
+		},
+		"fieldcannonw": {
+			"name": "Balfour Wolfhound 40mm",
+			"codeName": "FieldCannonW",
+			"description": "This destructive short-ranged cannon is designed for direct engagement with enemy fortifications. The Wolfhound is fitted with reinforced shielding and a 40mm barrel. ",
+			"category": "weaponry",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/FieldCannonWVehicleIcon.webp",
+			"texture": "game/Textures/Structures/fieldcannonw.webp",
+			"techId": "unlockfieldcannon",
+			"maxHealth": 2850,
+			"cost": {
+				"wood": 20
+			},
+			"repairCost": 100
+		},
 		"fieldhospital": {
 			"name": "Field Hospital",
 			"codeName": "FieldHospital",
@@ -3661,12 +4218,102 @@ const gameData = {
 			},
 			"repairCost": 200
 		},
+		"fieldlightartilleryc": {
+			"name": "120-68 “Koronides” Field Gun",
+			"codeName": "FieldLightArtilleryC",
+			"description": "A long range Colonial mobile artillery used to lay siege to fortified positions.",
+			"category": "weaponry",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/FieldArtilleryColVehicleIcon.webp",
+			"texture": "game/Textures/Structures/fieldlightartilleryc.webp",
+			"techId": "unlockfieldartillery",
+			"maxHealth": 1000,
+			"cost": {
+				"wood": 25
+			},
+			"repairCost": 120
+		},
+		"fieldmgc": {
+			"name": "G40 “Sagittarii”",
+			"codeName": "FieldMGC",
+			"description": "A dual barrelled, high calibre anti-infantry machine gun. The “Sagittarii” is fitted with forward-facing armour plating and is excellent for suppression. ",
+			"category": "weaponry",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/FieldMachineGun.webp",
+			"texture": "game/Textures/Structures/fieldmgc.webp",
+			"maxHealth": 1850,
+			"cost": {
+				"wood": 20
+			},
+			"repairCost": 100
+		},
+		"fieldmgw": {
+			"name": "Swallowtail 988/127-2 ",
+			"codeName": "FieldMGW",
+			"description": "A dual barrelled, high calibre anti-infantry machine gun. The Swallowtail is fitted with forward-facing armour plating and is excellent for suppression. ",
+			"category": "weaponry",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/FieldMachineGunWar.webp",
+			"texture": "game/Textures/Structures/fieldmgw.webp",
+			"maxHealth": 1850,
+			"cost": {
+				"wood": 20
+			},
+			"repairCost": 100
+		},
+		"fieldmortarw": {
+			"name": "Balfour Falconer 250mm",
+			"codeName": "FieldMortarW",
+			"description": "A heavy mobile mortar platform fitted with a thick frontal shield for assaulting fortified locations.",
+			"category": "weaponry",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/FieldMortarWIcon.webp",
+			"texture": "game/Textures/Structures/fieldmortarw.webp",
+			"techId": "unlockfieldmortar",
+			"maxHealth": 2850,
+			"cost": {
+				"wood": 35
+			},
+			"repairCost": 100
+		},
+		"fieldmultiw": {
+			"name": "Rycker 4/3-F Wasp Nest",
+			"codeName": "FieldMultiW",
+			"description": "Lyle Rycker first built a prototype of the Wasp Nest as a test for his rack mounted rocket batteries that would eventually find their way onto armoured vehicles. Capable of firing twelve compact rockets in quick succession, the Wasp Nest became a quick favourite of the Warden infantry testing it, so an official design was requisitioned.",
+			"category": "weaponry",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/FieldMultiWItemIcon.webp",
+			"texture": "game/Textures/Structures/fieldmultiw.webp",
+			"techId": "unlockfacilitytier2",
+			"maxHealth": 1000,
+			"cost": {
+				"facilitymaterials2": 20,
+				"facilitymaterials5": 15,
+				"facilitymaterials7": 3
+			},
+			"repairCost": 100
+		},
+		"firepit": {
+			"name": "Fire Pit",
+			"codeName": "FirePit",
+			"description": "A pit of fire used to keep soldiers warm during Snow Storms. Requires Diesel to fuel.",
+			"category": "misc",
+			"categoryOrder": 7,
+			"icon": "game/Textures/UI/StructureIcons/FirePitIcon.webp",
+			"texture": "game/Textures/Structures/firepit.webp",
+			"buildOnFoundation": true,
+			"maxHealth": 400,
+			"cost": {
+				"cloth": 35
+			},
+			"repairCost": 35
+		},
 		"flatbedtruck": {
 			"name": "BMS - Packmule Flatbed",
 			"codeName": "FlatbedTruck",
 			"description": "A heavy duty shipping transport truck designed by Bassett Motor Society. It’s built for hauling the heaviest of equipment over long distances with ease. ",
 			"category": "vehicles",
-			"categoryOrder": 7,
+			"categoryOrder": 15,
 			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/FlatbedTruckVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/flatbedtruck.webp"
@@ -5319,6 +5966,7 @@ const gameData = {
 			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation01Icon.webp",
 			"texture": "game/Textures/Structures/foundation_1x1.webp",
 			"textureBorder": "game/Textures/Structures/foundation_border.webp",
+			"buildOnWater": true,
 			"garrisonSupplyMultiplier": 2,
 			"canSnap": true,
 			"snapNearest": true,
@@ -5404,6 +6052,7 @@ const gameData = {
 			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation03Icon.webp",
 			"texture": "game/Textures/Structures/foundation_1x2.webp",
 			"textureBorder": "game/Textures/Structures/foundation_border.webp",
+			"buildOnWater": true,
 			"garrisonSupplyMultiplier": 2,
 			"canSnap": true,
 			"snapNearest": true,
@@ -5512,6 +6161,7 @@ const gameData = {
 			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation04Icon.webp",
 			"texture": "game/Textures/Structures/foundation_2x2.webp",
 			"textureBorder": "game/Textures/Structures/foundation_border.webp",
+			"buildOnWater": true,
 			"garrisonSupplyMultiplier": 2,
 			"canSnap": true,
 			"snapNearest": true,
@@ -5656,6 +6306,7 @@ const gameData = {
 				"x": 288,
 				"y": 288
 			},
+			"buildOnWater": true,
 			"garrisonSupplyMultiplier": 2,
 			"canSnap": true,
 			"snapNearest": true,
@@ -5711,7 +6362,7 @@ const gameData = {
 			"name": "BMS - Ironship",
 			"codeName": "Freighter",
 			"description": "The Basset Motor Society’s Ironship-class shipping vessel is used to freight shippable goods and heavy vehicles.",
-			"category": "vehicles",
+			"category": "naval",
 			"categoryOrder": 21,
 			"sortLayer": "vehicle",
 			"hitArea": [
@@ -5736,10 +6387,11 @@ const gameData = {
 			"codeName": "FuelContainer",
 			"description": "A container for storing high volumes of liquids. Nearby structures and vehicles can refill directly from this container. ",
 			"category": "shippables",
-			"categoryOrder": 4,
+			"categoryOrder": 5,
 			"sortLayer": "container",
 			"icon": "game/Textures/UI/StructureIcons/FuelTankIcon.webp",
 			"texture": "game/Textures/Structures/fuel_container.webp",
+			"buildOnFoundation": true,
 			"maxHealth": 1000,
 			"cost": {
 				"cloth": 100
@@ -5805,6 +6457,7 @@ const gameData = {
 			"sortLayer": "wall",
 			"icon": "game/Textures/UI/StructureIcons/Gate-T1Icon.webp",
 			"texture": "game/Textures/Structures/gatet1.webp",
+			"buildOnFoundation": true,
 			"canSnap": true,
 			"canSnapRotate": true,
 			"sockets": [
@@ -5931,16 +6584,137 @@ const gameData = {
 				}
 			}
 		},
+		"gunboatc": {
+			"name": "Type C - “Charon”",
+			"codeName": "GunboatC",
+			"description": "A naval vessel designed to bombard coastal targets. The \"Charon\" is fitted with a 120mm light artillery cannon and a 12.7mm Machinegun.",
+			"category": "naval",
+			"categoryOrder": 75,
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/GunBoatVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/gunboatc.webp",
+			"techId": "unlockgunboat"
+		},
+		"gunboatoffensivew": {
+			"name": "74c-2 Ronan Meteora Gunship",
+			"codeName": "GunboatOffensiveW",
+			"description": "The Meteora Gunship replaces the machinegun with another identical 120mm artillery cannon on the bow. ",
+			"category": "naval",
+			"categoryOrder": 75,
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/GunboatWarDoubleArtilleryVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/gunboatoffensivew.webp",
+			"techId": "unlockgunboatoffensive"
+		},
+		"gunboatw": {
+			"name": "74b-1 Ronan Gunship",
+			"codeName": "GunboatW",
+			"description": "A naval vessel designed to bombard coastal targets. The Ronan is fitted with a 120mm light artillery cannon and a 12.7mm Machinegun.",
+			"category": "naval",
+			"categoryOrder": 75,
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/GunboatWarVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/gunboatw.webp"
+		},
+		"halftrackartilleryc": {
+			"name": "HH-d “Peltast”",
+			"codeName": "HalfTrackArtilleryC",
+			"description": "This “Javelin” variant is fitted with a 360 degree mortar platform, designed to support infantry in frontline operations.",
+			"category": "armor",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/HalfTrackArtilleryCIcon.webp",
+			"texture": "game/Textures/Vehicles/halftrackartilleryc.webp",
+			"techId": "unlockhalftrackartillery"
+		},
+		"halftrackc": {
+			"name": "HH-a “Javelin”",
+			"codeName": "HalfTrackC",
+			"description": "Designed for escort missions and to support infantry operations, the HH-a class “Javelin” Half-Track is an armoured, versatile all-terrain vehicle that can be equipped with a variety of mounted weapons.",
+			"category": "armor",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/HalfTrackColVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/halftrackc.webp"
+		},
+		"halftrackdefensivec": {
+			"name": "HH-b “Hoplite”",
+			"codeName": "HalfTrackDefensiveC",
+			"description": "With reinforced armour at the expense of speed, the \"Hoplite\" is a formidable force in the heat of combat.",
+			"category": "armor",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/HalfTrackColHeavyArmorVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/halftrackdefensivec.webp",
+			"techId": "unlockfacilitytier2"
+		},
+		"halftrackmultiw": {
+			"name": "Niska-Rycker Mk. IX Skycaller",
+			"codeName": "HalftrackMultiW",
+			"description": "A first of its kind, the Skycaller is a variation of the Niska Motor Carriage with a Rycker designed rocket battery fitted in the rear bed. This unique armoured vehicle quickly fires rockets over long distances with ease, and can be rearmed and relocated at the drop of a hat. The Skycaller is the deadly result of combined Nevish and Caoivish engineering.",
+			"category": "armor",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/HalftrackMultiWIcon.webp",
+			"texture": "game/Textures/Vehicles/halftrackmultiw.webp",
+			"techId": "unlockhalftrackmulti"
+		},
+		"halftrackoffensivew": {
+			"name": "Niska Mk. II Blinder",
+			"codeName": "HalfTrackOffensiveW",
+			"description": "Fitted with a heavy-duty anti-tank gun, the Blinder is capable of punching through all but the most tempered of alloys.",
+			"category": "armor",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/HalfTrackOffensiveWarVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/halftrackoffensivew.webp",
+			"techId": "unlockfacilitytier2"
+		},
+		"halftrackw": {
+			"name": "Niska Mk. I Gun Motor Carriage",
+			"codeName": "HalfTrackW",
+			"description": "Designed for escort missions and to support infantry operations, the Niska Gun Motor Carriage Half-Track is an armoured, versatile all-terrain vehicle that can be equipped with a variety of mounted weapons.",
+			"category": "armor",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/HalfTrackWarVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/halftrackw.webp"
+		},
 		"harvester": {
 			"name": "BMS - Scrap Hauler",
 			"codeName": "Harvester",
 			"description": "The Scrap Hauler, designed by the Bassett Motor Society is a heavy-duty piece of machinery designed to reduce scrap metal and other materials into usable, raw resources. Scrap Haulers are often used to extract battlefield resources following skirmishes.",
 			"category": "vehicles",
-			"categoryOrder": 8,
+			"categoryOrder": 15,
 			"sortLayer": "vehicle",
 			"icon": "game/Textures/UI/VehicleIcons/Harvester.webp",
 			"texture": "game/Textures/Vehicles/harvester.webp",
 			"techId": "unlockharvester"
+		},
+		"landingcraftc": {
+			"name": "AB-8 “Acheron”",
+			"codeName": "LandingCraftC",
+			"description": "The \"Acheron\" is an armoured amphibious vehicle designed for carrying troops across large bodies of water to aid in coordinated beach landings and flanking assaults. ",
+			"category": "naval",
+			"categoryOrder": 50,
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/LandingCraftVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/landingcraftc.webp"
+		},
+		"landingcraftoffensivec": {
+			"name": "AB-11 “Doru”",
+			"codeName": "LandingCraftOffensiveC",
+			"description": "With its mounted machinegun, the \"Doru\" is the perfect addition to any shoreline assault. ",
+			"category": "naval",
+			"categoryOrder": 50,
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/LandingCraftOffensiveVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/landingcraftoffensivec.webp",
+			"techId": "unlockfacilitytier2"
+		},
+		"landingcraftw": {
+			"name": "Mulloy LPC",
+			"codeName": "LandingCraftW",
+			"description": "The Mulloy Landing Personnel Carrier is an armoured amphibious vehicle designed for carrying troops across large bodies of water to aid in coordinated beach landings and flanking assaults.",
+			"category": "naval",
+			"categoryOrder": 50,
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/LandingCraftWarVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/landingcraftw.webp"
 		},
 		"large_assembly_factory": {
 			"name": "Large Assembly Station",
@@ -5951,6 +6725,7 @@ const gameData = {
 			"color": 8184298,
 			"icon": "game/Textures/UI/ItemIcons/LargeAssemblyStationIcon.webp",
 			"texture": "game/Textures/Structures/large_assembly_factory.webp",
+			"preventOnLandscape": true,
 			"power": -8,
 			"sockets": [
 				{
@@ -6199,6 +6974,7 @@ const gameData = {
 			"color": 8184298,
 			"icon": "game/Textures/UI/ItemIcons/AssemblyStationIcon.webp",
 			"texture": "game/Textures/Structures/light_vehicle_assembly_station.webp",
+			"preventOnLandscape": true,
 			"power": -2,
 			"sockets": [
 				{
@@ -7011,6 +7787,84 @@ const gameData = {
 				}
 			}
 		},
+		"lighttank2infantryc": {
+			"name": "HC-2 “Scorpion”",
+			"codeName": "LightTank2InfantryC",
+			"description": "The “Scorpion” HC-class tank is a moderately armoured infantry support vehicle with twin, high-powered heavy machine guns and short-range radios for improved intelligence support. In addition, exterior seating is available for infantry. ",
+			"category": "tank",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/LightTank2InfantryCVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/lighttank2infantryc.webp",
+			"techId": "unlockfacilitytier2"
+		},
+		"lighttankartilleryw": {
+			"name": "Devitt-Caine Mk. IV MMR",
+			"codeName": "LightTankArtilleryW",
+			"description": "A modified Devitt fitted with a specialized Caine mortar turret at the expense of top speed.",
+			"category": "tank",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/LightTankArtilleryWar.webp",
+			"texture": "game/Textures/Vehicles/lighttankartilleryw.webp",
+			"techId": "unlockfacilitytier2"
+		},
+		"lighttankc": {
+			"name": "H-5 \"Hatchet\"",
+			"codeName": "LightTankC",
+			"description": "A highly maneuverable lightweight tank. Designed for urban environments, the “Hatchet” is fitted with a 40mm cannon.",
+			"category": "tank",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/LightTankColVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/lighttankc.webp"
+		},
+		"lighttankdefensivew": {
+			"name": "Devitt Ironhide Mk. IV ",
+			"codeName": "LightTankDefensiveW",
+			"description": "The Ironhide Light Tank is similar to the Mk. III but reinforced with plates of heavy steel at the expense of speed and maneuverability.",
+			"category": "tank",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/LightTankWarDefensiveVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/lighttankdefensivew.webp",
+			"techId": "unlockfacilitytier2"
+		},
+		"lighttankflamec": {
+			"name": "H-19 “Vulcan”",
+			"codeName": "LightTankFlameC",
+			"description": "This modified “Hatchet” features a reinforced fuel cell fixed to its rear alongside a flamethrower turret. This light tank can launch litres of burning fuel a fair distance, while its crew remains protected behind light armour plating.",
+			"category": "tank",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/LightTankFlameCIcon.webp",
+			"texture": "game/Textures/Vehicles/lighttankflamec.webp",
+			"techId": "unlocklighttankflame"
+		},
+		"lighttankmobilityc": {
+			"name": "H-8 “Kranesca”",
+			"codeName": "LightTankMobilityC",
+			"description": "The “Kranesca” Light Tank is fitted with an overpowered engine and a reinforced chassis, capable of boosting its top speed at the expense of overall acceleration and maneuverability.",
+			"category": "tank",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/LightTankColMobilityVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/lighttankmobilityc.webp",
+			"techId": "unlockfacilitytier2"
+		},
+		"lighttankoffensivec": {
+			"name": "H-10 “Pelekys”",
+			"codeName": "LightTankOffensiveC",
+			"description": "The “Pelekys” H-class light tank is heavily modified with an open top chassis and equipped with a devastating long-range anti-tank cannon.",
+			"category": "tank",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/LightTankOffensiveCVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/lighttankoffensivec.webp",
+			"techId": "unlocklighttankoffensive"
+		},
+		"lighttankw": {
+			"name": "Devitt Mk. III",
+			"codeName": "LightTankW",
+			"description": "A highly maneuverable lightweight tank. Designed for urban environments, the Devitt is fitted with a 40mm cannon.",
+			"category": "tank",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/LightTankWarVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/lighttankw.webp"
+		},
 		"liquid_transfer_station": {
 			"name": "Liquid Transfer Station",
 			"codeName": "FacilityResourceTransfer3",
@@ -7020,6 +7874,7 @@ const gameData = {
 			"color": 8186514,
 			"icon": "game/Textures/UI/ItemIcons/MaterialTransferStationLiquidIcon.webp",
 			"texture": "game/Textures/Structures/liquid_transfer_station.webp",
+			"preventOnLandscape": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -7082,6 +7937,7 @@ const gameData = {
 			"color": 8186514,
 			"icon": "game/Textures/UI/ItemIcons/FacilityResourceTransfer3Icon.webp",
 			"texture": "game/Textures/Structures/material_transfer_station.webp",
+			"preventOnLandscape": true,
 			"maxHealth": 2200,
 			"cost": {
 				"facilitymaterials1": 35
@@ -7096,6 +7952,7 @@ const gameData = {
 			"categoryOrder": 1,
 			"icon": "game/Textures/UI/ItemIcons/MaterialPlatformItemIcon.webp",
 			"texture": "game/Textures/Structures/material_platform.webp",
+			"buildOnFoundation": true,
 			"maxHealth": 1000,
 			"cost": {
 				"cloth": 25
@@ -7123,6 +7980,7 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/StructureIcons/MetalworksFactoryBase.webp",
 			"texture": "game/Textures/Structures/materials_factory.webp",
+			"preventOnLandscape": true,
 			"power": -2,
 			"sockets": [
 				{
@@ -7490,6 +8348,115 @@ const gameData = {
 				}
 			}
 		},
+		"mediumtank2c": {
+			"name": "86K-a “Bardiche”",
+			"codeName": "MediumTank2C",
+			"description": "Unlike the 85-series, the \"Bardiche\" sports a heavier, more durable build and is fitted with a coaxial heavy machinegun along with a powerful, short-barrelled 68mm turret. Modern Kraunian engineering allows for a fast reload, making it an ideal tool to combat enemy armour.",
+			"category": "tank",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/MediumTank2CIcon.webp",
+			"texture": "game/Textures/Vehicles/mediumtank2c.webp",
+			"techId": "unlockmediumtank2"
+		},
+		"mediumtank2indirectw": {
+			"name": "Gallagher Thornfall Mk. VI",
+			"codeName": "MediumTank2IndirectW",
+			"description": "Armed with a rack of Bonesaw mortar launchers, the Thornfall is designed to launch an indirect mechanized assault on enemy armour. This unique vehicle supports an allied assault and cannot withstand large amounts of punishment.",
+			"category": "tank",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/MediumTank2IndirectWIcon.webp",
+			"texture": "game/Textures/Vehicles/mediumtank2indirectw.webp",
+			"techId": "unlockfacilitytier3"
+		},
+		"mediumtank2multiw": {
+			"name": "Gallagher Highwayman Mk. III",
+			"codeName": "MediumTank2MultiW",
+			"description": "Colm Gallagher’s engineers designed a variation of the Outlaw that features an independently rotating MG turret sitting atop the main armament of twin anti-tank cannons. What it lacks in raw firepower compared to its older sibling, the Highwayman more than makes up for it with versatility.",
+			"category": "tank",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/MediumTank2MultiWIcon.webp",
+			"texture": "game/Textures/Vehicles/mediumtank2multiw.webp",
+			"techId": "unlockfacilitytier2"
+		},
+		"mediumtank2rangew": {
+			"name": "Gallagher Outlaw Mk. II",
+			"codeName": "MediumTank2RangeW",
+			"description": "Originally designed in response to increasing swarms of Mesean armour, the Outlaw is an exceptionally capable medium tank armed with a long-range 40mm turret and includes a built-in storm rifle support position.",
+			"category": "tank",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/MediumTank2RangeWIcon.webp",
+			"texture": "game/Textures/Vehicles/mediumtank2rangew.webp",
+			"techId": "unlockmediumtank2range"
+		},
+		"mediumtank2twinc": {
+			"name": "86K-c “Ranseur”",
+			"codeName": "MediumTank2TwinC",
+			"description": "This evolution of the “Bardiche” is fitted quad-mounted RPG launchers paired with a high-velocity 12.7mm cannon. The “Ranseur” indicates progress in Kraunian design as they continue to leverage outdated equipment to create deadly, modern armour.",
+			"category": "tank",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/MediumTank2TwinCVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/mediumtank2twinc.webp",
+			"techId": "unlockfacilitytier2"
+		},
+		"mediumtankatw": {
+			"name": "Silverhand Lordscar - Mk. X",
+			"codeName": "MediumTankATW",
+			"description": "A cut down variation of the Silverhand Assault Tank that sacrifices armour and protection in favour of a high-powered 94.5mm cannon. This open-top weapon platform is uniquely designed to intercept enemy armour before they’re given time to retaliate. Its moniker is a tribute to the maiming of the great king the Silverhand is named for; while his title was stripped, and his pride damaged, his rage was never quelled.",
+			"category": "tank",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/MediumTankATWIcon.webp",
+			"texture": "game/Textures/Vehicles/mediumtankatw.webp",
+			"techId": "unlockfacilitytier3"
+		},
+		"mediumtankc": {
+			"name": "85K-b “Falchion”",
+			"codeName": "MediumTankC",
+			"description": "Designed for mass-production in Kraunia, this assault tank features a modular turret system for maximum versatility. The “Falchion” class features a powerful if understated, 40mm cannon.",
+			"category": "tank",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/ColonialMediumTankIcon.webp",
+			"texture": "game/Textures/Vehicles/mediumtankc.webp"
+		},
+		"mediumtanklargec": {
+			"name": "85V-g \"Talos\"",
+			"codeName": "MediumTankLargeC",
+			"description": "The \"Talos\" is a Velian modification to the 85-series, fitted with an oversized 75mm cannon. Knowing that such a heavy cannon would likely not be suitable, the engineers built it to disperse weight in such a manner that the 85-series chassis could bear it.",
+			"category": "tank",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/MediumTankLargeCIcon.webp",
+			"texture": "game/Textures/Vehicles/mediumtanklargec.webp",
+			"techId": "unlockfacilitytier3"
+		},
+		"mediumtankoffensivec": {
+			"name": "85K-a “Spatha”",
+			"codeName": "MediumTankOffensiveC",
+			"description": "The “Spatha” assault tank features a unique and destructive 40mm turret that fires high-velocity shells. This specialized turret is not as well suited to mass-production as its more refined counterpart, the “Falchion.”",
+			"category": "tank",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/ColonialMediumTankOffensive.webp",
+			"texture": "game/Textures/Vehicles/mediumtankoffensivec.webp",
+			"techId": "unlockfacilitytier2"
+		},
+		"mediumtanksiegew": {
+			"name": "Silverhand Chieftain - Mk. VI",
+			"codeName": "MediumTankSiegeW",
+			"description": "The Chieftan assault tank is fitted with asymmetrical armaments, including a 250mm mortar cannon and a twin-barrelled 12.7mm turret.",
+			"category": "tank",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/MediumTankSiegeWVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/mediumtanksiegew.webp",
+			"techId": "unlockfacilitytier2"
+		},
+		"mediumtankw": {
+			"name": "Silverhand - Mk. IV",
+			"codeName": "MediumTankW",
+			"description": "The Silverhand assault tank is fitted with destructive dual-barrel armaments, and heavy frontal and rear armour. Its 68mm frontal cannon is paired with a lighter 40mm turret. ",
+			"category": "tank",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/WardenMediumTankIcon.webp",
+			"texture": "game/Textures/Vehicles/mediumtankw.webp",
+			"techId": "unlockmediumtank"
+		},
 		"metalworks_factory": {
 			"name": "Metalworks Factory",
 			"codeName": "FacilityRefinery2",
@@ -7515,6 +8482,7 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/StructureIcons/FacilityRefinery2Icon.webp",
 			"texture": "game/Textures/Structures/metalworks_factory.webp",
+			"preventOnLandscape": true,
 			"power": -5,
 			"sockets": [
 				{
@@ -7902,6 +8870,58 @@ const gameData = {
 			"hasPipes": false,
 			"currentGearPower" : 0
 		},
+		"mortartankc": {
+			"name": "HC-7 \"Ballista\"",
+			"codeName": "MortarTankC",
+			"description": "The HC-Class “Ballista” is a heavy tank designed to obliterate opposition defenses with its 250mm Hades Mortar Cannon.",
+			"category": "tank",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/MortarTankVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/mortartankc.webp"
+		},
+		"motorboat": {
+			"name": "BMS - Grouper",
+			"codeName": "Motorboat",
+			"description": "Powered by the Basset Motor Society’s lightweight Grouper engine, this simple wooden boat is ideal for ferrying small groups of infantry across rivers and between islands.",
+			"category": "misc",
+			"categoryOrder": 5,
+			"icon": "game/Textures/UI/VehicleIcons/Motorboat.webp",
+			"texture": "game/Textures/Vehicles/motorboat.webp",
+			"maxHealth": 20,
+			"cost": {
+				"cloth": 60
+			},
+			"repairCost": 60
+		},
+		"motorcyclec": {
+			"name": "03MM “Caster”",
+			"codeName": "MotorcycleC",
+			"description": "A motorcycle and sidecar used to patrol large areas. Speed can be boosted at the cost of additional fuel.",
+			"category": "vehicles",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/MotorcycleVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/motorcyclec.webp",
+			"techId": "unlockmotorcycle"
+		},
+		"motorcycleoffensivec": {
+			"name": "00MS “Stinger”",
+			"codeName": "MotorcycleOffensiveC",
+			"description": "The cab of this Motorcycle is fitted with an LMG for fast-response hit and run assaults.",
+			"category": "vehicles",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/MotorcycleOffensiveVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/motorcycleoffensivec.webp"
+		},
+		"motorcyclew": {
+			"name": "Kivela Power Wheel 80-1",
+			"codeName": "MotorcycleW",
+			"description": "A Warden motorcycle used in patrols and fitted with a sidecar. The Kivela Power Wheel can also gain a momentary speed boost by burning additional fuel.",
+			"category": "vehicles",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/MotorcycleWIcon.webp",
+			"texture": "game/Textures/Vehicles/motorcyclew.webp",
+			"techId": "unlockmotorcycle"
+		},
 		"oil_refinery": {
 			"name": "Oil Refinery",
 			"codeName": "FacilityRefineryOil",
@@ -7931,6 +8951,7 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/ItemIcons/OilRefineryBaseIcon.webp",
 			"texture": "game/Textures/Structures/oil_refinery.webp",
+			"preventOnLandscape": true,
 			"power": -1,
 			"sockets": [
 				{
@@ -8559,6 +9580,7 @@ const gameData = {
 			"texture": "game/Textures/Structures/pipeline.webp",
 			"textureFrontCap": "game/Textures/Structures/pipeline_front.webp",
 			"textureBackCap": "game/Textures/Structures/pipeline_back.webp",
+			"buildOnFoundation": true,
 			"canSnap": true,
 			"sockets": [
 				{
@@ -8645,6 +9667,8 @@ const gameData = {
 			"texture": "game/Textures/Structures/pipeline_overhead.webp",
 			"textureFrontCap": "game/Textures/Structures/pipeline_overhead_front.webp",
 			"textureBackCap": "game/Textures/Structures/pipeline_overhead_back.webp",
+			"buildOnFoundation": true,
+			"preventOnLandscape": true,
 			"canSnap": true,
 			"sockets": [
 				{
@@ -8716,6 +9740,7 @@ const gameData = {
 			"texture": null,
 			"textureFrontCap": "game/Textures/Structures/pipeline_underground_front.webp",
 			"textureBackCap": "game/Textures/Structures/pipeline_underground_back.webp",
+			"buildOnFoundation": true,
 			"garrisonSupplyMultiplier": 4,
 			"canSnap": true,
 			"sockets": [
@@ -8775,6 +9800,7 @@ const gameData = {
 			"sortLayer": "pipe",
 			"icon": "game/Textures/UI/ItemIcons/FacilityPipeValveIcon.webp",
 			"texture": "game/Textures/Structures/pipeline_valve.webp",
+			"buildOnFoundation": true,
 			"canSnap": true,
 			"sockets": [
 				{
@@ -8840,6 +9866,7 @@ const gameData = {
 			"sortLayer": "power_pole",
 			"icon": "game/Textures/UI/StructureIcons/FacilityPowerBoxIcon.webp",
 			"texture": "game/Textures/Structures/power_box.webp",
+			"preventOnLandscape": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -8877,6 +9904,7 @@ const gameData = {
 			"maxLength": 25,
 			"icon": "game/Textures/UI/StructureIcons/PowelineIcon.webp",
 			"texture": "game/Textures/Structures/power_line.webp",
+			"buildOnFoundation": true,
 			"garrisonSupplyMultiplier": 0,
 			"canSnap": true,
 			"canSnapRotate": true,
@@ -9006,6 +10034,7 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/StructureIcons/FacilityPowerOilIcon.webp",
 			"texture": "game/Textures/Structures/power_station.webp",
+			"preventOnLandscape": true,
 			"power": 15,
 			"sockets": [
 				{
@@ -9231,6 +10260,8 @@ const gameData = {
 			"maxLength": 30,
 			"icon": "game/Textures/UI/StructureIcons/CraneRailTrackIcon.webp",
 			"texture": "game/Textures/Structures/rail_large_crane.webp",
+			"buildOnFoundation": true,
+			"preventOnLandscape": true,
 			"canSnap": true,
 			"sockets": [
 				{
@@ -9276,6 +10307,7 @@ const gameData = {
 			"maxLength": 30,
 			"icon": "game/Textures/UI/StructureIcons/BiarcRailTrackIcon.webp",
 			"texture": "game/Textures/Structures/rail_large_gauge.webp",
+			"buildOnFoundation": true,
 			"canSnap": true,
 			"canSnapAlongBezier": true,
 			"sockets": [
@@ -9331,6 +10363,7 @@ const gameData = {
 			"maxLength": 30,
 			"icon": "game/Textures/UI/StructureIcons/BiarcSmallRailTrackIcon.webp",
 			"texture": "game/Textures/Structures/rail_small_gauge.webp",
+			"buildOnFoundation": true,
 			"canSnap": true,
 			"canSnapAlongBezier": true,
 			"sockets": [
@@ -9371,6 +10404,25 @@ const gameData = {
 			},
 			"repairCost": 50
 		},
+		"relicapc": {
+			"name": "Heavy Infantry Carrier",
+			"codeName": "RelicAPC",
+			"description": "An armoured landship reinforced with an alloy now lost to time. This nearly indestructible beast carries up to 8 passengers. Whispers of its existence date back to the first breaching.",
+			"category": "vehicles",
+			"hideInList": true,
+			"icon": "game/Textures/UI/VehicleIcons/RelicApc.webp",
+			"texture": "game/Textures/Vehicles/relicapc.webp"
+		},
+		"relicarmouredcar": {
+			"name": "Armoured Fighting Tractor",
+			"codeName": "RelicArmouredCar",
+			"description": "A recovered Colonial prototype once found in early mechanized warfare. Built on the frame of a powerful tractor, this amoured vehicle was seen escorting soldiers or, later, in support of larger armoured forces.",
+			"category": "vehicles",
+			"hideInList": true,
+			"icon": "game/Textures/UI/VehicleIcons/RelicArmouredCarVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/relicarmouredcar.webp",
+			"techId": "unlocklighttankammohe"
+		},
 		"relicbase1": {
 			"name": "Relic Base",
 			"codeName": "RelicBase1",
@@ -9408,6 +10460,46 @@ const gameData = {
 			"texture": "game/Textures/Structures/relicbase1.webp",
 			"cost": false
 		},
+		"reliclighttank": {
+			"name": "Storm Tank",
+			"codeName": "RelicLightTank",
+			"description": "A light armoured mechanized vehicle first seen in early border skirmishes between Caoiva and Veli. With its thin frame, it was deployed in wide formations, often overwhelming enemy forces.",
+			"category": "vehicles",
+			"hideInList": true,
+			"icon": "game/Textures/UI/VehicleIcons/RelicLightTankVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/reliclighttank.webp",
+			"techId": "unlockreliclighttank"
+		},
+		"relicmediumtank": {
+			"name": "PL-1 “Phalanx”",
+			"codeName": "RelicMediumTank",
+			"description": "Ancient by modern standards, this first iteration heavily armoured Colonial Assault tank is fitted with full coverage shielding and equipped with twin sponson cannons.",
+			"category": "vehicles",
+			"hideInList": true,
+			"icon": "game/Textures/UI/VehicleIcons/ColonialRelicMediumTankVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/relicmediumtank.webp",
+			"techId": "unlockrelicmediumtank"
+		},
+		"relicscoutvehicle": {
+			"name": "Staff Car",
+			"codeName": "RelicScoutVehicle",
+			"description": "A vehicle once used by officers to survey the battlefield, or to deliver emergency supplies and orders.",
+			"category": "vehicles",
+			"hideInList": true,
+			"icon": "game/Textures/UI/VehicleIcons/RelicCarVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/relicscoutvehicle.webp",
+			"techId": "unlockrelicscoutvehicle"
+		},
+		"relictruck": {
+			"name": "Repurposed Truck",
+			"codeName": "RelicTruck",
+			"description": "A sturdy old farmer's truck that's been reinforced for military use.",
+			"category": "vehicles",
+			"hideInList": true,
+			"icon": "game/Textures/UI/VehicleIcons/RelicTruckVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/relictruck.webp",
+			"techId": "unlockrelictruck"
+		},
 		"resource_transfer_station": {
 			"name": "Resource Transfer Station",
 			"codeName": "FacilityResourceTransfer1",
@@ -9417,6 +10509,7 @@ const gameData = {
 			"color": 8186514,
 			"icon": "game/Textures/UI/ItemIcons/MaterialTransferStationIcon.webp",
 			"texture": "game/Textures/Structures/resource_transfer_station.webp",
+			"preventOnLandscape": true,
 			"maxHealth": 2200,
 			"cost": {
 				"facilitymaterials1": 35
@@ -9516,6 +10609,7 @@ const gameData = {
 			"maxLength": 10,
 			"icon": "game/Textures/UI/StructureIcons/SandbagsStructureIcon.webp",
 			"texture": "game/Textures/Structures/sandbaghalfspline.webp",
+			"buildOnFoundation": true,
 			"canSnap": true,
 			"sockets": [
 				{
@@ -9562,6 +10656,85 @@ const gameData = {
 				}
 			}
 		},
+		"scouttankoffensivew": {
+			"name": "King Gallant Mk. II",
+			"codeName": "ScoutTankOffensiveW",
+			"description": "A heavily armoured variant of the King Spire, the Gallant Mk. II boasts a weighty 30mm cannon at the cost of top speed.",
+			"category": "tank",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/ScoutTankOffensiveWIcon.webp",
+			"texture": "game/Textures/Vehicles/scouttankoffensivew.webp",
+			"techId": "unlockfacilitytier2"
+		},
+		"scouttankw": {
+			"name": "King Spire Mk. I",
+			"codeName": "ScoutTankW",
+			"description": "This small tank has been recently recommissioned to the Warden arsenal. It boasts high maneuverability and an antenna that allows for long-range communications during high-stakes recon operations.",
+			"category": "tank",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/ScoutTankWIcon.webp",
+			"texture": "game/Textures/Vehicles/scouttankw.webp",
+			"techId": "unlockscouttank"
+		},
+		"scoutvehiclemobilityc": {
+			"name": "UV-05a “Argonaut”",
+			"codeName": "ScoutVehicleMobilityC",
+			"description": "This stripped down Light Utility Vehicle provides extra seating for a small crew to engage in hit and run tactics.",
+			"category": "vehicles",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/ScoutVehicleMobilityVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/scoutvehiclemobilityc.webp",
+			"techId": "unlockscoutvehiclemobility"
+		},
+		"scoutvehicleoffensivec": {
+			"name": "UV-24 “Icarus”",
+			"codeName": "ScoutVehicleOffensiveC",
+			"description": "This RPG-mounted Light Utility Vehicle provides a heavy-duty weapons platform with superior speed. Perfectly suited for assaulting enemy structures and vehicles, or supporting an armoured assault.",
+			"category": "vehicles",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/ScoutVehicleOffensiveVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/scoutvehicleoffensivec.webp",
+			"techId": "unlockscoutvehicleoffensive"
+		},
+		"scoutvehicleoffensivew": {
+			"name": "Drummond Spitfire 100d",
+			"codeName": "ScoutVehicleOffensiveW",
+			"description": "This LMG-mounted Light Utility Vehicle provides a heavy-duty weapons platform with superior speed. Perfectly suited for supporting flanking infantry or an armoured assault.",
+			"category": "armor",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/ScoutVehicleOffensiveWarVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/scoutvehicleoffensivew.webp",
+			"techId": "unlockscoutvehicleoffensive"
+		},
+		"scoutvehicleutilityc": {
+			"name": "UV-5c “Odyssey”",
+			"codeName": "ScoutVehicleUtilityC",
+			"description": "This simple, modified Utility Vehicle is fitted with a reinforced hatch to provide one crew member with increased visibility for intense recon operations.",
+			"category": "armor",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/ScoutVehicleUtilityCVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/scoutvehicleutilityc.webp"
+		},
+		"scoutvehicleutilityw": {
+			"name": "Drummond Loscann 55c",
+			"codeName": "ScoutVehicleUtilityW",
+			"description": "This amphibious Light Utility Vehicle has been heavily modified to cross rivers and lakes with ease. Venturing out into the open sea is ill-advised, however.",
+			"category": "naval",
+			"categoryOrder": 45,
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/ScoutVehicleAmphibiousWarVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/scoutvehicleutilityw.webp"
+		},
+		"scoutvehiclew": {
+			"name": "Drummond 100a",
+			"codeName": "ScoutVehicleW",
+			"description": "A multipurpose off-road Warden vehicle that can scout nearby targets.",
+			"category": "armor",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/ScoutVehicleWarVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/scoutvehiclew.webp",
+			"techId": "unlockscoutvehicle"
+		},
 		"scrapmine": {
 			"name": "Salvage Mine",
 			"codeName": "ScrapMine",
@@ -9587,6 +10760,17 @@ const gameData = {
 				"cloth": 100
 			},
 			"repairCost": 100
+		},
+		"shippingcrate": {
+			"name": "Shipping Crate",
+			"description": "A crate of packed items.",
+			"category": "shippables",
+			"categoryOrder": 4,
+			"icon": "game/Textures/UI/StructureIcons/ProductionPartsStructureIcon.webp",
+			"texture": "game/Textures/Structures/shippingcrate.webp",
+			"maxHealth": 800,
+			"cost": false,
+			"repairCost": 50
 		},
 		"smalltraindump": {
 			"name": "BMS Railtruck",
@@ -10078,6 +11262,21 @@ const gameData = {
 				}
 			]
 		},
+		"storagebox": {
+			"name": "Storage Box",
+			"codeName": "StorageBox",
+			"description": "A shared storage container that can be used to stash item.",
+			"category": "misc",
+			"categoryOrder": 2,
+			"icon": "game/Textures/UI/StructureIcons/StorageItemIcon.webp",
+			"texture": "game/Textures/Structures/storagebox.webp",
+			"buildOnFoundation": true,
+			"maxHealth": 400,
+			"cost": {
+				"cloth": 25
+			},
+			"repairCost": 25
+		},
 		"sulfurmine": {
 			"name": "Sulfur Mine",
 			"codeName": "SulfurMine",
@@ -10088,6 +11287,56 @@ const gameData = {
 			"maxHealth": 1000,
 			"cost": false,
 			"repairCost": 200
+		},
+		"supertankc": {
+			"name": "O-75b \"Ares\"",
+			"codeName": "SuperTankC",
+			"description": "Armed with a dual 75mm turret, what the “Ares” lacks in speed and versatility, it more than makes up for with raw destructive power. Development of the “Ares” was fraught with strife, and its history is intertwined with a period of several riots erupting on the streets of Dimiourg. Rebels commandeered the first “Ares” Prototype, the O-75a, and turned it against Colonial forces in the region, ultimately leading to its destruction—albeit not without great effort. This event wove the great behemoth into the tapestry of Colonial legend.",
+			"category": "tank",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/SuperTankCtemIcon.webp",
+			"texture": "game/Textures/Vehicles/supertankc.webp",
+			"techId": "unlocksupertank"
+		},
+		"supertankw": {
+			"name": "Cullen Predator Mk. III",
+			"codeName": "SuperTankW",
+			"description": "This gargantuan beast is the brainchild of Gray Cullen. Once thought impossible, the Predator was Cullen’s idea of how a great ship might operate on land. It boasts two sets of quad-barrelled grenade launches and a heavy-duty 94.5mm forward facing cannon. While limitations of ground-based travel posed certain restrictions on the scope of the project, Cullen wasn’t deterred and made necessary adjustments to meet his vision of the ideal land ship.",
+			"category": "tank",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/SuperTankWVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/supertankw.webp",
+			"techId": "unlocksupertank"
+		},
+		"tankettec": {
+			"name": "T12 “Actaeon” Tankette",
+			"codeName": "TanketteC",
+			"description": "This complete overhaul of the T3 Armoured Car is reinforced with tank armour. While these extra defenses lower the T12’s overall speed and handling, the addition of treads provide increased performance in less than ideal terrain.",
+			"category": "tank",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/TanketteCVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/tankettec.webp",
+			"techId": "unlocktankette"
+		},
+		"tanketteflamec": {
+			"name": "T14 “Vesta” Tankette",
+			"codeName": "TanketteFlameC",
+			"description": "The first T-class tankette to utilize this sturdier frame and versatile treads, the Vesta also represents the Velian’s first foray into fire weapons. The “Vesta” boasts a light flame turret and ample storage for the additional fuel supply required.",
+			"category": "tank",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/TanketteFlameCIcon.webp",
+			"texture": "game/Textures/Vehicles/tanketteflamec.webp",
+			"techId": "unlockfacilitytier2"
+		},
+		"tanketteoffensivec": {
+			"name": "T20 “Ixion” Tankette",
+			"codeName": "TanketteOffensiveC",
+			"description": "A bombastic variant of the T12 Tankette, the “Ixion” provides its crew with more support and a mounted Infantry Support Gun. Added weight from the armour results in reduced overall speed.",
+			"category": "tank",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/TanketteOffensiveCVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/tanketteoffensivec.webp",
+			"techId": "unlocktanketteoffensive"
 		},
 		"tankstop": {
 			"name": "Tank Trap",
@@ -10121,6 +11370,7 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/StructureIcons/TankStopIcon.webp",
 			"texture": "game/Textures/Structures/tankstop.webp",
+			"buildOnFoundation": true,
 			"techId": "unlocktankstop",
 			"maxHealth": 2000,
 			"cost": {
@@ -10574,7 +11824,7 @@ const gameData = {
 			"category": "entrenchments",
 			"categoryOrder": 2,
 			"tier": 1,
-			"sortLayer": "foundation",
+			"sortLayer": "trench",
 			"hasHandle": true,
 			"isBezier": true,
 			"trenchConnector": true,
@@ -11401,7 +12651,7 @@ const gameData = {
 			"name": "BMS - White Whale",
 			"codeName": "TroopShip",
 			"description": "A heavily armoured vessel, the Basset Motor Society’s White Whale-class troop transports can deploy on faraway beaches to function as a permanent forward operating base.",
-			"category": "vehicles",
+			"category": "naval",
 			"categoryOrder": 22,
 			"sortLayer": "vehicle",
 			"hitArea": [
@@ -11442,6 +12692,76 @@ const gameData = {
 			"icon": "game/Textures/UI/VehicleIcons/TruckVehicleIcon.webp",
 			"texture": "game/Textures/Vehicles/truckc.webp"
 		},
+		"truckdefensivew": {
+			"name": "Dunne Leatherback 2a",
+			"codeName": "TruckDefensiveW",
+			"description": "A heavy, reinforced Dunne transport. Fitted with a heavier frame, the Leatherback is capable of enduring more punishment at the cost of initial acceleration. ",
+			"category": "vehicles",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/TruckDefensiveWIcon.webp",
+			"texture": "game/Textures/Vehicles/truckdefensivew.webp"
+		},
+		"truckdumpc": {
+			"name": "R-5 “Atlas” Hauler",
+			"codeName": "TruckDumpC",
+			"description": "This standard Truck is fitted with a resource hopper in place of the standard cargo hold. This allows for a much greater capacity for resources at the expense of space for cargo.",
+			"category": "vehicles",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/TruckUtilityVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/truckdumpc.webp"
+		},
+		"truckdumpw": {
+			"name": "Dunne Loadlugger 3c",
+			"codeName": "TruckDumpW",
+			"description": "This standard Truck is fitted with a resource hopper in place of the standard cargo hold. This allows for a much greater capacity for resources at the expense of space for cargo. ",
+			"category": "vehicles",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/TruckUtilityWarVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/truckdumpw.webp"
+		},
+		"truckmobilityc": {
+			"name": "R-5b “Sisyphus” Hauler",
+			"codeName": "TruckMobilityC",
+			"description": "This variation of the standard R-5 Hauler is fitted with an improved suspension and axle system resulting in better overall handling. However, these improvements may not hold up under severe weather conditions.",
+			"category": "vehicles",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/TruckMobilityCVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/truckmobilityc.webp"
+		},
+		"truckmobilityw": {
+			"name": "Dunne Landrunner 12c",
+			"codeName": "TruckMobilityW",
+			"description": "This standard Truck is fitted with rugged off-road treads, allowing for more efficient movement on rough terrain and conditions at the expense of maximum speed.",
+			"category": "vehicles",
+			"faction": "w",
+			"icon": "game/Textures/UI/VehicleIcons/TruckMobilityWarVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/truckmobilityw.webp"
+		},
+		"truckmultic": {
+			"name": "R-17 “Retiarius” Skirmisher",
+			"codeName": "TruckMultiC",
+			"description": "A truck fitted with an advanced rocket propulsion rack, the “Retiarius” webs the sky with deadly, screeching rockets shot at a high frequency over long distances. Holds sixteen rockets.",
+			"category": "vehicles",
+			"categoryOrder": 5,
+			"faction": "c",
+			"range": {
+				"type": "killboxRocket",
+				"min": 200,
+				"max": 275
+			},
+			"icon": "game/Textures/UI/VehicleIcons/TruckMultiCIcon.webp",
+			"texture": "game/Textures/Vehicles/truckmultic.webp",
+			"techId": "unlocktruckmulti"
+		},
+		"truckoffensivec": {
+			"name": "R-9 “Speartip” Escort",
+			"codeName": "TruckOffensiveC",
+			"description": "This standard Truck is fitted with Light Machinegun in place of the passenger seat. It’s well suited as an escort for convoys or lightly armoured operations.",
+			"category": "vehicles",
+			"faction": "c",
+			"icon": "game/Textures/UI/VehicleIcons/TruckOffensiveVehicleIcon.webp",
+			"texture": "game/Textures/Vehicles/truckoffensivec.webp"
+		},
 		"truckw": {
 			"name": "Dunne Transport",
 			"codeName": "TruckW",
@@ -11465,6 +12785,7 @@ const gameData = {
 			"maxLength": 10,
 			"icon": "game/Textures/UI/ItemIcons/Wall-T1Icon.webp",
 			"texture": "game/Textures/Structures/wallsplinet1.webp",
+			"buildOnFoundation": true,
 			"canSnap": true,
 			"canSnapRotate": true,
 			"sockets": [
@@ -11601,6 +12922,7 @@ const gameData = {
 			},
 			"icon": "game/Textures/UI/StructureIcons/WatchTowerStructureIcon.webp",
 			"texture": "game/Textures/Structures/watchtower.webp",
+			"buildOnFoundation": true,
 			"maxHealth": 350,
 			"cost": {
 				"cloth": 60
@@ -11632,6 +12954,8 @@ const gameData = {
 			],
 			"icon": "game/Textures/UI/StructureIcons/FacilityMineWaterIcon.webp",
 			"texture": "game/Textures/Structures/water_pump.webp",
+			"buildOnWater": true,
+			"preventOnLandscape": true,
 			"maxHealth": 850,
 			"cost": {
 				"facilitymaterials1": 35

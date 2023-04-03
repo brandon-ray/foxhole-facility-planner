@@ -163,6 +163,34 @@ function initializeStructureItems(component) {
     }
 }
 
+const requiredMeshes = {};
+const ignoredMeshes = ['Headlight', 'Sphere', 'Destroyed'];
+function getValidMesh(meshes = {}, property) {
+    if (property?.Properties) {
+        const meshObj = property.Properties.StaticMesh ?? property.Properties.SkeletalMesh;
+        if (meshObj?.ObjectPath) {
+            const baseName = path.parse(meshObj.ObjectPath).name;
+            for (const ignoredMesh of ignoredMeshes) {
+                if (baseName.includes(ignoredMesh)) {
+                    return meshes;
+                }
+            }
+            meshes[property.Name] = baseName;
+        }
+    }
+    return meshes;
+}
+
+function fetchTextureMeshes(objData, codeName, meshProperty, meshes) {
+    if (objData && objData.texture && codeName && (meshProperty || meshes)) {
+        try {
+            fs.accessSync('public/games/foxhole/assets/' + objData.texture, fs.constants.F_OK);
+        } catch (err) {
+            requiredMeshes[codeName] = meshes ?? getValidMesh(requiredMeshes[codeName], meshProperty);
+        }
+    }
+}
+
 function iterateBaseStructures(uProperty, baseData) {
     let basePath = `${foxholeDataDirectory}${uProperty.SuperStruct.ObjectPath.slice(0, -1)}json`;
     let baseAsset = fs.readFileSync(basePath);
@@ -184,12 +212,22 @@ function iterateBaseStructures(uProperty, baseData) {
                     baseData.description = structure.Description?.SourceString ?? baseData.description;
                     baseData.BuildCategory = structure.BuildCategory ?? baseData.BuildCategory;
                     baseData.BuildOrder = structure.BuildOrder ?? baseData.BuildOrder;
+                    baseData.FactionVariant = structure.FactionVariant ?? baseData.FactionVariant;
+                    baseData.bIsBuiltOnFoundation = structure.bIsBuiltOnFoundation ?? baseData.bIsBuiltOnFoundation,
+                    baseData.bIsBuiltOnLandscape = structure.bIsBuiltOnLandscape ?? baseData.bIsBuiltOnLandscape,
+                    baseData.bBuildOnWater = structure.bBuildOnWater ?? baseData.bBuildOnWater,
                     baseData.minLength = structure.ConnectorMinLength ? structure.ConnectorMinLength / METER_UNREAL_UNITS : undefined ?? baseData.minLength;
                     baseData.maxLength = structure.ConnectorMaxLength ? structure.ConnectorMaxLength / METER_UNREAL_UNITS : undefined ?? baseData.maxLength;
                     baseData.icon = getLocalIcon(structure) ?? baseData.icon;
                     baseData.garrisonSupplyMultiplier = structure.DecaySupplyDrain ?? baseData.garrisonSupplyMultiplier;
                     baseData.power = structure.PowerGridInfo?.PowerDelta ?? baseData.power;
                 }
+                break;
+            case 'SkeletalMeshComponent':
+                baseData.meshes = getValidMesh(baseData.meshes, uProperty);
+                break;
+            case 'StaticMeshComponent':
+                baseData.meshes = getValidMesh(baseData.meshes, uProperty);
                 break;
         }
     });
@@ -333,6 +371,25 @@ async function iterateStructures(dirPath) {
                                     break;
                                 }
                             }
+                            /*
+                            if (!structureData && dirPath.startsWith('dev\\tools\\Output\\Exports\\War\\Content\\Blueprints\\Vehicles')) {
+                                let containsIgnoredStr = false;
+                                const ignoredStrings = [
+                                    'buildsite',
+                                    'destroyed',
+                                    'fill'
+                                ];
+                                for (const ignoredStr of ignoredStrings) {
+                                    if (structureCodeName.includes(ignoredStr)) {
+                                        containsIgnoredStr = true;
+                                        break;
+                                    }
+                                }
+                                if (!containsIgnoredStr) {
+                                    console.info(`"${structureCodeName}": {},`);
+                                }
+                            }
+                            */
                             if (structureData && !structureData.reference) {
                                 structureData = {
                                     'id': structureData.id,
@@ -346,7 +403,7 @@ async function iterateStructures(dirPath) {
                                     //'category': buildCategoryMap[(structure.BuildCategory ?? baseData.BuildCategory)?.substring(16)] ?? structureData.category ?? 'misc',
                                     'category': structureData.category,
                                     'categoryOrder': structureData.categoryOrder ?? structure.BuildOrder ?? baseData.BuildOrder,
-                                    'faction': structure.FactionVariant === 'EFactionId::Colonials' ? 'c' : (structure.FactionVariant === 'EFactionId::Wardens' ? 'w' : structureData.faction),
+                                    'faction': (structure.FactionVariant ?? baseData.FactionVariant) === 'EFactionId::Colonials' ? 'c' : ((structure.FactionVariant ?? baseData.FactionVariant) === 'EFactionId::Wardens' ? 'w' : structureData.faction),
                                     'color': structureData.color,
                                     'experimental': structureData.experimental,
                                     'hideInList': structureData.hideInList,
@@ -367,13 +424,20 @@ async function iterateStructures(dirPath) {
                                     'lineWidth': structureData.lineWidth,
                                     'minLength': structure.ConnectorMinLength ? structure.ConnectorMinLength / METER_UNREAL_UNITS : structureData.minLength ?? baseData.minLength,
                                     'maxLength': structure.ConnectorMaxLength ? structure.ConnectorMaxLength / METER_UNREAL_UNITS : structureData.maxLength ?? baseData.maxLength,
+                                    'minExtLength': structureData.minExtLength,
+                                    'maxExtLength': structureData.maxExtLength,
                                     'maxRange': structure.MaxRange ? structure.MaxRange / METER_UNREAL_UNITS : undefined,
                                     'icon': structureData.icon ?? getLocalIcon(structure) ?? baseData.icon,
                                     'texture': (typeof structureData.texture === 'string' || structureData.texture === null) ? structureData.texture : `game/Textures/Structures/${structureData.id}.webp`,
                                     'textureBorder': structureData.textureBorder,
                                     'textureFrontCap': structureData.textureFrontCap,
                                     'textureBackCap': structureData.textureBackCap,
+                                    'texturePost': structureData.texturePost,
+                                    'texturePostDist': structureData.texturePostDist,
                                     'textureOffset': structureData.textureOffset,
+                                    'buildOnFoundation': (structure.bIsBuiltOnFoundation ?? baseData.bIsBuiltOnFoundation) === true || undefined,
+                                    'buildOnWater': (structure.bBuildOnWater ?? baseData.bBuildOnWater),
+                                    'preventOnLandscape': (structure.bIsBuiltOnLandscape ?? baseData.bIsBuiltOnLandscape) === false || undefined,
                                     'garrisonSupplyMultiplier': structure.DecaySupplyDrain ?? baseData.garrisonSupplyMultiplier ?? structureData.garrisonSupplyMultiplier,
                                     'power': (structure.PowerGridInfo?.PowerDelta ?? baseData.power) / 1000 || undefined,
                                     'canSnap': structureData.canSnap,
@@ -417,6 +481,7 @@ async function iterateStructures(dirPath) {
                                         initializeStructureItems(modification);
                                     }
                                 }
+                                fetchTextureMeshes(structureData, structureCodeName, undefined, baseData.meshes);
                                 if (parentCodeName) {
                                     structureList[parentCodeName].upgrades[structureCodeName] = structureData;
                                 } else {
@@ -450,6 +515,8 @@ async function iterateStructures(dirPath) {
                                             'textureBorder': storedModData?.textureBorder,
                                             'textureFrontCap': storedModData?.textureFrontCap,
                                             'textureBackCap': storedModData?.textureBackCap,
+                                            'texturePost': structureData.texturePost,
+                                            'texturePostDist': structureData.texturePostDist,
                                             'positionOffset': storedModData?.positionOffset,
                                             'sockets': storedModData?.sockets,
                                             'techId': modification.TechID && (modification.TechID !== 'ETechID::None') ? modification.TechID.substring(9).toLowerCase() : undefined,
@@ -489,10 +556,16 @@ async function iterateStructures(dirPath) {
                         if (structure && structureData && uProperty.Properties?.Config) {
                             structureList[structureCodeName]['range'] = {
                                 "type": "crane",
-                                "min": uProperty.Properties.Config.MinHorizontalDistanceToTarget / METER_UNREAL_UNITS,
-                                "max": uProperty.Properties.Config.MaxHorizontalDistanceToTarget / METER_UNREAL_UNITS
+                                "min": (uProperty.Properties.Config.MinHorizontalDistanceToTarget ?? 600) / METER_UNREAL_UNITS,
+                                "max": (uProperty.Properties.Config.MaxHorizontalDistanceToTarget ?? 1750) / METER_UNREAL_UNITS
                             };
                         }
+                        break;
+                    case 'SkeletalMeshComponent':
+                        fetchTextureMeshes(structureData, structureCodeName, uProperty);
+                        break;
+                    case 'StaticMeshComponent':
+                        fetchTextureMeshes(structureData, structureCodeName, uProperty);
                         break;
                 }
             }
@@ -959,7 +1032,7 @@ async function updateData() {
             sharp(fullresPath).metadata().then(metadata => {
                 const resizeWidth = Math.max(metadata.width + (padding * 2), metadata.height + (padding * 2));
                 sharp(fullresPath)
-                .extend({ top: resizeWidth - metadata.width / 2, bottom: resizeWidth - metadata.width / 2, left: resizeWidth - metadata.height / 2, right: resizeWidth - metadata.height / 2, background: { r: 0, g: 0, b: 0, alpha: 0 } })
+                .extend({ top: resizeWidth - Math.round(metadata.width / 2), bottom: resizeWidth - Math.round(metadata.width / 2), left: resizeWidth - Math.round(metadata.height / 2), right: resizeWidth - Math.round(metadata.height / 2), background: { r: 0, g: 0, b: 0, alpha: 0 } })
                 .toBuffer((err, resizedImage, resizeInfo) => {
                     if (err) {
                         console.error(err);
@@ -999,6 +1072,30 @@ async function updateData() {
                 });
             });
         }
+
+        /*
+        const presetPath = path.join(directoryPath, 'preset.json');
+        fs.readFile(presetPath, 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading file:', presetPath, err);
+                return;
+            }
+            try {
+                const saveObject = JSON.parse(data);
+                
+                // Run save version updates.
+                
+                fs.writeFile(presetPath, JSON.stringify(saveObject), 'utf8', (err) => {
+                    if (err) {
+                        console.error('Error writing file:', presetPath, err);
+                        return;
+                    }
+                });
+            } catch (e) {
+                console.error('Error processing file:', presetPath, e);
+            }
+        });
+        */
     });
 
     const importDirectory = './public/games/foxhole/assets/game/Textures/Import';
@@ -1016,6 +1113,7 @@ async function updateData() {
                         throw err;
                     }
 
+                    /* Uncomment for structures that have predefined width/length/radius like bunkers, trenches, etc.
                     const origin = {
                         x: Math.round(metadata.width / 2) + info.trimOffsetLeft,
                         y: Math.round(metadata.height / 2) + info.trimOffsetTop
@@ -1025,6 +1123,7 @@ async function updateData() {
                         x: Math.round(info.width / 2),
                         y: Math.round(info.height / 2)
                     }
+                    */
 
                     const structureName = file.split('.')[0].toLowerCase();
                     if (structureList[structureName]) {
@@ -1033,10 +1132,12 @@ async function updateData() {
                                 throw err;
                             }
                         });
+                        /* Uncomment for structures that have predefined width/length/radius like bunkers, trenches, etc.
                         structureList[structureName].textureOffset = {
                             x: trimOrigin.x - (trimOrigin.x - origin.x),
                             y: trimOrigin.y - (trimOrigin.y - origin.y)
                         };
+                        */
                     } else {
                         console.info('Could not find structure for imported image in list: ', structureName);
                     }
@@ -1081,11 +1182,16 @@ async function updateData() {
 
     await iterateStructures(`${foxholeDataDirectory}War/Content/Blueprints/`);
 
+    for (const [codeName, meshes] of Object.entries(requiredMeshes)) {
+        console.info(`"${codeName}":`, Object.values(meshes), ",");
+    }
+
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPVehicleDynamicData.json`, itemList, 'item');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, itemList, 'item'); // Check for items in the structure data... Yes, Material Pallet is stored here.
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPAmmoDynamicData.json`, weaponList, 'weapon');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/DTDamageProfiles.json`, weaponList, 'damageType');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPMapList.json`, foxholeData.maps, 'map');
+    //iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPVehicleDynamicData.json`, structureList, 'item');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPMountDynamicData.json`, structureList, 'gunner');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, structureList);
 

@@ -28,7 +28,7 @@ Access the tool at: https://foxholeplanner.com
 
 ## Tool Preview
 
-![Screenshot](public/assets/screenshot5.jpg)
+![Screenshot](public/assets/screenshot6.jpg)
 
 
 ## Project Authors / Maintainers

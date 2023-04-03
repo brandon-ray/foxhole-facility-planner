@@ -120,7 +120,7 @@ Vue.component('app-game-sidebar', {
             <div class="building-info-body">
                 <p class="building-info-description" v-if="hoverData.description">{{hoverData.description}}</p>
                 <p class="building-tech-description" v-if="hoverData.author">
-                    <span>Author:</span> {{hoverData.author}}
+                    <span>Author:</span> {{typeof hoverData.author === 'string' ? hoverData.author : hoverData.author.join(', ')}}
                 </p>
                 <p class="building-tech-description" v-if="hoverData.techId">
                     <span>Requires Tech<template v-if="window.objectData.tech[hoverData.techId]">:</template></span> {{window.objectData.tech[hoverData.techId]?.name}}
@@ -811,7 +811,7 @@ Vue.component('app-menu-building-selected', {
                     </div>
                 </div>
             </template>
-            <div v-if="game.settings.enableExperimental && entity.building?.sockets" class="settings-option-wrapper">
+            <div v-if="game.settings.enableExperimental && entity.building?.category === 'entrenchments' && entity.building?.sockets" class="settings-option-wrapper">
                 <div class="settings-title">Socket Options</div>
                 <div class="text-button-wrapper">
                     <button class="text-button" type="button" @click="recoverConnections()" @mouseenter="bme()">
@@ -933,6 +933,12 @@ Vue.component('app-menu-construction-list', {
                 game.updateSettings();
                 this.refresh();
             }
+        },
+        toggleBuildingFilter: function(key) {
+            this.bmc();
+            game.settings.buildingListFilters[key] = !game.settings.buildingListFilters[key];
+            game.updateSettings();
+            this.refresh();
         }
     },
     template: html`
@@ -957,7 +963,7 @@ Vue.component('app-menu-construction-list', {
                     <select class="btn-small app-input construction-category" @click="bmc()" title="Filter by Category" v-model="game.selectedBuildingCategory" @change="refresh()">
                         <option value="all">All Buildings</option>
                         <template v-for="(category, key) in window.objectData.categories">
-                            <option v-if="!category.experimental || game.settings.enableExperimental" :value="key">{{category.name}}</option>
+                            <option v-if="game.canShowListCategory(category, true)" :value="key">{{category.name}}</option>
                         </template>
                     </select>
                 </div>
@@ -969,6 +975,11 @@ Vue.component('app-menu-construction-list', {
             </div>
         </div>
         <div class="menu-page">
+            <div class="construction-tabs construction-options d-flex justify-content-center justify-content-between">
+                <template v-for="(filter, key) in game.settings.buildingListFilters">
+                    <div class="btn-small" :class="{'btn-inactive': !filter }" @click="toggleBuildingFilter(key)">{{key}}</div>
+                </template>
+            </div>
             <label class="construction-search" title="Search">
                 <i class="fa fa-search" aria-hidden="true"></i>
                 <div class="input-wrapper">
@@ -985,8 +996,9 @@ Vue.component('app-menu-construction-list', {
                     <app-game-building-list-icon v-for="building in window.objectData.categories[game.selectedBuildingCategory].buildings" :building="building"/>
                 </template>
                 <template v-else>
+                    <p v-if="!Object.values(game.settings.buildingListFilters).some(value => value)" class="px-2 py-1 text-center">Show categories by selecting the tabs above.</p>
                     <template v-for="(category, key) in window.objectData.categories">
-                        <template v-if="!category.hideInList && (game.settings.showCollapsibleBuildingList || !category.hideInBuildingList) && (game.settings.enableExperimental || !category.experimental)">
+                        <template v-if="game.canShowListCategory(category) && (game.settings.showCollapsibleBuildingList || !category.hideInBuildingList)">
                             <div v-if="game.settings.showCollapsibleBuildingList" class="construction-item-category" @click="category.visible = !category.visible; refresh()">
                                 <div class="construction-item-category-icon" :style="{backgroundImage: 'url(' + category.icon + ')'}"></div>{{category.name}}{{category.experimental && ' (Preview)'}}<i class="fa float-right" :class="{'fa-angle-down': category.visible, 'fa-angle-right': !category.visible}" style="margin-top: 2px;" aria-hidden="true"></i>
                             </div>
@@ -1055,6 +1067,10 @@ Vue.component('app-game-shape-options', {
             <div class="btn-small col" title="Front Arrow" :class="{ 'btn-active': shapeOptions.frontArrow }" @click="shapeOptions.frontArrow = !shapeOptions.frontArrow; container.updateStyleOptions()">
                 <i class="fa fa-caret-left" aria-hidden="true"></i>
                 <span class="label">arrow</span>
+            </div>
+            <div class="btn-small col" title="Distance" :class="{ 'btn-active': shapeOptions.showDist }" @click="shapeOptions.showDist = !shapeOptions.showDist; container.updateStyleOptions()">
+                <i class="fa fa-sort-numeric-asc" aria-hidden="true"></i>
+                <span class="label">meters</span>
             </div>
             <div class="btn-small col" title="Back Arrow" :class="{ 'btn-active': shapeOptions.backArrow }" @click="shapeOptions.backArrow = !shapeOptions.backArrow; container.updateStyleOptions()">
                 <i class="fa fa-caret-right" aria-hidden="true"></i>
@@ -1207,7 +1223,7 @@ Vue.component('app-menu-settings', {
                 <select class="app-input" v-model="game.settings.defaultBuildingCategory" @change="game.updateSettings()">
                     <option value="all">All Buildings</option>
                     <template v-for="(category, key) in window.objectData.categories">
-                        <option v-if="!category.experimental || game.settings.enableExperimental" :value="key">{{category.name}}</option>
+                        <option v-if="game.canShowListCategory(category, true)" :value="key">{{category.name}}</option>
                     </template>
                 </select>
             </label>
@@ -1293,7 +1309,7 @@ Vue.component('app-menu-save-load', {
             }
             game.updateSave();
             this.$forceUpdate();
-            game.appComponent.$forceUpdate();
+            game.appComponent?.refresh();
         }
     },
     template: html`
@@ -1379,6 +1395,7 @@ Vue.component('app-menu-about', {
                 <div class="right-mouse-button"></div> Rotate selected structures.
                 <hr>
                 <div class="keyboard-key">ctrl</div> + <div class="left-mouse-button"></div> Add structure to selection.<br>
+                <div class="keyboard-key">ctrl</div> + <div class="middle-mouse-button"></div> Adjust selected spline length.<br>
                 <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">A</div> Select all structures.<br>
                 <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">C</div> Clone selection.
                 <hr>

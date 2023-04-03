@@ -1,4 +1,4 @@
-const SAVE_VERSION = '1.0.1';
+const SAVE_VERSION = '1.0.2';
 
 const COLOR_WHITE = 0xFFFFFF; // Also resets tint.
 const COLOR_DARKGREY = 0x505050;
@@ -50,6 +50,7 @@ const TEXTURE_SCALE = 0.5; // Scale for textures to adjust values after the text
 const METER_BOARD_PIXEL_SIZE = 32; // Size of a grid square in pixels.
 const METER_TEXTURE_PIXEL_SIZE = 52.8; // Size of a meter in pixels from a texture generated with Blender that's resized by 0.5.
 const METER_TEXTURE_PIXEL_SCALE = METER_TEXTURE_PIXEL_SIZE / METER_BOARD_PIXEL_SIZE;
+const METER_INVERSE_PIXEL_SCALE = METER_BOARD_PIXEL_SIZE / METER_TEXTURE_PIXEL_SIZE; // Scale used for bezier objects.
 
 const game = {
     services: {},
@@ -83,8 +84,14 @@ const game = {
         showParentProductionList: true,
         showCollapsibleBuildingList: true,
         showUpgradesAsBuildings: false,
+        buildingListFilters: {
+            bunkers: true,
+            facilities: true,
+            vehicles: true
+        },
         showFacilityName: true,
         showToolbelt: true,
+        showFooterInfo: false,
         selectedToolbelt: 0,
         toolbelts: {},
         toolbeltFilters: {
@@ -109,7 +116,8 @@ const game = {
             line: Object.assign({}, DEFAULT_SHAPE_STYLE, {
                 lineWidth: 14,
                 frontArrow: true,
-                backArrow: true
+                backArrow: true,
+                showDist: false
             })
         },
         volume: 0.2
@@ -382,7 +390,7 @@ try {
     game.setPlaying = function(playing) {
         if (game.playMode !== playing) {
             game.playMode = playing;
-            game.appComponent.$forceUpdate();
+            game.appComponent?.refresh();
         }
     }
 
@@ -578,10 +586,7 @@ try {
         }
 
         game.reloadSettings();
-
-        if (game.appComponent) {
-            game.appComponent.$forceUpdate();
-        }
+        game.appComponent?.refresh();
     };
 
     game.reloadSettings = () => {
@@ -691,7 +696,7 @@ try {
                     setTimeout(() => {
                         let x = 0, y = 0;
                         for (const [key, category] of Object.entries(window.objectData.categories)) {
-                            if (game.settings.enableExperimental || !category.experimental) {
+                            if (game.canShowListCategory(category, true)) {
                                 for (let i = 0; i < category.buildings.length; i++) {
                                     const building = category.buildings[i];
                                     if (!building.preset && (game.settings.enableDebug || (!building.hideInList && (!building.parent || !building.parent.hideInList)))) {
@@ -930,6 +935,8 @@ try {
         if (debugText) {
             debugText.x = WIDTH*0.22;
         }
+        
+        game?.boardUIComponent?.refresh();
     }
     window.addEventListener('resize', onWindowResize);
 
@@ -1253,6 +1260,17 @@ try {
             }
             saveObject.version = '1.0.1';
         }
+        if (saveObject.version === '1.0.1') {
+            console.info('Upgrading save from v1.0.1 => v1.0.2');
+            for (const entity of saveObject.entities) {
+                if (entity.type === 'building' && entity.subtype === 'crane') {
+                    const position = Math.extendPoint(entity, 215 / METER_TEXTURE_PIXEL_SCALE, Math.angleNormalized(entity.rotation + Math.PI));
+                    entity.x = position.x;
+                    entity.y = position.y;
+                }
+            }
+            saveObject.version = '1.0.2';
+        }
         if (isSelection) {
             game.deselectEntities(false, true);
         } else {
@@ -1339,7 +1357,7 @@ try {
         game.projectSettings.regionKey = regionKey;
         game.updateEntityOverlays();
         game.updateSave();
-        game.appComponent?.$forceUpdate();
+        game.appComponent?.refresh();
     };
 
     game.getEntitiesCenter = function(ents, isSelection) {
@@ -1527,6 +1545,8 @@ try {
     let mouseDown = {};
     let forceMouseDown = {};
     mouseEventListenerObject.addEventListener('wheel', (e) => {
+        e.preventDefault();
+
         if (!e.ctrlKey) {
             let lastZoom = camera.zoom;
             camera.zoom *= (1 - e.deltaY * (game.settings.zoomSpeed * 0.000225));
@@ -1551,6 +1571,13 @@ try {
             let angle = Math.angleBetween(pos2, {x: gmx, y: gmy});
             camera.x += Math.cos(angle) * dist;
             camera.y += Math.sin(angle) * dist;
+        } else {
+            for (const selectedEntity of selectedEntities) {
+                if (selectedEntity.building?.maxExtLength) {
+                    selectedEntity.postExtension = Math.max(Math.min((selectedEntity.postExtension ?? 1) - (e.deltaY / 200), selectedEntity.building.maxExtLength), selectedEntity.building.minExtLength);
+                    selectedEntity.regenerate();
+                }
+            }
         }
     });
     mouseEventListenerObject.addEventListener('contextmenu', (e) => {
@@ -2510,7 +2537,7 @@ try {
     function updateBuildingDB() {
         if (window.objectData?.categories) {
             let searchBuildings = Object.values(window.objectData.categories).reduce((acc, category) => {
-                if (game.settings.enableExperimental || !category.experimental) {
+                if (game.canShowListCategory(category, true)) {
                     acc.push(...category.buildings);
                 }
                 return acc;
@@ -2526,7 +2553,7 @@ try {
                     { name: 'author', weight: 0.2 }
                 ],
                 includeMatches: true,
-                threshold: 0.4,
+                threshold: 0.3,
                 distance: 100
             });
         }
@@ -2540,6 +2567,7 @@ try {
         if (building && (!building.hideInList || game.settings.enableDebug) &&
             (!building.experimental || game.settings.enableExperimental) &&
             (search || ((!building.parent || building.parentKey || filters.showUpgradesAsBuildings) &&
+            (!building.filters || building.filters.some(filter => { return game.settings.buildingListFilters[filter]; })) &&
             ((!building.tier || (!filters.showSelectedTierOnly && (building.tier <= filters.selectedTier))) || building.tier === filters.selectedTier) &&
             ((!building.techId || !window.objectData.tech[building.techId]) || ((building.techId === 'unlockfacilitytier2' && filters.selectedTier >= 2) || (building.techId === 'unlockfacilitytier3' && filters.selectedTier >= 3))) &&
             (!game.settings.selectedFaction || (!building.faction || building.faction === game.settings.selectedFaction))))) {
@@ -2548,10 +2576,18 @@ try {
         return false;
     }
 
+    game.canShowListCategory = function(category, ignoreFilters = false) {
+        return !category.hideInList && (game.settings.enableExperimental || !category.experimental) &&
+        ignoreFilters || (!category.filters || category.filters.some(filter => {
+            return game.settings.buildingListFilters[filter];
+        }));
+    };
+
     const FPSMIN = 30;
     let fpsCheck = null;
     let menuInit = false;
     let lastTick = Date.now();
+    let lastCameraZoom;
     let g_TICK = 10;
     let g_Time = 0;
     let selectionRotation = null;
@@ -2568,6 +2604,11 @@ try {
 
         let delta = Date.now() - lastTick;
         lastTick = Date.now();
+
+        if (lastCameraZoom !== game.camera.zoom) {
+            lastCameraZoom = game.camera.zoom;
+            game.boardUIComponent?.refresh();
+        }
 
         game.tryGameFocus();
 
@@ -2976,7 +3017,7 @@ try {
                                                 i = -1;
                                             }
                                         }
-                                        if (!connectionEstablished && pickupEntity && entity.building?.isBezier && ((pickupEntity.building?.isBezier && pickupEntity.building?.canSnapAlongBezier && entity.subtype === pickupEntity.subtype) || pickupEntity.isTrain || pickupEntity.building?.canSnapAlongBezier === entity.subtype)) {
+                                        if (!connectionEstablished && pickupEntity && entity.building?.isBezier && entity.bezier && ((pickupEntity.building?.isBezier && pickupEntity.building?.canSnapAlongBezier && entity.subtype === pickupEntity.subtype) || pickupEntity.isTrain || pickupEntity.building?.canSnapAlongBezier === entity.subtype)) {
                                             const projection = entity.bezier?.project(mousePos);
                                             if (projection.d <= Math.max(entity.building?.lineWidth ?? 0, 25)) {
                                                 if (pickupEntity && projection && ((!connectionEstablished && entity.bezier && entity.building.isBezier && entity.building.canSnapAlongBezier && selectedEntity.subtype === entity.subtype) ||
@@ -3117,18 +3158,6 @@ try {
             }
         }
 
-        if (game.settings.enableExperimental && (game.saveStateChanged || pickupSelectedEntities)) {
-            for (const entity of entities) {
-
-                if (entity.valid && entity.rangeSprite) {
-                    entity.updateRangeMask();
-                }
-                if(entity.hasPipes !== undefined && entity.gearPowerCost !== undefined){
-                    entity.updatePipes(gearPowerCost);
-                }
-            }
-        }
-
         if (game.saveStateChanged && game.settings.enableHistory && !pickupSelectedEntities && !game.selectedHandlePoint && !selectionRotation) {
             game.saveStateChanged = false;
             game.updateSave();
@@ -3142,6 +3171,12 @@ try {
     }, 60000);
 
     Math.PI2 = Math.PI * 2;
+    Math.pointBetween = function (p1, p2) {
+        return {
+            x: (p1.x + p2.x) / 2,
+            y: (p1.y + p2.y) / 2
+        };
+    };
     Math.angleBetween = function (p1, p2) {
         return Math.atan2(p2.y - p1.y, p2.x - p1.x);
     };
@@ -3252,8 +3287,13 @@ try {
 
         return false;
     };
+    Math.distanceToLine = function(point, lineStart, lineEnd) {
+        const { x: x1, y: y1 } = lineStart;
+        const { x: x2, y: y2 } = lineEnd;
+        return Math.abs((y2 - y1) * point.x - (x2 - x1) * point.y + x2 * y1 - y2 * x1) / Math.sqrt(Math.pow(y2 - y1, 2) + Math.pow(x2 - x1, 2));
+    }
     Number.prototype.round = function(n) {
         const d = Math.pow(10, n);
         return Math.round((this + Number.EPSILON) * d) / d;
-    }
+    };
 })();

@@ -110,6 +110,12 @@ body {
     padding: 10px 12px;
 }
 
+/*
+.show-footer-info .statistics-panel .board-panel-body {
+    max-height: 869px;
+}
+*/
+
 .statistics-panel .board-panel-body .resource-row {
     background: #0b0b0b;
     margin: 0;
