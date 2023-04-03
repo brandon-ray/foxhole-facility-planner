@@ -658,6 +658,42 @@ Vue.component('app-menu-building-selected', {
                     <div class="resource-icon" :title="upgrade.upgradeName ?? upgrade.name" :style="{backgroundImage:'url(' + (upgrade.icon ?? entity.building.icon) + ')'}"></div>
                 </button>
             </div>
+
+            <div v-if="entity.building.hasPipes !== undefined && entity.building.gearPowerCost === undefined" class="settings-option-wrapper upgrade-list">
+
+                <button v-if="!entity.building.hasPipes" type="button" class="upgrade-button" v-on:click="entity.building.hasPipes = !entity.building.hasPipes" style="padding: 1px 2px; color:white;">
+                    <div class="pipe-upgrade"> <i class = "fa fa-gears"></i> NO PIPE </div>
+                </button>
+
+                <button v-if="entity.building.hasPipes && entity.building.currentGearPower === 0" type="button" class="upgrade-button" v-on:click="entity.building.hasPipes = !entity.building.hasPipes" style="padding: 1px 2px; color:red;">
+                    <div class="pipe-upgrade"> <i class = "fa fa-gears"></i> NO POWER</div>
+                </button>
+
+                <button v-if="entity.building.hasPipes && entity.building.currentGearPower > 0" type="button" class="upgrade-button" v-on:click="entity.building.hasPipes = !entity.building.hasPipes" style="padding: 1px 2px; color:green;">
+                    <div class="pipe-upgrade"> <i class = "fa fa-gears"></i> FULL POWER</div>
+                </button>
+
+            </div>
+
+            <div v-if="entity.building.hasPipes !== undefined && entity.building.gearPowerCost !== undefined" class="settings-option-wrapper upgrade-list">
+
+                <button v-if="!entity.building.hasPipes" type="button" class="upgrade-button" v-on:click="entity.building.hasPipes = !entity.building.hasPipes" style="padding: 1px 2px; color:white;">
+                    <div class="pipe-upgrade"> <i class = "fa fa-gears"></i> NO PIPE </div>
+                </button>
+
+                <button v-if="entity.building.hasPipes && entity.building.currentGearPower <= 0" type="button" class="upgrade-button" v-on:click="entity.building.hasPipes = !entity.building.hasPipes" style="padding: 1px 2px; color:red;">
+                    <div class="pipe-upgrade"> <i class = "fa fa-gears"></i> NO POWER</div>
+                </button>
+                <button v-if="entity.building.hasPipes && entity.building.currentGearPower > 0 && entity.building.currentGearPower <= entity.building.gearPowerCost" type="button" class="upgrade-button" v-on:click="entity.building.hasPipes = !entity.building.hasPipes" style="padding: 1px 2px; color:orange;">
+                    <div class="pipe-upgrade"> <i class = "fa fa-gears"></i> LOW POWER</div>
+                </button>
+                <button v-if="entity.building.hasPipes && entity.building.currentGearPower >= entity.building.gearPowerCost" type="button" class="upgrade-button" v-on:click="entity.building.hasPipes = !entity.building.hasPipes" style="padding: 1px 2px; color:green;">
+                    <div class="pipe-upgrade"> <i class = "fa fa-gears"></i> FULL POWER</div>
+                </button>
+
+
+            </div>
+
             <div v-if="entity.baseUpgrades && entity.building?.baseGarrisonRadius" class="settings-option-wrapper upgrade-list">
                 <div class="settings-title">Base Upgrades</div>
                 <button class="upgrade-button" v-for="(upgrade, key) in entity.building.baseUpgrades.base" :class="{'selected-upgrade': entity.baseUpgrades.base === key}"

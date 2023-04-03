@@ -3119,8 +3119,12 @@ try {
 
         if (game.settings.enableExperimental && (game.saveStateChanged || pickupSelectedEntities)) {
             for (const entity of entities) {
+
                 if (entity.valid && entity.rangeSprite) {
                     entity.updateRangeMask();
+                }
+                if(entity.hasPipes !== undefined && entity.gearPowerCost !== undefined){
+                    entity.updatePipes(gearPowerCost);
                 }
             }
         }

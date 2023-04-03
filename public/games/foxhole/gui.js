@@ -308,7 +308,7 @@ Vue.component('app-menu-statistics', {
                     }
 
                     if (buildingData.category==='gearPower') {
-                        gearPower = buildingData.gearPower;
+                        gearPower -= buildingData.gearPowerCost;
                     }
                     
                     gearPowerTotal += gearPower;
@@ -414,8 +414,8 @@ Vue.component('app-menu-statistics', {
                     </div>
                 </div>
             </div>
-            <div v-if="gearPowerProduced || gearPowerConsumed || gearPowerTotal class="construction-options-wrapper">
-                <h5 class="construction-options-header"><i class="fa fa-bolt"></i> {{selection ? 'Selection' : 'Bunker'}} Gear Power</h5>
+            <div v-if="gearPowerProduced || gearPowerConsumed || gearPowerTotal" class="construction-options-wrapper">
+                <h5 class="construction-options-header"><i class="fa fa-gears"></i> {{selection ? 'Selection' : 'Bunker'}} Gear Power</h5>
                 <div class="construction-options row d-flex justify-content-center">
                     <div class="btn-small col" style="color: #00ca00;">
                         <span style="font-size: 18px;">{{gearPowerProduced}} <small>Unit</small></span>

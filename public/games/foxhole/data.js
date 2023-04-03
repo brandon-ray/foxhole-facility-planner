@@ -4120,6 +4120,8 @@ const gameData = {
 			"maxHealth": 1500,
 			"structuralIntegrity": 0.85,
 			"repairCost": 75,
+			"hasPipes": false,
+			"currentGearPower" : 0,
 			"upgrades": {
 				"fortcornert1": {
 					"reference": "fortcornert1"
@@ -4209,6 +4211,8 @@ const gameData = {
 				"cloth": 75
 			},
 			"repairCost": 75,
+			"hasPipes": false,
+			"currentGearPower" : 0,
 			"upgrades": {
 				"fortcornert1": {
 					"reference": "fortcornert1"
@@ -4297,6 +4301,8 @@ const gameData = {
 				"concrete": 15
 			},
 			"repairCost": 120,
+			"hasPipes": false,
+			"currentGearPower" : 0,
 			"upgrades": {
 				"fortcornert1": {
 					"reference": "fortcornert1"
@@ -4400,6 +4406,8 @@ const gameData = {
 			"maxHealth": 1500,
 			"structuralIntegrity": 0.85,
 			"repairCost": 75,
+			"hasPipes": false,
+			"currentGearPower" : 0,
 			"upgrades": {
 				"fortt2": {
 					"reference": "fortt2"
@@ -4414,7 +4422,7 @@ const gameData = {
 					"name": "Machine Gun Garrison (Tier 1)",
 					"codeName": "MGAIT1",
 					"category" : "gearPower",
-					"gearPower" : -600,
+					"gearPowerCost" : 600,
 					"description": "An entrenched machine gun manned by stationed troops.",
 					"range": {
 						"type": "killboxMG",
@@ -4434,7 +4442,9 @@ const gameData = {
 					"cost": {
 						"cloth": 75
 					},
-					"repairCost": 75
+					"repairCost": 75,
+					"hasPipes": false,
+					"currentGearPower" : 0
 				},
 				"fortrampt1": {
 					"name": "Bunker Ramp (Tier 1)",
@@ -4517,13 +4527,15 @@ const gameData = {
 					"cost": {
 						"cloth": 50
 					},
-					"repairCost": 75
+					"repairCost": 75,
+					"hasPipes": false,
+					"currentGearPower" : 0
 				},
 				"rifleait1": {
 					"name": "Rifle Garrison (Tier 1)",
 					"codeName": "RifleAIT1",
 					"category" : "gearPower",
-					"gearPower" : -600,
+					"gearPowerCost" : 600,
 					"description": "An entrenched bunker manned by stationed troops armed with Rifles.",
 					"range": {
 						"type": "killbox",
@@ -4542,7 +4554,9 @@ const gameData = {
 					"cost": {
 						"cloth": 50
 					},
-					"repairCost": 50
+					"repairCost": 50,
+					"hasPipes": false,
+					"currentGearPower" : 0
 				}
 			}
 		},
@@ -4634,6 +4648,8 @@ const gameData = {
 				"cloth": 75
 			},
 			"repairCost": 75,
+			"hasPipes": false,
+			"currentGearPower" : 0,
 			"upgrades": {
 				"fortt3": {
 					"reference": "fortt3"
@@ -4642,7 +4658,7 @@ const gameData = {
 					"name": "AT Gun Garrison (Tier 2)",
 					"codeName": "ATGunAIT2",
 					"category" : "gearPower",
-					"gearPower" : -600,
+					"gearPowerCost" : 600,
 					"description": "An entrenched AT gun manned by stationed troops.",
 					"range": {
 						"type": "killboxAT",
@@ -4663,7 +4679,9 @@ const gameData = {
 					"cost": {
 						"cloth": 150
 					},
-					"repairCost": 150
+					"repairCost": 150,
+					"hasPipes": false,
+					"currentGearPower" : 0
 				},
 				"fortcornert3": {
 					"reference": "fortcornert3"
@@ -4672,7 +4690,7 @@ const gameData = {
 					"name": "Engine Room (Tier 2)",
 					"codeName": "EngineRoomT2",
 					"category" : "gearPower",
-					"gearPower" : 3000,
+					"gearPowerCost" : -3000,
 					"description": "A engineering facility that provides power to Bunker structures using pipe connections.",
 					"icon": "game/Textures/UI/StructureIcons/EngineRoomIcon.webp",
 					"texture": "game/Textures/Structures/fortt2_engineroom.webp",
@@ -4681,13 +4699,15 @@ const gameData = {
 					"cost": {
 						"cloth": 150
 					},
-					"repairCost": 120
+					"repairCost": 120,
+					"hasPipes": false,
+					"currentGearPower" : 0
 				},
 				"mgait2": {
 					"name": "Machine Gun Garrison (Tier 2)",
 					"codeName": "MGAIT2",
 					"category": "gearPower",
-					"gearPower" : -600,
+					"gearPowerCost" : 600,
 					"description": "An entrenched machine gun manned by stationed troops.",
 					"range": {
 						"type": "killboxMG",
@@ -4703,13 +4723,15 @@ const gameData = {
 					"cost": {
 						"cloth": 100
 					},
-					"repairCost": 100
+					"repairCost": 100,
+					"hasPipes": false,
+					"currentGearPower" : 0
 				},
 				"observationbunkert2": {
 					"name": "Observation Bunker (Tier 2)",
 					"codeName": "ObservationBunkerT2",
 					"category" : "gearPower",
-					"gearPower" : -1000,
+					"gearPowerCost" : 1000,
 					"description": "A radio bunker that provides intel to friendly units about the surrounding area. Reinforced with wood, it can withstand more punishment than a standard radio tower, and therefore is capable of increased effectiveness.",
 					"range": {
 						"type": "radio",
@@ -4728,7 +4750,9 @@ const gameData = {
 					"cost": {
 						"cloth": 125
 					},
-					"repairCost": 150
+					"repairCost": 150,
+					"hasPipes": false,
+					"currentGearPower" : 0
 				},
 				"fortrampt2": {
 					"name": "Bunker Ramp (Tier 2)",
@@ -4811,13 +4835,15 @@ const gameData = {
 					"cost": {
 						"cloth": 50
 					},
-					"repairCost": 75
+					"repairCost": 75,
+					"hasPipes": false,
+					"currentGearPower" : 0
 				},
 				"rifleait2": {
 					"name": "Rifle Garrison (Tier 2)",
 					"codeName": "RifleAIT2",
 					"category" : "gearPower",
-					"gearPower" : -600,
+					"gearPowerCost" : 600,
 					"description": "An entrenched bunker manned by stationed troops armed with Rifles.",
 					"range": {
 						"type": "killbox",
@@ -4832,7 +4858,9 @@ const gameData = {
 					"cost": {
 						"cloth": 75
 					},
-					"repairCost": 75
+					"repairCost": 75,
+					"hasPipes": false,
+					"currentGearPower" : 0
 				},
 				"ammoroomt2": {
 					"name": "Storage Room (Tier 2)",
@@ -4845,7 +4873,9 @@ const gameData = {
 					"cost": {
 						"cloth": 35
 					},
-					"repairCost": 120
+					"repairCost": 120,
+					"hasPipes": false,
+					"currentGearPower" : 0
 				}
 			}
 		},
@@ -4937,12 +4967,14 @@ const gameData = {
 				"concrete": 15
 			},
 			"repairCost": 120,
+			"hasPipes": false,
+			"currentGearPower" : 0,
 			"upgrades": {
 				"intelcenter": {
 					"name": "Intelligence Center",
 					"codeName": "IntelCenter",
 					"category" : "gearPower",
-					"gearPower" : -35000,
+					"gearPowerCost" : 35000,
 					"description": "A high-tech listening post designed to intercept and decode enemy transmissions. The Intelligence Center can target distant locations and will continue to decipher sensitive transmissions over a sustained period.",
 					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/IntelligenceCenterIcon.webp",
@@ -4953,13 +4985,15 @@ const gameData = {
 					"cost": {
 						"concrete": 125
 					},
-					"repairCost": 1200
+					"repairCost": 1200,
+					"hasPipes": false,
+					"currentGearPower" : 0,
 				},
 				"lrartillery": {
 					"name": "Storm Cannon",
 					"codeName": "LRArtillery",
 					"category" : "gearPower",
-					"gearPower" : -35000,
+					"gearPowerCost" : 35000,
 					"description": "A heavy fixed position artillery piece that can release devastating firepower on distant enemy targets.",
 					"sortLayer": "upgrade",
 					"icon": "game/Textures/UI/StructureIcons/LongRangedArtilleryIcon.webp",
@@ -4973,7 +5007,9 @@ const gameData = {
 					"cost": {
 						"concrete": 200
 					},
-					"repairCost": 500
+					"repairCost": 500,
+					"hasPipes": false,
+					"currentGearPower" : 0,
 				},
 				"ammoroomt3": {
 					"name": "Storage Room (Tier 3)",
@@ -4987,7 +5023,9 @@ const gameData = {
 					"cost": {
 						"concrete": 10
 					},
-					"repairCost": 160
+					"repairCost": 160,
+					"hasPipes": false,
+					"currentGearPower" : 0
 				},
 				"artilleryait3": {
 					"name": "Howitzer Garrison",
@@ -5022,13 +5060,15 @@ const gameData = {
 					"cost": {
 						"concrete": 20
 					},
-					"repairCost": 160
+					"repairCost": 160,
+					"hasPipes": false,
+					"currentGearPower" : 0
 				},
 				"atgunait3": {
 					"name": "AT Gun Garrison (Tier 3)",
 					"codeName": "ATGunAIT3",
 					"category" : "gearPower",
-					"gearPower" : -600,
+					"gearPowerCost" : 600,
 					"prevUpgradeKey": "fortt2_atgunait2",
 					"description": "An entrenched AT gun manned by stationed troops.",
 					"range": {
@@ -5063,13 +5103,15 @@ const gameData = {
 					"cost": {
 						"concrete": 20
 					},
-					"repairCost": 160
+					"repairCost": 160,
+					"hasPipes": false,
+					"currentGearPower" : 0
 				},
 				"engineroomt3": {
 					"name": "Engine Room (Tier 3)",
 					"codeName": "EngineRoomT3",
 					"category" : "gearPower",
-					"gearPower": 3000,
+					"gearPowerCost" : -3000,
 					"prevUpgradeKey": "fortt2_engineroomt2",
 					"description": "A engineering facility that provides power to Bunker structures using pipe connections.",
 					"icon": "game/Textures/UI/StructureIcons/EngineRoomIcon.webp",
@@ -5079,13 +5121,15 @@ const gameData = {
 					"cost": {
 						"concrete": 25
 					},
-					"repairCost": 120
+					"repairCost": 120,
+					"hasPipes": false,
+					"currentGearPower" : 0
 				},
 				"mgait3": {
 					"name": "Machine Gun Garrison (Tier 3)",
 					"codeName": "MGAIT3",
 					"category" : "gearPower",
-					"gearPower" : -600,
+					"gearPowerCost" : 600,
 					"prevUpgradeKey": "fortt2_mgait2",
 					"description": "An entrenched machine gun manned by stationed troops.",
 					"range": {
@@ -5103,13 +5147,15 @@ const gameData = {
 					"cost": {
 						"concrete": 15
 					},
-					"repairCost": 120
+					"repairCost": 120,
+					"hasPipes": false,
+					"currentGearPower" : 0
 				},
 				"observationbunkert3": {
 					"name": "Observation Bunker (Tier 3)",
 					"codeName": "ObservationBunkerT3",
 					"category" : "gearPower",
-					"gearPower": -1000,
+					"gearPowerCost" : 1000,
 					"prevUpgradeKey": "fortt2_observationbunkert2",
 					"description": "A radio bunker that provides intel to friendly units about the surrounding area. Built from solid concrete, this reliable structure can push its effective range beyond lesser fortified radio structures.",
 					"range": {
@@ -5132,7 +5178,9 @@ const gameData = {
 					"cost": {
 						"concrete": 10
 					},
-					"repairCost": 160
+					"repairCost": 160,
+					"hasPipes": false,
+					"currentGearPower" : 0
 				},
 				"fortrampt3": {
 					"name": "Bunker Ramp (Tier 3)",
@@ -5216,13 +5264,15 @@ const gameData = {
 					"cost": {
 						"concrete": 10
 					},
-					"repairCost": 120
+					"repairCost": 120,
+					"hasPipes": false,
+					"currentGearPower" : 0
 				},
 				"rifleait3": {
 					"name": "Rifle Garrison (Tier 3)",
 					"codeName": "RifleAIT3",
 					"category" : "gearPower",
-					"gearPower" : -600,
+					"gearPowerCost" : 600,
 					"prevUpgradeKey": "fortt2_rifleait2",
 					"description": "An entrenched bunker manned by stationed troops armed with Rifles.",
 					"range": {
@@ -5239,7 +5289,9 @@ const gameData = {
 					"cost": {
 						"concrete": 15
 					},
-					"repairCost": 120
+					"repairCost": 120,
+					"hasPipes": false,
+					"currentGearPower" : 0
 				}
 			}
 		},
@@ -7846,7 +7898,9 @@ const gameData = {
 			"cost": {
 				"cloth": 75
 			},
-			"repairCost": 75
+			"repairCost": 75,
+			"hasPipes": false,
+			"currentGearPower" : 0
 		},
 		"oil_refinery": {
 			"name": "Oil Refinery",
@@ -10558,6 +10612,8 @@ const gameData = {
 			],
 			"maxHealth": 1500,
 			"repairCost": 90,
+			"hasPipes": false,
+			"currentGearPower" : 0,
 			"upgrades": {
 				"trenchconnectort1": {
 					"reference": "trenchconnectort1"
@@ -10609,7 +10665,9 @@ const gameData = {
 			"cost": {
 				"cloth": 60
 			},
-			"repairCost": 60
+			"repairCost": 60,
+			"hasPipes": false,
+			"currentGearPower" : 0
 		},
 		"trenchconnectort3": {
 			"name": "Trench Connector (Tier 3)",
@@ -10650,7 +10708,9 @@ const gameData = {
 			"cost": {
 				"concrete": 15
 			},
-			"repairCost": 120
+			"repairCost": 120,
+			"hasPipes": false,
+			"currentGearPower" : 0
 		},
 		"trenchempt1": {
 			"name": "Trench Emplacement (Tier 1)",
@@ -10795,6 +10855,8 @@ const gameData = {
 			],
 			"maxHealth": 1500,
 			"repairCost": 75,
+			"hasPipes": false,
+			"currentGearPower" : 0,
 			"upgrades": {
 				"trenchempt1": {
 					"reference": "trenchempt1"
@@ -10941,7 +11003,9 @@ const gameData = {
 			"cost": {
 				"cloth": 50
 			},
-			"repairCost": 50
+			"repairCost": 50,
+			"hasPipes": false,
+			"currentGearPower" : 0
 		},
 		"trenchempt3": {
 			"name": "Trench Emplacement (Tier 3)",
@@ -11077,7 +11141,9 @@ const gameData = {
 			"cost": {
 				"concrete": 10
 			},
-			"repairCost": 80
+			"repairCost": 80,
+			"hasPipes": false,
+			"currentGearPower" : 0
 		},
 		"trencht1": {
 			"name": "Trench (Tier 1)",
@@ -11151,6 +11217,8 @@ const gameData = {
 			],
 			"maxHealth": 1500,
 			"repairCost": 75,
+			"hasPipes": false,
+			"currentGearPower" : 0,
 			"upgrades": {
 				"trencht1": {
 					"reference": "trencht1"
@@ -11232,6 +11300,8 @@ const gameData = {
 				"cloth": 50
 			},
 			"repairCost": 50,
+			"hasPipes": false,
+			"currentGearPower" : 0,
 			"upgrades": {
 				"trencht1": {
 					"reference": "trencht1"
@@ -11313,6 +11383,8 @@ const gameData = {
 				"concrete": 10
 			},
 			"repairCost": 80,
+			"hasPipes": false,
+			"currentGearPower" : 0,
 			"upgrades": {
 				"trencht1": {
 					"reference": "trencht1"
