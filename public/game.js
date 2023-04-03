@@ -3158,19 +3158,6 @@ try {
             }
         }
 
-        if (game.saveStateChanged || pickupSelectedEntities) {
-            for (const entity of entities) {
-                if (entity.valid) {
-                    if (game.settings.enableExperimental && entity.rangeSprite) {
-                        entity.updateRangeMask();
-                    }
-                    if (entity.type === 'shape' && entity.subtype === 'line' && entity.shapeStyle?.showDist) {
-                        entity.regenerate();
-                    }
-                }
-            }
-        }
-
         if (game.saveStateChanged && game.settings.enableHistory && !pickupSelectedEntities && !game.selectedHandlePoint && !selectionRotation) {
             game.saveStateChanged = false;
             game.updateSave();
