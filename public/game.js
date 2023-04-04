@@ -2431,6 +2431,8 @@ try {
                             x: gmx - entity.x,
                             y: gmy - entity.y
                         };
+                        delete entity.prevPosition;
+                        delete entity.prevRotation;
                     });
                 }
             }
