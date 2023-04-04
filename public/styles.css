@@ -816,11 +816,7 @@ input[type=number].btn-small {
     padding: 8px 14px;
 }
 
-#about-page > .about-section .controls-section-body {
-    font-size: 0.96em;
-}
-
-#about-page > .about-section hr {
+hr {
     margin-top: 8px;
     margin-bottom: 8px;
     border-top: 1px solid #2d2d2d;
@@ -839,9 +835,13 @@ input[type=number].btn-small {
     white-space: nowrap;
 }
 
-#about-page > .about-section .left-mouse-button,
-#about-page > .about-section .right-mouse-button,
-#about-page > .about-section .middle-mouse-button {
+.controls-section-body {
+    font-size: 0.96em;
+}
+
+.controls-section-body .left-mouse-button,
+.controls-section-body .right-mouse-button,
+.controls-section-body .middle-mouse-button {
     display: inline-block;
     min-width: 18px;
     min-height: 25px;
@@ -853,9 +853,9 @@ input[type=number].btn-small {
     margin-bottom: 5px;
 }
 
-#about-page > .about-section .left-mouse-button::before,
-#about-page > .about-section .right-mouse-button::before ,
-#about-page > .about-section .middle-mouse-button::before {
+.controls-section-body .left-mouse-button::before,
+.controls-section-body .right-mouse-button::before ,
+.controls-section-body .middle-mouse-button::before {
     content: '';
     display: block;
     position: absolute;
@@ -865,9 +865,9 @@ input[type=number].btn-small {
     top: 10px;
 }
 
-#about-page > .about-section .left-mouse-button::after,
-#about-page > .about-section .right-mouse-button::after,
-#about-page > .about-section .middle-mouse-button::after {
+.controls-section-body .left-mouse-button::after,
+.controls-section-body .right-mouse-button::after,
+.controls-section-body .middle-mouse-button::after {
     content: '';
     display: block;
     background: #ff8f00;
@@ -878,18 +878,18 @@ input[type=number].btn-small {
     left: 0;
 }
 
-#about-page > .about-section .right-mouse-button::after {
+.controls-section-body .right-mouse-button::after {
     left: 50%;
 }
 
-#about-page > .about-section .middle-mouse-button::after {
+.controls-section-body .middle-mouse-button::after {
     width: 4px;
     border-radius: 6px;
     position: initial;
     margin: 0 auto;
 }
 
-#about-page > .about-section .keyboard-key {
+.controls-section-body .keyboard-key {
     display: inline-block;
     min-width: 27px;
     min-height: 27px;
@@ -1374,12 +1374,23 @@ input[type=number].btn-small {
 }
 
 .hub-dialog {
-    width: 800px;
-    height: 550px;
+    width: 900px;
+    height: 650px;
     top: 50%;
     left: 50%;
-    margin-top: -275px;
-    margin-left: -400px;
+    margin-top: -325px;
+    margin-left: -450px;
+}
+
+.hub-dialog.maximized {
+    width: auto;
+    height: auto;
+    top: 15px;
+    bottom: 59px;
+    left: 365px;
+    right: 355px;
+    margin-top: initial;
+    margin-left: initial;
 }
 
 .hub-dialog .hub-sidebar {
@@ -1388,10 +1399,15 @@ input[type=number].btn-small {
 }
 
 .hub-dialog .hub-sidebar-tab {
-    height: 16.66%;
+    height: auto;
     color: rgb(110, 110, 110);
     cursor: pointer;
     padding: 12px;
+}
+
+.hub-dialog.sidebar-names .hub-sidebar-tab {
+    width: 120px;
+    max-height: 80px;
 }
 
 .hub-dialog .hub-sidebar-tab:hover,
@@ -1444,11 +1460,25 @@ input[type=number].btn-small {
 .hub-body {
     padding: 20px 30px;
     overflow-y: auto;
+    text-align: center;
+    position: relative;
+}
+
+.hub-body .preset-gallery {
+    width: 500px;
+    background: black;
+    position: absolute;
+    inset: 0;
+    right: auto;
+    overflow-y: auto;
 }
 
 .fall-in-item {
+    display: inline-block;
+    width: 625px;
     margin-bottom: 20px;
     box-shadow: 0 5px 8px rgba(0, 0, 0, 0.5);
+    text-align: left;
 }
 
 .tab-content-header {
@@ -1473,10 +1503,12 @@ input[type=number].btn-small {
 .tab-content-body-img-wrapper {
     margin-bottom: 25px;
     padding: 8px 0;
+    text-align: center;
 }
 
 .tab-content-body-img-wrapper img {
     width: 100%;
+    max-width: 550px;
     box-shadow: 0 5px 8px rgba(0, 0, 0, 0.5);
 }
 
@@ -1529,6 +1561,35 @@ input[type=number].btn-small {
 .fall-in-leave-to {
     opacity: 0;
     transition: none;
+}
+
+.scroll-top-button {
+    position: absolute;
+    top: 12px;
+    right: 30px;
+    background-color: #2b2b2b;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+    text-align: center;
+    line-height: 46px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    cursor: pointer;
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+}
+
+.scroll-top-button.visible {
+    opacity: 0.7;
+    pointer-events: auto;
+}
+
+.scroll-top-button:hover {
+    opacity: 1;
 }
 
 .confirmation-dialog {

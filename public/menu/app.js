@@ -270,6 +270,8 @@ Vue.component('app-game-hub-popup', {
     data: function() {
         return {
             visible: false,
+            scrollTopButton: false,
+            maximized: false,
             hoverData: null,
             selectedTab: null,
             tabContent: [
@@ -280,12 +282,21 @@ Vue.component('app-game-hub-popup', {
                     content: html`
                     <div class="fall-in-item">
                         <div class="tab-content-header">
-                            Welcome to the Planner Hub!
+                            <i class="fa fa-home"></i> Welcome to the Planner Hub!
                         </div>
                         <p class="tab-content-body">
-                            The Planner Hub is a new feature that will give you easy access to changelogs, presets, settings, and more in the future.<br><br>
-                            Check out the updates tab to see what's new in the latest update!
+                            The Planner Hub is a new feature being developed that will give you easy access to changelogs, presets, settings, and more in the future.
                         </p>
+                    </div>
+                    <div class="fall-in-item">
+                        <div class="tab-content-header">
+                            <i class="fa fa-bullhorn"></i> Check "Updates" for the latest changes!
+                        </div>
+                        <div class="tab-content-body">
+                            <div class="tab-content-body-img-wrapper m-0">
+                                <img src="/assets/updates/04012023.jpg">
+                            </div>
+                        </div>
                     </div>
                     `
                 },
@@ -296,7 +307,7 @@ Vue.component('app-game-hub-popup', {
                     content: html`
                     <div class="fall-in-item">
                         <div class="tab-content-header">
-                            Motorcycles Update? 🤔
+                            <i class="fa fa-bullhorn"></i> Motorcycles Update? 🤔
                             <small class="float-right">April 1st, 2023</small>
                         </div>
                         <div class="tab-content-body">
@@ -326,6 +337,46 @@ Vue.component('app-game-hub-popup', {
                             <h4>Experimental Changes</h4>
                             <ul>
                                 <li>Added experimental map region selection / backdrop.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="fall-in-item">
+                        <div class="tab-content-header">
+                            <i class="fa fa-bullhorn"></i> Bunker & Trenches Update
+                            <small class="float-right">March 1st, 2023</small>
+                        </div>
+                        <div class="tab-content-body">
+                            <div class="tab-content-body-img-wrapper">
+                                <img src="/assets/updates/03012023.jpg">
+                            </div>
+                            <h4>Major Changes</h4>
+                            <ul>
+                                <li>Added Bunkers, Trenches, and Trench Encampments with their tier upgrades.</li>
+                                <li>Added Bunker Health / Repair / Structural Integrity Stats.</li>
+                                <li>Added Community Modules & Presets! You can submit your plans / projects in our Discord so that you can be featured in the planner!</li>
+                                <li>Added toolbelts. The ability to assign 0-9 as hotkeys for any placeable structure in the planner with up to 10 toolbelts to switch between.</li>
+                            </ul>
+
+                            <h4>Notable Recent Changes</h4>
+                            <ul>
+                                <li>Added ability to toggle the sidebar menu.</li>
+                                <li>Added ability to show stats for only selected buildings.</li>
+                                <li>Added Tier 1-3 Walls and Gates.</li>
+                                <li>Added Barge and Freighter.</li>
+                                <li>Added save versioning so we can automatically upgrade saves with changes for the planner.</li>
+                                <li>Updated controls information for newly added hotkeys: Q/E, WASD, etc.</li>
+                                <li>Bunkers, Trenches, and Trench Encampments had their socket positions updated so that they should be more accurately positioned when snapped.</li>
+                            </ul>
+
+                            <h4>Experimental Changes</h4>
+                            <ul>
+                                <li>Added experimental weapon damage stats for bunkers.</li>
+                                <li>Added image importing with drag and drop or pasting the image into the planner.</li>
+                            </ul>
+
+                            <h4>Upcoming Experimental Changes</h4>
+                            <ul>
+                                <li>Sorting Fixes: There's still some weird z-sorting for certain bunker upgrades that need to be dealt with for range occlusions to work properly.</li>
                             </ul>
                         </div>
                     </div>
@@ -369,7 +420,23 @@ Vue.component('app-game-hub-popup', {
             }
             this.visible = visible;
             this.refresh();
-        }
+            this.$nextTick(() => {
+                this.scrollToTop(true);
+            });
+        },
+        handleBodyScroll: function() {
+            if (this.$refs.hubBody.scrollTop > 100) {
+                this.scrollTopButton = true;
+            } else {
+                this.scrollTopButton = false;
+            }
+        },
+        scrollToTop: function(instant = false) {
+            this.$refs.hubBody.scrollTo({
+                top: 0,
+                behavior: instant ? 'instant' : 'smooth'
+            });
+        },
         /*
         buildBuilding: function(building) {
             this.bmc();
@@ -383,28 +450,35 @@ Vue.component('app-game-hub-popup', {
         */
     },
     template: html`
-    <div v-if="visible" class="board-panel hub-dialog">
+    <div v-if="visible" class="board-panel hub-dialog" :class="{ 'maximized': maximized, 'sidebar-names': game.settings.showExpandedHubSidebar }">
         <div class="board-panel-header">
             <h4 class="float-left m-0" style="color: #eee"><img src="/favicon_white.ico" height="28px" style="vertical-align: top; opacity: 0.25"> Planner Hub <span class="text-muted">/</span> {{selectedTab.title}}</h4>
             <button class="btn-small m-0 mr-1 float-right" title="Close Hub" @click="showPopup(false)"><i class="fa fa-times" aria-hidden="true"></i></button>
+            <button class="btn-small m-0 mr-2 float-right" :title="maximized ? 'Minimize Hub' : 'Maximize Hub'" @click="maximized = !maximized; refresh()"><i class="fa fa-window-maximize" aria-hidden="true"></i></button>
         </div>
         <div class="d-flex board-panel-body">
-            <div class="hub-sidebar col-2 h-100 text-center p-0 justify-content-center align-items-center">
-                <div v-for="tab in tabContent" class="hub-sidebar-tab" :class="{ 'selected': selectedTab.key === tab.key }" @click="showTab(tab.key)">
+            <div class="hub-sidebar h-100 text-center p-0 position-relative justify-content-center align-items-center">
+                <div v-for="tab in tabContent" class="hub-sidebar-tab" :class="{ 'selected': selectedTab.key === tab.key }" :title="tab.title" @click="showTab(tab.key)">
                     <i class="fa fa-2x" :class="tab.icon"></i><br>
-                    <span>{{tab.title}}</span>
+                    <span v-if="game.settings.showExpandedHubSidebar">{{tab.title}}</span>
+                </div>
+                <div class="hub-sidebar-tab position-absolute w-100 p-1" style="bottom: 0" :title="game.settings.showExpandedHubSidebar ? 'Retract Sidebar' : 'Extend Sidebar'" @click="game.settings.showExpandedHubSidebar = !game.settings.showExpandedHubSidebar; game.updateSettings()">
+                    <i class="fa fa-2x" :class="{'fa-angle-right': !game.settings.showExpandedHubSidebar, 'fa-angle-left': game.settings.showExpandedHubSidebar}" aria-hidden="true"></i>
                 </div>
             </div>
-            <div v-if="selectedTab" class="col-10 hub-body">
+            <div v-if="selectedTab" class="hub-body w-100" @scroll="handleBodyScroll" ref="hubBody">
                 <transition name="fall-in" mode="out-in">
-                    <!--
-                    <div v-if="selectedTab.key === 'presets'" class="tab-content" :key="selectedTab.key">
-                        <app-game-building-list-icon-v2 v-for="preset in window.objectData.categories.showcase.buildings" :container="game.hubPopup" :building="preset" />
-                    </div>
-                    -->
+                    <!-- <div v-if="selectedTab.key === 'presets'" class="tab-content" :key="selectedTab.key">
+                        <div class="preset-gallery">
+                            <app-game-building-list-icon-v2 v-for="preset in window.objectData.categories.showcase.buildings" :container="game.hubPopup" :building="preset" />
+                        </div>
+                    </div> -->
                     <div class="tab-content" :key="selectedTab.key" v-html="selectedTab.content"></div>
                 </transition>
             </div>
+            <button class="scroll-top-button" :class="{ 'visible': scrollTopButton }" @click="scrollToTop()">
+                <i class="fa fa-2x fa-angle-up"></i>
+            </button>
         </div>
     </div>
     `

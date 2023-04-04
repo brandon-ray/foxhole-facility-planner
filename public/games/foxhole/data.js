@@ -376,8 +376,7 @@ const gameData = {
 			"author": "KitsunePanzer",
 			"module": true,
 			"filters": [
-				"bunkers",
-				"facilities"
+				"bunkers"
 			]
 		},
 		"small_artillery_facility": {

@@ -91,6 +91,7 @@ const game = {
         },
         showFacilityName: true,
         showToolbelt: true,
+        showExpandedHubSidebar: true,
         showFooterInfo: false,
         selectedToolbelt: 0,
         toolbelts: {},
