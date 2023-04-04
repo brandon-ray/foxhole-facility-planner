@@ -819,6 +819,9 @@ try {
                         }
                         game.rotateSelected(angle);
                         break;
+                    case 70: // F
+                        game.mirrorSelected(event.shiftKey);
+                        break;
                     case 76: // L
                         game.lockSelected();
                         break;
@@ -2435,7 +2438,6 @@ try {
         }
     };
 
-    // TODO: Add support for flipping a group of objects along their center?
     game.flipSelected = function(vertical = false) {
         for (const selectedEntity of selectedEntities) {
             if (selectedEntity.type === 'shape' && selectedEntity.subtype === 'image') {
@@ -2443,6 +2445,63 @@ try {
             }
         }
         game.saveStateChanged = true;
+    };
+
+    game.mirrorSelected = function(vertical = false) {
+        if (game.settings.enableExperimental && selectedEntities.length) {
+            const selectionCenter = game.getEntitiesCenter(selectedEntities);
+            for (const selectedEntity of selectedEntities) {
+                if (!vertical) {
+                    selectedEntity.x = selectionCenter.x - (selectedEntity.x - selectionCenter.x);
+                    selectedEntity.rotation = (2 * Math.PI - Math.angleNormalized(selectedEntity.rotation)) % (2 * Math.PI);
+                } else {
+                    selectedEntity.y = selectionCenter.y - (selectedEntity.y - selectionCenter.y);
+                    selectedEntity.rotation = (Math.PI - Math.angleNormalized(selectedEntity.rotation) + 2 * Math.PI) % (2 * Math.PI);
+                }
+                if (selectedEntity.subtype?.includes('corner')) {
+                    selectedEntity.rotation = Math.angleNormalized(selectedEntity.rotation + Math.PI / 2);
+                } else if (selectedEntity.building?.hasHandle) {
+                    selectedEntity.rotation = Math.angleNormalized(selectedEntity.rotation + Math.PI);
+
+                    const handlePoint = selectedEntity.getHandlePoint();
+                    const globalHandlePos = app.cstage.toLocal(handlePoint, selectedEntity, undefined, true);
+                    if (!vertical) {
+                        globalHandlePos.x = selectionCenter.x - (globalHandlePos.x - selectionCenter.x);
+                        globalHandlePos.rotation = (2 * Math.PI - Math.angleNormalized(handlePoint.rotation)) % (2 * Math.PI);
+                    } else {
+                        globalHandlePos.y = selectionCenter.y - (globalHandlePos.y - selectionCenter.y);
+                        globalHandlePos.rotation = (Math.PI - Math.angleNormalized(handlePoint.rotation) + 2 * Math.PI) % (2 * Math.PI);
+                    }
+
+                    const newHandlePos = selectedEntity.toLocal(globalHandlePos, app.cstage);
+                    handlePoint.x = newHandlePos.x;
+                    handlePoint.y = newHandlePos.y;
+                    handlePoint.rotation = Math.angleNormalized(globalHandlePos.rotation + (vertical ? Math.PI : 0));
+
+                    selectedEntity.updateHandlePos();
+                    if (selectedEntity.subtype !== 'power_line') {
+                        selectedEntity.regenerate();
+                    }
+                }
+            }
+            for (const selectedEntity of selectedEntities) {
+                if (selectedEntity.subtype === 'power_line') {
+                    selectedEntity.forceReposition();
+                }
+            }
+            for (const selectedEntity of selectedEntities) {
+                if (selectedEntity.sockets) {
+                    selectedEntity.attemptReconnections(true, false, true);
+                }
+                if (pickupSelectedEntities) {
+                    selectedEntity.pickupOffset = {
+                        x: gmx - selectedEntity.x,
+                        y: gmy - selectedEntity.y
+                    };
+                }
+            }
+            game.saveStateChanged = true;
+        }
     };
 
     game.removeEntities = function(isLoading) {

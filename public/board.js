@@ -620,6 +620,18 @@ class DraggableContainer extends PIXI.Container {
         }
     }
     
+    getHandlePoint() {
+        return this.points && this.points[this.points.length - 1];
+    }
+
+    updateHandlePos() {
+        if (this.hasHandle) {
+            const point = this.getHandlePoint();
+            point.handle.x = point.x;
+            point.handle.y = point.y;
+        }
+    }
+
     grabHandlePoint() {
         if (this.selected && this.hasHandle) {
             if (this.shouldSelectLastHandlePoint) {

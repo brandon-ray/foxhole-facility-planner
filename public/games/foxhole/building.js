@@ -183,7 +183,7 @@ class FoxholeStructureSocket extends PIXI.Container {
         }
     }
     
-    removeConnections(entityId, ignoreSelected) {
+    removeConnections(entityId, ignoreSelected, ignoreChecks) {
         if (Object.keys(this.connections).length) {
             let connectionEstablished = false;
             for (const [connectedEntityId, connectedSocketId] of Object.entries(this.connections)) {
@@ -203,10 +203,8 @@ class FoxholeStructureSocket extends PIXI.Container {
                             if (connectedSocket.socketData.id === connectedSocketId) {
                                 delete connectedSocket.connections[this.structure.id];
                                 if (Object.keys(connectedSocket.connections).length === 0) {
-                                    if (connectedEntity.building?.requireConnection) {
+                                    if (!ignoreChecks && (connectedEntity.building?.requireConnection || connectedSocket.socketData.temp)) {
                                         connectedEntity.remove();
-                                    } else if (connectedSocket.socketData.temp) {
-                                        connectedSocket.remove();
                                     } else {
                                         connectedSocket.setVisible(true);
                                     }
@@ -1046,9 +1044,9 @@ class FoxholeStructure extends DraggableContainer {
     
     hasConnectionToEntity = (connectingEntity, ignoredSocket) => this.hasConnectionToEntityId(connectingEntity.id, ignoredSocket);
     
-    attemptReconnections(removeConnections = true, ignoreSelected = true) {
+    attemptReconnections(removeConnections = true, ignoreSelected = true, ignoreChecks = false) {
         if (removeConnections) {
-            this.removeConnections(undefined, ignoreSelected);
+            this.removeConnections(undefined, ignoreSelected, undefined, undefined, ignoreChecks);
         }
         for (const e2 of game.getEntities()) {
             if (e2 === this || !e2.sockets || (ignoreSelected && e2.selected) || Math.distanceBetween(this.mid ?? this, e2.mid ?? e2) > 1000) {
@@ -1061,8 +1059,7 @@ class FoxholeStructure extends DraggableContainer {
                     if (eSocket.canConnect(e2Socket) && (!e2Socket.socketData.connectionLimit || Object.keys(e2Socket.connections).length < e2Socket.socketData.connectionLimit) && (Math.distanceBetween(eSocketPosition, e2SocketPosition) < 3)) {
                         let eSocketRotation = Math.angleNormalized((this.rotation + eSocket.rotation) - Math.PI);
                         let e2SocketRotation = Math.angleNormalized(e2.rotation + e2Socket.rotation);
-                        let angleDiff = Math.angleDifference(eSocketRotation, e2SocketRotation);
-                        if (angleDiff < 0.001 && angleDiff > -0.001) {
+                        if (this.building?.canSnapRotate || Math.abs(Math.angleNormalized(Math.angleDifference(eSocketRotation, e2SocketRotation))) < 0.0025) {
                             eSocket.setConnection(e2.id, e2Socket);
                         }
                     }
@@ -1071,6 +1068,30 @@ class FoxholeStructure extends DraggableContainer {
         }
     }
     
+    forceReposition() {
+        for (const eSocket of this.sockets) {
+            for (const [connectedEntityId, connectedSocketId] of Object.entries(eSocket.connections)) {
+                const connectedEntity = game.getEntityById(connectedEntityId);
+                if (connectedEntity && connectedEntity.sockets) {
+                    const e2Socket = connectedEntity.getSocketById(connectedSocketId);
+                    if (e2Socket) {
+                        const e2SocketPosition = game.app.cstage.toLocal(e2Socket, connectedEntity);
+                        if (eSocket.socketData.id === 0) {
+                            this.position.set(e2SocketPosition.x, e2SocketPosition.y);
+                        } else if (eSocket.socketData.id === 1) {
+                            const dist = Math.distanceBetween(this, e2SocketPosition);
+                            const handle = this.getHandlePoint();
+                            handle.x = dist;
+                            this.rotation = Math.angleBetween(this, e2SocketPosition);
+                            this.updateHandlePos();
+                        }
+                    }
+                }
+            }
+        }
+        this.regenerate();
+    }
+
     recoverConnections(recoveredEntities = [this]) {
         for (const eSocket of this.sockets) {
             for (const [connectedEntityId, connectedSocketId] of Object.entries(eSocket.connections)) {
@@ -1098,13 +1119,13 @@ class FoxholeStructure extends DraggableContainer {
         }
     }
     
-    removeConnections(socketId, ignoreSelected, ignoreSocket, entityId) {
+    removeConnections(socketId, ignoreSelected, ignoreSocket, entityId, ignoreChecks) {
         if (this.sockets) {
             // Iterate sockets to make sure we either remove the connections and update the socket or remove the entity altogether.
             for (let i = 0; i < this.sockets.length; i++) {
                 const entitySocket = this.sockets[i];
                 if (typeof socketId !== 'number' || (ignoreSocket ? entitySocket.socketData.id !== socketId : entitySocket.socketData.id === socketId)) {
-                    entitySocket.removeConnections(entityId, ignoreSelected);
+                    entitySocket.removeConnections(entityId, ignoreSelected, ignoreChecks);
                 }
             }
         }
