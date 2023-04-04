@@ -203,8 +203,12 @@ class FoxholeStructureSocket extends PIXI.Container {
                             if (connectedSocket.socketData.id === connectedSocketId) {
                                 delete connectedSocket.connections[this.structure.id];
                                 if (Object.keys(connectedSocket.connections).length === 0) {
-                                    if (!ignoreChecks && (connectedEntity.building?.requireConnection || connectedSocket.socketData.temp)) {
-                                        connectedEntity.remove();
+                                    if (!ignoreChecks) {
+                                        if (connectedEntity.building?.requireConnection) {
+                                            connectedEntity.remove();
+                                        } else if (connectedSocket.socketData.temp) {
+                                            connectedSocket.remove();
+                                        }
                                     } else {
                                         connectedSocket.setVisible(true);
                                     }
