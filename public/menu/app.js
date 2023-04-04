@@ -524,7 +524,8 @@ Vue.component('app-game-confirmation-popup', {
             </div>
             <p class="board-panel-body">
                 This will delete all objects you have placed.<br>
-                Note: This <u>cannot</u> be undone.
+                <template v-if="!(game.settings.enableHistory && game.constructionHistory.length)">Note: This <u>cannot</u> be undone.</template>
+                <template v-else>Note: Objects can be recovered with undo.</template>
                 <button @click="closePopup(true)">Erase Board</button>
             </p>
         </template>
@@ -535,7 +536,8 @@ Vue.component('app-game-confirmation-popup', {
             </div>
             <p class="board-panel-body">
                 Your current work will be lost if you don't save.<br>
-                Note: This <u>cannot</u> be undone.
+                <template v-if="!(game.settings.enableHistory && game.constructionHistory.length)">Note: This <u>cannot</u> be undone.</template>
+                <template v-else>Note: Projects can be recovered with undo.</template>
                 <button @click="closePopup(true)">Erase Board</button>
             </p>
         </template>
@@ -546,7 +548,8 @@ Vue.component('app-game-confirmation-popup', {
             </div>
             <p class="board-panel-body">
                 This will delete project settings, layers, and objects.<br>
-                Note: This <u>cannot</u> be undone.
+                <template v-if="!(game.settings.enableHistory && game.constructionHistory.length)">Note: This <u>cannot</u> be undone.</template>
+                <template v-else>Note: Projects can be recovered with undo.</template>
                 <button @click="closePopup(true)">Erase Project & Board</button>
             </p>
         </template>
