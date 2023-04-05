@@ -211,7 +211,7 @@ Vue.component('app-menu-building-selected', {
                     x: selectedEntity.x,
                     y: selectedEntity.y,
                     rotation: selectedEntity.rotation,
-                    rotationDegrees: Math.rad2deg(selectedEntity.rotation),
+                    rotationDegrees: Math.rad2deg(selectedEntity.rotation).round(3),
                     baseProduction: selectedEntity.baseProduction,
                     selectedProduction: selectedEntity.selectedProduction,
                     productionScale: selectedEntity.productionScale,
@@ -246,15 +246,14 @@ Vue.component('app-menu-building-selected', {
         },
         updateEntity: function(removeConnections) {
             if (this.entity) {
-                this.entity.x = this.entity.x || 0;
-                this.entity.y = this.entity.y || 0;
-                this.entity.rotationDegrees = this.entity.rotationDegrees || 0;
                 let selectedEntity = game.getSelectedEntity();
                 if (selectedEntity) {
+                    this.entity.x = parseFloat(this.entity.x).round(3);
+                    this.entity.y = parseFloat(this.entity.y).round(3);
                     if (!selectedEntity.building?.vehicle) {
-                        selectedEntity.x = this.entity.x;
-                        selectedEntity.y = this.entity.y;
-                        selectedEntity.rotation = Math.deg2rad(this.entity.rotationDegrees);
+                        selectedEntity.x = this.entity.x || 0;
+                        selectedEntity.y = this.entity.y || 0;
+                        selectedEntity.rotation = Math.angleNormalized(Math.deg2rad(this.entity.rotationDegrees || 0));
                     }
                     this.entity.rotation = selectedEntity.rotation;
                     if (selectedEntity.type === 'building') {
@@ -277,6 +276,13 @@ Vue.component('app-menu-building-selected', {
                 }
             }
             game.saveStateChanged = true;
+        },
+        updatePositionProps: function() {
+            if (this.entity) {
+                this.entity.x = (this.entity.x || 0).round(3);
+                this.entity.y = (this.entity.y || 0).round(3);
+                this.entity.rotationDegrees = Math.rad2deg(Math.angleNormalized(this.entity.rotation)).round(3);
+            }
         },
         updateStyleOptions: function(reset) {
             let selectedEntity = game.getSelectedEntity();
@@ -548,17 +554,19 @@ Vue.component('app-menu-building-selected', {
                 <div class="settings-title">
                     {{(entity.building && ((!entity.building.parentKey && entity.building.parent?.name) || entity.building.name)) ?? 'Other Options'}}
                 </div>
-                <label class="app-input-label">
+                <div class="app-input-label settings-option-row">
                     <i class="fa fa-arrows" aria-hidden="true"></i> Position X:
-                    <input class="app-input" type="number" v-model.number="entity.x" @input="updateEntity(true)" :disabled="entity.building?.vehicle">
-                </label>
-                <label class="app-input-label">
+                    <input class="app-input float-right" type="number" v-model.number="entity.x" @input="updateEntity(true)" @change="updatePositionProps()" :disabled="entity.building?.vehicle">
+                    <button class="btn-small m-0 mr-1 float-right" type="button" @click="game.cameraTo(game.getSelectedEntity())" title="Go to Position"><i class="fa fa-crosshairs" aria-hidden="true"></i></button>
+                </div>
+                <div class="app-input-label settings-option-row">
                     <i class="fa fa-arrows" aria-hidden="true"></i> Position Y:
-                    <input class="app-input" type="number" v-model.number="entity.y" @input="updateEntity(true)" :disabled="entity.building?.vehicle">
-                </label>
+                    <input class="app-input float-right" type="number" v-model.number="entity.y" @input="updateEntity(true)" @change="updatePositionProps()" :disabled="entity.building?.vehicle">
+                    <button class="btn-small m-0 mr-1 float-right" type="button" @click="game.cameraTo(game.getSelectedEntity())" title="Go to Position"><i class="fa fa-crosshairs" aria-hidden="true"></i></button>
+                </div>
                 <div class="app-input-label settings-option-row">
                     <i class="fa fa-repeat" aria-hidden="true"></i> Rotation:
-                    <input class="app-input float-right" type="number" v-model.number="entity.rotationDegrees" @input="updateEntity(true)" :disabled="entity.building?.vehicle">
+                    <input class="app-input float-right" type="number" v-model.number="entity.rotationDegrees" @input="updateEntity(true)" @change="updatePositionProps()" :disabled="entity.building?.vehicle">
                     <template v-if="!entity.building?.vehicle">
                         <button class="btn-small m-0 mr-1 float-right" type="button" title="Rotate 45 degrees" @click="game.rotateSelected(Math.PI / 4)"><i class="fa fa-repeat" aria-hidden="true"></i></button>&nbsp;
                         <button class="btn-small m-0 mr-1 float-right" type="button" title="Rotate -45 degrees"@click="game.rotateSelected(-Math.PI / 4)"><i class="fa fa-undo" aria-hidden="true"></i></button>&nbsp;
@@ -649,7 +657,7 @@ Vue.component('app-menu-building-selected', {
             <div v-if="entity.building && entity.building.upgrades" class="settings-option-wrapper upgrade-list">
                 <div class="settings-title">
                     <button v-if="entity.building?.parentKey" type="button" class="title-button return-button" v-on:click="changeUpgrade(entity.building.parent)" title="Go to Previous Tier" @mouseenter="bme()" style="padding: 1px 2px;">
-                        <div class="btn-small m-1"><i class="fa fa-arrow-left"></i></div>
+                        <div class="btn-small m-1"><i class="fa fa-angle-double-down" aria-hidden="true"></i></div>
                     </button>
                     {{hoverUpgradeName ?? (entity.building.upgradeName ?? (entity.building.upgrades[entity.building.key]?.name ?? 'No Upgrade Selected'))}}
                 </div>

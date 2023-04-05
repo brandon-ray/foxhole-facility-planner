@@ -289,7 +289,7 @@ class DraggableContainer extends PIXI.Container {
                 }
 
                 if (game.getSelectedEntities().length === 1) {
-                    game.updateSelectedBuildingMenu();
+                    game.updateSelectedBuildingMenu(true);
                 }
             }
 

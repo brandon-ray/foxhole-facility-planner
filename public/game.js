@@ -1520,7 +1520,7 @@ try {
         return false;
     }
 
-    game.updateSelectedBuildingMenu = function() {
+    game.updateSelectedBuildingMenu = function(noForce) {
         let buildingMenuSelected = game.sidebarMenuComponent?.currentMenu?.key === 'building-selected';
         if (selectedEntities.length) {
             if (!buildingMenuSelected) {
@@ -1530,7 +1530,7 @@ try {
                     icon: 'fa-wrench'
                 });
             } else {
-                game.buildingSelectedMenuComponent?.refresh();
+                game.buildingSelectedMenuComponent?.refresh(noForce);
             }
         } else if (buildingMenuSelected) {
             game.sidebarMenuComponent.changeMenu(null);
@@ -2662,6 +2662,13 @@ try {
         }));
     };
 
+    game.cameraTo = function(entity) {
+        if (entity) {
+            camera.x = (entity.x * camera.zoom) - WIDTH/2;
+            camera.y = (entity.y * camera.zoom) - HEIGHT/2;
+        }
+    };
+
     const FPSMIN = 30;
     let fpsCheck = null;
     let menuInit = false;
@@ -3204,8 +3211,7 @@ try {
             if (followEntity.selectionArea.visible) {
                 followEntity.selectionArea.visible = false;
             }
-            camera.x = (followEntity.x * camera.zoom) - WIDTH/2;
-            camera.y = (followEntity.y * camera.zoom) - HEIGHT/2;
+            game.cameraTo(followEntity);
         }
 
         if (ENABLE_DEBUG) {
