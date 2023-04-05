@@ -4440,6 +4440,7 @@ const gameData = {
 				"cloth": 300
 			},
 			"repairCost": 300,
+			"tierUp": "fortbaset2",
 			"upgrades": {
 				"fortbaset1": {
 					"reference": "fortbaset1"
@@ -4563,6 +4564,8 @@ const gameData = {
 				"cloth": 100
 			},
 			"repairCost": 100,
+			"tierUp": "fortbaset3",
+			"tierDown": "fortbaset1",
 			"upgrades": {
 				"fortbaset1": {
 					"reference": "fortbaset1"
@@ -4689,6 +4692,7 @@ const gameData = {
 				"concrete": 25
 			},
 			"repairCost": 200,
+			"tierDown": "fortbaset2",
 			"upgrades": {
 				"fortbaset1": {
 					"reference": "fortbaset1"
@@ -4774,6 +4778,7 @@ const gameData = {
 			"maxHealth": 1500,
 			"structuralIntegrity": 0.85,
 			"repairCost": 75,
+			"tierUp": "fortcornert2",
 			"upgrades": {
 				"fortcornert1": {
 					"reference": "fortcornert1"
@@ -4863,6 +4868,8 @@ const gameData = {
 				"cloth": 75
 			},
 			"repairCost": 75,
+			"tierUp": "fortcornert3",
+			"tierDown": "fortcornert1",
 			"upgrades": {
 				"fortcornert1": {
 					"reference": "fortcornert1"
@@ -4951,6 +4958,7 @@ const gameData = {
 				"concrete": 15
 			},
 			"repairCost": 120,
+			"tierDown": "fortcornert2",
 			"upgrades": {
 				"fortcornert1": {
 					"reference": "fortcornert1"
@@ -5054,6 +5062,7 @@ const gameData = {
 			"maxHealth": 1500,
 			"structuralIntegrity": 0.85,
 			"repairCost": 75,
+			"tierUp": "fortt2",
 			"upgrades": {
 				"fortt2": {
 					"reference": "fortt2"
@@ -5086,7 +5095,8 @@ const gameData = {
 					"cost": {
 						"cloth": 75
 					},
-					"repairCost": 75
+					"repairCost": 75,
+					"tierUp": "fortt2_mgait2"
 				},
 				"fortrampt1": {
 					"name": "Bunker Ramp (Tier 1)",
@@ -5169,7 +5179,8 @@ const gameData = {
 					"cost": {
 						"cloth": 50
 					},
-					"repairCost": 75
+					"repairCost": 75,
+					"tierUp": "fortt2_fortrampt2"
 				},
 				"rifleait1": {
 					"name": "Rifle Garrison (Tier 1)",
@@ -5192,7 +5203,8 @@ const gameData = {
 					"cost": {
 						"cloth": 50
 					},
-					"repairCost": 50
+					"repairCost": 50,
+					"tierUp": "fortt2_rifleait2"
 				}
 			}
 		},
@@ -5284,6 +5296,8 @@ const gameData = {
 				"cloth": 75
 			},
 			"repairCost": 75,
+			"tierUp": "fortt3",
+			"tierDown": "fortt1",
 			"upgrades": {
 				"fortt3": {
 					"reference": "fortt3"
@@ -5311,7 +5325,8 @@ const gameData = {
 					"cost": {
 						"cloth": 150
 					},
-					"repairCost": 150
+					"repairCost": 150,
+					"tierUp": "fortt3_atgunait3"
 				},
 				"fortcornert3": {
 					"reference": "fortcornert3"
@@ -5327,7 +5342,8 @@ const gameData = {
 					"cost": {
 						"cloth": 150
 					},
-					"repairCost": 120
+					"repairCost": 120,
+					"tierUp": "fortt3_engineroomt3"
 				},
 				"mgait2": {
 					"name": "Machine Gun Garrison (Tier 2)",
@@ -5347,7 +5363,9 @@ const gameData = {
 					"cost": {
 						"cloth": 100
 					},
-					"repairCost": 100
+					"repairCost": 100,
+					"tierUp": "fortt3_mgait3",
+					"tierDown": "fortt1_mgait1"
 				},
 				"observationbunkert2": {
 					"name": "Observation Bunker (Tier 2)",
@@ -5370,7 +5388,8 @@ const gameData = {
 					"cost": {
 						"cloth": 125
 					},
-					"repairCost": 150
+					"repairCost": 150,
+					"tierUp": "fortt3_observationbunkert3"
 				},
 				"fortrampt2": {
 					"name": "Bunker Ramp (Tier 2)",
@@ -5453,7 +5472,9 @@ const gameData = {
 					"cost": {
 						"cloth": 50
 					},
-					"repairCost": 75
+					"repairCost": 75,
+					"tierUp": "fortt3_fortrampt3",
+					"tierDown": "fortt1_fortrampt1"
 				},
 				"rifleait2": {
 					"name": "Rifle Garrison (Tier 2)",
@@ -5472,7 +5493,9 @@ const gameData = {
 					"cost": {
 						"cloth": 75
 					},
-					"repairCost": 75
+					"repairCost": 75,
+					"tierUp": "fortt3_rifleait3",
+					"tierDown": "fortt1_rifleait1"
 				},
 				"ammoroomt2": {
 					"name": "Storage Room (Tier 2)",
@@ -5485,7 +5508,8 @@ const gameData = {
 					"cost": {
 						"cloth": 35
 					},
-					"repairCost": 120
+					"repairCost": 120,
+					"tierUp": "fortt3_ammoroomt3"
 				}
 			}
 		},
@@ -5577,6 +5601,7 @@ const gameData = {
 				"concrete": 15
 			},
 			"repairCost": 120,
+			"tierDown": "fortt2",
 			"upgrades": {
 				"intelcenter": {
 					"name": "Intelligence Center",
@@ -5623,7 +5648,8 @@ const gameData = {
 					"cost": {
 						"concrete": 10
 					},
-					"repairCost": 160
+					"repairCost": 160,
+					"tierDown": "fortt2_ammoroomt2"
 				},
 				"artilleryait3": {
 					"name": "Howitzer Garrison",
@@ -5697,7 +5723,8 @@ const gameData = {
 					"cost": {
 						"concrete": 20
 					},
-					"repairCost": 160
+					"repairCost": 160,
+					"tierDown": "fortt2_atgunait2"
 				},
 				"engineroomt3": {
 					"name": "Engine Room (Tier 3)",
@@ -5711,7 +5738,8 @@ const gameData = {
 					"cost": {
 						"concrete": 25
 					},
-					"repairCost": 120
+					"repairCost": 120,
+					"tierDown": "fortt2_engineroomt2"
 				},
 				"mgait3": {
 					"name": "Machine Gun Garrison (Tier 3)",
@@ -5733,7 +5761,8 @@ const gameData = {
 					"cost": {
 						"concrete": 15
 					},
-					"repairCost": 120
+					"repairCost": 120,
+					"tierDown": "fortt2_mgait2"
 				},
 				"observationbunkert3": {
 					"name": "Observation Bunker (Tier 3)",
@@ -5760,7 +5789,8 @@ const gameData = {
 					"cost": {
 						"concrete": 10
 					},
-					"repairCost": 160
+					"repairCost": 160,
+					"tierDown": "fortt2_observationbunkert2"
 				},
 				"fortrampt3": {
 					"name": "Bunker Ramp (Tier 3)",
@@ -5844,7 +5874,8 @@ const gameData = {
 					"cost": {
 						"concrete": 10
 					},
-					"repairCost": 120
+					"repairCost": 120,
+					"tierDown": "fortt2_fortrampt2"
 				},
 				"rifleait3": {
 					"name": "Rifle Garrison (Tier 3)",
@@ -5865,7 +5896,8 @@ const gameData = {
 					"cost": {
 						"concrete": 15
 					},
-					"repairCost": 120
+					"repairCost": 120,
+					"tierDown": "fortt2_rifleait2"
 				}
 			}
 		},
@@ -5952,6 +5984,7 @@ const gameData = {
 				"groundmaterials": 75
 			},
 			"repairCost": 100,
+			"tierUp": "foundation01t3",
 			"upgrades": {
 				"foundation01t3": {
 					"name": "Concrete Foundation (1x1)",
@@ -5965,7 +5998,8 @@ const gameData = {
 						"concrete": 5
 					},
 					"maxHealth": 3850,
-					"repairCost": 100
+					"repairCost": 100,
+					"tierDown": "foundation_1x1"
 				}
 			}
 		},
@@ -6062,6 +6096,7 @@ const gameData = {
 				"groundmaterials": 115
 			},
 			"repairCost": 100,
+			"tierUp": "foundation011x2t3",
 			"upgrades": {
 				"foundation011x2t3": {
 					"name": "Concrete Foundation (1x2)",
@@ -6075,7 +6110,8 @@ const gameData = {
 						"concrete": 10
 					},
 					"maxHealth": 3850,
-					"repairCost": 100
+					"repairCost": 100,
+					"tierDown": "foundation_1x2"
 				}
 			}
 		},
@@ -6195,6 +6231,7 @@ const gameData = {
 				"groundmaterials": 150
 			},
 			"repairCost": 100,
+			"tierUp": "foundation012x2t3",
 			"upgrades": {
 				"foundation012x2t3": {
 					"name": "Concrete Foundation (2x2)",
@@ -6208,7 +6245,8 @@ const gameData = {
 						"concrete": 15
 					},
 					"maxHealth": 3850,
-					"repairCost": 100
+					"repairCost": 100,
+					"tierDown": "foundation_2x2"
 				}
 			}
 		},
@@ -6268,6 +6306,7 @@ const gameData = {
 				"groundmaterials": 75
 			},
 			"repairCost": 100,
+			"tierUp": "foundation02t3",
 			"upgrades": {
 				"foundation02t3": {
 					"name": "Concrete Foundation Corner (1x1)",
@@ -6281,7 +6320,8 @@ const gameData = {
 						"concrete": 5
 					},
 					"maxHealth": 3850,
-					"repairCost": 100
+					"repairCost": 100,
+					"tierDown": "foundation_corner"
 				}
 			}
 		},
@@ -6422,6 +6462,7 @@ const gameData = {
 				"cloth": 25
 			},
 			"repairCost": 25,
+			"tierUp": "gatet2",
 			"upgrades": {
 				"gatet2": {
 					"name": "Gate (Tier 2)",
@@ -6464,7 +6505,9 @@ const gameData = {
 						"cloth": 50
 					},
 					"maxHealth": 1000,
-					"repairCost": 50
+					"repairCost": 50,
+					"tierDown": "gatet1",
+					"tierUp": "gatet1_gatet3"
 				},
 				"gatet3": {
 					"name": "Gate (Tier 3)",
@@ -6507,7 +6550,8 @@ const gameData = {
 						"concrete": 15
 					},
 					"maxHealth": 3000,
-					"repairCost": 75
+					"repairCost": 75,
+					"tierDown": "gatet1_gatet2"
 				}
 			}
 		},
@@ -10565,6 +10609,7 @@ const gameData = {
 				"sandbagmaterials": 3
 			},
 			"repairCost": 10,
+			"tierUp": "sandbagfullspline",
 			"upgrades": {
 				"sandbagfullspline": {
 					"name": "Sandbag Wall",
@@ -10577,7 +10622,8 @@ const gameData = {
 						"sandbagmaterials": 3
 					},
 					"maxHealth": 1600,
-					"repairCost": 30
+					"repairCost": 30,
+					"tierDown": "sandbaghalfspline"
 				}
 			}
 		},
@@ -11787,6 +11833,7 @@ const gameData = {
 			],
 			"maxHealth": 1500,
 			"repairCost": 90,
+			"tierUp": "trenchconnectort2",
 			"upgrades": {
 				"trenchconnectort1": {
 					"reference": "trenchconnectort1"
@@ -11838,7 +11885,9 @@ const gameData = {
 			"cost": {
 				"cloth": 60
 			},
-			"repairCost": 60
+			"repairCost": 60,
+			"tierUp": "trenchconnectort3",
+			"tierDown": "trenchconnectort1"
 		},
 		"trenchconnectort3": {
 			"name": "Trench Connector (Tier 3)",
@@ -11879,7 +11928,8 @@ const gameData = {
 			"cost": {
 				"concrete": 15
 			},
-			"repairCost": 120
+			"repairCost": 120,
+			"tierDown": "trenchconnectort2"
 		},
 		"trenchempt1": {
 			"name": "Trench Emplacement (Tier 1)",
@@ -12024,6 +12074,7 @@ const gameData = {
 			],
 			"maxHealth": 1500,
 			"repairCost": 75,
+			"tierUp": "trenchempt2",
 			"upgrades": {
 				"trenchempt1": {
 					"reference": "trenchempt1"
@@ -12170,7 +12221,9 @@ const gameData = {
 			"cost": {
 				"cloth": 50
 			},
-			"repairCost": 50
+			"repairCost": 50,
+			"tierUp": "trenchempt3",
+			"tierDown": "trenchempt1"
 		},
 		"trenchempt3": {
 			"name": "Trench Emplacement (Tier 3)",
@@ -12306,7 +12359,8 @@ const gameData = {
 			"cost": {
 				"concrete": 10
 			},
-			"repairCost": 80
+			"repairCost": 80,
+			"tierDown": "trenchempt2"
 		},
 		"trencht1": {
 			"name": "Trench (Tier 1)",
@@ -12380,6 +12434,7 @@ const gameData = {
 			],
 			"maxHealth": 1500,
 			"repairCost": 75,
+			"tierUp": "trencht2",
 			"upgrades": {
 				"trencht1": {
 					"reference": "trencht1"
@@ -12461,6 +12516,8 @@ const gameData = {
 				"cloth": 50
 			},
 			"repairCost": 50,
+			"tierUp": "trencht3",
+			"tierDown": "trencht1",
 			"upgrades": {
 				"trencht1": {
 					"reference": "trencht1"
@@ -12542,6 +12599,7 @@ const gameData = {
 				"concrete": 10
 			},
 			"repairCost": 80,
+			"tierDown": "trencht2",
 			"upgrades": {
 				"trencht1": {
 					"reference": "trencht1"
@@ -12728,6 +12786,7 @@ const gameData = {
 				"cloth": 15
 			},
 			"repairCost": 15,
+			"tierUp": "wallsplinet2",
 			"upgrades": {
 				"wallsplinet2": {
 					"name": "Wall (Tier 2)",
@@ -12770,7 +12829,9 @@ const gameData = {
 						"cloth": 30
 					},
 					"maxHealth": 1000,
-					"repairCost": 30
+					"repairCost": 30,
+					"tierDown": "wallsplinet1",
+					"tierUp": "wallsplinet1_wallsplinet3"
 				},
 				"wallsplinet3": {
 					"name": "Wall (Tier 3)",
@@ -12813,7 +12874,8 @@ const gameData = {
 						"concrete": 15
 					},
 					"maxHealth": 3000,
-					"repairCost": 75
+					"repairCost": 75,
+					"tierDown": "wallsplinet1_wallsplinet2"
 				}
 			}
 		},

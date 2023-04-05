@@ -287,6 +287,56 @@ function iterateUpgradeCodeNames(dirPath) {
                                 }
                             }
                             */
+                            if (uProperty.Properties.UpgradeStructureCodeName && uProperty.Properties.UpgradeStructureCodeName !== 'None') {
+                                const downgradeCodeName = uProperty.Properties.CodeName.toLowerCase();
+                                const upgradeCodeName = uProperty.Properties.UpgradeStructureCodeName.toLowerCase();
+                                let downgradeId, upgradeId;
+                                if (!downgradeCodeName.includes('destroyed')) {
+                                    for (const [codeName, structureData] of Object.entries(structureList)) {
+                                        if (codeName === downgradeCodeName) {
+                                            downgradeId = structureData.id;
+                                        }
+                                        if (codeName === upgradeCodeName) {
+                                            upgradeId = structureData.id;
+                                        }
+                                        if (structureData.upgrades) {
+                                            for (const [codeName, upgradeData] of Object.entries(structureData.upgrades)) {
+                                                if (!upgradeData.reference) {
+                                                    if (codeName === downgradeCodeName) {
+                                                        downgradeId = `${structureData.id}_${upgradeData.id}`;
+                                                    }
+                                                    if (codeName === upgradeCodeName) {
+                                                        upgradeId = `${structureData.id}_${upgradeData.id}`;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        if (downgradeId && upgradeId) {
+                                            break;
+                                        }
+                                    }
+                                    for (const [codeName, structureData] of Object.entries(structureList)) {
+                                        if (codeName === downgradeCodeName) {
+                                            structureData.tierUp = upgradeCodeName;
+                                        }
+                                        if (codeName === upgradeCodeName) {
+                                            structureData.tierDown = downgradeCodeName;
+                                        }
+                                        if (structureData.upgrades) {
+                                            for (const [codeName, upgradeData] of Object.entries(structureData.upgrades)) {
+                                                if (!upgradeData.reference) {
+                                                    if (upgradeId && codeName === downgradeCodeName) {
+                                                        structureData.upgrades[downgradeCodeName].tierUp = upgradeId;
+                                                    }
+                                                    if (downgradeId && codeName === upgradeCodeName) {
+                                                        structureData.upgrades[upgradeCodeName].tierDown = downgradeId;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                         break;
                 }
@@ -461,6 +511,8 @@ async function iterateStructures(dirPath) {
                                     '_productionLength': structureData._productionLength,
                                     'production': structureData.production,
                                     'productionScaling': structureData.productionScaling,
+                                    'tierUp': structureData.tierUp,
+                                    'tierDown': structureData.tierDown,
                                     'AssemblyItems': structure.AssemblyItems,
                                     'ConversionEntries': structure.ConversionEntries,
                                     'upgrades': structureData.upgrades

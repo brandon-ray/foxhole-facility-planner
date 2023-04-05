@@ -2279,11 +2279,11 @@ try {
         game.loadSave(game.getSaveData(true), true);
     }
 
-    game.upgradeSelected = function(upgrade) {
+    game.exchangeSelected = function(dataKey) {
         let entity = game.getSelectedEntity();
         let bData = entity?.building;
         if (bData) {
-            let upgradeKey = upgrade?.key;
+            let upgradeKey = typeof dataKey === 'string' ? dataKey : dataKey?.key;
             if (upgradeKey && bData.parent?.key && upgradeKey === entity.building.key) {
                 upgradeKey = bData.parent.key;
             }

@@ -416,7 +416,7 @@ Vue.component('app-menu-building-selected', {
         },
         changeUpgrade: function(upgrade) {
             this.bmc();
-            game.upgradeSelected(upgrade);
+            game.exchangeSelected(upgrade);
         },
         changeBaseUpgrade: function(tree, key) {
             this.bmc();
@@ -656,10 +656,13 @@ Vue.component('app-menu-building-selected', {
         <template v-if="game.getSelectedEntities().length === 1">
             <div v-if="entity.building && entity.building.upgrades" class="settings-option-wrapper upgrade-list">
                 <div class="settings-title">
-                    <button v-if="entity.building?.parentKey" type="button" class="title-button return-button" v-on:click="changeUpgrade(entity.building.parent)" title="Go to Previous Tier" @mouseenter="bme()" style="padding: 1px 2px;">
+                    <button v-if="entity.building?.tierDown ?? entity.building?.parentKey" type="button" class="title-button return-button" @click="changeUpgrade(entity.building.tierDown ?? entity.building.parent)" title="Go to Previous Tier" @mouseenter="bme()" style="padding: 1px 2px;">
                         <div class="btn-small m-1"><i class="fa fa-angle-double-down" aria-hidden="true"></i></div>
                     </button>
                     {{hoverUpgradeName ?? (entity.building.upgradeName ?? (entity.building.upgrades[entity.building.key]?.name ?? 'No Upgrade Selected'))}}
+                    <button v-if="entity.building?.tierUp" type="button" class="title-button return-button attach-right" @click="changeUpgrade(entity.building.tierUp)" title="Go to Next Tier" @mouseenter="bme()" style="padding: 1px 2px;">
+                        <div class="btn-small m-1"><i class="fa fa-angle-double-up" aria-hidden="true"></i></div>
+                    </button>
                 </div>
                 <button class="upgrade-button" v-for="upgrade in entity.building.upgrades" :class="{'selected-upgrade': (entity.building.parent && entity.building.key === entity.building.parent.key + '_' + upgrade.key) || entity.building.key === upgrade.key}"
                     @mouseenter="showUpgradeHover(upgrade); bme()" @mouseleave="showUpgradeHover()" @click="changeUpgrade(upgrade)">

@@ -41,7 +41,10 @@ const game_asset_list = {
                 building.cost = buildingCost;
             }
 
-            parentData.push(Object.assign({}, building));
+            parentData.push(Object.assign({
+                tierUp: undefined,
+                tierDown: undefined
+            }, building));
             Object.assign(building, ...parentData);
             building.parent = window.objectData.buildings[building.parentKey];
         }
