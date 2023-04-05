@@ -541,6 +541,9 @@ class DraggableContainer extends PIXI.Container {
             this.points = [];
             if (objData.handlePoint) {
                 this.addPoint(0, 0);
+                if (!this.building?.isBezier && objData.handlePoint.y) {
+                    objData.handlePoint.y = 0;
+                }
                 this.addPoint(objData.handlePoint.x, objData.handlePoint.y, undefined, objData.handlePoint.rotation);
             } else {
                 for (const point of (objData.handlePoints ?? objData.railPoints)) {

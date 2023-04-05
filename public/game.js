@@ -95,6 +95,7 @@ const game = {
         showFooterInfo: false,
         selectedToolbelt: 0,
         toolbelts: {},
+        toolbeltMode: 0,
         toolbeltFilters: {
             showUpgradesAsBuildings: false,
             selectedTier: 3,
@@ -544,11 +545,13 @@ try {
             }
         }
         for (const unionEntity of unionEntities) {
-            for (const entitySocket of unionEntity.sockets) {
-                for (const entityId of Object.keys(entitySocket.connections)) {
-                    const connectedEntity = game.getEntityById(entityId);
-                    if (connectedEntity?.building?.canUnion) {
-                        unionEntity.setUnion(connectedEntity);
+            if (unionEntity.sockets) {
+                for (const entitySocket of unionEntity.sockets) {
+                    for (const entityId of Object.keys(entitySocket.connections)) {
+                        const connectedEntity = game.getEntityById(entityId);
+                        if (connectedEntity?.building?.canUnion) {
+                            unionEntity.setUnion(connectedEntity);
+                        }
                     }
                 }
             }
@@ -2280,58 +2283,60 @@ try {
     }
 
     game.exchangeSelected = function(dataKey) {
-        let entity = game.getSelectedEntity();
-        let bData = entity?.building;
-        if (bData) {
-            let upgradeKey = typeof dataKey === 'string' ? dataKey : dataKey?.key;
-            if (upgradeKey && bData.parent?.key && upgradeKey === entity.building.key) {
-                upgradeKey = bData.parent.key;
-            }
-            let clone = game.createObject(upgradeKey ?? entity.building.key, entity.x, entity.y, entity.z, entity.rotation, entity.id, false);
-            if (upgradeKey) {
-                let position = { x: clone.x, y: clone.y };
-                if (entity.building?.positionOffset) {
-                    position.x -= ((entity.building.positionOffset.x ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
-                    position.y -= ((entity.building.positionOffset.y ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
+        for (const selectedEntity of selectedEntities) {
+            let bData = selectedEntity?.building;
+            if (bData) {
+                let upgradeKey = dataKey?.key;
+                if (upgradeKey && bData.parent?.key && upgradeKey === selectedEntity.building.key) {
+                    upgradeKey = bData.parent.key;
                 }
-                if (clone.building?.positionOffset) {
-                    position.x += ((clone.building.positionOffset.x ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
-                    position.y += ((clone.building.positionOffset.y ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
+                let clone = game.createObject(upgradeKey ?? dataKey ?? selectedEntity.building.key, selectedEntity.x, selectedEntity.y, selectedEntity.z, selectedEntity.rotation, selectedEntity.id, false);
+                if (upgradeKey) {
+                    let position = { x: clone.x, y: clone.y };
+                    if (selectedEntity.building?.positionOffset) {
+                        position.x -= ((selectedEntity.building.positionOffset.x ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
+                        position.y -= ((selectedEntity.building.positionOffset.y ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
+                    }
+                    if (clone.building?.positionOffset) {
+                        position.x += ((clone.building.positionOffset.x ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
+                        position.y += ((clone.building.positionOffset.y ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
+                    }
+                    position = Math.rotateAround(clone, position);
+                    clone.position.set(position.x, position.y);
                 }
-                position = Math.rotateAround(clone, position);
-                clone.position.set(position.x, position.y);
-            }
-            clone.locked = entity.locked;
-            clone.selectionArea.tint = clone.locked ? COLOR_RED : COLOR_WHITE;
-            let objData = {
-                upgrading: true
-            };
-            entity.onSave(objData);
-            clone.onLoad(objData);
-            clone.afterLoad(objData);
-            game.selectEntity(clone);
-            if (entity.sockets) {
-                for (const entitySocket of entity.sockets) {
-                    if (clone.sockets) {
-                        let foundSocket = false;
-                        for (const cloneSocket of clone.sockets) {
-                            if (entitySocket.socketData.id === cloneSocket.socketData.id) {
-                                foundSocket = true;
-                                break;
+                clone.locked = selectedEntity.locked;
+                clone.selectionArea.tint = clone.locked ? COLOR_RED : COLOR_WHITE;
+                let objData = {
+                    upgrading: true
+                };
+                selectedEntity.onSave(objData);
+                clone.onLoad(objData);
+                clone.afterLoad(objData);
+                game.selectEntity(clone);
+                if (upgradeKey && selectedEntity.sockets) {
+                    for (const entitySocket of selectedEntity.sockets) {
+                        if (clone.sockets) {
+                            let foundSocket = false;
+                            for (const cloneSocket of clone.sockets) {
+                                if (entitySocket.socketData.id === cloneSocket.socketData.id) {
+                                    foundSocket = true;
+                                    break;
+                                }
+                            }
+                            if (foundSocket) {
+                                continue;
                             }
                         }
-                        if (foundSocket) {
-                            continue;
-                        }
+                        entitySocket.removeConnections();
                     }
-                    entitySocket.removeConnections();
+                    selectedEntity.sockets = null;
+                }
+                selectedEntity.remove();
+                if (typeof dataKey === 'string') {
+                    clone.attemptReconnections(true, false);
                 }
             }
-            entity.sockets = null;
-            entity.remove();
-            return clone;
         }
-        return null;
     }
 
     // Returns null = No buildings locked, 0 = Some buildings locked, 1 = All buildings locked.
@@ -3184,6 +3189,13 @@ try {
                             selectedEntity.selectionArea.visible = false;
                         }
                         if (selectionRotation) {
+                            if (!selectedEntity.rotationData) {
+                                selectedEntity.rotationData = {
+                                    x: selectedEntity.x,
+                                    y: selectedEntity.y,
+                                    rotation: selectedEntity.rotation
+                                }
+                            }
                             let rotatedPosition = Math.rotateAround(selectionRotation, selectedEntity.rotationData, rotationAngle);
                             selectedEntity.x = rotatedPosition.x;
                             selectedEntity.y = rotatedPosition.y;

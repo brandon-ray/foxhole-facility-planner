@@ -622,7 +622,12 @@ Vue.component('app-game-toolbelt', {
                         game.updateSettings();
                         this.refresh();
                     } else {
-                        game.createObject(item.subtype);
+                        const selectedEntities = game.getSelectedEntities().length;
+                        if (!selectedEntities || !game.settings.toolbeltMode || (game.settings.toolbeltMode === 1 && selectedEntities > 1)) {
+                            game.createObject(item.subtype);
+                        } else if (game.settings.toolbeltMode) {
+                            game.exchangeSelected(item.subtype);
+                        }
                         clearTimeout(this.activeItemTimeoutId);
                         this.activeItemIndex = index;
                         this.activeItemTimeoutId = setTimeout(() => {

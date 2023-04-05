@@ -5984,7 +5984,7 @@ const gameData = {
 				"groundmaterials": 75
 			},
 			"repairCost": 100,
-			"tierUp": "foundation01t3",
+			"tierUp": "foundation_1x1_foundation01t3",
 			"upgrades": {
 				"foundation01t3": {
 					"name": "Concrete Foundation (1x1)",
@@ -6096,7 +6096,7 @@ const gameData = {
 				"groundmaterials": 115
 			},
 			"repairCost": 100,
-			"tierUp": "foundation011x2t3",
+			"tierUp": "foundation_1x2_foundation011x2t3",
 			"upgrades": {
 				"foundation011x2t3": {
 					"name": "Concrete Foundation (1x2)",
@@ -6231,7 +6231,7 @@ const gameData = {
 				"groundmaterials": 150
 			},
 			"repairCost": 100,
-			"tierUp": "foundation012x2t3",
+			"tierUp": "foundation_2x2_foundation012x2t3",
 			"upgrades": {
 				"foundation012x2t3": {
 					"name": "Concrete Foundation (2x2)",
@@ -6306,7 +6306,7 @@ const gameData = {
 				"groundmaterials": 75
 			},
 			"repairCost": 100,
-			"tierUp": "foundation02t3",
+			"tierUp": "foundation_corner_foundation02t3",
 			"upgrades": {
 				"foundation02t3": {
 					"name": "Concrete Foundation Corner (1x1)",
@@ -6462,7 +6462,7 @@ const gameData = {
 				"cloth": 25
 			},
 			"repairCost": 25,
-			"tierUp": "gatet2",
+			"tierUp": "gatet1_gatet2",
 			"upgrades": {
 				"gatet2": {
 					"name": "Gate (Tier 2)",
@@ -10609,7 +10609,7 @@ const gameData = {
 				"sandbagmaterials": 3
 			},
 			"repairCost": 10,
-			"tierUp": "sandbagfullspline",
+			"tierUp": "sandbaghalfspline_sandbagfullspline",
 			"upgrades": {
 				"sandbagfullspline": {
 					"name": "Sandbag Wall",
@@ -12786,7 +12786,7 @@ const gameData = {
 				"cloth": 15
 			},
 			"repairCost": 15,
-			"tierUp": "wallsplinet2",
+			"tierUp": "wallsplinet1_wallsplinet2",
 			"upgrades": {
 				"wallsplinet2": {
 					"name": "Wall (Tier 2)",

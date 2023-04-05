@@ -154,7 +154,10 @@ const game_asset_list = {
                 if (!upgrade.reference) {
                     appendGameAssets(upgrade);
 
-                    let upgradeBuilding = Object.assign({}, building, upgrade, {
+                    let upgradeBuilding = Object.assign({}, building, {
+                        tierUp: undefined,
+                        tierDown: undefined
+                    }, upgrade, {
                         parentKey: undefined
                     });
                     upgradeBuilding.parent = building;

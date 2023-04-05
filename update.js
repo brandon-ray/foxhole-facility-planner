@@ -317,10 +317,10 @@ function iterateUpgradeCodeNames(dirPath) {
                                     }
                                     for (const [codeName, structureData] of Object.entries(structureList)) {
                                         if (codeName === downgradeCodeName) {
-                                            structureData.tierUp = upgradeCodeName;
+                                            structureData.tierUp = upgradeId;
                                         }
                                         if (codeName === upgradeCodeName) {
-                                            structureData.tierDown = downgradeCodeName;
+                                            structureData.tierDown = downgradeId;
                                         }
                                         if (structureData.upgrades) {
                                             for (const [codeName, upgradeData] of Object.entries(structureData.upgrades)) {

@@ -1233,6 +1233,14 @@ Vue.component('app-menu-settings', {
         </div>
         <div class="settings-option-wrapper">
             <div class="settings-title">Building Settings</div>
+            <label v-if="game.settings.enableExperimental" class="app-input-label" title="Changes behavior of the toolbelt hotkeys. By default, hotkeys will spawn a new object if nothing is selected.">
+                <i class="fa fa-wrench" aria-hidden="true"></i> Toolbelt Mode
+                <select class="app-input" v-model.number="game.settings.toolbeltMode" @change="game.updateSettings()">
+                    <option :value="0">Create Only</option>
+                    <option value="1">Modify Single</option>
+                    <option value="2">Modify Selection</option>
+                </select>
+            </label>
             <label class="app-input-label">
                 <i class="fa fa-sitemap" aria-hidden="true"></i> Show Base Production Recipes
                 <input class="app-input" type="checkbox" v-model="game.settings.showParentProductionList" @change="game.updateSettings()">
