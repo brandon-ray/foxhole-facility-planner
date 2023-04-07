@@ -5660,7 +5660,7 @@ const gameData = {
 						"max": 600,
 						"arc": 60
 					},
-					"sortLayer": "upgrade",
+					"sortLayer": "upgrade2",
 					"hitArea": [
 						{
 							"shape": [ -29.83,70.67,29.7,70.3,29.2,77.52,25.45,85.45,-23.64,85.45,-29.83,78.31 ]
