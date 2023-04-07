@@ -164,7 +164,7 @@ const game_asset_list = {
                     upgradeBuilding.upgradeName = upgrade.name;
                     upgradeBuilding.name = building.name + ' (' + upgrade.name + ')';
 
-                    let parentCost = upgradeBuilding.prevUpgradeKey ? window.objectData.buildings[upgradeBuilding.prevUpgradeKey]?.cost : building.cost;
+                    let parentCost = upgradeBuilding.tierDown ? window.objectData.buildings[upgradeBuilding.tierDown]?.cost : building.cost;
                     let upgradeBuildingCost = Object.assign({}, parentCost);
                     if (upgradeBuilding.cost) {
                         for (const [resource, amount] of Object.entries(upgradeBuilding.cost)) {
