@@ -643,10 +643,28 @@ Vue.component('app-menu-building-selected', {
                 </label>
             </div>
         </template>
-        <div v-else class="settings-option-wrapper text-center">
-            <div class="settings-title">
+        <div v-else class="settings-option-wrapper">
+            <div class="settings-title text-center">
                 ({{game.getSelectedEntities().length}}) Buildings Selected
             </div>
+            <template v-if="game.selectionData">
+                <div class="app-input-label settings-option-row">
+                    <i class="fa fa-arrows" aria-hidden="true"></i> Position X:
+                    <input class="app-input float-right" type="number" v-model.number="game.selectionData.x" @input="game.updateSelected()">
+                    <button class="btn-small m-0 mr-1 float-right" type="button" @click="game.cameraTo(game.selectionData)" title="Go to Position"><i class="fa fa-crosshairs" aria-hidden="true"></i></button>
+                </div>
+                <div class="app-input-label settings-option-row">
+                    <i class="fa fa-arrows" aria-hidden="true"></i> Position Y:
+                    <input class="app-input float-right" type="number" v-model.number="game.selectionData.y" @input="game.updateSelected()">
+                    <button class="btn-small m-0 mr-1 float-right" type="button" @click="game.cameraTo(game.selectionData)" title="Go to Position"><i class="fa fa-crosshairs" aria-hidden="true"></i></button>
+                </div>
+                <div class="app-input-label settings-option-row">
+                    <i class="fa fa-repeat" aria-hidden="true"></i> Rotation:
+                    <input class="app-input float-right" type="number" v-model.number="game.selectionData.rotationDegrees" @input="game.updateSelected()">
+                    <button class="btn-small m-0 mr-1 float-right" type="button" title="Rotate 45 degrees" @click="game.rotateSelected(Math.PI / 4)"><i class="fa fa-repeat" aria-hidden="true"></i></button>&nbsp;
+                    <button class="btn-small m-0 mr-1 float-right" type="button" title="Rotate -45 degrees"@click="game.rotateSelected(-Math.PI / 4)"><i class="fa fa-undo" aria-hidden="true"></i></button>&nbsp;
+                </div>
+            </template>
             <div class="text-button-wrapper">
                 <button class="text-button" type="button" v-on:click="game.downloadSave(true)" @mouseenter="bme()">
                     <i class="fa fa-save"></i> Export Selection

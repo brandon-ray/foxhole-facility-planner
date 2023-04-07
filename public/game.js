@@ -146,13 +146,12 @@ const game = {
             }
         }
     },
-    isPlayScreen: false
+    isPlayScreen: false,
+    playMode: false
 };
 
 game.defaultSettings = JSON.parse(JSON.stringify(game.settings));
 game.defaultProject = JSON.parse(JSON.stringify(game.project));
-
-game.playMode = false;
 
 function escapeHtml(str) {
     if (str && str.replace) {
@@ -269,6 +268,7 @@ try {
     let selectedEntities = [];
     let followEntity = null;
     let pickupSelectedEntities = false;
+    let rotateSelectedEntities = false;
     let pickupTime = null;
     let pickupPosition = null;
     let ignoreMousePickup = true;
@@ -581,6 +581,79 @@ try {
         }
     };
 
+    game.updateSelected = function(rotation, attemptReconnections, removeConnections = true) {
+        if (selectedEntities.length && (rotation || typeof game.selectionData.rotationDegrees === 'number')) {
+            game.selectionData.rotation = Math.angleNormalized(rotation !== undefined ? rotation : (Math.deg2rad(game.selectionData.rotationDegrees) - game.selectionData.origin.rotationOffset));
+            if (rotation) {
+                game.resetSelectionData(true);
+            }
+            const rotationAngle = Math.angleNormalized(game.selectionData.rotation - game.selectionData.origin.rotation);
+            for (const entity of selectedEntities) {
+                if (entity.selectionData) {
+                    const rotatedPosition = Math.rotateAround(game.selectionData, {
+                        x: game.selectionData.x + entity.selectionData.x,
+                        y: game.selectionData.y + entity.selectionData.y
+                    }, rotationAngle);
+                    entity.x = rotatedPosition.x;
+                    entity.y = rotatedPosition.y;
+                    entity.rotation = Math.angleNormalized(entity.selectionData.rotation + rotationAngle);
+                    if (removeConnections && entity.sockets && (!rotation || !entity.building?.emplaced)) {
+                        entity.removeConnections(undefined, true);
+                    }
+                    if (pickupSelectedEntities) {
+                        entity.pickupOffset = {
+                            x: snappedMX - entity.x,
+                            y: snappedMY - entity.y
+                        };
+                        delete entity.prevPosition;
+                        delete entity.prevRotation;
+                    }
+                }
+            }
+            if (attemptReconnections) {
+                for (const entity of selectedEntities) {
+                    if (entity.sockets) {
+                        entity.attemptReconnections(removeConnections);
+                    }
+                }
+            }
+            game.saveStateChanged = true;
+        }
+    };
+
+    game.resetSelectionData = function(keepPreviousData = false, preserveRotation = false) {
+        if (selectedEntities.length) {
+            const centerPos = game.getSelectedEntitiesCenter();
+            const selectionData = Object.assign({}, keepPreviousData ? game.selectionData : undefined, {
+                x: centerPos.x.round(3),
+                y: centerPos.y.round(3)
+            });
+            let rotation = null;
+            if (!keepPreviousData) {
+                for (const selectedEntity of selectedEntities) {
+                    if (rotation !== false) {
+                        if (rotation === null) {
+                            rotation = selectedEntity.rotation;
+                        } else if (rotation !== selectedEntity.rotation) {
+                            rotation = false;
+                        }
+                    }
+                    selectedEntity.selectionData = {
+                        x: selectedEntity.x - centerPos.x,
+                        y: selectedEntity.y - centerPos.y,
+                        rotation: selectedEntity.rotation
+                    };
+                }
+                selectionData.rotation = rotation || 0;
+                selectionData.origin = Object.assign({}, selectionData);
+                selectionData.origin.rotationOffset = preserveRotation ? ((game.selectionData?.origin?.rotationOffset ?? 0) + (game.selectionData?.rotation ?? 0)) : 0;
+            }
+            selectionData.rotationDegrees = Math.rad2deg(Math.angleNormalized(Math.angleDifference(selectionData.origin.rotation, selectionData.rotation) + selectionData.origin.rotationOffset)).round(3);
+            game.selectionData = selectionData;
+        }
+        game.updateSelectedBuildingMenu();
+    };
+
     game.updateSettings = function() {
         try {
             if (window.localStorage) {
@@ -739,7 +812,7 @@ try {
                         entities.forEach(entity => {
                             game.addSelectedEntity(entity, false);
                         });
-                        game.updateSelectedBuildingMenu();
+                        game.resetSelectionData();
                         break;
                     case 67: // C
                         game.cloneSelected();
@@ -868,7 +941,7 @@ try {
     }
 
     game.isMovingSelected = function() {
-        return (pickupSelectedEntities && !ignoreMousePickup) || selectionRotation;
+        return (pickupSelectedEntities && !ignoreMousePickup) || rotateSelectedEntities;
     }
 
     game.activateToolbeltSlot = function(index, swapBelt = false) {
@@ -1341,7 +1414,7 @@ try {
                     centerPos.y = Math.round(centerPos.y / gridSize) * gridSize;
                 }
                 game.setPickupEntities(true, false, centerPos, true);
-                game.updateSelectedBuildingMenu();
+                game.resetSelectionData();
                 game.refreshStats();
             } else if (!ignoreConfirmation) {
                 game.zoomToEntitiesCenter();
@@ -1390,6 +1463,11 @@ try {
             };
         }
         return ents.mid;
+    };
+
+    // TODO: Save result so we're not recalculating for selectionData.
+    game.getSelectedEntitiesCenter = function(isSelection) {
+        return game.getEntitiesCenter(selectedEntities, isSelection);
     };
 
     game.zoomToEntitiesCenter = function() {
@@ -1458,7 +1536,7 @@ try {
             selectedEntities.push(entity);
             entity.onSelect();
             if (!noMenuUpdate) {
-                game.updateSelectedBuildingMenu();
+                game.resetSelectionData();
                 game.refreshStats();
             }
             return true;
@@ -1480,7 +1558,7 @@ try {
                 game.setPickupEntities(false);
             } 
             if (!noMenuUpdate) {
-                game.updateSelectedBuildingMenu();
+                game.resetSelectionData();
                 game.refreshStats();
             }
             return true;
@@ -1515,7 +1593,7 @@ try {
             }
             selectedEntities = [];
             if (!noMenuUpdate) {
-                game.updateSelectedBuildingMenu();
+                game.resetSelectionData();
                 game.refreshStats();
             }
             return true;
@@ -1779,7 +1857,7 @@ try {
                 }
             });
             if (selectedChange) {
-                game.updateSelectedBuildingMenu();
+                game.resetSelectionData();
                 game.refreshStats();
             }
         }
@@ -2280,7 +2358,7 @@ try {
 
     game.cloneSelected = function() {
         game.loadSave(game.getSaveData(true), true);
-    }
+    };
 
     game.exchangeSelected = function(dataKey) {
         for (const selectedEntity of selectedEntities) {
@@ -2337,7 +2415,7 @@ try {
                 }
             }
         }
-    }
+    };
 
     // Returns null = No buildings locked, 0 = Some buildings locked, 1 = All buildings locked.
     game.getSelectedLockState = function() {
@@ -2353,7 +2431,7 @@ try {
             return locked !== 0;
         });
         return locked;
-    }
+    };
 
     game.lockSelected = function() {
         let locked = game.getSelectedLockState();
@@ -2371,7 +2449,7 @@ try {
             game.setPickupEntities(false);
         }
         game.buildingSelectedMenuComponent?.refresh(true);
-    }
+    };
 
     game.moveSelected = function(x, y, snapped) {
         if (selectedEntities.length && game.getSelectedLockState() === null) {
@@ -2405,43 +2483,12 @@ try {
             game.saveStateChanged = true;
             game.buildingSelectedMenuComponent?.refresh(true);
         }
-    }
+    };
 
-    // TODO: Add support for flipping trains.
-    game.rotateSelected = function (angle) {
-        if (selectedEntities.length && game.getSelectedLockState() === null) {
-            const selectionCenter = game.getEntitiesCenter(selectedEntities);
-            for (let i = 0; i < selectedEntities.length; i++) {
-                let selectedEntity = selectedEntities[i];
-        
-                let rotatedPosition = Math.rotateAround(
-                    selectionCenter,
-                    { x: selectedEntity.x, y: selectedEntity.y },
-                    angle
-                );
-        
-                selectedEntity.x = rotatedPosition.x;
-                selectedEntity.y = rotatedPosition.y;
-                selectedEntity.rotation = Math.angleNormalized(
-                    selectedEntity.rotation + angle
-                );
-        
-                if (selectedEntity.sockets) {
-                    selectedEntity.attemptReconnections();
-                }
-
-                if (pickupSelectedEntities) {
-                    selectedEntities.forEach(entity => {
-                        entity.pickupOffset = {
-                            x: gmx - entity.x,
-                            y: gmy - entity.y
-                        };
-                        delete entity.prevPosition;
-                        delete entity.prevRotation;
-                    });
-                }
-            }
-            game.saveStateChanged = true;
+    game.rotateSelected = function(rotationOffset) {
+        if (game.selectionData && game.getSelectedLockState() === null) {
+            game.resetSelectionData(false, true);
+            game.updateSelected(game.selectionData.rotation + rotationOffset, true);
         }
     };
 
@@ -2681,7 +2728,8 @@ try {
     let lastCameraZoom;
     let g_TICK = 10;
     let g_Time = 0;
-    let selectionRotation = null;
+    let snappedMX;
+    let snappedMY;
     function update() {
         requestAnimationFrame(update);
 
@@ -2899,48 +2947,41 @@ try {
             }
         }
 
-        if (mouseDown[2] && !game.selectedHandlePoint) {
-            if (!selectionRotation && game.getSelectedLockState() === null) {
-                let rotationOffset = null;
+        let mouseRotationOffset;
+        if (!selectionArea.visible && mouseDown[2] && !game.selectedHandlePoint && selectedEntities.length) {
+            const mouseAngle = Math.angleBetween(game.selectionData, { x: gmx, y: gmy });
+            if (!rotateSelectedEntities && game.getSelectedLockState() === null) {
                 selectedEntities.forEach(selectedEntity => {
-                    if (rotationOffset !== false) {
-                        if (rotationOffset === null) {
-                            rotationOffset = selectedEntity.rotation;
-                        } else if (rotationOffset !== selectedEntity.rotation) {
-                            rotationOffset = false;
-                        }
-                    }
                     if (selectedEntity.sockets && !selectedEntity.building?.emplaced) {
                         selectedEntity.removeConnections(undefined, true);
                     }
-                    selectedEntity.rotationData = {
-                        x: selectedEntity.x,
-                        y: selectedEntity.y,
-                        rotation: selectedEntity.rotation
-                    }
                 });
-                selectionRotation = game.getEntitiesCenter(selectedEntities); // Get center of selection.
-                selectionRotation.angle = Math.angleBetween({ x: selectionRotation.x, y: selectionRotation.y }, { x: gmx, y: gmy }); // Angle of mouse from the center of selection.
-                selectionRotation.offset = rotationOffset;
+                game.resetSelectionData(false, true);
+                rotateSelectedEntities = true;
+                game.selectionData.prevRotation = game.selectionData.rotation;
+                game.selectionData.mouseAngle = mouseAngle; // Angle of mouse from the center of selection.
             }
-        } else if (selectionRotation) {
-            selectionRotation = null;
-        }
-        let rotationAngle;
-        if (selectionRotation) {
-            rotationAngle = Math.angleBetween(selectionRotation, { x: gmx, y: gmy }) - selectionRotation.angle; // Get the angle of the mouse from the center and subtract the angle of the selection from it.
-            if (game.settings.enableSnapRotation) {
-                let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ?? 15);
-                rotationAngle = Math.round(rotationAngle / snapRotationDegrees) * snapRotationDegrees; // Snap the angle of the selection.
-                if (typeof selectionRotation.offset === 'number') {
-                    rotationAngle += (Math.round(selectionRotation.offset / snapRotationDegrees) * snapRotationDegrees) - selectionRotation.offset; // Subtract the difference to snap entities with the same rotation to grid.
+            if (rotateSelectedEntities) {
+                mouseRotationOffset = mouseAngle - game.selectionData.mouseAngle; // Get the angle of the mouse from the center and subtract the angle of the selection from it.
+                if (game.settings.enableSnapRotation) {
+                    let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ?? 15);
+                    mouseRotationOffset = Math.round(mouseRotationOffset / snapRotationDegrees) * snapRotationDegrees; // Snap the angle of the selection.
+                    if (typeof game.selectionData.prevRotation === 'number') {
+                        mouseRotationOffset += (Math.round(game.selectionData.prevRotation / snapRotationDegrees) * snapRotationDegrees) - game.selectionData.prevRotation; // Subtract the difference to snap entities with the same rotation to grid.
+                    }
                 }
             }
-            rotationAngle = Math.angleNormalized(rotationAngle);
+        } else if (rotateSelectedEntities) {
+            rotateSelectedEntities = false;
+            selectedEntities.forEach(selectedEntity => {
+                if (selectedEntity.sockets) {
+                    selectedEntity.attemptReconnections();
+                }
+            });
         }
 
         // TODO: Check for mouse pickup but for right click instead.
-        if (selectionRotation || pickupSelectedEntities) {
+        if (pickupSelectedEntities || rotateSelectedEntities) {
             game.buildingSelectedMenuComponent?.refresh(true);
             if (!game.selectedHandlePoint && (!ignoreMousePickup || (Date.now()-pickupTime > 250 || Math.distanceBetween(pickupPosition, {x: gmx, y: gmy}) > 20))) {
                 if (ignoreMousePickup) {
@@ -2961,7 +3002,8 @@ try {
                     }
                 }
                 ignoreMousePickup = false;
-                let snappedMX = gmx, snappedMY = gmy;
+                snappedMX = gmx;
+                snappedMY = gmy;
                 if (game.settings.enableGrid || keys[16]) {
                     let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
                     if (!pickupPosition) {
@@ -2976,185 +3018,189 @@ try {
                     snappedMY = pickupPosition.y - (Math.round(mYDiff / gridSize) * gridSize);
                 }
 
-                let pickupEntity = game.getSelectedEntity();
-                if (pickupEntity?.isTrain) {
-                    pickupEntity.currentTrack = null;
-                    pickupEntity.currentTrackT = null;
-                    pickupEntity.trackVelocity = 0;
-                }
-
-                let connectionEstablished = false;
-                if (!selectionRotation && selectedEntities.length) {
-                    for (let i = 0; i < selectedEntities.length; i++) {
-                        let selectedEntity = selectedEntities[i];
-                        if (connectionEstablished && connectionEstablished !== true && selectedEntity !== connectionEstablished) {
-                            if (!selectedEntity.prevPosition) {
-                                selectedEntity.prevPosition = {
-                                    x: selectedEntity.x,
-                                    y: selectedEntity.y
+                if (rotateSelectedEntities) {
+                    game.updateSelected(game.selectionData.prevRotation + mouseRotationOffset);
+                } else {
+                    let pickupEntity = game.getSelectedEntity();
+                    if (pickupEntity?.isTrain) {
+                        pickupEntity.currentTrack = null;
+                        pickupEntity.currentTrackT = null;
+                        pickupEntity.trackVelocity = 0;
+                    }
+                    
+                    let connectionEstablished = false;
+                    if (selectedEntities.length) {
+                        for (let i = 0; i < selectedEntities.length; i++) {
+                            let selectedEntity = selectedEntities[i];
+                            if (connectionEstablished && connectionEstablished !== true && selectedEntity !== connectionEstablished) {
+                                if (!selectedEntity.prevPosition) {
+                                    selectedEntity.prevPosition = {
+                                        x: selectedEntity.x,
+                                        y: selectedEntity.y
+                                    }
                                 }
-                            }
-                            if (isNaN(selectedEntity.prevRotation)) {
-                                selectedEntity.prevRotation = selectedEntity.rotation;
-                            }
-                            const offsetX = connectionEstablished.prevPosition.x - connectionEstablished.x;
-                            const offsetY = connectionEstablished.prevPosition.y - connectionEstablished.y;
-                            const offsetRotation = Math.angleDifference(connectionEstablished.prevRotation, connectionEstablished.rotation);
-                            const rotatedPosition = Math.rotateAround(connectionEstablished.prevPosition, selectedEntity.prevPosition, offsetRotation);
-                            selectedEntity.position.set(rotatedPosition.x - offsetX, rotatedPosition.y - offsetY);
-                            selectedEntity.rotation = selectedEntity.prevRotation + offsetRotation;
-                        }
-                        if (selectedEntity.building?.canSnap || selectedEntity.isTrain) {
-                            for (let j = 0; j < entities.length; j++) {
-                                let entity = entities[j];
-                                if (!entity.valid || !entity.visible || entity === selectedEntity || entity.type !== 'building' || entity.selected || !((selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain || pickupEntity?.building?.canSnapAlongBezier) || (selectedEntity.building?.emplaced && entity.building?.emplaced) || Math.distanceBetween(selectedEntity, entity.mid) > 1000) {
-                                    continue;
+                                if (isNaN(selectedEntity.prevRotation)) {
+                                    selectedEntity.prevRotation = selectedEntity.rotation;
                                 }
-                                if (selectedEntity.subtype === entity.subtype || (selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain || (pickupEntity && entity.subtype && pickupEntity.building?.canSnapAlongBezier === entity.subtype)) {
-                                    const mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
-                                    if ((selectedEntity.building?.canSnap || selectedEntity.isTrain) && (selectedEntity.building?.canSnapStructureType !== false || selectedEntity.subtype !== entity.subtype)) {
-                                        if (selectedEntity.sockets && entity.sockets) {
-                                            let frontSocket = null, nearestSocket = null, nearestSocketDist = null;
-                                            const connectEntitiesBySockets = function(fromSocket, toSocket) {
-                                                fromSocket.setConnection(entity.id, toSocket);
-                                                if (!connectionEstablished) {
-                                                    if (selectedEntity.building?.snapNearest) {
-                                                        selectedEntity.removeConnections(fromSocket.socketData.id, true, true);
-                                                    }
-    
-                                                    if (!selectedEntity.prevPosition) {
-                                                        selectedEntity.prevPosition = {
-                                                            x: selectedEntity.x,
-                                                            y: selectedEntity.y
+                                const offsetX = connectionEstablished.prevPosition.x - connectionEstablished.x;
+                                const offsetY = connectionEstablished.prevPosition.y - connectionEstablished.y;
+                                const offsetRotation = Math.angleDifference(connectionEstablished.prevRotation, connectionEstablished.rotation);
+                                const rotatedPosition = Math.rotateAround(connectionEstablished.prevPosition, selectedEntity.prevPosition, offsetRotation);
+                                selectedEntity.position.set(rotatedPosition.x - offsetX, rotatedPosition.y - offsetY);
+                                selectedEntity.rotation = selectedEntity.prevRotation + offsetRotation;
+                            }
+                            if (selectedEntity.building?.canSnap || selectedEntity.isTrain) {
+                                for (let j = 0; j < entities.length; j++) {
+                                    let entity = entities[j];
+                                    if (!entity.valid || !entity.visible || entity === selectedEntity || entity.type !== 'building' || entity.selected || !((selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain || pickupEntity?.building?.canSnapAlongBezier) || (selectedEntity.building?.emplaced && entity.building?.emplaced) || Math.distanceBetween(selectedEntity, entity.mid) > 1000) {
+                                        continue;
+                                    }
+                                    if (selectedEntity.subtype === entity.subtype || (selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain || (pickupEntity && entity.subtype && pickupEntity.building?.canSnapAlongBezier === entity.subtype)) {
+                                        const mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
+                                        if ((selectedEntity.building?.canSnap || selectedEntity.isTrain) && (selectedEntity.building?.canSnapStructureType !== false || selectedEntity.subtype !== entity.subtype)) {
+                                            if (selectedEntity.sockets && entity.sockets) {
+                                                let frontSocket = null, nearestSocket = null, nearestSocketDist = null;
+                                                const connectEntitiesBySockets = function(fromSocket, toSocket) {
+                                                    fromSocket.setConnection(entity.id, toSocket);
+                                                    if (!connectionEstablished) {
+                                                        if (selectedEntity.building?.snapNearest) {
+                                                            selectedEntity.removeConnections(fromSocket.socketData.id, true, true);
                                                         }
-                                                    }
-    
-                                                    if (isNaN(selectedEntity.prevRotation)) {
-                                                        selectedEntity.prevRotation = selectedEntity.rotation;
-                                                    }
-            
-                                                    let selectedEntityPosition = app.cstage.toLocal({x: toSocket.x, y: toSocket.y}, entity, undefined, true);
-                                                    const selectedEntityRotation = Math.angleNormalized(-Math.angleDifference(entity.rotation + toSocket.rotation + Math.PI, fromSocket.rotation));
-                                                    if (fromSocket.x !== 0 || fromSocket.y !== 0) {
-                                                        const fromSocketDist = Math.distanceBetween({ x: 0, y: 0 }, fromSocket);
-                                                        const socketAngleDiff = Math.angleBetween({ x: 0, y: 0 }, fromSocket) + Math.PI;
-                                                        selectedEntityPosition = Math.extendPoint(selectedEntityPosition, fromSocketDist, selectedEntityRotation + socketAngleDiff);
-                                                    }
-    
-                                                    selectedEntity.position.set(selectedEntityPosition.x, selectedEntityPosition.y);
-                                                    if (!selectedEntity.building?.emplaced) {
-                                                        selectedEntity.rotation = selectedEntityRotation;
-                                                    }
-    
-                                                    connectionEstablished = selectedEntity;
-                                                    return true;
-                                                }
-                                            }
-                                            for (let k = 0; k < entity.sockets.length; k++) {
-                                                let entitySocket = entity.sockets[k];
-                                                if (!entitySocket.socketData.temp) {
-                                                    let socketDistance = Math.distanceBetween(mousePos, entitySocket);
-                                                    // Checks socket distance is close, closer than previous socket distance, or hovering a building with a power socket.
-                                                    if (selectedEntity.building?.snapNearest || ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || selectedEntity.building?.snapGrab && entity.canGrab())) {
-                                                        for (let l = 0; l < selectedEntity.sockets.length; l++) {
-                                                            let selectedSocket = selectedEntity.sockets[l];
-                                                            if (selectedSocket.socketData.ignoreSnap || (selectedEntities.length === 1 && selectedEntity.building?.hasHandle && selectedSocket.socketData.id !== 0)) {
-                                                                continue;
+        
+                                                        if (!selectedEntity.prevPosition) {
+                                                            selectedEntity.prevPosition = {
+                                                                x: selectedEntity.x,
+                                                                y: selectedEntity.y
                                                             }
-                                                            if (entitySocket.canConnect(selectedSocket)) {
-                                                                const sSocketConnections = Object.keys(selectedSocket.connections).length;
-                                                                const eSocketConnections = Object.keys(entitySocket.connections).length;
-                                                                const connectedSocket = sSocketConnections ? entity.getSocketById(selectedSocket.connections[entity.id]) : null;
-                                                                if (!sSocketConnections || selectedSocket.connections[entity.id] === entitySocket.socketData.id || connectedSocket?.socketData.temp) {
-                                                                    if (!eSocketConnections || (eSocketConnections < (entitySocket.socketData.connectionLimit ?? 1)) || entitySocket.connections[selectedEntity.id] === selectedSocket.socketData.id) {
-                                                                        if (selectedEntity.building?.snapNearest || selectedEntities.length > 1) {
-                                                                            let selectedSocketPos;
-                                                                            if (connectionEstablished) {
-                                                                                selectedSocketPos = app.cstage.toLocal({x: selectedSocket.x, y: selectedSocket.y}, selectedEntity, undefined, true);
-                                                                            } else {
-                                                                                selectedSocketPos = Math.rotateAround({x: 0, y: 0}, selectedSocket, (selectedEntity.prevRotation ?? selectedEntity.rotation));
-                                                                                selectedSocketPos.x += gmx - selectedEntity.pickupOffset.x;
-                                                                                selectedSocketPos.y += gmy - selectedEntity.pickupOffset.y;
+                                                        }
+        
+                                                        if (isNaN(selectedEntity.prevRotation)) {
+                                                            selectedEntity.prevRotation = selectedEntity.rotation;
+                                                        }
+                
+                                                        let selectedEntityPosition = app.cstage.toLocal({x: toSocket.x, y: toSocket.y}, entity, undefined, true);
+                                                        const selectedEntityRotation = Math.angleNormalized(-Math.angleDifference(entity.rotation + toSocket.rotation + Math.PI, fromSocket.rotation));
+                                                        if (fromSocket.x !== 0 || fromSocket.y !== 0) {
+                                                            const fromSocketDist = Math.distanceBetween({ x: 0, y: 0 }, fromSocket);
+                                                            const socketAngleDiff = Math.angleBetween({ x: 0, y: 0 }, fromSocket) + Math.PI;
+                                                            selectedEntityPosition = Math.extendPoint(selectedEntityPosition, fromSocketDist, selectedEntityRotation + socketAngleDiff);
+                                                        }
+        
+                                                        selectedEntity.position.set(selectedEntityPosition.x, selectedEntityPosition.y);
+                                                        if (!selectedEntity.building?.emplaced) {
+                                                            selectedEntity.rotation = selectedEntityRotation;
+                                                        }
+        
+                                                        connectionEstablished = selectedEntity;
+                                                        return true;
+                                                    }
+                                                }
+                                                for (let k = 0; k < entity.sockets.length; k++) {
+                                                    let entitySocket = entity.sockets[k];
+                                                    if (!entitySocket.socketData.temp) {
+                                                        let socketDistance = Math.distanceBetween(mousePos, entitySocket);
+                                                        // Checks socket distance is close, closer than previous socket distance, or hovering a building with a power socket.
+                                                        if (selectedEntity.building?.snapNearest || ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || selectedEntity.building?.snapGrab && entity.canGrab())) {
+                                                            for (let l = 0; l < selectedEntity.sockets.length; l++) {
+                                                                let selectedSocket = selectedEntity.sockets[l];
+                                                                if (selectedSocket.socketData.ignoreSnap || (selectedEntities.length === 1 && selectedEntity.building?.hasHandle && selectedSocket.socketData.id !== 0)) {
+                                                                    continue;
+                                                                }
+                                                                if (entitySocket.canConnect(selectedSocket)) {
+                                                                    const sSocketConnections = Object.keys(selectedSocket.connections).length;
+                                                                    const eSocketConnections = Object.keys(entitySocket.connections).length;
+                                                                    const connectedSocket = sSocketConnections ? entity.getSocketById(selectedSocket.connections[entity.id]) : null;
+                                                                    if (!sSocketConnections || selectedSocket.connections[entity.id] === entitySocket.socketData.id || connectedSocket?.socketData.temp) {
+                                                                        if (!eSocketConnections || (eSocketConnections < (entitySocket.socketData.connectionLimit ?? 1)) || entitySocket.connections[selectedEntity.id] === selectedSocket.socketData.id) {
+                                                                            if (selectedEntity.building?.snapNearest || selectedEntities.length > 1) {
+                                                                                let selectedSocketPos;
+                                                                                if (connectionEstablished) {
+                                                                                    selectedSocketPos = app.cstage.toLocal({x: selectedSocket.x, y: selectedSocket.y}, selectedEntity, undefined, true);
+                                                                                } else {
+                                                                                    selectedSocketPos = Math.rotateAround({x: 0, y: 0}, selectedSocket, (selectedEntity.prevRotation ?? selectedEntity.rotation));
+                                                                                    selectedSocketPos.x += gmx - selectedEntity.pickupOffset.x;
+                                                                                    selectedSocketPos.y += gmy - selectedEntity.pickupOffset.y;
+                                                                                }
+                                                                                let entitySocketPos = app.cstage.toLocal({x: entitySocket.x, y: entitySocket.y}, entity, undefined, true);
+                                                                                if (Math.floor(Math.distanceBetween(selectedSocketPos, entitySocketPos)) >= (!connectionEstablished ? 35 : 3)) {
+                                                                                    continue;
+                                                                                }
+                                                                                let selectedSocketRot = Math.angleNormalized((selectedEntity.rotation + selectedSocket.rotation) - Math.PI);
+                                                                                let entitySocketRot = Math.angleNormalized(entity.rotation + entitySocket.rotation);
+                                                                                if (!Math.anglesWithinRange(entitySocketRot, selectedSocketRot, Math.PI / 8)) {
+                                                                                    continue;
+                                                                                }
+        
+                                                                                if (connectEntitiesBySockets(selectedSocket, entitySocket)) {
+                                                                                    i = -1;
+                                                                                }
+                                                                                break;
                                                                             }
-                                                                            let entitySocketPos = app.cstage.toLocal({x: entitySocket.x, y: entitySocket.y}, entity, undefined, true);
-                                                                            if (Math.floor(Math.distanceBetween(selectedSocketPos, entitySocketPos)) >= (!connectionEstablished ? 35 : 3)) {
-                                                                                continue;
-                                                                            }
-                                                                            let selectedSocketRot = Math.angleNormalized((selectedEntity.rotation + selectedSocket.rotation) - Math.PI);
-                                                                            let entitySocketRot = Math.angleNormalized(entity.rotation + entitySocket.rotation);
-                                                                            if (!Math.anglesWithinRange(entitySocketRot, selectedSocketRot, Math.PI / 8)) {
-                                                                                continue;
-                                                                            }
-    
-                                                                            if (connectEntitiesBySockets(selectedSocket, entitySocket)) {
-                                                                                i = -1;
-                                                                            }
+                                                                            
+                                                                            frontSocket = selectedSocket;
+                                                                            nearestSocket = entitySocket;
+                                                                            nearestSocketDist = socketDistance;
+                                                                            
                                                                             break;
                                                                         }
-                                                                        
-                                                                        frontSocket = selectedSocket;
-                                                                        nearestSocket = entitySocket;
-                                                                        nearestSocketDist = socketDistance;
-                                                                        
-                                                                        break;
                                                                     }
                                                                 }
                                                             }
                                                         }
                                                     }
                                                 }
+                                                if (nearestSocket && connectEntitiesBySockets(frontSocket, nearestSocket)) {
+                                                    i = -1;
+                                                }
                                             }
-                                            if (nearestSocket && connectEntitiesBySockets(frontSocket, nearestSocket)) {
-                                                i = -1;
-                                            }
-                                        }
-                                        if (!connectionEstablished && pickupEntity && entity.building?.isBezier && entity.bezier && ((pickupEntity.building?.isBezier && pickupEntity.building?.canSnapAlongBezier && entity.subtype === pickupEntity.subtype) || pickupEntity.isTrain || pickupEntity.building?.canSnapAlongBezier === entity.subtype)) {
-                                            const projection = entity.bezier?.project(mousePos);
-                                            if (projection.d <= Math.max(entity.building?.lineWidth ?? 0, 25)) {
-                                                if (pickupEntity && projection && ((!connectionEstablished && entity.bezier && entity.building.isBezier && entity.building.canSnapAlongBezier && selectedEntity.subtype === entity.subtype) ||
-                                                (selectedEntity.isTrain && entity.subtype === selectedEntity.building.vehicle.track) ||
-                                                (!pickupEntity.building?.isBezier && pickupEntity.building?.canSnapAlongBezier))) {
-                                                    let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity, undefined, true);
-                                                    let normal = entity.bezier.normal(projection.t);
-                                                    let angle = Math.angleBetween({x: 0, y: 0}, normal);
-                                                    selectedEntity.x = global.x;
-                                                    selectedEntity.y = global.y;
-                    
-                                                    let angleRight = entity.rotation + (angle - Math.PI/2) - Math.PI/2;
-                                                    let angleLeft = entity.rotation + (angle + Math.PI/2) - Math.PI/2;
-                                                    let rightDiff = Math.angleNormalized(angleRight - selectedEntity.rotation);
-                                                    let leftDiff = Math.angleNormalized(angleLeft - selectedEntity.rotation);
-                    
-                                                    if (isNaN(selectedEntity.prevRotation)) {
-                                                        selectedEntity.prevRotation = selectedEntity.rotation;
-                                                    }
-                    
-                                                    if (selectedEntity.isTrain) {
-                                                        selectedEntity.currentTrack = entity;
-                                                        selectedEntity.currentTrackT = projection.t;
-                                                    }
-                    
-                                                    if (rightDiff < leftDiff) {
-                                                        selectedEntity.rotation = angleRight + Math.PI/2;
-                                                    } else {
-                                                        selectedEntity.rotation = angleLeft + Math.PI/2;
-                                                    }
-                    
-                                                    if (!connectionEstablished && selectedEntity.sockets && (selectedEntity.subtype === 'rail_large_gauge' || selectedEntity.subtype === 'rail_small_gauge')) {
-                                                        for (let k = 0; k < selectedEntity.sockets.length; k++) {
-                                                            let selectedSocket = selectedEntity.sockets[k];
-                                                            if (selectedSocket.socketData.cap === 'front') {
-                                                                // TODO: Store this somewhere so we don't have to loop each time for sockets. There will only ever be one front and back socket for rails.
-                                                                selectedSocket.createConnection(entity, projection.x, projection.y, angle);
-                                                                break;
-                                                            }
+                                            if (!connectionEstablished && pickupEntity && entity.building?.isBezier && entity.bezier && ((pickupEntity.building?.isBezier && pickupEntity.building?.canSnapAlongBezier && entity.subtype === pickupEntity.subtype) || pickupEntity.isTrain || pickupEntity.building?.canSnapAlongBezier === entity.subtype)) {
+                                                const projection = entity.bezier?.project(mousePos);
+                                                if (projection.d <= Math.max(entity.building?.lineWidth ?? 0, 25)) {
+                                                    if (pickupEntity && projection && ((!connectionEstablished && entity.bezier && entity.building.isBezier && entity.building.canSnapAlongBezier && selectedEntity.subtype === entity.subtype) ||
+                                                    (selectedEntity.isTrain && entity.subtype === selectedEntity.building.vehicle.track) ||
+                                                    (!pickupEntity.building?.isBezier && pickupEntity.building?.canSnapAlongBezier))) {
+                                                        let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity, undefined, true);
+                                                        let normal = entity.bezier.normal(projection.t);
+                                                        let angle = Math.angleBetween({x: 0, y: 0}, normal);
+                                                        selectedEntity.x = global.x;
+                                                        selectedEntity.y = global.y;
+                        
+                                                        let angleRight = entity.rotation + (angle - Math.PI/2) - Math.PI/2;
+                                                        let angleLeft = entity.rotation + (angle + Math.PI/2) - Math.PI/2;
+                                                        let rightDiff = Math.angleNormalized(angleRight - selectedEntity.rotation);
+                                                        let leftDiff = Math.angleNormalized(angleLeft - selectedEntity.rotation);
+                        
+                                                        if (isNaN(selectedEntity.prevRotation)) {
+                                                            selectedEntity.prevRotation = selectedEntity.rotation;
                                                         }
-                                                    } else {
-                                                        selectedEntity.removeConnections();
+                        
+                                                        if (selectedEntity.isTrain) {
+                                                            selectedEntity.currentTrack = entity;
+                                                            selectedEntity.currentTrackT = projection.t;
+                                                        }
+                        
+                                                        if (rightDiff < leftDiff) {
+                                                            selectedEntity.rotation = angleRight + Math.PI/2;
+                                                        } else {
+                                                            selectedEntity.rotation = angleLeft + Math.PI/2;
+                                                        }
+                        
+                                                        if (!connectionEstablished && selectedEntity.sockets && (selectedEntity.subtype === 'rail_large_gauge' || selectedEntity.subtype === 'rail_small_gauge')) {
+                                                            for (let k = 0; k < selectedEntity.sockets.length; k++) {
+                                                                let selectedSocket = selectedEntity.sockets[k];
+                                                                if (selectedSocket.socketData.cap === 'front') {
+                                                                    // TODO: Store this somewhere so we don't have to loop each time for sockets. There will only ever be one front and back socket for rails.
+                                                                    selectedSocket.createConnection(entity, projection.x, projection.y, angle);
+                                                                    break;
+                                                                }
+                                                            }
+                                                        } else {
+                                                            selectedEntity.removeConnections();
+                                                        }
+                        
+                                                        connectionEstablished = true;
+                                                        break;
                                                     }
-                    
-                                                    connectionEstablished = true;
-                                                    break;
                                                 }
                                             }
                                         }
@@ -3163,51 +3209,30 @@ try {
                             }
                         }
                     }
-                }
-                if (!connectionEstablished) {
-                    for (let i = 0; i < selectedEntities.length; i++) {
-                        let selectedEntity = selectedEntities[i];
-                        if (!isNaN(selectedEntity.prevRotation)) {
-                            if (selectedEntity.sockets) {
-                                selectedEntity.removeConnections(undefined, true);
-                            }
-                            if (selectedEntity.prevPosition) {
-                                selectedEntity.x = selectedEntity.prevPosition.x;
-                                selectedEntity.y = selectedEntity.prevPosition.y;
-                                delete selectedEntity.prevPosition;
-                            }
-                            selectedEntity.rotation = selectedEntity.prevRotation;
-                            delete selectedEntity.prevRotation;
-                            if (selectedEntities.length === 1 && selectedEntity.building?.isBezier) {
-                                selectedEntity.pickupOffset = {
-                                    x: 0,
-                                    y: 0
-                                };
-                            }
-                        }
-                        if (selectedEntity.building && !selectedEntity.hasHandle && selectedEntity.selectionArea.visible) {
-                            selectedEntity.selectionArea.visible = false;
-                        }
-                        if (selectionRotation) {
-                            if (!selectedEntity.rotationData) {
-                                selectedEntity.rotationData = {
-                                    x: selectedEntity.x,
-                                    y: selectedEntity.y,
-                                    rotation: selectedEntity.rotation
+                    if (!connectionEstablished) {
+                        for (let i = 0; i < selectedEntities.length; i++) {
+                            let selectedEntity = selectedEntities[i];
+                            if (!isNaN(selectedEntity.prevRotation)) {
+                                if (selectedEntity.sockets) {
+                                    selectedEntity.removeConnections(undefined, true);
+                                }
+                                if (selectedEntity.prevPosition) {
+                                    selectedEntity.x = selectedEntity.prevPosition.x;
+                                    selectedEntity.y = selectedEntity.prevPosition.y;
+                                    delete selectedEntity.prevPosition;
+                                }
+                                selectedEntity.rotation = selectedEntity.prevRotation;
+                                delete selectedEntity.prevRotation;
+                                if (selectedEntities.length === 1 && selectedEntity.building?.isBezier) {
+                                    selectedEntity.pickupOffset = {
+                                        x: 0,
+                                        y: 0
+                                    };
                                 }
                             }
-                            let rotatedPosition = Math.rotateAround(selectionRotation, selectedEntity.rotationData, rotationAngle);
-                            selectedEntity.x = rotatedPosition.x;
-                            selectedEntity.y = rotatedPosition.y;
-                            selectedEntity.pickupOffset = {
-                                x: snappedMX - selectedEntity.x,
-                                y: snappedMY - selectedEntity.y
-                            };
-                            selectedEntity.rotation = Math.angleNormalized(selectedEntity.rotationData.rotation + rotationAngle);
-                            if (!isNaN(selectedEntity.prevRotation)) {
-                                selectedEntity.prevRotation = selectedEntity.rotation;
+                            if (selectedEntity.building && !selectedEntity.hasHandle && selectedEntity.selectionArea.visible) {
+                                selectedEntity.selectionArea.visible = false;
                             }
-                        } else {
                             selectedEntity.x = snappedMX - selectedEntity.pickupOffset.x;
                             selectedEntity.y = snappedMY - selectedEntity.pickupOffset.y;
                             if (selectedEntities.length === 1 && !selectedEntity.building?.ignoreSnapSettings && (game.settings.enableGrid || keys[16])) {
@@ -3255,7 +3280,7 @@ try {
             }
         }
 
-        if (game.saveStateChanged || pickupSelectedEntities) {
+        if (game.saveStateChanged || pickupSelectedEntities || rotateSelectedEntities) {
             for (const entity of entities) {
                 if (entity.valid) {
                     if (game.settings.enableExperimental && entity.rangeSprite) {
@@ -3266,9 +3291,10 @@ try {
                     }
                 }
             }
+            game.resetSelectionData(true);
         }
 
-        if (game.saveStateChanged && game.settings.enableHistory && !pickupSelectedEntities && !game.selectedHandlePoint && !selectionRotation) {
+        if (game.saveStateChanged && game.settings.enableHistory && !pickupSelectedEntities && !game.selectedHandlePoint && !rotateSelectedEntities) {
             game.saveStateChanged = false;
             game.updateSave();
         }
