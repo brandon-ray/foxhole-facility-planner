@@ -1,11 +1,18 @@
-function assetDir(str) {
-    return !str.startsWith('/games/foxhole/assets/') ? '/games/foxhole/assets/' + str : str;
+const game_asset_dir = '/games/foxhole/assets/';
+let texture_asset_path = game_asset_dir + 'game/Textures/';
+let preset_asset_path = game_asset_dir + 'presets/';
+function assetDir(str, dir = texture_asset_path) {
+    const index = str.indexOf('../');
+    if (index === -1) {
+        return str;
+    }
+    return str.substring(0, index) + dir + str.substring(index + 3);
 }
 
 const game_asset_keys = ['baseIcon', 'icon', 'texture', 'textureBorder', 'textureFrontCap', 'textureBackCap', 'texturePost'];
 const game_asset_list = {
-    trackswitch_active: assetDir('game/Textures/Structures/trackswitch_active.webp'),
-    trackswitch_inactive: assetDir('game/Textures/Structures/trackswitch_inactive.webp')
+    trackswitch_active: assetDir('../Structures/trackswitch_active.webp'),
+    trackswitch_inactive: assetDir('../Structures/trackswitch_inactive.webp')
 };
 
 (function() {
@@ -55,7 +62,7 @@ const game_asset_list = {
                         'provisional_garrison': {
                             name: 'Provisional Garrison',
                             description: 'A Provisional Garrison connects this base to nearby defensive structures. Defensive structures will deactivate if player activity is too low. This also allows Towns to be claimed towards the victory condition.',
-                            icon: assetDir('game/Textures/UI/Menus/IconFacilitiesProvisionalGarrison.webp'),
+                            icon: assetDir('../UI/Menus/IconFacilitiesProvisionalGarrison.webp'),
                             range: {
                                 type: 'garrison',
                                 max: building.baseGarrisonRadius
@@ -64,7 +71,7 @@ const game_asset_list = {
                         'small_garrison': {
                             name: 'Small Garrison',
                             description: 'A Small Garrison permanently connects this base to nearby defensive structures. A Small Garrison is required for upgrading the base to Tier 2.',
-                            icon: assetDir('game/Textures/UI/Menus/IconFacilitiesSmallGarrison.webp'),
+                            icon: assetDir('../UI/Menus/IconFacilitiesSmallGarrison.webp'),
                             range: {
                                 type: 'garrison',
                                 max: building.baseGarrisonRadius
@@ -73,7 +80,7 @@ const game_asset_list = {
                         'large_garrison': {
                             name: 'Large Garrison',
                             description: 'A Large Garrison permanently connects this base to nearby defensive structures. A Large Garrison required for upgrading the base to Tier 3.',
-                            icon: assetDir('game/Textures/UI/Menus/IconFacilitiesLargeGarrison.webp'),
+                            icon: assetDir('../UI/Menus/IconFacilitiesLargeGarrison.webp'),
                             range: {
                                 type: 'garrison',
                                 max: building.baseGarrisonRadius
@@ -103,8 +110,8 @@ const game_asset_list = {
             let asset = data[key];
             if (asset) {
                 if (typeof asset === 'object' && !Array.isArray(asset)) {
-                    asset = assetDir(asset.sheet);
-                    data[key].sheet = asset;
+                    asset = assetDir(asset.src);
+                    data[key].src = asset;
                 } else {
                     asset = assetDir(asset);
                     data[key] = asset;
@@ -230,9 +237,9 @@ const game_asset_list = {
     for (const [key, data] of Object.entries(gameData.presets)) {
         data.preset = true;
         data.category = (data.module && 'presets') || 'showcase';
-        data.dataFile = assetDir(`presets/${key}/preset.json`);
-        data.icon = assetDir(`presets/${key}/icon.webp`);
-        data.texture = assetDir(`presets/${key}/preview.webp`);
+        data.dataFile = assetDir(`../${key}/preset.json`, preset_asset_path);
+        data.icon = assetDir(`../${key}/icon.webp`, preset_asset_path);
+        data.texture = assetDir(`../${key}/preview.webp`, preset_asset_path);
         window.objectData.categories[data.category].buildings.push(data);
     }
 

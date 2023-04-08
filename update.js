@@ -15,35 +15,38 @@ let structureList = foxholeData.buildings;
 let upgradeList = {};
 let techList = {};
 let itemList = {
+    "diesel": {
+        "icon": "../UI/CustomIcons/ResourceFuelIcon.webp"
+    },
     "facilitymaterials4": {
-        "icon": "game/Textures/UI/ItemIcons/AssemblyMaterials1Icon.webp"
+        "icon": "../UI/ItemIcons/AssemblyMaterials1Icon.webp"
     },
     "facilitymaterials5": {
-        "icon": "game/Textures/UI/ItemIcons/AssemblyMaterials2Icon.webp"
+        "icon": "../UI/ItemIcons/AssemblyMaterials2Icon.webp"
     },
     "facilitymaterials6": {
-        "icon": "game/Textures/UI/ItemIcons/AssemblyMaterials3Icon.webp"
+        "icon": "../UI/ItemIcons/AssemblyMaterials3Icon.webp"
     },
     "facilitymaterials7": {
-        "icon": "game/Textures/UI/ItemIcons/AssemblyMaterials4Icon.webp"
+        "icon": "../UI/ItemIcons/AssemblyMaterials4Icon.webp"
     },
     "facilitymaterials8": {
-        "icon": "game/Textures/UI/ItemIcons/AssemblyMaterials5Icon.webp"
+        "icon": "../UI/ItemIcons/AssemblyMaterials5Icon.webp"
     },
     "oilcan": {
         "name": "Oil (Canned)",
         "description": "A raw viscous liquid that must be refined into fuel at Facilities.",
-        "icon": "game/Textures/UI/ItemIcons/Facilities/OilIcon.webp"
+        "icon": "../UI/ItemIcons/Facilities/OilIcon.webp"
     },
     "watercan": {
         "name": "Water (Canned)",
         "description": "Water... in a can!",
-        "icon": "game/Textures/UI/ItemIcons/WaterIcon.webp"
+        "icon": "../UI/ItemIcons/WaterIcon.webp"
     },
     "wood": {
         "name": "Refined Materials",
         "description": "Resource used for building advanced structures and producing special items.",
-        "icon": "game/Textures/UI/ItemIcons/RefinedMaterialsIcon.webp"
+        "icon": "../UI/ItemIcons/RefinedMaterialsIcon.webp"
     }
 };
 
@@ -120,7 +123,7 @@ const conversionEntriesMap = {
 function getLocalIcon(component) {
     let iconPath = component?.Icon?.ObjectPath ?? component?.Icon?.ResourceObject?.ObjectPath ?? component?.BrushOverride?.ResourceObject?.ObjectPath;
     if (iconPath) {
-        return `game/${iconPath.slice(12, -1)}webp`;
+        return `../${iconPath.slice(21, -1)}webp`;
     }
 }
 
@@ -184,7 +187,7 @@ function getValidMesh(meshes = {}, property) {
 function fetchTextureMeshes(objData, codeName, meshProperty, meshes) {
     if (objData && objData.texture && codeName && (meshProperty || meshes)) {
         try {
-            fs.accessSync('public/games/foxhole/assets/' + objData.texture, fs.constants.F_OK);
+            fs.accessSync(objData.texture.replace('../', './public/games/foxhole/assets/game/Textures/'), fs.constants.F_OK);
         } catch (err) {
             requiredMeshes[codeName] = meshes ?? getValidMesh(requiredMeshes[codeName], meshProperty);
         }
@@ -477,13 +480,12 @@ async function iterateStructures(dirPath) {
                                     'maxExtLength': structureData.maxExtLength,
                                     'maxRange': structure.MaxRange ? structure.MaxRange / METER_UNREAL_UNITS : undefined,
                                     'icon': structureData.icon ?? getLocalIcon(structure) ?? baseData.icon,
-                                    'texture': (typeof structureData.texture === 'string' || structureData.texture === null) ? structureData.texture : `game/Textures/Structures/${structureData.id}.webp`,
+                                    'texture': (typeof structureData.texture === 'string' || typeof structureData.texture === 'object' || structureData.texture === null) ? structureData.texture : `../Structures/${structureData.id}.webp`,
                                     'textureBorder': structureData.textureBorder,
                                     'textureFrontCap': structureData.textureFrontCap,
                                     'textureBackCap': structureData.textureBackCap,
                                     'texturePost': structureData.texturePost,
                                     'texturePostDist': structureData.texturePostDist,
-                                    'textureOffset': structureData.textureOffset,
                                     'buildOnFoundation': (structure.bIsBuiltOnFoundation ?? baseData.bIsBuiltOnFoundation) === true || undefined,
                                     'buildOnWater': (structure.bBuildOnWater ?? baseData.bBuildOnWater),
                                     'preventOnLandscape': (structure.bIsBuiltOnLandscape ?? baseData.bIsBuiltOnLandscape) === false || undefined,
@@ -518,9 +520,6 @@ async function iterateStructures(dirPath) {
                                 }
                                 if (structure.MaximumRange) {
                                     structureData.range.max = structure.MaximumRange / METER_UNREAL_UNITS;
-                                }
-                                if (structureData.texture) {
-                                    structureData.hitArea = await getStructureHitArea(structureData);
                                 }
                                 initializeStructureItems(structure);
                                 if (structureData.techId) {
@@ -561,7 +560,7 @@ async function iterateStructures(dirPath) {
                                             'hitArea': undefined,
                                             'baseIcon': storedModData?.baseIcon,
                                             'icon': getLocalIcon(modification),
-                                            'texture': typeof storedModData?.texture === 'string' || storedModData?.texture === null ? storedModData.texture : `game/Textures/Structures/${structureData.id}_${storedModData?.id}.webp`,
+                                            'texture': (typeof storedModData?.texture === 'string' || typeof storedModData?.texture === 'object' || storedModData?.texture === null) ? storedModData.texture : `../Structures/${structureData.id}_${storedModData?.id}.webp`,
                                             'textureBorder': storedModData?.textureBorder,
                                             'textureFrontCap': storedModData?.textureFrontCap,
                                             'textureBackCap': storedModData?.textureBackCap,
@@ -580,9 +579,6 @@ async function iterateStructures(dirPath) {
                                             'AssemblyItems': modificationData?.AssemblyItems,
                                             'ConversionEntries': modificationData?.ConversionEntries
                                             // There is a FuelCost variable which is never used here.
-                                        }
-                                        if (modificationData.texture) {
-                                            modificationData.hitArea = await getStructureHitArea(modificationData);
                                         }
                                         if (modificationData.techId) {
                                             techList[modificationData.techId] = {};
@@ -766,8 +762,8 @@ function iterateData(filePath, list, type) {
                         list[codeName] = {
                             name: data.DisplayName?.SourceString,
                             regionId: listItem.regionId,
-                            icon: `game/${data.Image.ObjectPath.replace('/Processed/', '/Icons/').slice(12, -1)}webp`,
-                            texture: `game/${data.Image.ObjectPath.slice(12, -1)}png`,
+                            icon: `../${data.Image.ObjectPath.replace('/Processed/', '/Icons/').slice(21, -1)}webp`,
+                            texture: `../${data.Image.ObjectPath.slice(21, -1)}png`,
                             gridCoord: {
                                 x: data.GridCoord.X > 10 ? data.GridCoord.X - 4294967296 : data.GridCoord.X,
                                 y: data.GridCoord.Y > 10 ? data.GridCoord.Y - 4294967296 : data.GridCoord.Y
@@ -983,25 +979,36 @@ function findFile(directory, fileName) {
 }
 
 const METER_PIXEL_SCALE = 52.8 / 32; // Meter in pixels of a texture divided by the width of a meter on the grid / board.
-async function getStructureHitArea(structureData) {
-    const shapes = structurePolygons[path.basename(structureData.texture, '.webp')];
-    if (shapes) {
-        const texture = await sharp('./public/games/foxhole/assets/' + structureData.texture).metadata();
-        if (texture) {
-            let hitAreaPolygons = [];
-            for (let i = 0; i < shapes.length; i++) {
-                const shape = shapes[i].shape;
-                let adjustedShape = [];
-                for (let i = 0; i < shape.length; i += 2) {
-                    adjustedShape.push(((shape[i] - ((structureData.textureOffset?.x ?? texture.width) / 2)) / METER_PIXEL_SCALE).round(2));
-                    adjustedShape.push(((shape[i + 1] - ((structureData.textureOffset?.y ?? texture.height) / 2)) / METER_PIXEL_SCALE).round(2));
+async function fetchTextureData(structureData) {
+    const texturePath = (typeof structureData.texture === 'string' && structureData.texture) || structureData.texture?.src;
+    if (texturePath && !structureData.texture?.speed) {
+        const texture = await sharp(texturePath.replace('../', './public/games/foxhole/assets/game/Textures/')).metadata();
+        structureData.texture = {
+            src: texturePath,
+            width: texture.width,
+            height: texture.height,
+            offset: structureData.texture.offset || (structureData.textureOffset && {
+                x: structureData.textureOffset?.x,
+                y: structureData.textureOffset?.y
+            })
+        }
+        const shapes = structurePolygons[path.basename(texturePath, '.webp')];
+        if (shapes) {
+            if (texture) {
+                let hitAreaPolygons = [];
+                for (let i = 0; i < shapes.length; i++) {
+                    const shape = shapes[i].shape;
+                    let adjustedShape = [];
+                    for (let i = 0; i < shape.length; i += 2) {
+                        adjustedShape.push(((shape[i] - ((structureData.texture.offset?.x ?? texture.width) / 2)) / METER_PIXEL_SCALE).round(2));
+                        adjustedShape.push(((shape[i + 1] - ((structureData.texture.offset?.y ?? texture.height) / 2)) / METER_PIXEL_SCALE).round(2));
+                    }
+                    hitAreaPolygons.push({ 'shape': `[ ${adjustedShape.join()} ]` });
                 }
-                hitAreaPolygons.push({ 'shape': `[ ${adjustedShape.join()} ]` });
+                structureData.hitArea = hitAreaPolygons;
             }
-            return hitAreaPolygons;
         }
     }
-    return undefined;
 }
 
 Number.prototype.round = function(n) {
@@ -1183,7 +1190,7 @@ async function updateData() {
                             }
                         });
                         /* Uncomment for structures that have predefined width/length/radius like bunkers, trenches, etc.
-                        structureList[structureName].textureOffset = {
+                        structureList[structureName].texture.offset = {
                             x: trimOrigin.x - (trimOrigin.x - origin.x),
                             y: trimOrigin.y - (trimOrigin.y - origin.y)
                         };
@@ -1270,6 +1277,15 @@ async function updateData() {
     for (const [codeName, techInfo] of Object.entries(techList)) {
         if (!Object.keys(techInfo).length) {
             delete techList[codeName];
+        }
+    }
+
+    for (const structure of Object.values(structureList)) {
+        await fetchTextureData(structure);
+        if (structure.upgrades) {
+            for (const upgrade of Object.values(structure.upgrades)) {
+                await fetchTextureData(upgrade);
+            }
         }
     }
 
