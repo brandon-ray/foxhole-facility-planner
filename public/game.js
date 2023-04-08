@@ -646,9 +646,9 @@ try {
                 }
                 selectionData.rotation = rotation || 0;
                 selectionData.origin = Object.assign({}, selectionData);
-                selectionData.origin.rotationOffset = preserveRotation ? ((game.selectionData?.origin?.rotationOffset ?? 0) + (game.selectionData?.rotation ?? 0)) : 0;
+                selectionData.origin.rotationOffset = (rotation === false && preserveRotation) ? ((game.selectionData?.origin?.rotationOffset ?? 0) + (game.selectionData?.rotation ?? 0)) : 0;
             }
-            selectionData.rotationDegrees = Math.rad2deg(Math.angleNormalized(Math.angleDifference(selectionData.origin.rotation, selectionData.rotation) + selectionData.origin.rotationOffset)).round(3);
+            selectionData.rotationDegrees = Math.rad2deg(Math.angleNormalized(rotation || (selectionData.rotation + selectionData.origin.rotationOffset))).round(3);
             game.selectionData = selectionData;
         }
         game.updateSelectedBuildingMenu();
