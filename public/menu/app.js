@@ -425,17 +425,22 @@ Vue.component('app-game-hub-popup', {
             });
         },
         handleBodyScroll: function() {
-            if (this.$refs.hubBody.scrollTop > 100) {
-                this.scrollTopButton = true;
-            } else {
-                this.scrollTopButton = false;
+            if (this.$refs.hubBody) {
+                if (this.$refs.hubBody.scrollTop > 100) {
+                    this.scrollTopButton = true;
+                } else {
+                    this.scrollTopButton = false;
+                }
             }
         },
         scrollToTop: function(instant = false) {
-            this.$refs.hubBody.scrollTo({
-                top: 0,
-                behavior: instant ? 'instant' : 'smooth'
-            });
+            this.scrollTopButton = false;
+            if (this.$refs.hubBody) {
+                this.$refs.hubBody.scrollTo({
+                    top: 0,
+                    behavior: instant ? 'instant' : 'smooth'
+                });
+            }
         },
         /*
         buildBuilding: function(building) {
