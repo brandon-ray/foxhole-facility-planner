@@ -10,10 +10,11 @@ function assetDir(str, dir = texture_asset_path) {
 }
 
 const game_asset_keys = ['baseIcon', 'icon', 'texture', 'textureBorder', 'textureFrontCap', 'textureBackCap', 'texturePost'];
-const game_asset_list = {
+const game_asset_required = {
     trackswitch_active: assetDir('../Structures/trackswitch_active.webp'),
     trackswitch_inactive: assetDir('../Structures/trackswitch_inactive.webp')
 };
+const game_asset_list = {};
 
 (function() {
     window.objectData = {

@@ -971,6 +971,10 @@ try {
             PIXI.Loader.shared.add(key, 'assets/' + asset_list[key]);
         }
 
+        for (let key in game_asset_required) {
+            PIXI.Loader.shared.add(key, game_asset_required[key]);
+        }
+
         if (!game.settings.lazyLoadTextures) {
             for (let key in game_asset_list) {
                 PIXI.Loader.shared.add(key, game_asset_list[key]);
