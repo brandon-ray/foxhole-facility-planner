@@ -56,7 +56,6 @@ const game = {
     services: {},
     settings: {
         quality: 'auto',
-        lazyLoadTextures: true,
         disableSound: false,
         disableHUD: false,
         enableAdvanced: false,
@@ -971,14 +970,8 @@ try {
             PIXI.Loader.shared.add(key, 'assets/' + asset_list[key]);
         }
 
-        for (let key in game_asset_required) {
-            PIXI.Loader.shared.add(key, game_asset_required[key]);
-        }
-
-        if (!game.settings.lazyLoadTextures) {
-            for (let key in game_asset_list) {
-                PIXI.Loader.shared.add(key, game_asset_list[key]);
-            }
+        for (let key in game_asset_list) {
+            PIXI.Loader.shared.add(key, game_asset_list[key]);
         }
 
         loadSounds();
@@ -2263,30 +2256,6 @@ try {
         if (entities.length > 0) {
             return 'Are you sure you want to leave?';
         }
-    };
-
-    game.fetchTexture = function(sprite, src, callback) {
-        const texture = game.resources[src]?.texture ?? PIXI.utils.TextureCache[src] ?? PIXI.Texture.from(src);
-        const onTextureLoad = () => {
-            sprite.texture = texture;
-            if (callback) {
-                callback(sprite, texture);
-            }
-        };
-        if (!game.resources[src] && !texture.hasLoaded) {
-            texture.baseTexture.on('loaded', () => {
-                texture.hasLoaded = true;
-                onTextureLoad();
-            });
-            return;
-        }
-        onTextureLoad();
-    };
-
-    game.createSprite = function(src, callback) {
-        const sprite = new PIXI.Sprite();
-        game.fetchTexture(sprite, src, callback);
-        return sprite;
     };
 
     game.setPickupEntities = function(pickup, ignoreOffset, position, ignoreLock) {

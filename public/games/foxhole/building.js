@@ -30,16 +30,15 @@ class FoxholeStructureSocket extends PIXI.Container {
                 this.pointer.rotation = -(parent.rotation + this.rotation);
                 parent.handleTick = true;
             } else if (parent.building?.textureBorder && !parent.building.trenchConnector) {
-                this.pointer = game.createSprite(parent.building.textureBorder, (sprite, texture) => {
-                    sprite.width = texture.width / METER_TEXTURE_PIXEL_SCALE;
-                    sprite.height = texture.height / METER_TEXTURE_PIXEL_SCALE;
-                });
+                let textureBorder = game.resources[parent.building.textureBorder].texture;
+                this.pointer = new PIXI.Sprite(textureBorder);
+                this.pointer.width = textureBorder.width / METER_TEXTURE_PIXEL_SCALE;
+                this.pointer.height = textureBorder.height / METER_TEXTURE_PIXEL_SCALE;
                 this.pointer.anchor.set(0.5, 1.0);
             } else if (this.socketData.texture) {
-                this.pointer = game.createSprite(this.socketData.texture, (sprite, texture) => {
-                    sprite.width = texture.width / METER_TEXTURE_PIXEL_SCALE;
-                    sprite.height = texture.height / METER_TEXTURE_PIXEL_SCALE;
-                });
+                this.pointer = new PIXI.Sprite(game.resources[this.socketData.texture].texture);
+                this.pointer.width = this.pointer.width / METER_TEXTURE_PIXEL_SCALE;
+                this.pointer.height = this.pointer.height / METER_TEXTURE_PIXEL_SCALE;
                 this.pointer.anchor.set(0.5, 0.5);
             }
             if (this.pointer) {
@@ -243,10 +242,10 @@ class FoxholeStructureSocket extends PIXI.Container {
             const connectedEntityIds = Object.keys(this.connections);
             visible = visible ?? connectedEntityIds.length === 0;
             if (this.socketData.textureAlt) {
-                game.fetchTexture(this.pointer, visible ? this.socketData.texture : this.socketData.textureAlt, (sprite, texture) => {
-                    sprite.width = texture.width / METER_TEXTURE_PIXEL_SCALE;
-                    sprite.height = texture.height / METER_TEXTURE_PIXEL_SCALE;
-                });
+                let texture = game.resources[visible ? this.socketData.texture : this.socketData.textureAlt].texture;
+                this.pointer.texture = texture;
+                this.pointer.width = texture.width / METER_TEXTURE_PIXEL_SCALE;
+                this.pointer.height = texture.height / METER_TEXTURE_PIXEL_SCALE;
                 visible = true;
             } else if (this.socketData.texture && !visible) {
                 if (connectedEntityIds.length === 1) {
@@ -284,30 +283,28 @@ class FoxholeStructure extends DraggableContainer {
 
         if (this.building.texture && !this.hasHandle) {
             let sprite;
-            if (this.building.texture.speed) {
-                sprite = game.createSprite(this.building.texture.src, (sprite, texture) => {
-                    this.sheet = game.loadSpritesheet(texture, this.building.texture.width, this.building.texture.height);
-                    sprite.texture = this.sheet[0][0];
-                    sprite.frameWidth = Math.floor(texture.width / this.building.texture.width);
-                    sprite.frameHeight = Math.floor(texture.height / this.building.texture.height);
-                });
+            if (typeof this.building.texture === 'object' && !Array.isArray(this.building.texture)) {
+                this.sheet = game.loadSpritesheet(game.resources[this.building.texture.sheet].texture, this.building.texture.width, this.building.texture.height);
+                sprite = new PIXI.Sprite(this.sheet[0][0]);
                 sprite.frameX = 0;
                 sprite.frameY = 0;
+                sprite.frameWidth = Math.floor(game.resources[this.building.texture.sheet].texture.width/this.building.texture.width);
+                sprite.frameHeight = Math.floor(game.resources[this.building.texture.sheet].texture.height/this.building.texture.height);
                 sprite.width = this.building.width * METER_BOARD_PIXEL_SIZE;
                 sprite.height = this.building.length * METER_BOARD_PIXEL_SIZE;
-            } else {
-                sprite = game.createSprite(this.building.texture.src);
-                sprite.frameWidth = this.building.texture.width;
-                sprite.frameHeight = this.building.texture.height;
+            } else if (game.resources[this.building.texture]) {
+                sprite = new PIXI.Sprite(game.resources[this.building.texture].texture);
+                sprite.frameWidth = game.resources[this.building.texture].texture.width;
+                sprite.frameHeight = game.resources[this.building.texture].texture.height;
                 sprite.width = sprite.frameWidth / METER_TEXTURE_PIXEL_SCALE;
                 sprite.height = sprite.frameHeight / METER_TEXTURE_PIXEL_SCALE;
             }
-            if (!this.building.texture.offset) {
+            if (!this.building.textureOffset) {
                 sprite.anchor.set(0.5);
             } else {
                 // TODO: Add support for percentages. <= 1 could set anchor so we don't need exact pixels.
-                sprite.x = (-this.building.texture.offset.x * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
-                sprite.y = (-this.building.texture.offset.y * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
+                sprite.x = (-this.building.textureOffset.x * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
+                sprite.y = (-this.building.textureOffset.y * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
             }
             this.sprite = sprite;
         }
@@ -325,13 +322,13 @@ class FoxholeStructure extends DraggableContainer {
         this.addChild(this.sprite);
 
         if (this.building.textureFrontCap) {
-            this.frontCap = game.createSprite(this.building.textureFrontCap);
+            this.frontCap = new PIXI.Sprite(game.resources[this.building.textureFrontCap].texture);
             this.frontCap.anchor.set(0, 0.5);
             this.addChild(this.frontCap);
         }
 
         if (this.building.textureBackCap) {
-            this.backCap = game.createSprite(this.building.textureBackCap);
+            this.backCap = new PIXI.Sprite(game.resources[this.building.textureBackCap].texture);
             this.backCap.anchor.set(1, 0.5);
             this.addChild(this.backCap);
         }
@@ -434,7 +431,7 @@ class FoxholeStructure extends DraggableContainer {
     tick(delta) {
         super.tick(delta);
 
-        if (this.sheet && this.visible && this.sprite.frameWidth && this.sprite.frameHeight) {
+        if (this.sheet && this.visible) {
             this.sprite.frameX += this.building.texture.speed ? this.building.texture.speed : 0.1;
             if (this.sprite.frameX >= this.sprite.frameWidth) {
                 this.sprite.frameX -= this.sprite.frameWidth;
@@ -1151,7 +1148,7 @@ class FoxholeStructure extends DraggableContainer {
             productionIcon.drawRect(-47, -47, 94, 94);
             productionIcon.endFill();
 
-            productionIcon.icon = game.createSprite(icon);
+            productionIcon.icon = new PIXI.Sprite(icon);
             productionIcon.icon.anchor.set(0.5);
             productionIcon.icon.width = 84;
             productionIcon.icon.height = 84;
@@ -1177,11 +1174,11 @@ class FoxholeStructure extends DraggableContainer {
                     if (production.id === id) {
                         if (production.output) {
                             for (const resource of Object.keys(production.output)) {
-                                createProductionIcon(window.objectData.resources[resource].icon);
+                                createProductionIcon(game.resources[window.objectData.resources[resource].icon].texture);
                             }
                         }
                         if (this.building.power > 0 || production.power > 0) {
-                            createProductionIcon('power_x128');
+                            createProductionIcon(game.resources.power_x128.texture);
                         }
                         const productionIcons = this.productionIcons.children;
                         if (productionIcons.length) {
@@ -1313,27 +1310,21 @@ class FoxholeStructure extends DraggableContainer {
 
                     this.sprite.hitArea = trapezoid;
 
-                    this.sprite.trapezoid.floor = new PIXI.TilingSprite(undefined, Math.distanceBetween(frontPoint, endPoint) + floorTexturePadding);
-                    game.fetchTexture(this.sprite.trapezoid.floor, this.building.texture.src, (sprite, texture) => {
-                        sprite.anchor.set((floorTexturePadding / texture.width) / 2, 0.5);
-                    });
+                    this.sprite.trapezoid.floor = new PIXI.TilingSprite(game.resources[this.building.texture].texture, Math.distanceBetween(frontPoint, endPoint) + floorTexturePadding);
+                    this.sprite.trapezoid.floor.anchor.set((floorTexturePadding / this.sprite.trapezoid.floor.width) / 2, 0.5);
                     this.sprite.trapezoid.floor.mask = floorMask;
                     this.sprite.trapezoid.floor.rotation = angle;
                     this.sprite.trapezoid.addChild(this.sprite.trapezoid.floor);
 
-                    const connectorTopBorder = new PIXI.TilingSprite(undefined, Math.distanceBetween(frontPoint1, endPoint2));
-                    game.fetchTexture(connectorTopBorder, this.building.textureBorder, (sprite, texture) => {
-                        sprite.height = texture.height;
-                    });
+                    const textureBorderHeight = game.resources[this.building.textureBorder].texture.height;
+
+                    const connectorTopBorder = new PIXI.TilingSprite(game.resources[this.building.textureBorder].texture, Math.distanceBetween(frontPoint1, endPoint2), textureBorderHeight);
                     connectorTopBorder.y = -floorHalfHeight;
                     connectorTopBorder.anchor.set(0, 0.5);
                     connectorTopBorder.rotation = Math.angleBetween(frontPoint1, endPoint2);
                     this.sprite.trapezoid.addChild(connectorTopBorder);
 
-                    const connectorBottomBorder = new PIXI.TilingSprite(undefined, Math.distanceBetween(frontPoint2, endPoint1));
-                    game.fetchTexture(connectorBottomBorder, this.building.textureBorder, (sprite, texture) => {
-                        sprite.height = texture.height;
-                    });
+                    const connectorBottomBorder = new PIXI.TilingSprite(game.resources[this.building.textureBorder].texture, Math.distanceBetween(frontPoint2, endPoint1), textureBorderHeight);
                     connectorBottomBorder.y = floorHalfHeight;
                     connectorBottomBorder.scale.y = -1;
                     connectorBottomBorder.anchor.set(0, 0.5);
@@ -1394,7 +1385,7 @@ class FoxholeStructure extends DraggableContainer {
 
                     const postRotation = Math.angleBetween(frontExtPoint, backExtPoint);
                     const createPost = (point, rotation = postRotation) => {
-                        const post = game.createSprite(this.building.texturePost);
+                        const post = new PIXI.Sprite(game.resources[this.building.texturePost].texture);
                         post.anchor.set(0.5);
                         this.posts.addChild(post);
                         if (point.rotation === undefined) {
@@ -1433,8 +1424,7 @@ class FoxholeStructure extends DraggableContainer {
                     const ropePoints = [];
                     generatePoints(ropePoints, frontPoint, frontExtPoint, 3);
                     generatePoints(ropePoints, backExtPoint, backPoint, 3, backPoint.rotation);
-                    this.sprite.rope = new PIXI.SimpleRope(game.resources.white.texture, ropePoints, METER_INVERSE_PIXEL_SCALE);
-                    game.fetchTexture(this.sprite.rope, this.building.texture.src);
+                    this.sprite.rope = new PIXI.SimpleRope(game.resources[this.building.texture].texture, ropePoints, METER_INVERSE_PIXEL_SCALE);
                     this.sprite.addChild(this.sprite.rope);
 
                     if (this.sockets) {
@@ -1544,10 +1534,8 @@ class FoxholeStructure extends DraggableContainer {
                     this.bezier = new Bezier(bezierPoints);
                     const lut = this.bezier.getLUT(Math.round(this.bezier.length()/16));
                     if (this.building.texture) {
-                        this.sprite.rope = new PIXI.SimpleRope(game.resources.white.texture, lut, METER_INVERSE_PIXEL_SCALE);
-                        game.fetchTexture(this.sprite.rope, this.building.texture.src, (sprite, texture) => {
-                            texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
-                        });
+                        game.resources[this.building.texture].texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
+                        this.sprite.rope = new PIXI.SimpleRope(game.resources[this.building.texture].texture, lut, METER_INVERSE_PIXEL_SCALE);
                         if (typeof this.building.color === 'number') {
                             this.sprite.rope.tint = this.building.color;
                         }

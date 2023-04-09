@@ -193,13 +193,13 @@ if (isMobile && !isPhoneApp) {
                             <button class="btn-small btn-float-left" :class="{ 'btn-active': settings.showToolbelt }" @click="settings.showToolbelt = !settings.showToolbelt; game.updateSettings()"><i class="fa fa-wrench" aria-hidden="true"></i></button>
                             Toolbelt
                         </label>
-                        <label v-if="game.settings.enableExperimental" class="btn-checkbox-wrapper">
-                            <button class="btn-small btn-float-left" :class="{ 'btn-active': regionSelectionVisible }" title="Toggle Region Selection" @click="regionSelectionVisible = !regionSelectionVisible"><i class="fa fa-map-o" aria-hidden="true"></i></button>
-                            Map
-                        </label>
                         <label class="btn-checkbox-wrapper">
                             <button class="btn-small btn-float-left" :class="{ 'btn-active': settings.enableStats }" @click="settings.enableStats = !settings.enableStats; game.updateSettings()"><i class="fa fa-bar-chart" aria-hidden="true"></i></button>
                             Stats
+                        </label>
+                        <label v-if="game.settings.enableExperimental" class="btn-checkbox-wrapper">
+                            <button class="btn-small btn-float-left" :class="{ 'btn-active': regionSelectionVisible }" title="Toggle Region Selection" @click="regionSelectionVisible = !regionSelectionVisible"><i class="fa fa-map-o" aria-hidden="true"></i></button>
+                            Map
                         </label>
                     </div>
                     <button class="btn-small" title="Toggle Fullscreen" @click="game.tryFullscreen()">
