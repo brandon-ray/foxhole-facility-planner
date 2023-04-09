@@ -194,10 +194,10 @@ Vue.component('app-menu-building-selected', {
             this.lockState = game.getSelectedLockState();
             let selectedEntity = game.getSelectedEntity();
             if (selectedEntity) {
-                if (selectedEntity.building?.textureOffset) {
+                if (selectedEntity.building?.texture.offset) {
                     this.debug.textureOffset = {
-                        x: selectedEntity.building.textureOffset?.x,
-                        y: selectedEntity.building.textureOffset?.y
+                        x: selectedEntity.building.texture.offset?.x,
+                        y: selectedEntity.building.texture.offset?.y
                     }
                 } else {
                     this.debug.textureOffset = null;
@@ -1146,20 +1146,16 @@ Vue.component('app-menu-settings', {
         <div class="settings-option-wrapper">
             <div class="settings-title">General Settings</div>
             <label class="app-input-label">
-                <i class="fa fa-picture-o" aria-hidden="true"></i> Graphics
-                <select class="app-input" v-model="game.settings.quality" @change="game.updateQuality()">
-                    <option value="auto">Auto</option>
-                    <option value="high">High Quality</option>
-                    <option value="low">Low Quality</option>
-                </select>
-            </label>
-            <label class="app-input-label">
                 <i class="fa fa-volume-up" aria-hidden="true"></i> Volume
                 <input type="range" v-model="game.settings.volume" min="0" max="1" step="0.1" class="slider" @input="game.updateSettings()">
             </label>
             <label class="app-input-label">
                 <i class="fa fa-flag" aria-hidden="true"></i> Display Faction Colors
                 <input class="app-input" type="checkbox" v-model="game.settings.displayFactionTheme" @change="game.updateSettings()">
+            </label>
+            <label class="app-input-label" title="Disabling this will load all textures when you load the page.">
+                <i class="fa fa-picture-o" aria-hidden="true"></i> Lazy Load Images
+                <input class="app-input" type="checkbox" v-model="game.settings.lazyLoadTextures" @change="game.updateSettings()">
             </label>
             <label class="app-input-label">
                 <i class="fa fa-history" aria-hidden="true"></i> Save History (Undo / Redo)
@@ -1338,7 +1334,6 @@ Vue.component('app-menu-save-load', {
             <label class="app-input-label project-name-input pt-0">
                 <small class="mx-1">Author(s)</small>
                 <input class="app-input text-left" type="text" v-model="game.project.authors" placeholder="Anonymous" @change="updateProjectProperties()">
-            </label>
             </label>
             <div class="text-center">
                 <button class="app-btn app-btn-primary load-button" type="button" @click="openFileBrowser()" @mouseenter="bme()">
