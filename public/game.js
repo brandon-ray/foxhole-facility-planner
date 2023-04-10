@@ -80,6 +80,7 @@ const game = {
         showSelectedTierOnly: true,
         disableLockedMouseEvents: false,
         bringSelectedToFront: true,
+        showLineOfSightRanges: true,
         displayFactionTheme: true,
         defaultBuildingCategory: 'all',
         showParentProductionList: true,
@@ -400,11 +401,9 @@ try {
     }
 
     game.setDarkMode = function(darkMode) {
-        if (game.settings.enableDarkMode !== darkMode) {
-            game.settings.enableDarkMode = darkMode;
-            background.texture = game.resources[game.settings.enableDarkMode ? 'background_dark' : 'background'].texture;
-            game.updateSettings();
-        }
+        game.settings.enableDarkMode = darkMode;
+        background.texture = game.resources[game.settings.enableDarkMode ? 'background_dark' : 'background'].texture;
+        game.updateSettings();
     }
 
     game.setConstructionMode = function(mode) {
@@ -2632,6 +2631,15 @@ try {
         });
     };
 
+    game.confirmResetSettings = function() {
+        game.confirmationPopup.showPopup('reset-settings', confirmed => {
+            if (confirmed) {
+                game.settings = JSON.parse(JSON.stringify(game.defaultSettings));
+                game.updateSettings();
+            }
+        });
+    };
+
     function shuffle(array) {
         let currentIndex = array.length, temporaryValue, randomIndex;
         while (0 !== currentIndex) {
@@ -3313,7 +3321,7 @@ try {
         if (game.saveStateChanged || pickupSelectedEntities || rotateSelectedEntities) {
             for (const entity of entities) {
                 if (entity.valid) {
-                    if (game.settings.enableExperimental && entity.rangeSprite) {
+                    if (game.settings.enableExperimental && game.settings.showLineOfSightRanges && entity.rangeSprite) {
                         entity.updateRangeMask();
                     }
                     if (entity.type === 'shape' && entity.subtype === 'line' && entity.shapeStyle?.showDist) {

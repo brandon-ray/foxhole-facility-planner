@@ -747,7 +747,7 @@ class FoxholeStructure extends DraggableContainer {
     }
     
     updateRangeMask() {
-        if (game.settings.enableExperimental && this.building.range?.lineOfSight && this.rangeSprite?.visible) {
+        if (game.settings.enableExperimental && game.settings.showLineOfSightRanges && this.building.range?.lineOfSight && this.rangeSprite?.visible) {
             const rayCast = (polygons, rayStart, rayEnd) => {
                 let closestIntersection = null;
 

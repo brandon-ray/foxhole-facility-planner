@@ -394,13 +394,13 @@ Vue.component('app-game-hub-popup', {
                     title: 'Presets',
                     icon: 'fa-th' // fa-cubes
                 },
+                */
                 {
                     key: 'settings',
                     title: 'Settings',
                     icon: 'fa-cog',
                     content: html``
                 }
-                */
             ]
         };
     },
@@ -442,6 +442,17 @@ Vue.component('app-game-hub-popup', {
                 });
             }
         },
+        toggleSetting: function(setting) {
+            game.settings[setting] = !game.settings[setting];
+            game.updateSettings();
+        },
+        updateSettings: function() {
+            game.settings.gridSize = Math.max(game.settings.gridSize, 1);
+            game.settings.snapRotationDegrees = Math.min(Math.max(game.settings.snapRotationDegrees, 1), 360);
+            game.settings.keySnapRotationDegrees = Math.min(Math.max(game.settings.keySnapRotationDegrees, 1), 360);
+            game.settings.zoomSpeed = Math.min(Math.max(game.settings.zoomSpeed, 1), 5);
+            game.updateSettings();
+        }
         /*
         buildBuilding: function(building) {
             this.bmc();
@@ -478,6 +489,185 @@ Vue.component('app-game-hub-popup', {
                             <app-game-building-list-icon-v2 v-for="preset in window.objectData.categories.showcase.buildings" :container="game.hubPopup" :building="preset" />
                         </div>
                     </div> -->
+                    <div v-if="selectedTab.key === 'settings'" class="tab-content" :key="selectedTab.key">
+                        <div class="fall-in-item settings-option-wrapper">
+                            <div class="tab-content-header">
+                                <i class="fa fa-gear"></i> General Settings
+                            </div>
+                            <div class="tab-content-body container">
+                                <div class="row">
+                                    <label class="col-md-6 app-input-label" title="Disabling this will load all textures when you load the page.">
+                                        <i class="fa fa-picture-o" aria-hidden="true"></i> Lazy Load Images
+                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.lazyLoadTextures }" @click="toggleSetting('lazyLoadTextures')"></button>
+                                    </label>
+                                    <label class="col-md-6 app-input-label">
+                                        <i class="fa fa-volume-up" aria-hidden="true"></i> Volume ({{game.settings.volume * 100}}%)
+                                        <input type="range" v-model="game.settings.volume" min="0" max="1" step="0.1" class="slider" @input="game.updateSettings()">
+                                    </label>
+                                </div>
+                                <div class="row">
+                                    <label class="col-md-6 app-input-label">
+                                        <i class="fa fa-flag" aria-hidden="true"></i> Display Faction Colors
+                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.displayFactionTheme }" @click="toggleSetting('displayFactionTheme')"></button>
+                                    </label>
+                                    <label class="col-md-6 app-input-label">
+                                        <i class="fa fa-users" aria-hidden="true"></i> Selected Faction
+                                        <select class="app-input" v-model="game.settings.selectedFaction" @change="game.setFaction(game.settings.selectedFaction)">
+                                            <option :value="null">Neutral</option>
+                                            <option value="c">Colonials</option>
+                                            <option value="w">Wardens</option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="row">
+                                    <label class="col-md-6 app-input-label">
+                                        <i class="fa fa-history" aria-hidden="true"></i> Save History (Undo / Redo)
+                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.enableHistory }" @click="toggleSetting('enableHistory')"></button>
+                                    </label>
+                                    <label class="col-md-6 app-input-label" :class="{'disabled': !game.settings.enableHistory}" title="The total amount of saves / actions that can be stored to undo / redo. Requires Save History to be enabled.">
+                                        <i class="fa fa-hdd-o" aria-hidden="true"></i> Stored History Size
+                                        <input class="app-input" type="number" v-model.number="game.settings.historySize" @input="game.updateSettings()" :disabled="!game.settings.enableHistory">
+                                    </label>
+                                </div>
+                                <div class="row">
+                                    <label class="col-md-6 app-input-label" :class="{'disabled': !game.settings.enableHistory}" title="Load the last save found in the browser. Requires Save History to be enabled.">
+                                        <i class="fa fa-upload" aria-hidden="true"></i> Auto-Load Last Save
+                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.enableAutoLoading }" @click="toggleSetting('enableAutoLoading')" :disabled="!game.settings.enableHistory"></button>
+                                    </label>
+                                    <label class="col-md-6 app-input-label">
+                                        <i class="fa fa-flask" aria-hidden="true"></i> Enable Experimental Features
+                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.enableExperimental }" @click="toggleSetting('enableExperimental')"></button>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fall-in-item settings-option-wrapper">
+                            <div class="tab-content-header">
+                                <i class="fa fa-cogs"></i> Board Configuration
+                            </div>
+                            <div class="tab-content-body container">
+                                <div class="row">
+                                    <label class="col-md-6 app-input-label">
+                                        <i class="fa fa-header" aria-hidden="true"></i> Display Project Name
+                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.showFacilityName }" @click="toggleSetting('showFacilityName')"></button>
+                                    </label>
+                                    <label class="col-md-6 app-input-label">
+                                        <i class="fa fa-moon-o" aria-hidden="true"></i> Enable Dark Mode
+                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.enableDarkMode }" @click="game.setDarkMode(!game.settings.enableDarkMode)"></button>
+                                    </label>
+                                </div>
+                                <div class="row">
+                                    <label class="col-md-6 app-input-label">
+                                        <i class="fa fa-arrow-circle-up" aria-hidden="true"></i> Bring Selected to Front
+                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.bringSelectedToFront }" @click="toggleSetting('bringSelectedToFront')"></button>
+                                    </label>
+                                    <label class="col-md-6 app-input-label">
+                                        <i class="fa fa-mouse-pointer" aria-hidden="true"></i> Disable Locked Selection
+                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.disableLockedMouseEvents }" @click="toggleSetting('disableLockedMouseEvents')"></button>
+                                    </label>
+                                </div>
+                                <div class="row">
+                                    <label class="col-md-6 app-input-label">
+                                        <i class="fa fa-arrows" aria-hidden="true"></i> Enable Snap to Grid
+                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.enableGrid }" @click="toggleSetting('enableGrid')"></button>
+                                    </label>
+                                    <label class="col-md-6 app-input-label">
+                                        <i class="fa fa-repeat" aria-hidden="true"></i> Enable Snap Rotation
+                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.enableSnapRotation }" @click="toggleSetting('enableSnapRotation')"></button>
+                                    </label>
+                                </div>
+                                <div class="row">
+                                    <label class="col-md-6 app-input-label">
+                                        <i class="fa fa-th-large" aria-hidden="true"></i> Grid Snap Size
+                                        <input class="app-input" type="number" v-model.number="game.settings.gridSize" min="1" @change="updateSettings()">
+                                    </label>
+                                    <label class="col-md-6 app-input-label" :class="{'disabled': !game.settings.enableSnapRotation}" title="Requires Snap Rotation to be enabled.">
+                                        <i class="fa fa-repeat" aria-hidden="true"></i> Mouse Snap Degrees
+                                        <input class="app-input" type="number" v-model.number="game.settings.snapRotationDegrees" min="1" max="360" @change="updateSettings()" :disabled="!game.settings.enableSnapRotation">
+                                    </label>
+                                </div>
+                                <div class="row">
+                                    <label class="col-md-6 app-input-label">
+                                        <i class="fa fa-repeat" aria-hidden="true"></i> Hotkey Rotation Degrees
+                                        <input class="app-input" type="number" v-model.number="game.settings.keySnapRotationDegrees" min="1" max="360" @change="updateSettings()">
+                                    </label>
+                                    <label class="col-md-6 app-input-label">
+                                        <i class="fa fa-search-plus" aria-hidden="true"></i> Zoom Speed
+                                        <input class="app-input" type="number" v-model.number="game.settings.zoomSpeed" min="1" max="5" @change="updateSettings()">
+                                    </label>
+                                </div>
+                                <div class="row">
+                                    <label class="col-md-6 app-input-label" :class="{'disabled': !game.settings.enableExperimental}" title="Changes behavior of the toolbelt hotkeys. By default, hotkeys will spawn a new object if nothing is selected. Requires Experimental Features to be enabled.">
+                                        <i class="fa fa-wrench" aria-hidden="true"></i> Toolbelt Mode
+                                        <select class="app-input" v-model.number="game.settings.toolbeltMode" @change="game.updateSettings()" :disabled="!game.settings.enableExperimental">
+                                            <option :value="0">Create Only</option>
+                                            <option value="1">Modify Single</option>
+                                            <option value="2">Modify Selection</option>
+                                        </select>
+                                    </label>
+                                    <label class="col-md-6 app-input-label" :class="{'disabled': !game.settings.enableExperimental}" title="Allows you to display LOS for certain structures: Pillboxes, Bunkers, etc. Requires Experimental Features to be enabled.">
+                                        <i class="fa fa-eye" aria-hidden="true"></i> Enable Line-of-Sight Ranges
+                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.showLineOfSightRanges }" @click="toggleSetting('showLineOfSightRanges')" :disabled="!game.settings.enableExperimental"></button>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fall-in-item settings-option-wrapper">
+                            <div class="tab-content-header">
+                                <i class="fa fa-sliders"></i> Construction Filters
+                            </div>
+                            <div class="tab-content-body container">
+                                <div class="row">
+                                    <label class="col-md-6 app-input-label">
+                                        <i class="fa fa-folder-open" aria-hidden="true"></i> Default Category
+                                        <select class="app-input" v-model="game.settings.defaultBuildingCategory" @change="game.updateSettings()">
+                                            <option value="all">All Buildings</option>
+                                            <template v-for="(category, key) in window.objectData.categories">
+                                                <option v-if="game.canShowListCategory(category, true)" :value="key">{{category.name}}</option>
+                                            </template>
+                                        </select>
+                                    </label>
+                                    <label class="col-md-6 app-input-label">
+                                        <i class="fa fa-users" aria-hidden="true"></i> Selected Faction
+                                        <select class="app-input" v-model="game.settings.selectedFaction" @change="game.setFaction(game.settings.selectedFaction)">
+                                            <option :value="null">Neutral</option>
+                                            <option value="c">Colonials</option>
+                                            <option value="w">Wardens</option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="row">
+                                    <label class="col-md-6 app-input-label">
+                                        <i class="fa fa-sitemap" aria-hidden="true"></i> Selected Tech Tier
+                                        <select class="app-input" v-model.number="game.settings.selectedTier" @change="game.updateSettings()">
+                                            <option value="1">Tier 1</option>
+                                            <option value="2">Tier 2</option>
+                                            <option value="3">Tier 3</option>
+                                        </select>
+                                    </label>
+                                    <label class="col-md-6 app-input-label">
+                                        <i class="fa fa-ban" aria-hidden="true"></i> Show Selected Tier Only
+                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.showSelectedTierOnly }" @click="toggleSetting('showSelectedTierOnly')"></button>
+                                    </label>
+                                </div>
+                                <div class="row">
+                                    <label class="col-md-6 app-input-label">
+                                        <i class="fa fa-compress" aria-hidden="true"></i> Show Collapsible Building List
+                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.showCollapsibleBuildingList }" @click="toggleSetting('showCollapsibleBuildingList')"></button>
+                                    </label>
+                                    <label class="col-md-6 app-input-label">
+                                        <i class="fa fa-sitemap" aria-hidden="true"></i> Show Base Production Recipes
+                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.showParentProductionList }" @click="toggleSetting('showParentProductionList')"></button>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="fall-in-item">
+                            <button class="btn-small" @click="game.confirmResetSettings()">
+                                <i class="fa fa-undo" aria-hidden="true"></i>
+                            </button>
+                        </div> -->
+                    </div>
                     <div class="tab-content" :key="selectedTab.key" v-html="selectedTab.content"></div>
                 </transition>
             </div>
@@ -556,6 +746,17 @@ Vue.component('app-game-confirmation-popup', {
                 <template v-if="!(game.settings.enableHistory && game.constructionHistory.length)">Note: This <u>cannot</u> be undone.</template>
                 <template v-else>Note: Projects can be recovered with undo.</template>
                 <button @click="closePopup(true)">Erase Project & Board</button>
+            </p>
+        </template>
+        <template v-else-if="type === 'reset-settings'">
+            <div class="board-panel-header">
+                <h4 class="float-left m-0" style="color: #eee"><i class="fa fa-undo"></i> Confirm Reset</h4>
+                <button class="btn-small m-0 mr-1 float-right" title="Close" @click="closePopup(false)"><i class="fa fa-times" aria-hidden="true"></i></button>
+            </div>
+            <p class="board-panel-body">
+                This will revert any changes you've made in settings.<br>
+                Note: This <u>cannot</u> be undone.
+                <button @click="closePopup(true)">Reset Settings</button>
             </p>
         </template>
     </div>
