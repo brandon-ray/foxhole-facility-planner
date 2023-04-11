@@ -448,6 +448,15 @@ const gameData = {
 			"filters": [
 				"facilities"
 			]
+		},
+		"small_artillery_setup": {
+			"name": "Small Artillery Setup",
+			"description": "This blueprint allows for 3 artillery pieces to have an emplaced cover with light defenses. 2 ammo rooms hold up to 200 shells of either 120mm or 150mm for safe storage. Best for small to medium bunker bases that want a spot for some friendly artillery. ",
+			"author": "Stonefox01",
+			"filters": [
+				"bunkers"
+			],
+			"module": true
 		}
 	},
 	"maps": {
