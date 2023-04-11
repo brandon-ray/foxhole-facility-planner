@@ -1352,6 +1352,13 @@ async function updateData() {
         return structures;
     }, {});
 
+    const presets = Object.entries(foxholeData.presets).map(([name, value]) => ({ name, value }));
+    presets.sort((a, b) => (a.name > b.name) ? 1 : -1);
+    foxholeData.presets = presets.reduce((acc, { name, value }) => {
+        acc[name] = value;
+        return acc;
+    }, {});
+
     let foxholeDataStr = JSON.stringify({
         'categories': foxholeData.categories,
         'presets': foxholeData.presets,

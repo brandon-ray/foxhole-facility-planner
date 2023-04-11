@@ -139,28 +139,10 @@ const gameData = {
 		}
 	},
 	"presets": {
-		"classic_storm_cannon": {
-			"name": "Classic Storm Cannon",
-			"description": "Storm Cannon setup with corner howitzers.",
-			"author": "Stonefox",
-			"filters": [
-				"bunkers"
-			],
-			"module": true
-		},
-		"classic_intel_center": {
-			"name": "Classic Intelligence Center",
-			"description": "Intelligence Center setup with corner howitzers.",
-			"author": "Stonefox",
-			"filters": [
-				"bunkers"
-			],
-			"module": true
-		},
-		"360_zero": {
-			"name": "360 ZERO",
-			"description": "Cheap, Effective, Practical.",
-			"author": "Unknown",
+		"360_dual": {
+			"name": "360 DUAL",
+			"description": "Retains compactness while significantly augmenting resistance to artillery.",
+			"author": "AllShallKneel",
 			"filters": [
 				"bunkers"
 			],
@@ -175,19 +157,112 @@ const gameData = {
 			],
 			"module": true
 		},
-		"360_dual": {
-			"name": "360 DUAL",
-			"description": "Retains compactness while significantly augmenting resistance to artillery.",
-			"author": "AllShallKneel",
+		"360_zero": {
+			"name": "360 ZERO",
+			"description": "Cheap, Effective, Practical.",
+			"author": "Unknown",
 			"filters": [
 				"bunkers"
 			],
 			"module": true
 		},
-		"long_shall": {
-			"name": "LongShall",
-			"description": "Did somebody say compact? While this bunker sacrifices some coverage for extreme density, it does so marvelously.",
-			"author": "AllShallKneel",
+		"5mw_80h_drip_power": {
+			"name": "5mw 80h Drip Power",
+			"description": "Very useful to ease maintenance. This Design will be producing power ≃50% of the time, maintenance tunnels on its grid will be generating ≃80 Gsups/h and fuel will last twice as much (80h)",
+			"author": "[5th] Menxs",
+			"filters": [
+				"facilities"
+			]
+		},
+		"antoines_train_station": {
+			"name": "Antoine's Train Station",
+			"description": "This is a train station for 3 trains.",
+			"author": "Antoine",
+			"filters": [
+				"facilities"
+			]
+		},
+		"bad_idea_inc": {
+			"name": "Bad Idea INC.™",
+			"description": "Field mod facility, PLS DONT BUILD",
+			"author": "maverick0537(im sorry)",
+			"filters": [
+				"facilities"
+			]
+		},
+		"bunker_w_module": {
+			"name": "\"W\" Bunker",
+			"description": "A meta bunker design that has lots of health with great structural integrity and defenses.",
+			"author": "Unknown",
+			"filters": [
+				"bunkers"
+			],
+			"module": true
+		},
+		"classic_intel_center": {
+			"name": "Classic Intelligence Center",
+			"description": "Intelligence Center setup with corner howitzers.",
+			"author": "Stonefox",
+			"filters": [
+				"bunkers"
+			],
+			"module": true
+		},
+		"classic_storm_cannon": {
+			"name": "Classic Storm Cannon",
+			"description": "Storm Cannon setup with corner howitzers.",
+			"author": "Stonefox",
+			"filters": [
+				"bunkers"
+			],
+			"module": true
+		},
+		"coastal_storage_facility_by_eg0611": {
+			"name": "Coastal Storage Facility",
+			"description": "A small facility with only purpose of storing items. No power production and consumption. It depends nearby bunker base for GSUPS usage.",
+			"author": "EG0611",
+			"filters": [
+				"facilities"
+			]
+		},
+		"compact_coal_liquefaction": {
+			"name": "Compact Coal Liquefaction",
+			"description": "Produce coal with the power of coal! You can easily power this setup with a coal power station and an extra water pump for \"automatic\" coal. The coal to coal conversion factor is of ≃2.6. Taking into account power the multiplier is of ≃2.286",
+			"author": "[5th] Menxs",
+			"filters": [
+				"facilities"
+			]
+		},
+		"compact_corner_bunker": {
+			"name": "Compact Corner Bunker",
+			"description": "This is a compact AT, MG and HG corner design that covers a 90 degree angle. This design is meant to be integrated into a straight line defence without wasting any space, or making any concessions on defence. Corner cutting is needed in the middle where 4 corner cuts are needed, but are easy to do. Do note that this design is only viable at the concrete tier.",
+			"author": "Danetello",
+			"filters": [
+				"bunkers"
+			],
+			"module": true
+		},
+		"eat_maker": {
+			"name": "EAT Maker",
+			"description": "Small EAT making facility\na train will make imports/exports easier but is not necessary",
+			"author": "maverick0537",
+			"module": true,
+			"filters": [
+				"facilities"
+			]
+		},
+		"frontline_sandbag_factory": {
+			"name": "Frontline Sandbag Factory",
+			"description": "Simple, easy to maintain frontline sandbag factory. Heavily based off of Small Munition Factory by Oberst_Den",
+			"author": "runningpeanuts",
+			"filters": [
+				"facilities"
+			]
+		},
+		"halberd_bunker": {
+			"name": "\"Halberd\" Bunker",
+			"description": "A common reliable defensive bunker pattern.",
+			"author": "Unknown",
 			"filters": [
 				"bunkers"
 			],
@@ -202,28 +277,18 @@ const gameData = {
 			],
 			"module": true
 		},
-		"mini_obs": {
-			"name": "miniObs",
-			"description": "Extremely lightweight, but provides RG coverage at the bare minimum cost.",
+		"locomotive_factory_by_eg0611": {
+			"name": "Locomotive Factory",
+			"description": "A facility that is capable to build Black Bolt, Longrider, Holdout, Rockhold and Roadhouse and their necessary manufacturing materials. 4 independent power systems allow facility to be functional 7/24.",
+			"author": "EG0611",
+			"filters": [
+				"facilities"
+			]
+		},
+		"long_shall": {
+			"name": "LongShall",
+			"description": "Did somebody say compact? While this bunker sacrifices some coverage for extreme density, it does so marvelously.",
 			"author": "AllShallKneel",
-			"filters": [
-				"bunkers"
-			],
-			"module": true
-		},
-		"halberd_bunker": {
-			"name": "\"Halberd\" Bunker",
-			"description": "A common reliable defensive bunker pattern.",
-			"author": "Unknown",
-			"filters": [
-				"bunkers"
-			],
-			"module": true
-		},
-		"xi_observation_bunker1": {
-			"name": "XI Observation Bunker",
-			"description": "Simple observation bunker split into two pieces to help with integrity (especially if left T2). Only 2 RGs can be lit, but that should be enough to prevent anyone from slipping into the bunker without suppression.",
-			"author": "nondidjos",
 			"filters": [
 				"bunkers"
 			],
@@ -237,6 +302,89 @@ const gameData = {
 				"bunkers"
 			],
 			"module": true
+		},
+		"m_bunker_w_trenches": {
+			"name": "\"M\" Bunker w/ Trenches",
+			"description": "Wide concrete bunker with trench support.",
+			"author": "Stonefox",
+			"filters": [
+				"bunkers"
+			]
+		},
+		"mini_obs": {
+			"name": "miniObs",
+			"description": "Extremely lightweight, but provides RG coverage at the bare minimum cost.",
+			"author": "AllShallKneel",
+			"filters": [
+				"bunkers"
+			],
+			"module": true
+		},
+		"msupps_facility": {
+			"name": "Msupps Facility",
+			"description": "Best if built next to bunker bases, these facilities makes Msupps production easy and quick.",
+			"author": "Trooper",
+			"filters": [
+				"facilities"
+			]
+		},
+		"obs_bunker": {
+			"name": "OBS Bunker",
+			"description": "Standard observation bunker. Power only 2 rifle garrisons and the OBS bunker.",
+			"author": "Unknown",
+			"filters": [
+				"bunkers"
+			],
+			"module": true
+		},
+		"panzer_snares": {
+			"name": "Panzer Snares",
+			"author": "KitsunePanzer",
+			"module": true,
+			"filters": [
+				"bunkers"
+			]
+		},
+		"simple_vehicle_factory": {
+			"name": "Simple Vehicle Factory (Example)",
+			"description": "A simple vehicle factory to output upgraded vehicles per hour. This is an example of a preset for the planner. Contribute your own saves to our Discord!",
+			"author": "Jimbo",
+			"filters": [
+				"facilities"
+			]
+		},
+		"small_artillery_facility": {
+			"name": "Small Artillery Facility",
+			"description": "A small and simple design that doesn't take up much space or Msupps.",
+			"author": "Trooper",
+			"filters": [
+				"facilities"
+			]
+		},
+		"small_artillery_setup": {
+			"name": "Small Artillery Setup",
+			"description": "This blueprint allows for 3 artillery pieces to have an emplaced cover with light defenses. 2 ammo rooms hold up to 200 shells of either 120mm or 150mm for safe storage. Best for small to medium bunker bases that want a spot for some friendly artillery. ",
+			"author": "Stonefox01",
+			"filters": [
+				"bunkers"
+			],
+			"module": true
+		},
+		"small_munition_factory": {
+			"name": "Small Munition Factory",
+			"description": "Small one man Facility with Low Gsupps cost of 432 for 24h when the lvl 3 Encampment is reached.",
+			"author": "Oberst_Den",
+			"filters": [
+				"facilities"
+			]
+		},
+		"small_tripod_facility": {
+			"name": "Small Tripod Facility",
+			"description": "A variant to the Small Artillery Facility I made, this one allows you to mass produce tripod weapons",
+			"author": "Trooper",
+			"filters": [
+				"facilities"
+			]
 		},
 		"squid_bunker_t2_1": {
 			"name": "\"Squid\" Bunker T2",
@@ -256,60 +404,18 @@ const gameData = {
 			],
 			"module": true
 		},
-		"bunker_w_module": {
-			"name": "\"W\" Bunker",
-			"description": "A meta bunker design that has lots of health with great structural integrity and defenses.",
-			"author": "Unknown",
-			"filters": [
-				"bunkers"
-			],
-			"module": true
-		},
-		"compact_corner_bunker": {
-			"name": "Compact Corner Bunker",
-			"description": "This is a compact AT, MG and HG corner design that covers a 90 degree angle. This design is meant to be integrated into a straight line defence without wasting any space, or making any concessions on defence. Corner cutting is needed in the middle where 4 corner cuts are needed, but are easy to do. Do note that this design is only viable at the concrete tier.",
-			"author": "Danetello",
-			"filters": [
-				"bunkers"
-			],
-			"module": true
-		},
-		"obs_bunker": {
-			"name": "OBS Bunker",
-			"description": "Standard observation bunker. Power only 2 rifle garrisons and the OBS bunker.",
-			"author": "Unknown",
-			"filters": [
-				"bunkers"
-			],
-			"module": true
-		},
-		"locomotive_factory_by_eg0611": {
-			"name": "Locomotive Factory",
-			"description": "A facility that is capable to build Black Bolt, Longrider, Holdout, Rockhold and Roadhouse and their necessary manufacturing materials. 4 independent power systems allow facility to be functional 7/24.",
-			"author": "EG0611",
+		"t1_oil_field_refinement": {
+			"name": "T1 Oil field refinement",
+			"description": "Basic T1 oil field setup, water is optional. I highly recommend adding a 4th oil refinary to consume oil faster when it backs up.",
+			"author": "[5th] Menxs",
+			"module": true,
 			"filters": [
 				"facilities"
-			]
-		},
-		"m_bunker_w_trenches": {
-			"name": "\"M\" Bunker w/ Trenches",
-			"description": "Wide concrete bunker with trench support.",
-			"author": "Stonefox",
-			"filters": [
-				"bunkers"
 			]
 		},
 		"t2_courtyard": {
 			"name": "T2 Courtyard",
 			"description": "A courtyard T2 bunker layout for early - mid war.",
-			"author": "Stonefox",
-			"filters": [
-				"bunkers"
-			]
-		},
-		"t2_or_t3_halberd_trench_designs": {
-			"name": "T2 / T3 Halberd Trench Designs",
-			"description": "Using the Halberd bunker design here are some trenches you can use to connect them, varying in amount of emplacements.",
 			"author": "Stonefox",
 			"filters": [
 				"bunkers"
@@ -323,102 +429,12 @@ const gameData = {
 				"facilities"
 			]
 		},
-		"small_munition_factory": {
-			"name": "Small Munition Factory",
-			"description": "Small one man Facility with Low Gsupps cost of 432 for 24h when the lvl 3 Encampment is reached.",
-			"author": "Oberst_Den",
-			"filters": [
-				"facilities"
-			]
-		},
-		"frontline_sandbag_factory": {
-			"name": "Frontline Sandbag Factory",
-			"description": "Simple, easy to maintain frontline sandbag factory. Heavily based off of Small Munition Factory by Oberst_Den",
-			"author": "runningpeanuts",
-			"filters": [
-				"facilities"
-			]
-		},
-		"compact_coal_liquefaction": {
-			"name": "Compact Coal Liquefaction",
-			"description": "Produce coal with the power of coal! You can easily power this setup with a coal power station and an extra water pump for \"automatic\" coal. The coal to coal conversion factor is of ≃2.6. Taking into account power the multiplier is of ≃2.286",
-			"author": "[5th] Menxs",
-			"filters": [
-				"facilities"
-			]
-		},
-		"5mw_80h_drip_power": {
-			"name": "5mw 80h Drip Power",
-			"description": "Very useful to ease maintenance. This Design will be producing power ≃50% of the time, maintenance tunnels on its grid will be generating ≃80 Gsups/h and fuel will last twice as much (80h)",
-			"author": "[5th] Menxs",
-			"filters": [
-				"facilities"
-			]
-		},
-		"coastal_storage_facility_by_eg0611": {
-			"name": "Coastal Storage Facility",
-			"description": "A small facility with only purpose of storing items. No power production and consumption. It depends nearby bunker base for GSUPS usage.",
-			"author": "EG0611",
-			"filters": [
-				"facilities"
-			]
-		},
-		"simple_vehicle_factory": {
-			"name": "Simple Vehicle Factory (Example)",
-			"description": "A simple vehicle factory to output upgraded vehicles per hour. This is an example of a preset for the planner. Contribute your own saves to our Discord!",
-			"author": "Jimbo",
-			"filters": [
-				"facilities"
-			]
-		},
-		"panzer_snares": {
-			"name": "Panzer Snares",
-			"author": "KitsunePanzer",
-			"module": true,
+		"t2_or_t3_halberd_trench_designs": {
+			"name": "T2 / T3 Halberd Trench Designs",
+			"description": "Using the Halberd bunker design here are some trenches you can use to connect them, varying in amount of emplacements.",
+			"author": "Stonefox",
 			"filters": [
 				"bunkers"
-			]
-		},
-		"small_artillery_facility": {
-			"name": "Small Artillery Facility",
-			"description": "A small and simple design that doesn't take up much space or Msupps.",
-			"author": "Trooper",
-			"filters": [
-				"facilities"
-			]
-		},
-		"small_tripod_facility": {
-			"name": "Small Tripod Facility",
-			"description": "A variant to the Small Artillery Facility I made, this one allows you to mass produce tripod weapons",
-			"author": "Trooper",
-			"filters": [
-				"facilities"
-			]
-		},
-		"eat_maker": {
-			"name": "EAT Maker",
-			"description": "Small EAT making facility\na train will make imports/exports easier but is not necessary",
-			"author": "maverick0537",
-			"module": true,
-			"filters": [
-				"facilities"
-			]
-		},
-		"msupps_facility": {
-			"name": "Msupps Facility",
-			"description": "Best if built next to bunker bases, these facilities makes Msupps production easy and quick.",
-			"author": "Trooper",
-			"filters": [
-				"facilities"
-			]
-		},
-		"t1_oil_field_refinement": {
-			"name": "T1 Oil field refinement",
-			"description": "Basic T1 oil field setup, water is optional. I highly recommend adding a 4th oil refinary to consume oil faster when it backs up.",
-			"author": "[5th] Menxs",
-			"module": true,
-			"filters": [
-				"facilities"
 			]
 		},
 		"t3_core": {
@@ -433,26 +449,10 @@ const gameData = {
 			],
 			"module": true
 		},
-		"bad_idea_inc": {
-			"name": "Bad Idea INC.™",
-			"description": "Field mod facility, PLS DONT BUILD",
-			"author": "maverick0537(im sorry)",
-			"filters": [
-				"facilities"
-			]
-		},
-		"antoines_train_station": {
-			"name": "Antoine's Train Station",
-			"description": "This is a train station for 3 trains.",
-			"author": "Antoine",
-			"filters": [
-				"facilities"
-			]
-		},
-		"small_artillery_setup": {
-			"name": "Small Artillery Setup",
-			"description": "This blueprint allows for 3 artillery pieces to have an emplaced cover with light defenses. 2 ammo rooms hold up to 200 shells of either 120mm or 150mm for safe storage. Best for small to medium bunker bases that want a spot for some friendly artillery. ",
-			"author": "Stonefox01",
+		"xi_observation_bunker1": {
+			"name": "XI Observation Bunker",
+			"description": "Simple observation bunker split into two pieces to help with integrity (especially if left T2). Only 2 RGs can be lit, but that should be enough to prevent anyone from slipping into the bunker without suppression.",
+			"author": "nondidjos",
 			"filters": [
 				"bunkers"
 			],
