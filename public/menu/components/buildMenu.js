@@ -16,11 +16,6 @@ Vue.component('app-game-sidebar', {
                     icon: 'fa-save'
                 },
                 {
-                    key: 'settings',
-                    name: 'Settings',
-                    icon: 'fa-gear'
-                },
-                {
                     key: 'about',
                     name: 'About',
                     icon: 'fa-info-circle'
@@ -102,7 +97,7 @@ Vue.component('app-game-sidebar', {
                     <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
                 </svg>
             </a>
-            <button v-on:click="event.preventDefault(); changeMenu('settings')" class="btn-small float-right" @mouseenter="bme()">
+            <button @click="game.hubPopup?.showTab('settings')" class="btn-small float-right" @mouseenter="bme()">
                 <i class="fa fa-gear"></i>
             </button>
             <button v-on:click="event.preventDefault(); changeMenu('about')" class="btn-small float-right" @mouseenter="bme()">
@@ -948,7 +943,7 @@ Vue.component('app-menu-construction-list', {
                 <app-game-shape-options v-else-if="game.constructionMode.key === 'rectangle' || game.constructionMode.key === 'circle' || game.constructionMode.key === 'line'" :container="this" :shapeOptions="modeOptions" :subtype="game.constructionMode.key"></app-game-shape-options>
             </template>
             <div v-else class="construction-options row d-flex justify-content-center">
-                <button class="btn-small construction-settings-button" @click="game.sidebarMenuComponent?.changeMenu('settings')" title="Filter Settings">
+                <button class="btn-small construction-settings-button" @click="game.hubPopup?.showTab('settings')" title="Filter Settings">
                     <i class="fa fa-sliders" aria-hidden="true"></i>
                 </button>
                 <button class="btn-small construction-tech-button" @click="incrementTier()" title="Filter by Tier">{{'Tier ' + game.settings.selectedTier}}</button>
@@ -1126,140 +1121,6 @@ Vue.component('app-game-building-list-icon', {
         :style="{backgroundImage:'url(' + ((building.baseIcon || (building.category !== 'entrenchments' && building.parent && !building.parentKey && building.parent.icon) || building.icon) ?? '/assets/default_icon.webp') + ')'}"
         @mouseenter="bme(); buildingHover(building)" @mouseleave="buildingHover(null)" @click="buildBuilding(building)">
         <div v-if="!building.baseIcon && !building.parentKey && building.parent?.icon && building.parent.icon !== building.icon" class="build-subicon" :title="building.parent.name" :style="{backgroundImage: 'url(' + ((building.category === 'entrenchments' && building.parent.icon) || building.icon) + ')'}"></div>
-    </div>
-    `
-});
-
-Vue.component('app-menu-settings', {
-    props: ['menuData'],
-    methods: {
-        updateSettings: function() {
-            game.settings.gridSize = Math.max(game.settings.gridSize, 1);
-            game.settings.snapRotationDegrees = Math.min(Math.max(game.settings.snapRotationDegrees, 1), 360);
-            game.settings.keySnapRotationDegrees = Math.min(Math.max(game.settings.keySnapRotationDegrees, 1), 360);
-            game.settings.zoomSpeed = Math.min(Math.max(game.settings.zoomSpeed, 1), 5);
-            game.updateSettings();
-        }
-    },
-    template: html`
-    <div id="settings" class="text-left">
-        <div class="settings-option-wrapper">
-            <div class="settings-title">General Settings</div>
-            <label class="app-input-label">
-                <i class="fa fa-volume-up" aria-hidden="true"></i> Volume
-                <input type="range" v-model="game.settings.volume" min="0" max="1" step="0.1" class="slider" @input="game.updateSettings()">
-            </label>
-            <label class="app-input-label">
-                <i class="fa fa-flag" aria-hidden="true"></i> Display Faction Colors
-                <input class="app-input" type="checkbox" v-model="game.settings.displayFactionTheme" @change="game.updateSettings()">
-            </label>
-            <label class="app-input-label" title="Disabling this will load all textures when you load the page.">
-                <i class="fa fa-picture-o" aria-hidden="true"></i> Lazy Load Images
-                <input class="app-input" type="checkbox" v-model="game.settings.lazyLoadTextures" @change="game.updateSettings()">
-            </label>
-            <label class="app-input-label">
-                <i class="fa fa-history" aria-hidden="true"></i> Save History (Undo / Redo)
-                <input class="app-input" type="checkbox" v-model="game.settings.enableHistory" @change="game.updateSettings()">
-            </label>
-            <label v-if="game.settings.enableHistory" class="app-input-label" title="The total amount of saves / actions that can be stored to undo / redo.">
-                <i class="fa fa-hdd-o" aria-hidden="true"></i> Stored History Size
-                <input class="app-input" type="number" v-model.number="game.settings.historySize" @input="game.updateSettings()">
-            </label>
-            <label v-if="game.settings.enableHistory" class="app-input-label">
-                <i class="fa fa-upload" aria-hidden="true"></i> Auto-Load Last Save
-                <input class="app-input" type="checkbox" v-model="game.settings.enableAutoLoading" @change="game.updateSettings()">
-            </label>
-            <label class="app-input-label">
-                <i class="fa fa-flask" aria-hidden="true"></i> Enable Experimental Features
-                <input class="app-input" type="checkbox" v-model="game.settings.enableExperimental" @change="game.updateSettings()">
-            </label>
-        </div>
-        <div class="settings-option-wrapper">
-            <div class="settings-title">Board Settings</div>
-            <label class="app-input-label">
-                <i class="fa fa-header" aria-hidden="true"></i> Display Project Name
-                <input class="app-input" type="checkbox" v-model="game.settings.showFacilityName" @change="game.updateSettings()">
-            </label>
-            <label class="app-input-label">
-                <i class="fa fa-arrow-circle-up" aria-hidden="true"></i> Bring Selected to Front
-                <input class="app-input" type="checkbox" v-model="game.settings.bringSelectedToFront" @change="game.updateSettings()">
-            </label>
-            <label class="app-input-label">
-                <i class="fa fa-mouse-pointer" aria-hidden="true"></i> Disable Locked Selection
-                <input class="app-input" type="checkbox" v-model="game.settings.disableLockedMouseEvents" @change="game.updateSettings()">
-            </label>
-            <label class="app-input-label">
-                <i class="fa fa-th-large" aria-hidden="true"></i> Snap Grid Size
-                <input class="app-input" type="number" v-model.number="game.settings.gridSize" min="1" @change="updateSettings()">
-            </label>
-            <label class="app-input-label">
-                <i class="fa fa-repeat" aria-hidden="true"></i> Mouse Rotation Degrees
-                <input class="app-input" type="number" v-model.number="game.settings.snapRotationDegrees" min="1" max="360" @change="updateSettings()">
-            </label>
-            <label class="app-input-label">
-                <i class="fa fa-repeat" aria-hidden="true"></i> Hotkey Rotation Degrees
-                <input class="app-input" type="number" v-model.number="game.settings.keySnapRotationDegrees" min="1" max="360" @change="updateSettings()">
-            </label>
-            <label class="app-input-label">
-                <i class="fa fa-search-plus" aria-hidden="true"></i> Zoom Speed
-                <input class="app-input" type="number" v-model.number="game.settings.zoomSpeed" min="1" max="5" @change="updateSettings()">
-            </label>
-        </div>
-        <div class="settings-option-wrapper">
-            <div class="settings-title">Construction Settings</div>
-            <label class="app-input-label">
-                <i class="fa fa-folder-open" aria-hidden="true"></i> Default Category
-                <select class="app-input" v-model="game.settings.defaultBuildingCategory" @change="game.updateSettings()">
-                    <option value="all">All Buildings</option>
-                    <template v-for="(category, key) in window.objectData.categories">
-                        <option v-if="game.canShowListCategory(category, true)" :value="key">{{category.name}}</option>
-                    </template>
-                </select>
-            </label>
-            <label class="app-input-label">
-                <i class="fa fa-users" aria-hidden="true"></i> Selected Faction
-                <select class="app-input" v-model="game.settings.selectedFaction" @change="game.setFaction(game.settings.selectedFaction)">
-                    <option :value="null">Neutral</option>
-                    <option value="c">Colonials</option>
-                    <option value="w">Wardens</option>
-                </select>
-            </label>
-            <label class="app-input-label">
-                <i class="fa fa-sitemap" aria-hidden="true"></i> Selected Tech Tier
-                <select class="app-input" v-model.number="game.settings.selectedTier" @change="game.updateSettings()">
-                    <option value="1">Tier 1</option>
-                    <option value="2">Tier 2</option>
-                    <option value="3">Tier 3</option>
-                </select>
-            </label>
-            <label class="app-input-label">
-                <i class="fa fa-ban" aria-hidden="true"></i> Show Selected Tier Only
-                <input class="app-input" type="checkbox" v-model="game.settings.showSelectedTierOnly" @change="game.updateSettings()">
-            </label>
-            <label class="app-input-label">
-                <i class="fa fa-compress" aria-hidden="true"></i> Show Collapsible Building List
-                <input class="app-input" type="checkbox" v-model="game.settings.showCollapsibleBuildingList" @change="game.updateSettings()">
-            </label>
-            <label class="app-input-label">
-                <i class="fa fa-chevron-circle-up" aria-hidden="true"></i> Show All Upgrades in List
-                <input class="app-input" type="checkbox" v-model="game.settings.showUpgradesAsBuildings" @change="game.updateSettings()">
-            </label>
-        </div>
-        <div class="settings-option-wrapper">
-            <div class="settings-title">Building Settings</div>
-            <label v-if="game.settings.enableExperimental" class="app-input-label" title="Changes behavior of the toolbelt hotkeys. By default, hotkeys will spawn a new object if nothing is selected.">
-                <i class="fa fa-wrench" aria-hidden="true"></i> Toolbelt Mode
-                <select class="app-input" v-model.number="game.settings.toolbeltMode" @change="game.updateSettings()">
-                    <option :value="0">Create Only</option>
-                    <option value="1">Modify Single</option>
-                    <option value="2">Modify Selection</option>
-                </select>
-            </label>
-            <label class="app-input-label">
-                <i class="fa fa-sitemap" aria-hidden="true"></i> Show Base Production Recipes
-                <input class="app-input" type="checkbox" v-model="game.settings.showParentProductionList" @change="game.updateSettings()">
-            </label>
-        </div>
     </div>
     `
 });

@@ -68,7 +68,6 @@ if (isMobile && !isPhoneApp) {
             },
             template: html`
             <div ref="app" :class="{'colonial-faction': game.settings.displayFactionTheme && game.settings.selectedFaction === 'c', 'warden-faction': game.settings.displayFactionTheme && game.settings.selectedFaction === 'w', 'no-sidebar': !sidebarVisible }">
-                <app-game-game-menu></app-game-game-menu>
                 <app-game-sidebar v-if="sidebarVisible"></app-game-sidebar>
                 
                 <div v-if="game.settings.showFacilityName && game.project.name && game.project.name !== 'Unnamed Facility' && game.project.name !== 'Unnamed Project'" class="project-banner">
@@ -278,116 +277,18 @@ Vue.component('app-game-hub-popup', {
                 {
                     key: 'home',
                     title: 'Home',
-                    icon: 'fa-home',
-                    content: html`
-                    <div class="fall-in-item">
-                        <div class="tab-content-header">
-                            <i class="fa fa-home"></i> Welcome to the Planner Hub!
-                        </div>
-                        <p class="tab-content-body">
-                            The Planner Hub is a new feature being developed that will give you easy access to changelogs, presets, settings, and more in the future.
-                        </p>
-                    </div>
-                    <div class="fall-in-item">
-                        <div class="tab-content-header">
-                            <i class="fa fa-bullhorn"></i> Check "Updates" for the latest changes!
-                        </div>
-                        <div class="tab-content-body">
-                            <div class="tab-content-body-img-wrapper m-0">
-                                <img src="/assets/updates/04012023.jpg">
-                            </div>
-                        </div>
-                    </div>
-                    `
+                    icon: 'fa-home'
                 },
                 {
                     key: 'updates',
                     title: 'Updates',
-                    icon: 'fa-bullhorn', // fa-newspaper-o
-                    content: html`
-                    <div class="fall-in-item">
-                        <div class="tab-content-header">
-                            <i class="fa fa-bullhorn"></i> Motorcycles Update? 🤔
-                            <small class="float-right">April 1st, 2023</small>
-                        </div>
-                        <div class="tab-content-body">
-                            <div class="tab-content-body-img-wrapper">
-                                <img src="/assets/updates/04012023.jpg">
-                            </div>
-                            <h4>Major Changes</h4>
-                            <ul>
-                                <li>Added 100+ new placeable objects including: <i><b>Tanks, Armored Vehicles, Field Weapons, Ships, Emplaced Weapons, and more!</b></i></li>
-                                <li>Added Barbed Wire Fence, Shipping Crate, Storage Box, and Fire Pit.</li>
-                                <li>Added references for Sulfur, Salvage, and Component Mines.</li>
-                                <li>Updated scale of buildings to better reflect distances on the grid. One meter is now equal to one grid square.</li>
-                                <li>Updated searching to use the Fuse.js library with the ability to search by name, category, descriptions, and even preset creators!</li>
-                            </ul>
-                            <h4>Other Changes</h4>
-                            <ul>
-                                <li>Added toggleable distance to line tool, aka measuring / ruler tool.</li>
-                                <li>Added toggleable board info such as region and scale.</li>
-                                <li>Added costs for Construction Vehicle, Advanced Construction Vehicle, and Crane. Also moved to Utilities for game parity.</li>
-                                <li>Added tabs to the construction menu for filtering bunkers, facilities, vehicles.</li>
-                                <li>Added range to BMS - Class 2 Mobile Auto-Crane and fixed hitbox.</li>
-                                <li>Updated texture for BMS Foreman Stacker.</li>
-                                <li>Updated range for T1 Rifle Garrison.</li>
-                                <li>Fixed trench connector visual issues. (Dev Branch)</li>
-                                <li>Updated all presets to the latest save version.</li>
-                            </ul>
-                            <h4>Experimental Changes</h4>
-                            <ul>
-                                <li>Added experimental map region selection / backdrop.</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="fall-in-item">
-                        <div class="tab-content-header">
-                            <i class="fa fa-bullhorn"></i> Bunker & Trenches Update
-                            <small class="float-right">March 1st, 2023</small>
-                        </div>
-                        <div class="tab-content-body">
-                            <div class="tab-content-body-img-wrapper">
-                                <img src="/assets/updates/03012023.jpg">
-                            </div>
-                            <h4>Major Changes</h4>
-                            <ul>
-                                <li>Added Bunkers, Trenches, and Trench Encampments with their tier upgrades.</li>
-                                <li>Added Bunker Health / Repair / Structural Integrity Stats.</li>
-                                <li>Added Community Modules & Presets! You can submit your plans / projects in our Discord so that you can be featured in the planner!</li>
-                                <li>Added toolbelts. The ability to assign 0-9 as hotkeys for any placeable structure in the planner with up to 10 toolbelts to switch between.</li>
-                            </ul>
-
-                            <h4>Notable Recent Changes</h4>
-                            <ul>
-                                <li>Added ability to toggle the sidebar menu.</li>
-                                <li>Added ability to show stats for only selected buildings.</li>
-                                <li>Added Tier 1-3 Walls and Gates.</li>
-                                <li>Added Barge and Freighter.</li>
-                                <li>Added save versioning so we can automatically upgrade saves with changes for the planner.</li>
-                                <li>Updated controls information for newly added hotkeys: Q/E, WASD, etc.</li>
-                                <li>Bunkers, Trenches, and Trench Encampments had their socket positions updated so that they should be more accurately positioned when snapped.</li>
-                            </ul>
-
-                            <h4>Experimental Changes</h4>
-                            <ul>
-                                <li>Added experimental weapon damage stats for bunkers.</li>
-                                <li>Added image importing with drag and drop or pasting the image into the planner.</li>
-                            </ul>
-
-                            <h4>Upcoming Experimental Changes</h4>
-                            <ul>
-                                <li>Sorting Fixes: There's still some weird z-sorting for certain bunker upgrades that need to be dealt with for range occlusions to work properly.</li>
-                            </ul>
-                        </div>
-                    </div>
-                    `
+                    icon: 'fa-bullhorn' // fa-newspaper-o
                 },
                 /*
                 {
                     key: 'saves',
                     title: 'Load/Save',
-                    icon: 'fa-upload',
-                    content: html``
+                    icon: 'fa-upload'
                 },
                 {
                     key: 'presets',
@@ -398,8 +299,7 @@ Vue.component('app-game-hub-popup', {
                 {
                     key: 'settings',
                     title: 'Settings',
-                    icon: 'fa-cog',
-                    content: html``
+                    icon: 'fa-cog'
                 }
             ]
         };
@@ -441,29 +341,7 @@ Vue.component('app-game-hub-popup', {
                     behavior: instant ? 'instant' : 'smooth'
                 });
             }
-        },
-        toggleSetting: function(setting) {
-            game.settings[setting] = !game.settings[setting];
-            game.updateSettings();
-        },
-        updateSettings: function() {
-            game.settings.gridSize = Math.max(game.settings.gridSize, 1);
-            game.settings.snapRotationDegrees = Math.min(Math.max(game.settings.snapRotationDegrees, 1), 360);
-            game.settings.keySnapRotationDegrees = Math.min(Math.max(game.settings.keySnapRotationDegrees, 1), 360);
-            game.settings.zoomSpeed = Math.min(Math.max(game.settings.zoomSpeed, 1), 5);
-            game.updateSettings();
         }
-        /*
-        buildBuilding: function(building) {
-            this.bmc();
-            game.createObject(building);
-            game.sidebarMenuComponent.showHoverMenu(null);
-            this.showPopup(false);
-        },
-        buildingHover: function(building) {
-            game.sidebarMenuComponent.showHoverMenu(building);
-        }
-        */
     },
     template: html`
     <div v-if="visible" class="board-panel hub-dialog" :class="{ 'maximized': maximized, 'sidebar-names': game.settings.showExpandedHubSidebar }">
@@ -484,197 +362,340 @@ Vue.component('app-game-hub-popup', {
             </div>
             <div v-if="selectedTab" class="hub-body w-100" @scroll="handleBodyScroll" ref="hubBody">
                 <transition name="fall-in" mode="out-in">
-                    <!-- <div v-if="selectedTab.key === 'presets'" class="tab-content" :key="selectedTab.key">
-                        <div class="preset-gallery">
-                            <app-game-building-list-icon-v2 v-for="preset in window.objectData.categories.showcase.buildings" :container="game.hubPopup" :building="preset" />
-                        </div>
-                    </div> -->
-                    <div v-if="selectedTab.key === 'settings'" class="tab-content" :key="selectedTab.key">
-                        <div class="fall-in-item settings-option-wrapper">
-                            <div class="tab-content-header">
-                                <i class="fa fa-gear"></i> General Settings
-                            </div>
-                            <div class="tab-content-body container">
-                                <div class="row">
-                                    <label class="col-md-6 app-input-label" title="Disabling this will load all textures when you load the page.">
-                                        <i class="fa fa-picture-o" aria-hidden="true"></i> Lazy Load Images
-                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.lazyLoadTextures }" @click="toggleSetting('lazyLoadTextures')"></button>
-                                    </label>
-                                    <label class="col-md-6 app-input-label">
-                                        <i class="fa fa-volume-up" aria-hidden="true"></i> Volume ({{game.settings.volume * 100}}%)
-                                        <input type="range" v-model="game.settings.volume" min="0" max="1" step="0.1" class="slider" @input="game.updateSettings()">
-                                    </label>
-                                </div>
-                                <div class="row">
-                                    <label class="col-md-6 app-input-label">
-                                        <i class="fa fa-flag" aria-hidden="true"></i> Display Faction Colors
-                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.displayFactionTheme }" @click="toggleSetting('displayFactionTheme')"></button>
-                                    </label>
-                                    <label class="col-md-6 app-input-label">
-                                        <i class="fa fa-users" aria-hidden="true"></i> Selected Faction
-                                        <select class="app-input" v-model="game.settings.selectedFaction" @change="game.setFaction(game.settings.selectedFaction)">
-                                            <option :value="null">Neutral</option>
-                                            <option value="c">Colonials</option>
-                                            <option value="w">Wardens</option>
-                                        </select>
-                                    </label>
-                                </div>
-                                <div class="row">
-                                    <label class="col-md-6 app-input-label">
-                                        <i class="fa fa-history" aria-hidden="true"></i> Save History (Undo / Redo)
-                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.enableHistory }" @click="toggleSetting('enableHistory')"></button>
-                                    </label>
-                                    <label class="col-md-6 app-input-label" :class="{'disabled': !game.settings.enableHistory}" title="The total amount of saves / actions that can be stored to undo / redo. Requires Save History to be enabled.">
-                                        <i class="fa fa-hdd-o" aria-hidden="true"></i> Stored History Size
-                                        <input class="app-input" type="number" v-model.number="game.settings.historySize" @input="game.updateSettings()" :disabled="!game.settings.enableHistory">
-                                    </label>
-                                </div>
-                                <div class="row">
-                                    <label class="col-md-6 app-input-label" :class="{'disabled': !game.settings.enableHistory}" title="Load the last save found in the browser. Requires Save History to be enabled.">
-                                        <i class="fa fa-upload" aria-hidden="true"></i> Auto-Load Last Save
-                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.enableAutoLoading }" @click="toggleSetting('enableAutoLoading')" :disabled="!game.settings.enableHistory"></button>
-                                    </label>
-                                    <label class="col-md-6 app-input-label">
-                                        <i class="fa fa-flask" aria-hidden="true"></i> Enable Experimental Features
-                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.enableExperimental }" @click="toggleSetting('enableExperimental')"></button>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="fall-in-item settings-option-wrapper">
-                            <div class="tab-content-header">
-                                <i class="fa fa-cogs"></i> Board Configuration
-                            </div>
-                            <div class="tab-content-body container">
-                                <div class="row">
-                                    <label class="col-md-6 app-input-label">
-                                        <i class="fa fa-header" aria-hidden="true"></i> Display Project Name
-                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.showFacilityName }" @click="toggleSetting('showFacilityName')"></button>
-                                    </label>
-                                    <label class="col-md-6 app-input-label">
-                                        <i class="fa fa-moon-o" aria-hidden="true"></i> Enable Dark Mode
-                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.enableDarkMode }" @click="game.setDarkMode(!game.settings.enableDarkMode)"></button>
-                                    </label>
-                                </div>
-                                <div class="row">
-                                    <label class="col-md-6 app-input-label">
-                                        <i class="fa fa-arrow-circle-up" aria-hidden="true"></i> Bring Selected to Front
-                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.bringSelectedToFront }" @click="toggleSetting('bringSelectedToFront')"></button>
-                                    </label>
-                                    <label class="col-md-6 app-input-label">
-                                        <i class="fa fa-mouse-pointer" aria-hidden="true"></i> Disable Locked Selection
-                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.disableLockedMouseEvents }" @click="toggleSetting('disableLockedMouseEvents')"></button>
-                                    </label>
-                                </div>
-                                <div class="row">
-                                    <label class="col-md-6 app-input-label">
-                                        <i class="fa fa-arrows" aria-hidden="true"></i> Enable Snap to Grid
-                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.enableGrid }" @click="toggleSetting('enableGrid')"></button>
-                                    </label>
-                                    <label class="col-md-6 app-input-label">
-                                        <i class="fa fa-repeat" aria-hidden="true"></i> Enable Snap Rotation
-                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.enableSnapRotation }" @click="toggleSetting('enableSnapRotation')"></button>
-                                    </label>
-                                </div>
-                                <div class="row">
-                                    <label class="col-md-6 app-input-label">
-                                        <i class="fa fa-th-large" aria-hidden="true"></i> Grid Snap Size
-                                        <input class="app-input" type="number" v-model.number="game.settings.gridSize" min="1" @change="updateSettings()">
-                                    </label>
-                                    <label class="col-md-6 app-input-label" :class="{'disabled': !game.settings.enableSnapRotation}" title="Requires Snap Rotation to be enabled.">
-                                        <i class="fa fa-repeat" aria-hidden="true"></i> Mouse Snap Degrees
-                                        <input class="app-input" type="number" v-model.number="game.settings.snapRotationDegrees" min="1" max="360" @change="updateSettings()" :disabled="!game.settings.enableSnapRotation">
-                                    </label>
-                                </div>
-                                <div class="row">
-                                    <label class="col-md-6 app-input-label">
-                                        <i class="fa fa-repeat" aria-hidden="true"></i> Hotkey Rotation Degrees
-                                        <input class="app-input" type="number" v-model.number="game.settings.keySnapRotationDegrees" min="1" max="360" @change="updateSettings()">
-                                    </label>
-                                    <label class="col-md-6 app-input-label">
-                                        <i class="fa fa-search-plus" aria-hidden="true"></i> Zoom Speed
-                                        <input class="app-input" type="number" v-model.number="game.settings.zoomSpeed" min="1" max="5" @change="updateSettings()">
-                                    </label>
-                                </div>
-                                <div class="row">
-                                    <label class="col-md-6 app-input-label" :class="{'disabled': !game.settings.enableExperimental}" title="Changes behavior of the toolbelt hotkeys. By default, hotkeys will spawn a new object if nothing is selected. Requires Experimental Features to be enabled.">
-                                        <i class="fa fa-wrench" aria-hidden="true"></i> Toolbelt Mode
-                                        <select class="app-input" v-model.number="game.settings.toolbeltMode" @change="game.updateSettings()" :disabled="!game.settings.enableExperimental">
-                                            <option :value="0">Create Only</option>
-                                            <option value="1">Modify Single</option>
-                                            <option value="2">Modify Selection</option>
-                                        </select>
-                                    </label>
-                                    <label class="col-md-6 app-input-label" :class="{'disabled': !game.settings.enableExperimental}" title="Allows you to display LOS for certain structures: Pillboxes, Bunkers, etc. Requires Experimental Features to be enabled.">
-                                        <i class="fa fa-eye" aria-hidden="true"></i> Enable Line-of-Sight Ranges
-                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.showLineOfSightRanges }" @click="toggleSetting('showLineOfSightRanges')" :disabled="!game.settings.enableExperimental"></button>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="fall-in-item settings-option-wrapper">
-                            <div class="tab-content-header">
-                                <i class="fa fa-sliders"></i> Construction Filters
-                            </div>
-                            <div class="tab-content-body container">
-                                <div class="row">
-                                    <label class="col-md-6 app-input-label">
-                                        <i class="fa fa-folder-open" aria-hidden="true"></i> Default Category
-                                        <select class="app-input" v-model="game.settings.defaultBuildingCategory" @change="game.updateSettings()">
-                                            <option value="all">All Buildings</option>
-                                            <template v-for="(category, key) in window.objectData.categories">
-                                                <option v-if="game.canShowListCategory(category, true)" :value="key">{{category.name}}</option>
-                                            </template>
-                                        </select>
-                                    </label>
-                                    <label class="col-md-6 app-input-label">
-                                        <i class="fa fa-users" aria-hidden="true"></i> Selected Faction
-                                        <select class="app-input" v-model="game.settings.selectedFaction" @change="game.setFaction(game.settings.selectedFaction)">
-                                            <option :value="null">Neutral</option>
-                                            <option value="c">Colonials</option>
-                                            <option value="w">Wardens</option>
-                                        </select>
-                                    </label>
-                                </div>
-                                <div class="row">
-                                    <label class="col-md-6 app-input-label">
-                                        <i class="fa fa-sitemap" aria-hidden="true"></i> Selected Tech Tier
-                                        <select class="app-input" v-model.number="game.settings.selectedTier" @change="game.updateSettings()">
-                                            <option value="1">Tier 1</option>
-                                            <option value="2">Tier 2</option>
-                                            <option value="3">Tier 3</option>
-                                        </select>
-                                    </label>
-                                    <label class="col-md-6 app-input-label">
-                                        <i class="fa fa-ban" aria-hidden="true"></i> Show Selected Tier Only
-                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.showSelectedTierOnly }" @click="toggleSetting('showSelectedTierOnly')"></button>
-                                    </label>
-                                </div>
-                                <div class="row">
-                                    <label class="col-md-6 app-input-label">
-                                        <i class="fa fa-compress" aria-hidden="true"></i> Show Collapsible Building List
-                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.showCollapsibleBuildingList }" @click="toggleSetting('showCollapsibleBuildingList')"></button>
-                                    </label>
-                                    <label class="col-md-6 app-input-label">
-                                        <i class="fa fa-sitemap" aria-hidden="true"></i> Show Base Production Recipes
-                                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.showParentProductionList }" @click="toggleSetting('showParentProductionList')"></button>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- <div class="fall-in-item">
-                            <button class="btn-small" @click="game.confirmResetSettings()">
-                                <i class="fa fa-undo" aria-hidden="true"></i>
-                            </button>
-                        </div> -->
-                    </div>
-                    <div class="tab-content" :key="selectedTab.key" v-html="selectedTab.content"></div>
+                    <component :is="'app-hub-' + selectedTab.key" :key="selectedTab.key"></component>
                 </transition>
             </div>
             <button class="scroll-top-button" :class="{ 'visible': scrollTopButton }" @click="scrollToTop()">
                 <i class="fa fa-2x fa-angle-up"></i>
             </button>
         </div>
+    </div>
+    `
+});
+
+Vue.component('app-hub-home', {
+    template: html`
+    <div class="tab-content">
+        <div class="fall-in-item">
+            <div class="tab-content-header">
+                <i class="fa fa-home"></i> Welcome to the Planner Hub!
+            </div>
+            <p class="tab-content-body">
+                The Planner Hub is a new feature being developed that will give you easy access to changelogs, presets, settings, and more in the future.
+            </p>
+        </div>
+        <div class="fall-in-item">
+            <div class="tab-content-header">
+                <i class="fa fa-bullhorn"></i> Check "Updates" for the latest changes!
+            </div>
+            <div class="tab-content-body">
+                <div class="tab-content-body-img-wrapper m-0">
+                    <img src="/assets/updates/04012023.jpg">
+                </div>
+            </div>
+        </div>
+    </div>
+    `
+});
+
+Vue.component('app-hub-updates', {
+    template: html`
+    <div class="tab-content">
+        <div class="fall-in-item">
+            <div class="tab-content-header">
+                <i class="fa fa-bullhorn"></i> Motorcycles Update? 🤔
+                <small class="float-right">April 1st, 2023</small>
+            </div>
+            <div class="tab-content-body">
+                <div class="tab-content-body-img-wrapper">
+                    <img src="/assets/updates/04012023.jpg">
+                </div>
+                <h4>Major Changes</h4>
+                <ul>
+                    <li>Added 100+ new placeable objects including: <i><b>Tanks, Armored Vehicles, Field Weapons, Ships, Emplaced Weapons, and more!</b></i></li>
+                    <li>Added Barbed Wire Fence, Shipping Crate, Storage Box, and Fire Pit.</li>
+                    <li>Added references for Sulfur, Salvage, and Component Mines.</li>
+                    <li>Updated scale of buildings to better reflect distances on the grid. One meter is now equal to one grid square.</li>
+                    <li>Updated searching to use the Fuse.js library with the ability to search by name, category, descriptions, and even preset creators!</li>
+                </ul>
+                <h4>Other Changes</h4>
+                <ul>
+                    <li>Added toggleable distance to line tool, aka measuring / ruler tool.</li>
+                    <li>Added toggleable board info such as region and scale.</li>
+                    <li>Added costs for Construction Vehicle, Advanced Construction Vehicle, and Crane. Also moved to Utilities for game parity.</li>
+                    <li>Added tabs to the construction menu for filtering bunkers, facilities, vehicles.</li>
+                    <li>Added range to BMS - Class 2 Mobile Auto-Crane and fixed hitbox.</li>
+                    <li>Updated texture for BMS Foreman Stacker.</li>
+                    <li>Updated range for T1 Rifle Garrison.</li>
+                    <li>Fixed trench connector visual issues. (Dev Branch)</li>
+                    <li>Updated all presets to the latest save version.</li>
+                </ul>
+                <h4>Experimental Changes</h4>
+                <ul>
+                    <li>Added experimental map region selection / backdrop.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="fall-in-item">
+            <div class="tab-content-header">
+                <i class="fa fa-bullhorn"></i> Bunker & Trenches Update
+                <small class="float-right">March 1st, 2023</small>
+            </div>
+            <div class="tab-content-body">
+                <div class="tab-content-body-img-wrapper">
+                    <img src="/assets/updates/03012023.jpg">
+                </div>
+                <h4>Major Changes</h4>
+                <ul>
+                    <li>Added Bunkers, Trenches, and Trench Encampments with their tier upgrades.</li>
+                    <li>Added Bunker Health / Repair / Structural Integrity Stats.</li>
+                    <li>Added Community Modules & Presets! You can submit your plans / projects in our Discord so that you can be featured in the planner!</li>
+                    <li>Added toolbelts. The ability to assign 0-9 as hotkeys for any placeable structure in the planner with up to 10 toolbelts to switch between.</li>
+                </ul>
+
+                <h4>Notable Recent Changes</h4>
+                <ul>
+                    <li>Added ability to toggle the sidebar menu.</li>
+                    <li>Added ability to show stats for only selected buildings.</li>
+                    <li>Added Tier 1-3 Walls and Gates.</li>
+                    <li>Added Barge and Freighter.</li>
+                    <li>Added save versioning so we can automatically upgrade saves with changes for the planner.</li>
+                    <li>Updated controls information for newly added hotkeys: Q/E, WASD, etc.</li>
+                    <li>Bunkers, Trenches, and Trench Encampments had their socket positions updated so that they should be more accurately positioned when snapped.</li>
+                </ul>
+
+                <h4>Experimental Changes</h4>
+                <ul>
+                    <li>Added experimental weapon damage stats for bunkers.</li>
+                    <li>Added image importing with drag and drop or pasting the image into the planner.</li>
+                </ul>
+
+                <h4>Upcoming Experimental Changes</h4>
+                <ul>
+                    <li>Sorting Fixes: There's still some weird z-sorting for certain bunker upgrades that need to be dealt with for range occlusions to work properly.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    `
+});
+
+/*
+Vue.component('app-hub-presets', {
+    methods: {
+        buildBuilding: function(building) {
+            this.bmc();
+            game.createObject(building);
+            game.sidebarMenuComponent.showHoverMenu(null);
+            this.showPopup(false);
+        },
+        buildingHover: function(building) {
+            game.sidebarMenuComponent.showHoverMenu(building);
+        }
+    },
+    template: html`
+    <div class="tab-content">
+        <div class="preset-gallery">
+            <app-game-building-list-icon-v2 v-for="preset in window.objectData.categories.showcase.buildings" :container="game.hubPopup" :building="preset" />
+        </div>
+    </div>
+    `
+});
+*/
+
+Vue.component('app-hub-settings', {
+    methods: {
+        toggleSetting: function(setting) {
+            game.settings[setting] = !game.settings[setting];
+            game.updateSettings();
+        },
+        updateSettings: function() {
+            game.settings.gridSize = Math.max(game.settings.gridSize, 1);
+            game.settings.snapRotationDegrees = Math.min(Math.max(game.settings.snapRotationDegrees, 1), 360);
+            game.settings.keySnapRotationDegrees = Math.min(Math.max(game.settings.keySnapRotationDegrees, 1), 360);
+            game.settings.zoomSpeed = Math.min(Math.max(game.settings.zoomSpeed, 1), 5);
+            game.updateSettings();
+        }
+    },
+    template: html`
+    <div class="tab-content">
+        <div class="fall-in-item settings-option-wrapper">
+            <div class="tab-content-header">
+                <i class="fa fa-gear"></i> General Settings
+            </div>
+            <div class="tab-content-body container">
+                <div class="row">
+                    <label class="col-md-6 app-input-label" title="Disabling this will load all textures when you load the page.">
+                        <i class="fa fa-picture-o" aria-hidden="true"></i> Lazy Load Images
+                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.lazyLoadTextures }" @click="toggleSetting('lazyLoadTextures')"></button>
+                    </label>
+                    <label class="col-md-6 app-input-label">
+                        <i class="fa fa-volume-up" aria-hidden="true"></i> Volume ({{game.settings.volume * 100}}%)
+                        <input type="range" v-model="game.settings.volume" min="0" max="1" step="0.1" class="slider" @input="game.updateSettings()">
+                    </label>
+                </div>
+                <div class="row">
+                    <label class="col-md-6 app-input-label">
+                        <i class="fa fa-flag" aria-hidden="true"></i> Display Faction Colors
+                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.displayFactionTheme }" @click="toggleSetting('displayFactionTheme')"></button>
+                    </label>
+                    <label class="col-md-6 app-input-label">
+                        <i class="fa fa-users" aria-hidden="true"></i> Selected Faction
+                        <select class="app-input" v-model="game.settings.selectedFaction" @change="game.setFaction(game.settings.selectedFaction)">
+                            <option :value="null">Neutral</option>
+                            <option value="c">Colonials</option>
+                            <option value="w">Wardens</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="row">
+                    <label class="col-md-6 app-input-label">
+                        <i class="fa fa-history" aria-hidden="true"></i> Save History (Undo / Redo)
+                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.enableHistory }" @click="toggleSetting('enableHistory')"></button>
+                    </label>
+                    <label class="col-md-6 app-input-label" :class="{'disabled': !game.settings.enableHistory}" title="The total amount of saves / actions that can be stored to undo / redo. Requires Save History to be enabled.">
+                        <i class="fa fa-hdd-o" aria-hidden="true"></i> Stored History Size
+                        <input class="app-input" type="number" v-model.number="game.settings.historySize" @input="game.updateSettings()" :disabled="!game.settings.enableHistory">
+                    </label>
+                </div>
+                <div class="row">
+                    <label class="col-md-6 app-input-label" :class="{'disabled': !game.settings.enableHistory}" title="Load the last save found in the browser. Requires Save History to be enabled.">
+                        <i class="fa fa-upload" aria-hidden="true"></i> Auto-Load Last Save
+                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.enableAutoLoading }" @click="toggleSetting('enableAutoLoading')" :disabled="!game.settings.enableHistory"></button>
+                    </label>
+                    <label class="col-md-6 app-input-label">
+                        <i class="fa fa-flask" aria-hidden="true"></i> Enable Experimental Features
+                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.enableExperimental }" @click="toggleSetting('enableExperimental')"></button>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="fall-in-item settings-option-wrapper">
+            <div class="tab-content-header">
+                <i class="fa fa-cogs"></i> Board Configuration
+            </div>
+            <div class="tab-content-body container">
+                <div class="row">
+                    <label class="col-md-6 app-input-label">
+                        <i class="fa fa-header" aria-hidden="true"></i> Display Project Name
+                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.showFacilityName }" @click="toggleSetting('showFacilityName')"></button>
+                    </label>
+                    <label class="col-md-6 app-input-label">
+                        <i class="fa fa-moon-o" aria-hidden="true"></i> Enable Dark Mode
+                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.enableDarkMode }" @click="game.setDarkMode(!game.settings.enableDarkMode)"></button>
+                    </label>
+                </div>
+                <div class="row">
+                    <label class="col-md-6 app-input-label">
+                        <i class="fa fa-arrow-circle-up" aria-hidden="true"></i> Bring Selected to Front
+                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.bringSelectedToFront }" @click="toggleSetting('bringSelectedToFront')"></button>
+                    </label>
+                    <label class="col-md-6 app-input-label">
+                        <i class="fa fa-mouse-pointer" aria-hidden="true"></i> Disable Locked Selection
+                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.disableLockedMouseEvents }" @click="toggleSetting('disableLockedMouseEvents')"></button>
+                    </label>
+                </div>
+                <div class="row">
+                    <label class="col-md-6 app-input-label">
+                        <i class="fa fa-arrows" aria-hidden="true"></i> Enable Snap to Grid
+                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.enableGrid }" @click="toggleSetting('enableGrid')"></button>
+                    </label>
+                    <label class="col-md-6 app-input-label">
+                        <i class="fa fa-repeat" aria-hidden="true"></i> Enable Snap Rotation
+                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.enableSnapRotation }" @click="toggleSetting('enableSnapRotation')"></button>
+                    </label>
+                </div>
+                <div class="row">
+                    <label class="col-md-6 app-input-label">
+                        <i class="fa fa-th-large" aria-hidden="true"></i> Grid Snap Size
+                        <input class="app-input" type="number" v-model.number="game.settings.gridSize" min="1" @change="updateSettings()">
+                    </label>
+                    <label class="col-md-6 app-input-label" :class="{'disabled': !game.settings.enableSnapRotation}" title="Requires Snap Rotation to be enabled.">
+                        <i class="fa fa-repeat" aria-hidden="true"></i> Mouse Snap Degrees
+                        <input class="app-input" type="number" v-model.number="game.settings.snapRotationDegrees" min="1" max="360" @change="updateSettings()" :disabled="!game.settings.enableSnapRotation">
+                    </label>
+                </div>
+                <div class="row">
+                    <label class="col-md-6 app-input-label">
+                        <i class="fa fa-repeat" aria-hidden="true"></i> Hotkey Rotation Degrees
+                        <input class="app-input" type="number" v-model.number="game.settings.keySnapRotationDegrees" min="1" max="360" @change="updateSettings()">
+                    </label>
+                    <label class="col-md-6 app-input-label">
+                        <i class="fa fa-search-plus" aria-hidden="true"></i> Zoom Speed
+                        <input class="app-input" type="number" v-model.number="game.settings.zoomSpeed" min="1" max="5" @change="updateSettings()">
+                    </label>
+                </div>
+                <div class="row">
+                    <label class="col-md-6 app-input-label" :class="{'disabled': !game.settings.enableExperimental}" title="Changes behavior of the toolbelt hotkeys. By default, hotkeys will spawn a new object if nothing is selected. Requires Experimental Features to be enabled.">
+                        <i class="fa fa-wrench" aria-hidden="true"></i> Toolbelt Mode
+                        <select class="app-input" v-model.number="game.settings.toolbeltMode" @change="game.updateSettings()" :disabled="!game.settings.enableExperimental">
+                            <option :value="0">Create Only</option>
+                            <option value="1">Modify Single</option>
+                            <option value="2">Modify Selection</option>
+                        </select>
+                    </label>
+                    <label class="col-md-6 app-input-label" :class="{'disabled': !game.settings.enableExperimental}" title="Allows you to display LOS for certain structures: Pillboxes, Bunkers, etc. Requires Experimental Features to be enabled.">
+                        <i class="fa fa-eye" aria-hidden="true"></i> Enable Line-of-Sight Ranges
+                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.showLineOfSightRanges }" @click="toggleSetting('showLineOfSightRanges')" :disabled="!game.settings.enableExperimental"></button>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="fall-in-item settings-option-wrapper">
+            <div class="tab-content-header">
+                <i class="fa fa-sliders"></i> Construction Filters
+            </div>
+            <div class="tab-content-body container">
+                <div class="row">
+                    <label class="col-md-6 app-input-label">
+                        <i class="fa fa-folder-open" aria-hidden="true"></i> Default Category
+                        <select class="app-input" v-model="game.settings.defaultBuildingCategory" @change="game.updateSettings()">
+                            <option value="all">All Buildings</option>
+                            <template v-for="(category, key) in window.objectData.categories">
+                                <option v-if="game.canShowListCategory(category, true)" :value="key">{{category.name}}</option>
+                            </template>
+                        </select>
+                    </label>
+                    <label class="col-md-6 app-input-label">
+                        <i class="fa fa-users" aria-hidden="true"></i> Selected Faction
+                        <select class="app-input" v-model="game.settings.selectedFaction" @change="game.setFaction(game.settings.selectedFaction)">
+                            <option :value="null">Neutral</option>
+                            <option value="c">Colonials</option>
+                            <option value="w">Wardens</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="row">
+                    <label class="col-md-6 app-input-label">
+                        <i class="fa fa-sitemap" aria-hidden="true"></i> Selected Tech Tier
+                        <select class="app-input" v-model.number="game.settings.selectedTier" @change="game.updateSettings()">
+                            <option value="1">Tier 1</option>
+                            <option value="2">Tier 2</option>
+                            <option value="3">Tier 3</option>
+                        </select>
+                    </label>
+                    <label class="col-md-6 app-input-label">
+                        <i class="fa fa-ban" aria-hidden="true"></i> Show Selected Tier Only
+                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.showSelectedTierOnly }" @click="toggleSetting('showSelectedTierOnly')"></button>
+                    </label>
+                </div>
+                <div class="row">
+                    <label class="col-md-6 app-input-label">
+                        <i class="fa fa-compress" aria-hidden="true"></i> Show Collapsible Building List
+                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.showCollapsibleBuildingList }" @click="toggleSetting('showCollapsibleBuildingList')"></button>
+                    </label>
+                    <label class="col-md-6 app-input-label">
+                        <i class="fa fa-sitemap" aria-hidden="true"></i> Show Base Production Recipes
+                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.showParentProductionList }" @click="toggleSetting('showParentProductionList')"></button>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="fall-in-item">
+            <button class="btn-small" @click="game.confirmResetSettings()">
+                <i class="fa fa-undo" aria-hidden="true"></i>
+            </button>
+        </div> -->
     </div>
     `
 });
