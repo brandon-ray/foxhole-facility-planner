@@ -390,7 +390,7 @@ Vue.component('app-hub-home', {
             </div>
             <div class="tab-content-body">
                 <div class="tab-content-body-img-wrapper m-0">
-                    <img src="/assets/updates/04012023.jpg">
+                    <img src="/assets/updates/04112023.jpg">
                 </div>
             </div>
         </div>
