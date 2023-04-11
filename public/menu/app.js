@@ -403,6 +403,55 @@ Vue.component('app-hub-updates', {
     <div class="tab-content">
         <div class="fall-in-item">
             <div class="tab-content-header">
+                <i class="fa fa-bullhorn"></i> Settings & Performance Update
+                <small class="float-right">April 11th, 2023</small>
+            </div>
+            <div class="tab-content-body">
+                <div class="tab-content-body-img-wrapper">
+                    <img src="/assets/updates/04112023.jpg">
+                </div>
+                <h4>Major Changes</h4>
+                <ul>
+                    <li>Added lazy loading of texture assets. Reduces load times, can be disabled in settings.</li>
+                    <li>Moved settings page to hub and updated visuals.</li>
+                </ul>
+                <h4>Other Changes</h4>
+                <ul>
+                    <li>Added position / rotation to selections.</li>
+                    <li>Added tier up / down buttons for various structures.</li>
+                    <li>Updated costs of various tiered structures.</li>
+                    <li>Added go-to buttons for aligning camera with a selected object.</li>
+                    <li>Added delete project button to Load/Save menu.</li>
+                    <li>Presets will now be sorted by name.</li>
+                    <li>Updated Hub visuals, toggleable tab names, and maximize / minimize window.</li>
+                    <li>Selections automatically snap to nearest structures when rotated.</li>
+                    <li>Updated confirmation messaging when clearing the board, deleting project, etc.</li>
+                </ul>
+                <h4>Experimental Changes</h4>
+                <ul>
+                    <li>Added Tier 2-3 bunker base to upgrades for that tier.</li>
+                    <li>Added Toolbelt Modes:
+                        <ul>
+                            <li><b>Create Only:</b> Create a new structure each time you activate a toolbelt slot.</li>
+                            <li><b>Modify Single:</b> Modify the selected structure to the type of the activated toolbelt slot if only one structure is selected, otherwise create the structure.</li>
+                            <li><b>Modify Selection:</b> Modify all of the selected structures to the type of the activated toolbelt slot, otherwise create a single structure.</li>
+                        </ul>
+                    </li>
+                    <li>Added mirroring / flipping selections with F key and SHIFT + F.</i>
+                        <ul>
+                            <li>Bunkers are supported, but not much else. Use with caution. Still WIP.</li>
+                        </ul>
+                    </li>
+                    <li>Added toggleable setting for Line-of-Sight ranges.</li>
+                </ul>
+                <h4>Bug Fixes</h4>
+                <ul>
+                    <li>Fixed issue with selections becoming unaligned when snapped.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="fall-in-item">
+            <div class="tab-content-header">
                 <i class="fa fa-bullhorn"></i> Motorcycles Update? 🤔
                 <small class="float-right">April 1st, 2023</small>
             </div>

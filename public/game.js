@@ -2621,6 +2621,7 @@ try {
             if (confirmed) {
                 game.removeEntities();
                 game.project = JSON.parse(JSON.stringify(game.defaultProject));
+                game.updateEntityOverlays();
                 game.saveStateChanged = true;
                 game.appComponent?.refresh();
                 game.loadSaveMenuComponent?.refresh();
