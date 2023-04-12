@@ -189,7 +189,7 @@ Vue.component('app-menu-building-selected', {
             this.lockState = game.getSelectedLockState();
             let selectedEntity = game.getSelectedEntity();
             if (selectedEntity) {
-                if (selectedEntity.building?.texture.offset) {
+                if (selectedEntity.building?.texture?.offset) {
                     this.debug.textureOffset = {
                         x: selectedEntity.building.texture.offset?.x,
                         y: selectedEntity.building.texture.offset?.y
