@@ -646,6 +646,16 @@ Vue.component('app-hub-settings', {
                 </div>
                 <div class="row">
                     <label class="col-md-6 app-input-label">
+                        <i class="fa fa-cube" aria-hidden="true"></i> Show Selection Stats
+                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.enableSelectionStats }" @click="toggleSetting('enableSelectionStats'); game.refreshStats()"></button>
+                    </label>
+                    <label class="col-md-6 app-input-label" :class="{'disabled': !game.settings.enableSelectionStats}" title="Enabling this will require multiple objects to be selected for their stats to be displayed. Requires Selection Stats to be enabled.">
+                        <i class="fa fa-cubes" aria-hidden="true"></i> Require Multi-Selection for Stats
+                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.statsRequireMultiSelection }" @click="toggleSetting('statsRequireMultiSelection'); game.refreshStats()" :disabled="!game.settings.enableSelectionStats"></button>
+                    </label>
+                </div>
+                <div class="row">
+                    <label class="col-md-6 app-input-label">
                         <i class="fa fa-arrows" aria-hidden="true"></i> Enable Snap to Grid
                         <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.enableGrid }" @click="toggleSetting('enableGrid')"></button>
                     </label>

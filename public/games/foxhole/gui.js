@@ -139,7 +139,8 @@ Vue.component('app-menu-statistics', {
             let maintenanceTunnels = [];
             //let garrisonConsumptionReducers = [];
 
-            this.selection = game.settings.enableSelectionStats && game.getSelectedEntities().length;
+            const selected = game.getSelectedEntities().length;
+            this.selection = game.settings.enableSelectionStats && selected && (selected > 1 || !game.settings.statsRequireMultiSelection);
 
             const entities = game.getEntities();
             let selectedBunker = null;
@@ -156,7 +157,7 @@ Vue.component('app-menu-statistics', {
                         garrisonConsumptionReducers.push(entity);
                     }
                     */
-                    if (this.selection && selectedBunker !== false && entity.building.canUnion && entity.selected) {
+                    if (selectedBunker !== false && entity.building.canUnion && entity.selected) {
                         if (selectedBunker === null) {
                             selectedBunker = entity;
                         }
@@ -359,7 +360,7 @@ Vue.component('app-menu-statistics', {
                     <app-game-resource-icon v-for="(value, key) in cost" :resource="key" :amount="value"/>
                 </div>
             </div>
-            <div v-if="selection && bunker?.total" class="construction-options-wrapper">
+            <div v-if="bunker?.total" class="construction-options-wrapper">
                 <h5 class="construction-options-header"><i class="fa fa-shield" aria-hidden="true"></i> Selected Bunker Stats</h5>
                 <div class="construction-options row d-flex justify-content-center">
                     <div class="btn-small col" style="color: #00ca00;">
