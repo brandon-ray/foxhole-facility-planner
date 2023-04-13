@@ -2756,8 +2756,8 @@ try {
 
     game.cameraTo = function(entity) {
         if (entity) {
-            camera.x = (entity.x * camera.zoom) - WIDTH/2;
-            camera.y = (entity.y * camera.zoom) - HEIGHT/2;
+            camera.x = ((entity.mid?.x ?? entity.x) * camera.zoom) - WIDTH/2;
+            camera.y = ((entity.mid?.y ?? entity.y) * camera.zoom) - HEIGHT/2;
         }
     };
 

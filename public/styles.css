@@ -247,19 +247,20 @@ p {
 /* Buttons */
 
 .btn-small {
-    display: inline-block;
     background: #050505;
     border: 2px solid rgba(255, 255, 255, 0.075);
-    font-size: 2.25em;
+    font-size: 1.15em;
     color: #777;
-    width: 48px;
-    height: 48px;
+    width: 30px;
+    height: 30px;
     margin: 0 2px;
     padding: 0;
     position: relative;
-    line-height: 42px;
+    line-height: 25px;
+    margin: 6px 6px 6px 0;
     vertical-align: middle;
     text-align: center;
+    float: right;
 }
 
 .btn-small:not(:disabled) {
@@ -268,8 +269,21 @@ p {
 
 .btn-small:not(:disabled):focus, .btn-small:not(:disabled):hover {
     border-color: white;
-    color: white;
     outline: none;
+}
+
+.btn-small:not(:disabled):not(.btn-active):focus, .btn-small:not(.btn-active):hover {
+    color: white;
+}
+
+.btn-small.btn-active {
+    color: #ff8034 !important;
+}
+
+.btn-small.btn-inactive,
+.btn-small.btn-inactive:hover {
+    background: black !important;
+    color: #757575 !important;
 }
 
 .btn-small.header-icon {
@@ -716,10 +730,6 @@ input[type=number].btn-small {
 
 .construction-options .btn-small.layer-inactive > span.slash-icon::after {
     content: '/';
-}
-
-.construction-options .btn-small.btn-active {
-    color: #ff8034;
 }
 
 #construction-page .construction-settings-button,
@@ -1172,15 +1182,6 @@ hr {
 
 .no-sidebar .project-banner {
     left: 15px;
-}
-
-.btn-small {
-    width: 30px;
-    height: 30px;
-    line-height: 25px;
-    margin: 6px 6px 6px 0;
-    font-size: 1.15em;
-    float: right;
 }
 
 #hover-building-info {
@@ -1902,16 +1903,6 @@ hr {
 .settings-option-wrapper .settings-option .btn-small {
     margin: 6px 3px;
     float: left;
-}
-
-.btn-small.btn-active {
-    color: #ff8034;
-}
-
-.btn-small.btn-inactive,
-.btn-small.btn-inactive:hover {
-    background: black;
-    color: #757575;
 }
 
 .settings-option-wrapper .settings-option .btn-right {

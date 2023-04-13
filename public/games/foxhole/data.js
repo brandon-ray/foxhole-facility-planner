@@ -174,9 +174,23 @@ const gameData = {
 				"facilities"
 			]
 		},
+		"antoines_front_ammunition_fac": {
+			"name": "Antoine's Front Ammunition Fac.",
+			"author": "Antoine",
+			"filters": [
+				"facilities"
+			]
+		},
 		"antoines_train_station": {
 			"name": "Antoine's Train Station",
 			"description": "This is a train station for 3 trains.",
+			"author": "Antoine",
+			"filters": [
+				"facilities"
+			]
+		},
+		"antoines_train_station_2_1": {
+			"name": "Antoine's Train Station 2",
 			"author": "Antoine",
 			"filters": [
 				"facilities"
@@ -5648,6 +5662,9 @@ const gameData = {
 				"fortt3": {
 					"reference": "fortt3"
 				},
+				"fortbaset2": {
+					"reference": "fortbaset2"
+				},
 				"atgunait2": {
 					"name": "AT Gun Garrison (Tier 2)",
 					"codeName": "ATGunAIT2",
@@ -5981,6 +5998,9 @@ const gameData = {
 			"repairCost": 120,
 			"tierDown": "fortt2",
 			"upgrades": {
+				"fortbaset3": {
+					"reference": "fortbaset3"
+				},
 				"intelcenter": {
 					"name": "Intelligence Center",
 					"codeName": "IntelCenter",

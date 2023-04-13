@@ -348,7 +348,7 @@ Vue.component('app-game-hub-popup', {
         <div class="board-panel-header">
             <h4 class="float-left m-0" style="color: #eee"><img src="/favicon_white.ico" height="28px" style="vertical-align: top; opacity: 0.25"> Planner Hub <span class="text-muted">/</span> {{selectedTab.title}}</h4>
             <button class="btn-small m-0 mr-1 float-right" title="Close Hub" @click="showPopup(false)"><i class="fa fa-times" aria-hidden="true"></i></button>
-            <button class="btn-small m-0 mr-2 float-right" :title="maximized ? 'Minimize Hub' : 'Maximize Hub'" @click="maximized = !maximized; refresh()"><i class="fa fa-window-maximize" aria-hidden="true"></i></button>
+            <button class="btn-small m-0 mr-2 float-right" :class="{'btn-active': maximized}" :title="maximized ? 'Minimize Hub' : 'Maximize Hub'" @click="maximized = !maximized; refresh()"><i class="fa fa-window-maximize" aria-hidden="true"></i></button>
         </div>
         <div class="d-flex board-panel-body">
             <div class="hub-sidebar h-100 text-center p-0 position-relative justify-content-center align-items-center">
