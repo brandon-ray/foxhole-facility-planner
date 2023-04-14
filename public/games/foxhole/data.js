@@ -4020,7 +4020,6 @@ const gameData = {
 			"radius": 2,
 			"range": {
 				"type": "killboxRocket",
-				"lineOfSight": true,
 				"min": 3.5,
 				"max": 45
 			},
@@ -9624,6 +9623,46 @@ const gameData = {
 			},
 			"techId": "unlockmotorcycle"
 		},
+		"observationtower": {
+			"name": "Observation Tower",
+			"codeName": "ObservationTower",
+			"description": "An Observation Tower that provides intel on friendly and enemy forces in an area.",
+			"category": "world",
+			"categoryOrder": 15,
+			"width": 6,
+			"length": 6,
+			"radius": 3,
+			"range": {
+				"type": "radio",
+				"max": 240
+			},
+			"hitArea": [
+				{
+					"shape": [ -1.82,79.39,-34.63,71.86,-57.32,55.06,-79.48,1.39,79.65,0.17,73.77,28.92,58.7,53.68,30.91,73.33 ]
+				},
+				{
+					"shape": [ 72.38,-32.21,79.65,0.17,-79.48,1.39,-73.94,-29.26,-57.84,-54.89,-2.42,-79.39,28.48,-74.55,54.55,-58.18 ]
+				},
+				{
+					"shape": [ -2.42,-79.39,-57.84,-54.89,-32.55,-72.73 ]
+				},
+				{
+					"shape": [ -79.48,1.39,-57.32,55.06,-73.94,29.09 ]
+				}
+			],
+			"icon": "../UI/CustomIcons/ObservationTowerIcon.webp",
+			"texture": {
+				"src": "../Structures/observationtower.webp",
+				"width": 293,
+				"height": 286,
+				"offset": {
+					"x": 308,
+					"y": 308
+				}
+			},
+			"maxHealth": 2000,
+			"cost": false
+		},
 		"oil_refinery": {
 			"name": "Oil Refinery",
 			"codeName": "FacilityRefineryOil",
@@ -12846,7 +12885,7 @@ const gameData = {
 			"name": "Tree",
 			"description": "A tree featured throughout the world of Foxhole.",
 			"category": "world",
-			"categoryOrder": 10,
+			"categoryOrder": 18,
 			"sortLayer": "overhead",
 			"radius": 2,
 			"icon": "../UI/CustomIcons/TreeIcon.webp",
@@ -14213,7 +14252,7 @@ const gameData = {
 			"name": "Public Road",
 			"description": "A public road featured throughout the world of Foxhole.",
 			"category": "world",
-			"categoryOrder": 11,
+			"categoryOrder": 19,
 			"sortLayer": "road",
 			"hasHandle": true,
 			"isBezier": true,
