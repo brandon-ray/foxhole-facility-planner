@@ -1047,8 +1047,8 @@ try {
         mapRegion = new PIXI.Sprite();
         // mapRegion.width = 1024; // 2162m x 32?
         // mapRegion.height = 888; // 1875m x 32?
-        mapRegion.width = 2162 * METER_BOARD_PIXEL_SIZE;
-        mapRegion.height = 1875 * METER_BOARD_PIXEL_SIZE; // 125m x 15u
+        mapRegion.width = 2177 * METER_BOARD_PIXEL_SIZE;
+        mapRegion.height = 1888 * METER_BOARD_PIXEL_SIZE; // 125m x 15.104u
         mapRegion.x = GRID_WIDTH/2;
         mapRegion.y = GRID_HEIGHT/2;
         mapRegion.anchor.set(0.5);
