@@ -176,21 +176,23 @@ const gameData = {
 		},
 		"antoines_front_ammunition_fac": {
 			"name": "Antoine's Front Ammunition Fac.",
+			"description": "This is an easy Facility you can do near the front to provide public",
 			"author": "Antoine",
 			"filters": [
 				"facilities"
 			]
 		},
-		"antoines_train_station": {
-			"name": "Antoine's Train Station",
-			"description": "This is a train station for 3 trains.",
+		"antoines_train_station_1_1": {
+			"name": "Antoine's Train Station 1",
+			"description": "This is a t2 train station for 3 train.",
 			"author": "Antoine",
 			"filters": [
 				"facilities"
 			]
 		},
-		"antoines_train_station_2_1": {
+		"antoines_train_station_2_2": {
 			"name": "Antoine's Train Station 2",
+			"description": "This is a t3 train station for 4 train.",
 			"author": "Antoine",
 			"filters": [
 				"facilities"
