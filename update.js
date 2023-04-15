@@ -503,6 +503,7 @@ async function iterateStructures(dirPath) {
 			                        'canSnapRotate': structureData.canSnapRotate,
                                     'canSnapStructureType': structureData.canSnapStructureType,
                                     'canSnapAlongBezier': structureData.canSnapAlongBezier,
+                                    'canBlueprint': structureData.canBlueprint,
                                     'canUnion': structureData.canUnion,
                                     'ignoreSnapSettings': structureData.ignoreSnapSettings,
                                     'snapGrab': structureData.snapGrab,
@@ -1026,8 +1027,9 @@ function findFile(directory, fileName) {
 const METER_PIXEL_SCALE = 52.8 / 32; // Meter in pixels of a texture divided by the width of a meter on the grid / board.
 async function fetchTextureData(structureData) {
     const texturePath = (typeof structureData.texture === 'string' && structureData.texture) || structureData.texture?.src;
-    if (texturePath && !structureData.texture?.speed) {
-        const texture = await sharp(texturePath.replace('../', './public/games/foxhole/assets/game/Textures/')).metadata();
+    const filePath = texturePath?.replace('../', './public/games/foxhole/assets/game/Textures/');
+    if (texturePath && fs.existsSync(filePath) && !structureData.texture?.speed) {
+        const texture = await sharp(filePath).metadata();
         structureData.texture = {
             src: texturePath,
             width: texture.width,

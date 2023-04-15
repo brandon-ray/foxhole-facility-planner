@@ -744,6 +744,12 @@ Vue.component('app-hub-settings', {
                         <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.showCollapsibleBuildingList }" @click="toggleSetting('showCollapsibleBuildingList')"></button>
                     </label>
                     <label class="col-md-6 app-input-label">
+                        <i class="fa fa-chevron-circle-up" aria-hidden="true"></i> Show All Upgrades in List
+                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.showUpgradesAsBuildings }" @click="toggleSetting('showUpgradesAsBuildings')"></button>
+                    </label>
+                </div>
+                <div class="row">
+                    <label class="col-md-6 app-input-label">
                         <i class="fa fa-sitemap" aria-hidden="true"></i> Show Base Production Recipes
                         <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.showParentProductionList }" @click="toggleSetting('showParentProductionList')"></button>
                     </label>

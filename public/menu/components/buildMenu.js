@@ -155,6 +155,7 @@ Vue.component('app-menu-building-selected', {
                 y: 0,
                 rotation: 0,
                 rotationDegrees: 0,
+                blueprint: false,
                 baseProduction: false,
                 selectedProduction: null,
                 productionScale: null,
@@ -207,6 +208,7 @@ Vue.component('app-menu-building-selected', {
                     y: selectedEntity.y,
                     rotation: selectedEntity.rotation,
                     rotationDegrees: Math.rad2deg(selectedEntity.rotation).round(3),
+                    blueprint: selectedEntity.blueprint,
                     baseProduction: selectedEntity.baseProduction,
                     selectedProduction: selectedEntity.selectedProduction,
                     productionScale: selectedEntity.productionScale,
@@ -413,6 +415,13 @@ Vue.component('app-menu-building-selected', {
             this.bmc();
             game.exchangeSelected(upgrade);
         },
+        toggleBlueprint: function() {
+            const selectedEntity = game.getSelectedEntity();
+            if (selectedEntity && selectedEntity.type === 'building') {
+                selectedEntity.setBlueprint(!selectedEntity.blueprint);
+                game.saveStateChanged = true;
+            }
+        },
         changeBaseUpgrade: function(tree, key) {
             this.bmc();
             const selectedEntity = game.getSelectedEntity();
@@ -566,6 +575,10 @@ Vue.component('app-menu-building-selected', {
                         <button class="btn-small m-0 mr-1 float-right" type="button" title="Rotate 45 degrees" @click="game.rotateSelected(Math.PI / 4)"><i class="fa fa-repeat" aria-hidden="true"></i></button>&nbsp;
                         <button class="btn-small m-0 mr-1 float-right" type="button" title="Rotate -45 degrees"@click="game.rotateSelected(-Math.PI / 4)"><i class="fa fa-undo" aria-hidden="true"></i></button>&nbsp;
                     </template>
+                </div>
+                <div v-if="entity.building?.category === 'entrenchments'" class="app-input-label settings-option-row" :class="{'disabled': !entity.building?.canBlueprint}" title="Enabling this will display the structure as a blueprint. This option is only available to Entrenchments.">
+                    <i class="fa fa-cube" aria-hidden="true"></i> Toggle Blueprint:
+                    <button class="btn-small btn-tickbox m-0 mr-1 float-right" :class="{'btn-active': entity.blueprint}" type="button" @click="toggleBlueprint()" title="Toggle Blueprint" :disabled="!entity.building?.canBlueprint"></button>
                 </div>
                 <label v-if="game.settings.enableDebug && entity.subtype === 'power_line'" class="app-input-label">
                     <i class="fa fa-paint-brush" aria-hidden="true"></i> Color:

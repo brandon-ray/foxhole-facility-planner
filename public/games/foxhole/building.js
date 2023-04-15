@@ -570,6 +570,10 @@ class FoxholeStructure extends DraggableContainer {
             }
         }
 
+        if (this.blueprint) {
+            objData.blueprint = this.blueprint;
+        }
+
         if (this.maintenanceFilters) {
             objData.maintenanceFilters = Object.assign({}, this.maintenanceFilters);
         }
@@ -634,6 +638,10 @@ class FoxholeStructure extends DraggableContainer {
             for (const [tree, key] of Object.entries(objData.baseUpgrades)) {
                 this.setBaseUpgrade(tree, key);
             }
+        }
+
+        if (objData.blueprint) {
+            this.setBlueprint(objData.blueprint);
         }
 
         if (objData.maintenanceFilters) {
@@ -1231,6 +1239,27 @@ class FoxholeStructure extends DraggableContainer {
         });
     }
 
+    setBlueprint(blueprint) {
+        if (this.building.canBlueprint && this.blueprint !== blueprint) {
+            this.blueprint = blueprint;
+            const tint = this.blueprint ? COLOR_BLUEPRINT : COLOR_WHITE;
+            const filters = this.blueprint ? [FILTER_BRIGHT] : [];
+            const setTint = (sprite) => {
+                sprite.tint = tint;
+                sprite.filters = filters;
+            }
+            setTint(this.sprite);
+            if (this.sockets) {
+                for (const socket of this.sockets) {
+                    if (socket.pointer) {
+                        setTint(socket.pointer);
+                    }
+                }
+            }
+            this.regenerate();
+        }
+    }
+
     getUnion() {
         if (this.union !== this) {
             this.union = this.union.getUnion();
@@ -1349,6 +1378,10 @@ class FoxholeStructure extends DraggableContainer {
                         this.sprite.trapezoid.floor.tint = COLOR_RED;
                         connectorTopBorder.tint = COLOR_RED;
                         connectorBottomBorder.tint = COLOR_RED;
+                    } else if (this.blueprint) {
+                        this.sprite.trapezoid.floor.tint = COLOR_BLUEPRINT;
+                        connectorTopBorder.tint = COLOR_BLUEPRINT;
+                        connectorBottomBorder.tint = COLOR_BLUEPRINT;
                     }
 
                     if (this.sockets) {
@@ -1358,7 +1391,7 @@ class FoxholeStructure extends DraggableContainer {
                                 socket.position.set(endPoint.x, endPoint.y);
                                 socket.rotation = endPoint.rotation - Math.PI/2;
                             }
-                            socket.pointer.tint = limitReached ? COLOR_RED : COLOR_WHITE;
+                            socket.pointer.tint = limitReached ? COLOR_RED : (this.blueprint ? COLOR_BLUEPRINT : COLOR_WHITE);
                         }
                     }
                 } else if (this.building.key === 'barbedwirewallspline') {

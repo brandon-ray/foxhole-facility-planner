@@ -1937,6 +1937,11 @@ label.settings-option-wrapper, .settings-option-wrapper label, .settings-option-
     margin: 0;
 }
 
+.settings-option-row.disabled {
+    color: gray;
+    background: #1c1c1c;
+}
+
 .settings-option-wrapper label:last-child, .settings-option-wrapper .settings-option-row:last-child {
     border-bottom: none;
 }

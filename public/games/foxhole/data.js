@@ -4675,6 +4675,7 @@ const gameData = {
 				}
 			},
 			"canSnap": true,
+			"canBlueprint": true,
 			"snapNearest": true,
 			"sockets": [
 				{
@@ -5037,6 +5038,193 @@ const gameData = {
 				}
 			}
 		},
+		"fortbuildsite": {
+			"name": "Bunker Dig Site",
+			"codeName": "FortBuildSite",
+			"parentKey": "fortt1",
+			"description": "A build site that serves as the foundation for constructing a bunker piece. Connects to other Bunkers and Trenches.",
+			"categoryOrder": 2.5,
+			"sortLayer": "resource",
+			"icon": "../UI/CustomIcons/FortBuildSiteIcon.webp",
+			"texture": {
+				"src": "../Structures/fortbuildsite.webp",
+				"width": 284,
+				"height": 286
+			},
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 2.5,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 1,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 5,
+					"y": 2.5,
+					"rotation": 90
+				},
+				{
+					"id": 2,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 2.5,
+					"y": 5,
+					"rotation": 180
+				},
+				{
+					"id": 3,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 0,
+					"y": 2.5,
+					"rotation": 270
+				}
+			],
+			"maxHealth": 400,
+			"tierUp": "fortt1",
+			"tierDown": false,
+			"upgrades": {
+				"fortbuildsite": {
+					"reference": "fortbuildsite"
+				},
+				"fortt2": {
+					"reference": "fortt2"
+				},
+				"fortbaset1": {
+					"reference": "fortbaset1"
+				},
+				"fortcornert2": {
+					"reference": "fortcornert2"
+				},
+				"mgait1": {
+					"reference": "fortt1_mgait1"
+				},
+				"fortrampt1": {
+					"reference": "fortt1_fortrampt1"
+				},
+				"rifleait1": {
+					"reference": "fortt1_rifleait1"
+				}
+			}
+		},
+		"fortcornerbuildsite": {
+			"name": "Bunker Corner Dig Site",
+			"codeName": "FortCornerBuildSite",
+			"parentKey": "fortcornert1",
+			"description": "A build site that serves as the foundation for constructing a bunker corner piece. Connects to other Bunkers and Trenches.",
+			"categoryOrder": 2.5,
+			"sortLayer": "resource",
+			"icon": "../UI/CustomIcons/FortCornerBuildSiteIcon.webp",
+			"texture": {
+				"src": "../Structures/fortcornerbuildsite.webp",
+				"width": 285,
+				"height": 286
+			},
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 2.5,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 6,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 3.39,
+					"y": 3.39,
+					"rotation": 135
+				},
+				{
+					"id": 3,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 0,
+					"y": 2.5,
+					"rotation": 270
+				}
+			],
+			"maxHealth": 400,
+			"tierUp": "fortcornert1",
+			"tierDown": false,
+			"upgrades": {
+				"fortcornerbuildsite": {
+					"reference": "fortcornerbuildsite"
+				},
+				"fortcornert1": {
+					"reference": "fortcornert1"
+				},
+				"fortcornert2": {
+					"reference": "fortcornert2"
+				},
+				"fortcornert3": {
+					"reference": "fortcornert3"
+				}
+			}
+		},
 		"fortcornert1": {
 			"name": "Bunker Corner (Tier 1)",
 			"codeName": "FortCornerT1",
@@ -5114,7 +5302,11 @@ const gameData = {
 			"structuralIntegrity": 0.85,
 			"repairCost": 75,
 			"tierUp": "fortcornert2",
+			"tierDown": "fortcornerbuildsite",
 			"upgrades": {
+				"fortcornerbuildsite": {
+					"reference": "fortcornerbuildsite"
+				},
 				"fortcornert1": {
 					"reference": "fortcornert1"
 				},
@@ -5145,6 +5337,7 @@ const gameData = {
 				"width": 300,
 				"height": 300
 			},
+			"canBlueprint": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -5209,6 +5402,9 @@ const gameData = {
 			"tierUp": "fortcornert3",
 			"tierDown": "fortcornert1",
 			"upgrades": {
+				"fortcornerbuildsite": {
+					"reference": "fortcornerbuildsite"
+				},
 				"fortcornert1": {
 					"reference": "fortcornert1"
 				},
@@ -5301,6 +5497,9 @@ const gameData = {
 			"repairCost": 120,
 			"tierDown": "fortcornert2",
 			"upgrades": {
+				"fortcornerbuildsite": {
+					"reference": "fortcornerbuildsite"
+				},
 				"fortcornert1": {
 					"reference": "fortcornert1"
 				},
@@ -5408,7 +5607,11 @@ const gameData = {
 			"structuralIntegrity": 0.85,
 			"repairCost": 75,
 			"tierUp": "fortt2",
+			"tierDown": "fortbuildsite",
 			"upgrades": {
+				"fortbuildsite": {
+					"reference": "fortbuildsite"
+				},
 				"fortt2": {
 					"reference": "fortt2"
 				},
@@ -5439,6 +5642,7 @@ const gameData = {
 							"y": 312
 						}
 					},
+					"canBlueprint": true,
 					"maxHealth": 1650,
 					"structuralIntegrity": 0.65,
 					"cost": {
@@ -5461,6 +5665,7 @@ const gameData = {
 							"y": 324
 						}
 					},
+					"canBlueprint": true,
 					"sockets": [
 						{
 							"id": 0,
@@ -5555,6 +5760,7 @@ const gameData = {
 							"y": 328
 						}
 					},
+					"canBlueprint": true,
 					"maxHealth": 1500,
 					"structuralIntegrity": 0.65,
 					"cost": {
@@ -5577,6 +5783,7 @@ const gameData = {
 				"width": 308,
 				"height": 308
 			},
+			"canBlueprint": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -12972,6 +13179,7 @@ const gameData = {
 				"height": 97
 			},
 			"textureBorder": "../Structures/trencht2_connector_side.webp",
+			"canBlueprint": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -13224,6 +13432,7 @@ const gameData = {
 				"width": 442,
 				"height": 442
 			},
+			"canBlueprint": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -13596,6 +13805,7 @@ const gameData = {
 				"width": 530,
 				"height": 157
 			},
+			"canBlueprint": true,
 			"sockets": [
 				{
 					"id": 0,

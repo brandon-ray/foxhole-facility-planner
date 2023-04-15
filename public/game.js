@@ -8,6 +8,7 @@ const COLOR_ORANGE = 0xFF8F00;
 const COLOR_RED = 0xFF0000;
 const COLOR_GREEN = 0x00FF00;
 const COLOR_BLUE = 0x0000FF;
+const COLOR_BLUEPRINT = 0x335cff;
 const COLOR_LIGHTBLUE = 0x00E1FF;
 const COLOR_YELLOW = 0xFFFF00;
 const COLOR_PURPLE = 0x9900FF;
@@ -26,6 +27,9 @@ const COLOR_RANGES = {
     crane: COLOR_LIGHTBLUE
 };
 const COLOR_RANGE_BORDER = 0xED2323; // Red
+
+const FILTER_BRIGHT = new PIXI.filters.ColorMatrixFilter();
+FILTER_BRIGHT.brightness(2.75);
 
 const DEFAULT_TEXT_STYLE = {
     fontFamily: 'Jost',
