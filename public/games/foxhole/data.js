@@ -5043,8 +5043,7 @@ const gameData = {
 			"codeName": "FortBuildSite",
 			"parentKey": "fortt1",
 			"description": "A build site that serves as the foundation for constructing a bunker piece. Connects to other Bunkers and Trenches.",
-			"categoryOrder": 2.5,
-			"sortLayer": "resource",
+			"sortLayer": "road",
 			"icon": "../UI/CustomIcons/FortBuildSiteIcon.webp",
 			"texture": {
 				"src": "../Structures/fortbuildsite.webp",
@@ -5124,8 +5123,8 @@ const gameData = {
 				"fortbuildsite": {
 					"reference": "fortbuildsite"
 				},
-				"fortt2": {
-					"reference": "fortt2"
+				"fortt1": {
+					"reference": "fortt1"
 				},
 				"fortbaset1": {
 					"reference": "fortbaset1"
@@ -5149,8 +5148,8 @@ const gameData = {
 			"codeName": "FortCornerBuildSite",
 			"parentKey": "fortcornert1",
 			"description": "A build site that serves as the foundation for constructing a bunker corner piece. Connects to other Bunkers and Trenches.",
-			"categoryOrder": 2.5,
-			"sortLayer": "resource",
+			"categoryOrder": 4,
+			"sortLayer": "road",
 			"icon": "../UI/CustomIcons/FortCornerBuildSiteIcon.webp",
 			"texture": {
 				"src": "../Structures/fortcornerbuildsite.webp",
@@ -13104,6 +13103,128 @@ const gameData = {
 				"height": 193
 			}
 		},
+		"trenchbuildsite": {
+			"name": "Trench Dig Site",
+			"codeName": "BPTrenchBuildSite",
+			"parentKey": "trencht1",
+			"description": "A build site that serves as the foundation for constructing a trench. Connects to other Bunkers and Trenches.",
+			"categoryOrder": 0,
+			"sortLayer": "road",
+			"icon": "../UI/CustomIcons/TrenchBuildSiteIcon.webp",
+			"texture": {
+				"src": "../Structures/trenchbuildsite.webp",
+				"width": 539,
+				"height": 175
+			},
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 70,
+							"category": 2
+						}
+					],
+					"x": 0,
+					"y": 1.47,
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": [
+						{
+							"mask": 2,
+							"category": 64
+						}
+					],
+					"x": 5,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 2,
+					"type": [
+						{
+							"mask": 70,
+							"category": 2
+						}
+					],
+					"x": 10,
+					"y": 1.47,
+					"rotation": 90
+				},
+				{
+					"id": 3,
+					"type": [
+						{
+							"mask": 2,
+							"category": 64
+						}
+					],
+					"x": 5,
+					"y": 2.94,
+					"rotation": 180
+				}
+			],
+			"maxHealth": 400,
+			"tierUp": "trencht1",
+			"tierDown": false,
+			"upgrades": {
+				"trenchbuildsite": {
+					"reference": "trenchbuildsite"
+				},
+				"trencht1": {
+					"reference": "trencht1"
+				},
+				"trencht2": {
+					"reference": "trencht2"
+				},
+				"trencht3": {
+					"reference": "trencht3"
+				}
+			}
+		},
+		"trenchconnectorbuildsite": {
+			"name": "Trench Connector Dig Site",
+			"codeName": "TrenchConnectorBuildSite",
+			"parentKey": "trenchconnectort1",
+			"description": "A build site that serves as the foundation for constructing a trench connector. Connects to other Bunkers and Trenches.",
+			"sortLayer": "road",
+			"icon": "../UI/CustomIcons/TrenchConnectorBuildSiteIcon.webp",
+			"texture": null,
+			"textureBorder": "../Structures/trench_connector_buildsite_side.webp",
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 1094,
+							"category": 1026
+						}
+					],
+					"texture": "../Structures/trench_connector_buildsite_end.webp",
+					"textureAlt": "../Structures/trench_connector_buildsite_end.webp",
+					"cap": "front",
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": [
+						{
+							"mask": 1094,
+							"category": 1026
+						}
+					],
+					"texture": "../Structures/trench_connector_buildsite_end.webp",
+					"textureAlt": "../Structures/trench_connector_buildsite_end.webp",
+					"cap": "back",
+					"rotation": 90
+				}
+			],
+			"maxHealth": 1500,
+			"tierUp": "trenchconnectort1",
+			"tierDown": false
+		},
 		"trenchconnectort1": {
 			"name": "Trench Connector (Tier 1)",
 			"codeName": "TrenchConnectorT1",
@@ -13154,7 +13275,11 @@ const gameData = {
 			"maxHealth": 1500,
 			"repairCost": 90,
 			"tierUp": "trenchconnectort2",
+			"tierDown": "trenchconnectorbuildsite",
 			"upgrades": {
+				"trenchconnectorbuildsite": {
+					"reference": "trenchconnectorbuildsite"
+				},
 				"trenchconnectort1": {
 					"reference": "trenchconnectort1"
 				},
@@ -13259,6 +13384,120 @@ const gameData = {
 			},
 			"repairCost": 120,
 			"tierDown": "trenchconnectort2"
+		},
+		"trenchempbuildsite": {
+			"name": "Trench Emplacement Dig Site",
+			"codeName": "BPTrenchEmpBuildSite",
+			"parentKey": "trenchempt1",
+			"description": "A build site that serves as the foundation for constructing a trench emplacement. Connects to other Bunkers and Trenches.",
+			"sortLayer": "road",
+			"icon": "../UI/CustomIcons/TrenchEmpBuildSiteIcon.webp",
+			"texture": {
+				"src": "../Structures/trenchempbuildsite.webp",
+				"width": 508,
+				"height": 508
+			},
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"x": 5,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 1,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"x": 8.53,
+					"y": 1.47,
+					"rotation": 45
+				},
+				{
+					"id": 2,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"x": 10,
+					"y": 5,
+					"rotation": 90
+				},
+				{
+					"id": 3,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"x": 8.53,
+					"y": 8.53,
+					"rotation": 135
+				},
+				{
+					"id": 4,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"x": 5,
+					"y": 10,
+					"rotation": 180
+				},
+				{
+					"id": 5,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"x": 1.47,
+					"y": 8.53,
+					"rotation": 225
+				},
+				{
+					"id": 6,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"x": 0,
+					"y": 5,
+					"rotation": 270
+				},
+				{
+					"id": 7,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"x": 1.47,
+					"y": 1.47,
+					"rotation": 315
+				}
+			],
+			"maxHealth": 400,
+			"tierUp": "trenchempt1",
+			"tierDown": false
 		},
 		"trenchempt1": {
 			"name": "Trench Emplacement (Tier 1)",
@@ -13408,7 +13647,11 @@ const gameData = {
 			"maxHealth": 1500,
 			"repairCost": 75,
 			"tierUp": "trenchempt2",
+			"tierDown": "trenchempbuildsite",
 			"upgrades": {
+				"trenchempbuildsite": {
+					"reference": "trenchempbuildsite"
+				},
 				"trenchempt1": {
 					"reference": "trenchempt1"
 				},
@@ -13781,7 +14024,11 @@ const gameData = {
 			"maxHealth": 1500,
 			"repairCost": 75,
 			"tierUp": "trencht2",
+			"tierDown": "trenchbuildsite",
 			"upgrades": {
+				"trenchbuildsite": {
+					"reference": "trenchbuildsite"
+				},
 				"trencht1": {
 					"reference": "trencht1"
 				},
@@ -13868,18 +14115,7 @@ const gameData = {
 			},
 			"repairCost": 50,
 			"tierUp": "trencht3",
-			"tierDown": "trencht1",
-			"upgrades": {
-				"trencht1": {
-					"reference": "trencht1"
-				},
-				"trencht2": {
-					"reference": "trencht2"
-				},
-				"trencht3": {
-					"reference": "trencht3"
-				}
-			}
+			"tierDown": "trencht1"
 		},
 		"trencht3": {
 			"name": "Trench (Tier 3)",
@@ -13954,18 +14190,7 @@ const gameData = {
 				"concrete": 10
 			},
 			"repairCost": 80,
-			"tierDown": "trencht2",
-			"upgrades": {
-				"trencht1": {
-					"reference": "trencht1"
-				},
-				"trencht2": {
-					"reference": "trencht2"
-				},
-				"trencht3": {
-					"reference": "trencht3"
-				}
-			}
+			"tierDown": "trencht2"
 		},
 		"troopship": {
 			"name": "BMS - White Whale",

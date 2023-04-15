@@ -1317,7 +1317,7 @@ class FoxholeStructure extends DraggableContainer {
                 if (this.building.trenchConnector) {
                     this.sprite.removeChild(this.sprite.trapezoid);
 
-                    const floorHalfHeight = 51.65, floorTexturePadding = 100;
+                    const floorHalfHeight = this.building.texture ? 51.65 : 62, floorTexturePadding = 100;
                     const frontPoint = this.points[0], endPoint = this.points[this.points.length - 1];
                     const frontPoint1 = { x: 0, y: -floorHalfHeight };
                     const frontPoint2 = { x: 0, y: floorHalfHeight };
@@ -1334,21 +1334,23 @@ class FoxholeStructure extends DraggableContainer {
                         endPoint2.x, endPoint2.y
                     ]);
 
-                    const floorMask = new PIXI.Graphics();
-                    floorMask.beginFill(0xFF3300);
-                    floorMask.drawPolygon(trapezoid);
-                    floorMask.endFill();
-                    this.sprite.trapezoid.addChild(floorMask);
-
                     this.sprite.hitArea = trapezoid;
 
-                    this.sprite.trapezoid.floor = new PIXI.TilingSprite(undefined, Math.distanceBetween(frontPoint, endPoint) + floorTexturePadding);
-                    game.fetchTexture(this.sprite.trapezoid.floor, this.building.texture.src, (sprite, texture) => {
-                        sprite.anchor.set((floorTexturePadding / texture.width) / 2, 0.5);
-                    });
-                    this.sprite.trapezoid.floor.mask = floorMask;
-                    this.sprite.trapezoid.floor.rotation = angle;
-                    this.sprite.trapezoid.addChild(this.sprite.trapezoid.floor);
+                    if (this.building.texture) {
+                        const floorMask = new PIXI.Graphics();
+                        floorMask.beginFill(0xFF3300);
+                        floorMask.drawPolygon(trapezoid);
+                        floorMask.endFill();
+                        this.sprite.trapezoid.addChild(floorMask);
+
+                        this.sprite.trapezoid.floor = new PIXI.TilingSprite(undefined, Math.distanceBetween(frontPoint, endPoint) + floorTexturePadding);
+                        game.fetchTexture(this.sprite.trapezoid.floor, this.building.texture.src, (sprite, texture) => {
+                            sprite.anchor.set((floorTexturePadding / texture.width) / 2, 0.5);
+                        });
+                        this.sprite.trapezoid.floor.mask = floorMask;
+                        this.sprite.trapezoid.floor.rotation = angle;
+                        this.sprite.trapezoid.addChild(this.sprite.trapezoid.floor);
+                    }
 
                     const connectorTopBorder = new PIXI.TilingSprite(undefined, Math.distanceBetween(frontPoint1, endPoint2));
                     game.fetchTexture(connectorTopBorder, this.building.textureBorder, (sprite, texture) => {
@@ -1375,11 +1377,15 @@ class FoxholeStructure extends DraggableContainer {
                     const maxAngle = Math.deg2rad((15 * 3) + 1), angleBetweenPoints = Math.angleBetween(frontPoint, endPoint);
                     const limitReached = (this.building?.minLength && (Math.distanceBetween(frontPoint, endPoint) < (this.building.minLength * METER_BOARD_PIXEL_SIZE))) || ((Math.abs(angleBetweenPoints) > maxAngle) || (Math.abs(Math.angleNormalized(-angleBetweenPoints + endPoint.rotation + Math.PI)) > maxAngle));
                     if (limitReached) {
-                        this.sprite.trapezoid.floor.tint = COLOR_RED;
+                        if (this.sprite.trapezoid.floor) {
+                            this.sprite.trapezoid.floor.tint = COLOR_RED;
+                        }
                         connectorTopBorder.tint = COLOR_RED;
                         connectorBottomBorder.tint = COLOR_RED;
                     } else if (this.blueprint) {
-                        this.sprite.trapezoid.floor.tint = COLOR_BLUEPRINT;
+                        if (this.sprite.trapezoid.floor) {
+                            this.sprite.trapezoid.floor.tint = COLOR_BLUEPRINT;
+                        }
                         connectorTopBorder.tint = COLOR_BLUEPRINT;
                         connectorBottomBorder.tint = COLOR_BLUEPRINT;
                     }
