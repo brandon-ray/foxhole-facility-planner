@@ -1300,6 +1300,7 @@ Vue.component('app-menu-about', {
                 <i class="fa fa-reply fa-rotate-180" aria-hidden="true"></i> <div class="keyboard-key">shift</div> Double selection rotation. ({{game.settings.keySnapRotationDegrees * 2}}°)
                 <hr>
                 <div class="keyboard-key">space</div> Pause / Resume physics.<br>
+                <div class="keyboard-key">B</div> Toggle blueprint for selection.<br>
                 <div class="keyboard-key">L</div> Toggle lock for selected structures.<br>
                 <div class="keyboard-key">P</div> Toggle production output icons.<br>
                 <div class="keyboard-key">del</div> Delete selected structures.<br>

@@ -889,6 +889,9 @@ try {
                     case 65: // A
                         game.moveSelected(event.shiftKey ? -16 : -32, 0);
                         break;
+                    case 66: // B
+                        game.blueprintSelected();
+                        break;
                     case 68: // D
                         game.moveSelected(event.shiftKey ? 16 : 32, 0);
                         break;
@@ -2484,6 +2487,33 @@ try {
             game.setPickupEntities(false);
         }
         game.buildingSelectedMenuComponent?.refresh(true);
+    };
+
+    // Returns null = No buildings blueprinted, 0 = Some buildings blueprinted, 1 = All buildings blueprinted.
+    game.getSelectedBlueprintState = function() {
+        let blueprinted = null; // Assume no buildings are blueprinted.
+        selectedEntities.every((selectedEntity, i) => {
+            if (selectedEntity.building?.canBlueprint) {
+                if (selectedEntity.blueprint) {
+                    if (blueprinted === null) {
+                        blueprinted = i === 0 ? 1 : 0;  // Assume all are blueprinted unless it's not the first index.
+                    }
+                } else if (blueprinted) {
+                    blueprinted = 0; // Some selected aren't blueprinted.
+                }
+            }
+            return blueprinted !== 0;
+        });
+        return blueprinted;
+    };
+
+    game.blueprintSelected = function() {
+        const blueprinted = !game.getSelectedBlueprintState() ? true : false;
+        for (const selectedEntity of selectedEntities) {
+            if (selectedEntity.building) {
+                selectedEntity.setBlueprint(blueprinted);
+            }
+        }
     };
 
     game.moveSelected = function(x, y, snapped) {
