@@ -2496,7 +2496,7 @@ try {
             if (selectedEntity.building?.canBlueprint) {
                 if (selectedEntity.blueprint) {
                     if (blueprinted === null) {
-                        blueprinted = i === 0 ? 1 : 0;  // Assume all are blueprinted unless it's not the first index.
+                        blueprinted = 1;
                     }
                 } else if (blueprinted) {
                     blueprinted = 0; // Some selected aren't blueprinted.
