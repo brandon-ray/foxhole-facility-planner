@@ -756,49 +756,13 @@ class FoxholeStructure extends DraggableContainer {
     
     updateRangeMask() {
         if (game.settings.enableExperimental && game.settings.showLineOfSightRanges && this.building.range?.lineOfSight && this.rangeSprite?.visible) {
-            const rayCast = (polygons, rayStart, rayEnd) => {
-                let closestIntersection = null;
-
-                for (let polygon of polygons) {
-                    for (let i = 0; i < polygon.length; i++) {
-                        let p1 = polygon[i];
-                        let p2 = polygon[(i + 1) % polygon.length];
-
-                        let intersection = getLineIntersection(p1, p2, rayStart, rayEnd);
-                        if (!intersection) continue;
-
-                        if (!closestIntersection || Math.distanceBetween(rayStart, intersection) < Math.distanceBetween(rayStart, closestIntersection)) {
-                            closestIntersection = intersection;
-                        }
-                    }
-                }
-
-                return closestIntersection;
-            }
-
-            const getLineIntersection = (p1, p2, p3, p4) => {
-                let denominator = (p4.y - p3.y) * (p2.x - p1.x) - (p4.x - p3.x) * (p2.y - p1.y);
-                if (denominator == 0) return null;
-
-                let ua = ((p4.x - p3.x) * (p1.y - p3.y) - (p4.y - p3.y) * (p1.x - p3.x)) / denominator;
-                let ub = ((p2.x - p1.x) * (p1.y - p3.y) - (p2.y - p1.y) * (p1.x - p3.x)) / denominator;
-
-                if (ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1) {
-                    return {
-                        x: p1.x + ua * (p2.x - p1.x),
-                        y: p1.y + ua * (p2.y - p1.y)
-                    };
-                }
-
-                return null;
-            }
-            
             const polygons = [], entitySortLayer = game.constructionLayers[this.sortLayer];
             for (const e2 of game.getEntities()) {
-                if (!e2.valid || e2 === this || !e2.building || e2.bezier) {
+                if (!e2.valid || e2 === this || !e2.building || e2.bezier || game.constructionLayers[e2.sortLayer] < entitySortLayer) {
                     continue;
                 }
-                if (game.constructionLayers[e2.sortLayer] >= entitySortLayer && Math.distanceBetween(this, e2) < 1200) {
+                const entityHalfSize = Math.max(e2.width, e2.height) / 2;
+                if (Math.distanceBetween(this, e2) < ((this.building.range.max * METER_BOARD_PIXEL_SIZE) + entityHalfSize)) {
                     if (e2.building?.hitArea) {
                         for (const poly of e2.building.hitArea) {
                             if (poly.shape) {
@@ -827,14 +791,14 @@ class FoxholeStructure extends DraggableContainer {
             
             const maxDist = (this.building.range.max * 2) * METER_BOARD_PIXEL_SIZE, hitPoints = [];
 
-            hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, { x: -maxDist, y: -maxDist }) || { x: -maxDist, y: -maxDist });
-            hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, { x: maxDist, y: -maxDist }) || { x: maxDist, y: -maxDist });
-            hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, { x: maxDist, y: maxDist }) || { x: maxDist, y: maxDist });
-            hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, { x: -maxDist, y: maxDist }) || { x: -maxDist, y: maxDist });
+            hitPoints.push(Math.rayCast(polygons, { x: 0, y: 0 }, { x: -maxDist, y: -maxDist }) || { x: -maxDist, y: -maxDist });
+            hitPoints.push(Math.rayCast(polygons, { x: 0, y: 0 }, { x: maxDist, y: -maxDist }) || { x: maxDist, y: -maxDist });
+            hitPoints.push(Math.rayCast(polygons, { x: 0, y: 0 }, { x: maxDist, y: maxDist }) || { x: maxDist, y: maxDist });
+            hitPoints.push(Math.rayCast(polygons, { x: 0, y: 0 }, { x: -maxDist, y: maxDist }) || { x: -maxDist, y: maxDist });
 
             for (const poly of polygons) {
                 for (const p of poly) {
-                    hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, p));
+                    hitPoints.push(Math.rayCast(polygons, { x: 0, y: 0 }, p));
                 }
             }
 
@@ -843,8 +807,8 @@ class FoxholeStructure extends DraggableContainer {
                     let angle = Math.angleBetween({ x: 0, y: 0 }, p);
                     let p1 = Math.extendPoint({ x: 0, y: 0 }, maxDist, angle - 0.001);
                     let p2 = Math.extendPoint({ x: 0, y: 0 }, maxDist, angle + 0.001);
-                    hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, p1) || p1);
-                    hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, p2) || p2);
+                    hitPoints.push(Math.rayCast(polygons, { x: 0, y: 0 }, p1) || p1);
+                    hitPoints.push(Math.rayCast(polygons, { x: 0, y: 0 }, p2) || p2);
                 }
             }
 
@@ -852,8 +816,8 @@ class FoxholeStructure extends DraggableContainer {
                 return Math.angleBetween({ x: 0, y: 0}, p1) - Math.angleBetween({ x: 0, y: 0}, p2);
             });
 
-            this.removeChild(this.lineOfSightRange);
             if (game.settings.enableDebug) {
+                this.removeChild(this.lineOfSightRange);
                 this.lineOfSightRange = new PIXI.Container();
                 for (const p of hitPoints) {
                     let line = new PIXI.Graphics();

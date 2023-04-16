@@ -3502,7 +3502,35 @@ try {
         const { x: x1, y: y1 } = lineStart;
         const { x: x2, y: y2 } = lineEnd;
         return Math.abs((y2 - y1) * point.x - (x2 - x1) * point.y + x2 * y1 - y2 * x1) / Math.sqrt(Math.pow(y2 - y1, 2) + Math.pow(x2 - x1, 2));
-    }
+    };
+    Math.getLineIntersection = function(p1, p2, p3, p4) {
+        let denominator = (p4.y - p3.y) * (p2.x - p1.x) - (p4.x - p3.x) * (p2.y - p1.y);
+        if (denominator == 0) return null;
+        let ua = ((p4.x - p3.x) * (p1.y - p3.y) - (p4.y - p3.y) * (p1.x - p3.x)) / denominator;
+        let ub = ((p2.x - p1.x) * (p1.y - p3.y) - (p2.y - p1.y) * (p1.x - p3.x)) / denominator;
+        if (ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1) {
+            return {
+                x: p1.x + ua * (p2.x - p1.x),
+                y: p1.y + ua * (p2.y - p1.y)
+            };
+        }
+        return null;
+    };
+    Math.rayCast = function(polygons, rayStart, rayEnd) {
+        let closestIntersection = null;
+        for (let polygon of polygons) {
+            for (let i = 0; i < polygon.length; i++) {
+                let p1 = polygon[i];
+                let p2 = polygon[(i + 1) % polygon.length];
+                let intersection = Math.getLineIntersection(p1, p2, rayStart, rayEnd);
+                if (!intersection) continue;
+                if (!closestIntersection || Math.distanceBetween(rayStart, intersection) < Math.distanceBetween(rayStart, closestIntersection)) {
+                    closestIntersection = intersection;
+                }
+            }
+        }
+        return closestIntersection;
+    };
     Number.prototype.round = function(n) {
         const d = Math.pow(10, n);
         return Math.round((this + Number.EPSILON) * d) / d;

@@ -12586,6 +12586,7 @@ const gameData = {
 			"category": "defenses",
 			"categoryOrder": 10,
 			"radius": 0.5,
+			"sortLayer": "trench",
 			"icon": "../UI/ItemIcons/AntiTankMineItemIcon.webp",
 			"texture": {
 				"src": "../Structures/tankmine.webp",
