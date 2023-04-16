@@ -188,6 +188,9 @@ const gameData = {
 			"author": [
 				"Antoine",
 				"elpargo"
+			],
+			"filters": [
+				"facilities"
 			]
 		},
 		"antoines_train_station_1_1": {
