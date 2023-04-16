@@ -372,6 +372,14 @@ const gameData = {
 				"bunkers"
 			]
 		},
+		"salvage_field1": {
+			"name": "Salvage Field",
+			"description": "Designed for Epicwarding\n55m round from salvage centre",
+			"author": "meowNIman",
+			"filters": [
+				"facilities"
+			]
+		},
 		"simple_vehicle_factory": {
 			"name": "Simple Vehicle Factory (Example)",
 			"description": "A simple vehicle factory to output upgraded vehicles per hour. This is an example of a preset for the planner. Contribute your own saves to our Discord!",
