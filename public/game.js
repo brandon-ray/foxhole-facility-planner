@@ -417,6 +417,7 @@ try {
             game.constructionMode = mode;
             app.view.style.cursor = mode.cursor ? `url(/assets/${mode.cursor}.webp) 16 16, auto` : 'unset';
             game.constructionMenuComponent?.refresh();
+            game.boardUIComponent?.refresh();
             return true;
         }
         return false;

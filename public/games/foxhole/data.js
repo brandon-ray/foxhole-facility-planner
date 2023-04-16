@@ -12576,6 +12576,20 @@ const gameData = {
 			},
 			"techId": "unlocktanketteoffensive"
 		},
+		"tankmine": {
+			"name": "Abisme AT-99",
+			"codeName": "TankMine",
+			"description": "A simple mine that is placed under terrain and fitted with a pressure-sensitive plate to detonate under the weight of heavy vehicles. Mines are visible to friendlies and enemies on foot and deactivate after 48 in-game days.",
+			"category": "defenses",
+			"categoryOrder": 10,
+			"radius": 0.5,
+			"icon": "../UI/ItemIcons/AntiTankMineItemIcon.webp",
+			"texture": {
+				"src": "../Structures/tankmine.webp",
+				"width": 58,
+				"height": 52
+			}
+		},
 		"tankstop": {
 			"name": "Tank Trap",
 			"codeName": "TankStop",
