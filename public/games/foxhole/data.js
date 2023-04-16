@@ -182,6 +182,14 @@ const gameData = {
 				"facilities"
 			]
 		},
+		"antoines_front_fac_2_1": {
+			"name": "Antoine's Front Fac 2",
+			"description": "This is an easy Facility you can do near the front to provide public. Optimized tiles",
+			"author": [
+				"Antoine",
+				"elpargo"
+			]
+		},
 		"antoines_train_station_1_1": {
 			"name": "Antoine's Train Station 1",
 			"description": "This is a t2 train station for 3 train.",
