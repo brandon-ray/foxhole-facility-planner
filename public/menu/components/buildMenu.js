@@ -117,6 +117,9 @@ Vue.component('app-game-sidebar', {
                 <p class="building-tech-description" v-if="hoverData.author">
                     <span>Author:</span> {{typeof hoverData.author === 'string' ? hoverData.author : hoverData.author.join(', ')}}
                 </p>
+                <p class="building-tech-description" v-if="hoverData.requireFoundation">
+                    <span>Requires Foundation</span>
+                </p>
                 <p class="building-tech-description" v-if="hoverData.techId">
                     <span>Requires Tech<template v-if="window.objectData.tech[hoverData.techId]">:</template></span> {{window.objectData.tech[hoverData.techId]?.name}}
                 </p>

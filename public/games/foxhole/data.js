@@ -3362,6 +3362,7 @@ const gameData = {
 				"width": 262,
 				"height": 111
 			},
+			"buildOnFoundation": false,
 			"techId": "unlockconcretemixer",
 			"maxHealth": 1200,
 			"cost": {
@@ -10307,6 +10308,7 @@ const gameData = {
 				"width": 198,
 				"height": 321
 			},
+			"buildOnFoundation": false,
 			"maxHealth": 1850,
 			"cost": {
 				"facilitymaterials1": 35
@@ -12154,6 +12156,7 @@ const gameData = {
 				"width": 254,
 				"height": 414
 			},
+			"buildOnFoundation": false,
 			"sockets": [
 				{
 					"id": 0,
@@ -12228,6 +12231,7 @@ const gameData = {
 				"width": 254,
 				"height": 414
 			},
+			"buildOnFoundation": false,
 			"sockets": [
 				{
 					"id": 0,
@@ -12377,6 +12381,7 @@ const gameData = {
 				"width": 254,
 				"height": 414
 			},
+			"buildOnFoundation": false,
 			"sockets": [
 				{
 					"id": 0,
@@ -12450,6 +12455,7 @@ const gameData = {
 				"width": 254,
 				"height": 414
 			},
+			"buildOnFoundation": false,
 			"sockets": [
 				{
 					"id": 0,
@@ -14600,6 +14606,7 @@ const gameData = {
 				"width": 223,
 				"height": 245
 			},
+			"buildOnFoundation": false,
 			"buildOnWater": true,
 			"preventOnLandscape": true,
 			"maxHealth": 850,

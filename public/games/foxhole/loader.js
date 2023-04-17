@@ -92,6 +92,9 @@ const game_asset_list = {};
             };
             Object.assign(building, garrisonData);
         }
+        if (building.preventOnLandscape && building.buildOnFoundation !== false) {
+            building.requireFoundation = true;
+        }
     }
 
     const appendGameAssets = function(data) {
