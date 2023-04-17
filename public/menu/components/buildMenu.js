@@ -17,8 +17,8 @@ Vue.component('app-game-sidebar', {
                 },
                 {
                     key: 'about',
-                    name: 'About',
-                    icon: 'fa-info-circle'
+                    name: 'Controls',
+                    icon: 'fa-keyboard-o'
                 }
             ]
         };
@@ -100,8 +100,8 @@ Vue.component('app-game-sidebar', {
             <button @click="game.hubPopup?.showTab('settings')" class="btn-small float-right" @mouseenter="bme()">
                 <i class="fa fa-gear"></i>
             </button>
-            <button v-on:click="event.preventDefault(); changeMenu('about')" class="btn-small float-right" @mouseenter="bme()">
-                <i class="fa fa-question-circle"></i>
+            <button v-on:click="event.preventDefault(); changeMenu('about')" class="btn-small float-right" style="font-size: 2em" @mouseenter="bme()">
+                <i class="fa fa fa-keyboard-o"></i>
             </button>
         </div>
         <div id="hover-building-info" v-if="hoverData">
@@ -1274,12 +1274,6 @@ Vue.component('app-menu-about', {
     template: html`
     <div id="about-page">
         <div class="about-section">
-            <div class="about-section-header"><i class="fa fa-question-circle"></i> What is Foxhole Planner?</div>
-            <p>
-                This is a fan-made tool that allows you to create plans for bunkers, facilities, and more from the game Foxhole.
-            </p>
-        </div>
-        <div class="about-section">
             <div class="about-section-header"><i class="fa fa-keyboard-o" aria-hidden="true"></i> Controls + Hotkeys</div>
             <div class="controls-section-body">
                 <div class="middle-mouse-button"></div> Move board position.<br>
@@ -1323,18 +1317,6 @@ Vue.component('app-menu-about', {
                 <div class="keyboard-key">F2</div> Debug menu.
             </div>
         </div>
-        <div class="about-section">
-            <div class="about-section-header"><i class="fa fa-code" aria-hidden="true"></i> Project Credits</div>
-            <div class="text-center">
-                Made with ❤️ by <a href="https://bombsightgames.com/" target="_blank">Ray</a> and <a href="https://github.com/jimdcunningham" target="_blank">Jimbo</a>.<br>
-                <hr>
-                <p style="font-size:10px;">
-                    <a href="https://www.foxholegame.com/" target="_blank">Foxhole</a> is a registered trademark of <a href="https://www.siegecamp.com/" target="_blank">Siege Camp</a>.<br>
-                    We are not affiliated with Siege Camp, this is a fan project.
-                </p>
-            </div>
-        </div>
-        <span style="font-size:7px; cursor:pointer; " @click="buildBuilding('sound_test')">worden smely 🤮</span>
     </div>
     `
 });

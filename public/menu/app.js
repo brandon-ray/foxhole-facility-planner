@@ -301,7 +301,12 @@ Vue.component('app-game-hub-popup', {
                     key: 'settings',
                     title: 'Settings',
                     icon: 'fa-cog'
-                }
+                },
+                {
+                    key: 'about',
+                    title: 'About',
+                    icon: 'fa-question-circle'
+                },
             ]
         };
     },
@@ -762,6 +767,51 @@ Vue.component('app-hub-settings', {
                 <i class="fa fa-undo" aria-hidden="true"></i>
             </button>
         </div> -->
+    </div>
+    `
+});
+
+Vue.component('app-hub-about', {
+    template: html`
+    <div class="tab-content">
+        <div class="fall-in-item">
+            <div class="tab-content-header"><i class="fa fa-question-circle"></i> What is Foxhole Planner?</div>
+            <div class="tab-content-body">
+                <p>
+                    <b>Foxhole Planner</b> is a third-party web tool that enables players of <b>Foxhole</b> to plan and design their own custom bunkers, facilities, and structures from the game.
+                </p>
+                <p>
+                    <b>Foxhole</b> is a massively multiplayer online game that simulates warfare in a persistent, player-driven world. It is set in a fictional universe where two factions, the <span @click="game.createBuildingAtCenter('sound_test'); game.hubPopup.showPopup(false)" style="cursor: pointer;">Wardens</span> and the Colonials, battle for control of territories and resources. <b><a href="https://store.steampowered.com/app/505460/Foxhole/" target="_blank">Purchase Foxhole on Steam</a></b>
+                </p>
+                <p>
+                    With <b>Foxhole Planner</b>, players can experiment with different layouts and configurations for their structures, and then use the resulting plan as a blueprint to guide their in-game construction efforts.
+                </p>
+            </div>
+        </div>
+        <div class="fall-in-item discord-cta">
+            <div class="tab-content-header"><i class="fa fa-comments-o" aria-hidden="true"></i> Don't forget to join our Discord!</div>
+            <div class="tab-content-body">
+                <p class="text-right" style="font-size: 1.28em">
+                    Join our community to share designs, get support,<br>
+                    and follow the development of Foxhole Planner!
+                </p>
+                <div class="text-center" style="position: absolute; bottom: 20px; right: 235px;">
+                    Need developer help?<br>
+                    <a href="https://discord.gg/SnyEDQyAVr" target="_blank">Join with this link instead.</a>
+                </div>
+                <a href="https://discord.gg/2hgaMQN26s" target="_blank">Join Our Discord <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+            </div>
+        </div>
+        <div class="fall-in-item container mt-2">
+            <div class="row" style="line-height: 22px;">
+                <div class="col-md-6" style="font-size: 17px;">Made with ❤️ by <a href="https://bombsightgames.com/" target="_blank">Ray</a> and <a href="https://github.com/jimdcunningham" target="_blank">Jimbo</a>.</div>
+                <div class="col-md-6" style="font-size: 14px;"><a href="https://www.foxholegame.com/" target="_blank">Foxhole</a> is a registered trademark of <a href="https://www.siegecamp.com/" target="_blank">Siege Camp</a>.</div>
+            </div>
+            <div class="row">
+                <div class="col-md-6" style="font-size: 13px;"><!--Map Assets from <a href="https://sentsu.itch.io/foxhole-better-map-mod" target="_blank">Better Map Mod</a> by <a href="https://sentsu.itch.io/" target="_blank">Sentsu</a>.--></div>
+                <div class="col-md-6" style="font-size: 11px;">We are not affiliated with Siege Camp, this is a fan project.</div>
+            </div>
+        </div>
     </div>
     `
 });

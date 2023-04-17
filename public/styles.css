@@ -1493,6 +1493,9 @@ hr {
     width: 100%;
     max-width: 700px;
     margin-bottom: 20px;
+}
+
+.fall-in-item:not(.container) {
     box-shadow: 0 5px 8px rgba(0, 0, 0, 0.5);
     text-align: left;
 }
@@ -1512,6 +1515,59 @@ hr {
     background: #1c1c1c;
     font-size: 0.95em;
     color: #f7f6f6;
+    position: relative;
+    overflow: hidden;
+}
+
+.discord-cta .tab-content-body {
+    height: 160px;
+}
+
+.discord-cta .tab-content-body::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-image: url('/assets/discord.jpg');
+    background-size: contain;
+    background-position: left;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    position: absolute;
+    top: -43px;
+    left: 0;
+    transform: rotate(-11deg);
+    /* opacity: 0.15; */
+    opacity: 0.85;
+}
+
+.discord-cta .tab-content-body > a {
+    width: 170px;
+    background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
+    padding: 10px 20px;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    color: white;
+    text-decoration: none;
+    box-shadow: 1px 1px 4px #00000070;
+    border-radius: 5px;
+    white-space: nowrap;
+    font-weight: bold;
+    text-align: center;
+}
+
+.discord-cta .tab-content-body > a:hover {
+    outline: 2px solid white;
+}
+
+.discord-cta .tab-content-body > a i {
+    margin-left: 2px;
+    transition-duration: 0.5s;
+}
+
+.discord-cta .tab-content-body > a:hover i {
+    margin-left: 6px;
 }
 
 /*
@@ -1527,10 +1583,14 @@ hr {
 }
 
 .tab-content-body.container .row > * {
-    padding: 6px;
-    padding-left: 14px;
+    padding: 10px 12px 6px;
     border-bottom: 1px solid #131313;
     color: #e8e8e8;
+}
+
+.tab-content-body.container .row > label {
+    padding: 6px;
+    padding-left: 14px;
 }
 
 .tab-content-body.container .row > *.disabled {
@@ -1650,6 +1710,19 @@ hr {
     background-color: #c25721;
     height: 100%;
     border-radius: 5px;
+}
+
+.tab-content a {
+    color: #ff864e;
+    margin: 0 2px;
+}
+
+.tab-content a:hover {
+    color: white;
+}
+
+.tab-content-body p {
+    margin-bottom: 20px;
 }
 
 /*
