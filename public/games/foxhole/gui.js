@@ -216,7 +216,7 @@ Vue.component('app-menu-statistics', {
                             productionSelected = true;
                         }
 
-                        let power = productionSelected && buildingData.power ? buildingData.power : 0;
+                        let power = !entity.disableProduction && productionSelected && buildingData.power ? buildingData.power : 0;
                         if (buildingData.cost) {
                             let costKeys = Object.keys(buildingData.cost);
                             for (let j = 0; j < costKeys.length; j++) {
@@ -229,7 +229,7 @@ Vue.component('app-menu-statistics', {
                             }
                         }
 
-                        if (productionSelected && buildingData.production && buildingData.production.length) {
+                        if (!entity.disableProduction && productionSelected && buildingData.production && buildingData.production.length) {
                             let selectedProduction;
                             for (const production of ((entity.baseProduction && buildingData.parent) || buildingData).production) {
                                 if (production.id === entity.selectedProduction) {

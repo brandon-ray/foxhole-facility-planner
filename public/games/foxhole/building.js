@@ -570,9 +570,8 @@ class FoxholeStructure extends DraggableContainer {
             }
         }
 
-        if (this.blueprint) {
-            objData.blueprint = this.blueprint;
-        }
+        objData.blueprint = (this.blueprint === true && this.blueprint) || undefined;
+        objData.disableProduction = (this.disableProduction === true && this.disableProduction) || undefined;
 
         if (this.maintenanceFilters) {
             objData.maintenanceFilters = Object.assign({}, this.maintenanceFilters);
@@ -643,6 +642,8 @@ class FoxholeStructure extends DraggableContainer {
         if (objData.blueprint) {
             this.setBlueprint(objData.blueprint);
         }
+
+        this.disableProduction = objData.disableProduction;
 
         if (objData.maintenanceFilters) {
             this.setMaintenanceFilters(objData.maintenanceFilters);

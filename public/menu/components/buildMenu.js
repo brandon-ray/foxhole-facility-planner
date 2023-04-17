@@ -213,6 +213,7 @@ Vue.component('app-menu-building-selected', {
                     rotationDegrees: Math.rad2deg(selectedEntity.rotation).round(3),
                     blueprint: selectedEntity.blueprint,
                     baseProduction: selectedEntity.baseProduction,
+                    disableProduction: selectedEntity.disableProduction,
                     selectedProduction: selectedEntity.selectedProduction,
                     productionScale: selectedEntity.productionScale,
                     properties: selectedEntity.properties,
@@ -260,6 +261,7 @@ Vue.component('app-menu-building-selected', {
                         if (removeConnections) {
                             selectedEntity.removeConnections();
                         }
+                        selectedEntity.disableProduction = this.entity.disableProduction;
                         selectedEntity.setProductionId(this.entity.selectedProduction, this.entity.baseProduction);
                         if (typeof this.entity.userThrottle === 'number') {
                             selectedEntity.userThrottle = this.entity.userThrottle;
@@ -385,6 +387,12 @@ Vue.component('app-menu-building-selected', {
                 this.entity.baseProduction = isMatchingProduction ? false : useBaseProduction;
                 this.entity.selectedProduction = isMatchingProduction ? null : id;
                 this.entity.productionScale = null;
+                this.updateEntity();
+            }
+        },
+        toggleProduction: function() {
+            if (this.entity) {
+                this.entity.disableProduction = !this.entity.disableProduction;
                 this.updateEntity();
             }
         },
@@ -578,6 +586,10 @@ Vue.component('app-menu-building-selected', {
                         <button class="btn-small m-0 mr-1 float-right" type="button" title="Rotate 45 degrees" @click="game.rotateSelected(Math.PI / 4)"><i class="fa fa-repeat" aria-hidden="true"></i></button>&nbsp;
                         <button class="btn-small m-0 mr-1 float-right" type="button" title="Rotate -45 degrees"@click="game.rotateSelected(-Math.PI / 4)"><i class="fa fa-undo" aria-hidden="true"></i></button>&nbsp;
                     </template>
+                </div>
+                <div v-if="entity.building?.power || entity.building?.production" class="app-input-label settings-option-row">
+                    <i class="fa fa-bar-chart" aria-hidden="true"></i> Show Power/Production in Stats:
+                    <button class="btn-small btn-tickbox m-0 mr-1 float-right" :class="{'btn-active': !entity.disableProduction}" type="button" @click="toggleProduction()" title="Toggle Power/Production Stats"></button>
                 </div>
                 <div v-if="entity.building?.category === 'entrenchments'" class="app-input-label settings-option-row" :class="{'disabled': !entity.building?.canBlueprint}" title="Enabling this will display the structure as a blueprint. This option is only available to Entrenchments.">
                     <i class="fa fa-cube" aria-hidden="true"></i> Toggle Blueprint:

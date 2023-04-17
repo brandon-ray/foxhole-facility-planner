@@ -2514,6 +2514,7 @@ try {
                 selectedEntity.setBlueprint(blueprinted);
             }
         }
+        game.buildingSelectedMenuComponent?.refresh();
     };
 
     game.moveSelected = function(x, y, snapped) {
