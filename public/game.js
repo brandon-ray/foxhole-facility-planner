@@ -31,6 +31,37 @@ const COLOR_RANGE_BORDER = 0xED2323; // Red
 const FILTER_BRIGHT = new PIXI.filters.ColorMatrixFilter();
 FILTER_BRIGHT.brightness(2.75);
 
+const REGION_LAYERS = {
+    base: {
+        name: 'Foxhole Map',
+        bmm: false
+    },
+    colors: {
+        name: 'BMM Map'
+    },
+    shadows: {
+        name: 'Shadows'
+    },
+    // topography: {
+    //     name: 'Topography'
+    // },
+    topography_values: {
+        name: 'Topography'
+    },
+    roads: {
+        name: 'Roads'
+    },
+    roads_tiers: {
+        name: 'Road Tiers'
+    },
+    tracks: {
+        name: 'Tracks'
+    },
+    rdz: {
+        name: 'Rapid Decay Zone'
+    }
+};
+
 const DEFAULT_TEXT_STYLE = {
     fontFamily: 'Jost',
     dropShadow: true,
@@ -55,6 +86,9 @@ const METER_BOARD_PIXEL_SIZE = 32; // Size of a grid square in pixels.
 const METER_TEXTURE_PIXEL_SIZE = 52.8; // Size of a meter in pixels from a texture generated with Blender that's resized by 0.5.
 const METER_TEXTURE_PIXEL_SCALE = METER_TEXTURE_PIXEL_SIZE / METER_BOARD_PIXEL_SIZE;
 const METER_INVERSE_PIXEL_SCALE = METER_BOARD_PIXEL_SIZE / METER_TEXTURE_PIXEL_SIZE; // Scale used for bezier objects.
+
+const REGION_WIDTH = 2177 * METER_BOARD_PIXEL_SIZE;
+const REGION_HEIGHT = 1888 * METER_BOARD_PIXEL_SIZE; // 125m x 15.104u
 
 const game = {
     services: {},
@@ -140,6 +174,17 @@ const game = {
             showProductionIcons: true,
             showRangeWhenSelected: true,
             regionKey: '',
+            region: {
+                base: false,
+                colors: true,
+                shadows: false,
+                topography: false,
+                topography_values: true,
+                roads: true,
+                roads_tiers: false,
+                tracks: true,
+                rdz: true
+            },
             ranges: {
                 crane: false,
                 radio: false,
@@ -565,23 +610,62 @@ try {
     };
 
     game.updateEntityOverlays = function() {
-        const mapTexture = game.project.settings.regionKey ? gameData.maps[game.project.settings.regionKey].texture : null;
-        if (mapTexture && (!mapRegion.texture || !mapRegion.texture.textureCacheIds?.length || mapRegion.texture.textureCacheIds[0] !== mapTexture)) {
-            if (game.resources[mapTexture]) {
-                mapRegion.texture = game.resources[mapTexture].texture;
-            } else {
-                const loader = new PIXI.Loader();
-                loader.add(mapTexture);
-                loader.load((loader, res) => {
-                    game.resources[mapTexture] = res[mapTexture];
-                    mapRegion.texture = game.resources[mapTexture].texture;
-                });
-                loader.onError.add((error, resource) => {
-                    console.error('Failed to load region image:', error.message);
-                });
+        mapLayer.visible = game.project.settings.regionKey && game.project.settings.showWorldRegion;
+        if (mapLayer.visible) {
+            const regionLayers = {};
+            const loader = new PIXI.Loader();
+            const updateMapLayer = (key, file) => {
+                if (file) {
+                    if (mapLayer[key]) {
+                        mapLayer[key].texture = game.resources[file].texture;
+                    } else {
+                        const mapSpriteLayer = new PIXI.Sprite(game.resources[file].texture);
+                        mapSpriteLayer.visible = game.project.settings.region[key];
+                        mapSpriteLayer.anchor.set(0.5);
+                        mapSpriteLayer.width = REGION_WIDTH;
+                        mapSpriteLayer.height = REGION_HEIGHT;
+                        mapSpriteLayer.zIndex = Object.keys(REGION_LAYERS).indexOf(key);
+                        mapLayer.addChild(mapSpriteLayer);
+                        mapLayer.sortChildren();
+                        mapLayer[key] = mapSpriteLayer;
+                    }
+                }
+                if (mapLayer[key]) {
+                    mapLayer[key].visible = game.project.settings.region[key];
+                }
+            };
+            const textureKey = gameData.maps[game.project.settings.regionKey].textureKey;
+            for (const [key, info] of Object.entries(REGION_LAYERS)) {
+                if (game.project.settings.region[key]) {
+                    let layerPath = game_asset_dir + 'game/Textures/UI/';
+                    if (info.bmm === false) {
+                        layerPath += `HexMaps/Processed/${textureKey}.png`;
+                    } else {
+                        layerPath += `BMM/${textureKey}_${key}.png`;
+                    }
+                    if (!(game.resources[layerPath]?.texture ?? PIXI.utils.TextureCache[layerPath])) {
+                        regionLayers[key] = layerPath;
+                        loader.add(layerPath);
+                    } else {
+                        updateMapLayer(key, layerPath);
+                    }
+                } else {
+                    updateMapLayer(key);
+                }
             }
+            loader.load((loader, res) => {
+                for (const [key, file] of Object.entries(regionLayers)) {
+                    if (res[file]) {
+                        game.resources[file] = res[file];
+                        res[file].texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+                        updateMapLayer(key, file);
+                    }
+                }
+            });
+            loader.onError.add((error, resource) => {
+                console.error('Failed to load region image:', error.message);
+            });
         }
-        mapRegion.visible = mapTexture && game.project.settings.showWorldRegion;
         for (const entity of entities) {
             entity.updateOverlays();
         }
@@ -995,7 +1079,7 @@ try {
     }
 
     let background = null;
-    let mapRegion = null;
+    let mapLayer = null;
     let selectionArea = null;
 
     function onWindowResize() {
@@ -1052,18 +1136,15 @@ try {
         app.stage.addChild(app.cstage);
         app.stage.filterArea = app.renderer.screen;
 
-        mapRegion = new PIXI.Sprite();
-        // mapRegion.width = 1024; // 2162m x 32?
-        // mapRegion.height = 888; // 1875m x 32?
-        mapRegion.width = 2177 * METER_BOARD_PIXEL_SIZE;
-        mapRegion.height = 1888 * METER_BOARD_PIXEL_SIZE; // 125m x 15.104u
-        mapRegion.x = GRID_WIDTH/2;
-        mapRegion.y = GRID_HEIGHT/2;
-        mapRegion.anchor.set(0.5);
-        mapRegion.getZIndex = () => {
+        mapLayer = new PIXI.Container();
+        mapLayer.width = REGION_WIDTH;
+        mapLayer.height = REGION_HEIGHT;
+        mapLayer.x = GRID_WIDTH/2;
+        mapLayer.y = GRID_HEIGHT/2;
+        mapLayer.getZIndex = () => {
             return 1;
         };
-        app.cstage.addChild(mapRegion);
+        app.cstage.addChild(mapLayer);
 
         diffuseGroupLayer = new PIXI.display.Layer(PIXI.lights.diffuseGroup);
         PIXI.lights.diffuseGroup.zIndex = 1;
@@ -1518,9 +1599,13 @@ try {
             camera.x = (centerPos.x * camera.zoom) - (app.view.width / 2);
             camera.y = (centerPos.y * camera.zoom) - (app.view.height / 2);
         } else {
-            game.resetZoom();
-            camera.x = (GRID_WIDTH/2) - WIDTH/2;
-            camera.y = (GRID_HEIGHT/2) - HEIGHT/2;
+            if (game.project.settings.regionKey) {
+                camera.zoom = 0.018;
+            } else {
+                game.resetZoom();
+            }
+            camera.x = (GRID_WIDTH/2 * camera.zoom) - WIDTH/2;
+            camera.y = (GRID_HEIGHT/2 * camera.zoom) - HEIGHT/2;
         }
     }
     game.zoomToEntitiesCenter();
@@ -1936,7 +2021,7 @@ try {
 
         setTimeout(() => {
             var renderTexture = PIXI.RenderTexture.create(app.renderer.width, app.renderer.height);
-            app.renderer.render(background, mapRegion, renderTexture);
+            app.renderer.render(background, mapLayer, renderTexture);
 
             const addObjectToRender = (obj) => {
                 app.renderer.render(obj, {
@@ -1946,8 +2031,8 @@ try {
                 });
             }
 
-            if (mapRegion.visible) {
-                addObjectToRender(mapRegion);
+            if (mapLayer.visible) {
+                addObjectToRender(mapLayer);
             }
 
             const renderEntities = [...entities];
@@ -2807,6 +2892,17 @@ try {
     let snappedMX;
     let snappedMY;
     function update() {
+        // This can lock the camera to the bounds of the map. I'm still trying to figure out if this is needed, I may include a setting to disable it if I include it.
+        // const zoomRatio = 1 / camera.zoom;
+        // const centerPos = {
+        //     x: (camera.x + app.view.width / 2) * zoomRatio,
+        //     y: (camera.y + app.view.height / 2) * zoomRatio
+        // };
+        // centerPos.x = Math.max(Math.min(centerPos.x, 39832), -29832);
+        // centerPos.y = Math.max(Math.min(centerPos.y, 35208), -25208);
+        // camera.x = (centerPos.x * camera.zoom) - app.view.width / 2;
+        // camera.y = (centerPos.y * camera.zoom) - app.view.height / 2;
+
         requestAnimationFrame(update);
 
         let timeDiff = 1;

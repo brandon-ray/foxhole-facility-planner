@@ -809,7 +809,8 @@ function iterateData(filePath, list, type) {
                             name: data.DisplayName?.SourceString,
                             regionId: listItem.regionId,
                             icon: `../${data.Image.ObjectPath.replace('/Processed/', '/Icons/').slice(21, -1)}webp`,
-                            texture: `../${data.Image.ObjectPath.slice(21, -1)}png`,
+                            // texture: `../${data.Image.ObjectPath.slice(21, -1)}png`,
+                            textureKey: path.basename(data.Image.ObjectPath, '.0'),
                             gridCoord: {
                                 x: data.GridCoord.X > 10 ? data.GridCoord.X - 4294967296 : data.GridCoord.X,
                                 y: data.GridCoord.Y > 10 ? data.GridCoord.Y - 4294967296 : data.GridCoord.Y

@@ -499,7 +499,7 @@ const gameData = {
 			"name": "Acrithia",
 			"regionId": 30,
 			"icon": "../UI/HexMaps/Icons/MapAcrithiaHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapAcrithiaHex.png",
+			"textureKey": "MapAcrithiaHex",
 			"gridCoord": {
 				"x": 1,
 				"y": 2
@@ -509,7 +509,7 @@ const gameData = {
 			"name": "Allod's Bight",
 			"regionId": 21,
 			"icon": "../UI/HexMaps/Icons/MapAllodsBightHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapAllodsBightHex.png",
+			"textureKey": "MapAllodsBightHex",
 			"gridCoord": {
 				"x": 2,
 				"y": 0
@@ -519,7 +519,7 @@ const gameData = {
 			"name": "Ash Fields",
 			"regionId": 41,
 			"icon": "../UI/HexMaps/Icons/MapAshFieldsHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapAshFieldsHex.png",
+			"textureKey": "MapAshFieldsHex",
 			"gridCoord": {
 				"x": -2,
 				"y": 3
@@ -529,7 +529,7 @@ const gameData = {
 			"name": "Basin Sionnach",
 			"regionId": 34,
 			"icon": "../UI/HexMaps/Icons/MapBasinSionnachHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapBasinSionnachHex.png",
+			"textureKey": "MapBasinSionnachHex",
 			"gridCoord": {
 				"x": 0,
 				"y": -3
@@ -539,7 +539,7 @@ const gameData = {
 			"name": "Callahan's Passage",
 			"regionId": 4,
 			"icon": "../UI/HexMaps/Icons/MapCallahansPassageHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapCallahansPassageHex.png",
+			"textureKey": "MapCallahansPassageHex",
 			"gridCoord": {
 				"x": 0,
 				"y": -1
@@ -549,7 +549,7 @@ const gameData = {
 			"name": "Callum's Cape",
 			"regionId": 32,
 			"icon": "../UI/HexMaps/Icons/MapCallumsCapeHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapCallumsCapeHex.png",
+			"textureKey": "MapCallumsCapeHex",
 			"gridCoord": {
 				"x": -2,
 				"y": -1
@@ -559,7 +559,7 @@ const gameData = {
 			"name": "Clanshead Valley",
 			"regionId": 36,
 			"icon": "../UI/HexMaps/Icons/MapClansheadValleyHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapClansheadValleyHex.png",
+			"textureKey": "MapClansheadValleyHex",
 			"gridCoord": {
 				"x": 2,
 				"y": -3
@@ -569,7 +569,7 @@ const gameData = {
 			"name": "Deadlands",
 			"regionId": 3,
 			"icon": "../UI/HexMaps/Icons/MapDeadlandsHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapDeadlandsHex.png",
+			"textureKey": "MapDeadlandsHex",
 			"gridCoord": {
 				"x": 0,
 				"y": 0
@@ -579,7 +579,7 @@ const gameData = {
 			"name": "The Drowned Vale",
 			"regionId": 23,
 			"icon": "../UI/HexMaps/Icons/MapDrownedValeHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapDrownedValeHex.png",
+			"textureKey": "MapDrownedValeHex",
 			"gridCoord": {
 				"x": 1,
 				"y": 0
@@ -589,7 +589,7 @@ const gameData = {
 			"name": "Endless Shore",
 			"regionId": 20,
 			"icon": "../UI/HexMaps/Icons/MapEndlessShoreHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapEndlessShoreHex.png",
+			"textureKey": "MapEndlessShoreHex",
 			"gridCoord": {
 				"x": 2,
 				"y": -1
@@ -599,7 +599,7 @@ const gameData = {
 			"name": "Farranac Coast",
 			"regionId": 13,
 			"icon": "../UI/HexMaps/Icons/MapFarranacCoastHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapFarranacCoastHex.png",
+			"textureKey": "MapFarranacCoastHex",
 			"gridCoord": {
 				"x": -2,
 				"y": 1
@@ -609,7 +609,7 @@ const gameData = {
 			"name": "Fisherman's Row",
 			"regionId": 15,
 			"icon": "../UI/HexMaps/Icons/MapFishermansRowHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapFishermansRowHex.png",
+			"textureKey": "MapFishermansRowHex",
 			"gridCoord": {
 				"x": -3,
 				"y": 2
@@ -619,7 +619,7 @@ const gameData = {
 			"name": "Godcrofts",
 			"regionId": 19,
 			"icon": "../UI/HexMaps/Icons/MapGodcroftsHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapGodcroftsHex.png",
+			"textureKey": "MapGodcroftsHex",
 			"gridCoord": {
 				"x": 3,
 				"y": -2
@@ -629,7 +629,7 @@ const gameData = {
 			"name": "Great March",
 			"regionId": 17,
 			"icon": "../UI/HexMaps/Icons/MapGreatMarchHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapGreatMarchHex.png",
+			"textureKey": "MapGreatMarchHex",
 			"gridCoord": {
 				"x": 0,
 				"y": 2
@@ -639,7 +639,7 @@ const gameData = {
 			"name": "The Heartlands",
 			"regionId": 8,
 			"icon": "../UI/HexMaps/Icons/MapHeartlandsHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapHeartlandsHex.png",
+			"textureKey": "MapHeartlandsHex",
 			"gridCoord": {
 				"x": -1,
 				"y": 2
@@ -649,7 +649,7 @@ const gameData = {
 			"name": "Howl County",
 			"regionId": 35,
 			"icon": "../UI/HexMaps/Icons/MapHowlCountyHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapHowlCountyHex.png",
+			"textureKey": "MapHowlCountyHex",
 			"gridCoord": {
 				"x": 1,
 				"y": -3
@@ -659,7 +659,7 @@ const gameData = {
 			"name": "Kalokai",
 			"regionId": 40,
 			"icon": "../UI/HexMaps/Icons/MapKalokaiHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapKalokaiHex.png",
+			"textureKey": "MapKalokaiHex",
 			"gridCoord": {
 				"x": 0,
 				"y": 3
@@ -669,7 +669,7 @@ const gameData = {
 			"name": "The Linn of Mercy",
 			"regionId": 10,
 			"icon": "../UI/HexMaps/Icons/MapLinnMercyHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapLinnMercyHex.png",
+			"textureKey": "MapLinnMercyHex",
 			"gridCoord": {
 				"x": -1,
 				"y": 0
@@ -679,7 +679,7 @@ const gameData = {
 			"name": "Loch Mór",
 			"regionId": 9,
 			"icon": "../UI/HexMaps/Icons/MapLochMorHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapLochMorHex.png",
+			"textureKey": "MapLochMorHex",
 			"gridCoord": {
 				"x": -1,
 				"y": 1
@@ -689,7 +689,7 @@ const gameData = {
 			"name": "Marban Hollow",
 			"regionId": 5,
 			"icon": "../UI/HexMaps/Icons/MapMarbanHollow.webp",
-			"texture": "../UI/HexMaps/Processed/MapMarbanHollow.png",
+			"textureKey": "MapMarbanHollow",
 			"gridCoord": {
 				"x": 1,
 				"y": -1
@@ -699,7 +699,7 @@ const gameData = {
 			"name": "The Moors",
 			"regionId": 7,
 			"icon": "../UI/HexMaps/Icons/MapMooringCountyHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapMooringCountyHex.png",
+			"textureKey": "MapMooringCountyHex",
 			"gridCoord": {
 				"x": -1,
 				"y": -1
@@ -709,7 +709,7 @@ const gameData = {
 			"name": "Morgen's Crossing",
 			"regionId": 37,
 			"icon": "../UI/HexMaps/Icons/MapMorgensCrossingHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapMorgensCrossingHex.png",
+			"textureKey": "MapMorgensCrossingHex",
 			"gridCoord": {
 				"x": 3,
 				"y": -3
@@ -719,7 +719,7 @@ const gameData = {
 			"name": "Nevish Line",
 			"regionId": 29,
 			"icon": "../UI/HexMaps/Icons/MapNevishLineHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapNevishLineHex.png",
+			"textureKey": "MapNevishLineHex",
 			"gridCoord": {
 				"x": -3,
 				"y": 0
@@ -729,7 +729,7 @@ const gameData = {
 			"name": "The Oarbreaker Isles",
 			"regionId": 16,
 			"icon": "../UI/HexMaps/Icons/MapOarbreakerHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapOarbreakerHex.png",
+			"textureKey": "MapOarbreakerHex",
 			"gridCoord": {
 				"x": -3,
 				"y": 1
@@ -739,7 +739,7 @@ const gameData = {
 			"name": "Origin",
 			"regionId": 42,
 			"icon": "../UI/HexMaps/Icons/MapOriginHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapOriginHex.png",
+			"textureKey": "MapOriginHex",
 			"gridCoord": {
 				"x": -3,
 				"y": 3
@@ -749,7 +749,7 @@ const gameData = {
 			"name": "Reaching Trail",
 			"regionId": 11,
 			"icon": "../UI/HexMaps/Icons/MapReachingTrailHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapReachingTrailHex.png",
+			"textureKey": "MapReachingTrailHex",
 			"gridCoord": {
 				"x": 0,
 				"y": -2
@@ -759,7 +759,7 @@ const gameData = {
 			"name": "Red River",
 			"regionId": 31,
 			"icon": "../UI/HexMaps/Icons/MapRedRiverHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapRedRiverHex.png",
+			"textureKey": "MapRedRiverHex",
 			"gridCoord": {
 				"x": -1,
 				"y": 3
@@ -769,7 +769,7 @@ const gameData = {
 			"name": "Shackled Chasm",
 			"regionId": 24,
 			"icon": "../UI/HexMaps/Icons/MapShackledChasmHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapShackledChasmHex.png",
+			"textureKey": "MapShackledChasmHex",
 			"gridCoord": {
 				"x": 1,
 				"y": 1
@@ -779,7 +779,7 @@ const gameData = {
 			"name": "Speaking Woods",
 			"regionId": 33,
 			"icon": "../UI/HexMaps/Icons/MapSpeakingWoodsHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapSpeakingWoodsHex.png",
+			"textureKey": "MapSpeakingWoodsHex",
 			"gridCoord": {
 				"x": -1,
 				"y": -2
@@ -789,7 +789,7 @@ const gameData = {
 			"name": "Stonecradle",
 			"regionId": 12,
 			"icon": "../UI/HexMaps/Icons/MapStonecradleHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapStonecradleHex.png",
+			"textureKey": "MapStonecradleHex",
 			"gridCoord": {
 				"x": -2,
 				"y": 0
@@ -799,7 +799,7 @@ const gameData = {
 			"name": "Tempest Island",
 			"regionId": 18,
 			"icon": "../UI/HexMaps/Icons/MapTempestIslandHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapTempestIslandHex.png",
+			"textureKey": "MapTempestIslandHex",
 			"gridCoord": {
 				"x": 3,
 				"y": -1
@@ -809,7 +809,7 @@ const gameData = {
 			"name": "Terminus",
 			"regionId": 39,
 			"icon": "../UI/HexMaps/Icons/MapTerminusHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapTerminusHex.png",
+			"textureKey": "MapTerminusHex",
 			"gridCoord": {
 				"x": 2,
 				"y": 1
@@ -819,7 +819,7 @@ const gameData = {
 			"name": "The Fingers",
 			"regionId": 38,
 			"icon": "../UI/HexMaps/Icons/MapTheFingersHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapTheFingersHex.png",
+			"textureKey": "MapTheFingersHex",
 			"gridCoord": {
 				"x": 3,
 				"y": 0
@@ -829,7 +829,7 @@ const gameData = {
 			"name": "Umbral Wildwood",
 			"regionId": 6,
 			"icon": "../UI/HexMaps/Icons/MapUmbralWildwoodHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapUmbralWildwoodHex.png",
+			"textureKey": "MapUmbralWildwoodHex",
 			"gridCoord": {
 				"x": 0,
 				"y": 1
@@ -839,7 +839,7 @@ const gameData = {
 			"name": "Viper Pit",
 			"regionId": 25,
 			"icon": "../UI/HexMaps/Icons/MapViperPitHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapViperPitHex.png",
+			"textureKey": "MapViperPitHex",
 			"gridCoord": {
 				"x": 1,
 				"y": -2
@@ -849,7 +849,7 @@ const gameData = {
 			"name": "Weathered Expanse",
 			"regionId": 22,
 			"icon": "../UI/HexMaps/Icons/MapWeatheredExpanseHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapWeatheredExpanseHex.png",
+			"textureKey": "MapWeatheredExpanseHex",
 			"gridCoord": {
 				"x": 2,
 				"y": -2
@@ -859,7 +859,7 @@ const gameData = {
 			"name": "Westgate",
 			"regionId": 14,
 			"icon": "../UI/HexMaps/Icons/MapWestgateHex.webp",
-			"texture": "../UI/HexMaps/Processed/MapWestgateHex.png",
+			"textureKey": "MapWestgateHex",
 			"gridCoord": {
 				"x": -2,
 				"y": 2

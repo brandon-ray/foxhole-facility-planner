@@ -81,10 +81,6 @@ if (isMobile && !isPhoneApp) {
                     </div>
                     <div class="board-panel-body row p-1">
                         <div class="col">
-                            <label v-if="game.settings.enableExperimental" class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.showWorldRegion }" @click="toggleProjectSetting('showWorldRegion')"></button>
-                                World Region
-                            </label>
                             <label class="btn-checkbox-wrapper d-block">
                                 <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.showProductionIcons }" @click="toggleProjectSetting('showProductionIcons')"></button>
                                 Production Icons
@@ -104,6 +100,14 @@ if (isMobile && !isPhoneApp) {
                             <label class="btn-checkbox-wrapper d-block">
                                 <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.ranges.crane }" @click="toggleProjectSetting('ranges', 'crane')"></button>
                                 Crane Ranges
+                            </label>
+                            <label class="btn-checkbox-wrapper d-block">
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.showWorldRegion }" @click="toggleProjectSetting('showWorldRegion')"></button>
+                                World Region
+                            </label>
+                            <label v-for="(info, key) in REGION_LAYERS" class="btn-checkbox-wrapper d-block">
+                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.region[key] }" @click="toggleProjectSetting('region', key)"></button>
+                                {{info.name}}
                             </label>
                         </div>
                         <div class="col">
@@ -192,7 +196,7 @@ if (isMobile && !isPhoneApp) {
                             <button class="btn-small btn-float-left" :class="{ 'btn-active': settings.showToolbelt }" @click="settings.showToolbelt = !settings.showToolbelt; game.updateSettings()"><i class="fa fa-wrench" aria-hidden="true"></i></button>
                             Toolbelt
                         </label>
-                        <label v-if="game.settings.enableExperimental" class="btn-checkbox-wrapper">
+                        <label class="btn-checkbox-wrapper">
                             <button class="btn-small btn-float-left" :class="{ 'btn-active': regionSelectionVisible }" title="Toggle Region Selection" @click="regionSelectionVisible = !regionSelectionVisible"><i class="fa fa-map-o" aria-hidden="true"></i></button>
                             Map
                         </label>
@@ -808,7 +812,7 @@ Vue.component('app-hub-about', {
                 <div class="col-md-6" style="font-size: 14px;"><a href="https://www.foxholegame.com/" target="_blank">Foxhole</a> is a registered trademark of <a href="https://www.siegecamp.com/" target="_blank">Siege Camp</a>.</div>
             </div>
             <div class="row">
-                <div class="col-md-6" style="font-size: 13px;"><!--Map Assets from <a href="https://sentsu.itch.io/foxhole-better-map-mod" target="_blank">Better Map Mod</a> by <a href="https://sentsu.itch.io/" target="_blank">Sentsu</a>.--></div>
+                <div class="col-md-6" style="font-size: 13px;">Map Assets from <a href="https://sentsu.itch.io/foxhole-better-map-mod" target="_blank">Better Map Mod</a> by <a href="https://sentsu.itch.io/" target="_blank">Sentsu</a>.</div>
                 <div class="col-md-6" style="font-size: 11px;">We are not affiliated with Siege Camp, this is a fan project.</div>
             </div>
         </div>
