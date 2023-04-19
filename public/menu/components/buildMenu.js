@@ -1187,6 +1187,7 @@ Vue.component('app-menu-save-load', {
         },
         loadFile: function() {
             let file = this.$refs.file.files[0];
+            this.$refs.file.value = '';
             let reader = new FileReader();
             let component = this;
             reader.onload = function() {
