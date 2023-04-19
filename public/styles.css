@@ -1746,6 +1746,9 @@ hr {
 /* Starting position */
 .fall-in-enter {
     opacity: 0;
+}
+
+.hub-dialog:not(.prevent-slide) .fall-in-enter {
     transform: translateY(20px);
 }
 
@@ -2176,19 +2179,11 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
 }
 
 .layer-selection .btn-checkbox-wrapper {
-    margin: 5px;
+    display: inline-block;
+    margin: 0 6px;
 }
 
-.world-region-selection {
-    width: 900px;
-    height: 860px;
-    top: 50%;
-    left: 50%;
-    margin-top: -430px;
-    margin-left: -450px;
-}
-
-.world-region-selection .board-panel-body {
+.region-selection {
     background-image: url('/games/foxhole/assets/game/Textures/UI/WorldMap/WorldMapBG.webp');
     background-size: cover;
     background-position: center;
@@ -2196,17 +2191,68 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
     box-shadow: inset 0 0 200px black;
     position: absolute;
     inset: 0;
-    top: 42px;
+    overflow: hidden;
 }
 
-.region-selection-info {
-    background: rgba(0, 0, 0, 0.5);
-    max-width: 275px;
+.info-tooltips {
     position: absolute;
-    padding: 6px 12px;
+    max-width: 275px;
+    text-align: left;
 }
 
-.region-selection-info.info-tooltip::before {
+.info-tooltips.tt-tr, .info-tooltips.tt-br {
+    text-align: right;
+}
+
+.hub-dialog:not(.maximized) .info-tooltips {
+    transform: scale(0.85);
+}
+
+.info-tooltips.tt-tl, .info-tooltips.tt-tr {
+    top: 12px;
+}
+
+.info-tooltips.tt-tl {
+    left: 12px;
+    transform-origin: 0% 0%;
+}
+
+.info-tooltips.tt-tr {
+    right: 12px;
+    transform-origin: 100% 0%;
+}
+
+.info-tooltips.tt-bl, .info-tooltips.tt-br {
+    bottom: 12px;
+}
+
+.info-tooltips.tt-bl {
+    left: 12px;
+    transform-origin: 0% 100%;
+}
+
+.info-tooltips.tt-br {
+    right: 12px;
+    transform-origin: 100% 100%;
+}
+
+.info-tooltips > div {
+    display: inline-block;
+    background: rgba(0, 0, 0, 0.5);
+    position: relative;
+    padding: 6px 12px;
+    text-align: left;
+}
+
+.info-tooltips.tt-tl > div, .info-tooltips.tt-tr > div {
+    margin-bottom: 12px;
+}
+
+.info-tooltips.tt-bl > div, .info-tooltips.tt-br > div {
+    margin-top: 12px;
+}
+
+.info-tooltips:not(.tt-br) > div::before {
     content: '';
     display: block;
     position: absolute;
@@ -2216,24 +2262,14 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
     border-left: 16px solid #ff8f00;
 }
 
-.region-selection-info.top-left {
-    top: 12px;
-    left: 12px;
+.region-selection-hexes {
+    position: absolute;
+    inset: 0;
+    transform: scale(1.05);
 }
 
-.region-selection-info.top-left-2 {
-    top: 82px;
-    left: 12px;
-}
-
-.region-selection-info.top-right {
-    top: 12px;
-    right: 12px;
-}
-
-.region-selection-info.bottom-right {
-    bottom: 12px;
-    right: 12px;
+.hub-dialog:not(.maximized) .region-selection-hexes {
+    transform: scale(0.75);
 }
 
 .region-map-hex {

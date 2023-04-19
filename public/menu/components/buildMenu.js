@@ -1312,6 +1312,7 @@ Vue.component('app-menu-about', {
                 <div class="keyboard-key">space</div> Pause / Resume physics.<br>
                 <div class="keyboard-key">B</div> Toggle blueprint for selection.<br>
                 <div class="keyboard-key">L</div> Toggle lock for selected structures.<br>
+                <div class="keyboard-key">M</div> Toggle region selection. (Map)<br>
                 <div class="keyboard-key">P</div> Toggle production output icons.<br>
                 <div class="keyboard-key">del</div> Delete selected structures.<br>
                 <div class="keyboard-key">esc</div> Clear selection.<br>

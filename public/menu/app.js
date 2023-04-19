@@ -17,8 +17,7 @@ if (isMobile && !isPhoneApp) {
                     isInMenu: game.isInMenu,
                     settings: game.settings,
                     sidebarVisible: true,
-                    layerSelectionVisible: false,
-                    regionSelectionVisible: false
+                    layerSelectionVisible: false
                 };
             },
             methods: {
@@ -56,13 +55,6 @@ if (isMobile && !isPhoneApp) {
                     }
                     game.updateEntityOverlays();
                     game.updateSave();
-                    this.refresh();
-                },
-                selectMapRegion: function(key) {
-                    game.setMapRegion(key);
-                    if (game.project.settings.regionKey) {
-                        this.regionSelectionVisible = false;
-                    }
                     this.refresh();
                 }
             },
@@ -141,29 +133,6 @@ if (isMobile && !isPhoneApp) {
 
                 <app-menu-statistics></app-menu-statistics>
 
-                <div v-if="regionSelectionVisible" class="board-panel world-region-selection" style="transform: scale(0.95)">
-                    <div class="board-panel-header">
-                        <h4 class="float-left m-0" style="color: #eee"><i class="fa fa-map-o"></i> Select Map Region (Preview)</h4>
-                        <button class="btn-small m-0 mr-1 float-right" title="Minimize Map" @click="regionSelectionVisible = false"><i class="fa fa-window-minimize" aria-hidden="true"></i></button>
-                    </div>
-                    <div class="board-panel-body">
-                        <div class="region-selection-info info-tooltip top-left">Select a region and it will become the backdrop for your project.</div>
-                        <div class="region-selection-info info-tooltip top-left-2">Select a region again to deselect it.</div>
-                        <div class="region-selection-info info-tooltip top-right">Regions will have a white border around them when they are selected.</div>
-                        <template v-for="(map, key) in gameData.maps">
-                            <div class="region-map-hex" :style="{
-                                    marginTop: ((-55 + (map.gridCoord.y * 110)) + (map.gridCoord.x * 55)) + 'px',
-                                    marginLeft: (-64 + (map.gridCoord.x * 96)) + 'px'
-                                }" :title="'Select ' + map.name" :class="{'hex-selected': key === game.project.settings.regionKey }" @click="selectMapRegion(key)">
-                                <div class="d-flex justify-content-center align-items-center text-center" :style="{backgroundImage: 'url(' + map.icon + ')'}">
-                                    <div>{{map.name}}</div>
-                                </div>
-                            </div>
-                        </template>
-                        <div class="region-selection-info bottom-right">Early Preview</div>
-                    </div>
-                </div>
-
                 <app-game-toolbelt></app-game-toolbelt>
                 
                 <app-game-hub-popup></app-game-hub-popup>
@@ -197,7 +166,7 @@ if (isMobile && !isPhoneApp) {
                             Toolbelt
                         </label>
                         <label class="btn-checkbox-wrapper">
-                            <button class="btn-small btn-float-left" :class="{ 'btn-active': regionSelectionVisible }" title="Toggle Region Selection" @click="regionSelectionVisible = !regionSelectionVisible"><i class="fa fa-map-o" aria-hidden="true"></i></button>
+                            <button class="btn-small btn-float-left" :class="{ 'btn-active': game.hubPopup?.selectedTab?.key === 'map' }" @click="game.hubPopup?.toggleTab('map')"><i class="fa fa-map-o" aria-hidden="true"></i></button>
                             Map
                         </label>
                         <label class="btn-checkbox-wrapper">
@@ -302,6 +271,12 @@ Vue.component('app-game-hub-popup', {
                 },
                 */
                 {
+                    key: 'map',
+                    title: 'Map',
+                    icon: 'fa-map-o',
+                    preventSlide: true
+                },
+                {
                     key: 'settings',
                     title: 'Settings',
                     icon: 'fa-cog'
@@ -310,7 +285,7 @@ Vue.component('app-game-hub-popup', {
                     key: 'about',
                     title: 'About',
                     icon: 'fa-question-circle'
-                },
+                }
             ]
         };
     },
@@ -320,6 +295,13 @@ Vue.component('app-game-hub-popup', {
         },
         showTab: function(key) {
             this.showPopup(true, key);
+        },
+        toggleTab: function(key) {
+            if (this.selectedTab?.key === key) {
+                this.showPopup(false);
+            } else {
+                this.showPopup(true, key);
+            }
         },
         showPopup: function(visible = !this.visible, key = 'home') {
             for (const tab in this.tabContent) {
@@ -354,7 +336,7 @@ Vue.component('app-game-hub-popup', {
         }
     },
     template: html`
-    <div v-if="visible" class="board-panel hub-dialog" :class="{ 'maximized': maximized, 'sidebar-names': game.settings.showExpandedHubSidebar }">
+    <div v-if="visible" class="board-panel hub-dialog" :class="{ 'maximized': maximized, 'sidebar-names': game.settings.showExpandedHubSidebar, 'prevent-slide': selectedTab.preventSlide }">
         <div class="board-panel-header">
             <h4 class="float-left m-0" style="color: #eee"><img src="/favicon_white.ico" height="28px" style="vertical-align: top; opacity: 0.25"> Planner Hub <span class="text-muted">/</span> {{selectedTab.title}}</h4>
             <button class="btn-small m-0 mr-1 float-right" title="Close Hub" @click="showPopup(false)"><i class="fa fa-times" aria-hidden="true"></i></button>
@@ -393,16 +375,6 @@ Vue.component('app-hub-home', {
             <p class="tab-content-body">
                 The Planner Hub is a new feature being developed that will give you easy access to changelogs, presets, settings, and more in the future.
             </p>
-        </div>
-        <div class="fall-in-item">
-            <div class="tab-content-header">
-                <i class="fa fa-bullhorn"></i> Check "Updates" for the latest changes!
-            </div>
-            <div class="tab-content-body">
-                <div class="tab-content-body-img-wrapper m-0">
-                    <img src="/assets/updates/04112023.jpg">
-                </div>
-            </div>
         </div>
     </div>
     `
@@ -537,6 +509,46 @@ Vue.component('app-hub-updates', {
         </div>
     </div>
     `
+});
+
+Vue.component('app-hub-map', {
+    methods: {
+        selectMapRegion: function(key) {
+            game.setMapRegion(key);
+            if (game.project.settings.regionKey) {
+                game.hubPopup?.showPopup(false);
+            }
+            this.$forceUpdate();
+        }
+    },
+    template: html`
+    <div class="tab-content region-selection">
+        <div class="region-selection-hexes">
+            <template v-for="(map, key) in gameData.maps">
+                <div class="region-map-hex" :style="{
+                        marginTop: ((-55 + (map.gridCoord.y * 110)) + (map.gridCoord.x * 55)) + 'px',
+                        marginLeft: (-64 + (map.gridCoord.x * 96)) + 'px'
+                    }" :title="(key === game.project.settings.regionKey ? 'Deselect ' : 'Select ') + map.name" :class="{'hex-selected': key === game.project.settings.regionKey }" @click="selectMapRegion(key)">
+                    <div class="d-flex justify-content-center align-items-center text-center" :style="{backgroundImage: 'url(' + map.icon + ')'}">
+                        <div>{{map.name}}</div>
+                    </div>
+                </div>
+            </template>
+        </div>
+        <div class="info-tooltips tt-tl">
+            <div>Select a region and it will become the backdrop for your project.</div>
+            <div>Select a region again to deselect it.</div>
+        </div>
+        <div class="info-tooltips tt-tr">
+            <div>Regions will have a white border around them when they are selected.</div>
+        </div>
+        <div class="info-tooltips tt-bl"></div>
+        <div class="info-tooltips tt-br">
+            <div><a href="https://sentsu.itch.io/foxhole-better-map-mod" target="_blank">Better Map Mod v3.2</a> by <a href="https://sentsu.itch.io/" target="_blank">Sentsu</a></div>
+        </div>
+    </div>
+    `
+                
 });
 
 /*
@@ -690,11 +702,15 @@ Vue.component('app-hub-settings', {
                         <input class="app-input" type="number" v-model.number="game.settings.keySnapRotationDegrees" min="1" max="360" @change="updateSettings()">
                     </label>
                     <label class="col-md-6 app-input-label">
-                        <i class="fa fa-search-plus" aria-hidden="true"></i> Zoom Speed
+                        <i class="fa fa-search-plus" aria-hidden="true"></i> Mouse Zoom Speed
                         <input class="app-input" type="number" v-model.number="game.settings.zoomSpeed" min="1" max="5" @change="updateSettings()">
                     </label>
                 </div>
                 <div class="row">
+                    <label class="col-md-6 app-input-label" title="Disabling this will allow the camera to be positioned outside of a region hex.">
+                        <i class="fa fa-ban" aria-hidden="true"></i> Lock Camera View to Region
+                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.lockCameraToHex }" @click="toggleSetting('lockCameraToHex')"></button>
+                    </label>
                     <label class="col-md-6 app-input-label" :class="{'disabled': !game.settings.enableExperimental}" title="Changes behavior of the toolbelt hotkeys. By default, hotkeys will spawn a new object if nothing is selected. Requires Experimental Features to be enabled.">
                         <i class="fa fa-wrench" aria-hidden="true"></i> Toolbelt Mode
                         <select class="app-input" v-model.number="game.settings.toolbeltMode" @change="game.updateSettings()" :disabled="!game.settings.enableExperimental">
@@ -703,6 +719,8 @@ Vue.component('app-hub-settings', {
                             <option value="2">Modify Selection</option>
                         </select>
                     </label>
+                </div>
+                <div class="row">
                     <label class="col-md-6 app-input-label" :class="{'disabled': !game.settings.enableExperimental}" title="Allows you to display LOS for certain structures: Pillboxes, Bunkers, etc. Requires Experimental Features to be enabled.">
                         <i class="fa fa-eye" aria-hidden="true"></i> Enable Line-of-Sight Ranges
                         <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.showLineOfSightRanges }" @click="toggleSetting('showLineOfSightRanges')" :disabled="!game.settings.enableExperimental"></button>

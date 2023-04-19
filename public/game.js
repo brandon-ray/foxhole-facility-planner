@@ -114,6 +114,7 @@ const game = {
         snapRotationDegrees: 15,
         keySnapRotationDegrees: 45,
         zoomSpeed: 3,
+        lockCameraToHex: true,
         selectedFaction: null,
         selectedTier: 3,
         showSelectedTierOnly: true,
@@ -178,7 +179,6 @@ const game = {
                 base: false,
                 colors: true,
                 shadows: false,
-                topography: false,
                 topography_values: true,
                 roads: true,
                 roads_tiers: false,
@@ -994,6 +994,9 @@ try {
                     case 76: // L
                         game.lockSelected();
                         break;
+                    case 77: // M
+                        game.hubPopup?.toggleTab('map');
+                        break;
                     case 80: // P
                         game.project.settings.showProductionIcons = !game.project.settings.showProductionIcons;
                         game.updateEntityOverlays();
@@ -1533,6 +1536,11 @@ try {
             regionKey = null;
         }
         game.project.settings.regionKey = regionKey;
+        if (game.project.settings.regionKey && !entities.length) {
+            camera.zoom = 0.018;
+            camera.x = (GRID_WIDTH/2 * camera.zoom) - WIDTH/2;
+            camera.y = (GRID_HEIGHT/2 * camera.zoom) - HEIGHT/2;
+        }
         game.updateEntityOverlays();
         game.updateSave();
         game.appComponent?.refresh();
@@ -2892,16 +2900,17 @@ try {
     let snappedMX;
     let snappedMY;
     function update() {
-        // This can lock the camera to the bounds of the map. I'm still trying to figure out if this is needed, I may include a setting to disable it if I include it.
-        // const zoomRatio = 1 / camera.zoom;
-        // const centerPos = {
-        //     x: (camera.x + app.view.width / 2) * zoomRatio,
-        //     y: (camera.y + app.view.height / 2) * zoomRatio
-        // };
-        // centerPos.x = Math.max(Math.min(centerPos.x, 39832), -29832);
-        // centerPos.y = Math.max(Math.min(centerPos.y, 35208), -25208);
-        // camera.x = (centerPos.x * camera.zoom) - app.view.width / 2;
-        // camera.y = (centerPos.y * camera.zoom) - app.view.height / 2;
+        if (game.project.settings.regionKey && game.settings.lockCameraToHex) {
+            const zoomRatio = 1 / camera.zoom;
+            const centerPos = {
+                x: (camera.x + app.view.width / 2) * zoomRatio,
+                y: (camera.y + app.view.height / 2) * zoomRatio
+            };
+            centerPos.x = Math.max(Math.min(centerPos.x, 39832), -29832);
+            centerPos.y = Math.max(Math.min(centerPos.y, 35208), -25208);
+            camera.x = (centerPos.x * camera.zoom) - app.view.width / 2;
+            camera.y = (centerPos.y * camera.zoom) - app.view.height / 2;
+        }
 
         requestAnimationFrame(update);
 
