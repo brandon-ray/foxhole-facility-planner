@@ -1495,7 +1495,7 @@ hr {
     margin-bottom: 20px;
 }
 
-.fall-in-item:not(.container) {
+.fall-in-item:not(.no-box):not(.container) {
     box-shadow: 0 5px 8px rgba(0, 0, 0, 0.5);
     text-align: left;
 }
@@ -1723,6 +1723,7 @@ hr {
 
 .tab-content-body p {
     margin-bottom: 20px;
+    text-indent: 4px;
 }
 
 /*
@@ -2210,6 +2211,7 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
 
 .info-tooltips.tt-tl, .info-tooltips.tt-tr {
     top: 12px;
+    pointer-events: none;
 }
 
 .info-tooltips.tt-tl {
@@ -2328,6 +2330,7 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
     pointer-events: none;
     text-shadow: 0 0 5px rgba(0, 0, 0, 0.75);
     transition-duration: 0.125s;
+    z-index: 100;
 }
 
 .region-map-hex:hover > div,
@@ -2338,6 +2341,7 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
 .region-map-hex:hover > div > div,
 .region-map-hex.hex-selected > div > div {
     transform: scale(1.25);
+    text-shadow: 0 0 3px rgba(0, 0, 0, 1);
 }
 
 #toolbelt-panel {

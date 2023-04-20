@@ -79,6 +79,7 @@ const gameData = {
 		},
 		"weaponry": {
 			"name": "Weaponry",
+			"hideInBuildingList": true,
 			"icon": "../UI/VehicleIcons/FieldArtilleryColVehicleIcon.webp",
 			"filters": [
 				"vehicles"
@@ -86,6 +87,7 @@ const gameData = {
 		},
 		"vehicles": {
 			"name": "Vehicles",
+			"hideInBuildingList": true,
 			"icon": "../UI/Menus/IconFilterVehicle.webp",
 			"filters": [
 				"vehicles"
@@ -93,6 +95,7 @@ const gameData = {
 		},
 		"armor": {
 			"name": "Armory",
+			"hideInBuildingList": true,
 			"icon": "../UI/VehicleIcons/ArmoredCarVehicleIcon.webp",
 			"filters": [
 				"vehicles"
@@ -100,6 +103,7 @@ const gameData = {
 		},
 		"tank": {
 			"name": "Tanks",
+			"hideInBuildingList": true,
 			"icon": "../UI/VehicleIcons/BattleTankWarDefensiveVehicleIcon.webp",
 			"filters": [
 				"vehicles"
@@ -107,6 +111,7 @@ const gameData = {
 		},
 		"trains": {
 			"name": "Locomotives",
+			"hideInBuildingList": true,
 			"icon": "../UI/VehicleIcons/SmallGaugeEngineVehicleIcon.webp",
 			"filters": [
 				"facilities",
@@ -115,6 +120,7 @@ const gameData = {
 		},
 		"naval": {
 			"name": "Aquatic",
+			"hideInBuildingList": true,
 			"icon": "../UI/VehicleIcons/Motorboat.webp",
 			"filters": [
 				"vehicles"

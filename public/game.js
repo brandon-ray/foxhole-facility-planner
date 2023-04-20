@@ -39,6 +39,9 @@ const REGION_LAYERS = {
     colors: {
         name: 'BMM Map'
     },
+    grid: {
+        name: 'Grid'
+    },
     shadows: {
         name: 'Shadows'
     },
@@ -178,6 +181,7 @@ const game = {
             region: {
                 base: false,
                 colors: true,
+                grid: true,
                 shadows: false,
                 topography_values: true,
                 roads: true,
@@ -665,6 +669,7 @@ try {
             loader.onError.add((error, resource) => {
                 console.error('Failed to load region image:', error.message);
             });
+            mapLayer.gridbg.visible = game.project.settings.region.grid;
         }
         for (const entity of entities) {
             entity.updateOverlays();
@@ -1148,6 +1153,55 @@ try {
             return 1;
         };
         app.cstage.addChild(mapLayer);
+
+        const cellSize = 125 * METER_BOARD_PIXEL_SIZE;
+        mapLayer.grid = new PIXI.Container();
+        mapLayer.grid.x = -REGION_WIDTH / 2;
+        mapLayer.grid.y = -REGION_HEIGHT / 2;
+        mapLayer.grid.zIndex = 100;
+        for (let i = 0; i <= 17; i++) {
+            const line = new PIXI.Graphics();
+            line.alpha = 0.1;
+            line.lineStyle(64, 0x000000);
+            line.moveTo(i * cellSize, 0).lineTo(i * cellSize, REGION_HEIGHT);
+            mapLayer.grid.addChild(line);
+            if (i > 0) {
+                const letterLabel = new PIXI.Text(String.fromCharCode(64 + i), {
+                    fill: 0xFFFFFF,
+                    fontSize: 1000,
+                    fontFamily: 'Jost'
+                });
+                letterLabel.anchor.set(0.5, 1);
+                letterLabel.position.set(i * cellSize - cellSize / 2, -500);
+                mapLayer.grid.addChild(letterLabel);
+            }
+        }
+        for (let i = 0; i <= 15; i++) {
+            const line = new PIXI.Graphics();
+            line.alpha = 0.1;
+            line.lineStyle(64, 0x000000);
+            line.moveTo(0, i * cellSize).lineTo(REGION_WIDTH, i * cellSize);
+            mapLayer.grid.addChild(line);
+            if (i < 15) {
+                const numberLabel = new PIXI.Text(i + 1, {
+                    fill: 0xFFFFFF,
+                    fontSize: 1000,
+                    fontFamily: 'Jost'
+                });
+                numberLabel.anchor.set(1, 0.5);
+                numberLabel.position.set(-700, i * cellSize + cellSize / 2);
+                mapLayer.grid.addChild(numberLabel);
+            }
+        }
+        mapLayer.addChild(mapLayer.grid);
+
+        mapLayer.gridbg = new PIXI.Graphics();
+        mapLayer.gridbg.alpha = 0.075;
+        mapLayer.gridbg.beginFill(0xFFFFFF);
+        mapLayer.gridbg.drawRect(-REGION_WIDTH / 2, -REGION_HEIGHT / 2, REGION_WIDTH, REGION_HEIGHT);
+        mapLayer.gridbg.endFill();
+        mapLayer.gridbg.zIndex = -1;
+        mapLayer.addChild(mapLayer.gridbg);
 
         diffuseGroupLayer = new PIXI.display.Layer(PIXI.lights.diffuseGroup);
         PIXI.lights.diffuseGroup.zIndex = 1;
