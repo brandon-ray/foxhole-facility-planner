@@ -115,7 +115,7 @@ Vue.component('app-game-sidebar', {
             <div class="building-info-body">
                 <p class="building-info-description" v-if="hoverData.description">{{hoverData.description}}</p>
                 <p class="building-tech-description" v-if="hoverData.author">
-                    <span>Author:</span> {{typeof hoverData.author === 'string' ? hoverData.author : hoverData.author.join(', ')}}
+                    <span>Creator{{typeof hoverData.author !== 'string' && 's' || ''}}:</span> {{typeof hoverData.author === 'string' ? hoverData.author : hoverData.author.join(', ')}}
                 </p>
                 <p class="building-tech-description" v-if="hoverData.requireFoundation">
                     <span>Requires Foundation</span>
@@ -123,7 +123,7 @@ Vue.component('app-game-sidebar', {
                 <p class="building-tech-description" v-if="hoverData.techId">
                     <span>Requires Tech<template v-if="window.objectData.tech[hoverData.techId]">:</template></span> {{window.objectData.tech[hoverData.techId]?.name}}
                 </p>
-                <p class="building-tech-description" v-if="hoverData.author">
+                <p class="building-tech-description" v-if="hoverData.category === 'presets' || hoverData.category === 'showcase'">
                     <span>Want your design featured in the planner?</span> Submit it on our Discord!
                 </p>
                 <div class="building-info-production" v-if="hoverData.production && hoverData.production.length && hoverData.production.hasOutput">

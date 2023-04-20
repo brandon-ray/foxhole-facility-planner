@@ -151,7 +151,6 @@ const gameData = {
 		"360_one": {
 			"name": "360 ONE",
 			"description": "The older brother of the zero, more expensive, but more aggressive.",
-			"author": "Unknown",
 			"filters": [
 				"bunkers"
 			],
@@ -160,7 +159,6 @@ const gameData = {
 		"360_zero": {
 			"name": "360 ZERO",
 			"description": "Cheap, Effective, Practical.",
-			"author": "Unknown",
 			"filters": [
 				"bunkers"
 			],
@@ -209,6 +207,14 @@ const gameData = {
 				"facilities"
 			]
 		},
+		"arty_pits_pallets_ammo_rooms": {
+			"name": "Arty pits pallets + ammo room's",
+			"description": "Simple way to do arty pits. They are ammo room's under the craines, cost about 1.5k to do pits and bunker and you can add as much pillbox's as you wan't !",
+			"author": "Furature",
+			"filters": [
+				"bunkers"
+			]
+		},
 		"bad_idea_inc": {
 			"name": "Bad Idea INC.™",
 			"description": "Field mod facility, PLS DONT BUILD",
@@ -220,7 +226,6 @@ const gameData = {
 		"bunker_w_module": {
 			"name": "\"W\" Bunker",
 			"description": "A meta bunker design that has lots of health with great structural integrity and defenses.",
-			"author": "Unknown",
 			"filters": [
 				"bunkers"
 			],
@@ -289,7 +294,6 @@ const gameData = {
 		"halberd_bunker": {
 			"name": "\"Halberd\" Bunker",
 			"description": "A common reliable defensive bunker pattern.",
-			"author": "Unknown",
 			"filters": [
 				"bunkers"
 			],
@@ -358,7 +362,6 @@ const gameData = {
 		"obs_bunker": {
 			"name": "OBS Bunker",
 			"description": "Standard observation bunker. Power only 2 rifle garrisons and the OBS bunker.",
-			"author": "Unknown",
 			"filters": [
 				"bunkers"
 			],
@@ -417,6 +420,14 @@ const gameData = {
 			"name": "Small Tripod Facility",
 			"description": "A variant to the Small Artillery Facility I made, this one allows you to mass produce tripod weapons",
 			"author": "Trooper",
+			"filters": [
+				"facilities"
+			]
+		},
+		"spatha_mpf": {
+			"name": "Spatha MPF",
+			"description": "Mass producting Spatha. Can be suply alone and design for it. So if you more than one wanting to do this its easy . (def can be reduce but i think its the minimum to have a 360deg at/rifle bunker)",
+			"author": "Furature",
 			"filters": [
 				"facilities"
 			]
