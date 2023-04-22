@@ -722,7 +722,7 @@ class FoxholeStructure extends DraggableContainer {
     assignRange(rangeData) {
         this.removeChild(this.rangeSprite);
         if (rangeData) {
-            const rangeColor = COLOR_RANGES[rangeData.type] ?? COLOR_RANGES.default;
+            const rangeColor = PROJECT_LAYERS.ranges[rangeData.type]?.color ?? COLOR_LIMEGREEN;
             this.rangeSprite = new PIXI.Graphics();
             this.rangeSprite.alpha = 0.15;
             this.updateOverlays();

@@ -48,7 +48,14 @@ if (isMobile && !isPhoneApp) {
                     game.updateSettings();
                 },
                 toggleProjectSetting: function(type, subtype) {
+                    this.bmc();
                     if (subtype) {
+                        if (PROJECT_LAYERS[type] && PROJECT_LAYERS[type][subtype]) {
+                            const disableKey = PROJECT_LAYERS[type][subtype].disable;
+                            if (disableKey) {
+                                game.project.settings[type][disableKey] = false;
+                            }
+                        }
                         game.project.settings[type][subtype] = !game.project.settings[type][subtype];
                     } else {
                         game.project.settings[type] = !game.project.settings[type];
@@ -66,67 +73,36 @@ if (isMobile && !isPhoneApp) {
                     <i class="fa fa-wrench" aria-hidden="true"></i> {{game.project.name}}
                 </div>
 
-                <div v-if="layerSelectionVisible" class="board-panel layer-selection">
-                    <div class="board-panel-header">
-                        <h4 class="float-left m-0" style="color: #eee"><i class="fa fa-cogs"></i> Toggle Layers</h4>
-                        <button class="btn-small m-0 mr-1 float-right" title="Minimize Layers" @click="layerSelectionVisible = false"><i class="fa fa-window-minimize" aria-hidden="true"></i></button>
-                    </div>
-                    <div class="board-panel-body row p-1">
-                        <div class="col">
-                            <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.showProductionIcons }" @click="toggleProjectSetting('showProductionIcons')"></button>
-                                Production Icons
-                            </label>
-                            <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.showRangeWhenSelected }" @click="toggleProjectSetting('showRangeWhenSelected')"></button>
-                                Selection Ranges
-                            </label>
-                            <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.ranges.resourceField }" @click="toggleProjectSetting('ranges', 'resourceField')"></button>
-                                Resource Field Ranges
-                            </label>
-                            <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.ranges.preventDecay }" @click="toggleProjectSetting('ranges', 'preventDecay')"></button>
-                                Maintenance Ranges
-                            </label>
-                            <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.ranges.crane }" @click="toggleProjectSetting('ranges', 'crane')"></button>
-                                Crane Ranges
-                            </label>
-                            <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.showWorldRegion }" @click="toggleProjectSetting('showWorldRegion')"></button>
-                                World Region
-                            </label>
-                            <label v-for="(info, key) in REGION_LAYERS" class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.region[key] }" @click="toggleProjectSetting('region', key)"></button>
-                                {{info.name}}
-                            </label>
+                <div v-if="game.settings.enableLayers" class="layer-selection text-left">
+                    <template v-for="(layers, group) in PROJECT_LAYERS">
+                        <div v-if="group !== 'region' || game.project.settings.regionKey" class="layer-button-wrapper">
+                            <div class="layer-button-heading">{{group}}</div>
+                            <template v-if="group === 'region'">
+                                <div class="layer-button" :class="{ 'btn-inactive': !game.project.settings.showWorldRegion }" title="Toggle Region" @mouseenter="bme()" @click="toggleProjectSetting('showWorldRegion')">
+                                    <div class="layer-button-info">{{game.project.settings.showWorldRegion ? 'Visible' : 'Hidden'}}</div>
+                                </div>
+                            </template>
+                            <template v-if="group === 'ranges'">
+                                <div class="layer-button" :class="{ 'btn-inactive': !game.project.settings.showRangeWhenSelected }" title="Selection Ranges" @mouseenter="bme()" @click="toggleProjectSetting('showRangeWhenSelected')">
+                                    <div class="layer-button-info">MOUSE</div>
+                                </div>
+                            </template>
+                            <template v-if="group !== 'region' || game.project.settings.showWorldRegion" v-for="(info, key) in layers">
+                                <div class="layer-button" :class="{ 'btn-inactive': !game.project.settings[group][key] }" :title="info.description ?? info.name" @mouseenter="bme()" @click="toggleProjectSetting(group, key)">
+                                    <div class="layer-button-info">{{info.alias ?? info.name}}</div>
+                                </div>
+                                <!--
+                                <div class="layer-button" :class="{ 'btn-inactive': !game.project.settings[group][key], 'expanded': info.icon }" :title="info.description ?? info.name" @mouseenter="bme()" @click="toggleProjectSetting(group, key)">
+                                    <div class="layer-button-info" :style="{backgroundImage: (info.icon && 'url(' + info.icon + ')') || ''}">{{(!info.icon && (info.alias ?? info.name)) || ''}}</div>
+                                </div>
+                                -->
+                            </template>
                         </div>
-                        <div class="col">
-                            <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.ranges.killbox }" @click="toggleProjectSetting('ranges', 'killbox')"></button>
-                                Rifle Ranges
-                            </label>
-                            <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.ranges.killboxMG }" @click="toggleProjectSetting('ranges', 'killboxMG')"></button>
-                                Machine Gun Ranges
-                            </label>
-                            <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.ranges.killboxAT }" @click="toggleProjectSetting('ranges', 'killboxAT')"></button>
-                                Anti Tank Ranges
-                            </label>
-                            <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.ranges.killboxRocket }" @click="toggleProjectSetting('ranges', 'killboxRocket')"></button>
-                                Rocket Ranges
-                            </label>
-                            <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.ranges.killboxArty }" @click="toggleProjectSetting('ranges', 'killboxArty')"></button>
-                                Artillery Ranges
-                            </label>
-                            <label class="btn-checkbox-wrapper d-block">
-                                <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': game.project.settings.ranges.radio }" @click="toggleProjectSetting('ranges', 'radio')"></button>
-                                Radio Ranges
-                            </label>
+                    </template>
+                    <div class="layer-button-wrapper">
+                        <div class="layer-button-heading">ICONS</div>
+                        <div class="layer-button" :class="{ 'btn-inactive': !game.project.settings.showProductionIcons }" title="Production Icons" @mouseenter="bme()" @click="toggleProjectSetting('showProductionIcons')">
+                            <div class="layer-button-info">OUTPUT</div>
                         </div>
                     </div>
                 </div>
@@ -158,7 +134,7 @@ if (isMobile && !isPhoneApp) {
                             Hub
                         </label>
                         <label class="btn-checkbox-wrapper">
-                            <button class="btn-small btn-float-left" :class="{ 'btn-active': layerSelectionVisible }" title="Toggle Visual Layers" @click="layerSelectionVisible = !layerSelectionVisible"><i class="fa fa-cogs" aria-hidden="true"></i></button>
+                            <button class="btn-small btn-float-left" :class="{ 'btn-active': settings.enableLayers }" @click="settings.enableLayers = !settings.enableLayers; game.updateSettings()"><i class="fa fa-clone" aria-hidden="true"></i></button>
                             Layers
                         </label>
                         <label class="btn-checkbox-wrapper">

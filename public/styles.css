@@ -2170,18 +2170,74 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
 */
 
 .layer-selection {
-    width: 500px;
-    bottom: 59px;
+    position: absolute;
+    top: 16px;
     left: 365px;
+    pointer-events: none;
+    overflow: visible;
 }
 
 .no-sidebar .layer-selection {
     left: 15px;
 }
 
-.layer-selection .btn-checkbox-wrapper {
-    display: inline-block;
-    margin: 0 6px;
+.layer-selection .layer-button-wrapper {
+    /* background: rgba(0, 0, 0, 0.5); */
+    background: #0b0b0b;
+    padding: 2px;
+    overflow: auto;
+    margin-bottom: 12px;
+    pointer-events: auto;
+    overflow: visible;
+    text-transform: uppercase;
+}
+
+.layer-selection .layer-button-wrapper .layer-button-heading {
+    background: gray;
+    line-height: 20px;
+    font-size: 0.75em;
+    text-align: center;
+}
+
+.layer-selection .layer-button {
+    width: 70px;
+    height: 32px;
+    line-height: 32px;
+    font-size: 0.785em;
+    position: relative;
+    cursor: pointer;
+    text-align: center;
+    border-top: 1px solid #0b0b0b;
+}
+
+.layer-selection .layer-button:focus,
+.layer-selection .layer-button:hover {
+    outline: 2px solid white;
+    z-index: 100;
+}
+
+.layer-selection .layer-button-info {
+    height: 100%;
+    /* background-color: rgba(0, 0, 0, 0.15); */
+    background-color: #0f0f0f;
+    background-size: auto 90%;
+    background-repeat: no-repeat;
+    background-position: center;
+    letter-spacing: 1px;
+}
+
+.layer-selection .layer-button-info:hover {
+    background-color: #1b1b1b;
+}
+
+.layer-selection .layer-button.btn-inactive .layer-button-info {
+    background-color: black;
+    color: #505050;
+}
+
+.layer-selection .layer-button.expanded {
+    height: 40px;
+    line-height: 40px;
 }
 
 .region-selection {

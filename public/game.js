@@ -7,6 +7,7 @@ const COLOR_BLACK = 0x000000;
 const COLOR_ORANGE = 0xFF8F00;
 const COLOR_RED = 0xFF0000;
 const COLOR_GREEN = 0x00FF00;
+const COLOR_LIMEGREEN = 0x72FF5A;
 const COLOR_BLUE = 0x0000FF;
 const COLOR_BLUEPRINT = 0x335cff;
 const COLOR_LIGHTBLUE = 0x00E1FF;
@@ -15,55 +16,110 @@ const COLOR_PURPLE = 0x9900FF;
 
 const COLOR_SELECTION = 0xE16931; // Orange
 const COLOR_SELECTION_BORDER = 0xFF8248; // Lighter Orange
-
-const COLOR_RANGES = {
-    default: 0x72FF5A, // Green
-    killbox: COLOR_ORANGE,
-    killboxMG: COLOR_BLUE,
-    killboxAT: COLOR_RED,
-    killboxRocket: COLOR_ORANGE,
-    killboxArty: COLOR_YELLOW,
-    radio: COLOR_PURPLE,
-    crane: COLOR_LIGHTBLUE
-};
 const COLOR_RANGE_BORDER = 0xED2323; // Red
 
 const FILTER_BRIGHT = new PIXI.filters.ColorMatrixFilter();
 FILTER_BRIGHT.brightness(2.75);
 
-const REGION_LAYERS = {
-    base: {
-        name: 'Foxhole Map',
-        bmm: false
+const PROJECT_LAYERS = {
+    ranges: {
+        preventDecay: {
+            name: 'Maintenance',
+            alias: 'SUPPLY'
+        },
+        resourceField: {
+            name: 'Resource Field',
+            alias: 'HARVEST'
+        },
+        crane: {
+            name: 'Crane',
+            alias: 'CRANE',
+            color: COLOR_LIGHTBLUE
+        },
+        killbox: {
+            name: 'Rifle',
+            alias: 'RIFLE',
+            color: COLOR_ORANGE
+        },
+        killboxMG: {
+            name: 'Machine Gun',
+            alias: 'MG',
+            color: COLOR_BLUE
+        },
+        killboxAT: {
+            name: 'Anti-Tank',
+            alias: 'AT',
+            color: COLOR_RED
+        },
+        killboxRocket: {
+            name: 'Rocket',
+            alias: 'RPG',
+            color: COLOR_ORANGE
+        },
+        killboxArty: {
+            name: 'Artillery',
+            alias: 'ARTY',
+            color: COLOR_YELLOW
+        },
+        radio: {
+            name: 'Radio',
+            alias: 'RADIO',
+            color: COLOR_PURPLE
+        }
     },
-    colors: {
-        name: 'BMM Map'
+    region: {
+        base: {
+            name: 'Foxhole Map',
+            description: 'The default map for Foxhole.',
+            alias: 'FOXHOLE',
+            disable: 'colors',
+            bmm: false
+        },
+        colors: {
+            name: 'Better Map Mod',
+            description: 'A variant of the default map for Foxhole with more contrast colors and better detail.',
+            alias: 'BMM',
+            disable: 'base'
+        },
+        grid: {
+            name: 'Grid',
+            description: 'A grid overlay for the map.',
+            preventLoad: true
+        },
+        shadows: {
+            name: 'Shadows',
+            description: 'A shadow overlay for the map.',
+            alias: 'SHADE'
+        },
+        topography_values: {
+            name: 'Topography',
+            description: 'A topography overlay for the map.',
+            alias: 'TOPO'
+        },
+        roads: {
+            name: 'Roads',
+            description: 'A roads overlay for the map.',
+            alias: 'ROAD',
+            disable: 'roads_tiers'
+        },
+        roads_tiers: {
+            name: 'Road Tiers',
+            description: 'A roads overlay for the map with colored tiers.',
+            alias: 'ROAD+',
+            disable: 'roads'
+        },
+        tracks: {
+            name: 'Tracks',
+            description: 'A tracks overlay for the map.',
+            alias: 'RAIL'
+        },
+        rdz: {
+            name: 'Rapid Decay Zone',
+            description: 'A rapid decay zone overlay for the map.',
+            alias: 'RDZ'
+        }
     },
-    grid: {
-        name: 'Grid'
-    },
-    shadows: {
-        name: 'Shadows'
-    },
-    // topography: {
-    //     name: 'Topography'
-    // },
-    topography_values: {
-        name: 'Topography'
-    },
-    roads: {
-        name: 'Roads'
-    },
-    roads_tiers: {
-        name: 'Road Tiers'
-    },
-    tracks: {
-        name: 'Tracks'
-    },
-    rdz: {
-        name: 'Rapid Decay Zone'
-    }
-};
+}
 
 const DEFAULT_TEXT_STYLE = {
     fontFamily: 'Jost',
@@ -101,7 +157,7 @@ const game = {
         disableSound: false,
         disableHUD: false,
         enableAdvanced: false,
-        enableDarkMode: false,
+        enableDarkMode: true,
         enableDebug: false,
         enableExperimental: false,
         enableHistory: true,
@@ -109,6 +165,7 @@ const game = {
         enableAutoLoading: true,
         enableGrid: true,
         enableStats: true,
+        enableLayers: false,
         enableSelectionStats: true,
         statsRequireMultiSelection: false,
         enableBunkerDryingStats: false,
@@ -622,13 +679,13 @@ try {
                 if (file) {
                     if (mapLayer[key]) {
                         mapLayer[key].texture = game.resources[file].texture;
-                    } else {
+                    } else if (game.resources[file]) {
                         const mapSpriteLayer = new PIXI.Sprite(game.resources[file].texture);
                         mapSpriteLayer.visible = game.project.settings.region[key];
                         mapSpriteLayer.anchor.set(0.5);
                         mapSpriteLayer.width = REGION_WIDTH;
                         mapSpriteLayer.height = REGION_HEIGHT;
-                        mapSpriteLayer.zIndex = Object.keys(REGION_LAYERS).indexOf(key);
+                        mapSpriteLayer.zIndex = Object.keys(PROJECT_LAYERS.region).indexOf(key);
                         mapLayer.addChild(mapSpriteLayer);
                         mapLayer.sortChildren();
                         mapLayer[key] = mapSpriteLayer;
@@ -639,8 +696,8 @@ try {
                 }
             };
             const textureKey = gameData.maps[game.project.settings.regionKey].textureKey;
-            for (const [key, info] of Object.entries(REGION_LAYERS)) {
-                if (game.project.settings.region[key]) {
+            for (const [key, info] of Object.entries(PROJECT_LAYERS.region)) {
+                if (!info.preventLoad && game.project.settings.region[key]) {
                     let layerPath = game_asset_dir + 'game/Textures/UI/';
                     if (info.bmm === false) {
                         layerPath += `HexMaps/Processed/${textureKey}.png`;
@@ -1989,7 +2046,10 @@ try {
             selectionArea.y = selectionArea.origin.y > gmy ? gmy : selectionArea.origin.y;
             selectionArea.beginFill(COLOR_SELECTION);
             selectionArea.lineStyle(4, COLOR_SELECTION_BORDER);
-            selectionArea.drawRect(0, 0, Math.abs(gmx - selectionArea.origin.x), Math.abs(gmy - selectionArea.origin.y));
+
+            const selection_width = Math.abs(gmx - selectionArea.origin.x);
+            const selection_height = Math.abs(gmy - selectionArea.origin.y);
+            selectionArea.drawRect(0, 0, selection_width, selection_height);
             selectionArea.endFill();
 
             if (!selectionArea.visible) {
