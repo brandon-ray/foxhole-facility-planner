@@ -3014,10 +3014,11 @@ try {
                     { name: 'key', weight: 0.4 },
                     { name: 'category', weight: 0.3 },
                     { name: 'description', weight: 0.2 },
-                    { name: 'author', weight: 0.2 }
+                    { name: 'author', weight: 0.2 },
+                    { name: 'codeName', weight: 0.1 }
                 ],
                 includeMatches: true,
-                threshold: 0.3,
+                threshold: 0.225,
                 distance: 100
             });
         }
