@@ -475,7 +475,7 @@ async function iterateStructures(dirPath) {
                                     'range': structureData.range,
                                     'sortLayer': structureData.sortLayer,
                                     'sortOffset': structureData.sortOffset,
-                                    'hitArea': undefined,
+                                    'hitArea': structureData.hitArea,
                                     'hasHandle': structureData.hasHandle,
                                     'hasOutline': structureData.hasOutline,
                                     'isBezier': structureData.isBezier,

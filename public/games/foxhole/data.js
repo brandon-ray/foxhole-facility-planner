@@ -414,6 +414,14 @@ const gameData = {
 			],
 			"module": true
 		},
+		"small_easy_soloduo_facility": {
+			"name": "Small Easy Solo/Duo Facility",
+			"description": "Produces Sandbag and Barbwire to ship to front and modifies armored cars. ",
+			"author": "Mach 12 Slip n' Slide",
+			"filters": [
+				"facilities"
+			]
+		},
 		"small_munition_factory": {
 			"name": "Small Munition Factory",
 			"description": "Small one man Facility with Low Gsupps cost of 432 for 24h when the lvl 3 Encampment is reached.",
