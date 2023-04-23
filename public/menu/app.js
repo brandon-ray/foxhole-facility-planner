@@ -362,6 +362,16 @@ Vue.component('app-hub-home', {
                 The Planner Hub is a new feature being developed that will give you easy access to changelogs, presets, settings, and more in the future.
             </p>
         </div>
+        <div class="fall-in-item">
+            <div class="tab-content-header">
+                <i class="fa fa-bullhorn"></i> Check "Updates" for the latest changes!
+            </div>
+            <div class="tab-content-body">
+                <div class="tab-content-body-img-wrapper m-0">
+                    <img src="/assets/updates/04242023.jpg">
+                </div>
+            </div>
+        </div>
     </div>
     `
 });
@@ -369,6 +379,48 @@ Vue.component('app-hub-home', {
 Vue.component('app-hub-updates', {
     template: html`
     <div class="tab-content">
+        <div class="fall-in-item">
+            <div class="tab-content-header">
+                <i class="fa fa-bullhorn"></i> Map / Regions Update
+                <small class="float-right">April 24th, 2023</small>
+            </div>
+            <div class="tab-content-body">
+                <div class="tab-content-body-img-wrapper">
+                    <img src="/assets/updates/04242023_alt.jpg">
+                </div>
+                <h4>Major Changes</h4>
+                <ul>
+                    <li>Added Region Selection (Map):
+                        <ul>
+                            <li>Select a region to be your project background.</li>
+                            <li>Switch between Foxhole and BMM styled maps.</li>
+                            <li>Crop a selection of the map with the new "Region Crop Tool"</li>
+                            <li>Enable Shading, Topology, Road, Road Tiers, Rail, and RDZ Layers provided by BMM.</li>
+                            <li>Enable the Grid layer to match that of the in-game map.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h4>Other Changes</h4>
+                <ul>
+                    <li>Added blueprint & dig site variants of Bunker, Trench, and Emplacement pieces.</li>
+                    <li>Added toggle for power / production stats per building.</li>
+                    <li>Added foundation requirements to building hover info.</li>
+                    <li>Added setting for toggling single selection stats.</li>
+                    <li>Added new hotkeys for Map (M) and Blueprinting selections (B).</li>
+                    <li>Added Observation Tower reference and Abisme AT-99 Tank Mine.</li>
+                    <li>Added selected tool information to footer.</li>
+                    <li>Added new "About" page to the Planner Hub.</li>
+                    <li>Layers menu has been updated to accomodate the new map.</li>
+                    <li>Gate T1 no longer blocks LOS.</li>
+                    <li>Updated hitbox of AT Gun Garrison (Tier 3).</li>
+                    <li>Fixed issue with loading the same project. (Chromium)</li>
+                </ul>
+                <h4>Special Thanks</h4>
+                <ul>
+                    <li>Thank you <a href="https://sentsu.itch.io/" target="_blank">Sentsu</a> for allowing us to include layers from your <a href="https://sentsu.itch.io/foxhole-better-map-mod" target="_blank">Better Map Mod</a>!</li>
+                </ul>
+            </div>
+        </div>
         <div class="fall-in-item">
             <div class="tab-content-header">
                 <i class="fa fa-bullhorn"></i> Settings & Performance Update
