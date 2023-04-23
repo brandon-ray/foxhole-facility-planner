@@ -63,6 +63,13 @@ if (isMobile && !isPhoneApp) {
                     game.updateEntityOverlays();
                     game.updateSave();
                     this.refresh();
+                },
+                toggleCropMode: function() {
+                    if (game.constructionMode.key === 'crop-region') {
+                        game.resetConstructionMode();
+                    } else {
+                        game.resetRegionCrop(game.project.settings.regionCrop === undefined);
+                    }
                 }
             },
             template: html`
@@ -80,6 +87,9 @@ if (isMobile && !isPhoneApp) {
                             <template v-if="group === 'region'">
                                 <div class="layer-button" :class="{ 'btn-inactive': !game.project.settings.showWorldRegion }" title="Toggle Region" @mouseenter="bme()" @click="toggleProjectSetting('showWorldRegion')">
                                     <div class="layer-button-info">{{game.project.settings.showWorldRegion ? 'Visible' : 'Hidden'}}</div>
+                                </div>
+                                <div v-if="game.project.settings.showWorldRegion" class="layer-button" :class="{ 'btn-inactive': game.project.settings.regionCrop === undefined && game.constructionMode.key !== 'crop-region' }" title="Crop Region" @mouseenter="bme()" @click="toggleCropMode()">
+                                    <div class="layer-button-info">{{game.project.settings.regionCrop ? 'Cropped' : 'Crop'}}</div>
                                 </div>
                             </template>
                             <template v-if="group === 'ranges'">
@@ -520,7 +530,7 @@ Vue.component('app-hub-map', {
         </div>
         <div class="info-tooltips tt-bl"></div>
         <div class="info-tooltips tt-br">
-            <div><a href="https://sentsu.itch.io/foxhole-better-map-mod" target="_blank">Better Map Mod v3.2</a> by <a href="https://sentsu.itch.io/" target="_blank">Sentsu</a></div>
+            <div class="text-center">Map layer assets provided by: <br><a href="https://sentsu.itch.io/foxhole-better-map-mod" target="_blank">Better Map Mod v3.2</a> by <a href="https://sentsu.itch.io/" target="_blank">Sentsu</a></div>
         </div>
     </div>
     `

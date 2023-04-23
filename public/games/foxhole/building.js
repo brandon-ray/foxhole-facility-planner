@@ -777,7 +777,7 @@ class FoxholeStructure extends DraggableContainer {
                                 polygons.push(shapePoints);
                             }
                         }
-                    } else {
+                    } else if (e2.building?.hitArea !== false) {
                         const w = ((e2.building?.width * METER_BOARD_PIXEL_SIZE) || e2.sprite.width) / 2;
                         const h = ((e2.building?.length * METER_BOARD_PIXEL_SIZE) || e2.sprite.height) / 2;
                         polygons.push([

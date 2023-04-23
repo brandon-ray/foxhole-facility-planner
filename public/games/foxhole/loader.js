@@ -166,6 +166,7 @@ const game_asset_list = {};
                     appendGameAssets(upgrade);
 
                     let upgradeBuilding = Object.assign({}, building, {
+                        hitArea: undefined,
                         tierUp: undefined,
                         tierDown: undefined
                     }, upgrade, {

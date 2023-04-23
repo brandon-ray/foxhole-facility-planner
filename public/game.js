@@ -235,6 +235,7 @@ const game = {
             showProductionIcons: true,
             showRangeWhenSelected: true,
             regionKey: '',
+            regionCrop: undefined,
             region: {
                 base: false,
                 colors: true,
@@ -423,6 +424,12 @@ try {
             eSubType: 'line'
         },
         {
+            key: 'crop-region',
+            title: 'Region Crop Tool',
+            cursor: 'crosshair',
+            menuButton: false
+        },
+        {
             key: 'select',
             title: 'Selection Tool',
             icon: 'fa-mouse-pointer'
@@ -518,12 +525,16 @@ try {
     }
 
     game.setConstructionMode = function(mode) {
+        if (typeof mode === 'string') {
+            mode = game.constructionModes.find(m => m.key === mode);
+        }
         mode = mode ?? game.constructionModes[game.constructionModes.length - 1];
         if (game.constructionMode !== mode) {
             game.constructionMode = mode;
             app.view.style.cursor = mode.cursor ? `url(/assets/${mode.cursor}.webp) 16 16, auto` : 'unset';
             game.constructionMenuComponent?.refresh();
             game.boardUIComponent?.refresh();
+            game.appComponent?.refresh();
             return true;
         }
         return false;
@@ -673,6 +684,7 @@ try {
     game.updateEntityOverlays = function() {
         mapLayer.visible = game.project.settings.regionKey && game.project.settings.showWorldRegion;
         if (mapLayer.visible) {
+            game.updateRegionCrop();
             const regionLayers = {};
             const loader = new PIXI.Loader();
             const updateMapLayer = (key, file) => {
@@ -1260,6 +1272,9 @@ try {
         mapLayer.gridbg.zIndex = -1;
         mapLayer.addChild(mapLayer.gridbg);
 
+        mapLayer.cropMask = new PIXI.Graphics();
+        mapLayer.addChild(mapLayer.cropMask);
+
         diffuseGroupLayer = new PIXI.display.Layer(PIXI.lights.diffuseGroup);
         PIXI.lights.diffuseGroup.zIndex = 1;
         diffuseGroupLayer.getZIndex = () => {
@@ -1657,6 +1672,27 @@ try {
         game.appComponent?.refresh();
     };
 
+    game.updateRegionCrop = function() {
+        const regionCrop = game.project.settings.regionCrop;
+        if (regionCrop) {
+            mapLayer.cropMask.clear();
+            mapLayer.cropMask.drawRect(regionCrop.x - (GRID_WIDTH / 2), regionCrop.y - (GRID_HEIGHT / 2), regionCrop.width, regionCrop.height);
+            mapLayer.mask = mapLayer.cropMask;
+        } else {
+            mapLayer.mask = null;
+        }
+        game.updateSave();
+        game.appComponent?.refresh();
+    };
+
+    game.resetRegionCrop = function(switchMode = true) {
+        game.project.settings.regionCrop = undefined;
+        if (switchMode) {
+            game.setConstructionMode('crop-region');
+        }
+        game.updateRegionCrop();
+    };
+
     game.getEntitiesCenter = function(ents, isSelection) {
         const count = ents?.length ?? 1;
         if (Array.isArray(ents)) {
@@ -1916,7 +1952,7 @@ try {
                     if (selectedEntity?.hasHandle && selectedEntity.shouldSelectLastHandlePoint) {
                         selectedEntity.grabHandlePoint();
                     }
-                } else if (game.constructionMode.key !== 'select') {
+                } else if (game.constructionMode.eType) {
                     let gmxGrid = gmx;
                     let gmyGrid = gmy;
                     if (game.settings.enableGrid || keys[16]) {
@@ -1932,41 +1968,43 @@ try {
                         entity.grabHandlePoint();
                     }
                 } else {
-                    entities.sort(function (a, b) {
-                        return a.getZIndex() - b.getZIndex();
-                    });
-                    for (let i=0; i<entities.length; i++) {
-                        let entity = entities[i];
-                        if (entity.valid && entity.visible && entity.selectable) {
-                            if (entity.selected && entity.hasHandle && entity.grabHandlePoint()) {
-                                return;
-                            }
-                            if (entity.canGrab()) {
-                                if (keys[46]) {
-                                    entity.remove();
-                                } else {
-                                    if (!entity.selected) {
-                                        if (e.ctrlKey || e.shiftKey) {
-                                            game.addSelectedEntity(entity);
-                                        } else {
-                                            game.selectEntity(entity);
-                                        }
-                                    } else if (e.ctrlKey || e.shiftKey) {
-                                        game.removeSelectedEntity(entity);
-                                    }
-                                    /* Not sure how I feel about this yet. Might be worth keeping, unsure.
-                                    if (entity.selected && followNext) {
-                                        game.followEntity(entity);
-                                    }
-                                    */
-                                    game.setPickupEntities(true);
+                    if (game.constructionMode.key === 'select') {
+                        entities.sort(function (a, b) {
+                            return a.getZIndex() - b.getZIndex();
+                        });
+                        for (let i=0; i<entities.length; i++) {
+                            let entity = entities[i];
+                            if (entity.valid && entity.visible && entity.selectable) {
+                                if (entity.selected && entity.hasHandle && entity.grabHandlePoint()) {
+                                    return;
                                 }
-                                return;
+                                if (entity.canGrab()) {
+                                    if (keys[46]) {
+                                        entity.remove();
+                                    } else {
+                                        if (!entity.selected) {
+                                            if (e.ctrlKey || e.shiftKey) {
+                                                game.addSelectedEntity(entity);
+                                            } else {
+                                                game.selectEntity(entity);
+                                            }
+                                        } else if (e.ctrlKey || e.shiftKey) {
+                                            game.removeSelectedEntity(entity);
+                                        }
+                                        /* Not sure how I feel about this yet. Might be worth keeping, unsure.
+                                        if (entity.selected && followNext) {
+                                            game.followEntity(entity);
+                                        }
+                                        */
+                                        game.setPickupEntities(true);
+                                    }
+                                    return;
+                                }
                             }
                         }
-                    }
-                    if (!(e.ctrlKey || e.shiftKey)) {
-                        game.deselectEntities();
+                        if (!(e.ctrlKey || e.shiftKey)) {
+                            game.deselectEntities();
+                        }
                     }
                     if (selectionArea) {
                         selectionArea.origin = { x: gmx, y: gmy };
@@ -2062,25 +2100,27 @@ try {
                 }
             }
 
-            let selectedChange = false;
-            entities.forEach(entity => {
-                if (entity.canGrab(true)) {
-                    if (entity.mid.x > selectionArea.x && entity.mid.x < selectionArea.x + selectionArea.width) {
-                        if (entity.mid.y > selectionArea.y && entity.mid.y < selectionArea.y + selectionArea.height) {
-                            if (game.addSelectedEntity(entity, true)) {
-                                selectedChange = true;
+            if (game.constructionMode.key === 'select') {
+                let selectedChange = false;
+                entities.forEach(entity => {
+                    if (entity.canGrab(true)) {
+                        if (entity.mid.x > selectionArea.x && entity.mid.x < selectionArea.x + selectionArea.width) {
+                            if (entity.mid.y > selectionArea.y && entity.mid.y < selectionArea.y + selectionArea.height) {
+                                if (game.addSelectedEntity(entity, true)) {
+                                    selectedChange = true;
+                                }
+                                return;
                             }
-                            return;
                         }
                     }
+                    if (!e.ctrlKey && game.removeSelectedEntity(entity, true)) {
+                        selectedChange = true;
+                    }
+                });
+                if (selectedChange) {
+                    game.resetSelectionData();
+                    game.refreshStats();
                 }
-                if (!e.ctrlKey && game.removeSelectedEntity(entity, true)) {
-                    selectedChange = true;
-                }
-            });
-            if (selectedChange) {
-                game.resetSelectionData();
-                game.refreshStats();
             }
         }
     });
@@ -2096,6 +2136,16 @@ try {
         }
         if (mouseButton === 0) {
             if (selectionArea) {
+                if (selectionArea.visible && game.constructionMode.key === 'crop-region') {
+                    game.project.settings.regionCrop = {
+                        x: selectionArea.x,
+                        y: selectionArea.y,
+                        width: selectionArea.width,
+                        height: selectionArea.height
+                    }
+                    game.updateRegionCrop();
+                    game.resetConstructionMode();
+                }
                 selectionArea.origin = null;
                 selectionArea.visible = false;
                 if (game.toolbeltComponent) {
@@ -3014,7 +3064,7 @@ try {
     let snappedMX;
     let snappedMY;
     function update() {
-        if (game.project.settings.regionKey && game.settings.lockCameraToHex) {
+        if (game.project.settings.regionKey && !game.project.settings.regionCrop && game.settings.lockCameraToHex) {
             const zoomRatio = 1 / camera.zoom;
             const centerPos = {
                 x: (camera.x + app.view.width / 2) * zoomRatio,

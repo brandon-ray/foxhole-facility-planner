@@ -7150,6 +7150,7 @@ const gameData = {
 			"category": "defenses",
 			"categoryOrder": 4,
 			"sortLayer": "wall",
+			"hitArea": false,
 			"icon": "../UI/StructureIcons/Gate-T1Icon.webp",
 			"texture": {
 				"src": "../Structures/gatet1.webp",
