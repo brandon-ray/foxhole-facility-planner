@@ -127,36 +127,36 @@ if (isMobile && !isPhoneApp) {
 
                 <div class="footer">
                     <app-board-ui></app-board-ui>
-                    <button class="btn-small btn-float-left" :class="{ 'btn-active': !sidebarVisible }" title="Toggle Sidebar Menu" @click="sidebarVisible = !sidebarVisible">
+                    <button class="btn-small float-left" :class="{ 'btn-active': !sidebarVisible }" title="Toggle Sidebar Menu" @click="sidebarVisible = !sidebarVisible">
                         <i class="fa" :class="{'fa-chevron-left': sidebarVisible, 'fa-chevron-right': !sidebarVisible}" aria-hidden="true"></i>
                     </button>
                     <label class="btn-checkbox-wrapper float-left">
-                        <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': settings.enableGrid }" @click="settings.enableGrid = !settings.enableGrid; game.updateSettings()"></button>
+                        <button class="btn-small float-left btn-checkbox" :class="{ 'btn-active': settings.enableGrid }" @click="settings.enableGrid = !settings.enableGrid; game.updateSettings()"></button>
                         Snap to Grid
                     </label>
                     <label class="btn-checkbox-wrapper float-left">
-                        <button class="btn-small btn-float-left btn-checkbox" :class="{ 'btn-active': settings.enableSnapRotation }" @click="settings.enableSnapRotation = !settings.enableSnapRotation; game.updateSettings()"></button>
+                        <button class="btn-small float-left btn-checkbox" :class="{ 'btn-active': settings.enableSnapRotation }" @click="settings.enableSnapRotation = !settings.enableSnapRotation; game.updateSettings()"></button>
                         Snap Rotation
                     </label>
                     <div class="panel-toolbar">
                         <label class="btn-checkbox-wrapper">
-                            <button class="btn-small btn-float-left" :class="{ 'btn-active': game.hubPopup?.visible }" @click="game.hubPopup.showPopup()"><i class="fa fa-home" aria-hidden="true"></i></button>
+                            <button class="btn-small float-left" :class="{ 'btn-active': game.hubPopup?.visible }" @click="game.hubPopup.showPopup()"><i class="fa fa-home" aria-hidden="true"></i></button>
                             Hub
                         </label>
                         <label class="btn-checkbox-wrapper">
-                            <button class="btn-small btn-float-left" :class="{ 'btn-active': settings.enableLayers }" @click="settings.enableLayers = !settings.enableLayers; game.updateSettings()"><i class="fa fa-clone" aria-hidden="true"></i></button>
+                            <button class="btn-small float-left" :class="{ 'btn-active': settings.enableLayers }" @click="settings.enableLayers = !settings.enableLayers; game.updateSettings()"><i class="fa fa-clone" aria-hidden="true"></i></button>
                             Layers
                         </label>
                         <label class="btn-checkbox-wrapper">
-                            <button class="btn-small btn-float-left" :class="{ 'btn-active': settings.showToolbelt }" @click="settings.showToolbelt = !settings.showToolbelt; game.updateSettings()"><i class="fa fa-wrench" aria-hidden="true"></i></button>
+                            <button class="btn-small float-left" :class="{ 'btn-active': settings.showToolbelt }" @click="settings.showToolbelt = !settings.showToolbelt; game.updateSettings()"><i class="fa fa-wrench" aria-hidden="true"></i></button>
                             Toolbelt
                         </label>
                         <label class="btn-checkbox-wrapper">
-                            <button class="btn-small btn-float-left" :class="{ 'btn-active': game.hubPopup?.selectedTab?.key === 'map' }" @click="game.hubPopup?.toggleTab('map')"><i class="fa fa-map-o" aria-hidden="true"></i></button>
+                            <button class="btn-small float-left" :class="{ 'btn-active': game.hubPopup?.selectedTab?.key === 'map' }" @click="game.hubPopup?.toggleTab('map')"><i class="fa fa-map-o" aria-hidden="true"></i></button>
                             Map
                         </label>
                         <label class="btn-checkbox-wrapper">
-                            <button class="btn-small btn-float-left" :class="{ 'btn-active': settings.enableStats }" @click="settings.enableStats = !settings.enableStats; game.updateSettings()"><i class="fa fa-bar-chart" aria-hidden="true"></i></button>
+                            <button class="btn-small float-left" :class="{ 'btn-active': settings.enableStats }" @click="settings.enableStats = !settings.enableStats; game.updateSettings()"><i class="fa fa-bar-chart" aria-hidden="true"></i></button>
                             Stats
                         </label>
                     </div>
@@ -237,12 +237,19 @@ Vue.component('app-game-hub-popup', {
                 {
                     key: 'home',
                     title: 'Home',
-                    icon: 'fa-home'
+                    icon: 'fa-home',
+                    preventSlide: true
                 },
                 {
                     key: 'updates',
                     title: 'Updates',
-                    icon: 'fa-bullhorn' // fa-newspaper-o
+                    icon: 'fa-bullhorn'
+                },
+                {
+                    key: 'map',
+                    title: 'Map',
+                    icon: 'fa-map-o',
+                    preventSlide: true
                 },
                 /*
                 {
@@ -253,14 +260,14 @@ Vue.component('app-game-hub-popup', {
                 {
                     key: 'presets',
                     title: 'Presets',
-                    icon: 'fa-th' // fa-cubes
+                    icon: 'fa-th',
+                    preventSlide: true
                 },
                 */
                 {
-                    key: 'map',
-                    title: 'Map',
-                    icon: 'fa-map-o',
-                    preventSlide: true
+                    key: 'controls',
+                    title: 'Controls',
+                    icon: 'fa-keyboard-o'
                 },
                 {
                     key: 'settings',
@@ -354,14 +361,33 @@ Vue.component('app-game-hub-popup', {
 Vue.component('app-hub-home', {
     template: html`
     <div class="tab-content">
-        <div class="fall-in-item">
-            <div class="tab-content-header">
-                <i class="fa fa-home"></i> Welcome to the Planner Hub!
+        <!-- <img src="/assets/logo_icon.webp" height="200">
+        <div class="fall-in-item no-box text-center">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?list=PL5uBL5gApGWHGJ3OjxqlyzdEPv39O5T0T" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <div class="btn-large btn-color-2">
+                <i class="fa fa-4x fa-upload" aria-hidden="true"></i>
+                <span>Load</span>
             </div>
-            <p class="tab-content-body">
-                The Planner Hub is a new feature being developed that will give you easy access to changelogs, presets, settings, and more in the future.
-            </p>
-        </div>
+            <div class="btn-large btn-color-4">
+                <i class="fa fa-4x fa-plus-circle" aria-hidden="true"></i>
+                <span>New</span>
+            </div>
+            <div class="btn-large btn-color-purple">
+                <i class="fa fa-4x fa-th" aria-hidden="true"></i>
+                <span>Presets</span>
+            </div>
+            <br>
+            <a class="btn-large btn-color-github" href="https://github.com/brandon-ray/foxhole-facility-planner" target="_blank" @click="bmc()">
+                <i class="fa fa-4x fa-github" aria-hidden="true"></i>
+                <span>GitHub</span>
+            </a>
+            <a class="btn-large discord-button btn-color-discord" href="https://discord.gg/2hgaMQN26s" target="_blank" @click="bmc()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36">
+                    <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
+                </svg>
+                <span>Discord</span>
+            </a>
+        </div> -->
         <div class="fall-in-item">
             <div class="tab-content-header">
                 <i class="fa fa-bullhorn"></i> Check "Updates" for the latest changes!
@@ -589,28 +615,102 @@ Vue.component('app-hub-map', {
                 
 });
 
-/*
 Vue.component('app-hub-presets', {
+    data: function() {
+        return {
+            presets: [],
+            currentPage: 1,
+            presetsPerPage: 10,
+            selectedPreset: null,
+            searchQuery: null
+        }
+    },
+    mounted: function() {
+        game.hubPresets = this;
+        for (const [key, preset] of Object.entries(gameData.presets)) {
+            preset.key = key;
+            this.presets.push(preset);
+        }
+    },
+    computed: {
+        pagePresets: function() {
+            return this.presets.slice((this.currentPage - 1) * this.presetsPerPage, this.currentPage * this.presetsPerPage);
+        },
+        totalPages: function() {
+            return Math.ceil(this.presets.length / this.presetsPerPage);
+        }
+    },
     methods: {
         buildBuilding: function(building) {
             this.bmc();
             game.createObject(building);
-            game.sidebarMenuComponent.showHoverMenu(null);
+            this.selectedPreset = null;
             this.showPopup(false);
         },
         buildingHover: function(building) {
-            game.sidebarMenuComponent.showHoverMenu(building);
+            // this.selectedPreset = building;
+            this.$forceUpdate();
         }
     },
     template: html`
-    <div class="tab-content">
-        <div class="preset-gallery">
-            <app-game-building-list-icon-v2 v-for="preset in window.objectData.categories.showcase.buildings" :container="game.hubPopup" :building="preset" />
+    <div class="tab-content hub-presets d-flex">
+        <div class="col-md-6 p-0 preset-gallery">
+            <!-- Filters for modules, showcase, bunkers, facilities, etc. -->
+            <div class="construction-options preset-gallery-filters d-flex">
+                <label class="construction-search w-100" title="Search">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                    <div class="input-wrapper">
+                        <input type="text" v-model="searchQuery" placeholder="Search" @input="refresh()">
+                        <i class="fa fa-close" :class="{'active': searchQuery}" aria-hidden="true" @click="searchQuery = null"></i>
+                    </div>
+                </label>
+            </div>
+            <div class="preset-page">
+                <div v-for="preset in pagePresets" :key="preset.key" :title="preset.name" class="preset-listing" @mouseenter="bme(); buildingHover(preset)" @mouseleave="buildingHover(null)" @click="bmc(); selectedPreset = preset">
+                    <div class="build-icon ignore-transform" :style="{backgroundImage:'url(' + (preset.icon ?? '/assets/default_icon.webp') + ')'}"></div>
+                    <div class="listing-info">
+                        <h6>{{preset.name}}</h6>
+                        <i v-if="preset.module" class="fa fa-plug" aria-hidden="true" title="Modular"></i>
+                        <div v-if="preset.author" title="Creator(s)">{{typeof preset.author === 'string' ? preset.author : preset.author.join(', ')}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="preset-page-switcher">
+                <button type="button" class="btn-small float-left" @click="bmc(); currentPage = 1" title="First Page" :disabled="currentPage === 1">
+                    <i class="fa fa-angle-double-left"></i>
+                </button>
+                <button type="button" class="btn-small float-left" @click="bmc(); currentPage--" title="Previous Page" :disabled="currentPage === 1">
+                    <i class="fa fa-angle-left"></i>
+                </button>
+                <button type="button" class="btn-small float-right" @click="bmc(); currentPage = totalPages" title="Last Page" :disabled="currentPage === totalPages">
+                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="btn-small float-right" @click="bmc(); currentPage++" title="Next Page" :disabled="currentPage === totalPages">
+                    <i class="fa fa-angle-right"></i>
+                </button>
+            </div>
+        </div>
+        <div v-if="selectedPreset" class="col-md-6 preset-preview building-info text-left p-0">
+            <div class="building-info-name">
+                <img :src="selectedPreset.baseIcon || selectedPreset.icon || '/assets/default_icon.webp'" />
+                <h4>{{selectedPreset.name}}</h4>
+            </div>
+            <div class="building-info-body">
+                <p class="building-info-description" v-if="selectedPreset.description">{{selectedPreset.description}}</p>
+                <p class="building-tech-description" v-if="selectedPreset.author">
+                    <span>Creator{{typeof selectedPreset.author !== 'string' && 's' || ''}}:</span> {{typeof selectedPreset.author === 'string' ? selectedPreset.author : selectedPreset.author.join(', ')}}
+                </p>
+                <p class="building-tech-description" v-if="selectedPreset.category === 'presets' || selectedPreset.category === 'showcase'">
+                    <span>Want your design featured in the planner?</span> Submit it on our Discord!
+                </p>
+                <img v-if="selectedPreset.preset" class="building-preview" :src="selectedPreset.texture">
+                <!-- Load Button -->
+                <!-- Import/Clone Button -->
+            </div>
         </div>
     </div>
     `
 });
-*/
 
 Vue.component('app-hub-settings', {
     methods: {
@@ -749,6 +849,16 @@ Vue.component('app-hub-settings', {
                         <i class="fa fa-ban" aria-hidden="true"></i> Lock Camera View to Region
                         <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.lockCameraToHex }" @click="toggleSetting('lockCameraToHex')"></button>
                     </label>
+                    <label class="col-md-6 app-input-label">
+                        <i class="fa fa-map-o" aria-hidden="true"></i> Enable Real-Time Map Updates
+                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.enableRealTimeMap }" @click="toggleSetting('enableRealTimeMap'); game.updateEntityOverlays()"></button>
+                    </label>
+                </div>
+                <div class="row">
+                    <label class="col-md-6 app-input-label" :class="{'disabled': !game.settings.enableExperimental}" title="Allows you to display LOS for certain structures: Pillboxes, Bunkers, etc. Requires Experimental Features to be enabled.">
+                        <i class="fa fa-eye" aria-hidden="true"></i> Enable Line-of-Sight Ranges
+                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.showLineOfSightRanges }" @click="toggleSetting('showLineOfSightRanges')" :disabled="!game.settings.enableExperimental"></button>
+                    </label>
                     <label class="col-md-6 app-input-label" :class="{'disabled': !game.settings.enableExperimental}" title="Changes behavior of the toolbelt hotkeys. By default, hotkeys will spawn a new object if nothing is selected. Requires Experimental Features to be enabled.">
                         <i class="fa fa-wrench" aria-hidden="true"></i> Toolbelt Mode
                         <select class="app-input" v-model.number="game.settings.toolbeltMode" @change="game.updateSettings()" :disabled="!game.settings.enableExperimental">
@@ -756,12 +866,6 @@ Vue.component('app-hub-settings', {
                             <option value="1">Modify Single</option>
                             <option value="2">Modify Selection</option>
                         </select>
-                    </label>
-                </div>
-                <div class="row">
-                    <label class="col-md-6 app-input-label" :class="{'disabled': !game.settings.enableExperimental}" title="Allows you to display LOS for certain structures: Pillboxes, Bunkers, etc. Requires Experimental Features to be enabled.">
-                        <i class="fa fa-eye" aria-hidden="true"></i> Enable Line-of-Sight Ranges
-                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.showLineOfSightRanges }" @click="toggleSetting('showLineOfSightRanges')" :disabled="!game.settings.enableExperimental"></button>
                     </label>
                 </div>
             </div>
@@ -831,6 +935,63 @@ Vue.component('app-hub-settings', {
     `
 });
 
+Vue.component('app-hub-controls', {
+    template: html`
+    <div class="tab-content">
+        <div class="fall-in-item">
+            <div class="tab-content-header"><i class="fa fa-keyboard-o" aria-hidden="true"></i> Controls + Hotkeys</div>
+            <div class="tab-content-body controls-section-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="middle-mouse-button"></div> Move board position.<br>
+                        <div class="middle-mouse-button"></div> Scroll to zoom in/out board.
+                        <hr>
+                        <div class="left-mouse-button"></div> Select a single structure.<br>
+                        <div class="left-mouse-button"></div> Drag to select multiple structures.<br>
+                        <div class="right-mouse-button"></div> Rotate selected structures.
+                        <hr>
+                        <div class="keyboard-key">ctrl</div> + <div class="left-mouse-button"></div> Add structure to selection.<br>
+                        <div class="keyboard-key">ctrl</div> + <div class="middle-mouse-button"></div> Adjust selected spline length.<br>
+                        <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">A</div> Select all structures.<br>
+                        <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">C</div> Clone selection.
+                        <hr>
+                        <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">Z</div> Undo previous action.<br>
+                        <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">Y</div> Redo previous action.<br>
+                        <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">shift</div> + <div class="keyboard-key">Z</div> Redo previous action.
+                        <hr>
+                        <div class="keyboard-key">shift</div> + <div class="left-mouse-button"></div> Add structure to selection.<br>
+                        <div class="keyboard-key">shift</div> + <div class="left-mouse-button"></div> Add bunker to selection.<br>
+                        <div class="keyboard-key">shift</div> + <div class="left-mouse-button"></div> Snap structure to grid.
+                    </div>
+                    <div class="col-md-6">
+                        <div class="keyboard-key">number</div> Select toolbelt slot. (0-9)<br>
+                        <i class="fa fa-reply fa-rotate-180" aria-hidden="true"></i> <div class="keyboard-key">shift</div> Swap toolbelt. (0-9)
+                        <hr>
+                        <div class="keyboard-key"><i class="fa fa-angle-up" aria-hidden="true"></i></div> <div class="keyboard-key"><i class="fa fa-angle-down" aria-hidden="true"></i></div> Move selection up / down.<br>
+                        <div class="keyboard-key"><i class="fa fa-angle-left" aria-hidden="true"></i></div> <div class="keyboard-key"><i class="fa fa-angle-right" aria-hidden="true"></i></div> Move selection left / right.
+                        <hr>
+                        <div class="keyboard-key">W, A, S, D</div> Move selection along grid.<br>
+                        <i class="fa fa-reply fa-rotate-180" aria-hidden="true"></i> <div class="keyboard-key">shift</div> Halve selection movement.
+                        <hr>
+                        <div class="keyboard-key">Q, E</div> Rotate selection by degrees. ({{game.settings.keySnapRotationDegrees}}°)<br>
+                        <i class="fa fa-reply fa-rotate-180" aria-hidden="true"></i> <div class="keyboard-key">shift</div> Double selection rotation. ({{game.settings.keySnapRotationDegrees * 2}}°)
+                        <hr>
+                        <div class="keyboard-key">space</div> Pause / Resume physics.<br>
+                        <div class="keyboard-key">B</div> Toggle blueprint for selection.<br>
+                        <div class="keyboard-key">L</div> Toggle lock for selected structures.<br>
+                        <div class="keyboard-key">M</div> Toggle region selection. (Map)<br>
+                        <div class="keyboard-key">P</div> Toggle production output icons.<br>
+                        <div class="keyboard-key">del</div> Delete selected structures.<br>
+                        <div class="keyboard-key">esc</div> Clear selection.<br>
+                        <div class="keyboard-key">F2</div> Debug menu.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    `
+});
+
 Vue.component('app-hub-about', {
     template: html`
     <div class="tab-content">
@@ -859,7 +1020,7 @@ Vue.component('app-hub-about', {
                     Need developer help?<br>
                     <a href="https://discord.gg/SnyEDQyAVr" target="_blank">Join with this link instead.</a>
                 </div>
-                <a href="https://discord.gg/2hgaMQN26s" target="_blank">Join Our Discord <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                <a href="https://discord.gg/2hgaMQN26s" target="_blank">Join Our Discord<i class="fa fa-arrow-right" aria-hidden="true"></i></a>
             </div>
         </div>
         <div class="fall-in-item container mt-2">

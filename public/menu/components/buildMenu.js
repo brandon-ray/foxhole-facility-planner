@@ -14,11 +14,6 @@ Vue.component('app-game-sidebar', {
                     key: 'save-load',
                     name: 'Save/Load',
                     icon: 'fa-save'
-                },
-                {
-                    key: 'about',
-                    name: 'Controls',
-                    icon: 'fa-keyboard-o'
                 }
             ]
         };
@@ -79,32 +74,22 @@ Vue.component('app-game-sidebar', {
                     <component v-bind:is="'app-menu-' + currentMenu.key" :menuData="currentMenuData"></component>
                 </div>
             </div>
-            <div class="menu-footer-buttons">
-                <button v-if="!currentMenu" type="button" class="app-btn app-btn-primary" v-on:click="changeMenu('save-load')" @mouseenter="bme()">
-                    <i class="fa fa-save"></i> Save/Load
-                </button>
-                <button v-if="currentMenu"  type="button" class="app-btn app-btn-primary" v-on:click="changeMenu(null)" @mouseenter="bme()">
-                    <i class="fa fa-arrow-left"></i> Return
-                </button>
-            </div>
         </div>
         <div id="sidebar-footer">
-            <a class="btn-small float-left github-button" href="https://github.com/brandon-ray/foxhole-facility-planner" target="_blank" @click="bmc()" @mouseenter="bme()">
-                <i class="fa fa-github"></i>
-            </a>
-            <a class="btn-small float-left discord-button" href="https://discord.gg/2hgaMQN26s" target="_blank" @click="bmc()" @mouseenter="bme()">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36">
-                    <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
-                </svg>
-            </a>
-            <button @click="game.hubPopup?.showTab('settings')" class="btn-small float-right" @mouseenter="bme()">
+            <button class="btn-small float-left" @click="game.hubPopup?.toggleTab('about'); bmc()" title="About / Help" @mouseenter="bme()">
+                <i class="fa fa fa-question-circle"></i>
+            </button>
+            <div v-if="!currentMenu" class="menu-footer-button" @click="changeMenu('save-load')" @mouseenter="bme()">
+                <i class="fa fa-save"></i> Load/Save
+            </div>
+            <div v-else class="menu-footer-button" @click="changeMenu(null)" @mouseenter="bme()">
+                <i class="fa fa-arrow-left"></i> Return
+            </div>
+            <button class="btn-small float-right" @click="game.hubPopup?.toggleTab('settings'); bmc()" title="Settings" @mouseenter="bme()">
                 <i class="fa fa-gear"></i>
             </button>
-            <button v-on:click="event.preventDefault(); changeMenu('about')" class="btn-small float-right" style="font-size: 2em" @mouseenter="bme()">
-                <i class="fa fa fa-keyboard-o"></i>
-            </button>
         </div>
-        <div id="hover-building-info" v-if="hoverData">
+        <div v-if="hoverData" id="hover-building-info" class="building-info">
             <div class="building-info-name">
                 <img v-bind:src="hoverData.baseIcon || hoverData.icon || '/assets/default_icon.webp'" />
                 <h4>{{!hoverData.parentKey && hoverData.parent?.name || hoverData.name}}</h4>
@@ -556,286 +541,288 @@ Vue.component('app-menu-building-selected', {
                 <span v-else><i class="fa fa-unlock"></i></span>
             </div>
         </button>
-        <template v-if="game.getSelectedEntities().length === 1">
-            <div v-if="!entity.building" class="settings-option-wrapper">
-                <div class="settings-title">{{(entity.subtype ?? entity.type) + ' Options'}}</div>
-                <template v-if="entity.type === 'text'">
-                    <app-game-text-options :container="this" :textOptions="entity.style"></app-game-text-options>
-                    <textarea ref="label" v-model.trim="entity.label" @input="updateStyleOptions()" maxlength="500" placeholder="Text Required"></textarea>
-                </template>
-                <app-game-shape-options v-else-if="entity.type === 'shape'" :container="this" :shapeOptions="entity.style" :subtype="entity.subtype"></app-game-shape-options>
-            </div>
-            <div class="settings-option-wrapper">
-                <div class="settings-title">
-                    {{(entity.building && ((!entity.building.parentKey && entity.building.parent?.name) || entity.building.name)) ?? 'Other Options'}}
+        <div class="menu-page-scroller">
+            <template v-if="game.getSelectedEntities().length === 1">
+                <div v-if="!entity.building" class="settings-option-wrapper">
+                    <div class="settings-title">{{(entity.subtype ?? entity.type) + ' Options'}}</div>
+                    <template v-if="entity.type === 'text'">
+                        <app-game-text-options :container="this" :textOptions="entity.style"></app-game-text-options>
+                        <textarea ref="label" v-model.trim="entity.label" @input="updateStyleOptions()" maxlength="500" placeholder="Text Required"></textarea>
+                    </template>
+                    <app-game-shape-options v-else-if="entity.type === 'shape'" :container="this" :shapeOptions="entity.style" :subtype="entity.subtype"></app-game-shape-options>
                 </div>
-                <div class="app-input-label settings-option-row">
-                    <i class="fa fa-arrows" aria-hidden="true"></i> Position X:
-                    <input class="app-input float-right" type="number" v-model.number="entity.x" @input="updateEntity(true)" @change="updatePositionProps()" :disabled="entity.building?.vehicle">
-                    <button class="btn-small m-0 mr-1 float-right" type="button" @click="game.cameraTo(game.getSelectedEntity())" title="Go to Position"><i class="fa fa-crosshairs" aria-hidden="true"></i></button>
+                <div class="settings-option-wrapper">
+                    <div class="settings-title">
+                        {{(entity.building && ((!entity.building.parentKey && entity.building.parent?.name) || entity.building.name)) ?? 'Other Options'}}
+                    </div>
+                    <div class="app-input-label settings-option-row">
+                        <i class="fa fa-arrows" aria-hidden="true"></i> Position X:
+                        <input class="app-input float-right" type="number" v-model.number="entity.x" @input="updateEntity(true)" @change="updatePositionProps()" :disabled="entity.building?.vehicle">
+                        <button class="btn-small m-0 mr-1 float-right" type="button" @click="game.cameraTo(game.getSelectedEntity())" title="Go to Position"><i class="fa fa-crosshairs" aria-hidden="true"></i></button>
+                    </div>
+                    <div class="app-input-label settings-option-row">
+                        <i class="fa fa-arrows" aria-hidden="true"></i> Position Y:
+                        <input class="app-input float-right" type="number" v-model.number="entity.y" @input="updateEntity(true)" @change="updatePositionProps()" :disabled="entity.building?.vehicle">
+                        <button class="btn-small m-0 mr-1 float-right" type="button" @click="game.cameraTo(game.getSelectedEntity())" title="Go to Position"><i class="fa fa-crosshairs" aria-hidden="true"></i></button>
+                    </div>
+                    <div class="app-input-label settings-option-row">
+                        <i class="fa fa-repeat" aria-hidden="true"></i> Rotation:
+                        <input class="app-input float-right" type="number" v-model.number="entity.rotationDegrees" @input="updateEntity(true)" @change="updatePositionProps()" :disabled="entity.building?.vehicle">
+                        <template v-if="!entity.building?.vehicle">
+                            <button class="btn-small m-0 mr-1 float-right" type="button" title="Rotate 45 degrees" @click="game.rotateSelected(Math.PI / 4)"><i class="fa fa-repeat" aria-hidden="true"></i></button>&nbsp;
+                            <button class="btn-small m-0 mr-1 float-right" type="button" title="Rotate -45 degrees"@click="game.rotateSelected(-Math.PI / 4)"><i class="fa fa-undo" aria-hidden="true"></i></button>&nbsp;
+                        </template>
+                    </div>
+                    <div v-if="entity.building?.power || entity.building?.production" class="app-input-label settings-option-row">
+                        <i class="fa fa-bar-chart" aria-hidden="true"></i> Show Power/Production in Stats:
+                        <button class="btn-small btn-tickbox m-0 mr-1 float-right" :class="{'btn-active': !entity.disableProduction}" type="button" @click="toggleProduction()" title="Toggle Power/Production Stats"></button>
+                    </div>
+                    <div v-if="entity.building?.category === 'entrenchments'" class="app-input-label settings-option-row" :class="{'disabled': !entity.building?.canBlueprint}" title="Enabling this will display the structure as a blueprint. This option is only available to Entrenchments.">
+                        <i class="fa fa-cube" aria-hidden="true"></i> Toggle Blueprint:
+                        <button class="btn-small btn-tickbox m-0 mr-1 float-right" :class="{'btn-active': entity.blueprint}" type="button" @click="toggleBlueprint()" title="Toggle Blueprint" :disabled="!entity.building?.canBlueprint"></button>
+                    </div>
+                    <label v-if="game.settings.enableDebug && entity.subtype === 'power_line'" class="app-input-label">
+                        <i class="fa fa-paint-brush" aria-hidden="true"></i> Color:
+                        <input type="color" v-model="entity.color" style="padding: 1px;" @input="setColor()">
+                    </label>
+                    <div v-if="entity.building?.vehicle" class="settings-option-row">
+                        <i class="fa fa-chain-broken" aria-hidden="true"></i> Detach
+                        <button class="btn-small w-auto m-0 px-2" type="button" @click="detachConnections(1)">Back</button>&nbsp;
+                        <button class="btn-small w-auto m-0 mr-1 px-2" type="button" @click="detachConnections(0)">Front</button>&nbsp;
+                        <button class="btn-small w-auto m-0 mr-1 px-2" type="button" @click="detachConnections()">All</button>&nbsp;
+                    </div>
+                    <div v-if="entity.building?.vehicle" class="settings-option-row">
+                        <i class="fa fa-exchange" aria-hidden="true"></i> Flip Train
+                        <button class="btn-small m-0" type="button" @click="flipTrain()"><i class="fa fa-exchange" aria-hidden="true"></i></button>
+                    </div>
                 </div>
-                <div class="app-input-label settings-option-row">
-                    <i class="fa fa-arrows" aria-hidden="true"></i> Position Y:
-                    <input class="app-input float-right" type="number" v-model.number="entity.y" @input="updateEntity(true)" @change="updatePositionProps()" :disabled="entity.building?.vehicle">
-                    <button class="btn-small m-0 mr-1 float-right" type="button" @click="game.cameraTo(game.getSelectedEntity())" title="Go to Position"><i class="fa fa-crosshairs" aria-hidden="true"></i></button>
+                <div v-if="game.settings.enableDebug && debug?.textureOffset" class="settings-option-wrapper">
+                    <div class="settings-title">
+                        Texture Offset
+                    </div>
+                    <label class="app-input-label">
+                        <i class="fa fa-arrows" aria-hidden="true"></i> Texture Position X:
+                        <input class="app-input" type="number" v-model.number="debug.textureOffset.x" @input="updateDebugProps()">
+                    </label>
+                    <label class="app-input-label">
+                        <i class="fa fa-arrows" aria-hidden="true"></i> Texture Position Y:
+                        <input class="app-input" type="number" v-model.number="debug.textureOffset.y" @input="updateDebugProps()">
+                    </label>
                 </div>
-                <div class="app-input-label settings-option-row">
-                    <i class="fa fa-repeat" aria-hidden="true"></i> Rotation:
-                    <input class="app-input float-right" type="number" v-model.number="entity.rotationDegrees" @input="updateEntity(true)" @change="updatePositionProps()" :disabled="entity.building?.vehicle">
-                    <template v-if="!entity.building?.vehicle">
+                <div v-if="game.settings.enableAdvanced" class="settings-option-wrapper custom-properties-panel">
+                    <div class="settings-title">
+                        Custom Properties
+                    </div>
+                    <div v-if="entity.properties && Object.keys(entity.properties).length" class="settings-option-row">
+                        <div v-for="(property, key) in entity.properties" class="custom-property-row d-flex justify-content-center">
+                            <input class="app-input" type="text" placeholder="Key" v-model="property.key" @change="updateProperty(key)">
+                            <select v-if="property.type === 'bool'" class="app-input" v-model="property.value" @change="updateProperty(key)">
+                                <option :value="true">true</option>
+                                <option :value="false">false</option>
+                            </select>
+                            <input v-else-if="property.type === 'color'" type="color" v-model="property.value" @change="updateProperty(key)">
+                            <input v-else-if="property.type === 'float' || property.type === 'int'" class="app-input" type="number" v-model="property.value" @change="updateProperty(key)">
+                            <input v-else class="app-input" type="text" :placeholder="property.type" v-model="property.value" @change="updateProperty(key)">
+                            <button class="btn-small" type="button" @click="removeProperty(key)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                    <div class="settings-option-row">
+                        <div class="custom-property-row d-flex justify-content-center">
+                            <input class="app-input" type="text" v-model="propertyKey" placeholder="Key">
+                            <select class="app-input" v-model="propertyType">
+                                <!-- <option :value="null">Type</option> -->
+                                <option v-for="(value, key) in defaultPropertyTypes" :value="key">{{key}}</option>
+                            </select>
+                            <button class="btn-small" type="button" @click="addProperty()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="entity.building?.vehicle?.engine" class="settings-option-wrapper">
+                    <div class="settings-title">
+                        Train Controls
+                        <button class="btn-small m-0" :class="{ 'btn-active': entity.following }" style="font-size: 0.9em; position: absolute; right: 6px;" title="Follow" @click="toggleFollow()"><i class="fa fa-video-camera" aria-hidden="true"></i></button>
+                    </div>
+                    <label class="app-input-label">
+                        <i class="fa fa-train" aria-hidden="true"></i> Speed
+                        <input class="app-input" type="number" v-model.number="entity.trackVelocity" disabled>
+                    </label>
+                    <label class="app-input-label">
+                        <i class="fa fa-train" aria-hidden="true"></i> Throttle ({{Math.round(entity.userThrottle*100)}}%)
+                        <input type="range" class="slider w-50" v-model.number="entity.userThrottle" min="-1" max="1" step="0.1" @input="game.setPlaying(true); updateEntity()">
+                    </label>
+                </div>
+            </template>
+            <div v-else class="settings-option-wrapper">
+                <div class="settings-title text-center">
+                    ({{game.getSelectedEntities().length}}) Buildings Selected
+                </div>
+                <template v-if="game.selectionData">
+                    <div class="app-input-label settings-option-row">
+                        <i class="fa fa-arrows" aria-hidden="true"></i> Position X:
+                        <input class="app-input float-right" type="number" v-model.number="game.selectionData.x" @input="game.updateSelected()">
+                        <button class="btn-small m-0 mr-1 float-right" type="button" @click="game.cameraTo(game.selectionData)" title="Go to Position"><i class="fa fa-crosshairs" aria-hidden="true"></i></button>
+                    </div>
+                    <div class="app-input-label settings-option-row">
+                        <i class="fa fa-arrows" aria-hidden="true"></i> Position Y:
+                        <input class="app-input float-right" type="number" v-model.number="game.selectionData.y" @input="game.updateSelected()">
+                        <button class="btn-small m-0 mr-1 float-right" type="button" @click="game.cameraTo(game.selectionData)" title="Go to Position"><i class="fa fa-crosshairs" aria-hidden="true"></i></button>
+                    </div>
+                    <div class="app-input-label settings-option-row">
+                        <i class="fa fa-repeat" aria-hidden="true"></i> Rotation:
+                        <input class="app-input float-right" type="number" v-model.number="game.selectionData.rotationDegrees" @input="game.updateSelected()">
                         <button class="btn-small m-0 mr-1 float-right" type="button" title="Rotate 45 degrees" @click="game.rotateSelected(Math.PI / 4)"><i class="fa fa-repeat" aria-hidden="true"></i></button>&nbsp;
                         <button class="btn-small m-0 mr-1 float-right" type="button" title="Rotate -45 degrees"@click="game.rotateSelected(-Math.PI / 4)"><i class="fa fa-undo" aria-hidden="true"></i></button>&nbsp;
-                    </template>
-                </div>
-                <div v-if="entity.building?.power || entity.building?.production" class="app-input-label settings-option-row">
-                    <i class="fa fa-bar-chart" aria-hidden="true"></i> Show Power/Production in Stats:
-                    <button class="btn-small btn-tickbox m-0 mr-1 float-right" :class="{'btn-active': !entity.disableProduction}" type="button" @click="toggleProduction()" title="Toggle Power/Production Stats"></button>
-                </div>
-                <div v-if="entity.building?.category === 'entrenchments'" class="app-input-label settings-option-row" :class="{'disabled': !entity.building?.canBlueprint}" title="Enabling this will display the structure as a blueprint. This option is only available to Entrenchments.">
-                    <i class="fa fa-cube" aria-hidden="true"></i> Toggle Blueprint:
-                    <button class="btn-small btn-tickbox m-0 mr-1 float-right" :class="{'btn-active': entity.blueprint}" type="button" @click="toggleBlueprint()" title="Toggle Blueprint" :disabled="!entity.building?.canBlueprint"></button>
-                </div>
-                <label v-if="game.settings.enableDebug && entity.subtype === 'power_line'" class="app-input-label">
-                    <i class="fa fa-paint-brush" aria-hidden="true"></i> Color:
-                    <input type="color" v-model="entity.color" style="padding: 1px;" @input="setColor()">
-                </label>
-                <div v-if="entity.building?.vehicle" class="settings-option-row">
-                    <i class="fa fa-chain-broken" aria-hidden="true"></i> Detach
-                    <button class="btn-small w-auto m-0 px-2" type="button" @click="detachConnections(1)">Back</button>&nbsp;
-                    <button class="btn-small w-auto m-0 mr-1 px-2" type="button" @click="detachConnections(0)">Front</button>&nbsp;
-                    <button class="btn-small w-auto m-0 mr-1 px-2" type="button" @click="detachConnections()">All</button>&nbsp;
-                </div>
-                <div v-if="entity.building?.vehicle" class="settings-option-row">
-                    <i class="fa fa-exchange" aria-hidden="true"></i> Flip Train
-                    <button class="btn-small m-0" type="button" @click="flipTrain()"><i class="fa fa-exchange" aria-hidden="true"></i></button>
-                </div>
-            </div>
-            <div v-if="game.settings.enableDebug && debug?.textureOffset" class="settings-option-wrapper">
-                <div class="settings-title">
-                    Texture Offset
-                </div>
-                <label class="app-input-label">
-                    <i class="fa fa-arrows" aria-hidden="true"></i> Texture Position X:
-                    <input class="app-input" type="number" v-model.number="debug.textureOffset.x" @input="updateDebugProps()">
-                </label>
-                <label class="app-input-label">
-                    <i class="fa fa-arrows" aria-hidden="true"></i> Texture Position Y:
-                    <input class="app-input" type="number" v-model.number="debug.textureOffset.y" @input="updateDebugProps()">
-                </label>
-            </div>
-            <div v-if="game.settings.enableAdvanced" class="settings-option-wrapper custom-properties-panel">
-                <div class="settings-title">
-                    Custom Properties
-                </div>
-                <div v-if="entity.properties && Object.keys(entity.properties).length" class="settings-option-row">
-                    <div v-for="(property, key) in entity.properties" class="custom-property-row d-flex justify-content-center">
-                        <input class="app-input" type="text" placeholder="Key" v-model="property.key" @change="updateProperty(key)">
-                        <select v-if="property.type === 'bool'" class="app-input" v-model="property.value" @change="updateProperty(key)">
-                            <option :value="true">true</option>
-                            <option :value="false">false</option>
-                        </select>
-                        <input v-else-if="property.type === 'color'" type="color" v-model="property.value" @change="updateProperty(key)">
-                        <input v-else-if="property.type === 'float' || property.type === 'int'" class="app-input" type="number" v-model="property.value" @change="updateProperty(key)">
-                        <input v-else class="app-input" type="text" :placeholder="property.type" v-model="property.value" @change="updateProperty(key)">
-                        <button class="btn-small" type="button" @click="removeProperty(key)"><i class="fa fa-trash" aria-hidden="true"></i></button>
                     </div>
-                </div>
-                <div class="settings-option-row">
-                    <div class="custom-property-row d-flex justify-content-center">
-                        <input class="app-input" type="text" v-model="propertyKey" placeholder="Key">
-                        <select class="app-input" v-model="propertyType">
-                            <!-- <option :value="null">Type</option> -->
-                            <option v-for="(value, key) in defaultPropertyTypes" :value="key">{{key}}</option>
-                        </select>
-                        <button class="btn-small" type="button" @click="addProperty()"><i class="fa fa-plus" aria-hidden="true"></i></button>
-                    </div>
-                </div>
-            </div>
-            <div v-if="entity.building?.vehicle?.engine" class="settings-option-wrapper">
-                <div class="settings-title">
-                    Train Controls
-                    <button class="btn-small m-0" :class="{ 'btn-active': entity.following }" style="font-size: 0.9em; position: absolute; right: 6px;" title="Follow" @click="toggleFollow()"><i class="fa fa-video-camera" aria-hidden="true"></i></button>
-                </div>
-                <label class="app-input-label">
-                    <i class="fa fa-train" aria-hidden="true"></i> Speed
-                    <input class="app-input" type="number" v-model.number="entity.trackVelocity" disabled>
-                </label>
-                <label class="app-input-label">
-                    <i class="fa fa-train" aria-hidden="true"></i> Throttle ({{Math.round(entity.userThrottle*100)}}%)
-                    <input type="range" class="slider w-50" v-model.number="entity.userThrottle" min="-1" max="1" step="0.1" @input="game.setPlaying(true); updateEntity()">
-                </label>
-            </div>
-        </template>
-        <div v-else class="settings-option-wrapper">
-            <div class="settings-title text-center">
-                ({{game.getSelectedEntities().length}}) Buildings Selected
-            </div>
-            <template v-if="game.selectionData">
-                <div class="app-input-label settings-option-row">
-                    <i class="fa fa-arrows" aria-hidden="true"></i> Position X:
-                    <input class="app-input float-right" type="number" v-model.number="game.selectionData.x" @input="game.updateSelected()">
-                    <button class="btn-small m-0 mr-1 float-right" type="button" @click="game.cameraTo(game.selectionData)" title="Go to Position"><i class="fa fa-crosshairs" aria-hidden="true"></i></button>
-                </div>
-                <div class="app-input-label settings-option-row">
-                    <i class="fa fa-arrows" aria-hidden="true"></i> Position Y:
-                    <input class="app-input float-right" type="number" v-model.number="game.selectionData.y" @input="game.updateSelected()">
-                    <button class="btn-small m-0 mr-1 float-right" type="button" @click="game.cameraTo(game.selectionData)" title="Go to Position"><i class="fa fa-crosshairs" aria-hidden="true"></i></button>
-                </div>
-                <div class="app-input-label settings-option-row">
-                    <i class="fa fa-repeat" aria-hidden="true"></i> Rotation:
-                    <input class="app-input float-right" type="number" v-model.number="game.selectionData.rotationDegrees" @input="game.updateSelected()">
-                    <button class="btn-small m-0 mr-1 float-right" type="button" title="Rotate 45 degrees" @click="game.rotateSelected(Math.PI / 4)"><i class="fa fa-repeat" aria-hidden="true"></i></button>&nbsp;
-                    <button class="btn-small m-0 mr-1 float-right" type="button" title="Rotate -45 degrees"@click="game.rotateSelected(-Math.PI / 4)"><i class="fa fa-undo" aria-hidden="true"></i></button>&nbsp;
-                </div>
-            </template>
-            <div class="text-button-wrapper">
-                <button class="text-button" type="button" v-on:click="game.downloadSave(true)" @mouseenter="bme()">
-                    <i class="fa fa-save"></i> Export Selection
-                </button>
-            </div>
-        </div>
-        <template v-if="game.getSelectedEntities().length === 1">
-            <div v-if="entity.building && entity.building.upgrades" class="settings-option-wrapper upgrade-list">
-                <div class="settings-title">
-                    <button v-if="entity.building?.tierDown ?? entity.building?.parentKey" type="button" class="title-button return-button" @click="changeUpgrade(entity.building.tierDown ?? entity.building.parent)" title="Go to Previous Tier" @mouseenter="bme()" style="padding: 1px 2px;">
-                        <div class="btn-small m-1"><i class="fa fa-angle-double-down" aria-hidden="true"></i></div>
-                    </button>
-                    {{hoverUpgradeName ?? (entity.building.upgradeName ?? (entity.building.upgrades[entity.building.key]?.name ?? 'No Upgrade Selected'))}}
-                    <button v-if="entity.building?.tierUp" type="button" class="title-button return-button attach-right" @click="changeUpgrade(entity.building.tierUp)" title="Go to Next Tier" @mouseenter="bme()" style="padding: 1px 2px;">
-                        <div class="btn-small m-1"><i class="fa fa-angle-double-up" aria-hidden="true"></i></div>
-                    </button>
-                </div>
-                <button class="upgrade-button" v-for="upgrade in entity.building.upgrades" :class="{'selected-upgrade': (entity.building.parent && entity.building.key === entity.building.parent.key + '_' + upgrade.key) || entity.building.key === upgrade.key}"
-                    @mouseenter="showUpgradeHover(upgrade); bme()" @mouseleave="showUpgradeHover()" @click="changeUpgrade(upgrade)">
-                    <div class="resource-icon" :title="upgrade.upgradeName ?? upgrade.name" :style="{backgroundImage:'url(' + (upgrade.icon ?? entity.building.icon) + ')'}"></div>
-                </button>
-            </div>
-            <div v-if="entity.baseUpgrades && entity.building?.baseGarrisonRadius" class="settings-option-wrapper upgrade-list">
-                <div class="settings-title">Base Upgrades</div>
-                <button class="upgrade-button" v-for="(upgrade, key) in entity.building.baseUpgrades.base" :class="{'selected-upgrade': entity.baseUpgrades.base === key}"
-                    @mouseenter="showUpgradeHover(upgrade, false); bme()" @mouseleave="showUpgradeHover()" @click="changeBaseUpgrade('base', key)">
-                    <div class="resource-icon" :title="upgrade.name" :style="{backgroundImage:'url(' + (upgrade.icon ?? entity.building.icon) + ')'}"></div>
-                </button>
-            </div>
-            <template v-if="entity.maintenanceFilters">
-                <div class="settings-option-wrapper">
-                    <div class="settings-title">Maintained Structures</div>
-                    <div class="upgrade-buttons-small d-flex justify-content-center">
-                        <template v-for="(category, key) in gameData.categories">
-                            <button v-if="category.buildCategory" class="upgrade-button" :class="{'btn-inactive': entity.maintenanceFilters.exclusions.includes(key)}" @click="toggleMaintenanceExclusion(key)">
-                                <div class="resource-icon" :title="category.name" :style="{backgroundImage:'url(' + (category.icon) + ')'}"></div>
-                            </button>
-                        </template>
-                    </div>
-                </div>
-                <div class="settings-option-wrapper upgrade-list">
-                    <div class="settings-title">Maintenance Range</div>
-                    <div class="text-center">{{entity.maintenanceFilters.range}}m</div>
-                    <div class="d-flex">
-                        <div class="col-2 p-0">0m</div>
-                        <div class="col-8 p-0">
-                            <input type="range" class="slider w-100" style="height: 32px;" v-model.number="entity.maintenanceFilters.range" min="0" :max="entity.building.maxRange" step="1" @input="updateEntity()">
-                        </div>
-                        <div class="col-2 p-0">{{entity.building.maxRange}}m</div>
-                    </div>
-                    <span v-if="entity.maintainedStructures" style="font-size: 15px;">These settings apply to {{entity.maintainedStructures.toLocaleString()}}&nbsp;nearby&nbsp;structures.</span>
-                </div>
-                <div v-if="game.settings.enableExperimental && entity.maintainedConsumptionRate" class="settings-option-wrapper text-center">
-                    <div class="settings-title">Maintenance Supply Upkeep<span style="color: #b5b5b5;">/hr</span></div>
-                    <div class="construction-options row d-flex justify-content-center">
-                        <div class="btn-small no-button col" style="color: #00ca00;">
-                            <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate * 0.25}}</span>
-                            <span class="label">very good</span>
-                        </div>
-                        <div class="btn-small no-button col" style="color: #74d004;">
-                            <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate * 0.5}}</span>
-                            <span class="label">good</span>
-                        </div>
-                        <div class="btn-small no-button col" style="color: #ffa500;">
-                            <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate}}</span>
-                            <span class="label">poor</span>
-                        </div>
-                        <div class="btn-small no-button col" style="color: #ff0d0d;">
-                            <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate * 2}}</span>
-                            <span class="label">very poor</span>
-                        </div>
-                    </div>
-                    <small style="color: #d9d9d9;">Note: These values do not account for overlapping MTs.</small>
-                </div>
-            </template>
-            <div v-if="productionData" class="settings-option-wrapper">
-                <div class="settings-title">
-                    <button type="button" class="title-button return-button" v-on:click="changeProduction(null)" title="Back" @mouseenter="bme()" style="padding: 1px 2px;">
-                        <div class="btn-small m-1"><i class="fa fa-arrow-left"></i></div>
-                    </button>
-                    Production Stats
-                </div>
-                <div class="production-stats">
-                    <div class="select-production m-2" v-if="!productionData.faction || !game.settings.selectedFaction || productionData.faction == game.settings.selectedFaction">
-                        <app-game-recipe :building="entity.building" :recipe="productionData"></app-game-recipe>
-                        <h6 class="production-requirements">
-                            <template v-if="productionData.power || entity.building.power">
-                                <span title="Power"><i class="fa fa-bolt"></i> {{productionData.power || entity.building.power}} MW</span>
-                                &nbsp;&nbsp;&nbsp;
-                            </template>
-                            <span title="Time"><i class="fa fa-clock-o"></i> {{productionData.time}}s</span>
-                        </h6>
-                    </div>
-                    <template v-if="productionData">
-                        <template v-if="entity.building.productionScaling !== false && productionData.max > 0">
-                            <div class="text-center p-2 mb-1">
-                                <i class="fa fa-arrow-circle-down" aria-hidden="true"></i> Limiter: 
-                                <span v-if="productionData.time <= 3600">x{{entity.productionScale}} cycles/hr</span>
-                                <span v-else>x{{entity.productionScale}} cycles/day</span>
-                                <input type="range" class="slider w-100" v-model.number="entity.productionScale" min="0" :max="productionData.max" step="1" @input="updateProduction()">
-                            </div>
-                        </template>
-                        <template v-if="entity.productionScale > 0">
-                            <div class="production-stats-resources">
-                                <div v-if="productionData.input && Object.keys(productionData.input).length" class="mb-3">
-                                    <h5><i class="fa fa-sign-in"></i> Building Input<span v-if="productionData.time <= 3600">/hr</span><span v-else>/day</span></h5>
-                                    <div class="statistics-panel-fac-input">
-                                        <app-game-resource-icon v-for="(value, key) in productionData.input" :resource="key" :amount="entity.productionScale * value"/>
-                                    </div>
-                                </div>
-                                <div v-if="productionData.output && Object.keys(productionData.output).length">
-                                    <h5><i class="fa fa-sign-out"></i> Building Output<span v-if="productionData.time <= 3600">/hr</span><span v-else>/day</span></h5>
-                                    <div class="statistics-panel-fac-output">
-                                        <app-game-resource-icon v-for="(value, key) in productionData.output" :resource="key" :amount="entity.productionScale * value"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </template>
-                    </template>
-                </div>
-            </div>
-            <template v-else-if="entity.building && entity.building.production && entity.building.production.length">
-                <div v-if="game.settings.showParentProductionList && entity.building?.parent?.production" class="settings-option-wrapper">
-                    <div class="settings-title">
-                        {{entity.building.parent?.name ?? entity.building.name}} Production
-                    </div>
-                    <div class="production-list">
-                        <app-menu-production-list-row v-for="production in entity.building.parent.production" :production="production" :isParent="true"></app-menu-production-list-row>
-                    </div>
-                </div>
-                <div class="settings-option-wrapper">
-                    <div class="settings-title">
-                        {{entity.building.upgradeName ?? entity.building.name}} Production
-                    </div>
-                    <div class="production-list">
-                        <app-menu-production-list-row v-for="production in entity.building.production" :production="production"></app-menu-production-list-row>
-                    </div>
-                </div>
-            </template>
-            <div v-if="game.settings.enableExperimental && entity.building?.category === 'entrenchments' && entity.building?.sockets" class="settings-option-wrapper">
-                <div class="settings-title">Socket Options</div>
+                </template>
                 <div class="text-button-wrapper">
-                    <button class="text-button" type="button" @click="recoverConnections()" @mouseenter="bme()">
-                        <i class="fa fa-wrench" aria-hidden="true"></i> Repair Connections
+                    <button class="text-button" type="button" v-on:click="game.downloadSave(true)" @mouseenter="bme()">
+                        <i class="fa fa-save"></i> Export Selection
                     </button>
                 </div>
             </div>
-        </template>
+            <template v-if="game.getSelectedEntities().length === 1">
+                <div v-if="entity.building && entity.building.upgrades" class="settings-option-wrapper upgrade-list">
+                    <div class="settings-title">
+                        <button v-if="entity.building?.tierDown ?? entity.building?.parentKey" type="button" class="title-button return-button" @click="changeUpgrade(entity.building.tierDown ?? entity.building.parent)" title="Go to Previous Tier" @mouseenter="bme()" style="padding: 1px 2px;">
+                            <div class="btn-small m-1"><i class="fa fa-angle-double-down" aria-hidden="true"></i></div>
+                        </button>
+                        {{hoverUpgradeName ?? (entity.building.upgradeName ?? (entity.building.upgrades[entity.building.key]?.name ?? 'No Upgrade Selected'))}}
+                        <button v-if="entity.building?.tierUp" type="button" class="title-button return-button attach-right" @click="changeUpgrade(entity.building.tierUp)" title="Go to Next Tier" @mouseenter="bme()" style="padding: 1px 2px;">
+                            <div class="btn-small m-1"><i class="fa fa-angle-double-up" aria-hidden="true"></i></div>
+                        </button>
+                    </div>
+                    <button class="upgrade-button" v-for="upgrade in entity.building.upgrades" :class="{'selected-upgrade': (entity.building.parent && entity.building.key === entity.building.parent.key + '_' + upgrade.key) || entity.building.key === upgrade.key}"
+                        @mouseenter="showUpgradeHover(upgrade); bme()" @mouseleave="showUpgradeHover()" @click="changeUpgrade(upgrade)">
+                        <div class="resource-icon" :title="upgrade.upgradeName ?? upgrade.name" :style="{backgroundImage:'url(' + (upgrade.icon ?? entity.building.icon) + ')'}"></div>
+                    </button>
+                </div>
+                <div v-if="entity.baseUpgrades && entity.building?.baseGarrisonRadius" class="settings-option-wrapper upgrade-list">
+                    <div class="settings-title">Base Upgrades</div>
+                    <button class="upgrade-button" v-for="(upgrade, key) in entity.building.baseUpgrades.base" :class="{'selected-upgrade': entity.baseUpgrades.base === key}"
+                        @mouseenter="showUpgradeHover(upgrade, false); bme()" @mouseleave="showUpgradeHover()" @click="changeBaseUpgrade('base', key)">
+                        <div class="resource-icon" :title="upgrade.name" :style="{backgroundImage:'url(' + (upgrade.icon ?? entity.building.icon) + ')'}"></div>
+                    </button>
+                </div>
+                <template v-if="entity.maintenanceFilters">
+                    <div class="settings-option-wrapper">
+                        <div class="settings-title">Maintained Structures</div>
+                        <div class="upgrade-buttons-small d-flex justify-content-center">
+                            <template v-for="(category, key) in gameData.categories">
+                                <button v-if="category.buildCategory" class="upgrade-button" :class="{'btn-inactive': entity.maintenanceFilters.exclusions.includes(key)}" @click="toggleMaintenanceExclusion(key)">
+                                    <div class="resource-icon" :title="category.name" :style="{backgroundImage:'url(' + (category.icon) + ')'}"></div>
+                                </button>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="settings-option-wrapper upgrade-list">
+                        <div class="settings-title">Maintenance Range</div>
+                        <div class="text-center">{{entity.maintenanceFilters.range}}m</div>
+                        <div class="d-flex">
+                            <div class="col-2 p-0">0m</div>
+                            <div class="col-8 p-0">
+                                <input type="range" class="slider w-100" style="height: 32px;" v-model.number="entity.maintenanceFilters.range" min="0" :max="entity.building.maxRange" step="1" @input="updateEntity()">
+                            </div>
+                            <div class="col-2 p-0">{{entity.building.maxRange}}m</div>
+                        </div>
+                        <span v-if="entity.maintainedStructures" style="font-size: 15px;">These settings apply to {{entity.maintainedStructures.toLocaleString()}}&nbsp;nearby&nbsp;structures.</span>
+                    </div>
+                    <div v-if="game.settings.enableExperimental && entity.maintainedConsumptionRate" class="settings-option-wrapper text-center">
+                        <div class="settings-title">Maintenance Supply Upkeep<span style="color: #b5b5b5;">/hr</span></div>
+                        <div class="construction-options row d-flex justify-content-center">
+                            <div class="btn-small no-button col" style="color: #00ca00;">
+                                <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate * 0.25}}</span>
+                                <span class="label">very good</span>
+                            </div>
+                            <div class="btn-small no-button col" style="color: #74d004;">
+                                <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate * 0.5}}</span>
+                                <span class="label">good</span>
+                            </div>
+                            <div class="btn-small no-button col" style="color: #ffa500;">
+                                <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate}}</span>
+                                <span class="label">poor</span>
+                            </div>
+                            <div class="btn-small no-button col" style="color: #ff0d0d;">
+                                <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate * 2}}</span>
+                                <span class="label">very poor</span>
+                            </div>
+                        </div>
+                        <small style="color: #d9d9d9;">Note: These values do not account for overlapping MTs.</small>
+                    </div>
+                </template>
+                <div v-if="productionData" class="settings-option-wrapper">
+                    <div class="settings-title">
+                        <button type="button" class="title-button return-button" v-on:click="changeProduction(null)" title="Back" @mouseenter="bme()" style="padding: 1px 2px;">
+                            <div class="btn-small m-1"><i class="fa fa-arrow-left"></i></div>
+                        </button>
+                        Production Stats
+                    </div>
+                    <div class="production-stats">
+                        <div class="select-production m-2" v-if="!productionData.faction || !game.settings.selectedFaction || productionData.faction == game.settings.selectedFaction">
+                            <app-game-recipe :building="entity.building" :recipe="productionData"></app-game-recipe>
+                            <h6 class="production-requirements">
+                                <template v-if="productionData.power || entity.building.power">
+                                    <span title="Power"><i class="fa fa-bolt"></i> {{productionData.power || entity.building.power}} MW</span>
+                                    &nbsp;&nbsp;&nbsp;
+                                </template>
+                                <span title="Time"><i class="fa fa-clock-o"></i> {{productionData.time}}s</span>
+                            </h6>
+                        </div>
+                        <template v-if="productionData">
+                            <template v-if="entity.building.productionScaling !== false && productionData.max > 0">
+                                <div class="text-center p-2 mb-1">
+                                    <i class="fa fa-arrow-circle-down" aria-hidden="true"></i> Limiter: 
+                                    <span v-if="productionData.time <= 3600">x{{entity.productionScale}} cycles/hr</span>
+                                    <span v-else>x{{entity.productionScale}} cycles/day</span>
+                                    <input type="range" class="slider w-100" v-model.number="entity.productionScale" min="0" :max="productionData.max" step="1" @input="updateProduction()">
+                                </div>
+                            </template>
+                            <template v-if="entity.productionScale > 0">
+                                <div class="production-stats-resources">
+                                    <div v-if="productionData.input && Object.keys(productionData.input).length" class="mb-3">
+                                        <h5><i class="fa fa-sign-in"></i> Building Input<span v-if="productionData.time <= 3600">/hr</span><span v-else>/day</span></h5>
+                                        <div class="statistics-panel-fac-input">
+                                            <app-game-resource-icon v-for="(value, key) in productionData.input" :resource="key" :amount="entity.productionScale * value"/>
+                                        </div>
+                                    </div>
+                                    <div v-if="productionData.output && Object.keys(productionData.output).length">
+                                        <h5><i class="fa fa-sign-out"></i> Building Output<span v-if="productionData.time <= 3600">/hr</span><span v-else>/day</span></h5>
+                                        <div class="statistics-panel-fac-output">
+                                            <app-game-resource-icon v-for="(value, key) in productionData.output" :resource="key" :amount="entity.productionScale * value"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+                </div>
+                <template v-else-if="entity.building && entity.building.production && entity.building.production.length">
+                    <div v-if="game.settings.showParentProductionList && entity.building?.parent?.production" class="settings-option-wrapper">
+                        <div class="settings-title">
+                            {{entity.building.parent?.name ?? entity.building.name}} Production
+                        </div>
+                        <div class="production-list">
+                            <app-menu-production-list-row v-for="production in entity.building.parent.production" :production="production" :isParent="true"></app-menu-production-list-row>
+                        </div>
+                    </div>
+                    <div class="settings-option-wrapper">
+                        <div class="settings-title">
+                            {{entity.building.upgradeName ?? entity.building.name}} Production
+                        </div>
+                        <div class="production-list">
+                            <app-menu-production-list-row v-for="production in entity.building.production" :production="production"></app-menu-production-list-row>
+                        </div>
+                    </div>
+                </template>
+                <div v-if="game.settings.enableExperimental && entity.building?.category === 'entrenchments' && entity.building?.sockets" class="settings-option-wrapper">
+                    <div class="settings-title">Socket Options</div>
+                    <div class="text-button-wrapper">
+                        <button class="text-button" type="button" @click="recoverConnections()" @mouseenter="bme()">
+                            <i class="fa fa-wrench" aria-hidden="true"></i> Repair Connections
+                        </button>
+                    </div>
+                </div>
+            </template>
+        </div>
     </div>
     `
 });
@@ -1213,112 +1200,55 @@ Vue.component('app-menu-save-load', {
             <div class="inner-button"><i class="fa fa-trash"></i></div>
         </button>
         <input id="fileUpload" @change="loadFile()" type="file" ref="file" hidden>
-        <div class="settings-option-wrapper">
-            <div class="settings-title">Project Properties</div>
-            <label class="app-input-label project-name-input pt-0">
-                <small class="mx-1">Name</small>
-                <input class="app-input text-left" type="text" v-model="game.project.name" placeholder="Unnamed Project" @change="updateProjectProperties()">
-            </label>
-            <label class="app-input-label project-name-input pt-0">
-                <small class="mx-1">Description</small>
-                <textarea class="app-input text-left" maxlength="500" v-model="game.project.description" placeholder="No description provided." @change="updateProjectProperties()"></textarea>
-            </label>
-            <label class="app-input-label project-name-input pt-0">
-                <small class="mx-1">Author(s)</small>
-                <input class="app-input text-left" type="text" v-model="game.project.authors" placeholder="Anonymous" @change="updateProjectProperties()">
-            </label>
-            <div class="text-center">
-                <button class="app-btn app-btn-primary load-button" type="button" @click="openFileBrowser()" @mouseenter="bme()">
-                    <i class="fa fa-upload"></i> Load
-                </button>
-                <button class="app-btn app-btn-primary save-button" type="button" @click="game.downloadSave()" @mouseenter="bme()">
-                    <i class="fa fa-save"></i> Save
-                </button>
+        <div class="menu-page-scroller">
+            <div class="settings-option-wrapper">
+                <div class="settings-title">Project Properties</div>
+                <label class="app-input-label project-name-input pt-0">
+                    <small class="mx-1">Name</small>
+                    <input class="app-input text-left" type="text" v-model="game.project.name" placeholder="Unnamed Project" @change="updateProjectProperties()">
+                </label>
+                <label class="app-input-label project-name-input pt-0">
+                    <small class="mx-1">Description</small>
+                    <textarea class="app-input text-left" maxlength="500" v-model="game.project.description" placeholder="No description provided." @change="updateProjectProperties()"></textarea>
+                </label>
+                <label class="app-input-label project-name-input pt-0">
+                    <small class="mx-1">Author(s)</small>
+                    <input class="app-input text-left" type="text" v-model="game.project.authors" placeholder="Anonymous" @change="updateProjectProperties()">
+                </label>
+                <div class="text-center">
+                    <button class="app-btn app-btn-primary load-button" type="button" @click="openFileBrowser()" @mouseenter="bme()">
+                        <i class="fa fa-upload"></i> Load
+                    </button>
+                    <button class="app-btn app-btn-primary save-button" type="button" @click="game.downloadSave()" @mouseenter="bme()">
+                        <i class="fa fa-save"></i> Save
+                    </button>
+                </div>
             </div>
-        </div>
-        <div class="settings-option-wrapper">
-            <div class="settings-title">Selection Options</div>
-            <div class="text-button-wrapper">
-                <button class="text-button mb-0" type="button" @click="openFileBrowser(true)" @mouseenter="bme()">
-                    <i class="fa fa-mouse-pointer"></i> Import Project <small>(Objects)</small>
-                </button>
-                <small style="color: #d9d9d9;">Note: Importing only loads objects from a project.</small>
+            <div class="settings-option-wrapper">
+                <div class="settings-title">Selection Options</div>
+                <div class="text-button-wrapper">
+                    <button class="text-button mb-0" type="button" @click="openFileBrowser(true)" @mouseenter="bme()">
+                        <i class="fa fa-mouse-pointer"></i> Import Project <small>(Objects)</small>
+                    </button>
+                    <small style="color: #d9d9d9;">Note: Importing only loads objects from a project.</small>
+                </div>
             </div>
-        </div>
-        <div v-if="game.settings.enableExperimental" class="settings-option-wrapper">
-            <div class="settings-title">Image Export Options</div>
-            <label class="app-input-label">
-                <i class="fa fa-th-large" aria-hidden="true"></i> Include Background Grid
-                <input class="app-input" type="checkbox" v-model="showImageBackground">
-            </label>
-            <label class="app-input-label">
-                <i class="fa fa-crosshairs" aria-hidden="true"></i> Center Image on Objects
-                <input class="app-input" type="checkbox" v-model="centerImageOnObjects">
-            </label>
-            <div class="text-button-wrapper">
-                <button class="text-button" type="button" @click="game.downloadImage('screenshot', centerImageOnObjects, showImageBackground)" @mouseenter="bme()">
-                    <i class="fa fa-camera"></i> Export Screenshot
-                </button>
-                <small style="color: #d9d9d9;">Note: Exporting an image does not save your project.</small>
-            </div>
-        </div>
-    </div>
-    `
-});
-
-Vue.component('app-menu-about', {
-    props: ['menuData'],
-    methods: {
-        buildBuilding: function(buildingKey) {
-            this.bmc();
-            game.createBuildingAtCenter(buildingKey);
-        }
-    },
-    template: html`
-    <div id="about-page">
-        <div class="about-section">
-            <div class="about-section-header"><i class="fa fa-keyboard-o" aria-hidden="true"></i> Controls + Hotkeys</div>
-            <div class="controls-section-body">
-                <div class="middle-mouse-button"></div> Move board position.<br>
-                <div class="middle-mouse-button"></div> Scroll to zoom in/out board.
-                <hr>
-                <div class="left-mouse-button"></div> Select a single structure.<br>
-                <div class="left-mouse-button"></div> Drag to select multiple structures.<br>
-                <div class="right-mouse-button"></div> Rotate selected structures.
-                <hr>
-                <div class="keyboard-key">ctrl</div> + <div class="left-mouse-button"></div> Add structure to selection.<br>
-                <div class="keyboard-key">ctrl</div> + <div class="middle-mouse-button"></div> Adjust selected spline length.<br>
-                <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">A</div> Select all structures.<br>
-                <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">C</div> Clone selection.
-                <hr>
-                <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">Z</div> Undo previous action.<br>
-                <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">Y</div> Redo previous action.<br>
-                <div class="keyboard-key">ctrl</div> + <div class="keyboard-key">shift</div> + <div class="keyboard-key">Z</div> Redo previous action.
-                <hr>
-                <div class="keyboard-key">shift</div> + <div class="left-mouse-button"></div> Add structure to selection.<br>
-                <div class="keyboard-key">shift</div> + <div class="left-mouse-button"></div> Add bunker to selection.<br>
-                <div class="keyboard-key">shift</div> + <div class="left-mouse-button"></div> Snap structure to grid.
-                <hr>
-                <div class="keyboard-key">number</div> Select toolbelt slot. (0-9)<br>
-                <i class="fa fa-reply fa-rotate-180" aria-hidden="true"></i> <div class="keyboard-key">shift</div> Swap toolbelt. (0-9)
-                <hr>
-                <div class="keyboard-key"><i class="fa fa-angle-up" aria-hidden="true"></i></div> <div class="keyboard-key"><i class="fa fa-angle-down" aria-hidden="true"></i></div> Move selection up / down.<br>
-                <div class="keyboard-key"><i class="fa fa-angle-left" aria-hidden="true"></i></div> <div class="keyboard-key"><i class="fa fa-angle-right" aria-hidden="true"></i></div> Move selection left / right.
-                <hr>
-                <div class="keyboard-key">W, A, S, D</div> Move selection along grid.<br>
-                <i class="fa fa-reply fa-rotate-180" aria-hidden="true"></i> <div class="keyboard-key">shift</div> Halve selection movement.
-                <hr>
-                <div class="keyboard-key">Q, E</div> Rotate selection by degrees. ({{game.settings.keySnapRotationDegrees}}°)<br>
-                <i class="fa fa-reply fa-rotate-180" aria-hidden="true"></i> <div class="keyboard-key">shift</div> Double selection rotation. ({{game.settings.keySnapRotationDegrees * 2}}°)
-                <hr>
-                <div class="keyboard-key">space</div> Pause / Resume physics.<br>
-                <div class="keyboard-key">B</div> Toggle blueprint for selection.<br>
-                <div class="keyboard-key">L</div> Toggle lock for selected structures.<br>
-                <div class="keyboard-key">M</div> Toggle region selection. (Map)<br>
-                <div class="keyboard-key">P</div> Toggle production output icons.<br>
-                <div class="keyboard-key">del</div> Delete selected structures.<br>
-                <div class="keyboard-key">esc</div> Clear selection.<br>
-                <div class="keyboard-key">F2</div> Debug menu.
+            <div v-if="game.settings.enableExperimental" class="settings-option-wrapper">
+                <div class="settings-title">Image Export Options</div>
+                <label class="app-input-label">
+                    <i class="fa fa-th-large" aria-hidden="true"></i> Include Background Grid
+                    <input class="app-input" type="checkbox" v-model="showImageBackground">
+                </label>
+                <label class="app-input-label">
+                    <i class="fa fa-crosshairs" aria-hidden="true"></i> Center Image on Objects
+                    <input class="app-input" type="checkbox" v-model="centerImageOnObjects">
+                </label>
+                <div class="text-button-wrapper">
+                    <button class="text-button" type="button" @click="game.downloadImage('screenshot', centerImageOnObjects, showImageBackground)" @mouseenter="bme()">
+                        <i class="fa fa-camera"></i> Export Screenshot
+                    </button>
+                    <small style="color: #d9d9d9;">Note: Exporting an image does not save your project.</small>
+                </div>
             </div>
         </div>
     </div>

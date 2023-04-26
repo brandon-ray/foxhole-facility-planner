@@ -600,8 +600,8 @@ const gameData = {
 		"deadlandshex": {
 			"name": "Deadlands",
 			"regionId": 3,
-			"icon": "../UI/HexMaps/Icons/MapDeadlandsHex.webp",
-			"textureKey": "MapDeadlandsHex",
+			"icon": "../UI/HexMaps/Icons/MapDeadLandsHex.webp",
+			"textureKey": "MapDeadLandsHex",
 			"gridCoord": {
 				"x": 0,
 				"y": 0

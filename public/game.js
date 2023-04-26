@@ -86,6 +86,21 @@ const PROJECT_LAYERS = {
             description: 'A grid overlay for the map.',
             preventLoad: true
         },
+        subRegions: {
+            name: 'Regions',
+            description: 'A sub-region overlay for the map.',
+            preventLoad: true
+        },
+        subRegionNames: {
+            name: 'Names',
+            description: 'A sub-region name overlay for the map.',
+            preventLoad: true
+        },
+        icons: {
+            name: 'Icons',
+            description: 'An icon overlay for the map.',
+            preventLoad: true
+        },
         shadows: {
             name: 'Shadows',
             description: 'A shadow overlay for the map.',
@@ -167,6 +182,7 @@ const game = {
         enableStats: true,
         enableLayers: false,
         enableSelectionStats: true,
+        enableRealTimeMap: true,
         statsRequireMultiSelection: false,
         enableBunkerDryingStats: false,
         gridSize: 16,
@@ -240,6 +256,9 @@ const game = {
                 base: false,
                 colors: true,
                 grid: true,
+                subRegions: true,
+                subRegionNames: true,
+                icons: true,
                 shadows: false,
                 topography_values: true,
                 roads: true,
@@ -594,6 +613,149 @@ try {
         smoke_particles: 'smoke_particles.png'
     };
 
+    const MAP_ICONS = {
+        8: {
+            name: 'Forward Base',
+            icon: 'MapIconForwardBase1'
+        },
+        11: {
+            name: 'Hospital',
+            icon: 'MapIconHospital'
+        },
+        12: {
+            name: 'Vehicle Factory',
+            icon: 'MapIconVehicle'
+        },
+        17: {
+            name: 'Refinery',
+            icon: 'MapIconManufacturing'
+        },
+        18: {
+            name: 'Shipyard',
+            icon: 'Shipyard'
+        },
+        19: {
+            name: 'Tech Center',
+            icon: 'MapIconTechCenter'
+        },
+        20: {
+            name: 'Salvage Field',
+            icon: 'SalvageMapIcon'
+        },
+        21: {
+            name: 'Component Field',
+            icon: 'MapIconComponents'
+        },
+        22: {
+            name: 'Fuel Field',
+            icon: 'MapIconFuel'
+        },
+        23: {
+            name: 'Sulfur Field',
+            icon: 'MapIconSulfur'
+        },
+        27: {
+            name: 'Keep',
+            icon: 'MapIconsKeep'
+        },
+        28: {
+            name: 'Observation Tower',
+            icon: 'MapIconObservationTower'
+        },
+        29: {
+            name: 'Fort',
+            icon: 'MapIconFort'
+        },
+        30: {
+            name: 'Troop Ship',
+            icon: 'MapIconTroopShip'
+        },
+        32: {
+            name: 'Sulfur Mine',
+            icon: 'MapIconSulfurMine'
+        },
+        33: {
+            name: 'Storage Facility',
+            icon: 'MapIconStorageFacility'
+        },
+        34: {
+            name: 'Factory',
+            icon: 'MapIconFactory'
+        },
+        35: {
+            name: 'Safe House',
+            icon: 'MapIconSafehouse'
+        },
+        37: {
+            name: 'Rocket Site',
+            icon: 'MapIconRocketFacility'
+        },
+        38: {
+            name: 'Salvage Mine',
+            icon: 'MapIconScrapMine'
+        },
+        39: {
+            name: 'Construction Yard',
+            icon: 'MapIconConstructionYard'
+        },
+        40: {
+            name: 'Component Mine',
+            icon: 'MapIconComponentMine'
+        },
+        45: {
+            name: 'Relic Base',
+            icon: 'MapIconRelicBase'
+        },
+        46: {
+            name: 'Relic Base',
+            icon: 'MapIconRelicBase'
+        },
+        47: {
+            name: 'Relic Base',
+            icon: 'MapIconRelicBase'
+        },
+        51: {
+            name: 'Mass Production Factory',
+            icon: 'MapIconMassProductionFactory'
+        },
+        52: {
+            name: 'Seaport',
+            icon: 'MapIconSeaport'
+        },
+        53: {
+            name: 'Coastal Gun',
+            icon: 'MapIconCoastalGun'
+        },
+        56: {
+            name: 'Town Base',
+            icon: 'MapIconTownBaseTier1'
+        },
+        57: {
+            name: 'Town Base',
+            icon: 'MapIconTownBaseTier1'
+        },
+        58: {
+            name: 'Town Base',
+            icon: 'MapIconTownBaseTier1'
+        },
+        59: {
+            name: 'Storm Cannon',
+            icon: 'MapIconStormcannon'
+        },
+        60: {
+            name: 'Intel Center',
+            icon: 'MapIconIntelcenter'
+        },
+        61: {
+            name: 'Coal Field',
+            icon: 'MapIconCoal'
+        },
+        62: {
+            name: 'Oil Field',
+            icon: 'MapIconFuel'
+        }
+    };
+
     let soundsLoaded = false;
     function loadSounds() {
         if (soundsLoaded) {
@@ -681,35 +843,254 @@ try {
         }
     };
 
-    game.updateEntityOverlays = function() {
-        mapLayer.visible = game.project.settings.regionKey && game.project.settings.showWorldRegion;
-        if (mapLayer.visible) {
-            game.updateRegionCrop();
-            const regionLayers = {};
-            const loader = new PIXI.Loader();
-            const updateMapLayer = (key, file) => {
-                if (file) {
-                    if (mapLayer[key]) {
-                        mapLayer[key].texture = game.resources[file].texture;
-                    } else if (game.resources[file]) {
-                        const mapSpriteLayer = new PIXI.Sprite(game.resources[file].texture);
-                        mapSpriteLayer.visible = game.project.settings.region[key];
-                        mapSpriteLayer.anchor.set(0.5);
-                        mapSpriteLayer.width = REGION_WIDTH;
-                        mapSpriteLayer.height = REGION_HEIGHT;
-                        mapSpriteLayer.zIndex = Object.keys(PROJECT_LAYERS.region).indexOf(key);
-                        mapLayer.addChild(mapSpriteLayer);
-                        mapLayer.sortChildren();
-                        mapLayer[key] = mapSpriteLayer;
+    let apiSocket;
+    const cachedMaps = {}; // { mapKey: { mapData } }
+
+    // TODO: When switching maps, clear all icons.
+
+    game.getMapData = function(key) {
+        key = key.toLowerCase();
+        const mapData = cachedMaps[key];
+        if (mapData) {
+            return mapData;
+        }
+        try {
+            if (window.localStorage) {
+                const cachedMap = JSON.parse(window.localStorage.getItem(`map`));
+                if (cachedMap && cachedMap.key === key) {
+                    return cachedMap;
+                }
+            }
+        } catch (e) {
+            console.error('Failed to get map data.');
+        }
+        return mapData;
+    }
+
+    game.updateMapData = function(key = game.project.settings.regionKey, mapData) {
+        key = key.toLowerCase();
+        if (!mapData) {
+            mapData = game.getMapData(key);
+        } else {
+            if (!cachedMaps[key]) {
+                cachedMaps[key] = {};
+            }
+            mapData.key = key;
+            Object.assign(cachedMaps[key], mapData);
+            try {
+                if (window.localStorage) {
+                    window.localStorage.setItem(`map`, JSON.stringify(cachedMaps[key]));
+                }
+            } catch (e) {
+                console.error('Failed to update map data.');
+            }
+        }
+        if (mapData) {
+            // TODO: Instead of removing all children, see which ones have updated and only update those.
+            if (mapData.icons) {
+                mapLayer.icons.removeChildren();
+                if (game.project.settings.region.icons && mapData.icons && mapData.icons.items) {
+                    for (const obj of mapData.icons.items) {
+                        if (MAP_ICONS[obj.iconType]) {
+                            const sprite = new PIXI.Sprite(game.resources[MAP_ICONS[obj.iconType].icon].texture);
+                            sprite.position.set(obj.x * REGION_WIDTH, obj.y * REGION_HEIGHT);
+                            sprite.anchor.set(0.5);
+                            const realtime = game.settings.enableRealTimeMap;
+                            if (realtime && obj.teamId === "COLONIALS") {
+                                sprite.tint = 0x516C4B;
+                            } else if (realtime && obj.teamId === "WARDENS") {
+                                sprite.tint = 0x245682;
+                            } else if (MAP_ICONS[obj.iconType].color) {
+                                sprite.tint = MAP_ICONS[obj.iconType].color;
+                            }
+                            // sprite.interactive = true;
+                            // sprite.on('mouseover', () => {
+                            //     mapLayer.hoverLabel.text = MAP_ICONS[obj.iconType].name;
+                            //     mapLayer.hoverLabel.visible = true;
+                            // });
+                            // sprite.on('mouseout', () => {
+                            //     mapLayer.hoverLabel.visible = false;
+                            // });
+                            mapLayer.icons.addChild(sprite);
+                        } else {
+                            console.error(`Unknown map icon type ${obj.iconType}`);
+                        }
+                    }
+                    mapLayer.icons.sortChildren();
+                }
+            }
+
+            if (mapData.labels) {
+                const majorRegions = [];
+
+                mapLayer.subRegionNames.removeChildren();
+                if ((game.project.settings.region.subRegions || game.project.settings.region.subRegionNames) && mapData.labels && mapData.labels.items) {
+                    for (const mapLabel of mapData.labels.items) {
+                        const regionPos = { x: mapLabel.x * REGION_WIDTH, y: mapLabel.y * REGION_HEIGHT };
+                        if (game.project.settings.region.subRegionNames) {
+                            const label = new PIXI.Text(mapLabel.text, Object.assign({}, game.defaultSettings.styles.label, {
+                                fontFamily: 'Jost',
+                                fontSize: mapLabel.mapMarkerType === 'Major' ? 36 : 26,
+                                stroke: 0x505050,
+                                strokeThickness: 4
+                            }));
+                            label.anchor.set(0.5);
+                            label.position.set(regionPos.x, regionPos.y);
+                            label.labelType = mapLabel.mapMarkerType;
+                            mapLayer.subRegionNames.addChild(label);
+                        }
+                        if (mapLabel.mapMarkerType === 'Major') {
+                            majorRegions.push(regionPos);
+                        }
                     }
                 }
-                if (mapLayer[key]) {
-                    mapLayer[key].visible = game.project.settings.region[key];
+
+                mapLayer.subRegions.removeChildren();
+                if (game.project.settings.region.subRegions) {
+                    if (majorRegions.length) {
+                        const voronoi = new Voronoi();
+                        const diagram = voronoi.compute(majorRegions, { xl: 0, xr: REGION_WIDTH, yt: 0, yb: REGION_HEIGHT });
+                        const graphics = new PIXI.Graphics();
+                        graphics.lineStyle(100, 0x000000);
+                        for (let edge of diagram.edges) {
+                            if (edge.va && edge.vb) {
+                                graphics.moveTo(edge.va.x, edge.va.y);
+                                graphics.lineTo(edge.vb.x, edge.vb.y);
+                            }
+                        }
+                        mapLayer.subRegions.addChild(graphics);
+                    }
+    
+                    const polyhex = [
+                        0, REGION_HEIGHT / 2,
+                        REGION_WIDTH / 4, 0,
+                        REGION_WIDTH * 3 / 4, 0,
+                        REGION_WIDTH, REGION_HEIGHT / 2,
+                        REGION_WIDTH * 3 / 4, REGION_HEIGHT,
+                        REGION_WIDTH / 4, REGION_HEIGHT
+                    ];
+    
+                    const hexlines = new PIXI.Graphics();
+                    hexlines.lineStyle(200, 0x000000);
+                    hexlines.drawPolygon(polyhex);
+                    mapLayer.subRegions.addChild(hexlines);
+    
+                    const hexfill = new PIXI.Graphics();
+                    hexfill.beginFill(0x000000);
+                    hexfill.drawPolygon(polyhex);
+                    hexfill.endFill();
+                    mapLayer.subRegions.addChild(hexfill);
+                    mapLayer.subRegions.mask = hexfill;
                 }
-            };
-            const textureKey = gameData.maps[game.project.settings.regionKey].textureKey;
+            }
+
+            lastMapScale = null;
+        }
+    };
+
+    let lastMapScale;
+    game.updateMapIcons = function() {
+        const scale = Math.min(1 / app.cstage.scale.x, 35);
+        if (game.project.settings.regionKey && game.project.settings.showWorldRegion) {
+            // if (mapLayer.icons.visible && mapLayer.hoverLabel?.visible) {
+            //     mapLayer.hoverLabel.scale.set(lastMapScale);
+            //     mapLayer.hoverLabel.position.set(gmx - (GRID_WIDTH / 2), gmy - (GRID_HEIGHT / 2));
+            // }
+            if (lastMapScale !== scale) {
+                lastMapScale = scale;
+                if (mapLayer.grid) {
+                    mapLayer.grid.children.forEach((child) => {
+                        if (child instanceof PIXI.Text) {
+                            child.scale.set(lastMapScale);
+                        }
+                    });
+                }
+                if (mapLayer.icons.visible) {
+                    mapLayer.icons.children.forEach((icon) => {
+                        icon.scale.set(lastMapScale);
+                    });
+                }
+                if (mapLayer.subRegionNames.visible) {
+                    mapLayer.subRegionNames.children.forEach((label) => {
+                        if (label.labelType === 'Minor') {
+                            label.alpha = scale < 20 ? 1 : 1 - (scale - 20) / 15;
+                        }
+                        label.scale.set(lastMapScale);
+                    });
+                }
+            }
+        }
+    };
+
+    function updateMapLayer(key, file) {
+        if (file) {
+            if (mapLayer[key]) {
+                mapLayer[key].texture = game.resources[file].texture;
+            } else if (game.resources[file]) {
+                const mapSpriteLayer = new PIXI.Sprite(game.resources[file].texture);
+                mapSpriteLayer.visible = game.project.settings.region[key];
+                mapSpriteLayer.anchor.set(0.5);
+                mapSpriteLayer.width = REGION_WIDTH;
+                mapSpriteLayer.height = REGION_HEIGHT;
+                mapSpriteLayer.zIndex = Object.keys(PROJECT_LAYERS.region).indexOf(key);
+                mapLayer.addChild(mapSpriteLayer);
+                mapLayer.sortChildren();
+                mapLayer[key] = mapSpriteLayer;
+            }
+        }
+        if (mapLayer[key]) {
+            mapLayer[key].visible = game.project.settings.region[key];
+        }
+    }
+
+    // Client should only send a request if subregions and subregion names are enabled or disabled. Not if either is enabled or disabled.
+    let lastRegionKey;
+    let lastRegionSettings = {};
+    function updateOrRequestMapData(regionKey, regionSettings) {
+        if (apiSocket && (lastRegionKey !== regionKey || lastRegionSettings.subRegions !== regionSettings.subRegions || lastRegionSettings.subRegionNames !== regionSettings.subRegionNames || lastRegionSettings.icons !== regionSettings.icons)) {
+            lastRegionKey = regionKey;
+            Object.assign(lastRegionSettings, regionSettings);
+            const mapKey = gameData.maps[lastRegionKey].textureKey.substring(3);
+            const mapData = game.getMapData(mapKey);
+            const activeLayers = {};
+            if (regionSettings.icons) {
+                activeLayers.icons = mapData?.icons?.version ?? true;
+            }
+            if (regionSettings.subRegions || regionSettings.subRegionNames) {
+                activeLayers.labels = mapData?.labels?.version ?? true;
+            }
+            apiSocket.emit('request-map', mapKey, mapData?.warId, activeLayers, game.settings.enableRealTimeMap);
+        }
+        game.updateMapData(regionKey);
+    }
+
+    game.updateEntityOverlays = function() {
+        const regionKey = game.project.settings.regionKey;
+        const regionSettings = game.project.settings.region;
+        mapLayer.visible = regionKey && game.project.settings.showWorldRegion;
+        if (mapLayer.visible) {
+            if (gameData.maps[regionKey] && (regionSettings.subRegions || regionSettings.subRegionNames || regionSettings.icons)) {
+                if (!apiSocket) {
+                    apiSocket = io('https://api.foxholeplanner.com', {
+                        reconnectionAttempts: 20,
+                        reconnectionDelayMax: 60000,
+                        randomizationFactor: 0.5,
+                        backoffStrategy: function(attempt) {
+                            return Math.pow(2, attempt) * 1000;
+                        }
+                    });
+                    apiSocket.on('update-map', (data) => game.updateMapData(regionKey, data));
+                }
+                updateOrRequestMapData(regionKey, regionSettings);
+            }
+            game.updateRegionCrop();
+
+            // This handles all map image layers.
+            const regionLayers = {};
+            const loader = new PIXI.Loader();
+            const textureKey = gameData.maps[regionKey].textureKey;
             for (const [key, info] of Object.entries(PROJECT_LAYERS.region)) {
-                if (!info.preventLoad && game.project.settings.region[key]) {
+                if (!info.preventLoad && regionSettings[key]) {
                     let layerPath = game_asset_dir + 'game/Textures/UI/';
                     if (info.bmm === false) {
                         layerPath += `HexMaps/Processed/${textureKey}.png`;
@@ -738,7 +1119,10 @@ try {
             loader.onError.add((error, resource) => {
                 console.error('Failed to load region image:', error.message);
             });
-            mapLayer.gridbg.visible = game.project.settings.region.grid;
+            mapLayer.gridbg.visible = regionSettings.grid;
+        } else if (apiSocket) {
+            apiSocket.close();
+            apiSocket = null;
         }
         for (const entity of entities) {
             entity.updateOverlays();
@@ -1140,6 +1524,13 @@ try {
             PIXI.Loader.shared.add(key, 'assets/' + asset_list[key]);
         }
 
+        for (const icon of Object.values(MAP_ICONS)) {
+            icon.icon = assetDir(`../UI/MapIcons/${icon.icon}.webp`);
+            if (!PIXI.Loader.shared.resources[icon.icon]) {
+                PIXI.Loader.shared.add(icon.icon, icon.icon);
+            }
+        }
+
         for (let key in game_asset_required) {
             PIXI.Loader.shared.add(key, game_asset_required[key]);
         }
@@ -1223,7 +1614,19 @@ try {
         };
         app.cstage.addChild(mapLayer);
 
-        const cellSize = 125 * METER_BOARD_PIXEL_SIZE;
+        mapLayer.icons = new PIXI.Container();
+        mapLayer.icons.x = -REGION_WIDTH / 2;
+        mapLayer.icons.y = -REGION_HEIGHT / 2;
+        mapLayer.icons.zIndex = 110;
+        mapLayer.addChild(mapLayer.icons);
+
+        // TODO: Cropping apparently breaks this. Removed for now.
+        // mapLayer.hoverLabel = new PIXI.Text('', Object.assign({}, game.defaultSettings.styles.label, DEFAULT_TEXT_STYLE, { fontSize: 30 }));
+        // mapLayer.hoverLabel.visible = false;
+        // mapLayer.hoverLabel.zIndex = 1000;
+        // mapLayer.addChild(mapLayer.hoverLabel);
+
+        const cellSize = 124.55 * METER_BOARD_PIXEL_SIZE;
         mapLayer.grid = new PIXI.Container();
         mapLayer.grid.x = -REGION_WIDTH / 2;
         mapLayer.grid.y = -REGION_HEIGHT / 2;
@@ -1237,7 +1640,7 @@ try {
             if (i > 0) {
                 const letterLabel = new PIXI.Text(String.fromCharCode(64 + i), {
                     fill: 0xFFFFFF,
-                    fontSize: 1000,
+                    fontSize: 28,
                     fontFamily: 'Jost'
                 });
                 letterLabel.anchor.set(0.5, 1);
@@ -1254,7 +1657,7 @@ try {
             if (i < 15) {
                 const numberLabel = new PIXI.Text(i + 1, {
                     fill: 0xFFFFFF,
-                    fontSize: 1000,
+                    fontSize: 28,
                     fontFamily: 'Jost'
                 });
                 numberLabel.anchor.set(1, 0.5);
@@ -1263,6 +1666,19 @@ try {
             }
         }
         mapLayer.addChild(mapLayer.grid);
+
+        mapLayer.subRegions = new PIXI.Container();
+        mapLayer.subRegions.alpha = 0.15;
+        mapLayer.subRegions.x = -REGION_WIDTH / 2;
+        mapLayer.subRegions.y = -REGION_HEIGHT / 2;
+        mapLayer.subRegions.zIndex = 80;
+        mapLayer.addChild(mapLayer.subRegions);
+
+        mapLayer.subRegionNames = new PIXI.Container();
+        mapLayer.subRegionNames.x = -REGION_WIDTH / 2;
+        mapLayer.subRegionNames.y = -REGION_HEIGHT / 2;
+        mapLayer.subRegionNames.zIndex = 120;
+        mapLayer.addChild(mapLayer.subRegionNames);
 
         mapLayer.gridbg = new PIXI.Graphics();
         mapLayer.gridbg.alpha = 0.075;
@@ -3610,6 +4026,8 @@ try {
         app.cstage.scale.x = camera.zoom;
         app.cstage.scale.y = camera.zoom;
         app.cstage.updateLayersOrder();
+
+        game.updateMapIcons();
 
         let mousePos = game.getMousePosition();
         if (mousePos && (mousePos.x || mousePos.y)) {

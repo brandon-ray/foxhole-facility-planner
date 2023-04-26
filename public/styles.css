@@ -263,6 +263,11 @@ p {
     float: right;
 }
 
+.btn-small.float-left {
+    margin: 6px 0 6px 6px;
+    float: left;
+}
+
 .btn-small:not(:disabled) {
     cursor: pointer;
 }
@@ -272,7 +277,7 @@ p {
     outline: none;
 }
 
-.btn-small:not(:disabled):not(.btn-active):focus, .btn-small:not(.btn-active):hover {
+.btn-small:not(:disabled):not(.btn-active):focus, .btn-small:not(:disabled):not(.btn-active):hover {
     color: white;
 }
 
@@ -303,11 +308,6 @@ input.btn-small::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number].btn-small {
     -moz-appearance: textfield;
-}
-
-.btn-small.btn-float-left {
-    float: left;
-    margin: 6px 0 6px 6px;
 }
 
 .btn-small.btn-checkbox.btn-active::after {
@@ -392,17 +392,16 @@ input[type=number].btn-small {
 }
 
 #sidebar-footer {
-    height: 64px;
+    height: 68px;
     background: linear-gradient(#101010, black);
-    padding: 8px;
+    padding: 8px 6px;
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    text-align: left;
 }
 
-#sidebar-footer a, #sidebar-footer button {
+#sidebar-footer a, #sidebar-footer button:not(.menu-footer-button) {
     font-size: 2.25em;
     width: 48px;
     height: 48px;
@@ -428,13 +427,35 @@ input[type=number].btn-small {
     fill: #fff;
 }
 
+#sidebar-footer .menu-footer-button {
+    background: linear-gradient(#828282, #404040);
+    height: 48px;
+    line-height: 48px;
+    position: absolute;
+    inset: 8px 64px;
+    font-size: 1.5em;
+    text-align: center;
+    transition-duration: 0.125s;
+    cursor: pointer;
+    border-radius: 3px;
+    outline: 2px solid transparent;
+}
+
+#sidebar-footer .menu-footer-button:hover,
+#sidebar-footer .menu-footer-button:focus {
+    background: linear-gradient(#e96d34, #843b18);
+    color: #fff;
+    font-size: 1.55em;
+    outline: 2px solid white;
+}
+
 /* Inner Contents of Sidebar */
 
 #sidebar-body {
     background: linear-gradient(rgb(42, 42, 42), rgb(32, 32, 32));
     position: absolute;
     top: 70px;
-    bottom: 64px;
+    bottom: 68px;
     left: 0;
     right: 0;
     text-align: left;
@@ -442,23 +463,7 @@ input[type=number].btn-small {
 
 #sidebar-body .menu-body {
     position: absolute;
-    top: 0px;
-    bottom: 68px;
-    left: 0;
-    right: 0;
-    overflow: auto;
-}
-
-#sidebar-body .menu-footer-buttons {
-    height: 50px;
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
-}
-
-#sidebar-body .menu-footer-buttons > .app-btn.app-btn-primary {
-    margin: 0;
+    inset: 0;
 }
 
 #sidebar-body .menu-page-title {
@@ -471,10 +476,20 @@ input[type=number].btn-small {
     text-align: center;
 }
 
+/*
 #sidebar-body .menu-page {
     padding: 10px;
     overflow-x: hidden;
     overflow-y: auto;
+}
+*/
+
+.menu-page-scroller {
+    padding: 10px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: absolute;
+    inset: 46px 0 0 0;
 }
 
 /* Page-specific Stylings */
@@ -482,7 +497,7 @@ input[type=number].btn-small {
 #construction-page {
     position: absolute;
     top: 10px;
-    bottom: 0;
+    bottom: 12px;
     left: 10px;
     right: 10px;
 }
@@ -1201,12 +1216,12 @@ hr {
     left: 15px;
 }
 
-#hover-building-info > .building-info-name {
+.building-info > .building-info-name {
     background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
     overflow: auto;
 }
 
-#hover-building-info > .building-info-name > img {
+.building-info > .building-info-name > img {
     width: 36px;
     height: 36px;
     background-color: #151515;
@@ -1216,7 +1231,7 @@ hr {
     border: 1px solid black;
 }
 
-#hover-building-info > .building-info-name > h4 {
+.building-info > .building-info-name > h4 {
     line-height: 40px;
     margin: 0 0 0 48px;
     padding-right: 10px;
@@ -1225,30 +1240,30 @@ hr {
     white-space: nowrap;
 }
 
-#hover-building-info > .building-info-upgrade {
+.building-info > .building-info-upgrade {
     background: #0b0b0b;
     padding: 2px 7px;
 }
 
-#hover-building-info > .building-info-body {
+.building-info > .building-info-body {
     padding: 10px;
 }
 
-#hover-building-info > .building-info-body > p.building-info-description, #hover-building-info > .building-info-body > p.building-tech-description {
+.building-info > .building-info-body > p.building-info-description, .building-info > .building-info-body > p.building-tech-description {
     margin-bottom: 10px;
     padding: 0;
 }
 
-#hover-building-info > .building-info-body > p.building-tech-description {
+.building-info > .building-info-body > p.building-tech-description {
     font-size: 0.95em;
     color: #0ff;
 }
 
-#hover-building-info > .building-info-body > p.building-tech-description span {
+.building-info > .building-info-body > p.building-tech-description span {
     color: #00e7ff;
 }
 
-#hover-building-info > .building-info-body > .building-info-production {
+.building-info > .building-info-body > .building-info-production {
     background: #0d0d0d;
     border: 1px solid black;
     margin-bottom: 10px;
@@ -1256,7 +1271,7 @@ hr {
     overflow: auto;
 }
 
-#hover-building-info .produced-resource-row {
+.building-info .produced-resource-row {
     width: 50%;
     float: left;
 }
@@ -1329,15 +1344,15 @@ hr {
     color: #45d745;
 }
 
-#hover-building-info .produced-resource-row .produced-resource {
+.building-info .produced-resource-row .produced-resource {
     padding-right: 10px;
 }
 
-#hover-building-info > .building-info-body > .building-cost > div:last-child {
+.building-info > .building-info-body > .building-cost > div:last-child {
     margin-bottom: 0;
 }
 
-#hover-building-info > .building-info-body > .power-cost, #hover-building-info > .building-info-body > .power-produced {
+.building-info > .building-info-body > .power-cost, .building-info > .building-info-body > .power-produced {
     color: #ff0d0d;
     font-size: 1.2em;
     position: absolute;
@@ -1346,11 +1361,11 @@ hr {
     z-index: 100;
 }
 
-#hover-building-info > .building-info-body > .power-produced {
+.building-info > .building-info-body > .power-produced {
     color: #45d745;
 }
 
-#hover-building-info > .building-info-body > .building-preview {
+.building-info > .building-info-body > .building-preview {
     width: 100%;
     /* height: 512px; */
     background-image: url('/assets/grid_32_dark.webp');
@@ -1478,12 +1493,100 @@ hr {
     position: relative;
 }
 
+.hub-presets {
+    position: absolute;
+    inset: 0;
+}
+
 .hub-body .preset-gallery {
-    width: 500px;
+    height: 100%;
+    border-right: 1px solid black;
+    overflow: hidden;
+}
+
+.preset-gallery .preset-gallery-filters {
+    height: 40px;
     background: black;
     position: absolute;
     inset: 0;
-    right: auto;
+    bottom: auto;
+}
+
+.preset-gallery .preset-page {
+    position: absolute;
+    inset: 40px 0 44px;
+    overflow-y: auto;
+}
+
+.preset-gallery .preset-page-switcher {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 44px;
+    background: linear-gradient(rgb(24, 24, 24), rgb(12, 12, 12));
+    border-top: 1px solid black;
+}
+
+.preset-gallery .preset-page-switcher button {
+    width: 54px;
+}
+
+.preset-gallery .preset-page-switcher button:disabled {
+    opacity: 0.5;
+}
+
+.preset-gallery .preset-listing {
+    background: #0e0e0e;
+    border: 1px solid black;
+    overflow: auto;
+    cursor: pointer;
+    position: relative;
+}
+
+.preset-gallery .preset-listing .build-icon {
+    width: 20%;
+    padding-top: 20%;
+    border: none;
+    border-right: 1px solid black;
+}
+
+.preset-gallery .preset-listing:hover,
+.preset-gallery .preset-listing:focus,
+.preset-gallery .preset-listing.btn-active {
+    background: #202020;
+    border-color: white;
+}
+
+.preset-gallery .preset-listing .listing-info {
+    text-align: left;
+    position: absolute;
+    inset: 0;
+    left: 20%;
+}
+
+.preset-gallery .preset-listing .listing-info h6 {
+    font-size: 1.05em;
+    padding: 6px 8px;
+    color: #e8e8e8;
+}
+
+.preset-gallery .preset-listing .listing-info i {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: #2ab0a4;
+}
+
+.preset-gallery .preset-listing .listing-info div {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    color: #b5b5b5;
+    padding: 2px 4px;
+}
+
+.preset-preview {
     overflow-y: auto;
 }
 
@@ -1519,6 +1622,54 @@ hr {
     overflow: hidden;
 }
 
+.tab-content .btn-large {
+    display: inline-block;
+    /* width: 160px;
+    height: 132px; */
+    width: 128px;
+    height: 128px;
+    background: rgba(0, 0, 0, 0.25);
+    font-size: 1.1em;
+    padding: 20px;
+    border-radius: 16px;
+    position: relative;
+    margin: 10px;
+    color: #e8e8e8;
+    /* text-shadow: 0 0 1px black; */
+    transition-duration: 0.15s;
+    /* box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5); */
+    cursor: pointer;
+    outline: 2px solid transparent;
+    overflow: hidden;
+}
+
+.tab-content .btn-large:hover {
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    /* box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5); */
+    outline: 2px solid white;
+}
+
+.tab-content .btn-large span {
+    line-height: 42px;
+    position: absolute;
+    inset: 0;
+    top: 0px;
+    top: auto;
+    font-size: 1.05em;
+    letter-spacing: 2px;
+    /* font-weight: bold; */
+}
+
+.tab-content .btn-large.discord-button svg {
+    height: 60px;
+}
+
+.tab-content .btn-large.discord-button path {
+    fill: #ffffff;
+}
+
 .discord-cta .tab-content-body {
     height: 160px;
 }
@@ -1544,7 +1695,7 @@ hr {
 .discord-cta .tab-content-body > a {
     width: 170px;
     background: linear-gradient(rgb(233, 109, 52), rgb(132, 59, 24));
-    padding: 10px 20px;
+    padding: 10px 19px;
     position: absolute;
     bottom: 20px;
     right: 20px;
@@ -1554,7 +1705,6 @@ hr {
     border-radius: 5px;
     white-space: nowrap;
     font-weight: bold;
-    text-align: center;
 }
 
 .discord-cta .tab-content-body > a:hover {
@@ -1562,12 +1712,14 @@ hr {
 }
 
 .discord-cta .tab-content-body > a i {
-    margin-left: 2px;
+    position: absolute;
+    right: 13px;
     transition-duration: 0.5s;
+    top: 13px;
 }
 
 .discord-cta .tab-content-body > a:hover i {
-    margin-left: 6px;
+    right: 9px;
 }
 
 /*
@@ -1864,6 +2016,7 @@ hr {
     left: 350px;
     text-align: left;
     /*border-top: 1px solid #1e1e1e;*/
+    z-index: -1;
 }
 
 .no-sidebar .footer {
