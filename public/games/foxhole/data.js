@@ -2656,7 +2656,6 @@ const gameData = {
 			"description": "A large shipping vessel, the Aquatipper is used to transport vehicles, equipment, and personnel over large bodies of water.",
 			"category": "naval",
 			"categoryOrder": 20,
-			"sortLayer": "vehicle",
 			"hitArea": [
 				{
 					"shape": [ -181.21,98.18,-182.42,-97.58,186.06,-98.18,186.67,95.76 ]
@@ -2826,7 +2825,6 @@ const gameData = {
 			"category": "vehicles",
 			"categoryOrder": 10,
 			"faction": "c",
-			"sortLayer": "vehicle",
 			"icon": "../UI/VehicleIcons/BusIcon.webp",
 			"texture": {
 				"src": "../Vehicles/busc.webp",
@@ -2842,7 +2840,6 @@ const gameData = {
 			"category": "vehicles",
 			"categoryOrder": 10,
 			"faction": "w",
-			"sortLayer": "vehicle",
 			"icon": "../UI/VehicleIcons/BusWarIcon.webp",
 			"texture": {
 				"src": "../Vehicles/busw.webp",
@@ -3381,6 +3378,7 @@ const gameData = {
 			"description": "A portable device that mixes various materials to form Concrete, which are used to build heavily fortified structures.",
 			"category": "shippables",
 			"categoryOrder": 10,
+			"sortLayer": "container",
 			"icon": "../UI/StructureIcons/ConcreteMixerIcon.webp",
 			"texture": {
 				"src": "../Structures/concretemixer.webp",
@@ -3465,6 +3463,7 @@ const gameData = {
 			"description": "An advanced variant of the Universal Assembly Rig, the BMS - Fabricator is fitted with a unique kit designed to handle advanced or specialized construction and excavation jobs.",
 			"category": "misc",
 			"categoryOrder": 3,
+			"sortLayer": "vehicle",
 			"hitArea": [
 				{
 					"shape": [ -103.94,18.48,-117.88,41.52,-117.88,19.09 ]
@@ -4682,7 +4681,6 @@ const gameData = {
 			"description": "A heavy duty shipping transport truck designed by Bassett Motor Society. It’s built for hauling the heaviest of equipment over long distances with ease. ",
 			"category": "vehicles",
 			"categoryOrder": 15,
-			"sortLayer": "vehicle",
 			"icon": "../UI/VehicleIcons/FlatbedTruckVehicleIcon.webp",
 			"texture": {
 				"src": "../Vehicles/flatbedtruck.webp",
@@ -7055,7 +7053,6 @@ const gameData = {
 			"description": "The Basset Motor Society’s Ironship-class shipping vessel is used to freight shippable goods and heavy vehicles.",
 			"category": "naval",
 			"categoryOrder": 21,
-			"sortLayer": "vehicle",
 			"hitArea": [
 				{
 					"shape": [ 302.42,46.67,277.58,69.09,282.42,-66.06,305.45,-42.42,337.58,0.61 ]
@@ -7436,7 +7433,6 @@ const gameData = {
 			"description": "The Scrap Hauler, designed by the Bassett Motor Society is a heavy-duty piece of machinery designed to reduce scrap metal and other materials into usable, raw resources. Scrap Haulers are often used to extract battlefield resources following skirmishes.",
 			"category": "vehicles",
 			"categoryOrder": 15,
-			"sortLayer": "vehicle",
 			"icon": "../UI/VehicleIcons/Harvester.webp",
 			"texture": {
 				"src": "../Vehicles/harvester.webp",
@@ -8802,6 +8798,7 @@ const gameData = {
 			"description": "A material pallet.",
 			"category": "shippables",
 			"categoryOrder": 1,
+			"sortLayer": "container",
 			"icon": "../UI/ItemIcons/MaterialPlatformItemIcon.webp",
 			"texture": {
 				"src": "../Structures/material_platform.webp",
@@ -9827,6 +9824,7 @@ const gameData = {
 			"description": "Powered by the Basset Motor Society’s lightweight Grouper engine, this simple wooden boat is ideal for ferrying small groups of infantry across rivers and between islands.",
 			"category": "misc",
 			"categoryOrder": 5,
+			"sortLayer": "vehicle",
 			"icon": "../UI/VehicleIcons/Motorboat.webp",
 			"texture": {
 				"src": "../Vehicles/motorboat.webp",
@@ -10579,7 +10577,6 @@ const gameData = {
 			"category": "vehicles",
 			"categoryOrder": 3,
 			"faction": "c",
-			"sortLayer": "vehicle",
 			"icon": "../UI/VehicleIcons/OilTankerIcon.webp",
 			"texture": {
 				"src": "../Vehicles/oiltankerc.webp",
@@ -10594,7 +10591,6 @@ const gameData = {
 			"category": "vehicles",
 			"categoryOrder": 4,
 			"faction": "w",
-			"sortLayer": "vehicle",
 			"icon": "../UI/VehicleIcons/OilTankerWarIcon.webp",
 			"texture": {
 				"src": "../Vehicles/oiltankerw.webp",
@@ -11979,6 +11975,7 @@ const gameData = {
 			"description": "A crate of packed items.",
 			"category": "shippables",
 			"categoryOrder": 4,
+			"sortLayer": "container",
 			"icon": "../UI/StructureIcons/ProductionPartsStructureIcon.webp",
 			"texture": {
 				"src": "../Structures/shippingcrate.webp",
@@ -11995,7 +11992,6 @@ const gameData = {
 			"description": "A small gauge container car for transporting raw materials. ",
 			"category": "trains",
 			"categoryOrder": 3,
-			"sortLayer": "vehicle",
 			"icon": "../UI/VehicleIcons/SmallGaugeResourceCarVehicleIcon.webp",
 			"texture": {
 				"src": "../Vehicles/smalltraindump.webp",
@@ -12030,7 +12026,6 @@ const gameData = {
 			"description": "The Mineseeker is the Bassett Motor Society’s mechanized mule. This small 0-4-0 locomotive can haul tonnes of weight over short distances with little overhead. Ideal for a mining operation or short-range supply chains. ",
 			"category": "trains",
 			"categoryOrder": 1,
-			"sortLayer": "vehicle",
 			"icon": "../UI/VehicleIcons/SmallGaugeEngineVehicleIcon.webp",
 			"texture": {
 				"src": "../Vehicles/smalltrainengine.webp",
@@ -12067,7 +12062,6 @@ const gameData = {
 			"description": "The Tinderbox is a simple car used for transporting liquids between facilities.",
 			"category": "trains",
 			"categoryOrder": 4,
-			"sortLayer": "vehicle",
 			"icon": "../UI/VehicleIcons/SmallTrainFuelContainerIcon.webp",
 			"texture": {
 				"src": "../Vehicles/smalltrainfuelcontainer.webp",
@@ -12102,7 +12096,6 @@ const gameData = {
 			"description": "A low profile flatbed car for transporting large resources and munitions over short distances on small gauge tracks.",
 			"category": "trains",
 			"categoryOrder": 2,
-			"sortLayer": "vehicle",
 			"icon": "../UI/VehicleIcons/SmallGaugeFlatbedCarVehicleIcon.webp",
 			"texture": {
 				"src": "../Vehicles/smalltrainresourceplatform.webp",
@@ -12816,7 +12809,6 @@ const gameData = {
 			"description": "A simple caboose that allows rail crews to maintain tracks more efficiently.",
 			"category": "trains",
 			"categoryOrder": 11,
-			"sortLayer": "vehicle",
 			"icon": "../UI/VehicleIcons/TrainCabooseItemIcon.webp",
 			"texture": {
 				"src": "../Vehicles/traincaboose.webp",
@@ -12852,7 +12844,6 @@ const gameData = {
 			"description": "A container car for transporting coal to refuel trains over long-distance trips. ",
 			"category": "trains",
 			"categoryOrder": 5,
-			"sortLayer": "vehicle",
 			"icon": "../UI/VehicleIcons/TrainCoalCarVehicleIcon.webp",
 			"texture": {
 				"src": "../Vehicles/traincoal.webp",
@@ -12889,7 +12880,6 @@ const gameData = {
 			"category": "trains",
 			"categoryOrder": 8,
 			"faction": "c",
-			"sortLayer": "vehicle",
 			"hitArea": [
 				{
 					"shape": [ 140.61,33.03,109.7,63.33,-107.88,63.33,-140,33.64,-140.61,-33.03,-108.48,-62.73,107.88,-62.73,140.61,-33.64 ]
@@ -12931,7 +12921,6 @@ const gameData = {
 			"category": "trains",
 			"categoryOrder": 9,
 			"faction": "w",
-			"sortLayer": "vehicle",
 			"icon": "../UI/VehicleIcons/CombatCarWVehicleIcon.webp",
 			"texture": {
 				"src": "../Vehicles/traincombatcarw.webp",
@@ -12967,7 +12956,6 @@ const gameData = {
 			"description": "One of the most storied mass-market 0-6-2 locomotives engineered by the Bassett Motor Society, this coal-powered industrial train engine is reliable, tested, and incredibly durable. The Black Bolt’s legacy is unmatched having aided the Bassett Motor Society in supplying countries across the globe.",
 			"category": "trains",
 			"categoryOrder": 4,
-			"sortLayer": "vehicle",
 			"icon": "../UI/VehicleIcons/TrainEngineVehicleIcon.webp",
 			"texture": {
 				"src": "../Vehicles/trainengine.webp",
@@ -13005,7 +12993,6 @@ const gameData = {
 			"description": "A flatbed car for transporting large resources and munitions by train over long-distances. ",
 			"category": "trains",
 			"categoryOrder": 6,
-			"sortLayer": "vehicle",
 			"icon": "../UI/VehicleIcons/TrainCarVehicleIcon.webp",
 			"texture": {
 				"src": "../Vehicles/trainflatbed.webp",
@@ -13041,7 +13028,6 @@ const gameData = {
 			"description": "An armoured train car with a mounted machinegun position for transporting infantry safely over long distances.",
 			"category": "trains",
 			"categoryOrder": 7,
-			"sortLayer": "vehicle",
 			"icon": "../UI/VehicleIcons/InfantryCarVehicleIcon.webp",
 			"texture": {
 				"src": "../Vehicles/traininfantry.webp",
@@ -13079,7 +13065,6 @@ const gameData = {
 			"category": "trains",
 			"categoryOrder": 10,
 			"length": 3.5,
-			"sortLayer": "vehicle",
 			"hitArea": [
 				{
 					"shape": [ 270,25.15,269.39,-25.15,278.48,14.24,279.09,25.15 ]
@@ -13129,7 +13114,6 @@ const gameData = {
 		"trainlrartillery_undercarriage": {
 			"className": "locomotive_undercarriage",
 			"category": "trains",
-			"sortLayer": "vehicle",
 			"hideInList": true,
 			"texture": {
 				"src": "../Vehicles/trainlrartillery_undercarriage.webp",
@@ -14267,7 +14251,6 @@ const gameData = {
 			"description": "A heavily armoured vessel, the Basset Motor Society’s White Whale-class troop transports can deploy on faraway beaches to function as a permanent forward operating base.",
 			"category": "naval",
 			"categoryOrder": 22,
-			"sortLayer": "vehicle",
 			"hitArea": [
 				{
 					"shape": [ 310,-58.48,325.76,-30,325.76,29.39,16.06,87.58,-242.12,-85.15,260.91,-88.18,288.79,-78.48 ]
@@ -14306,7 +14289,6 @@ const gameData = {
 			"category": "vehicles",
 			"categoryOrder": 1,
 			"faction": "c",
-			"sortLayer": "vehicle",
 			"icon": "../UI/VehicleIcons/TruckVehicleIcon.webp",
 			"texture": {
 				"src": "../Vehicles/truckc.webp",
@@ -14419,7 +14401,6 @@ const gameData = {
 			"category": "vehicles",
 			"categoryOrder": 2,
 			"faction": "w",
-			"sortLayer": "vehicle",
 			"icon": "../UI/VehicleIcons/TruckWarVehicleIcon.webp",
 			"texture": {
 				"src": "../Vehicles/truckw.webp",

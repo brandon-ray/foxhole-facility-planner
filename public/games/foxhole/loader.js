@@ -211,10 +211,18 @@ const game_asset_list = {};
         }
     }
 
-    for (const category of Object.values(window.objectData.categories)) {
+    const vehicleCategories = ['shippables', 'weaponry', 'vehicles', 'armor', 'tank', 'trains', 'naval'];
+    for (const [key, category] of Object.entries(window.objectData.categories)) {
         if (category.icon) {
             category.icon = assetDir(category.icon);
             game_asset_list[category.icon] = category.icon;
+        }
+        if (category.buildings && vehicleCategories.includes(key)) {
+            for (const building of category.buildings) {
+                if (!building.sortLayer) {
+                    building.sortLayer = 'vehicle';
+                }
+            }
         }
     }
 
