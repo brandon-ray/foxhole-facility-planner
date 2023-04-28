@@ -263,6 +263,13 @@ const gameData = {
 				"facilities"
 			]
 		},
+		"compact_artillery": {
+			"name": "Compact Artillery Factory",
+			"author": "Brondos",
+			"filters": [
+				"facilities"
+			]
+		},
 		"compact_coal_liquefaction": {
 			"name": "Compact Coal Liquefaction",
 			"description": "Produce coal with the power of coal! You can easily power this setup with a coal power station and an extra water pump for \"automatic\" coal. The coal to coal conversion factor is of ≃2.6. Taking into account power the multiplier is of ≃2.286",
