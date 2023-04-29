@@ -3522,7 +3522,7 @@ const gameData = {
 				"min": 6,
 				"max": 17.5
 			},
-			"sortLayer": "vehicle",
+			"sortLayer": "crane",
 			"hitArea": [
 				{
 					"shape": [ 105.45,73.64,72.12,42.12,105.45,42.73 ]

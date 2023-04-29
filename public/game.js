@@ -1080,8 +1080,11 @@ try {
                         }
                     });
                     apiSocket.on('update-map', (data) => game.updateMapData(regionKey, data));
+                    apiSocket.on('connect', () => {
+                        console.log('Connected to API server.');
+                        updateOrRequestMapData(regionKey, regionSettings);
+                    });
                 }
-                updateOrRequestMapData(regionKey, regionSettings);
             }
             game.updateRegionCrop();
 
