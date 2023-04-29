@@ -1085,6 +1085,9 @@ try {
                         updateOrRequestMapData(regionKey, regionSettings);
                     });
                 }
+                if (lastRegionKey && lastRegionKey !== regionKey) {
+                    updateOrRequestMapData(regionKey, regionSettings);
+                }
             }
             game.updateRegionCrop();
 
