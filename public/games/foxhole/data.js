@@ -12686,7 +12686,6 @@ const gameData = {
 			"codeName": "TankStopSplineT3",
 			"description": "An anti-tank obstacle that prevents vehicle access to an area, and is resistant to most types of damage.",
 			"category": "defenses",
-			"experimental": true,
 			"hasHandle": true,
 			"isBezier": true,
 			"minLength": 3.75,

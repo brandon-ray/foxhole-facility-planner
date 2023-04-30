@@ -726,7 +726,7 @@ Vue.component('app-menu-building-selected', {
                         </div>
                         <span v-if="entity.maintainedStructures" style="font-size: 15px;">These settings apply to {{entity.maintainedStructures.toLocaleString()}}&nbsp;nearby&nbsp;structures.</span>
                     </div>
-                    <div v-if="game.settings.enableExperimental && entity.maintainedConsumptionRate" class="settings-option-wrapper text-center">
+                    <div v-if="entity.maintainedConsumptionRate" class="settings-option-wrapper text-center">
                         <div class="settings-title">Maintenance Supply Upkeep<span style="color: #b5b5b5;">/hr</span></div>
                         <div class="construction-options row d-flex justify-content-center">
                             <div class="btn-small no-button col" style="color: #00ca00;">

@@ -410,7 +410,7 @@ Vue.component('app-menu-statistics', {
                     </select>
                 </div>
             </div>
-            <div v-if="game.settings.enableExperimental && maintenanceSupplies" class="construction-options-wrapper" title="Maintenance Supplies are required to prevent structures from decaying. The following information indicates how much structures will cost based on the performance of the sub-region's consumption modifier.">
+            <div v-if="maintenanceSupplies" class="construction-options-wrapper" title="Maintenance Supplies are required to prevent structures from decaying. The following information indicates how much structures will cost based on the performance of the sub-region's consumption modifier.">
                 <h5 class="construction-options-header">
                     <i class="inline-resource-icon" style="width: 18px;" :style="{backgroundImage: 'url(games/foxhole/assets/game/Textures/UI/ItemIcons/MaintenanceSuppliesIcon.webp)'}"></i> {{selection ? 'Selection Maintenance' : 'Maintenance Supplies'}}
                 </h5>
@@ -433,7 +433,7 @@ Vue.component('app-menu-statistics', {
                     </div>
                 </div>
             </div>
-            <div v-if="game.settings.enableExperimental && selection && bunker?.total" class="construction-options-wrapper">
+            <div v-if="game.settings.showBuildingDestructionStats && selection && bunker?.total" class="construction-options-wrapper">
                 <h5 class="construction-options-header">
                     <i class="fa fa-shield"></i> Bunker Destruction Stats
                     <button class="btn-small m-0 float-right header-icon" :class="{'btn-active': game.settings.enableBunkerDryingStats}" title="Toggle Wet Concrete Drying Time" @click="game.settings.enableBunkerDryingStats = !game.settings.enableBunkerDryingStats; game.updateSettings(); game.refreshStats()"><i class="fa fa-tint"></i></button>

@@ -923,6 +923,10 @@ Vue.component('app-hub-settings', {
                         <i class="fa fa-sitemap" aria-hidden="true"></i> Show Base Production Recipes
                         <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.showParentProductionList }" @click="toggleSetting('showParentProductionList')"></button>
                     </label>
+                    <label class="col-md-6 app-input-label">
+                        <i class="fa fa-shield" aria-hidden="true"></i> Show Bunker Destruction Stats
+                        <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.showBuildingDestructionStats }" @click="toggleSetting('showBuildingDestructionStats')"></button>
+                    </label>
                 </div>
             </div>
         </div>

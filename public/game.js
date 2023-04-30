@@ -184,6 +184,7 @@ const game = {
         enableSelectionStats: true,
         enableRealTimeMap: true,
         statsRequireMultiSelection: false,
+        showBuildingDestructionStats: false,
         enableBunkerDryingStats: false,
         gridSize: 16,
         enableSnapRotation: true,
@@ -1006,8 +1007,9 @@ try {
                     });
                 }
                 if (mapLayer.icons.visible) {
+                    const iconScale = lastMapScale * 0.8;
                     mapLayer.icons.children.forEach((icon) => {
-                        icon.scale.set(lastMapScale);
+                        icon.scale.set(iconScale);
                     });
                 }
                 if (mapLayer.subRegionNames.visible) {
