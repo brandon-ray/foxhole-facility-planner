@@ -1203,7 +1203,14 @@ try {
         game.updateSelectedBuildingMenu();
     };
 
-    game.updateSettings = function() {
+    game.downloadSettings = function() {
+        const settingsString = JSON.stringify({
+            settings: game.settings,
+        });
+        download(settingsString, 'foxhole_planner_settings', 'application/json');
+    };
+
+    game.updateSettings = function(refreshAll = false) {
         try {
             if (window.localStorage) {
                 let settingsString = JSON.stringify(game.settings);
@@ -1215,6 +1222,15 @@ try {
 
         game.reloadSettings();
         game.appComponent?.refresh();
+        if (refreshAll) {
+            game.buildingSelectedMenuComponent?.refresh();
+            game.boardUIComponent?.refresh();
+            game.constructionMenuComponent?.refresh();
+            game.sidebarMenuComponent?.$forceUpdate();
+            game.toolbeltComponent?.refresh();
+            game.toolbeltComponent?.showList(false);
+            game.loadSaveMenuComponent?.refresh();
+        }
     };
 
     game.reloadSettings = () => {
@@ -1229,6 +1245,15 @@ try {
         game.updateLightingQuality();
 
         updateBuildingDB();
+    };
+
+    game.confirmResetSettings = function() {
+        game.confirmationPopup.showPopup('reset-settings', confirmed => {
+            if (confirmed) {
+                Object.assign(game.settings, JSON.parse(JSON.stringify(game.defaultSettings)));
+                game.updateSettings(true);
+            }
+        });
     };
 
     let lastSoundPlay = Date.now() + 500;
@@ -3339,15 +3364,6 @@ try {
             }
             if (typeof callback === 'function') {
                 callback(confirmed);
-            }
-        });
-    };
-
-    game.confirmResetSettings = function() {
-        game.confirmationPopup.showPopup('reset-settings', confirmed => {
-            if (confirmed) {
-                game.settings = JSON.parse(JSON.stringify(game.defaultSettings));
-                game.updateSettings();
             }
         });
     };

@@ -338,11 +338,13 @@ Vue.component('app-game-hub-popup', {
         <div class="d-flex board-panel-body">
             <div class="hub-sidebar h-100 text-center p-0 position-relative justify-content-center align-items-center">
                 <div v-for="tab in tabContent" class="hub-sidebar-tab" :class="{ 'selected': selectedTab.key === tab.key }" :title="tab.title" @click="showTab(tab.key)">
-                    <i class="fa fa-2x" :class="tab.icon"></i><br>
+                    <i class="fa" :class="tab.icon"></i>
                     <span v-if="game.settings.showExpandedHubSidebar">{{tab.title}}</span>
                 </div>
-                <div class="hub-sidebar-tab position-absolute w-100 p-1" style="bottom: 0" :title="game.settings.showExpandedHubSidebar ? 'Retract Sidebar' : 'Extend Sidebar'" @click="game.settings.showExpandedHubSidebar = !game.settings.showExpandedHubSidebar; game.updateSettings()">
-                    <i class="fa fa-2x" :class="{'fa-angle-right': !game.settings.showExpandedHubSidebar, 'fa-angle-left': game.settings.showExpandedHubSidebar}" aria-hidden="true"></i>
+                <div class="position-absolute" style="bottom: 0">
+                    <div class="hub-sidebar-tab forced-size" :title="game.settings.showExpandedHubSidebar ? 'Retract Sidebar' : 'Extend Sidebar'" @click="game.settings.showExpandedHubSidebar = !game.settings.showExpandedHubSidebar; game.updateSettings()">
+                        <i class="fa fa-2x" :class="{'fa-angle-right': !game.settings.showExpandedHubSidebar, 'fa-angle-left': game.settings.showExpandedHubSidebar}" aria-hidden="true"></i>
+                    </div>
                 </div>
             </div>
             <div v-if="selectedTab" class="hub-body w-100" @scroll="handleBodyScroll" ref="hubBody">
@@ -359,44 +361,63 @@ Vue.component('app-game-hub-popup', {
 });
 
 Vue.component('app-hub-home', {
+    methods: {
+        openFileBrowser: function() {
+            document.getElementById('fileUpload').click();
+        },
+        loadSave: function(saveObject) {
+            try {
+                if (typeof saveObject === 'string') {
+                    saveObject = JSON.parse(saveObject);
+                }
+                game.loadSave(saveObject);
+                game.hubPopup?.showPopup(false);
+            } catch (e) {
+                console.error('Failed to load save:', e);
+                game.showGrowl('Failed to load save.');
+            }
+        },
+        loadFile: function() {
+            let file = this.$refs.file.files[0];
+            this.$refs.file.value = '';
+            let reader = new FileReader();
+            let component = this;
+            reader.onload = function() {
+                let decoder = new TextDecoder("utf-8");
+                component.loadSave(decoder.decode(new Uint8Array(this.result)));
+            };
+            reader.readAsArrayBuffer(file);
+        },
+    },
     template: html`
-    <div class="tab-content">
-        <!-- <img src="/assets/logo_icon.webp" height="200">
+    <div class="tab-content hub-home">
+        <input id="fileUpload" @change="loadFile()" type="file" ref="file" hidden>
+        <img src="/assets/logo_icon.webp"><br>
         <div class="fall-in-item no-box text-center">
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?list=PL5uBL5gApGWHGJ3OjxqlyzdEPv39O5T0T" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            <div class="btn-large btn-color-2">
-                <i class="fa fa-4x fa-upload" aria-hidden="true"></i>
-                <span>Load</span>
-            </div>
-            <div class="btn-large btn-color-4">
-                <i class="fa fa-4x fa-plus-circle" aria-hidden="true"></i>
-                <span>New</span>
-            </div>
-            <div class="btn-large btn-color-purple">
-                <i class="fa fa-4x fa-th" aria-hidden="true"></i>
-                <span>Presets</span>
-            </div>
+            <button class="btn-long" @click="bmc(); game.hubPopup?.showPopup(false); game.confirmNewProject();">
+                <i class="fa fa-file" aria-hidden="true"></i>
+                <span>New Project</span>
+            </button>
             <br>
-            <a class="btn-large btn-color-github" href="https://github.com/brandon-ray/foxhole-facility-planner" target="_blank" @click="bmc()">
+            <button class="btn-long" @click="bmc(); openFileBrowser()">
+                <i class="fa fa-upload" aria-hidden="true"></i>
+                <span>Load Project</span>
+            </button>
+            <br>
+            <button class="btn-long" @click="bmc(); game.hubPopup?.showTab('settings')">
+                <i class="fa fa-gear" aria-hidden="true"></i>
+                <span>Settings</span>
+            </button>
+        </div>
+        <div class="social-icons">
+            <a class="btn-social btn-color-github" href="https://github.com/brandon-ray/foxhole-facility-planner" title="GitHub" target="_blank" @click="bmc()">
                 <i class="fa fa-4x fa-github" aria-hidden="true"></i>
-                <span>GitHub</span>
             </a>
-            <a class="btn-large discord-button btn-color-discord" href="https://discord.gg/2hgaMQN26s" target="_blank" @click="bmc()">
+            <a class="btn-social discord-button btn-color-discord" href="https://discord.gg/2hgaMQN26s" title="Discord" target="_blank" @click="bmc()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36">
                     <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
                 </svg>
-                <span>Discord</span>
             </a>
-        </div> -->
-        <div class="fall-in-item">
-            <div class="tab-content-header">
-                <i class="fa fa-bullhorn"></i> Check "Updates" for the latest changes!
-            </div>
-            <div class="tab-content-body">
-                <div class="tab-content-body-img-wrapper m-0">
-                    <img src="/assets/updates/04242023.jpg">
-                </div>
-            </div>
         </div>
     </div>
     `
@@ -405,6 +426,35 @@ Vue.component('app-hub-home', {
 Vue.component('app-hub-updates', {
     template: html`
     <div class="tab-content">
+        <div class="fall-in-item">
+            <div class="tab-content-header">
+                <i class="fa fa-bullhorn"></i> Map & Hub Improvements
+                <small class="float-right">May 1st, 2023</small>
+            </div>
+            <div class="tab-content-body">
+                <h4>Major Changes</h4>
+                <ul>
+                    <li>Added real-time icon and label layers from War API to the currently selected hex.
+                        <ul>
+                            <li>Note: Real-time stats can be disabled in settings.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h4>Other Changes</h4>
+                <ul>
+                    <li>Added Import, Export, and Reset Settings buttons to hub.</li>
+                    <li>Added bunker destruction stats setting.</li>
+                    <li>Added darkened background when confirmation dialogs are visible.</li>
+                    <li>Added controls page to hub.</li>
+                    <li>Updated hub home page and sidebar.</li>
+                    <li>Updated sidebar footer to reduce load/save button footprint.</li>
+                    <li>Moved GitHub and Discord buttons to hub home.</li>
+                    <li>Moved Dragon's Teeth from experimental.</li>
+                    <li>Fixed z-sorting of various vehicle-based items.</li>
+                </ul>
+            </div>
+        </div>
+        <!--
         <div class="fall-in-item">
             <div class="tab-content-header">
                 <i class="fa fa-bullhorn"></i> Map / Regions Update
@@ -571,6 +621,7 @@ Vue.component('app-hub-updates', {
                 </ul>
             </div>
         </div>
+        -->
     </div>
     `
 });
@@ -620,7 +671,7 @@ Vue.component('app-hub-presets', {
         return {
             presets: [],
             currentPage: 1,
-            presetsPerPage: 10,
+            presetsPerPage: 6,
             selectedPreset: null,
             searchQuery: null
         }
@@ -646,10 +697,6 @@ Vue.component('app-hub-presets', {
             game.createObject(building);
             this.selectedPreset = null;
             this.showPopup(false);
-        },
-        buildingHover: function(building) {
-            // this.selectedPreset = building;
-            this.$forceUpdate();
         }
     },
     template: html`
@@ -666,10 +713,11 @@ Vue.component('app-hub-presets', {
                 </label>
             </div>
             <div class="preset-page">
-                <div v-for="preset in pagePresets" :key="preset.key" :title="preset.name" class="preset-listing" @mouseenter="bme(); buildingHover(preset)" @mouseleave="buildingHover(null)" @click="bmc(); selectedPreset = preset">
+                <div v-for="preset in pagePresets" :key="preset.key" :title="preset.name" class="preset-listing" @mouseenter="bme()" @click="bmc(); selectedPreset = preset">
                     <div class="build-icon ignore-transform" :style="{backgroundImage:'url(' + (preset.icon ?? '/assets/default_icon.webp') + ')'}"></div>
                     <div class="listing-info">
                         <h6>{{preset.name}}</h6>
+                        <p v-if="preset.description" :title="preset.description">❝{{preset.description | truncate}}❞</p>
                         <i v-if="preset.module" class="fa fa-plug" aria-hidden="true" title="Modular"></i>
                         <div v-if="preset.author" title="Creator(s)">{{typeof preset.author === 'string' ? preset.author : preset.author.join(', ')}}</div>
                     </div>
@@ -692,21 +740,31 @@ Vue.component('app-hub-presets', {
         </div>
         <div v-if="selectedPreset" class="col-md-6 preset-preview building-info text-left p-0">
             <div class="building-info-name">
-                <img :src="selectedPreset.baseIcon || selectedPreset.icon || '/assets/default_icon.webp'" />
+                <button type="button" class="btn-small float-left" @click="bmc(); selectedPreset = null;" title="Return">
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                </button>
+                <!--<img :src="selectedPreset.baseIcon || selectedPreset.icon || '/assets/default_icon.webp'" />-->
                 <h4>{{selectedPreset.name}}</h4>
+                <button type="button" class="btn-small float-right" @click="bmc();" title="Report">
+                    <i class="fa fa-flag" aria-hidden="true"></i>
+                </button>
             </div>
             <div class="building-info-body">
                 <p class="building-info-description" v-if="selectedPreset.description">{{selectedPreset.description}}</p>
                 <p class="building-tech-description" v-if="selectedPreset.author">
                     <span>Creator{{typeof selectedPreset.author !== 'string' && 's' || ''}}:</span> {{typeof selectedPreset.author === 'string' ? selectedPreset.author : selectedPreset.author.join(', ')}}
                 </p>
+                <!--
                 <p class="building-tech-description" v-if="selectedPreset.category === 'presets' || selectedPreset.category === 'showcase'">
                     <span>Want your design featured in the planner?</span> Submit it on our Discord!
                 </p>
+                -->
                 <img v-if="selectedPreset.preset" class="building-preview" :src="selectedPreset.texture">
                 <!-- Load Button -->
                 <!-- Import/Clone Button -->
+                <!-- Download Project File Button -->
             </div>
+            <div class="building-info-footer-options"></div>
         </div>
     </div>
     `
@@ -724,6 +782,27 @@ Vue.component('app-hub-settings', {
             game.settings.keySnapRotationDegrees = Math.min(Math.max(game.settings.keySnapRotationDegrees, 1), 360);
             game.settings.zoomSpeed = Math.min(Math.max(game.settings.zoomSpeed, 1), 5);
             game.updateSettings();
+        },
+        openFileBrowser() {
+            this.$refs.fileInput.click();
+        },
+        importSettings: function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            this.$refs.fileInput.value = '';
+            const reader = new FileReader();
+            reader.readAsText(file);
+            reader.onload = () => {
+                const data = typeof reader.result === 'string' && JSON.parse(reader.result);
+                if (data && data.settings) {
+                    Object.assign(game.settings, game.defaultSettings, data.settings);
+                    game.updateSettings(true);
+                    this.$forceUpdate();
+                } else {
+                    console.error('Attempted to load invalid settings file.');
+                    game.showGrowl('Invalid Settings File');
+                }
+            }
         }
     },
     template: html`
@@ -930,11 +1009,18 @@ Vue.component('app-hub-settings', {
                 </div>
             </div>
         </div>
-        <!-- <div class="fall-in-item">
-            <button class="btn-small" @click="game.confirmResetSettings()">
-                <i class="fa fa-undo" aria-hidden="true"></i>
+        <div class="fall-in-item no-box">
+            <input id="fileInput" ref="fileInput" type="file" @change="importSettings" style="display: none;">
+            <button class="btn-long" @click="openFileBrowser()">
+                <i class="fa fa-upload" aria-hidden="true"></i> Import Settings
             </button>
-        </div> -->
+            <button class="btn-long" @click="game.downloadSettings()">
+                <i class="fa fa-save" aria-hidden="true"></i> Export Settings
+            </button>
+            <button class="btn-long btn-color-red" @click="game.confirmResetSettings()">
+                <i class="fa fa-undo" aria-hidden="true"></i> Reset Settings
+            </button>
+        </div>
     </div>
     `
 });
@@ -1074,6 +1160,7 @@ Vue.component('app-game-confirmation-popup', {
     },
     template: html`
     <div v-if="confirmationVisible" class="board-panel confirmation-dialog">
+        <div class="dialog-overlay" @click="closePopup(false)"></div>
         <template v-if="type === 'delete'">
             <div class="board-panel-header">
                 <h4 class="float-left m-0" style="color: #eee"><i class="fa fa-trash"></i> Confirm Deletion</h4>
@@ -1116,7 +1203,7 @@ Vue.component('app-game-confirmation-popup', {
                 <button class="btn-small m-0 mr-1 float-right" title="Close" @click="closePopup(false)"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
             <p class="board-panel-body">
-                This will revert any changes you've made in settings.<br>
+                This will revert all settings and toolbelts.<br>
                 Note: This <u>cannot</u> be undone.
                 <button @click="closePopup(true)">Reset Settings</button>
             </p>
@@ -1322,4 +1409,16 @@ Vue.component('app-game-building-list-icon-v2', {
         <div v-if="!building.baseIcon && !building.parentKey && building.parent?.icon && building.parent.icon !== building.icon" class="build-subicon" :title="building.parent.name" :style="{backgroundImage: 'url(' + ((building.category === 'entrenchments' && building.parent.icon) || building.icon) + ')'}"></div>
     </div>
     `
+});
+
+Vue.filter('truncate', function(value) {
+    if (value.length > 65) {
+        const truncated = value.slice(0, 65);
+        const lastSpace = truncated.lastIndexOf(' ');
+        if (lastSpace !== -1) {
+            return truncated.slice(0, lastSpace) + '...';
+        }
+        return truncated + '...';
+    }
+    return value;
 });

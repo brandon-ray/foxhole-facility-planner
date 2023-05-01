@@ -1428,15 +1428,43 @@ hr {
 }
 
 .hub-dialog .hub-sidebar-tab {
-    height: auto;
+    width: 60px;
     color: rgb(110, 110, 110);
     cursor: pointer;
-    padding: 12px;
+    overflow: auto;
 }
 
 .hub-dialog.sidebar-names .hub-sidebar-tab {
-    width: 120px;
-    max-height: 80px;
+    width: 130px;
+    height: 58px;
+    line-height: 58px;
+}
+
+.hub-dialog.sidebar-names .hub-sidebar-tab:not(.forced-size) {
+    font-size: 1.1em;
+}
+
+.hub-dialog.sidebar-names .hub-sidebar-tab i {
+    font-size: 1.1em;
+    opacity: 0.75;
+}
+
+.hub-dialog:not(.sidebar-names) .hub-sidebar-tab:not(.forced-size) i {
+    width: 60px;
+    height: 58px;
+    font-size: 2em;
+    line-height: 58px;
+    float: left;
+}
+
+.hub-dialog .hub-sidebar-tab.forced-size {
+    height: auto;
+    line-height: initial;
+    padding: 10px 0;
+}
+
+.hub-dialog .hub-sidebar-tab.forced-size i {
+    font-size: 1.6em;
 }
 
 .hub-dialog .hub-sidebar-tab:hover,
@@ -1499,22 +1527,52 @@ hr {
 }
 
 .hub-body .preset-gallery {
+    background: black;
     height: 100%;
     border-right: 1px solid black;
     overflow: hidden;
 }
 
+.hub-home {
+    position: absolute;
+    inset: 0;
+    background-image: url('/assets/grid_32_dark.webp');
+    background-size: 28px;
+    background-position: center;
+    box-shadow: inset 0 0 200px black;
+    overflow-y: auto;
+}
+
+.hub-home > img {
+    height: 225px;
+    pointer-events: none;
+    /* margin-top: 30px; */
+    margin-top: 84px;
+    /* margin-bottom: 20px; */
+    margin-bottom: 28px;
+}
+
+.hub-home .btn-long {
+    width: 230px;
+}
+
+.hub-home .social-icons {
+    position: absolute;
+    bottom: 3px;
+    right: 12px;
+}
+
 .preset-gallery .preset-gallery-filters {
-    height: 40px;
-    background: black;
+    height: 39px;
     position: absolute;
     inset: 0;
     bottom: auto;
+    padding-top: 1px;
 }
 
 .preset-gallery .preset-page {
     position: absolute;
-    inset: 40px 0 44px;
+    inset: 39px 0 44px;
     overflow-y: auto;
 }
 
@@ -1538,15 +1596,30 @@ hr {
 
 .preset-gallery .preset-listing {
     background: #0e0e0e;
+    height: 16.666%;
     border: 1px solid black;
     overflow: auto;
     cursor: pointer;
     position: relative;
 }
 
+.preset-gallery .preset-listing p {
+    width: 250px;
+    height: 34px;
+    line-height: 16px;
+    color: #a6a6a6;
+    position: absolute;
+    bottom: 22px;
+    left: 14px;
+    font-style: italic;
+    font-size: 0.85em;
+    overflow: hidden;
+}
+
 .preset-gallery .preset-listing .build-icon {
     width: 20%;
-    padding-top: 20%;
+    height: 100%;
+    padding-top: initial;
     border: none;
     border-right: 1px solid black;
 }
@@ -1582,12 +1655,20 @@ hr {
     position: absolute;
     bottom: 0;
     right: 0;
-    color: #b5b5b5;
+    color: #ececec;
     padding: 2px 4px;
 }
 
 .preset-preview {
     overflow-y: auto;
+}
+
+.preset-preview .building-info-header-options {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    overflow: auto;
 }
 
 .fall-in-item {
@@ -1622,6 +1703,36 @@ hr {
     overflow: hidden;
 }
 
+.tab-content .btn-social {
+    display: inline-block;
+    width: 48px;
+    height: 48px;
+    font-size: 0.6em;
+    border-radius: 6px;
+    position: relative;
+    margin: 3px;
+    color: white;
+    transition-duration: 0.15s;
+    cursor: pointer;
+    outline: 2px solid transparent;
+    overflow: hidden;
+    line-height: 70px;
+}
+
+.tab-content .btn-social.discord-button svg {
+    height: 27px;
+    overflow: visible;
+}
+
+.tab-content .btn-social.discord-button path {
+    fill: #ffffff;
+}
+
+.tab-content .btn-social:hover {
+    transform: scale(1.1);
+    outline: 2px solid white;
+}
+
 .tab-content .btn-large {
     display: inline-block;
     /* width: 160px;
@@ -1631,6 +1742,7 @@ hr {
     background: rgba(0, 0, 0, 0.25);
     font-size: 1.1em;
     padding: 20px;
+    border: none;
     border-radius: 16px;
     position: relative;
     margin: 10px;
@@ -1643,31 +1755,50 @@ hr {
     overflow: hidden;
 }
 
+.tab-content .btn-large i {
+    font-size: 4em;
+    margin-top: -15px;
+}
+
 .tab-content .btn-large:hover {
     color: white;
     transform: scale(1.05);
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-    /* box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5); */
     outline: 2px solid white;
 }
 
 .tab-content .btn-large span {
-    line-height: 42px;
+    line-height: 40px;
     position: absolute;
     inset: 0;
-    top: 0px;
     top: auto;
     font-size: 1.05em;
-    letter-spacing: 2px;
-    /* font-weight: bold; */
 }
 
-.tab-content .btn-large.discord-button svg {
-    height: 60px;
+.tab-content .btn-long {
+    display: inline-block;
+    line-height: 44px;
+    /* background: linear-gradient(#828282, #404040); */
+    background: linear-gradient(#777, #3e3e3e);
+    /* background: linear-gradient(#828282, #404040); */
+    font-size: 1.3em;
+    border: none;
+    border-radius: 5px;
+    position: relative;
+    margin: 5px;
+    color: #e8e8e8;
+    transition-duration: 0.15s;
+    cursor: pointer;
+    outline: 2px solid transparent;
+    overflow: hidden;
+    padding: 0 18px;
 }
 
-.tab-content .btn-large.discord-button path {
-    fill: #ffffff;
+.tab-content .btn-long:hover {
+    background: linear-gradient(#e96d34, #843b18);
+    color: white;
+    transform: scale(1.04);
+    outline: 2px solid white;
 }
 
 .discord-cta .tab-content-body {
@@ -1946,6 +2077,12 @@ hr {
     opacity: 1;
 }
 
+.dialog-overlay {
+    background: rgba(0, 0, 0, 0.75);
+    position: fixed;
+    inset: 0;
+}
+
 .confirmation-dialog {
     width: 400px;
     height: 200px;
@@ -1953,9 +2090,12 @@ hr {
     left: 50%;
     margin-top: -100px;
     margin-left: -200px;
+    z-index: 1000;
 }
 
 .confirmation-dialog .board-panel-body {
+    background: linear-gradient(#1c1c1c, #141414);
+    position: relative;
     padding: 20px;
     text-align: center;
 }
@@ -2852,4 +2992,32 @@ label.settings-option-wrapper input:focus, .settings-option-wrapper label input:
 
 ::-webkit-scrollbar-corner {
     background-color: rgba(0, 0, 0, 0.15);
+}
+
+.btn-color-discord {
+    background: linear-gradient(#5865f2, #303aa4) !important;
+}
+
+.btn-color-github {
+    background: linear-gradient(#202020, #0c0c0c) !important;
+}
+
+.btn-color-blue {
+    background: linear-gradient(rgb(0, 105, 217), #002a7b) !important;
+}
+
+.btn-color-purple {
+    background: linear-gradient(rgb(109, 0, 217), #26007b) !important;
+}
+
+.btn-color-green {
+    background: linear-gradient(rgb(0, 198, 22), #27660a) !important;
+}
+
+.btn-color-pink {
+    background: linear-gradient(rgb(217, 0, 217), #7b007b) !important;
+}
+
+.btn-color-red:hover {
+    background: linear-gradient(rgb(255, 0, 0), rgb(168, 0, 0)) !important;
 }
