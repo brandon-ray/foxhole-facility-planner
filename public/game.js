@@ -87,13 +87,8 @@ const PROJECT_LAYERS = {
             preventLoad: true
         },
         subRegions: {
-            name: 'Regions',
+            name: 'Labels',
             description: 'A sub-region overlay for the map.',
-            preventLoad: true
-        },
-        subRegionNames: {
-            name: 'Names',
-            description: 'A sub-region name overlay for the map.',
             preventLoad: true
         },
         icons: {
@@ -258,7 +253,6 @@ const game = {
                 colors: true,
                 grid: true,
                 subRegions: true,
-                subRegionNames: true,
                 icons: true,
                 shadows: false,
                 topography_values: true,
@@ -925,29 +919,25 @@ try {
                 const majorRegions = [];
 
                 mapLayer.subRegionNames.removeChildren();
-                if ((game.project.settings.region.subRegions || game.project.settings.region.subRegionNames) && mapData.labels && mapData.labels.items) {
+                mapLayer.subRegions.removeChildren();
+                if (game.project.settings.region.subRegions && mapData.labels && mapData.labels.items) {
                     for (const mapLabel of mapData.labels.items) {
                         const regionPos = { x: mapLabel.x * REGION_WIDTH, y: mapLabel.y * REGION_HEIGHT };
-                        if (game.project.settings.region.subRegionNames) {
-                            const label = new PIXI.Text(mapLabel.text, Object.assign({}, game.defaultSettings.styles.label, {
-                                fontFamily: 'Jost',
-                                fontSize: mapLabel.mapMarkerType === 'Major' ? 36 : 26,
-                                stroke: 0x505050,
-                                strokeThickness: 4
-                            }));
-                            label.anchor.set(0.5);
-                            label.position.set(regionPos.x, regionPos.y);
-                            label.labelType = mapLabel.mapMarkerType;
-                            mapLayer.subRegionNames.addChild(label);
-                        }
+                        const label = new PIXI.Text(mapLabel.text, Object.assign({}, game.defaultSettings.styles.label, {
+                            fontFamily: 'Jost',
+                            fontSize: mapLabel.mapMarkerType === 'Major' ? 36 : 26,
+                            stroke: 0x505050,
+                            strokeThickness: 4
+                        }));
+                        label.anchor.set(0.5);
+                        label.position.set(regionPos.x, regionPos.y);
+                        label.labelType = mapLabel.mapMarkerType;
+                        mapLayer.subRegionNames.addChild(label);
                         if (mapLabel.mapMarkerType === 'Major') {
                             majorRegions.push(regionPos);
                         }
                     }
-                }
 
-                mapLayer.subRegions.removeChildren();
-                if (game.project.settings.region.subRegions) {
                     if (majorRegions.length) {
                         const voronoi = new Voronoi();
                         const diagram = voronoi.compute(majorRegions, { xl: 0, xr: REGION_WIDTH, yt: 0, yb: REGION_HEIGHT });
@@ -1042,6 +1032,9 @@ try {
         }
         if (mapLayer[key]) {
             mapLayer[key].visible = game.project.settings.region[key];
+            if (key === 'subRegions') {
+                mapLayer.subRegionNames.visible = mapLayer[key].visible;
+            }
         }
     }
 
@@ -1049,7 +1042,7 @@ try {
     let lastRegionKey;
     let lastRegionSettings = {};
     function updateOrRequestMapData(regionKey, regionSettings) {
-        if (apiSocket && (lastRegionKey !== regionKey || lastRegionSettings.subRegions !== regionSettings.subRegions || lastRegionSettings.subRegionNames !== regionSettings.subRegionNames || lastRegionSettings.icons !== regionSettings.icons)) {
+        if (apiSocket && (lastRegionKey !== regionKey || lastRegionSettings.subRegions !== regionSettings.subRegions || lastRegionSettings.icons !== regionSettings.icons)) {
             lastRegionKey = regionKey;
             Object.assign(lastRegionSettings, regionSettings);
             const mapKey = gameData.maps[lastRegionKey].textureKey.substring(3);
@@ -1058,7 +1051,7 @@ try {
             if (regionSettings.icons) {
                 activeLayers.icons = mapData?.icons?.version ?? true;
             }
-            if (regionSettings.subRegions || regionSettings.subRegionNames) {
+            if (regionSettings.subRegions) {
                 activeLayers.labels = mapData?.labels?.version ?? true;
             }
             apiSocket.emit('request-map', mapKey, mapData?.warId, activeLayers, game.settings.enableRealTimeMap);
@@ -1071,7 +1064,7 @@ try {
         const regionSettings = game.project.settings.region;
         mapLayer.visible = regionKey && game.project.settings.showWorldRegion;
         if (mapLayer.visible) {
-            if (gameData.maps[regionKey] && (regionSettings.subRegions || regionSettings.subRegionNames || regionSettings.icons)) {
+            if (gameData.maps[regionKey] && (regionSettings.subRegions || regionSettings.icons)) {
                 if (!apiSocket) {
                     apiSocket = io('https://api.foxholeplanner.com', {
                         reconnectionAttempts: 20,
