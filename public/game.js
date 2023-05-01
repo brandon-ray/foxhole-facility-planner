@@ -1080,7 +1080,7 @@ try {
                         updateOrRequestMapData(regionKey, regionSettings);
                     });
                 }
-                if (lastRegionKey && lastRegionKey !== regionKey) {
+                if (lastRegionKey) {
                     updateOrRequestMapData(regionKey, regionSettings);
                 }
             }
