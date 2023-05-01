@@ -1041,8 +1041,8 @@ try {
     // Client should only send a request if subregions and subregion names are enabled or disabled. Not if either is enabled or disabled.
     let lastRegionKey;
     let lastRegionSettings = {};
-    function updateOrRequestMapData(regionKey, regionSettings) {
-        if (apiSocket && (lastRegionKey !== regionKey || lastRegionSettings.subRegions !== regionSettings.subRegions || lastRegionSettings.icons !== regionSettings.icons)) {
+    function updateOrRequestMapData(regionKey, regionSettings, reconnection = false) {
+        if (apiSocket && (reconnection || (lastRegionKey !== regionKey || lastRegionSettings.subRegions !== regionSettings.subRegions || lastRegionSettings.icons !== regionSettings.icons))) {
             lastRegionKey = regionKey;
             Object.assign(lastRegionSettings, regionSettings);
             const mapKey = gameData.maps[lastRegionKey].textureKey.substring(3);
@@ -1077,7 +1077,7 @@ try {
                     apiSocket.on('update-map', (data) => game.updateMapData(regionKey, data));
                     apiSocket.on('connect', () => {
                         console.log('Connected to API server.');
-                        updateOrRequestMapData(regionKey, regionSettings);
+                        updateOrRequestMapData(regionKey, regionSettings, true);
                     });
                 }
                 if (lastRegionKey) {
