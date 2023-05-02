@@ -287,6 +287,12 @@ const gameData = {
 			],
 			"module": true
 		},
+		"devbunker": {
+			"name": "Dev Bunker",
+			"filters": [
+				"bunkers"
+			]
+		},
 		"eat_maker": {
 			"name": "EAT Maker",
 			"description": "Small EAT making facility\na train will make imports/exports easier but is not necessary",
@@ -515,6 +521,14 @@ const gameData = {
 				"bunkers"
 			],
 			"module": true
+		},
+		"wheats_anti_partisan_base": {
+			"name": "\\/\\/heat's anti-partisan base",
+			"description": "Thanks to \\/\\/heat for this awesome, low-cost base! Features 360 degrees of anti-tank and anti-infantry defenses, an obs bunker, and an internal-facing core to protect players as they spawn in.",
+			"author": "io()stream",
+			"filters": [
+				"bunkers"
+			]
 		},
 		"xi_observation_bunker1": {
 			"name": "XI Observation Bunker",
