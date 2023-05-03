@@ -1146,7 +1146,6 @@ Vue.component('app-menu-save-load', {
     props: ['menuData'],
     data() {
         return {
-            importAsSelection: false,
             showImageBackground: true,
             centerImageOnObjects: false
         };
@@ -1158,32 +1157,18 @@ Vue.component('app-menu-save-load', {
         refresh: function() {
             this.$forceUpdate();
         },
-        openFileBrowser: function(importAsSelection = false) {
-            this.importAsSelection = importAsSelection;
-            document.getElementById('fileUpload').click();
-        },
-        loadSave: function(saveObject) {
-            try {
-                if (typeof saveObject === 'string') {
-                    saveObject = JSON.parse(saveObject);
-                }
-                game.loadSave(saveObject, this.importAsSelection);
+        loadProject: function(importAsSelection = false) {
+            game.openFileBrowser(saveObject => {
+                saveObject = JSON.parse(saveObject);
+                game.loadSave(saveObject, importAsSelection);
                 this.$forceUpdate();
-            } catch (e) {
-                console.error('Failed to load save:', e);
-                game.showGrowl('Failed to load save.');
-            }
+            })
         },
-        loadFile: function() {
-            let file = this.$refs.file.files[0];
-            this.$refs.file.value = '';
-            let reader = new FileReader();
-            let component = this;
-            reader.onload = function() {
-                let decoder = new TextDecoder("utf-8");
-                component.loadSave(decoder.decode(new Uint8Array(this.result)));
-            };
-            reader.readAsArrayBuffer(file);
+        importImage: function() {
+            game.openFileBrowser(image => {
+                game.importImage(image);
+                this.$forceUpdate();
+            }, '.png,.jpg,.jpeg,.gif,.webp');
         },
         updateProjectProperties: function() {
             if (game.project.name === '') {
@@ -1199,7 +1184,6 @@ Vue.component('app-menu-save-load', {
         <button type="button" class="title-button trash-button attach-right" v-on:click="game.confirmNewProject()" title="Delete Project" @mouseenter="bme()">
             <div class="inner-button"><i class="fa fa-trash"></i></div>
         </button>
-        <input id="fileUpload" @change="loadFile()" type="file" ref="file" hidden>
         <div class="menu-page-scroller">
             <div class="settings-option-wrapper">
                 <div class="settings-title">Project Properties</div>
@@ -1216,7 +1200,7 @@ Vue.component('app-menu-save-load', {
                     <input class="app-input text-left" type="text" v-model="game.project.authors" placeholder="Anonymous" @change="updateProjectProperties()">
                 </label>
                 <div class="text-center">
-                    <button class="app-btn app-btn-primary load-button" type="button" @click="openFileBrowser()" @mouseenter="bme()">
+                    <button class="app-btn app-btn-primary load-button" type="button" @click="loadProject()" @mouseenter="bme()">
                         <i class="fa fa-upload"></i> Load
                     </button>
                     <button class="app-btn app-btn-primary save-button" type="button" @click="game.downloadSave()" @mouseenter="bme()">
@@ -1225,10 +1209,13 @@ Vue.component('app-menu-save-load', {
                 </div>
             </div>
             <div class="settings-option-wrapper">
-                <div class="settings-title">Selection Options</div>
+                <div class="settings-title">Importing Options</div>
                 <div class="text-button-wrapper">
-                    <button class="text-button mb-0" type="button" @click="openFileBrowser(true)" @mouseenter="bme()">
+                    <button class="text-button" type="button" @click="loadProject(true)" @mouseenter="bme()">
                         <i class="fa fa-mouse-pointer"></i> Import Project <small>(Objects)</small>
+                    </button>
+                    <button class="text-button mb-0" type="button" @click="importImage()" @mouseenter="bme()">
+                        <i class="fa fa-upload"></i> Import Image <small>(New Object)</small>
                     </button>
                     <small style="color: #d9d9d9;">Note: Importing only loads objects from a project.</small>
                 </div>

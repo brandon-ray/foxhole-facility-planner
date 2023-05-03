@@ -131,11 +131,15 @@ if (isMobile && !isPhoneApp) {
                         <i class="fa" :class="{'fa-chevron-left': sidebarVisible, 'fa-chevron-right': !sidebarVisible}" aria-hidden="true"></i>
                     </button>
                     <label class="btn-checkbox-wrapper float-left">
-                        <button class="btn-small float-left btn-checkbox" :class="{ 'btn-active': settings.enableGrid }" @click="settings.enableGrid = !settings.enableGrid; game.updateSettings()"></button>
+                        <button class="btn-small float-left" :class="{ 'btn-active': game.shiftKeyModifier ? !settings.enableGrid : settings.enableGrid }" @click="settings.enableGrid = !settings.enableGrid; game.updateSettings()">
+                            <i v-show="game.shiftKeyModifier || settings.enableGrid" class="fa fa-check" :class="{'fa-ban': settings.enableGrid && game.shiftKeyModifier }" aria-hidden="true"></i>
+                        </button>
                         Snap to Grid
                     </label>
                     <label class="btn-checkbox-wrapper float-left">
-                        <button class="btn-small float-left btn-checkbox" :class="{ 'btn-active': settings.enableSnapRotation }" @click="settings.enableSnapRotation = !settings.enableSnapRotation; game.updateSettings()"></button>
+                        <button class="btn-small float-left" :class="{ 'btn-active': game.shiftKeyModifier ? !settings.enableSnapRotation : settings.enableSnapRotation }" @click="settings.enableSnapRotation = !settings.enableSnapRotation; game.updateSettings()">
+                            <i v-show="game.shiftKeyModifier || settings.enableSnapRotation" class="fa fa-check" :class="{'fa-ban': settings.enableSnapRotation && game.shiftKeyModifier }" aria-hidden="true"></i>
+                        </button>
                         Snap Rotation
                     </label>
                     <div class="panel-toolbar">
@@ -362,36 +366,16 @@ Vue.component('app-game-hub-popup', {
 
 Vue.component('app-hub-home', {
     methods: {
-        openFileBrowser: function() {
-            document.getElementById('fileUpload').click();
-        },
-        loadSave: function(saveObject) {
-            try {
-                if (typeof saveObject === 'string') {
-                    saveObject = JSON.parse(saveObject);
-                }
+        loadProject: function() {
+            game.openFileBrowser(saveObject => {
+                saveObject = JSON.parse(saveObject);
                 game.loadSave(saveObject);
                 game.hubPopup?.showPopup(false);
-            } catch (e) {
-                console.error('Failed to load save:', e);
-                game.showGrowl('Failed to load save.');
-            }
-        },
-        loadFile: function() {
-            let file = this.$refs.file.files[0];
-            this.$refs.file.value = '';
-            let reader = new FileReader();
-            let component = this;
-            reader.onload = function() {
-                let decoder = new TextDecoder("utf-8");
-                component.loadSave(decoder.decode(new Uint8Array(this.result)));
-            };
-            reader.readAsArrayBuffer(file);
-        },
+            });
+        }
     },
     template: html`
     <div class="tab-content hub-home">
-        <input id="fileUpload" @change="loadFile()" type="file" ref="file" hidden>
         <img src="/assets/logo_icon.webp"><br>
         <div class="fall-in-item no-box text-center">
             <button class="btn-long" @click="bmc(); game.hubPopup?.showPopup(false); game.confirmNewProject();">
@@ -399,7 +383,7 @@ Vue.component('app-hub-home', {
                 <span>New Project</span>
             </button>
             <br>
-            <button class="btn-long" @click="bmc(); openFileBrowser()">
+            <button class="btn-long" @click="bmc(); loadProject()">
                 <i class="fa fa-upload" aria-hidden="true"></i>
                 <span>Load Project</span>
             </button>
@@ -783,26 +767,17 @@ Vue.component('app-hub-settings', {
             game.settings.zoomSpeed = Math.min(Math.max(game.settings.zoomSpeed, 1), 5);
             game.updateSettings();
         },
-        openFileBrowser() {
-            this.$refs.fileInput.click();
-        },
-        importSettings: function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            this.$refs.fileInput.value = '';
-            const reader = new FileReader();
-            reader.readAsText(file);
-            reader.onload = () => {
-                const data = typeof reader.result === 'string' && JSON.parse(reader.result);
-                if (data && data.settings) {
-                    Object.assign(game.settings, game.defaultSettings, data.settings);
+        loadSettings: function() {
+            game.openFileBrowser(settingsObject => {
+                settingsObject = JSON.parse(settingsObject);
+                if (settingsObject && settingsObject.settings) {
+                    Object.assign(game.settings, game.defaultSettings, settingsObject.settings);
                     game.updateSettings(true);
                     this.$forceUpdate();
                 } else {
-                    console.error('Attempted to load invalid settings file.');
-                    game.showGrowl('Invalid Settings File');
+                    throw 'Invalid settings file.';
                 }
-            }
+            });
         }
     },
     template: html`
@@ -938,9 +913,9 @@ Vue.component('app-hub-settings', {
                         <i class="fa fa-eye" aria-hidden="true"></i> Enable Line-of-Sight Ranges
                         <button class="btn-small btn-tickbox" :class="{ 'btn-active': game.settings.showLineOfSightRanges }" @click="toggleSetting('showLineOfSightRanges')" :disabled="!game.settings.enableExperimental"></button>
                     </label>
-                    <label class="col-md-6 app-input-label" :class="{'disabled': !game.settings.enableExperimental}" title="Changes behavior of the toolbelt hotkeys. By default, hotkeys will spawn a new object if nothing is selected. Requires Experimental Features to be enabled.">
+                    <label class="col-md-6 app-input-label" title="Changes behavior of the toolbelt hotkeys. By default, hotkeys will spawn a new object if nothing is selected.">
                         <i class="fa fa-wrench" aria-hidden="true"></i> Toolbelt Mode
-                        <select class="app-input" v-model.number="game.settings.toolbeltMode" @change="game.updateSettings()" :disabled="!game.settings.enableExperimental">
+                        <select class="app-input" v-model.number="game.settings.toolbeltMode" @change="game.updateSettings()">
                             <option :value="0">Create Only</option>
                             <option value="1">Modify Single</option>
                             <option value="2">Modify Selection</option>
@@ -1010,8 +985,7 @@ Vue.component('app-hub-settings', {
             </div>
         </div>
         <div class="fall-in-item no-box">
-            <input id="fileInput" ref="fileInput" type="file" @change="importSettings" style="display: none;">
-            <button class="btn-long" @click="openFileBrowser()">
+            <button class="btn-long" @click="loadSettings()">
                 <i class="fa fa-upload" aria-hidden="true"></i> Import Settings
             </button>
             <button class="btn-long" @click="game.downloadSettings()">

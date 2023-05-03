@@ -975,29 +975,69 @@ try {
                 }
             }
 
-            lastMapScale = null;
+            game.uiScale = null;
         }
     };
 
-    let lastMapScale;
-    game.updateMapIcons = function() {
-        const scale = Math.min(1 / app.cstage.scale.x, 35);
-        if (game.project.settings.regionKey && game.project.settings.showWorldRegion) {
-            // if (mapLayer.icons.visible && mapLayer.hoverLabel?.visible) {
-            //     mapLayer.hoverLabel.scale.set(lastMapScale);
-            //     mapLayer.hoverLabel.position.set(gmx - (GRID_WIDTH / 2), gmy - (GRID_HEIGHT / 2));
-            // }
-            if (lastMapScale !== scale) {
-                lastMapScale = scale;
+    game.openFileBrowser = function(callback, extension = '.json') {
+        if (typeof callback !== 'function') {
+            console.error('Callback is not a function.');
+            return;
+        }
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = extension;
+        input.onchange = function() {
+            const file = input.files[0];
+            const reader = new FileReader();
+            reader.onload = function() {
+                try {
+                    callback(reader.result);
+                } catch (e) {
+                    console.error('Failed to load file:', e);
+                    game.showGrowl('Failed to load file.');
+                }
+            };
+            if (extension === '.json') {
+                reader.readAsText(file);
+            } else {
+                reader.readAsDataURL(file);
+            }
+            input.remove();
+        };
+        input.click();
+    };
+
+    game.updateIconScale = function() {
+        const scale = Math.min(1 / camera.zoom, 35);
+        if (game.uiScale !== scale) {
+            game.uiScale = scale;
+            if (selectedEntities.length) {
+                const handleScale = scale * 16;
+                for (const entity of selectedEntities) {
+                    if (entity.type === 'shape' && entity.points) {
+                        for (const point of entity.points) {
+                            if (point.handle) {
+                                point.handle.scale.set(handleScale);
+                            }
+                        }
+                    }
+                }
+            }
+            if (game.project.settings.regionKey && game.project.settings.showWorldRegion) {
+                // if (mapLayer.icons.visible && mapLayer.hoverLabel?.visible) {
+                //     mapLayer.hoverLabel.scale.set(game.uiScale);
+                //     mapLayer.hoverLabel.position.set(gmx - (GRID_WIDTH / 2), gmy - (GRID_HEIGHT / 2));
+                // }
                 if (mapLayer.grid) {
                     mapLayer.grid.children.forEach((child) => {
                         if (child instanceof PIXI.Text) {
-                            child.scale.set(lastMapScale);
+                            child.scale.set(game.uiScale);
                         }
                     });
                 }
                 if (mapLayer.icons.visible) {
-                    const iconScale = lastMapScale * 0.8;
+                    const iconScale = game.uiScale * 0.8;
                     mapLayer.icons.children.forEach((icon) => {
                         icon.scale.set(iconScale);
                     });
@@ -1007,7 +1047,7 @@ try {
                         if (label.labelType === 'Minor') {
                             label.alpha = scale < 20 ? 1 : 1 - (scale - 20) / 15;
                         }
-                        label.scale.set(lastMapScale);
+                        label.scale.set(game.uiScale);
                     });
                 }
             }
@@ -1302,10 +1342,14 @@ try {
     app.view.tabIndex = 0;
 
     let keys = {};
-    document.addEventListener('keydown', function (event) {
+    document.addEventListener('keydown', function(event) {
         event = event || window.event;
         let key = event.keyCode;
         let inputSelected = document.activeElement && (document.activeElement.type === 'text' || document.activeElement.type === 'number' || document.activeElement.type === 'textarea');
+        if (game.shiftKeyModifier !== event.shiftKey) {
+            game.shiftKeyModifier = event.shiftKey;
+            game.appComponent?.refresh();
+        }
         if (game.toolbeltComponent && (!event.shiftKey || !inputSelected)) {
             game.toolbeltComponent.setToolbeltSwapping(event.shiftKey);
         }
@@ -1465,7 +1509,7 @@ try {
                         break;
                     case 69: // E
                         snapRotationDegrees = game.settings.keySnapRotationDegrees * (event.shiftKey ? 2 : 1);
-                        if (game.settings.enableSnapRotation) {
+                        if (game.shiftKeyModifier ? !game.settings.enableSnapRotation : game.settings.enableSnapRotation) {
                             angle = (snapRotationDegrees * Math.PI) / 180;
                         } else {
                             angle = Math.PI / (event.shiftKey ? 2 : 4);
@@ -1487,7 +1531,7 @@ try {
                         break;
                     case 81: // Q
                         snapRotationDegrees = game.settings.keySnapRotationDegrees * (event.shiftKey ? 2 : 1);
-                        if (game.settings.enableSnapRotation) {
+                        if (game.shiftKeyModifier ? !game.settings.enableSnapRotation : game.settings.enableSnapRotation) {
                             angle = -(snapRotationDegrees * Math.PI) / 180;
                         } else {
                             angle = -Math.PI / (event.shiftKey ? 2 : 4);
@@ -1506,6 +1550,13 @@ try {
         if (!keys[key]) {
             keys[key] = true;
         }
+    });
+
+    window.addEventListener('blur', function(event) {
+        keys = {};
+        game.shiftKeyModifier = false;
+        game.appComponent?.refresh();
+        game.toolbeltComponent?.setToolbeltSwapping(false);
     });
 
     game.isKeyDown = function(key) {
@@ -1533,6 +1584,11 @@ try {
     document.addEventListener('keyup', function (event) {
         event = event || window.event;
         let key = event.keyCode;
+
+        if (game.shiftKeyModifier !== event.shiftKey) {
+            game.shiftKeyModifier = event.shiftKey;
+            game.appComponent?.refresh();
+        }
 
         if (game.toolbeltComponent) {
             game.toolbeltComponent.setToolbeltSwapping(event.shiftKey);
@@ -2075,7 +2131,7 @@ try {
 
             if (isSelection) {
                 let centerPos = game.getEntitiesCenter(selectedEntities, isSelection);
-                if (game.settings.enableGrid) {
+                if (game.shiftKeyModifier ? !game.settings.enableGrid : game.settings.enableGrid) {
                     let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
                     centerPos.x = Math.round(centerPos.x / gridSize) * gridSize;
                     centerPos.y = Math.round(centerPos.y / gridSize) * gridSize;
@@ -2397,7 +2453,7 @@ try {
                 } else if (game.constructionMode.eType) {
                     let gmxGrid = gmx;
                     let gmyGrid = gmy;
-                    if (game.settings.enableGrid || keys[16]) {
+                    if (game.shiftKeyModifier ? !game.settings.enableGrid : game.settings.enableGrid) {
                         let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
                         gmxGrid = Math.round(gmxGrid / gridSize) * gridSize;
                         gmyGrid = Math.round(gmyGrid / gridSize) * gridSize;
@@ -2460,35 +2516,44 @@ try {
     mouseEventListenerObject.addEventListener('dragover', (e) => {
         e.preventDefault();
     });
-    function importImageData(data, x, y) {
-        if (game.settings.enableExperimental) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                if (reader.result) {
-                    let pos = (isNaN(x) && isNaN(y)) ? game.getMousePosition() : {
-                        x: (camera.x + x) / camera.zoom,
-                        y: (camera.y + y) / camera.zoom
-                    };
-                    let objData = {
-                        type: 'shape',
-                        subtype: 'image',
-                        textureData: reader.result,
-                        imported: true
-                    }
-                    let entity = game.createObject(objData, pos.x, pos.y, 0, 0, undefined, false);
-                    if (entity) {
-                        entity.onLoad(objData);
-                        game.selectEntity(entity);
-                    }
-                }
-            };
-            reader.readAsDataURL(data);
+    
+    game.importImage = function(data, x, y) {
+        if (!data) {
+            console.error('No image data provided.');
+            return;
         }
+        let pos = (isNaN(x) && isNaN(y)) ? game.getMousePosition() : {
+            x: (camera.x + x) / camera.zoom,
+            y: (camera.y + y) / camera.zoom
+        };
+        let objData = {
+            type: 'shape',
+            subtype: 'image',
+            textureData: data,
+            imported: true
+        }
+        let entity = game.createObject(objData, pos.x, pos.y, 0, 0, undefined, false);
+        if (entity) {
+            entity.onLoad(objData);
+            game.selectEntity(entity);
+        }
+    };
+
+    function importImageData(data, x, y) {
+        const reader = new FileReader();
+        reader.onload = () => {
+            if (reader.result) {
+                game.importImage(reader.result, x, y);
+            }
+        };
+        reader.readAsDataURL(data);
     }
+
     mouseEventListenerObject.addEventListener('drop', (e) => {
         e.preventDefault();
         importImageData(e.dataTransfer.files[0], e.offsetX, e.offsetY);
     });
+
     document.addEventListener('paste', (e) => {
         if (!(document.activeElement && (document.activeElement.type === 'text' || document.activeElement.type === 'number' || document.activeElement.type === 'textarea'))) {
             e.preventDefault();
@@ -3361,6 +3426,7 @@ try {
                 game.saveStateChanged = true;
                 game.appComponent?.refresh();
                 game.loadSaveMenuComponent?.refresh();
+                game.resetZoom();
             }
             if (typeof callback === 'function') {
                 callback(confirmed);
@@ -3742,7 +3808,7 @@ try {
             }
             if (rotateSelectedEntities) {
                 mouseRotationOffset = mouseAngle - game.selectionData.mouseAngle; // Get the angle of the mouse from the center and subtract the angle of the selection from it.
-                if (game.settings.enableSnapRotation) {
+                if (game.shiftKeyModifier ? !game.settings.enableSnapRotation : game.settings.enableSnapRotation) {
                     let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ?? 15);
                     mouseRotationOffset = Math.round(mouseRotationOffset / snapRotationDegrees) * snapRotationDegrees; // Snap the angle of the selection.
                     if (typeof game.selectionData.prevRotation === 'number') {
@@ -3783,7 +3849,7 @@ try {
                 ignoreMousePickup = false;
                 snappedMX = gmx;
                 snappedMY = gmy;
-                if (game.settings.enableGrid || keys[16]) {
+                if (game.shiftKeyModifier ? !game.settings.enableGrid : game.settings.enableGrid) {
                     let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
                     if (!pickupPosition) {
                         pickupPosition = {
@@ -4014,7 +4080,7 @@ try {
                             }
                             selectedEntity.x = snappedMX - selectedEntity.pickupOffset.x;
                             selectedEntity.y = snappedMY - selectedEntity.pickupOffset.y;
-                            if (selectedEntities.length === 1 && !selectedEntity.building?.ignoreSnapSettings && (game.settings.enableGrid || keys[16])) {
+                            if (selectedEntities.length === 1 && !selectedEntity.building?.ignoreSnapSettings && (game.shiftKeyModifier ? !game.settings.enableGrid : game.settings.enableGrid)) {
                                 let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
                                 selectedEntity.x = (Math.round(selectedEntity.x / gridSize) * gridSize);
                                 selectedEntity.y = (Math.round(selectedEntity.y / gridSize) * gridSize);
@@ -4044,7 +4110,7 @@ try {
         app.cstage.scale.y = camera.zoom;
         app.cstage.updateLayersOrder();
 
-        game.updateMapIcons();
+        game.updateIconScale();
 
         let mousePos = game.getMousePosition();
         if (mousePos && (mousePos.x || mousePos.y)) {
