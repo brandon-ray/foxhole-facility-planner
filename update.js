@@ -528,6 +528,9 @@ async function iterateStructures(dirPath) {
                                     'upgrades': structureData.upgrades
                                 }
                                 if (structure.MaximumRange) {
+                                    if (!structureData.range) {
+                                        structureData.range = {};
+                                    }
                                     structureData.range.max = structure.MaximumRange / METER_UNREAL_UNITS;
                                 }
                                 initializeStructureItems(structure);

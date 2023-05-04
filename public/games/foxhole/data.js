@@ -3378,6 +3378,62 @@ const gameData = {
 				}
 			}
 		},
+		"coastalgun": {
+			"name": "Coastal Gun",
+			"codeName": "CoastalGun",
+			"description": "An old coastal defence gun that has been reused for the defence of key locations against naval bombardment.",
+			"category": "world",
+			"categoryOrder": 17,
+			"radius": 5.5,
+			"range": {
+				"max": 200
+			},
+			"hitArea": [
+				{
+					"shape": [ -158.79,106.36,-149.7,83.94,-123.64,125.76,-135.15,133.64,-154.55,125.76 ]
+				},
+				{
+					"shape": [ 123.64,126.36,146.06,88.18,158.18,105.15,158.18,117.88,140.61,131.82 ]
+				},
+				{
+					"shape": [ 6.67,-171.82,127.27,-113.03,162.42,59.09,146.06,88.18,-161.21,60.91,-172.12,-6.97,-107.88,-132.42,-59.39,-164.55 ]
+				},
+				{
+					"shape": [ -107.88,-132.42,-172.12,-6.97,-151.52,-85.76 ]
+				},
+				{
+					"shape": [ 162.42,59.09,127.27,-113.03,155.15,-77.27,173.94,2.73 ]
+				},
+				{
+					"shape": [ -123.64,125.76,-149.7,83.94,146.06,88.18,97.58,149.39,41.21,171.21,-9.09,175.45,-64.24,163.33,-100.61,148.18 ]
+				},
+				{
+					"shape": [ 127.27,-113.03,6.67,-171.82,49.09,-166.97,97.58,-143.94 ]
+				},
+				{
+					"shape": [ -64.24,163.33,-9.09,175.45,-58.18,171.82 ]
+				},
+				{
+					"shape": [ 97.58,149.39,146.06,88.18,123.64,126.36 ]
+				},
+				{
+					"shape": [ 146.06,88.18,-149.7,83.94,-161.21,60.91 ]
+				}
+			],
+			"icon": "../UI/CustomIcons/CoastalGunIcon.webp",
+			"texture": {
+				"src": "../Structures/coastalgun.webp",
+				"width": 571,
+				"height": 854,
+				"offset": {
+					"x": 568,
+					"y": 567
+				}
+			},
+			"maxHealth": 2000,
+			"cost": false,
+			"repairCost": 200
+		},
 		"componentmine": {
 			"name": "Component Mine",
 			"codeName": "ComponentMine",
