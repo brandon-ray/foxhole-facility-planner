@@ -299,7 +299,7 @@ class FoxholeStructure extends DraggableContainer {
                 let src = this.building.texture.src;
                 if (typeof src === 'object') {
                     if (!this.faction) {
-                        this.faction = game.settings.selectedFaction;
+                        this.faction = game.settings.selectedFaction ?? 'c';
                     }
                     src = src[(this.faction === 'w' && 'w') || 'c'];
                 }
@@ -572,7 +572,7 @@ class FoxholeStructure extends DraggableContainer {
                 objData.baseProduction = this.baseProduction;
             }
             objData.selectedProduction = this.selectedProduction;
-            if (this.baseUpgrades) {
+            if (this.baseUpgrades && Object.keys(this.baseUpgrades).length) {
                 objData.baseUpgrades = Object.assign({}, this.baseUpgrades);
             }
         }
