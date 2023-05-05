@@ -144,6 +144,7 @@ Vue.component('app-menu-building-selected', {
                 rotation: 0,
                 rotationDegrees: 0,
                 blueprint: false,
+                faction: null,
                 baseProduction: false,
                 selectedProduction: null,
                 productionScale: null,
@@ -197,6 +198,7 @@ Vue.component('app-menu-building-selected', {
                     rotation: selectedEntity.rotation,
                     rotationDegrees: Math.rad2deg(selectedEntity.rotation).round(3),
                     blueprint: selectedEntity.blueprint,
+                    faction: selectedEntity.faction,
                     baseProduction: selectedEntity.baseProduction,
                     disableProduction: selectedEntity.disableProduction,
                     selectedProduction: selectedEntity.selectedProduction,
@@ -418,6 +420,14 @@ Vue.component('app-menu-building-selected', {
                 game.saveStateChanged = true;
             }
         },
+        setFaction: function(faction) {
+            this.bmc();
+            const selectedEntity = game.getSelectedEntity();
+            if (selectedEntity && selectedEntity.type === 'building') {
+                selectedEntity.setFaction(faction);
+                game.saveStateChanged = true;
+            }
+        },
         changeBaseUpgrade: function(tree, key) {
             this.bmc();
             const selectedEntity = game.getSelectedEntity();
@@ -572,6 +582,11 @@ Vue.component('app-menu-building-selected', {
                             <button class="btn-small m-0 mr-1 float-right" type="button" title="Rotate 45 degrees" @click="game.rotateSelected(Math.PI / 4)"><i class="fa fa-repeat" aria-hidden="true"></i></button>&nbsp;
                             <button class="btn-small m-0 mr-1 float-right" type="button" title="Rotate -45 degrees"@click="game.rotateSelected(-Math.PI / 4)"><i class="fa fa-undo" aria-hidden="true"></i></button>&nbsp;
                         </template>
+                    </div>
+                    <div v-if="typeof entity.building?.texture?.src === 'object'" class="app-input-label settings-option-row">
+                        <i class="fa fa-flag" aria-hidden="true"></i> Faction:
+                        <button class="btn-small btn-image m-0 float-right" :style="{ backgroundImage: 'url(/games/foxhole/assets/warden_logo.webp)' }" :class="{ 'btn-active': entity.faction === 'w' }" type="button" title="Select Wardens" @click="setFaction('w')"></button>
+                        <button class="btn-small btn-image m-0 mr-1 float-right" :style="{ backgroundImage: 'url(/games/foxhole/assets/colonial_logo.webp)' }" :class="{ 'btn-active': !entity.faction || entity.faction === 'c' }" type="button" title="Select Colonials" @click="setFaction('c')"></button>
                     </div>
                     <div v-if="entity.building?.power || entity.building?.production" class="app-input-label settings-option-row">
                         <i class="fa fa-bar-chart" aria-hidden="true"></i> Show Power/Production in Stats:

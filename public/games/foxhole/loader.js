@@ -114,8 +114,16 @@ const game_asset_list = {};
             let asset = data[key];
             if (asset) {
                 if (typeof asset === 'object' && !Array.isArray(asset)) {
-                    asset = assetDir(asset.src);
-                    data[key].src = asset;
+                    if (typeof asset.src === 'object') {
+                        for (const [srcKey, srcValue] of Object.entries(asset.src)) {
+                            asset.src[srcKey] = assetDir(srcValue);
+                            game_asset_list[asset.src[srcKey]] = asset.src[srcKey];
+                        }
+                        return;
+                    } else {
+                        asset.src = assetDir(asset.src);
+                        game_asset_list[asset.src] = asset.src;
+                    }
                 } else {
                     asset = assetDir(asset);
                     data[key] = asset;

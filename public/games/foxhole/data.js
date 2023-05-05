@@ -4358,6 +4358,25 @@ const gameData = {
 			},
 			"repairCost": 100
 		},
+		"engineeringcenter": {
+			"name": "Engineering Center",
+			"codeName": "EngineeringCenter",
+			"description": "A research facility where players can contribute towards the research of their faction's Tech Tree.",
+			"category": "world",
+			"categoryOrder": 14,
+			"icon": "../UI/CustomIcons/EngineeringCenterIcon.webp",
+			"texture": {
+				"src": {
+					"c": "../Structures/engineeringcenterc.webp",
+					"w": "../Structures/engineeringcenterw.webp"
+				},
+				"width": 969,
+				"height": 440
+			},
+			"maxHealth": 2000,
+			"cost": false,
+			"repairCost": 400
+		},
 		"field_modification_center": {
 			"name": "Field Modification Center",
 			"codeName": "FacilityModificationCenter",

@@ -296,7 +296,14 @@ class FoxholeStructure extends DraggableContainer {
                 sprite.width = this.building.width * METER_BOARD_PIXEL_SIZE;
                 sprite.height = this.building.length * METER_BOARD_PIXEL_SIZE;
             } else {
-                sprite = game.createSprite(this.building.texture.src);
+                let src = this.building.texture.src;
+                if (typeof src === 'object') {
+                    if (!this.faction) {
+                        this.faction = game.settings.selectedFaction;
+                    }
+                    src = src[(this.faction === 'w' && 'w') || 'c'];
+                }
+                sprite = game.createSprite(src);
                 sprite.frameWidth = this.building.texture.width;
                 sprite.frameHeight = this.building.texture.height;
                 sprite.width = sprite.frameWidth / METER_TEXTURE_PIXEL_SCALE;
@@ -571,6 +578,7 @@ class FoxholeStructure extends DraggableContainer {
         }
 
         objData.blueprint = (this.blueprint === true && this.blueprint) || undefined;
+        objData.faction = this.faction;
         objData.disableProduction = (this.disableProduction === true && this.disableProduction) || undefined;
 
         if (this.maintenanceFilters) {
@@ -641,6 +649,10 @@ class FoxholeStructure extends DraggableContainer {
 
         if (objData.blueprint) {
             this.setBlueprint(objData.blueprint);
+        }
+
+        if (objData.faction) {
+            this.setFaction(objData.faction);
         }
 
         this.disableProduction = objData.disableProduction;
@@ -1222,6 +1234,13 @@ class FoxholeStructure extends DraggableContainer {
                 }
             }
             this.regenerate();
+        }
+    }
+
+    setFaction(faction) {
+        if (typeof this.building.texture.src === 'object' && this.faction !== faction) {
+            this.faction = faction;
+            game.fetchTexture(this.sprite, this.building.texture.src[(this.faction === 'w' && 'w') || 'c']);
         }
     }
 
