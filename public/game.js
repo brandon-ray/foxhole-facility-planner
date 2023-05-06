@@ -1631,6 +1631,7 @@ try {
         app.stage.filterArea = app.renderer.screen;
 
         mapLayer = new PIXI.Container();
+        mapLayer.visible = false;
         mapLayer.width = REGION_WIDTH;
         mapLayer.height = REGION_HEIGHT;
         mapLayer.x = GRID_WIDTH/2;
