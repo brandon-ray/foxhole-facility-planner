@@ -1661,6 +1661,12 @@ hr {
     color: #e8e8e8;
 }
 
+.preset-gallery .preset-listing:hover .listing-info h6,
+.preset-gallery .preset-listing:focus .listing-info h6,
+.preset-gallery .preset-listing.btn-active .listing-info h6 {
+    color: white;
+}
+
 .preset-gallery .preset-listing .listing-info i {
     position: absolute;
     top: 5px;

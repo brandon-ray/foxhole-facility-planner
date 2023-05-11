@@ -7537,6 +7537,20 @@ const gameData = {
 			},
 			"techId": "unlockharvester"
 		},
+		"hospital": {
+			"name": "Hospital",
+			"codeName": "Hospital",
+			"description": "A large medical facility for treating critically wounded soldiers returning from the battlefield.",
+			"category": "world",
+			"categoryOrder": 11,
+			"icon": "../UI/StructureIcons/HospitalIcon.webp",
+			"texture": {
+				"src": "../Structures/hospital.webp",
+				"width": 543,
+				"height": 754
+			},
+			"cost": false
+		},
 		"landingcraftc": {
 			"name": "AB-8 “Acheron”",
 			"codeName": "LandingCraftC",
@@ -12081,6 +12095,40 @@ const gameData = {
 			"maxHealth": 800,
 			"cost": false,
 			"repairCost": 50
+		},
+		"shipyard": {
+			"name": "Shipyard",
+			"codeName": "Shipyard",
+			"description": "A small-scale boat production center.",
+			"category": "world",
+			"categoryOrder": 11,
+			"hitArea": [
+				{
+					"shape": [ -213.03,-22.42,-6.36,-35.76,80.91,139.39,80.3,285.45,-217.27,283.64 ]
+				},
+				{
+					"shape": [ -598.48,-286.06,-576.06,-270.3,-598.48,-270.3 ]
+				},
+				{
+					"shape": [ -574.24,-38.18,-213.03,-22.42,-596.67,-23.03,-596.67,-38.18 ]
+				},
+				{
+					"shape": [ -6.36,-35.76,-213.03,-22.42,-598.48,-286.06,-20.3,-284.85 ]
+				},
+				{
+					"shape": [ 80.91,139.39,-6.36,-35.76,620.3,-35.76,621.52,140.61 ]
+				},
+				{
+					"shape": [ -576.06,-270.3,-213.03,-22.42,-574.24,-38.18 ]
+				}
+			],
+			"icon": "../UI/CustomIcons/ShipyardIcon.webp",
+			"texture": {
+				"src": "../Structures/shipyard.webp",
+				"width": 2053,
+				"height": 944
+			},
+			"cost": false
 		},
 		"smalltraindump": {
 			"name": "BMS Railtruck",
