@@ -477,6 +477,14 @@ const gameData = {
 			],
 			"module": true
 		},
+		"standard_facility_modules_7": {
+			"name": "Standard Facility Modules ",
+			"description": "Standardized Facility Modules. I tried to keep them all to the same footprint (6x4/4x4) \n\n",
+			"author": "Spannbeton",
+			"filters": [
+				"bunkers"
+			]
+		},
 		"t1_oil_field_refinement": {
 			"name": "T1 Oil field refinement",
 			"description": "Basic T1 oil field setup, water is optional. I highly recommend adding a 4th oil refinary to consume oil faster when it backs up.",
