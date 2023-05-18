@@ -477,12 +477,12 @@ const gameData = {
 			],
 			"module": true
 		},
-		"standard_facility_modules_7": {
-			"name": "Standard Facility Modules ",
+		"standard_facility_modules_10": {
+			"name": "Standard Facility Modules",
 			"description": "Standardized Facility Modules. I tried to keep them all to the same footprint (6x4/4x4) \n\n",
 			"author": "Spannbeton",
 			"filters": [
-				"bunkers"
+				"facilities"
 			]
 		},
 		"t1_oil_field_refinement": {
