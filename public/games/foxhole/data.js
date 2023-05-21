@@ -2853,6 +2853,10 @@ const gameData = {
 			"description": "A small base used as a jump-off point for invading enemy regions. Players can spawn and stockpile items here.",
 			"category": "world",
 			"categoryOrder": 16,
+			"baseGarrisonRadius": 40,
+			"baseGarrisonTypes": [
+				"provisional_garrison"
+			],
 			"width": 7,
 			"length": 7,
 			"icon": "../UI/CustomIcons/BorderBaseIcon.webp",

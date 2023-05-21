@@ -90,6 +90,13 @@ const game_asset_list = {};
                     }
                 }
             };
+            if (building.baseGarrisonTypes) {
+                for (const [key, value] of Object.entries(garrisonData.baseUpgrades.base)) {
+                    if (!building.baseGarrisonTypes.includes(key)) {
+                        delete garrisonData.baseUpgrades.base[key];
+                    }
+                }
+            }
             Object.assign(building, garrisonData);
         }
         if (building.preventOnLandscape && building.buildOnFoundation !== false) {
