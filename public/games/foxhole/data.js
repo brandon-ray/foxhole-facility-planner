@@ -2847,6 +2847,26 @@ const gameData = {
 			},
 			"repairCost": 100
 		},
+		"borderbase": {
+			"name": "Border Base",
+			"codeName": "BorderBase",
+			"description": "A small base used as a jump-off point for invading enemy regions. Players can spawn and stockpile items here.",
+			"category": "world",
+			"categoryOrder": 16,
+			"width": 7,
+			"length": 7,
+			"icon": "../UI/CustomIcons/BorderBaseIcon.webp",
+			"texture": {
+				"src": "../Structures/borderbase.webp",
+				"width": 350,
+				"height": 419,
+				"offset": {
+					"x": 347,
+					"y": 351
+				}
+			},
+			"cost": false
+		},
 		"busc": {
 			"name": "R-15 - “Chariot”",
 			"codeName": "BusC",
