@@ -386,6 +386,14 @@ const gameData = {
 			],
 			"module": true
 		},
+		"oil_refinement_guide": {
+			"name": "Oil refinement guide",
+			"description": "So, you want to refine oil. In this project i share what i have learned about the aspects of oil refinement and it's tips/tricks.",
+			"author": "[5th] Menxs",
+			"filters": [
+				"facilities"
+			]
+		},
 		"panzer_snares": {
 			"name": "Panzer Snares",
 			"author": "KitsunePanzer",
