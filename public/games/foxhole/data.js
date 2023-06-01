@@ -1057,7 +1057,7 @@ const gameData = {
 		},
 		"construction": {
 			"name": "BMS - Universal Assembly Rig",
-			"description": "A specialized vehicle designed by the Basset Motor Society used in the construction of large structures.",
+			"description": "A specialized vehicle designed by the Bassett Motor Society used in the construction of large structures.",
 			"icon": "../UI/VehicleIcons/ConstructionVehicleIcon.webp"
 		},
 		"constructionutility": {
@@ -1309,7 +1309,7 @@ const gameData = {
 			"icon": "../UI/VehicleIcons/LightTankColVehicleIcon.webp"
 		},
 		"lighttankdefensivew": {
-			"name": "Devitt Ironhide Mk. IV ",
+			"name": "Devitt Ironhide Mk. IV",
 			"description": "The Ironhide Light Tank is similar to the Mk. III but reinforced with plates of heavy steel at the expense of speed and maneuverability.",
 			"icon": "../UI/VehicleIcons/LightTankWarDefensiveVehicleIcon.webp"
 		},
@@ -1475,6 +1475,11 @@ const gameData = {
 			"description": "Used to construct Sandbag defenses.",
 			"icon": "../UI/ItemIcons/SandbagMaterialItemIcon.webp"
 		},
+		"scouttankmultiw": {
+			"name": "King Jester - Mk. I-1",
+			"description": "Originally designed as a mock-up for more sophisticated rocket platforms, the Jester gets its designation from the response to reckless early prototypes that were bolted onto stripped down King Spires. This unusual vehicle can fire specialized rockets over long distances. Its light frame makes it easy to reposition, but vulnerable to sabotage.",
+			"icon": "../UI/VehicleIcons/ScoutTankMultiWIcon.webp"
+		},
 		"scouttankoffensivew": {
 			"name": "King Gallant Mk. II",
 			"description": "A heavily armoured variant of the King Spire, the Gallant Mk. II boasts a weighty 30mm cannon at the cost of top speed.",
@@ -1559,6 +1564,11 @@ const gameData = {
 			"name": "T14 “Vesta” Tankette",
 			"description": "The first T-class tankette to utilize this sturdier frame and versatile treads, the Vesta also represents the Velian’s first foray into fire weapons. The “Vesta” boasts a light flame turret and ample storage for the additional fuel supply required.",
 			"icon": "../UI/VehicleIcons/TanketteFlameCIcon.webp"
+		},
+		"tankettemultic": {
+			"name": "T13 “Deioneus” Rocket Battery",
+			"description": "Initially intended to provide a mobile platform for cumbersome field weapons, the T13 “Deioneus” Rocket Battery is a lightweight tankette fitted with a nine-barrelled rocket artillery. This unique battery is configured for incendiary rockets to be launched at range while maintaining high maneuverability between deployments.",
+			"icon": "../UI/VehicleIcons/TanketteMultiCIcon.webp"
 		},
 		"tanketteoffensivec": {
 			"name": "T20 “Ixion” Tankette",
@@ -1678,7 +1688,7 @@ const gameData = {
 				"profiles": {
 					"t1": 0.75,
 					"t2": 0.75,
-					"t3": 0.25
+					"t3": 0.17000000000000004
 				}
 			},
 			"damage": 240
@@ -1698,7 +1708,7 @@ const gameData = {
 				"profiles": {
 					"t1": 0.75,
 					"t2": 0.75,
-					"t3": 0.25
+					"t3": 0.17000000000000004
 				}
 			},
 			"damage": 400
@@ -1717,7 +1727,7 @@ const gameData = {
 				"profiles": {
 					"t1": 0.75,
 					"t2": 0.75,
-					"t3": 0.25
+					"t3": 0.17000000000000004
 				}
 			},
 			"damage": 400
@@ -1735,7 +1745,7 @@ const gameData = {
 				"profiles": {
 					"t1": 0.75,
 					"t2": 0.75,
-					"t3": 0.25
+					"t3": 0.17000000000000004
 				}
 			},
 			"damage": 550
@@ -1751,7 +1761,7 @@ const gameData = {
 				"profiles": {
 					"t1": 0.75,
 					"t2": 0.75,
-					"t3": 0.25
+					"t3": 0.17000000000000004
 				}
 			}
 		},
@@ -1766,7 +1776,7 @@ const gameData = {
 				"profiles": {
 					"t1": 0.75,
 					"t2": 0.75,
-					"t3": 0.25
+					"t3": 0.17000000000000004
 				}
 			}
 		},
@@ -1781,7 +1791,7 @@ const gameData = {
 				"profiles": {
 					"t1": 0.25,
 					"t2": 0.25,
-					"t3": 0.06999999999999995
+					"t3": 0.050000000000000044
 				}
 			}
 		},
@@ -1796,7 +1806,7 @@ const gameData = {
 				"profiles": {
 					"t1": 0.25,
 					"t2": 0.25,
-					"t3": 0.06999999999999995
+					"t3": 0.050000000000000044
 				}
 			}
 		},
@@ -1852,7 +1862,7 @@ const gameData = {
 			"icon": "../UI/ItemIcons/HERocketAmmoIcon.webp",
 			"codeName": "herocketammo",
 			"alias": "Rocket",
-			"damage": 300,
+			"damage": 350,
 			"damageType": {
 				"name": "Incendiary",
 				"profiles": {
@@ -2287,7 +2297,6 @@ const gameData = {
 							"output": {
 								"herocketammo": 1
 							},
-							"faction": "c",
 							"time": 25
 						},
 						{
@@ -2299,7 +2308,6 @@ const gameData = {
 							"output": {
 								"firerocketammo": 1
 							},
-							"faction": "w",
 							"time": 25
 						}
 					]
@@ -2808,7 +2816,7 @@ const gameData = {
 			"repairCost": 100
 		},
 		"bms_overseer_skyhauler": {
-			"name": "BMS Overseer Sky-Hauler",
+			"name": "BMS - Overseer Sky-Hauler",
 			"codeName": "LargeCrane",
 			"description": "The star of the BMS arsenal of military-grade construction equipment, the Overseer Sky-Hauler makes several tonnes look like a feather, and enjoys a high level of mobility while deployed along heavy-duty rail lines.",
 			"category": "factories",
@@ -3489,7 +3497,7 @@ const gameData = {
 				"CV"
 			],
 			"codeName": "Construction",
-			"description": "A specialized vehicle designed by the Basset Motor Society used in the construction of large structures.",
+			"description": "A specialized vehicle designed by the Bassett Motor Society used in the construction of large structures.",
 			"category": "misc",
 			"categoryOrder": 3,
 			"sortLayer": "vehicle",
@@ -3582,7 +3590,7 @@ const gameData = {
 		"crane": {
 			"name": "BMS - Class 2 Mobile Auto-Crane",
 			"codeName": "Crane",
-			"description": "The Basset Motor Society’s Class 2 Mobile Auto-Crane is used to lift and reposition vehicles and very heavy equipment.",
+			"description": "The Bassett Motor Society’s Class 2 Mobile Auto-Crane is used to lift and reposition vehicles and very heavy equipment.",
 			"category": "misc",
 			"categoryOrder": 4,
 			"width": 7,
@@ -4695,7 +4703,7 @@ const gameData = {
 			"repairCost": 100
 		},
 		"fieldmgw": {
-			"name": "Swallowtail 988/127-2 ",
+			"name": "Swallowtail 988/127-2",
 			"codeName": "FieldMGW",
 			"description": "A dual barrelled, high calibre anti-infantry machine gun. The Swallowtail is fitted with forward-facing armour plating and is excellent for suppression. ",
 			"category": "weaponry",
@@ -5158,7 +5166,7 @@ const gameData = {
 					"rotation": 270
 				}
 			],
-			"maxHealth": 3500,
+			"maxHealth": 3150,
 			"structuralIntegrity": 0.75,
 			"cost": {
 				"concrete": 25
@@ -5627,7 +5635,7 @@ const gameData = {
 					"rotation": 270
 				}
 			],
-			"maxHealth": 2000,
+			"maxHealth": 1800,
 			"structuralIntegrity": 0.99,
 			"cost": {
 				"concrete": 15
@@ -6336,7 +6344,7 @@ const gameData = {
 					"rotation": 270
 				}
 			],
-			"maxHealth": 2000,
+			"maxHealth": 1800,
 			"structuralIntegrity": 0.99,
 			"cost": {
 				"concrete": 15
@@ -6397,7 +6405,7 @@ const gameData = {
 						"width": 266,
 						"height": 266
 					},
-					"maxHealth": 2000,
+					"maxHealth": 1800,
 					"structuralIntegrity": 0.95,
 					"cost": {
 						"concrete": 10
@@ -6437,7 +6445,7 @@ const gameData = {
 							"y": 288
 						}
 					},
-					"maxHealth": 1750,
+					"maxHealth": 1575,
 					"structuralIntegrity": 0.93,
 					"cost": {
 						"concrete": 20
@@ -6482,7 +6490,7 @@ const gameData = {
 							"y": 288
 						}
 					},
-					"maxHealth": 1750,
+					"maxHealth": 1575,
 					"structuralIntegrity": 0.93,
 					"cost": {
 						"concrete": 20
@@ -6500,7 +6508,7 @@ const gameData = {
 						"width": 266,
 						"height": 266
 					},
-					"maxHealth": 1500,
+					"maxHealth": 1350,
 					"structuralIntegrity": 0.85,
 					"cost": {
 						"concrete": 25
@@ -6556,7 +6564,7 @@ const gameData = {
 						"width": 288,
 						"height": 288
 					},
-					"maxHealth": 1750,
+					"maxHealth": 1575,
 					"structuralIntegrity": 0.93,
 					"cost": {
 						"concrete": 10
@@ -6644,7 +6652,7 @@ const gameData = {
 							"rotation": 270
 						}
 					],
-					"maxHealth": 2000,
+					"maxHealth": 1800,
 					"structuralIntegrity": 0.99,
 					"cost": {
 						"concrete": 10
@@ -6668,7 +6676,7 @@ const gameData = {
 						"width": 288,
 						"height": 288
 					},
-					"maxHealth": 2250,
+					"maxHealth": 2025,
 					"structuralIntegrity": 0.96,
 					"cost": {
 						"concrete": 15
@@ -7146,7 +7154,7 @@ const gameData = {
 		"freighter": {
 			"name": "BMS - Ironship",
 			"codeName": "Freighter",
-			"description": "The Basset Motor Society’s Ironship-class shipping vessel is used to freight shippable goods and heavy vehicles.",
+			"description": "The Bassett Motor Society’s Ironship-class shipping vessel is used to freight shippable goods and heavy vehicles.",
 			"category": "naval",
 			"categoryOrder": 21,
 			"hitArea": [
@@ -8224,7 +8232,7 @@ const gameData = {
 					"cost": {
 						"facilitymaterials2": 65
 					},
-					"_productionLength": 7,
+					"_productionLength": 9,
 					"production": [
 						{
 							"id": 0,
@@ -8320,6 +8328,34 @@ const gameData = {
 							},
 							"faction": "w",
 							"time": 300
+						},
+						{
+							"id": 7,
+							"input": {
+								"scouttankw": 1,
+								"facilitymaterials2": 20,
+								"facilitymaterials4": 15,
+								"facilitymaterials6": 3
+							},
+							"output": {
+								"scouttankmultiw": 1
+							},
+							"faction": "w",
+							"time": 600
+						},
+						{
+							"id": 8,
+							"input": {
+								"tankettec": 1,
+								"facilitymaterials2": 20,
+								"facilitymaterials4": 15,
+								"facilitymaterials6": 3
+							},
+							"output": {
+								"tankettemultic": 1
+							},
+							"faction": "c",
+							"time": 600
 						}
 					]
 				},
@@ -8687,8 +8723,8 @@ const gameData = {
 							"id": 4,
 							"input": {
 								"mediumtankw": 1,
-								"facilitymaterials3": 35,
-								"facilitymaterials5": 15,
+								"facilitymaterials3": 50,
+								"facilitymaterials5": 25,
 								"facilitymaterials6": 25
 							},
 							"output": {
@@ -8743,7 +8779,7 @@ const gameData = {
 			}
 		},
 		"lighttankdefensivew": {
-			"name": "Devitt Ironhide Mk. IV ",
+			"name": "Devitt Ironhide Mk. IV",
 			"codeName": "LightTankDefensiveW",
 			"description": "The Ironhide Light Tank is similar to the Mk. III but reinforced with plates of heavy steel at the expense of speed and maneuverability.",
 			"category": "tank",
@@ -9931,7 +9967,7 @@ const gameData = {
 		"motorboat": {
 			"name": "BMS - Grouper",
 			"codeName": "Motorboat",
-			"description": "Powered by the Basset Motor Society’s lightweight Grouper engine, this simple wooden boat is ideal for ferrying small groups of infantry across rivers and between islands.",
+			"description": "Powered by the Bassett Motor Society’s lightweight Grouper engine, this simple wooden boat is ideal for ferrying small groups of infantry across rivers and between islands.",
 			"category": "misc",
 			"categoryOrder": 5,
 			"sortLayer": "vehicle",
@@ -11069,7 +11105,7 @@ const gameData = {
 		"power_line": {
 			"name": "Power Line",
 			"codeName": "PowerLine",
-			"description": "Conducts power between two Power Poles.",
+			"description": "Conducts power between a Power Pole and another structure.",
 			"category": "power",
 			"categoryOrder": 2,
 			"color": 0,
@@ -11935,6 +11971,20 @@ const gameData = {
 				}
 			}
 		},
+		"scouttankmultiw": {
+			"name": "King Jester - Mk. I-1",
+			"codeName": "ScoutTankMultiW",
+			"description": "Originally designed as a mock-up for more sophisticated rocket platforms, the Jester gets its designation from the response to reckless early prototypes that were bolted onto stripped down King Spires. This unusual vehicle can fire specialized rockets over long distances. Its light frame makes it easy to reposition, but vulnerable to sabotage.",
+			"category": "tank",
+			"faction": "w",
+			"icon": "../UI/VehicleIcons/ScoutTankMultiWIcon.webp",
+			"texture": {
+				"src": "../Vehicles/scouttankmultiw.webp",
+				"width": 309,
+				"height": 213
+			},
+			"techId": "unlockfacilitytier2"
+		},
 		"scouttankoffensivew": {
 			"name": "King Gallant Mk. II",
 			"codeName": "ScoutTankOffensiveW",
@@ -12284,7 +12334,7 @@ const gameData = {
 		"stationary_harvester_coal": {
 			"name": "Stationary Harvester (Coal)",
 			"codeName": "FacilityMineResource4",
-			"description": "A stationary harvester that automatically gathers Coal. Requires Petrol. ",
+			"description": "A stationary harvester that automatically gathers Coal using Petrol as fuel.",
 			"category": "harvesters",
 			"categoryOrder": 4,
 			"hitArea": [
@@ -12359,7 +12409,7 @@ const gameData = {
 		"stationary_harvester_components": {
 			"name": "Stationary Harvester (Components)",
 			"codeName": "FacilityMineResource2",
-			"description": "A stationary harvester that automatically gathers Components. Requires Petrol.",
+			"description": "A stationary harvester that automatically gathers Components using Petrol as fuel.",
 			"category": "harvesters",
 			"categoryOrder": 3,
 			"hitArea": [
@@ -12509,7 +12559,7 @@ const gameData = {
 		"stationary_harvester_scrap": {
 			"name": "Stationary Harvester (Scrap)",
 			"codeName": "FacilityMineResource1",
-			"description": "A stationary harvester that automatically gathers Salvage. Requires Petrol. ",
+			"description": "A stationary harvester that automatically gathers Salvage using Petrol as fuel.",
 			"category": "harvesters",
 			"categoryOrder": 2,
 			"hitArea": [
@@ -12741,6 +12791,20 @@ const gameData = {
 			"texture": {
 				"src": "../Vehicles/tanketteflamec.webp",
 				"width": 288,
+				"height": 150
+			},
+			"techId": "unlockfacilitytier2"
+		},
+		"tankettemultic": {
+			"name": "T13 “Deioneus” Rocket Battery",
+			"codeName": "TanketteMultiC",
+			"description": "Initially intended to provide a mobile platform for cumbersome field weapons, the T13 “Deioneus” Rocket Battery is a lightweight tankette fitted with a nine-barrelled rocket artillery. This unique battery is configured for incendiary rockets to be launched at range while maintaining high maneuverability between deployments.",
+			"category": "tank",
+			"faction": "c",
+			"icon": "../UI/VehicleIcons/TanketteMultiCIcon.webp",
+			"texture": {
+				"src": "../Vehicles/tankettemultic.webp",
+				"width": 270,
 				"height": 150
 			},
 			"techId": "unlockfacilitytier2"
@@ -13574,7 +13638,7 @@ const gameData = {
 					"rotation": 90
 				}
 			],
-			"maxHealth": 3500,
+			"maxHealth": 3150,
 			"cost": {
 				"concrete": 15
 			},
@@ -14136,7 +14200,7 @@ const gameData = {
 					"ignoreSnap": true
 				}
 			],
-			"maxHealth": 3500,
+			"maxHealth": 3150,
 			"cost": {
 				"concrete": 10
 			},
@@ -14381,7 +14445,7 @@ const gameData = {
 					"rotation": 180
 				}
 			],
-			"maxHealth": 3500,
+			"maxHealth": 3150,
 			"cost": {
 				"concrete": 10
 			},
@@ -14391,7 +14455,7 @@ const gameData = {
 		"troopship": {
 			"name": "BMS - White Whale",
 			"codeName": "TroopShip",
-			"description": "A heavily armoured vessel, the Basset Motor Society’s White Whale-class troop transports can deploy on faraway beaches to function as a permanent forward operating base.",
+			"description": "A heavily armoured vessel, the Bassett Motor Society’s White Whale-class troop transports can deploy on faraway beaches to function as a permanent forward operating base.",
 			"category": "naval",
 			"categoryOrder": 22,
 			"hitArea": [
