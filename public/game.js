@@ -31,6 +31,10 @@ const PROJECT_LAYERS = {
             name: 'Resource Field',
             alias: 'HARVEST'
         },
+        garrison: {
+            name: 'Garrison',
+            alias: 'BASE'
+        },
         crane: {
             name: 'Crane',
             alias: 'CRANE',
@@ -270,7 +274,8 @@ const game = {
                 killboxMG: false,
                 killboxAT: false,
                 killboxRocket: false,
-                killboxArty: false
+                killboxArty: false,
+                garrison: false
             }
         }
     },
