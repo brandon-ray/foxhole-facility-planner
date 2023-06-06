@@ -522,6 +522,14 @@ const gameData = {
 			],
 			"module": true
 		},
+		"tankfactory": {
+			"name": "TankFactory",
+			"description": "This is a small compact facility made to make tank variants with the tank factory upgrade of the small assembly station.",
+			"author": "Sol",
+			"filters": [
+				"facilities"
+			]
+		},
 		"wheats_anti_partisan_base": {
 			"name": "\\/\\/heat's anti-partisan base",
 			"description": "Thanks to \\/\\/heat for this awesome, low-cost base! Features 360 degrees of anti-tank and anti-infantry defenses, an obs bunker, and an internal-facing core to protect players as they spawn in.",
