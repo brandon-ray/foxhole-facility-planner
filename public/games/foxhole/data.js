@@ -1696,7 +1696,7 @@ const gameData = {
 				"profiles": {
 					"t1": 0.75,
 					"t2": 0.75,
-					"t3": 0.17000000000000004
+					"t3": 0.25
 				}
 			},
 			"damage": 240
@@ -1716,7 +1716,7 @@ const gameData = {
 				"profiles": {
 					"t1": 0.75,
 					"t2": 0.75,
-					"t3": 0.17000000000000004
+					"t3": 0.25
 				}
 			},
 			"damage": 400
@@ -1735,7 +1735,7 @@ const gameData = {
 				"profiles": {
 					"t1": 0.75,
 					"t2": 0.75,
-					"t3": 0.17000000000000004
+					"t3": 0.25
 				}
 			},
 			"damage": 400
@@ -1753,7 +1753,7 @@ const gameData = {
 				"profiles": {
 					"t1": 0.75,
 					"t2": 0.75,
-					"t3": 0.17000000000000004
+					"t3": 0.25
 				}
 			},
 			"damage": 550
@@ -1769,7 +1769,7 @@ const gameData = {
 				"profiles": {
 					"t1": 0.75,
 					"t2": 0.75,
-					"t3": 0.17000000000000004
+					"t3": 0.25
 				}
 			}
 		},
@@ -1784,7 +1784,7 @@ const gameData = {
 				"profiles": {
 					"t1": 0.75,
 					"t2": 0.75,
-					"t3": 0.17000000000000004
+					"t3": 0.25
 				}
 			}
 		},
@@ -1799,7 +1799,7 @@ const gameData = {
 				"profiles": {
 					"t1": 0.25,
 					"t2": 0.25,
-					"t3": 0.050000000000000044
+					"t3": 0.06999999999999995
 				}
 			}
 		},
@@ -1814,7 +1814,7 @@ const gameData = {
 				"profiles": {
 					"t1": 0.25,
 					"t2": 0.25,
-					"t3": 0.050000000000000044
+					"t3": 0.06999999999999995
 				}
 			}
 		},
@@ -5174,7 +5174,7 @@ const gameData = {
 					"rotation": 270
 				}
 			],
-			"maxHealth": 3150,
+			"maxHealth": 3500,
 			"structuralIntegrity": 0.75,
 			"cost": {
 				"concrete": 25
@@ -5643,7 +5643,7 @@ const gameData = {
 					"rotation": 270
 				}
 			],
-			"maxHealth": 1800,
+			"maxHealth": 2000,
 			"structuralIntegrity": 0.99,
 			"cost": {
 				"concrete": 15
@@ -6352,7 +6352,7 @@ const gameData = {
 					"rotation": 270
 				}
 			],
-			"maxHealth": 1800,
+			"maxHealth": 2000,
 			"structuralIntegrity": 0.99,
 			"cost": {
 				"concrete": 15
@@ -6413,7 +6413,7 @@ const gameData = {
 						"width": 266,
 						"height": 266
 					},
-					"maxHealth": 1800,
+					"maxHealth": 2000,
 					"structuralIntegrity": 0.95,
 					"cost": {
 						"concrete": 10
@@ -6453,7 +6453,7 @@ const gameData = {
 							"y": 288
 						}
 					},
-					"maxHealth": 1575,
+					"maxHealth": 1750,
 					"structuralIntegrity": 0.93,
 					"cost": {
 						"concrete": 20
@@ -6498,7 +6498,7 @@ const gameData = {
 							"y": 288
 						}
 					},
-					"maxHealth": 1575,
+					"maxHealth": 1750,
 					"structuralIntegrity": 0.93,
 					"cost": {
 						"concrete": 20
@@ -6516,7 +6516,7 @@ const gameData = {
 						"width": 266,
 						"height": 266
 					},
-					"maxHealth": 1350,
+					"maxHealth": 1500,
 					"structuralIntegrity": 0.85,
 					"cost": {
 						"concrete": 25
@@ -6572,7 +6572,7 @@ const gameData = {
 						"width": 288,
 						"height": 288
 					},
-					"maxHealth": 1575,
+					"maxHealth": 1750,
 					"structuralIntegrity": 0.93,
 					"cost": {
 						"concrete": 10
@@ -6660,7 +6660,7 @@ const gameData = {
 							"rotation": 270
 						}
 					],
-					"maxHealth": 1800,
+					"maxHealth": 2000,
 					"structuralIntegrity": 0.99,
 					"cost": {
 						"concrete": 10
@@ -6684,7 +6684,7 @@ const gameData = {
 						"width": 288,
 						"height": 288
 					},
-					"maxHealth": 2025,
+					"maxHealth": 2250,
 					"structuralIntegrity": 0.96,
 					"cost": {
 						"concrete": 15
@@ -10476,7 +10476,7 @@ const gameData = {
 		"oil_well": {
 			"name": "Oil Well",
 			"codeName": "FacilityMineOil",
-			"description": "Extracts fuel from Crude Oil Fields. Must be constructed nearby.",
+			"description": "Extracts fuel from Oil Fields. Must be constructed nearby.",
 			"category": "harvesters",
 			"categoryOrder": 1,
 			"color": 2368548,
@@ -10710,7 +10710,7 @@ const gameData = {
 			}
 		},
 		"oilfield": {
-			"name": "Crude Oil Field",
+			"name": "Oil Field",
 			"codeName": "OilField",
 			"description": "An Oil Field that can produce Oil for further refinement or for power production.",
 			"category": "world",
@@ -13646,7 +13646,7 @@ const gameData = {
 					"rotation": 90
 				}
 			],
-			"maxHealth": 3150,
+			"maxHealth": 3500,
 			"cost": {
 				"concrete": 15
 			},
@@ -14208,7 +14208,7 @@ const gameData = {
 					"ignoreSnap": true
 				}
 			],
-			"maxHealth": 3150,
+			"maxHealth": 3500,
 			"cost": {
 				"concrete": 10
 			},
@@ -14453,7 +14453,7 @@ const gameData = {
 					"rotation": 180
 				}
 			],
-			"maxHealth": 3150,
+			"maxHealth": 3500,
 			"cost": {
 				"concrete": 10
 			},
