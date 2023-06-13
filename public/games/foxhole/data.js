@@ -229,6 +229,14 @@ const gameData = {
 				"facilities"
 			]
 		},
+		"bbfac_cometa_defense_micro_sustainment_v12": {
+			"name": "[BB+FAC] Cometa Defense & Micro-Sustainment (v1.2)",
+			"description": "Cometa @ Ashfields is a pivot from Origin that must be defended with RG/MG/AT, an OB, and ARTY due to partisan paths. An efficient, versatile sustainment facility (REF: Micro-Sustainment v1.0) for small-scale bunker bases is included with this design. The accompanying design maximizes throughput and retains mobility. Production at this facility outputs Construction Materials / Maintenance Supplies (Materials Factory) and Oil / Concrete Materials (Coal Refinery + Liquifier) from Salvage and Coal.",
+			"author": "[69th] hydranine & [69th] Starler99",
+			"filters": [
+				"facilities"
+			]
+		},
 		"bunker_w_module": {
 			"name": "\"W\" Bunker",
 			"description": "A meta bunker design that has lots of health with great structural integrity and defenses.",
@@ -493,11 +501,10 @@ const gameData = {
 				"facilities"
 			]
 		},
-		"t1_oil_field_refinement": {
-			"name": "T1 Oil field refinement",
-			"description": "Basic T1 oil field setup, water is optional. I highly recommend adding a 4th oil refinary to consume oil faster when it backs up.",
-			"author": "[5th] Menxs",
-			"module": true,
+		"t1_roadside_public_petrol": {
+			"name": "T1 Roadside Public Petrol",
+			"description": "Least labor intensive setup for T1 Public Petrol. \n\nNote(s): \n\n•Place Crude Oil Tinderboxes closer to refinery than the Petrol Tinderboxes\n\n•Place Petrol Tinderbox rail closer to Petrol Plant than Crude Oil Tinderboxes\n\n•Use 'Shift + E' to toggle between nearby structures from the minecart seat\n\n•Only 3 refineries are mathematically needed. However, reality insists we must sleep. Therefore, a 4th refinery is required to handle crude oil overflow from when facility is not operated.",
+			"author": "[OSHA] Tearloch",
 			"filters": [
 				"facilities"
 			]
@@ -508,14 +515,6 @@ const gameData = {
 			"author": "Stonefox",
 			"filters": [
 				"bunkers"
-			]
-		},
-		"t2_oil_field": {
-			"name": "T2 Oil Field",
-			"description": "Supply the whole back line with petrol! Basic Oil field at tier 2 facilities with 6 oil reformer and 1 cracking unit, never waste a drop of oil anymore.",
-			"author": "[5th] Menxs",
-			"filters": [
-				"facilities"
 			]
 		},
 		"t2_or_t3_halberd_trench_designs": {
