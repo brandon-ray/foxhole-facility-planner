@@ -670,18 +670,8 @@ const gameData = {
 			"icon": "../UI/HexMaps/Icons/MapFarranacCoastHex.webp",
 			"textureKey": "MapFarranacCoastHex",
 			"gridCoord": {
-				"x": -2,
-				"y": 1
-			}
-		},
-		"fishermansrowhex": {
-			"name": "Fisherman's Row",
-			"regionId": 15,
-			"icon": "../UI/HexMaps/Icons/MapFishermansRowHex.webp",
-			"textureKey": "MapFishermansRowHex",
-			"gridCoord": {
 				"x": -3,
-				"y": 2
+				"y": 1
 			}
 		},
 		"godcroftshex": {
@@ -732,6 +722,16 @@ const gameData = {
 			"gridCoord": {
 				"x": 0,
 				"y": 3
+			}
+		},
+		"kingscagehex": {
+			"name": "King's Cage",
+			"regionId": 44,
+			"icon": "../UI/HexMaps/Icons/MapKingsCageHex.webp",
+			"textureKey": "MapKingsCageHex",
+			"gridCoord": {
+				"x": -2,
+				"y": 1
 			}
 		},
 		"linnmercyhex": {
@@ -794,16 +794,6 @@ const gameData = {
 				"y": 0
 			}
 		},
-		"oarbreakerhex": {
-			"name": "The Oarbreaker Isles",
-			"regionId": 16,
-			"icon": "../UI/HexMaps/Icons/MapOarbreakerHex.webp",
-			"textureKey": "MapOarbreakerHex",
-			"gridCoord": {
-				"x": -3,
-				"y": 1
-			}
-		},
 		"originhex": {
 			"name": "Origin",
 			"regionId": 42,
@@ -832,6 +822,16 @@ const gameData = {
 			"gridCoord": {
 				"x": -1,
 				"y": 3
+			}
+		},
+		"sableporthex": {
+			"name": "Sableport",
+			"regionId": 43,
+			"icon": "../UI/HexMaps/Icons/MapSableportHex.webp",
+			"textureKey": "MapSableportHex",
+			"gridCoord": {
+				"x": -2,
+				"y": 2
 			}
 		},
 		"shackledchasmhex": {
@@ -930,7 +930,7 @@ const gameData = {
 			"icon": "../UI/HexMaps/Icons/MapWestgateHex.webp",
 			"textureKey": "MapWestgateHex",
 			"gridCoord": {
-				"x": -2,
+				"x": -3,
 				"y": 2
 			}
 		}

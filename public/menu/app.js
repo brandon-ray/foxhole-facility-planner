@@ -218,7 +218,7 @@ Vue.component('app-board-ui', {
     template: html`
     <div v-if="game.settings.showFooterInfo" class="board-scale-ui">
         <div class="mr-2">{{game.constructionMode.title}}</div>
-        <div v-if="game.project.settings.regionKey" class="mr-2">{{gameData.maps[game.project.settings.regionKey].name}}</div>
+        <div v-if="game.project.settings.regionKey" class="mr-2">{{gameData.maps[game.project.settings.regionKey]?.name}}</div>
         {{scaleUnits}}m
         <div class="board-scale-tile" :style="{ width: ((scaleUnits * boardScale) / WINDOW_SCALE) + 'px' }"></div>
     </div>

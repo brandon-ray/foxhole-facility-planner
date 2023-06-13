@@ -1372,7 +1372,7 @@ async function updateData() {
     }, {});
 
     /*
-    foxholeData.maps = {};
+    const mapData = {};
     await fetch('https://war-service-live.foxholeservices.com/api/worldconquest/maps')
     .then(response => response.json())
     .then(async data => {
@@ -1380,11 +1380,21 @@ async function updateData() {
             await fetch('https://war-service-live.foxholeservices.com/api/worldconquest/maps/' + map + '/static')
             .then(response => response.json())
             .then(data => {
-                foxholeData.maps[map.toLowerCase()] = data;
+                const mapKey = map.toLowerCase();
+                const textureKey = `Map${map}`;
+                const prevData = foxholeData.maps[mapKey];
+                mapData[mapKey] = {
+                    name: prevData?.name ?? map,
+                    regionId: data.regionId,
+                    icon: `../UI/HexMaps/Icons/${textureKey}.webp`,
+                    textureKey: textureKey,
+                    gridCoord: prevData?.gridCoord
+                };
             }).catch(error => console.error(error));
         }
     })
     .catch(error => console.error(error));
+    foxholeData.maps = mapData;
     */
 
     iterateUpgradeCodeNames(`${foxholeDataDirectory}War/Content/Blueprints/`);
