@@ -1499,7 +1499,7 @@ const gameData = {
 			"icon": "../UI/ItemIcons/SandbagMaterialItemIcon.webp"
 		},
 		"scouttankmultiw": {
-			"name": "King Jester - Mk. I-1",
+			"name": "King Jester Mk. I-1",
 			"description": "Originally designed as a mock-up for more sophisticated rocket platforms, the Jester gets its designation from the response to reckless early prototypes that were bolted onto stripped down King Spires. This unusual vehicle can fire specialized rockets over long distances. Its light frame makes it easy to reposition, but vulnerable to sabotage.",
 			"icon": "../UI/VehicleIcons/ScoutTankMultiWIcon.webp"
 		},
@@ -4380,8 +4380,8 @@ const gameData = {
 			"radius": 2,
 			"range": {
 				"type": "killboxRocket",
-				"min": 175,
-				"max": 275
+				"min": 200,
+				"max": 425
 			},
 			"icon": "../UI/StructureIcons/EmplacedMultiCStructureIcon.webp",
 			"texture": {
@@ -8770,7 +8770,7 @@ const gameData = {
 							"id": 4,
 							"input": {
 								"mediumtankw": 1,
-								"facilitymaterials3": 50,
+								"facilitymaterials3": 40,
 								"facilitymaterials5": 25,
 								"facilitymaterials6": 25
 							},
@@ -12019,7 +12019,7 @@ const gameData = {
 			}
 		},
 		"scouttankmultiw": {
-			"name": "King Jester - Mk. I-1",
+			"name": "King Jester Mk. I-1",
 			"codeName": "ScoutTankMultiW",
 			"description": "Originally designed as a mock-up for more sophisticated rocket platforms, the Jester gets its designation from the response to reckless early prototypes that were bolted onto stripped down King Spires. This unusual vehicle can fire specialized rockets over long distances. Its light frame makes it easy to reposition, but vulnerable to sabotage.",
 			"category": "tank",
@@ -14624,8 +14624,8 @@ const gameData = {
 			"faction": "c",
 			"range": {
 				"type": "killboxRocket",
-				"min": 200,
-				"max": 275
+				"min": 225,
+				"max": 350
 			},
 			"icon": "../UI/VehicleIcons/TruckMultiCIcon.webp",
 			"texture": {
