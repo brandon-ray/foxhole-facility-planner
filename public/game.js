@@ -1841,7 +1841,12 @@ try {
         onWindowResize();
         updateBuildingDB();
         
-        if (game.settings.enableDebug) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const presetParam = urlParams.get('preset');
+        if (presetParam && gameData.presets[presetParam]) {
+            game.ignoreSaving = true;
+            game.createObject(gameData.presets[presetParam], 0, 0, 0, 0, undefined, false, false);
+        } else if (game.settings.enableDebug) {
             fetch(`/games/foxhole/assets/presets/debug.json`).then(response => {
                 return response.json();
             }).then(saveObject => {
@@ -3453,13 +3458,15 @@ try {
     }
 
     game.updateSave = function(saveString = JSON.stringify(game.getSaveData())) {
-        try {
-            if (window.localStorage && saveString) {
-                window.localStorage.setItem('save', saveString);
+        if (!game.ignoreSaving) {
+            try {
+                if (window.localStorage && saveString) {
+                    window.localStorage.setItem('save', saveString);
+                }
+                game.updateHistory(saveString);
+            } catch (e) {
+                console.error('Failed to update save:', e);
             }
-            game.updateHistory(saveString);
-        } catch (e) {
-            console.error('Failed to update save:', e);
         }
     };
 

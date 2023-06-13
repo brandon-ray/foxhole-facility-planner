@@ -386,6 +386,14 @@ const gameData = {
 			],
 			"module": true
 		},
+		"oil_refinement_guide": {
+			"name": "Oil refinement guide",
+			"description": "So, you want to refine oil. In this project i share what i have learned about the aspects of oil refinement and it's tips/tricks.",
+			"author": "[5th] Menxs",
+			"filters": [
+				"facilities"
+			]
+		},
 		"panzer_snares": {
 			"name": "Panzer Snares",
 			"author": "KitsunePanzer",
@@ -476,6 +484,14 @@ const gameData = {
 				"bunkers"
 			],
 			"module": true
+		},
+		"standard_facility_modules_10": {
+			"name": "Standard Facility Modules",
+			"description": "Standardized Facility Modules. I tried to keep them all to the same footprint (6x4/4x4) \n\n",
+			"author": "Spannbeton",
+			"filters": [
+				"facilities"
+			]
 		},
 		"t1_oil_field_refinement": {
 			"name": "T1 Oil field refinement",
@@ -2854,6 +2870,30 @@ const gameData = {
 				"facilitymaterials3": 35
 			},
 			"repairCost": 100
+		},
+		"borderbase": {
+			"name": "Border Base",
+			"codeName": "BorderBase",
+			"description": "A small base used as a jump-off point for invading enemy regions. Players can spawn and stockpile items here.",
+			"category": "world",
+			"categoryOrder": 16,
+			"baseGarrisonRadius": 40,
+			"baseGarrisonTypes": [
+				"provisional_garrison"
+			],
+			"width": 7,
+			"length": 7,
+			"icon": "../UI/CustomIcons/BorderBaseIcon.webp",
+			"texture": {
+				"src": "../Structures/borderbase.webp",
+				"width": 350,
+				"height": 419,
+				"offset": {
+					"x": 347,
+					"y": 351
+				}
+			},
+			"cost": false
 		},
 		"busc": {
 			"name": "R-15 - “Chariot”",
