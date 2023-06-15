@@ -126,6 +126,7 @@ Vue.component('app-menu-statistics', {
             let bunker = {
                 total: 0,
                 maxHealth: 0,
+                gearTotal: 0,
                 repairCost: 0,
                 structuralIntegrity: 1.0,
                 damageProfiles: {}

@@ -5706,6 +5706,7 @@ const gameData = {
 			},
 			"canSnap": true,
 			"canUnion": true,
+			"canGear": true,
 			"snapNearest": true,
 			"sockets": [
 				{
@@ -5827,6 +5828,7 @@ const gameData = {
 						"cloth": 75
 					},
 					"repairCost": 75,
+					"gearPower" : -600,
 					"tierUp": "fortt2_mgait2"
 				},
 				"fortrampt1": {
@@ -5945,6 +5947,7 @@ const gameData = {
 						"cloth": 50
 					},
 					"repairCost": 50,
+					"gearPower" : -600,
 					"tierUp": "fortt2_rifleait2"
 				}
 			}
@@ -6079,6 +6082,7 @@ const gameData = {
 						"cloth": 150
 					},
 					"repairCost": 150,
+					"gearPower" : -600,
 					"tierUp": "fortt3_atgunait3"
 				},
 				"fortcornert3": {
@@ -6100,6 +6104,7 @@ const gameData = {
 						"cloth": 150
 					},
 					"repairCost": 120,
+					"gearPower" : 3000,
 					"tierUp": "fortt3_engineroomt3"
 				},
 				"mgait2": {
@@ -6125,6 +6130,7 @@ const gameData = {
 						"cloth": 100
 					},
 					"repairCost": 100,
+					"gearPower" : -600,
 					"tierUp": "fortt3_mgait3",
 					"tierDown": "fortt1_mgait1"
 				},
@@ -6153,7 +6159,8 @@ const gameData = {
 					"cost": {
 						"cloth": 125
 					},
-					"repairCost": 150,
+					"repairCost" : 150,
+					"gearPower" : -1000,
 					"tierUp": "fortt3_observationbunkert3"
 				},
 				"fortrampt2": {
@@ -6267,6 +6274,7 @@ const gameData = {
 						"cloth": 75
 					},
 					"repairCost": 75,
+					"gearPower" : -600,
 					"tierUp": "fortt3_rifleait3",
 					"tierDown": "fortt1_rifleait1"
 				},
@@ -6403,7 +6411,8 @@ const gameData = {
 					"cost": {
 						"concrete": 125
 					},
-					"repairCost": 1200
+					"repairCost": 1200,
+					"gearPower" : -35000
 				},
 				"lrartillery": {
 					"name": "Storm Cannon",
@@ -6425,7 +6434,8 @@ const gameData = {
 					"cost": {
 						"concrete": 200
 					},
-					"repairCost": 500
+					"repairCost": 500,
+					"gearPower" : -35000
 				},
 				"ammoroomt3": {
 					"name": "Storage Room (Tier 3)",
@@ -6546,6 +6556,7 @@ const gameData = {
 						"concrete": 25
 					},
 					"repairCost": 120,
+					"gearPower" : 3000,
 					"tierDown": "fortt2_engineroomt2"
 				},
 				"mgait3": {
@@ -6571,6 +6582,7 @@ const gameData = {
 						"concrete": 15
 					},
 					"repairCost": 120,
+					"gearPower" : -600,
 					"tierDown": "fortt2_mgait2"
 				},
 				"observationbunkert3": {
@@ -6602,6 +6614,7 @@ const gameData = {
 						"concrete": 10
 					},
 					"repairCost": 160,
+					"gearPower" : -1000,
 					"tierDown": "fortt2_observationbunkert2"
 				},
 				"fortrampt3": {
@@ -6714,6 +6727,7 @@ const gameData = {
 						"concrete": 15
 					},
 					"repairCost": 120,
+					"gearPower" : -600,
 					"tierDown": "fortt2_rifleait2"
 				}
 			}

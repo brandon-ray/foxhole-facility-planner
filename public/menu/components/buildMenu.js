@@ -167,7 +167,9 @@ Vue.component('app-menu-building-selected', {
                 int: 0,
                 string: ''
             },
-            lockState: 0
+            lockState: 0,
+
+            pipeBtnImg: '/games/foxhole/assets/game/Textures/UI/ItemIcons/RunestoneWIcon.webp'
         };
     },
     mounted: function() {
@@ -412,6 +414,20 @@ Vue.component('app-menu-building-selected', {
         changeUpgrade: function(upgrade) {
             this.bmc();
             game.exchangeSelected(upgrade);
+        },
+        editModifications: function() {
+            this.bmc();
+            //We get the current building and change the modifications it contains
+            let toModify = game.getSelectedEntity();
+            //TODO: Write a correct version, this will just add and remove pipes
+            let modList = toModify.mods;
+            if(modList.length == 0){
+                modList.push("pipes");
+                this.pipeBtnImg = '/games/foxhole/assets/game/Textures/UI/ItemIcons/RunestoneAIcon.webp';
+            } else {
+                modList.pop();
+                this.pipeBtnImg = '/games/foxhole/assets/game/Textures/UI/ItemIcons/RunestoneWIcon.webp';
+            }
         },
         toggleBlueprint: function() {
             const selectedEntity = game.getSelectedEntity();
@@ -711,6 +727,19 @@ Vue.component('app-menu-building-selected', {
                         <div class="resource-icon" :title="upgrade.upgradeName ?? upgrade.name" :style="{backgroundImage:'url(' + (upgrade.icon ?? entity.building.icon) + ')'}"></div>
                     </button>
                 </div>
+
+                <!-- This has to be overhauled in favor of something somewhat decent xD -->
+                <div class="settings-option-wrapper upgrade-list">
+                    <div class="settings-title">
+                        Modifications
+                    </div>
+                    <button class="upgrade-button" @mouseleave="showUpgradeHover()" @click="editModifications()">
+                        <div class="resource-icon" title ="Pipes" ref="pipeButton">
+                            <img v-bind:src="pipeBtnImg">    
+                        </div>
+                    </button>
+                </div>
+
                 <div v-if="entity.baseUpgrades && entity.building?.baseGarrisonRadius" class="settings-option-wrapper upgrade-list">
                     <div class="settings-title">Base Upgrades</div>
                     <button class="upgrade-button" v-for="(upgrade, key) in entity.building.baseUpgrades.base" :class="{'selected-upgrade': entity.baseUpgrades.base === key}"

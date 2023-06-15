@@ -262,6 +262,7 @@ class FoxholeStructureSocket extends PIXI.Container {
 }
 
 class FoxholeStructure extends DraggableContainer {
+    static hasAlerted = false;
     constructor(id, type, subtype, x, y, z, rotation) {
         super(id, type, subtype, x, y, z, rotation);
 
@@ -367,6 +368,9 @@ class FoxholeStructure extends DraggableContainer {
                     this.userThrottle = 0;
                 }
             }
+        } else {
+            //If the building is not a vehicle, then it is a building and may have modifications
+            this.mods = [];
         }
 
         if (this.building.key === 'maintenance_tunnel') {
@@ -382,6 +386,20 @@ class FoxholeStructure extends DraggableContainer {
         if (this.building.canUnion) {
             this.union = this;
             this.unionRank = 0;
+        }
+
+        if (this.building.canGear) {
+            //If a room can have gearPower, it needs to know all the engine rooms(EGR) in range and the power it brings (to avoid having multiple time the same EGR)
+            //We also need to know it's power cost (see data.js) to know if it is an EGR itself or a bunker that consumes power
+            this.hasGear = false;
+            this.gearPower = ( this.building.gearPower ? this.building.gearPower : 0 );
+            this.EGRinRange = [];
+            this.EGRdist = [];
+
+            //An EGR's power is divided by the number of bunker that uses its power in its range
+            if(this.gearPower > 0)
+                this.drains = 0;
+            
         }
 
         if (this.building.baseUpgrades) {
@@ -589,6 +607,17 @@ class FoxholeStructure extends DraggableContainer {
             objData.postExtension = this.postExtension;
         }
 
+
+        //Checks the mods list. If it contain pipes, we give the building the ability to have GearPower
+        if(this.building.canGear){
+            if(this.hasGear == false && this.mods.indexOf("pipes")>-1){
+                this.hasGear = true;
+            }
+            if(this.hasGear == true && this.mods.indexOf("pipes") == -1){
+                this.hasGear = false;
+            }
+}
+
         if (this.sockets) {
             for (let i = 0; i < this.sockets.length; i++) {
                 let socket = this.sockets[i];
@@ -598,6 +627,8 @@ class FoxholeStructure extends DraggableContainer {
                         const connectedEntity = game.getEntityById(connectedEntityId);
                         if (connectedEntity?.selected) {
                             socketConnections[connectedEntityId] = connectedSocketId;
+                            if(this.hasGear)
+                                updateGearPower(connectedEntity, this); //We update the neighboring bunkers' gearPower
                         }
                     }
                 }
@@ -670,7 +701,18 @@ class FoxholeStructure extends DraggableContainer {
             this.trackDirection = objData.trackDirection;
         }
 
+        if(this.hasGear == true) {
+            for (let i = 0; i < this.sockets.length; i++) {
+                let socket = this.sockets[i];
+                for (const [connectedEntityId, connectedSocketId] of Object.entries(socket.connections)) {
+                    const connectedEntity = game.getEntityById(connectedEntityId);
+                    if(toUpdate?.canGear == true)
+                        updateGearPower(this, connectedEntity); //We update this bunker's gearPower depending on the neighbors'
+                }
+            }
+        }
         game.refreshStats();
+        
     }
     
     afterLoad(objData, objIdMap) {
@@ -1611,6 +1653,37 @@ class FoxholeStructure extends DraggableContainer {
                     }
                 }
                 this.handleTick = true;
+            }
+        }
+    }
+
+    //We update the building toUpdate with the new data from the changed building
+    updateGearPower(toUpdate, changed){
+
+        //If the neighbor is an EGR, we add it to the list in first position
+        if(changed.gearPower > 0){
+            toUpdate.EGRinRange.unshift(changed);
+            toUpdate.dist.unshift(1);
+        }
+
+        for(let i = 0; i < this.changed.EGRinRange; i++){
+            currEGR = changed.EGRinRange[i];
+
+            check = toUpdate.EGRinRange.indexOf(currEGR);
+            if(check == -1){
+            //If the engine room is not in the new building's list and is not at max range, we add it and it's details
+                if(changed.EGRdist < 20)
+                    toUpdate.EGRinRange.push(currEGR);
+                    //If the bunker we are updating from uses power, we add a drain to this EGR's network
+                        toUpdate.EGRdist.push(changed.EGRdist[i] + 1);
+
+                    if(changed.gearPower < 0){
+                        currEGR.drains++;
+                    }
+
+            } else if(changed.EGRdist[i].dist + 1 < toUpdate.EGRdist[i]){
+                //If there is a shorter path to the EGR, we replace the current path by the shorter one
+                toUpdate.EGRdist.push(changed.EGRdist[i] + 1);
             }
         }
     }
