@@ -3569,8 +3569,18 @@ try {
     let lastCameraZoom;
     let g_TICK = 10;
     let g_Time = 0;
+    let selectionRotation = null;
     let snappedMX;
     let snappedMY;
+
+    game.updateAllGearPower = function() {
+        //We scroll through the entities list and we update the gearPower
+        for(i = 0; i<entities.length; i++){
+            if(entities[i].type === "building"){
+                entities[i].updateGearPower();
+            }
+        }
+    }
     function update() {
         if (game.project.settings.regionKey && !game.project.settings.regionCrop && game.settings.lockCameraToHex) {
             const zoomRatio = 1 / camera.zoom;
@@ -4154,6 +4164,7 @@ try {
             game.updateSave();
         }
     }
+
 
     setInterval(function() {
         if (window.ga) {

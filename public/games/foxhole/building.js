@@ -372,7 +372,6 @@ class FoxholeStructure extends DraggableContainer {
             //If the building is not a vehicle, then it is a building and may have modifications
             this.mods = [];
         }
-
         if (this.building.key === 'maintenance_tunnel') {
             this.setMaintenanceFilters();
         }
@@ -387,17 +386,17 @@ class FoxholeStructure extends DraggableContainer {
             this.union = this;
             this.unionRank = 0;
         }
-
         if (this.building.canGear) {
             //If a room can have gearPower, it needs to know all the engine rooms(EGR) in range and the power it brings (to avoid having multiple time the same EGR)
             //We also need to know it's power cost (see data.js) to know if it is an EGR itself or a bunker that consumes power
             this.hasGear = false;
-            this.gearPower = ( this.building.gearPower ? this.building.gearPower : 0 );
+            this.initialGearPower = ( this.building.gearPower ? this.building.gearPower : 0 );
+
             this.EGRinRange = [];
             this.EGRdist = [];
 
             //An EGR's power is divided by the number of bunker that uses its power in its range
-            if(this.gearPower > 0)
+            if(this.initialGearPower > 0)
                 this.drains = 0;
             
         }
@@ -1258,6 +1257,44 @@ class FoxholeStructure extends DraggableContainer {
         });
     }
 
+    getGearPower(){
+        //First, if there is no power, this should not be applicable
+        if(!this.EGRinRange){
+            return -1;
+        }
+        //To know a bunkers' gearPower, you have to sum the power brought by each EGR
+        var gearPower = 0;
+        for (var i = 0; i < this.EGRinRange.length; i++) {
+            //Each EGR shares it's power equally to all it's drains
+            gearPower += 3000/this.EGRinRange[i].drains;
+        }
+        return gearPower;
+
+    }
+
+    toggleGear() {
+        //The only way to toggle gearPower on and off is through this function accessible through a buildMenu.js method
+        if(this.building.canGear){
+            this.hasGear = !this.hasGear;
+            alert("Pipes toggled");
+        }
+    }
+
+    updateGearPower(){
+        //This function serves to update all gearPower
+        if(this.hasGear == true) {
+            for (let i = 0; i < this.sockets.length; i++) {
+                let socket = this.sockets[i];
+                for (const [connectedEntityId, connectedSocketId] of Object.entries(socket.connections)) {
+                    const connectedEntity = game.getEntityById(connectedEntityId);
+                    if(connectedEntity?.canGear == true){
+                        this.updateLocalGearPower(this, connectedEntity); //We update this bunker's gearPower depending on the neighbors'
+                    }
+                }
+            }
+        }
+    }
+
     setBlueprint(blueprint) {
         if (this.building.canBlueprint && this.blueprint !== blueprint) {
             this.blueprint = blueprint;
@@ -1658,8 +1695,7 @@ class FoxholeStructure extends DraggableContainer {
     }
 
     //We update the building toUpdate with the new data from the changed building
-    updateGearPower(toUpdate, changed){
-
+    updateLocalGearPower(toUpdate, changed){
         //If the neighbor is an EGR, we add it to the list in first position
         if(changed.gearPower > 0){
             toUpdate.EGRinRange.unshift(changed);
