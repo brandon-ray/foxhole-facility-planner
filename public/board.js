@@ -68,7 +68,7 @@ class DraggableContainer extends PIXI.Container {
             if (game.selectedHandlePoint && this.selected && !this.locked && this.hasHandle && game.isMouseDown(0)) {
                 let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
                 let gmpGrid = game.getGlobalMousePosition();
-                if (!this.building?.ignoreSnapSettings && (game.settings.enableGrid || game.isKeyDown(16))) {
+                if (!this.building?.ignoreSnapSettings && (game.shiftKeyModifier ? !game.settings.enableGrid : game.settings.enableGrid)) {
                     gmpGrid.x = Math.round(gmpGrid.x / gridSize) * gridSize;
                     gmpGrid.y = Math.round(gmpGrid.y / gridSize) * gridSize;
                 }
@@ -78,14 +78,14 @@ class DraggableContainer extends PIXI.Container {
                     this.x = gmpGrid.x;
                     this.y = gmpGrid.y;
 
-                    if (!this.building?.ignoreSnapSettings && (game.settings.enableGrid || game.isKeyDown(16))) {
+                    if (!this.building?.ignoreSnapSettings && (game.shiftKeyModifier ? !game.settings.enableGrid : game.settings.enableGrid)) {
                         this.x = Math.round(this.x / gridSize) * gridSize;
                         this.y = Math.round(this.y / gridSize) * gridSize;
                     }
                 } else if (this.type === 'shape' || this.building) {
                     if (game.isMouseDown(2) && this.building?.isBezier) {
                         let angle = Math.angleBetween(game.selectedHandlePoint, mousePos);
-                        if (!this.building?.ignoreSnapSettings && game.settings.enableSnapRotation) {
+                        if (!this.building?.ignoreSnapSettings && (game.shiftKeyModifier ? !game.settings.enableSnapRotation : game.settings.enableSnapRotation)) {
                             let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ? game.settings.snapRotationDegrees : 15);
                             angle = Math.floor(angle / snapRotationDegrees) * snapRotationDegrees;
                         }
@@ -98,7 +98,7 @@ class DraggableContainer extends PIXI.Container {
                     if (this.type === 'shape') {
                         if (this.subtype === 'line' || this.subtype === 'circle') {
                             let angle = Math.angleBetween(this, gmpGrid);
-                            if (game.settings.enableSnapRotation) {
+                            if (game.shiftKeyModifier ? !game.settings.enableSnapRotation : game.settings.enableSnapRotation) {
                                 let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ? game.settings.snapRotationDegrees : 15);
                                 angle = Math.round(angle / snapRotationDegrees) * snapRotationDegrees;
                             }
@@ -120,7 +120,7 @@ class DraggableContainer extends PIXI.Container {
                         if (!this.building.isBezier || Math.abs(game.selectedHandlePoint.y) < 25) {
                             if (!this.building.isBezier && (this.building.canSnapRotate || !this.hasConnections())) {
                                 let angle = Math.angleBetween(this, gmpGrid);
-                                if (!this.building.ignoreSnapSettings && game.settings.enableSnapRotation) {
+                                if (!this.building.ignoreSnapSettings && (game.shiftKeyModifier ? !game.settings.enableSnapRotation : game.settings.enableSnapRotation)) {
                                     let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ? game.settings.snapRotationDegrees : 15);
                                     angle = Math.round(angle / snapRotationDegrees) * snapRotationDegrees;
                                 }
@@ -289,7 +289,7 @@ class DraggableContainer extends PIXI.Container {
                 }
 
                 if (game.getSelectedEntities().length === 1) {
-                    game.updateSelectedBuildingMenu();
+                    game.updateSelectedBuildingMenu(true);
                 }
             }
 
@@ -541,6 +541,9 @@ class DraggableContainer extends PIXI.Container {
             this.points = [];
             if (objData.handlePoint) {
                 this.addPoint(0, 0);
+                if (!this.building?.isBezier && objData.handlePoint.y && (this.subtype !== 'rectangle' && this.subtype !== 'image')) {
+                    objData.handlePoint.y = 0;
+                }
                 this.addPoint(objData.handlePoint.x, objData.handlePoint.y, undefined, objData.handlePoint.rotation);
             } else {
                 for (const point of (objData.handlePoints ?? objData.railPoints)) {
@@ -614,12 +617,27 @@ class DraggableContainer extends PIXI.Container {
             if (point.handle) {
                 point.handle.visible = this.selected;
                 if (point.handle.visible) {
+                    if (this.type === 'shape') {
+                        point.handle.scale.set(Math.min(1 / game.camera.zoom, 35) * 16);
+                    }
                     point.handle.tint = this.locked ? COLOR_RED : (point.index === 0 ? COLOR_ORANGE : COLOR_WHITE);
                 }
             }
         }
     }
     
+    getHandlePoint() {
+        return this.points && this.points[this.points.length - 1];
+    }
+
+    updateHandlePos() {
+        if (this.hasHandle) {
+            const point = this.getHandlePoint();
+            point.handle.x = point.x;
+            point.handle.y = point.y;
+        }
+    }
+
     grabHandlePoint() {
         if (this.selected && this.hasHandle) {
             if (this.shouldSelectLastHandlePoint) {
@@ -631,7 +649,7 @@ class DraggableContainer extends PIXI.Container {
                 let mousePos = this.toLocal(game.getGlobalMousePosition(), game.app.cstage, undefined, true);
                 for (let i = 1; i < this.points.length; i++) {
                     let point = this.points[i];
-                    if (Math.distanceBetween(mousePos, point) < 20) {
+                    if (Math.distanceBetween(mousePos, point) < (point.handle.width / 2)) {
                         game.selectEntity(this);
                         game.selectedHandlePoint = point;
                         return true;
@@ -669,6 +687,9 @@ class DraggableContainer extends PIXI.Container {
         handle.zIndex = 50;
         handle.width = 16;
         handle.height = 16;
+        if (this.type === 'shape') {
+            handle.scale.set(game.uiScale * 16);
+        }
         handle.position.x = newPoint.x;
         handle.position.y = newPoint.y;
         this.addChild(handle);
@@ -728,12 +749,12 @@ class DraggableContainer extends PIXI.Container {
     
     updateOverlays() {
         if (this.productionIcons) {
-            this.productionIcons.visible = game.projectSettings.showProductionIcons;
+            this.productionIcons.visible = game.project.settings.showProductionIcons;
         }
         if (this.rangeSprite) {
-            const showWhenSelected = game.projectSettings.showRangeWhenSelected && this.selected;
+            const showWhenSelected = game.project.settings.showRangeWhenSelected && this.selected;
             const rangeType = this.building?.range?.type || (this.baseUpgrades?.base && this.building.baseUpgrades.base[this.baseUpgrades.base].range?.type) || (this.maintenanceFilters && 'preventDecay');
-            this.rangeSprite.visible = showWhenSelected || (rangeType && game.projectSettings.ranges[rangeType]);
+            this.rangeSprite.visible = showWhenSelected || (rangeType && game.project.settings.ranges[rangeType]);
             this.updateRangeMask();
         }
     }

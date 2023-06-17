@@ -3,7 +3,7 @@ const gameData = {
 		"presets": {
 			"name": "Modules",
 			"hideInBuildingList": true,
-			"icon": "game/Textures/UI/Menus/IconFilterModules.webp",
+			"icon": "../UI/Menus/IconFilterModules.webp",
 			"filters": [
 				"bunkers",
 				"facilities"
@@ -12,7 +12,7 @@ const gameData = {
 		"defenses": {
 			"name": "Defenses",
 			"buildCategory": "Defense",
-			"icon": "game/Textures/UI/Menus/IconFilterDefense.webp",
+			"icon": "../UI/Menus/IconFilterDefense.webp",
 			"filters": [
 				"bunkers",
 				"facilities"
@@ -21,7 +21,7 @@ const gameData = {
 		"entrenchments": {
 			"name": "Entrenchments",
 			"buildCategory": "Bunker",
-			"icon": "game/Textures/UI/Menus/IconFilterBunker.webp",
+			"icon": "../UI/Menus/IconFilterBunker.webp",
 			"filters": [
 				"bunkers"
 			]
@@ -29,7 +29,7 @@ const gameData = {
 		"misc": {
 			"name": "Utilities",
 			"buildCategory": true,
-			"icon": "game/Textures/UI/Menus/IconFilterGeneral.webp",
+			"icon": "../UI/Menus/IconFilterGeneral.webp",
 			"filters": [
 				"bunkers",
 				"facilities",
@@ -39,7 +39,7 @@ const gameData = {
 		"factories": {
 			"name": "Facilities",
 			"buildCategory": "Facility",
-			"icon": "game/Textures/UI/Menus/IconFilterFacility.webp",
+			"icon": "../UI/Menus/IconFilterFacility.webp",
 			"filters": [
 				"facilities"
 			]
@@ -47,7 +47,7 @@ const gameData = {
 		"harvesters": {
 			"name": "Harvesters",
 			"buildCategory": "Mining",
-			"icon": "game/Textures/UI/Menus/IconFilterMining.webp",
+			"icon": "../UI/Menus/IconFilterMining.webp",
 			"filters": [
 				"facilities"
 			]
@@ -55,7 +55,7 @@ const gameData = {
 		"power": {
 			"name": "Power",
 			"buildCategory": "Power",
-			"icon": "game/Textures/UI/Menus/IconFilterPower.webp",
+			"icon": "../UI/Menus/IconFilterPower.webp",
 			"filters": [
 				"facilities"
 			]
@@ -63,7 +63,7 @@ const gameData = {
 		"foundations": {
 			"name": "Foundations",
 			"buildCategory": "Foundation",
-			"icon": "game/Textures/UI/Menus/IconFilterFoundation.webp",
+			"icon": "../UI/Menus/IconFilterFoundation.webp",
 			"filters": [
 				"facilities"
 			]
@@ -71,7 +71,7 @@ const gameData = {
 		"shippables": {
 			"name": "Shippables",
 			"buildCategory": "Shippables",
-			"icon": "game/Textures/UI/Menus/IconFilterShippingContainer.webp",
+			"icon": "../UI/Menus/IconFilterShippingContainer.webp",
 			"filters": [
 				"bunkers",
 				"facilities"
@@ -79,35 +79,40 @@ const gameData = {
 		},
 		"weaponry": {
 			"name": "Weaponry",
-			"icon": "game/Textures/UI/VehicleIcons/FieldArtilleryColVehicleIcon.webp",
+			"hideInBuildingList": true,
+			"icon": "../UI/VehicleIcons/FieldArtilleryColVehicleIcon.webp",
 			"filters": [
 				"vehicles"
 			]
 		},
 		"vehicles": {
 			"name": "Vehicles",
-			"icon": "game/Textures/UI/Menus/IconFilterVehicle.webp",
+			"hideInBuildingList": true,
+			"icon": "../UI/Menus/IconFilterVehicle.webp",
 			"filters": [
 				"vehicles"
 			]
 		},
 		"armor": {
 			"name": "Armory",
-			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarVehicleIcon.webp",
+			"hideInBuildingList": true,
+			"icon": "../UI/VehicleIcons/ArmoredCarVehicleIcon.webp",
 			"filters": [
 				"vehicles"
 			]
 		},
 		"tank": {
 			"name": "Tanks",
-			"icon": "game/Textures/UI/VehicleIcons/BattleTankWarDefensiveVehicleIcon.webp",
+			"hideInBuildingList": true,
+			"icon": "../UI/VehicleIcons/BattleTankWarDefensiveVehicleIcon.webp",
 			"filters": [
 				"vehicles"
 			]
 		},
 		"trains": {
 			"name": "Locomotives",
-			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeEngineVehicleIcon.webp",
+			"hideInBuildingList": true,
+			"icon": "../UI/VehicleIcons/SmallGaugeEngineVehicleIcon.webp",
 			"filters": [
 				"facilities",
 				"vehicles"
@@ -115,14 +120,15 @@ const gameData = {
 		},
 		"naval": {
 			"name": "Aquatic",
-			"icon": "game/Textures/UI/VehicleIcons/Motorboat.webp",
+			"hideInBuildingList": true,
+			"icon": "../UI/VehicleIcons/Motorboat.webp",
 			"filters": [
 				"vehicles"
 			]
 		},
 		"world": {
 			"name": "References",
-			"icon": "game/Textures/UI/Menus/IconFilterGarrisonHouse.webp",
+			"icon": "../UI/Menus/IconFilterGarrisonHouse.webp",
 			"filters": [
 				"bunkers",
 				"facilities"
@@ -131,7 +137,7 @@ const gameData = {
 		"showcase": {
 			"name": "Showcase",
 			"hideInBuildingList": true,
-			"icon": "game/Textures/UI/Menus/IconFilterShowcase.webp",
+			"icon": "../UI/Menus/IconFilterShowcase.webp",
 			"filters": [
 				"bunkers",
 				"facilities"
@@ -139,10 +145,93 @@ const gameData = {
 		}
 	},
 	"presets": {
-		"classic_storm_cannon": {
-			"name": "Classic Storm Cannon",
-			"description": "Storm Cannon setup with corner howitzers.",
-			"author": "Stonefox",
+		"360_dual": {
+			"name": "360 DUAL",
+			"description": "Retains compactness while significantly augmenting resistance to artillery.",
+			"author": "AllShallKneel",
+			"filters": [
+				"bunkers"
+			],
+			"module": true
+		},
+		"360_one": {
+			"name": "360 ONE",
+			"description": "The older brother of the zero, more expensive, but more aggressive.",
+			"filters": [
+				"bunkers"
+			],
+			"module": true
+		},
+		"360_zero": {
+			"name": "360 ZERO",
+			"description": "Cheap, Effective, Practical.",
+			"filters": [
+				"bunkers"
+			],
+			"module": true
+		},
+		"5mw_80h_drip_power": {
+			"name": "5mw 80h Drip Power",
+			"description": "Very useful to ease maintenance. This Design will be producing power ≃50% of the time, maintenance tunnels on its grid will be generating ≃80 Gsups/h and fuel will last twice as much (80h)",
+			"author": "[5th] Menxs",
+			"filters": [
+				"facilities"
+			]
+		},
+		"antoines_front_ammunition_fac": {
+			"name": "Antoine's Front Ammunition Fac.",
+			"description": "This is an easy Facility you can do near the front to provide public",
+			"author": "Antoine",
+			"filters": [
+				"facilities"
+			]
+		},
+		"antoines_front_fac_2_1": {
+			"name": "Antoine's Front Fac 2",
+			"description": "This is an easy Facility you can do near the front to provide public. Optimized tiles",
+			"author": [
+				"Antoine",
+				"elpargo"
+			],
+			"filters": [
+				"facilities"
+			]
+		},
+		"antoines_train_station_1_1": {
+			"name": "Antoine's Train Station 1",
+			"description": "This is a t2 train station for 3 train.",
+			"author": "Antoine",
+			"filters": [
+				"facilities"
+			]
+		},
+		"antoines_train_station_2_2": {
+			"name": "Antoine's Train Station 2",
+			"description": "This is a t3 train station for 4 train.",
+			"author": "Antoine",
+			"filters": [
+				"facilities"
+			]
+		},
+		"arty_pits_pallets_ammo_rooms": {
+			"name": "Arty pits pallets + ammo room's",
+			"description": "Simple way to do arty pits. They are ammo room's under the craines, cost about 1.5k to do pits and bunker and you can add as much pillbox's as you wan't !",
+			"author": "Furature",
+			"filters": [
+				"bunkers"
+			]
+		},
+		"bad_idea_inc": {
+			"name": "Bad Idea INC.™",
+			"description": "Field mod facility, PLS DONT BUILD",
+			"author": "maverick0537(im sorry)",
+			"filters": [
+				"facilities"
+			]
+		},
+		"bunker_w_module": {
+			"name": "\"W\" Bunker",
+			"description": "A meta bunker design that has lots of health with great structural integrity and defenses.",
 			"filters": [
 				"bunkers"
 			],
@@ -157,37 +246,73 @@ const gameData = {
 			],
 			"module": true
 		},
-		"360_zero": {
-			"name": "360 ZERO",
-			"description": "Cheap, Effective, Practical.",
-			"author": "Unknown",
+		"classic_storm_cannon": {
+			"name": "Classic Storm Cannon",
+			"description": "Storm Cannon setup with corner howitzers.",
+			"author": "Stonefox",
 			"filters": [
 				"bunkers"
 			],
 			"module": true
 		},
-		"360_one": {
-			"name": "360 ONE",
-			"description": "The older brother of the zero, more expensive, but more aggressive.",
-			"author": "Unknown",
+		"coastal_storage_facility_by_eg0611": {
+			"name": "Coastal Storage Facility",
+			"description": "A small facility with only purpose of storing items. No power production and consumption. It depends nearby bunker base for GSUPS usage.",
+			"author": "EG0611",
+			"filters": [
+				"facilities"
+			]
+		},
+		"compact_artillery": {
+			"name": "Compact Artillery Factory",
+			"author": "Brondos",
+			"filters": [
+				"facilities"
+			]
+		},
+		"compact_coal_liquefaction": {
+			"name": "Compact Coal Liquefaction",
+			"description": "Produce coal with the power of coal! You can easily power this setup with a coal power station and an extra water pump for \"automatic\" coal. The coal to coal conversion factor is of ≃2.6. Taking into account power the multiplier is of ≃2.286",
+			"author": "[5th] Menxs",
+			"filters": [
+				"facilities"
+			]
+		},
+		"compact_corner_bunker": {
+			"name": "Compact Corner Bunker",
+			"description": "This is a compact AT, MG and HG corner design that covers a 90 degree angle. This design is meant to be integrated into a straight line defence without wasting any space, or making any concessions on defence. Corner cutting is needed in the middle where 4 corner cuts are needed, but are easy to do. Do note that this design is only viable at the concrete tier.",
+			"author": "Danetello",
 			"filters": [
 				"bunkers"
 			],
 			"module": true
 		},
-		"360_dual": {
-			"name": "360 DUAL",
-			"description": "Retains compactness while significantly augmenting resistance to artillery.",
-			"author": "AllShallKneel",
+		"devbunker": {
+			"name": "Dev Bunker",
 			"filters": [
 				"bunkers"
-			],
-			"module": true
+			]
 		},
-		"long_shall": {
-			"name": "LongShall",
-			"description": "Did somebody say compact? While this bunker sacrifices some coverage for extreme density, it does so marvelously.",
-			"author": "AllShallKneel",
+		"eat_maker": {
+			"name": "EAT Maker",
+			"description": "Small EAT making facility\na train will make imports/exports easier but is not necessary",
+			"author": "maverick0537",
+			"module": true,
+			"filters": [
+				"facilities"
+			]
+		},
+		"frontline_sandbag_factory": {
+			"name": "Frontline Sandbag Factory",
+			"description": "Simple, easy to maintain frontline sandbag factory. Heavily based off of Small Munition Factory by Oberst_Den",
+			"author": "runningpeanuts",
+			"filters": [
+				"facilities"
+			]
+		},
+		"halberd_bunker": {
+			"name": "\"Halberd\" Bunker",
+			"description": "A common reliable defensive bunker pattern.",
 			"filters": [
 				"bunkers"
 			],
@@ -202,28 +327,18 @@ const gameData = {
 			],
 			"module": true
 		},
-		"mini_obs": {
-			"name": "miniObs",
-			"description": "Extremely lightweight, but provides RG coverage at the bare minimum cost.",
+		"locomotive_factory_by_eg0611": {
+			"name": "Locomotive Factory",
+			"description": "A facility that is capable to build Black Bolt, Longrider, Holdout, Rockhold and Roadhouse and their necessary manufacturing materials. 4 independent power systems allow facility to be functional 7/24.",
+			"author": "EG0611",
+			"filters": [
+				"facilities"
+			]
+		},
+		"long_shall": {
+			"name": "LongShall",
+			"description": "Did somebody say compact? While this bunker sacrifices some coverage for extreme density, it does so marvelously.",
 			"author": "AllShallKneel",
-			"filters": [
-				"bunkers"
-			],
-			"module": true
-		},
-		"halberd_bunker": {
-			"name": "\"Halberd\" Bunker",
-			"description": "A common reliable defensive bunker pattern.",
-			"author": "Unknown",
-			"filters": [
-				"bunkers"
-			],
-			"module": true
-		},
-		"xi_observation_bunker1": {
-			"name": "XI Observation Bunker",
-			"description": "Simple observation bunker split into two pieces to help with integrity (especially if left T2). Only 2 RGs can be lit, but that should be enough to prevent anyone from slipping into the bunker without suppression.",
-			"author": "nondidjos",
 			"filters": [
 				"bunkers"
 			],
@@ -237,6 +352,120 @@ const gameData = {
 				"bunkers"
 			],
 			"module": true
+		},
+		"m_bunker_w_trenches": {
+			"name": "\"M\" Bunker w/ Trenches",
+			"description": "Wide concrete bunker with trench support.",
+			"author": "Stonefox",
+			"filters": [
+				"bunkers"
+			]
+		},
+		"mini_obs": {
+			"name": "miniObs",
+			"description": "Extremely lightweight, but provides RG coverage at the bare minimum cost.",
+			"author": "AllShallKneel",
+			"filters": [
+				"bunkers"
+			],
+			"module": true
+		},
+		"msupps_facility": {
+			"name": "Msupps Facility",
+			"description": "Best if built next to bunker bases, these facilities makes Msupps production easy and quick.",
+			"author": "Trooper",
+			"filters": [
+				"facilities"
+			]
+		},
+		"obs_bunker": {
+			"name": "OBS Bunker",
+			"description": "Standard observation bunker. Power only 2 rifle garrisons and the OBS bunker.",
+			"filters": [
+				"bunkers"
+			],
+			"module": true
+		},
+		"oil_refinement_guide": {
+			"name": "Oil refinement guide",
+			"description": "So, you want to refine oil. In this project i share what i have learned about the aspects of oil refinement and it's tips/tricks.",
+			"author": "[5th] Menxs",
+			"filters": [
+				"facilities"
+			]
+		},
+		"panzer_snares": {
+			"name": "Panzer Snares",
+			"author": "KitsunePanzer",
+			"module": true,
+			"filters": [
+				"bunkers"
+			]
+		},
+		"salvage_field1": {
+			"name": "Salvage Field",
+			"description": "Designed for Epicwarding\n55m round from salvage centre",
+			"author": "meowNIman",
+			"filters": [
+				"facilities"
+			]
+		},
+		"simple_vehicle_factory": {
+			"name": "Simple Vehicle Factory (Example)",
+			"description": "A simple vehicle factory to output upgraded vehicles per hour. This is an example of a preset for the planner. Contribute your own saves to our Discord!",
+			"author": "Jimbo",
+			"filters": [
+				"facilities"
+			]
+		},
+		"small_artillery_facility": {
+			"name": "Small Artillery Facility",
+			"description": "A small and simple design that doesn't take up much space or Msupps.",
+			"author": "Trooper",
+			"filters": [
+				"facilities"
+			]
+		},
+		"small_artillery_setup": {
+			"name": "Small Artillery Setup",
+			"description": "This blueprint allows for 3 artillery pieces to have an emplaced cover with light defenses. 2 ammo rooms hold up to 200 shells of either 120mm or 150mm for safe storage. Best for small to medium bunker bases that want a spot for some friendly artillery. ",
+			"author": "Stonefox01",
+			"filters": [
+				"bunkers"
+			],
+			"module": true
+		},
+		"small_easy_soloduo_facility": {
+			"name": "Small Easy Solo/Duo Facility",
+			"description": "Produces Sandbag and Barbwire to ship to front and modifies armored cars. ",
+			"author": "Mach 12 Slip n' Slide",
+			"filters": [
+				"facilities"
+			]
+		},
+		"small_munition_factory": {
+			"name": "Small Munition Factory",
+			"description": "Small one man Facility with Low Gsupps cost of 432 for 24h when the lvl 3 Encampment is reached.",
+			"author": "Oberst_Den",
+			"filters": [
+				"facilities"
+			]
+		},
+		"small_tripod_facility": {
+			"name": "Small Tripod Facility",
+			"description": "A variant to the Small Artillery Facility I made, this one allows you to mass produce tripod weapons",
+			"author": "Trooper",
+			"filters": [
+				"facilities"
+			]
+		},
+		"spatha_mpf": {
+			"name": "Spatha MPF",
+			"description": "Mass producting Spatha. Can be suply alone and design for it. So if you more than one wanting to do this its easy . (def can be reduce but i think its the minimum to have a 360deg at/rifle bunker)",
+			"author": "Furature",
+			"filters": [
+				"facilities"
+			]
 		},
 		"squid_bunker_t2_1": {
 			"name": "\"Squid\" Bunker T2",
@@ -256,60 +485,26 @@ const gameData = {
 			],
 			"module": true
 		},
-		"bunker_w_module": {
-			"name": "\"W\" Bunker",
-			"description": "A meta bunker design that has lots of health with great structural integrity and defenses.",
-			"author": "Unknown",
-			"filters": [
-				"bunkers"
-			],
-			"module": true
-		},
-		"compact_corner_bunker": {
-			"name": "Compact Corner Bunker",
-			"description": "This is a compact AT, MG and HG corner design that covers a 90 degree angle. This design is meant to be integrated into a straight line defence without wasting any space, or making any concessions on defence. Corner cutting is needed in the middle where 4 corner cuts are needed, but are easy to do. Do note that this design is only viable at the concrete tier.",
-			"author": "Danetello",
-			"filters": [
-				"bunkers"
-			],
-			"module": true
-		},
-		"obs_bunker": {
-			"name": "OBS Bunker",
-			"description": "Standard observation bunker. Power only 2 rifle garrisons and the OBS bunker.",
-			"author": "Unknown",
-			"filters": [
-				"bunkers"
-			],
-			"module": true
-		},
-		"locomotive_factory_by_eg0611": {
-			"name": "Locomotive Factory",
-			"description": "A facility that is capable to build Black Bolt, Longrider, Holdout, Rockhold and Roadhouse and their necessary manufacturing materials. 4 independent power systems allow facility to be functional 7/24.",
-			"author": "EG0611",
+		"standard_facility_modules_10": {
+			"name": "Standard Facility Modules",
+			"description": "Standardized Facility Modules. I tried to keep them all to the same footprint (6x4/4x4) \n\n",
+			"author": "Spannbeton",
 			"filters": [
 				"facilities"
 			]
 		},
-		"m_bunker_w_trenches": {
-			"name": "\"M\" Bunker w/ Trenches",
-			"description": "Wide concrete bunker with trench support.",
-			"author": "Stonefox",
+		"t1_oil_field_refinement": {
+			"name": "T1 Oil field refinement",
+			"description": "Basic T1 oil field setup, water is optional. I highly recommend adding a 4th oil refinary to consume oil faster when it backs up.",
+			"author": "[5th] Menxs",
+			"module": true,
 			"filters": [
-				"bunkers"
+				"facilities"
 			]
 		},
 		"t2_courtyard": {
 			"name": "T2 Courtyard",
 			"description": "A courtyard T2 bunker layout for early - mid war.",
-			"author": "Stonefox",
-			"filters": [
-				"bunkers"
-			]
-		},
-		"t2_or_t3_halberd_trench_designs": {
-			"name": "T2 / T3 Halberd Trench Designs",
-			"description": "Using the Halberd bunker design here are some trenches you can use to connect them, varying in amount of emplacements.",
 			"author": "Stonefox",
 			"filters": [
 				"bunkers"
@@ -323,103 +518,12 @@ const gameData = {
 				"facilities"
 			]
 		},
-		"small_munition_factory": {
-			"name": "Small Munition Factory",
-			"description": "Small one man Facility with Low Gsupps cost of 432 for 24h when the lvl 3 Encampment is reached.",
-			"author": "Oberst_Den",
+		"t2_or_t3_halberd_trench_designs": {
+			"name": "T2 / T3 Halberd Trench Designs",
+			"description": "Using the Halberd bunker design here are some trenches you can use to connect them, varying in amount of emplacements.",
+			"author": "Stonefox",
 			"filters": [
-				"facilities"
-			]
-		},
-		"frontline_sandbag_factory": {
-			"name": "Frontline Sandbag Factory",
-			"description": "Simple, easy to maintain frontline sandbag factory. Heavily based off of Small Munition Factory by Oberst_Den",
-			"author": "runningpeanuts",
-			"filters": [
-				"facilities"
-			]
-		},
-		"compact_coal_liquefaction": {
-			"name": "Compact Coal Liquefaction",
-			"description": "Produce coal with the power of coal! You can easily power this setup with a coal power station and an extra water pump for \"automatic\" coal. The coal to coal conversion factor is of ≃2.6. Taking into account power the multiplier is of ≃2.286",
-			"author": "[5th] Menxs",
-			"filters": [
-				"facilities"
-			]
-		},
-		"5mw_80h_drip_power": {
-			"name": "5mw 80h Drip Power",
-			"description": "Very useful to ease maintenance. This Design will be producing power ≃50% of the time, maintenance tunnels on its grid will be generating ≃80 Gsups/h and fuel will last twice as much (80h)",
-			"author": "[5th] Menxs",
-			"filters": [
-				"facilities"
-			]
-		},
-		"coastal_storage_facility_by_eg0611": {
-			"name": "Coastal Storage Facility",
-			"description": "A small facility with only purpose of storing items. No power production and consumption. It depends nearby bunker base for GSUPS usage.",
-			"author": "EG0611",
-			"filters": [
-				"facilities"
-			]
-		},
-		"simple_vehicle_factory": {
-			"name": "Simple Vehicle Factory (Example)",
-			"description": "A simple vehicle factory to output upgraded vehicles per hour. This is an example of a preset for the planner. Contribute your own saves to our Discord!",
-			"author": "Jimbo",
-			"filters": [
-				"facilities"
-			]
-		},
-		"panzer_snares": {
-			"name": "Panzer Snares",
-			"author": "KitsunePanzer",
-			"module": true,
-			"filters": [
-				"bunkers",
-				"facilities"
-			]
-		},
-		"small_artillery_facility": {
-			"name": "Small Artillery Facility",
-			"description": "A small and simple design that doesn't take up much space or Msupps.",
-			"author": "Trooper",
-			"filters": [
-				"facilities"
-			]
-		},
-		"small_tripod_facility": {
-			"name": "Small Tripod Facility",
-			"description": "A variant to the Small Artillery Facility I made, this one allows you to mass produce tripod weapons",
-			"author": "Trooper",
-			"filters": [
-				"facilities"
-			]
-		},
-		"eat_maker": {
-			"name": "EAT Maker",
-			"description": "Small EAT making facility\na train will make imports/exports easier but is not necessary",
-			"author": "maverick0537",
-			"module": true,
-			"filters": [
-				"facilities"
-			]
-		},
-		"msupps_facility": {
-			"name": "Msupps Facility",
-			"description": "Best if built next to bunker bases, these facilities makes Msupps production easy and quick.",
-			"author": "Trooper",
-			"filters": [
-				"facilities"
-			]
-		},
-		"t1_oil_field_refinement": {
-			"name": "T1 Oil field refinement",
-			"description": "Basic T1 oil field setup, water is optional. I highly recommend adding a 4th oil refinary to consume oil faster when it backs up.",
-			"author": "[5th] Menxs",
-			"module": true,
-			"filters": [
-				"facilities"
+				"bunkers"
 			]
 		},
 		"t3_core": {
@@ -434,21 +538,30 @@ const gameData = {
 			],
 			"module": true
 		},
-		"bad_idea_inc": {
-			"name": "Bad Idea INC.™",
-			"description": "Field mod facility, PLS DONT BUILD",
-			"author": "maverick0537(im sorry)",
+		"wheats_anti_partisan_base": {
+			"name": "\\/\\/heat's anti-partisan base",
+			"description": "Thanks to \\/\\/heat for this awesome, low-cost base! Features 360 degrees of anti-tank and anti-infantry defenses, an obs bunker, and an internal-facing core to protect players as they spawn in.",
+			"author": "io()stream",
 			"filters": [
-				"facilities"
+				"bunkers"
 			]
+		},
+		"xi_observation_bunker1": {
+			"name": "XI Observation Bunker",
+			"description": "Simple observation bunker split into two pieces to help with integrity (especially if left T2). Only 2 RGs can be lit, but that should be enough to prevent anyone from slipping into the bunker without suppression.",
+			"author": "nondidjos",
+			"filters": [
+				"bunkers"
+			],
+			"module": true
 		}
 	},
 	"maps": {
 		"acrithiahex": {
 			"name": "Acrithia",
 			"regionId": 30,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapAcrithiaHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapAcrithiaHex.png",
+			"icon": "../UI/HexMaps/Icons/MapAcrithiaHex.webp",
+			"textureKey": "MapAcrithiaHex",
 			"gridCoord": {
 				"x": 1,
 				"y": 2
@@ -457,8 +570,8 @@ const gameData = {
 		"allodsbighthex": {
 			"name": "Allod's Bight",
 			"regionId": 21,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapAllodsBightHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapAllodsBightHex.png",
+			"icon": "../UI/HexMaps/Icons/MapAllodsBightHex.webp",
+			"textureKey": "MapAllodsBightHex",
 			"gridCoord": {
 				"x": 2,
 				"y": 0
@@ -467,8 +580,8 @@ const gameData = {
 		"ashfieldshex": {
 			"name": "Ash Fields",
 			"regionId": 41,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapAshFieldsHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapAshFieldsHex.png",
+			"icon": "../UI/HexMaps/Icons/MapAshFieldsHex.webp",
+			"textureKey": "MapAshFieldsHex",
 			"gridCoord": {
 				"x": -2,
 				"y": 3
@@ -477,8 +590,8 @@ const gameData = {
 		"basinsionnachhex": {
 			"name": "Basin Sionnach",
 			"regionId": 34,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapBasinSionnachHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapBasinSionnachHex.png",
+			"icon": "../UI/HexMaps/Icons/MapBasinSionnachHex.webp",
+			"textureKey": "MapBasinSionnachHex",
 			"gridCoord": {
 				"x": 0,
 				"y": -3
@@ -487,8 +600,8 @@ const gameData = {
 		"callahanspassagehex": {
 			"name": "Callahan's Passage",
 			"regionId": 4,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapCallahansPassageHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapCallahansPassageHex.png",
+			"icon": "../UI/HexMaps/Icons/MapCallahansPassageHex.webp",
+			"textureKey": "MapCallahansPassageHex",
 			"gridCoord": {
 				"x": 0,
 				"y": -1
@@ -497,8 +610,8 @@ const gameData = {
 		"callumscapehex": {
 			"name": "Callum's Cape",
 			"regionId": 32,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapCallumsCapeHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapCallumsCapeHex.png",
+			"icon": "../UI/HexMaps/Icons/MapCallumsCapeHex.webp",
+			"textureKey": "MapCallumsCapeHex",
 			"gridCoord": {
 				"x": -2,
 				"y": -1
@@ -507,8 +620,8 @@ const gameData = {
 		"clansheadvalleyhex": {
 			"name": "Clanshead Valley",
 			"regionId": 36,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapClansheadValleyHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapClansheadValleyHex.png",
+			"icon": "../UI/HexMaps/Icons/MapClansheadValleyHex.webp",
+			"textureKey": "MapClansheadValleyHex",
 			"gridCoord": {
 				"x": 2,
 				"y": -3
@@ -517,8 +630,8 @@ const gameData = {
 		"deadlandshex": {
 			"name": "Deadlands",
 			"regionId": 3,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapDeadlandsHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapDeadlandsHex.png",
+			"icon": "../UI/HexMaps/Icons/MapDeadLandsHex.webp",
+			"textureKey": "MapDeadLandsHex",
 			"gridCoord": {
 				"x": 0,
 				"y": 0
@@ -527,8 +640,8 @@ const gameData = {
 		"drownedvalehex": {
 			"name": "The Drowned Vale",
 			"regionId": 23,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapDrownedValeHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapDrownedValeHex.png",
+			"icon": "../UI/HexMaps/Icons/MapDrownedValeHex.webp",
+			"textureKey": "MapDrownedValeHex",
 			"gridCoord": {
 				"x": 1,
 				"y": 0
@@ -537,8 +650,8 @@ const gameData = {
 		"endlessshorehex": {
 			"name": "Endless Shore",
 			"regionId": 20,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapEndlessShoreHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapEndlessShoreHex.png",
+			"icon": "../UI/HexMaps/Icons/MapEndlessShoreHex.webp",
+			"textureKey": "MapEndlessShoreHex",
 			"gridCoord": {
 				"x": 2,
 				"y": -1
@@ -547,8 +660,8 @@ const gameData = {
 		"farranaccoasthex": {
 			"name": "Farranac Coast",
 			"regionId": 13,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapFarranacCoastHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapFarranacCoastHex.png",
+			"icon": "../UI/HexMaps/Icons/MapFarranacCoastHex.webp",
+			"textureKey": "MapFarranacCoastHex",
 			"gridCoord": {
 				"x": -2,
 				"y": 1
@@ -557,8 +670,8 @@ const gameData = {
 		"fishermansrowhex": {
 			"name": "Fisherman's Row",
 			"regionId": 15,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapFishermansRowHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapFishermansRowHex.png",
+			"icon": "../UI/HexMaps/Icons/MapFishermansRowHex.webp",
+			"textureKey": "MapFishermansRowHex",
 			"gridCoord": {
 				"x": -3,
 				"y": 2
@@ -567,8 +680,8 @@ const gameData = {
 		"godcroftshex": {
 			"name": "Godcrofts",
 			"regionId": 19,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapGodcroftsHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapGodcroftsHex.png",
+			"icon": "../UI/HexMaps/Icons/MapGodcroftsHex.webp",
+			"textureKey": "MapGodcroftsHex",
 			"gridCoord": {
 				"x": 3,
 				"y": -2
@@ -577,8 +690,8 @@ const gameData = {
 		"greatmarchhex": {
 			"name": "Great March",
 			"regionId": 17,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapGreatMarchHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapGreatMarchHex.png",
+			"icon": "../UI/HexMaps/Icons/MapGreatMarchHex.webp",
+			"textureKey": "MapGreatMarchHex",
 			"gridCoord": {
 				"x": 0,
 				"y": 2
@@ -587,8 +700,8 @@ const gameData = {
 		"heartlandshex": {
 			"name": "The Heartlands",
 			"regionId": 8,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapHeartlandsHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapHeartlandsHex.png",
+			"icon": "../UI/HexMaps/Icons/MapHeartlandsHex.webp",
+			"textureKey": "MapHeartlandsHex",
 			"gridCoord": {
 				"x": -1,
 				"y": 2
@@ -597,8 +710,8 @@ const gameData = {
 		"howlcountyhex": {
 			"name": "Howl County",
 			"regionId": 35,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapHowlCountyHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapHowlCountyHex.png",
+			"icon": "../UI/HexMaps/Icons/MapHowlCountyHex.webp",
+			"textureKey": "MapHowlCountyHex",
 			"gridCoord": {
 				"x": 1,
 				"y": -3
@@ -607,8 +720,8 @@ const gameData = {
 		"kalokaihex": {
 			"name": "Kalokai",
 			"regionId": 40,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapKalokaiHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapKalokaiHex.png",
+			"icon": "../UI/HexMaps/Icons/MapKalokaiHex.webp",
+			"textureKey": "MapKalokaiHex",
 			"gridCoord": {
 				"x": 0,
 				"y": 3
@@ -617,8 +730,8 @@ const gameData = {
 		"linnmercyhex": {
 			"name": "The Linn of Mercy",
 			"regionId": 10,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapLinnMercyHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapLinnMercyHex.png",
+			"icon": "../UI/HexMaps/Icons/MapLinnMercyHex.webp",
+			"textureKey": "MapLinnMercyHex",
 			"gridCoord": {
 				"x": -1,
 				"y": 0
@@ -627,8 +740,8 @@ const gameData = {
 		"lochmorhex": {
 			"name": "Loch Mór",
 			"regionId": 9,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapLochMorHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapLochMorHex.png",
+			"icon": "../UI/HexMaps/Icons/MapLochMorHex.webp",
+			"textureKey": "MapLochMorHex",
 			"gridCoord": {
 				"x": -1,
 				"y": 1
@@ -637,8 +750,8 @@ const gameData = {
 		"marbanhollow": {
 			"name": "Marban Hollow",
 			"regionId": 5,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapMarbanHollow.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapMarbanHollow.png",
+			"icon": "../UI/HexMaps/Icons/MapMarbanHollow.webp",
+			"textureKey": "MapMarbanHollow",
 			"gridCoord": {
 				"x": 1,
 				"y": -1
@@ -647,8 +760,8 @@ const gameData = {
 		"mooringcountyhex": {
 			"name": "The Moors",
 			"regionId": 7,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapMooringCountyHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapMooringCountyHex.png",
+			"icon": "../UI/HexMaps/Icons/MapMooringCountyHex.webp",
+			"textureKey": "MapMooringCountyHex",
 			"gridCoord": {
 				"x": -1,
 				"y": -1
@@ -657,8 +770,8 @@ const gameData = {
 		"morgenscrossinghex": {
 			"name": "Morgen's Crossing",
 			"regionId": 37,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapMorgensCrossingHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapMorgensCrossingHex.png",
+			"icon": "../UI/HexMaps/Icons/MapMorgensCrossingHex.webp",
+			"textureKey": "MapMorgensCrossingHex",
 			"gridCoord": {
 				"x": 3,
 				"y": -3
@@ -667,8 +780,8 @@ const gameData = {
 		"nevishlinehex": {
 			"name": "Nevish Line",
 			"regionId": 29,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapNevishLineHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapNevishLineHex.png",
+			"icon": "../UI/HexMaps/Icons/MapNevishLineHex.webp",
+			"textureKey": "MapNevishLineHex",
 			"gridCoord": {
 				"x": -3,
 				"y": 0
@@ -677,8 +790,8 @@ const gameData = {
 		"oarbreakerhex": {
 			"name": "The Oarbreaker Isles",
 			"regionId": 16,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapOarbreakerHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapOarbreakerHex.png",
+			"icon": "../UI/HexMaps/Icons/MapOarbreakerHex.webp",
+			"textureKey": "MapOarbreakerHex",
 			"gridCoord": {
 				"x": -3,
 				"y": 1
@@ -687,8 +800,8 @@ const gameData = {
 		"originhex": {
 			"name": "Origin",
 			"regionId": 42,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapOriginHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapOriginHex.png",
+			"icon": "../UI/HexMaps/Icons/MapOriginHex.webp",
+			"textureKey": "MapOriginHex",
 			"gridCoord": {
 				"x": -3,
 				"y": 3
@@ -697,8 +810,8 @@ const gameData = {
 		"reachingtrailhex": {
 			"name": "Reaching Trail",
 			"regionId": 11,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapReachingTrailHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapReachingTrailHex.png",
+			"icon": "../UI/HexMaps/Icons/MapReachingTrailHex.webp",
+			"textureKey": "MapReachingTrailHex",
 			"gridCoord": {
 				"x": 0,
 				"y": -2
@@ -707,8 +820,8 @@ const gameData = {
 		"redriverhex": {
 			"name": "Red River",
 			"regionId": 31,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapRedRiverHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapRedRiverHex.png",
+			"icon": "../UI/HexMaps/Icons/MapRedRiverHex.webp",
+			"textureKey": "MapRedRiverHex",
 			"gridCoord": {
 				"x": -1,
 				"y": 3
@@ -717,8 +830,8 @@ const gameData = {
 		"shackledchasmhex": {
 			"name": "Shackled Chasm",
 			"regionId": 24,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapShackledChasmHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapShackledChasmHex.png",
+			"icon": "../UI/HexMaps/Icons/MapShackledChasmHex.webp",
+			"textureKey": "MapShackledChasmHex",
 			"gridCoord": {
 				"x": 1,
 				"y": 1
@@ -727,8 +840,8 @@ const gameData = {
 		"speakingwoodshex": {
 			"name": "Speaking Woods",
 			"regionId": 33,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapSpeakingWoodsHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapSpeakingWoodsHex.png",
+			"icon": "../UI/HexMaps/Icons/MapSpeakingWoodsHex.webp",
+			"textureKey": "MapSpeakingWoodsHex",
 			"gridCoord": {
 				"x": -1,
 				"y": -2
@@ -737,8 +850,8 @@ const gameData = {
 		"stonecradlehex": {
 			"name": "Stonecradle",
 			"regionId": 12,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapStonecradleHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapStonecradleHex.png",
+			"icon": "../UI/HexMaps/Icons/MapStonecradleHex.webp",
+			"textureKey": "MapStonecradleHex",
 			"gridCoord": {
 				"x": -2,
 				"y": 0
@@ -747,8 +860,8 @@ const gameData = {
 		"tempestislandhex": {
 			"name": "Tempest Island",
 			"regionId": 18,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapTempestIslandHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapTempestIslandHex.png",
+			"icon": "../UI/HexMaps/Icons/MapTempestIslandHex.webp",
+			"textureKey": "MapTempestIslandHex",
 			"gridCoord": {
 				"x": 3,
 				"y": -1
@@ -757,8 +870,8 @@ const gameData = {
 		"terminushex": {
 			"name": "Terminus",
 			"regionId": 39,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapTerminusHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapTerminusHex.png",
+			"icon": "../UI/HexMaps/Icons/MapTerminusHex.webp",
+			"textureKey": "MapTerminusHex",
 			"gridCoord": {
 				"x": 2,
 				"y": 1
@@ -767,8 +880,8 @@ const gameData = {
 		"thefingershex": {
 			"name": "The Fingers",
 			"regionId": 38,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapTheFingersHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapTheFingersHex.png",
+			"icon": "../UI/HexMaps/Icons/MapTheFingersHex.webp",
+			"textureKey": "MapTheFingersHex",
 			"gridCoord": {
 				"x": 3,
 				"y": 0
@@ -777,8 +890,8 @@ const gameData = {
 		"umbralwildwoodhex": {
 			"name": "Umbral Wildwood",
 			"regionId": 6,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapUmbralWildwoodHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapUmbralWildwoodHex.png",
+			"icon": "../UI/HexMaps/Icons/MapUmbralWildwoodHex.webp",
+			"textureKey": "MapUmbralWildwoodHex",
 			"gridCoord": {
 				"x": 0,
 				"y": 1
@@ -787,8 +900,8 @@ const gameData = {
 		"viperpithex": {
 			"name": "Viper Pit",
 			"regionId": 25,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapViperPitHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapViperPitHex.png",
+			"icon": "../UI/HexMaps/Icons/MapViperPitHex.webp",
+			"textureKey": "MapViperPitHex",
 			"gridCoord": {
 				"x": 1,
 				"y": -2
@@ -797,8 +910,8 @@ const gameData = {
 		"weatheredexpansehex": {
 			"name": "Weathered Expanse",
 			"regionId": 22,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapWeatheredExpanseHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapWeatheredExpanseHex.png",
+			"icon": "../UI/HexMaps/Icons/MapWeatheredExpanseHex.webp",
+			"textureKey": "MapWeatheredExpanseHex",
 			"gridCoord": {
 				"x": 2,
 				"y": -2
@@ -807,8 +920,8 @@ const gameData = {
 		"westgatehex": {
 			"name": "Westgate",
 			"regionId": 14,
-			"icon": "game/Textures/UI/HexMaps/Icons/MapWestgateHex.webp",
-			"texture": "game/Textures/UI/HexMaps/Processed/MapWestgateHex.png",
+			"icon": "../UI/HexMaps/Icons/MapWestgateHex.webp",
+			"textureKey": "MapWestgateHex",
 			"gridCoord": {
 				"x": -2,
 				"y": 2
@@ -819,757 +932,757 @@ const gameData = {
 		"unlockfacilitytier2": {
 			"name": "Facilities (Tier 2)",
 			"description": "Allows for the construction of advanced Facilities structures.",
-			"icon": "game/Textures/UI/StructureIcons/FacilityRefinery2Icon.webp"
+			"icon": "../UI/StructureIcons/FacilityRefinery2Icon.webp"
 		},
 		"unlockfacilitytier3": {
 			"name": "Facilities (Tier 3)",
 			"description": "Allows for the construction of specialized Facilities structures.",
-			"icon": "game/Textures/UI/StructureIcons/FacilityRefinery2Icon.webp"
+			"icon": "../UI/StructureIcons/FacilityRefinery2Icon.webp"
 		}
 	},
 	"resources": {
 		"ambulancec": {
 			"name": "R-12 - “Salus” Ambulance",
 			"description": "The “Salus” Ambulance is efficient at transporting Critically Wounded Soldiers and carrying medical supplies.",
-			"icon": "game/Textures/UI/VehicleIcons/Ambulance.webp"
+			"icon": "../UI/VehicleIcons/Ambulance.webp"
 		},
 		"ambulanceflamec": {
 			"name": "R-12b - “Salva” Flame Truck",
 			"description": "This simple variant of the “Salus” ambulance is fitted with a high-powered hose designed to quell wildfires.",
-			"icon": "game/Textures/UI/VehicleIcons/AmbulanceFlameC.webp"
+			"icon": "../UI/VehicleIcons/AmbulanceFlameC.webp"
 		},
 		"ambulanceflamew": {
 			"name": "Dunne Dousing Engine 3r",
 			"description": "A simple variant of the Dunne Responder 3e that’s fitted with a high-powered hose designed to extinguish raging flames.",
-			"icon": "game/Textures/UI/VehicleIcons/AmbulanceFlameW.webp"
+			"icon": "../UI/VehicleIcons/AmbulanceFlameW.webp"
 		},
 		"ambulancew": {
 			"name": "Dunne Responder 3e",
 			"description": "The Responder Ambulance is efficient at transporting Critically Wounded Soldiers and carrying medical supplies.",
-			"icon": "game/Textures/UI/VehicleIcons/AmbulanceWar.webp"
+			"icon": "../UI/VehicleIcons/AmbulanceWar.webp"
 		},
 		"armoredcaratw": {
 			"name": "O’Brien V.113 Gravekeeper",
 			"description": "A slight variation of the V.110, the Gravekeeper comes fitted with an embedded Bonesaw launcher, transforming the humble armoured car into an effective indirect anti-armour vehicle.",
-			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarATWVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/ArmoredCarATWVehicleIcon.webp"
 		},
 		"armoredcarc": {
 			"name": "T3 “Xiphos”",
 			"description": "Colonial Armoured Cars are quick, well-rounded urban assault platforms. These anti-infantry vehicles are equipped with twin-barrelled machineguns.",
-			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/ArmoredCarVehicleIcon.webp"
 		},
 		"armoredcarflamew": {
 			"name": "O’Brien V.130 Wild Jack",
 			"description": "While the Noble Firebrand Mk. XVII is a deadly flamethrower tank, a more efficient means of employing flame weapons was needed. Enter the Wild Jack. Named for the fiery idols made by children for Dead Harvest, the Wild Jack is a variation of the Highlander.",
-			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarFlameWarVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/ArmoredCarFlameWarVehicleIcon.webp"
 		},
 		"armoredcarmobilityw": {
 			"name": "O’Brien V.121 Highlander",
 			"description": "Fitted with all-terrain treads, the Highlander brings significant all-terrain mobility and performs especially well in snowy and mountainous environments. ",
-			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarMobilityWarVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/ArmoredCarMobilityWarVehicleIcon.webp"
 		},
 		"armoredcaroffensivec": {
 			"name": "T5 “Percutio”",
 			"description": "This “Xiphos” variant is fitted with a high-powered anti-tank turret in place of the twin machine gun platform.",
-			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarOffensiveCVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/ArmoredCarOffensiveCVehicleIcon.webp"
 		},
 		"armoredcaroffensivew": {
 			"name": "O’Brien V.101 Freeman",
 			"description": "This early O’Brien variant, the V.101 Freeman is fitted with a 360 degree ballistics cannon turret at the expense of top speed.",
-			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarOffensiveWVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/ArmoredCarOffensiveWVehicleIcon.webp"
 		},
 		"armoredcartwinc": {
 			"name": "T8 “Gemini”",
 			"description": "Fitted with twin RPG launchers, the T8 employs hit-and-run assaults against enemy structures and emplacements.",
-			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarTwinCItemIcon.webp"
+			"icon": "../UI/VehicleIcons/ArmoredCarTwinCItemIcon.webp"
 		},
 		"armoredcartwinw": {
 			"name": "O’Brien v.190 Knave",
 			"description": "One of Conor O’Brien’s best traits was his ability to modernize and make use of older technology in his designs. The v.190 Knave is the perfect example of this philosophy. Fitted with a modified, outdated twin-grenade launcher turret, the Knave is a surprising combination of speed and subterfuge that quickly routs the enemy, leaving them befuddled.",
-			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarTwinWIcon.webp"
+			"icon": "../UI/VehicleIcons/ArmoredCarTwinWIcon.webp"
 		},
 		"armoredcarw": {
 			"name": "O’Brien V.110",
 			"description": "Warden Armoured Cars are quick, well-rounded urban assault platforms. These anti-infantry vehicles are equipped with twin-barrelled machineguns.",
-			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarWarVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/ArmoredCarWarVehicleIcon.webp"
 		},
 		"atlargeammo": {
 			"name": "94.5mm",
 			"description": "A heavy anti-tank shell.",
-			"icon": "game/Textures/UI/ATLargeAmmoIcon.webp"
+			"icon": "../UI/ATLargeAmmoIcon.webp"
 		},
 		"atrifletc": {
 			"name": "“Typhon” ra.XII",
 			"description": "This mounted anti-tank rifle boasts improved accuracy over its free-standing counterparts. The Typhon was specifically designed with shock absorption in mind, allowing for faster, more consistent firing patterns.",
-			"icon": "game/Textures/UI/ItemIcons/ATRifleTCIcon.webp"
+			"icon": "../UI/ItemIcons/ATRifleTCIcon.webp"
 		},
 		"atrpgtw": {
 			"name": "Mounted Bonesaw MK.3",
 			"description": "This variant of the Bonesaw MK.3 is specially designed for use with tripod mounts. This affords it with increased stability and maximum potential range.",
-			"icon": "game/Textures/UI/ItemIcons/ATMortarWTripodItemIcon.webp"
+			"icon": "../UI/ItemIcons/ATMortarWTripodItemIcon.webp"
 		},
 		"barbedwirematerials": {
 			"name": "Barbed Wire",
 			"description": "Used to construct Barbed Wire defenses.",
-			"icon": "game/Textures/UI/ItemIcons/BarbedWireMaterialItemIcon.webp"
+			"icon": "../UI/ItemIcons/BarbedWireMaterialItemIcon.webp"
 		},
 		"battletankammo": {
 			"name": "75mm",
 			"description": "Standard payload for battle tanks.",
-			"icon": "game/Textures/UI/ItemIcons/BattleTankAmmoItemIcon.webp"
+			"icon": "../UI/ItemIcons/BattleTankAmmoItemIcon.webp"
 		},
 		"battletankatc": {
 			"name": "Lance-25 “Hasta”",
 			"description": "A heavy Lance variation, the 25, or “Hasta”, was employed in the first siege on Brightwall, a city now colloquially referred to as, “The Blemish”. Bombarded by heavy, armoured resistance in northern Veli, Colonial tank regiments requested a heavy vehicle with more effective search and destroy capabilities. Fitted with a front-facing 94.5mm cannon, the “Hasta” is a more than capable tank destroyer.",
-			"icon": "game/Textures/UI/VehicleIcons/BattleTankATCIcon.webp"
+			"icon": "../UI/VehicleIcons/BattleTankATCIcon.webp"
 		},
 		"battletankc": {
 			"name": "Lance-36",
 			"description": "A heavy-duty Battle Tank with thick armour plating and destructive firepower. The Lance is fitted with a 75mm turret and a front-facing 12.7mm anti-infantry machine gun. The heavy armour limits top speed, but in exchange it can take a lot of punishment.",
-			"icon": "game/Textures/UI/VehicleIcons/BattleTank.webp"
+			"icon": "../UI/VehicleIcons/BattleTank.webp"
 		},
 		"battletankdefensivew": {
 			"name": "Flood Juggernaut Mk. VII",
 			"description": "The Juggernaut is a heavily armoured Flood variant fitted with a heavy flamethrower turret that fires an advanced adhesive propellant. Its shovel-like treads may hinder top speeds, but this beast is quite capable in extreme weather conditions.",
-			"icon": "game/Textures/UI/VehicleIcons/BattleTankWarDefensiveVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/BattleTankWarDefensiveVehicleIcon.webp"
 		},
 		"battletankw": {
 			"name": "Flood Mk. I",
 			"description": "A heavy-duty Battle Tank with thick armour plating and destructive firepower. The Flood is fitted with a 75mm turret and a front-facing 12.7mm anti-infantry machine gun. The heavy armour limits top speed, but in exchange it can take a lot of punishment.",
-			"icon": "game/Textures/UI/VehicleIcons/BattleTankWar.webp"
+			"icon": "../UI/VehicleIcons/BattleTankWar.webp"
 		},
 		"cloth": {
 			"name": "Basic Materials",
 			"description": "Resource used for building basic structures and producing items.",
-			"icon": "game/Textures/UI/ItemIcons/BasicMaterialsIcon.webp"
+			"icon": "../UI/ItemIcons/BasicMaterialsIcon.webp"
 		},
 		"coal": {
 			"name": "Coal",
 			"description": "Chunks of raw Coal that can be refined into materials needed for production and power generation at Facilities.",
-			"icon": "game/Textures/UI/ItemIcons/CoalIcon.webp"
+			"icon": "../UI/ItemIcons/CoalIcon.webp"
 		},
 		"components": {
 			"name": "Components",
 			"description": "Components that can be salvaged into Refined Materials at a Refinery",
-			"icon": "game/Textures/UI/ItemIcons/ComponentsIcon.webp"
+			"icon": "../UI/ItemIcons/ComponentsIcon.webp"
 		},
 		"concrete": {
 			"name": "Concrete Materials",
 			"description": "A concrete compound that is used to build heavily fortified structures.",
-			"icon": "game/Textures/UI/ItemIcons/ConcreteBagIcon.webp"
+			"icon": "../UI/ItemIcons/ConcreteBagIcon.webp"
 		},
 		"construction": {
 			"name": "BMS - Universal Assembly Rig",
 			"description": "A specialized vehicle designed by the Basset Motor Society used in the construction of large structures.",
-			"icon": "game/Textures/UI/VehicleIcons/ConstructionVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/ConstructionVehicleIcon.webp"
 		},
 		"constructionutility": {
 			"name": "BMS - Fabricator",
 			"description": "An advanced variant of the Universal Assembly Rig, the BMS - Fabricator is fitted with a unique kit designed to handle advanced or specialized construction and excavation jobs.",
-			"icon": "game/Textures/UI/VehicleIcons/AdvancedConstructionVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/AdvancedConstructionVehicleIcon.webp"
 		},
 		"destroyertankflamew": {
 			"name": "Noble Firebrand Mk. XVII",
 			"description": "In response to the Legion embarking on aggressive northern offensives, the Firebrand is designed to conflagrate and eradicate their garrisons with ease. Built using the aggressive frame of the Widow, the Firebrand is a pure force of nature when paired with a secondary armoured escort.",
-			"icon": "game/Textures/UI/VehicleIcons/DestroyerTankFlameWIcon.webp"
+			"icon": "../UI/VehicleIcons/DestroyerTankFlameWIcon.webp"
 		},
 		"destroyertankw": {
 			"name": "Noble Widow MK. XIV",
 			"description": "This deadly tank turns predator into prey. A tank Destroyer, the Noble Widow specializes in ambush tactics, waiting for its quarry and striking with destructive high-velocity shells.",
-			"icon": "game/Textures/UI/VehicleIcons/DestroyerTankWVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/DestroyerTankWVehicleIcon.webp"
 		},
 		"diesel": {
 			"name": "Diesel",
 			"description": "Common fuel used to power all vehicles and resource mines.",
-			"icon": "game/Slate/Images/ResourceFuelIcon.webp",
+			"icon": "../UI/CustomIcons/ResourceFuelIcon.webp",
 			"isLiquid": true
 		},
 		"emplacedatlargew": {
 			"name": "Huber Starbreaker 94.5mm",
 			"description": "Built to compliment other free-standing artillery pieces, the emplaced Huber Starbreaker launches 94.5mm shells over very long distances. A necessary tool for infantry to knock back armoured Colonial advances.",
-			"icon": "game/Textures/UI/StructureIcons/EmplacedATLargeWIcon.webp"
+			"icon": "../UI/StructureIcons/EmplacedATLargeWIcon.webp"
 		},
 		"emplacedcannonlargec": {
 			"name": "DAE 2a-1 “Ruptura”",
 			"description": "Not to be outdone by its counterparts, the 2a-1 “Ruptura” is fitted with a 75mm cannon. Designed to aid in holding ground for longer durations, the “Ruptura” is a strong, efficient anti-armour tool.",
-			"icon": "game/Textures/UI/StructureIcons/EmplacedCannonLargeC.webp"
+			"icon": "../UI/StructureIcons/EmplacedCannonLargeC.webp"
 		},
 		"emplacedmultic": {
 			"name": "DAE 3b-2 “Hades’ Net”",
 			"description": "The DAE 3b-2 fires rockets over long distances from a safe, emplaced position. This unique weapon was given its name due to the screams heard across the battlefield during its first deployment, with some referring to the barrage as a “web of death.”",
-			"icon": "game/Textures/UI/StructureIcons/EmplacedMultiCStructureIcon.webp"
+			"icon": "../UI/StructureIcons/EmplacedMultiCStructureIcon.webp"
 		},
 		"explosive": {
 			"name": "Explosive Materials",
 			"description": "Resource used for producing heavy explosive weapons.",
-			"icon": "game/Textures/UI/ItemIcons/ExplosiveMaterialIcon.webp"
+			"icon": "../UI/ItemIcons/ExplosiveMaterialIcon.webp"
 		},
 		"facilitycoal1": {
 			"name": "Coke",
 			"description": "Refined Coal required for various Facility processes.",
-			"icon": "game/Textures/UI/ItemIcons/CokeIcon.webp"
+			"icon": "../UI/ItemIcons/CokeIcon.webp"
 		},
 		"facilitycomponents1": {
 			"name": "Damaged Components",
 			"description": "Damaged Components that can be salvaged into Components.",
-			"icon": "game/Textures/UI/ItemIcons/ComponentsDamagedIcon.webp"
+			"icon": "../UI/ItemIcons/ComponentsDamagedIcon.webp"
 		},
 		"facilitymaterials1": {
 			"name": "Construction Materials",
 			"description": "Metal beams needed to produce basic structures and vehicles at Facilities.",
-			"icon": "game/Textures/UI/ItemIcons/Facilities/ConstructionMaterialsIcon.webp"
+			"icon": "../UI/ItemIcons/Facilities/ConstructionMaterialsIcon.webp"
 		},
 		"facilitymaterials2": {
 			"name": "Processed Construction Materials",
 			"description": "Refined metal bars needed to produce advanced structures and vehicles at Facilities.",
-			"icon": "game/Textures/UI/ItemIcons/Facilities/ProcessedConstructionMaterialsIcon.webp"
+			"icon": "../UI/ItemIcons/Facilities/ProcessedConstructionMaterialsIcon.webp"
 		},
 		"facilitymaterials3": {
 			"name": "Steel Construction Materials",
 			"description": "Shaped, steel beams required for the most advanced processes at Facilities.",
-			"icon": "game/Textures/UI/ItemIcons/Facilities/SteelConstructionMaterialsIcon.webp"
+			"icon": "../UI/ItemIcons/Facilities/SteelConstructionMaterialsIcon.webp"
 		},
 		"facilitymaterials4": {
 			"name": "Assembly Materials I",
 			"description": "Specialized metal sheets forged using Coal that are required to assemble advanced vehicles and equipment.",
-			"icon": "game/Textures/UI/ItemIcons/AssemblyMaterials1Icon.webp"
+			"icon": "../UI/ItemIcons/AssemblyMaterials1Icon.webp"
 		},
 		"facilitymaterials5": {
 			"name": "Assembly Materials II",
 			"description": "Specialized metallic bars fortified with Petrol that are required to assemble advanced vehicles and equipment.",
-			"icon": "game/Textures/UI/ItemIcons/AssemblyMaterials2Icon.webp"
+			"icon": "../UI/ItemIcons/AssemblyMaterials2Icon.webp"
 		},
 		"facilitymaterials6": {
 			"name": "Assembly Materials III",
 			"description": "Sulfur-enriched metallic bars that are required to assemble advanced vehicles and equipment.",
-			"icon": "game/Textures/UI/ItemIcons/AssemblyMaterials3Icon.webp"
+			"icon": "../UI/ItemIcons/AssemblyMaterials3Icon.webp"
 		},
 		"facilitymaterials7": {
 			"name": "Assembly Materials IV",
 			"description": "High-end steel bars, fortified with Heavy Oil that are required to assemble advanced vehicles and equipment.",
-			"icon": "game/Textures/UI/ItemIcons/AssemblyMaterials4Icon.webp"
+			"icon": "../UI/ItemIcons/AssemblyMaterials4Icon.webp"
 		},
 		"facilitymaterials8": {
 			"name": "Assembly Materials V",
 			"description": "Meticulously engineered alloy beams that are required to assemble advanced vehicles and equipment.",
-			"icon": "game/Textures/UI/ItemIcons/AssemblyMaterials5Icon.webp"
+			"icon": "../UI/ItemIcons/AssemblyMaterials5Icon.webp"
 		},
 		"facilityoil1": {
 			"name": "Heavy Oil",
 			"description": "A high grade fuel that's refined from Oil. Used in a variety of applications at Facilities.",
-			"icon": "game/Textures/UI/ItemIcons/FacilityOil1Icon.webp",
+			"icon": "../UI/ItemIcons/FacilityOil1Icon.webp",
 			"isLiquid": true
 		},
 		"facilityoil2": {
 			"name": "Enriched Oil",
 			"description": "Oil that has been purified and enriched for advanced Facilities processes.",
-			"icon": "game/Textures/UI/ItemIcons/FacilityOil2Icon.webp",
+			"icon": "../UI/ItemIcons/FacilityOil2Icon.webp",
 			"isLiquid": true
 		},
 		"fieldatc": {
 			"name": "AA-2 \"Battering Ram\"",
 			"description": "The \"Battering Ram\" is a mobile Anti-Tank field gun firing 68mm armour-piercing rounds.",
-			"icon": "game/Textures/UI/VehicleIcons/FieldAntiTankColVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/FieldAntiTankColVehicleIcon.webp"
 		},
 		"fieldatdamagew": {
 			"name": "Balfour Rampart 68mm",
 			"description": "The Rampart is a powerful field cannon capable of dealing devastating damage to all but the heaviest of armoured vehicles while providing its crew with comprehensive ballistic shielding.",
-			"icon": "game/Textures/UI/VehicleIcons/FieldCannonOffensiveWIcon.webp"
+			"icon": "../UI/VehicleIcons/FieldCannonOffensiveWIcon.webp"
 		},
 		"fieldatlargec": {
 			"name": "945g “Stygian Bolt”",
 			"description": "The “Stygian Bolt” Heavy Field Gun is fitted with a monstrous 94.5mm cannon paired with heavy angled blast shielding. Inspired by the rows of narrow canyons in their homeland of the Lacrista province, Mesean engineers designed this field weapon to keep its crew as safe from ancillary fire as possible while maintaining forward momentum.",
-			"icon": "game/Textures/UI/VehicleIcons/FieldATHeavyCIcon.webp"
+			"icon": "../UI/VehicleIcons/FieldATHeavyCIcon.webp"
 		},
 		"fieldatw": {
 			"name": "Collins Cannon 68mm",
 			"description": "The Collins Cannon is a mobile Anti-Tank field gun firing 68mm armour-piercing rounds.",
-			"icon": "game/Textures/UI/VehicleIcons/FieldAntiTankWarVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/FieldAntiTankWarVehicleIcon.webp"
 		},
 		"fieldcannondamagec": {
 			"name": "40-45 “Smelter”",
 			"description": "Armed with explosive 40mm rounds, the Smelter is perfect for engaging enemy armour. The frontal blast shielding provides operators with ample cover during heated skirmishes.",
-			"icon": "game/Textures/UI/VehicleIcons/FieldATOffensiveCIcon.webp"
+			"icon": "../UI/VehicleIcons/FieldATOffensiveCIcon.webp"
 		},
 		"fieldcannonlargew": {
 			"name": "Balfour Stockade 75mm",
 			"description": "This robust field cannon not only allows infantry to fire heavy 75mm shells with ease, but it provides state-of-the-art curved blast shielding for maximum protection from crossfire.",
-			"icon": "game/Textures/UI/VehicleIcons/FieldCannonHeavyWIcon.webp"
+			"icon": "../UI/VehicleIcons/FieldCannonHeavyWIcon.webp"
 		},
 		"fieldcannonw": {
 			"name": "Balfour Wolfhound 40mm",
 			"description": "This destructive short-ranged cannon is designed for direct engagement with enemy fortifications. The Wolfhound is fitted with reinforced shielding and a 40mm barrel. ",
-			"icon": "game/Textures/UI/VehicleIcons/FieldCannonWVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/FieldCannonWVehicleIcon.webp"
 		},
 		"fieldmultiw": {
 			"name": "Rycker 4/3-F Wasp Nest",
 			"description": "Lyle Rycker first built a prototype of the Wasp Nest as a test for his rack mounted rocket batteries that would eventually find their way onto armoured vehicles. Capable of firing twelve compact rockets in quick succession, the Wasp Nest became a quick favourite of the Warden infantry testing it, so an official design was requisitioned.",
-			"icon": "game/Textures/UI/VehicleIcons/FieldMultiWItemIcon.webp"
+			"icon": "../UI/VehicleIcons/FieldMultiWItemIcon.webp"
 		},
 		"firerocketammo": {
 			"name": "4C-Fire Rocket",
 			"description": "Standard calibre rocket with an incendiary explosion. Will ignite objects near impact.",
-			"icon": "game/Textures/UI/ItemIcons/FlameRocketAmmoIcon.webp"
+			"icon": "../UI/ItemIcons/FlameRocketAmmoIcon.webp"
 		},
 		"flameammo": {
 			"name": "Flame Ammo",
 			"description": "A drum containing fuel for use with flame weapons.",
-			"icon": "game/Textures/UI/ItemIcons/FlameAmmoIcon.webp"
+			"icon": "../UI/ItemIcons/FlameAmmoIcon.webp"
 		},
 		"grenadelaunchertc": {
 			"name": "Mounted Fissura gd.I",
 			"description": "Capable of firing different grenades, quickly and at long range, the Fissura gd.I is mobile enough for easy transport, while increasing the effectiveness of infantry ordinance. ",
-			"icon": "game/Textures/UI/ItemIcons/GrenadeLauncherTCIcon.webp"
+			"icon": "../UI/ItemIcons/GrenadeLauncherTCIcon.webp"
 		},
 		"groundmaterials": {
 			"name": "Gravel",
 			"description": "Resource used for building Roads and Foundations.",
-			"icon": "game/Textures/UI/ItemIcons/GroundMaterialsIcon.webp"
+			"icon": "../UI/ItemIcons/GroundMaterialsIcon.webp"
 		},
 		"halftrackartilleryc": {
 			"name": "HH-d “Peltast”",
 			"description": "This “Javelin” variant is fitted with a 360 degree mortar platform, designed to support infantry in frontline operations.",
-			"icon": "game/Textures/UI/VehicleIcons/HalfTrackArtilleryCIcon.webp"
+			"icon": "../UI/VehicleIcons/HalfTrackArtilleryCIcon.webp"
 		},
 		"halftrackc": {
 			"name": "HH-a “Javelin”",
 			"description": "Designed for escort missions and to support infantry operations, the HH-a class “Javelin” Half-Track is an armoured, versatile all-terrain vehicle that can be equipped with a variety of mounted weapons.",
-			"icon": "game/Textures/UI/VehicleIcons/HalfTrackColVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/HalfTrackColVehicleIcon.webp"
 		},
 		"halftrackdefensivec": {
 			"name": "HH-b “Hoplite”",
 			"description": "With reinforced armour at the expense of speed, the \"Hoplite\" is a formidable force in the heat of combat.",
-			"icon": "game/Textures/UI/VehicleIcons/HalfTrackColHeavyArmorVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/HalfTrackColHeavyArmorVehicleIcon.webp"
 		},
 		"halftrackmultiw": {
 			"name": "Niska-Rycker Mk. IX Skycaller",
 			"description": "A first of its kind, the Skycaller is a variation of the Niska Motor Carriage with a Rycker designed rocket battery fitted in the rear bed. This unique armoured vehicle quickly fires rockets over long distances with ease, and can be rearmed and relocated at the drop of a hat. The Skycaller is the deadly result of combined Nevish and Caoivish engineering.",
-			"icon": "game/Textures/UI/VehicleIcons/HalftrackMultiWIcon.webp"
+			"icon": "../UI/VehicleIcons/HalftrackMultiWIcon.webp"
 		},
 		"halftrackoffensivew": {
 			"name": "Niska Mk. II Blinder",
 			"description": "Fitted with a heavy-duty anti-tank gun, the Blinder is capable of punching through all but the most tempered of alloys.",
-			"icon": "game/Textures/UI/VehicleIcons/HalfTrackOffensiveWarVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/HalfTrackOffensiveWarVehicleIcon.webp"
 		},
 		"halftrackw": {
 			"name": "Niska Mk. I Gun Motor Carriage",
 			"description": "Designed for escort missions and to support infantry operations, the Niska Gun Motor Carriage Half-Track is an armoured, versatile all-terrain vehicle that can be equipped with a variety of mounted weapons.",
-			"icon": "game/Textures/UI/VehicleIcons/HalfTrackWarVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/HalfTrackWarVehicleIcon.webp"
 		},
 		"harvester": {
 			"name": "BMS - Scrap Hauler",
 			"description": "The Scrap Hauler, designed by the Bassett Motor Society is a heavy-duty piece of machinery designed to reduce scrap metal and other materials into usable, raw resources. Scrap Haulers are often used to extract battlefield resources following skirmishes.",
-			"icon": "game/Textures/UI/VehicleIcons/Harvester.webp"
+			"icon": "../UI/VehicleIcons/Harvester.webp"
 		},
 		"heavyartilleryammo": {
 			"name": "150mm",
 			"description": "Payload for heavy artillery weapons.",
-			"icon": "game/Textures/UI/ItemIcons/HeavyArtilleryAmmoItemIcon.webp"
+			"icon": "../UI/ItemIcons/HeavyArtilleryAmmoItemIcon.webp"
 		},
 		"heavyexplosive": {
 			"name": "Heavy Explosive Materials",
 			"description": "Resource used for producing heavy explosive weapons.",
-			"icon": "game/Textures/UI/ItemIcons/HeavyExplosiveMaterialIcon.webp"
+			"icon": "../UI/ItemIcons/HeavyExplosiveMaterialIcon.webp"
 		},
 		"herocketammo": {
 			"name": "3C-High Explosive Rocket",
 			"description": "Standard calibre rocket with a heavy explosive payload. Chance to ignite objects near impact.",
-			"icon": "game/Textures/UI/ItemIcons/HERocketAmmoIcon.webp"
+			"icon": "../UI/ItemIcons/HERocketAmmoIcon.webp"
 		},
 		"isgtc": {
 			"name": "Daucus isg.III",
 			"description": "This heavy infantry cannon requires a tripod for stability. The Daucus is designed to give infantry a foothold against enemy vehicles and light fortifications or established fortified garrisons.",
-			"icon": "game/Textures/UI/ItemIcons/InfantrySupportGunItemIcon.webp"
+			"icon": "../UI/ItemIcons/InfantrySupportGunItemIcon.webp"
 		},
 		"landingcraftc": {
 			"name": "AB-8 “Acheron”",
 			"description": "The \"Acheron\" is an armoured amphibious vehicle designed for carrying troops across large bodies of water to aid in coordinated beach landings and flanking assaults. ",
-			"icon": "game/Textures/UI/VehicleIcons/LandingCraftVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/LandingCraftVehicleIcon.webp"
 		},
 		"landingcraftoffensivec": {
 			"name": "AB-11 “Doru”",
 			"description": "With its mounted machinegun, the \"Doru\" is the perfect addition to any shoreline assault. ",
-			"icon": "game/Textures/UI/VehicleIcons/LandingCraftOffensiveVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/LandingCraftOffensiveVehicleIcon.webp"
 		},
 		"lightartilleryammo": {
 			"name": "120mm",
 			"description": "Payload for light artillery weapons.",
-			"icon": "game/Textures/UI/ItemIcons/LightArtilleryAmmoItemIcon.webp"
+			"icon": "../UI/ItemIcons/LightArtilleryAmmoItemIcon.webp"
 		},
 		"lighttank2infantryc": {
 			"name": "HC-2 “Scorpion”",
 			"description": "The “Scorpion” HC-class tank is a moderately armoured infantry support vehicle with twin, high-powered heavy machine guns and short-range radios for improved intelligence support. In addition, exterior seating is available for infantry. ",
-			"icon": "game/Textures/UI/VehicleIcons/LightTank2InfantryCVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/LightTank2InfantryCVehicleIcon.webp"
 		},
 		"lighttankartilleryw": {
 			"name": "Devitt-Caine Mk. IV MMR",
 			"description": "A modified Devitt fitted with a specialized Caine mortar turret at the expense of top speed.",
-			"icon": "game/Textures/UI/VehicleIcons/LightTankArtilleryWar.webp"
+			"icon": "../UI/VehicleIcons/LightTankArtilleryWar.webp"
 		},
 		"lighttankc": {
 			"name": "H-5 \"Hatchet\"",
 			"description": "A highly maneuverable lightweight tank. Designed for urban environments, the “Hatchet” is fitted with a 40mm cannon.",
-			"icon": "game/Textures/UI/VehicleIcons/LightTankColVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/LightTankColVehicleIcon.webp"
 		},
 		"lighttankdefensivew": {
 			"name": "Devitt Ironhide Mk. IV ",
 			"description": "The Ironhide Light Tank is similar to the Mk. III but reinforced with plates of heavy steel at the expense of speed and maneuverability.",
-			"icon": "game/Textures/UI/VehicleIcons/LightTankWarDefensiveVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/LightTankWarDefensiveVehicleIcon.webp"
 		},
 		"lighttankflamec": {
 			"name": "H-19 “Vulcan”",
 			"description": "This modified “Hatchet” features a reinforced fuel cell fixed to its rear alongside a flamethrower turret. This light tank can launch litres of burning fuel a fair distance, while its crew remains protected behind light armour plating.",
-			"icon": "game/Textures/UI/VehicleIcons/LightTankFlameCIcon.webp"
+			"icon": "../UI/VehicleIcons/LightTankFlameCIcon.webp"
 		},
 		"lighttankmobilityc": {
 			"name": "H-8 “Kranesca”",
 			"description": "The “Kranesca” Light Tank is fitted with an overpowered engine and a reinforced chassis, capable of boosting its top speed at the expense of overall acceleration and maneuverability.",
-			"icon": "game/Textures/UI/VehicleIcons/LightTankColMobilityVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/LightTankColMobilityVehicleIcon.webp"
 		},
 		"lighttankoffensivec": {
 			"name": "H-10 “Pelekys”",
 			"description": "The “Pelekys” H-class light tank is heavily modified with an open top chassis and equipped with a devastating long-range anti-tank cannon.",
-			"icon": "game/Textures/UI/VehicleIcons/LightTankOffensiveCVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/LightTankOffensiveCVehicleIcon.webp"
 		},
 		"lighttankw": {
 			"name": "Devitt Mk. III",
 			"description": "A highly maneuverable lightweight tank. Designed for urban environments, the Devitt is fitted with a 40mm cannon.",
-			"icon": "game/Textures/UI/VehicleIcons/LightTankWarVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/LightTankWarVehicleIcon.webp"
 		},
 		"lrartilleryammo": {
 			"name": "300mm",
 			"description": "Standard payload used with Storm Cannons.",
-			"icon": "game/Textures/UI/ItemIcons/LRArtilleryAmmoItemIcon.webp"
+			"icon": "../UI/ItemIcons/LRArtilleryAmmoItemIcon.webp"
 		},
 		"maintenancesupplies": {
 			"name": "Maintenance Supplies",
 			"description": "Supplies for maintaining structures. Store at Bases or Maintenance Tunnels to prevent decay on surrounding structures.",
-			"icon": "game/Textures/UI/ItemIcons/MaintenanceSuppliesIcon.webp"
+			"icon": "../UI/ItemIcons/MaintenanceSuppliesIcon.webp"
 		},
 		"materialplatform": {
 			"name": "Material Pallet",
 			"description": "A material pallet.",
-			"icon": "game/Textures/UI/ItemIcons/MaterialPlatformItemIcon.webp"
+			"icon": "../UI/ItemIcons/MaterialPlatformItemIcon.webp"
 		},
 		"mediumtank2c": {
 			"name": "86K-a “Bardiche”",
 			"description": "Unlike the 85-series, the \"Bardiche\" sports a heavier, more durable build and is fitted with a coaxial heavy machinegun along with a powerful, short-barrelled 68mm turret. Modern Kraunian engineering allows for a fast reload, making it an ideal tool to combat enemy armour.",
-			"icon": "game/Textures/UI/VehicleIcons/MediumTank2CIcon.webp"
+			"icon": "../UI/VehicleIcons/MediumTank2CIcon.webp"
 		},
 		"mediumtank2indirectw": {
 			"name": "Gallagher Thornfall Mk. VI",
 			"description": "Armed with a rack of Bonesaw mortar launchers, the Thornfall is designed to launch an indirect mechanized assault on enemy armour. This unique vehicle supports an allied assault and cannot withstand large amounts of punishment.",
-			"icon": "game/Textures/UI/VehicleIcons/MediumTank2IndirectWIcon.webp"
+			"icon": "../UI/VehicleIcons/MediumTank2IndirectWIcon.webp"
 		},
 		"mediumtank2multiw": {
 			"name": "Gallagher Highwayman Mk. III",
 			"description": "Colm Gallagher’s engineers designed a variation of the Outlaw that features an independently rotating MG turret sitting atop the main armament of twin anti-tank cannons. What it lacks in raw firepower compared to its older sibling, the Highwayman more than makes up for it with versatility.",
-			"icon": "game/Textures/UI/VehicleIcons/MediumTank2MultiWIcon.webp"
+			"icon": "../UI/VehicleIcons/MediumTank2MultiWIcon.webp"
 		},
 		"mediumtank2rangew": {
 			"name": "Gallagher Outlaw Mk. II",
 			"description": "Originally designed in response to increasing swarms of Mesean armour, the Outlaw is an exceptionally capable medium tank armed with a long-range 40mm turret and includes a built-in storm rifle support position.",
-			"icon": "game/Textures/UI/VehicleIcons/MediumTank2RangeWIcon.webp"
+			"icon": "../UI/VehicleIcons/MediumTank2RangeWIcon.webp"
 		},
 		"mediumtank2twinc": {
 			"name": "86K-c “Ranseur”",
 			"description": "This evolution of the “Bardiche” is fitted quad-mounted RPG launchers paired with a high-velocity 12.7mm cannon. The “Ranseur” indicates progress in Kraunian design as they continue to leverage outdated equipment to create deadly, modern armour.",
-			"icon": "game/Textures/UI/VehicleIcons/MediumTank2TwinCVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/MediumTank2TwinCVehicleIcon.webp"
 		},
 		"mediumtankatw": {
 			"name": "Silverhand Lordscar - Mk. X",
 			"description": "A cut down variation of the Silverhand Assault Tank that sacrifices armour and protection in favour of a high-powered 94.5mm cannon. This open-top weapon platform is uniquely designed to intercept enemy armour before they’re given time to retaliate. Its moniker is a tribute to the maiming of the great king the Silverhand is named for; while his title was stripped, and his pride damaged, his rage was never quelled.",
-			"icon": "game/Textures/UI/VehicleIcons/MediumTankATWIcon.webp"
+			"icon": "../UI/VehicleIcons/MediumTankATWIcon.webp"
 		},
 		"mediumtankc": {
 			"name": "85K-b “Falchion”",
 			"description": "Designed for mass-production in Kraunia, this assault tank features a modular turret system for maximum versatility. The “Falchion” class features a powerful if understated, 40mm cannon.",
-			"icon": "game/Textures/UI/VehicleIcons/ColonialMediumTankIcon.webp"
+			"icon": "../UI/VehicleIcons/ColonialMediumTankIcon.webp"
 		},
 		"mediumtanklargec": {
 			"name": "85V-g \"Talos\"",
 			"description": "The \"Talos\" is a Velian modification to the 85-series, fitted with an oversized 75mm cannon. Knowing that such a heavy cannon would likely not be suitable, the engineers built it to disperse weight in such a manner that the 85-series chassis could bear it.",
-			"icon": "game/Textures/UI/VehicleIcons/MediumTankLargeCIcon.webp"
+			"icon": "../UI/VehicleIcons/MediumTankLargeCIcon.webp"
 		},
 		"mediumtankoffensivec": {
 			"name": "85K-a “Spatha”",
 			"description": "The “Spatha” assault tank features a unique and destructive 40mm turret that fires high-velocity shells. This specialized turret is not as well suited to mass-production as its more refined counterpart, the “Falchion.”",
-			"icon": "game/Textures/UI/VehicleIcons/ColonialMediumTankOffensive.webp"
+			"icon": "../UI/VehicleIcons/ColonialMediumTankOffensive.webp"
 		},
 		"mediumtanksiegew": {
 			"name": "Silverhand Chieftain - Mk. VI",
 			"description": "The Chieftan assault tank is fitted with asymmetrical armaments, including a 250mm mortar cannon and a twin-barrelled 12.7mm turret.",
-			"icon": "game/Textures/UI/VehicleIcons/MediumTankSiegeWVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/MediumTankSiegeWVehicleIcon.webp"
 		},
 		"mediumtankw": {
 			"name": "Silverhand - Mk. IV",
 			"description": "The Silverhand assault tank is fitted with destructive dual-barrel armaments, and heavy frontal and rear armour. Its 68mm frontal cannon is paired with a lighter 40mm turret. ",
-			"icon": "game/Textures/UI/VehicleIcons/WardenMediumTankIcon.webp"
+			"icon": "../UI/VehicleIcons/WardenMediumTankIcon.webp"
 		},
 		"metal": {
 			"name": "Salvage",
 			"description": "Salvage that can be recycled into other resources at a Refinery",
-			"icon": "game/Textures/UI/ItemIcons/SalvageIcon.webp"
+			"icon": "../UI/ItemIcons/SalvageIcon.webp"
 		},
 		"metalbeammaterials": {
 			"name": "Metal Beam",
 			"description": "Used to construct Metal Beam defenses.",
-			"icon": "game/Textures/UI/ItemIcons/MetalBeamMaterialItemIcon.webp"
+			"icon": "../UI/ItemIcons/MetalBeamMaterialItemIcon.webp"
 		},
 		"mgtc": {
 			"name": "Lamentum mm.IV",
 			"description": "Built on the bones of the first automatic weapons introduced to the Legion, the “Lamentum” mm.IV is still quite an intimidating force to encounter on the battlefield. Boasting a large magazine and impressive active range, this mounted machinegun excels at laying down consistent suppressive fire.",
-			"icon": "game/Textures/UI/ItemIcons/HeavyMachineGunIcon.webp"
+			"icon": "../UI/ItemIcons/HeavyMachineGunIcon.webp"
 		},
 		"mgtw": {
 			"name": "Malone Ratcatcher MK.1",
 			"description": "Early iterations of this machinegun were built to be emplaced in bunkers and on the decks of lightly armed warships, the Ratcatcher is Harvey Malone’s first freely mountable infantry weapon designed for field use. Just like its predecessors, this heavy weapon suppresses enemy soldiers with unmatched efficiency. ",
-			"icon": "game/Textures/UI/ItemIcons/MGHeavyTWItemIcon.webp"
+			"icon": "../UI/ItemIcons/MGHeavyTWItemIcon.webp"
 		},
 		"mortartankammo": {
 			"name": "250mm",
 			"description": "A shell that is launched over short distances by a spigot mortar.",
-			"icon": "game/Textures/UI/ItemIcons/MortarTankIcon.webp"
+			"icon": "../UI/ItemIcons/MortarTankIcon.webp"
 		},
 		"mortartankc": {
 			"name": "HC-7 \"Ballista\"",
 			"description": "The HC-Class “Ballista” is a heavy tank designed to obliterate opposition defenses with its 250mm Hades Mortar Cannon.",
-			"icon": "game/Textures/UI/VehicleIcons/MortarTankVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/MortarTankVehicleIcon.webp"
 		},
 		"motorcyclec": {
 			"name": "03MM “Caster”",
 			"description": "A motorcycle and sidecar used to patrol large areas. Speed can be boosted at the cost of additional fuel.",
-			"icon": "game/Textures/UI/VehicleIcons/MotorcycleVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/MotorcycleVehicleIcon.webp"
 		},
 		"motorcycleoffensivec": {
 			"name": "00MS “Stinger”",
 			"description": "The cab of this Motorcycle is fitted with an LMG for fast-response hit and run assaults.",
-			"icon": "game/Textures/UI/VehicleIcons/MotorcycleOffensiveVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/MotorcycleOffensiveVehicleIcon.webp"
 		},
 		"oil": {
 			"name": "Oil",
 			"description": "A raw viscous liquid that must be refined into fuel at Facilities.",
-			"icon": "game/Textures/UI/ItemIcons/Facilities/OilIcon.webp",
+			"icon": "../UI/ItemIcons/Facilities/OilIcon.webp",
 			"isLiquid": true
 		},
 		"oilcan": {
 			"name": "Oil (Canned)",
 			"description": "A raw viscous liquid that must be refined into fuel at Facilities.",
-			"icon": "game/Textures/UI/ItemIcons/Facilities/OilIcon.webp"
+			"icon": "../UI/ItemIcons/Facilities/OilIcon.webp"
 		},
 		"petrol": {
 			"name": "Petrol",
 			"description": "A medium grade fuel that's refined from Oil. Used as a higher end fuel for vehicles and in various applications at Facilities.",
-			"icon": "game/Textures/UI/ItemIcons/RefinedFuelIcon.webp",
+			"icon": "../UI/ItemIcons/RefinedFuelIcon.webp",
 			"isLiquid": true
 		},
 		"pipematerials": {
 			"name": "Pipe",
 			"description": "Used to construct various types of pipelines for transporting liquids.",
-			"icon": "game/Textures/UI/StructureIcons/EngineRoomPipeIcon.webp"
+			"icon": "../UI/StructureIcons/EngineRoomPipeIcon.webp"
 		},
 		"rpgtw": {
 			"name": "Cutler Foebreaker",
 			"description": "This unique dual-barrelled RPG launcher can fire two RPG shells in relatively quick succession. This increase in firepower makes it nearly impossible for a single soldier to operate without the support of a sturdy mount.",
-			"icon": "game/Textures/UI/ItemIcons/ATRPGTWIcon.webp"
+			"icon": "../UI/ItemIcons/ATRPGTWIcon.webp"
 		},
 		"sandbagmaterials": {
 			"name": "Sandbag",
 			"description": "Used to construct Sandbag defenses.",
-			"icon": "game/Textures/UI/ItemIcons/SandbagMaterialItemIcon.webp"
+			"icon": "../UI/ItemIcons/SandbagMaterialItemIcon.webp"
 		},
 		"scouttankoffensivew": {
 			"name": "King Gallant Mk. II",
 			"description": "A heavily armoured variant of the King Spire, the Gallant Mk. II boasts a weighty 30mm cannon at the cost of top speed.",
-			"icon": "game/Textures/UI/VehicleIcons/ScoutTankOffensiveWIcon.webp"
+			"icon": "../UI/VehicleIcons/ScoutTankOffensiveWIcon.webp"
 		},
 		"scouttankw": {
 			"name": "King Spire Mk. I",
 			"description": "This small tank has been recently recommissioned to the Warden arsenal. It boasts high maneuverability and an antenna that allows for long-range communications during high-stakes recon operations.",
-			"icon": "game/Textures/UI/VehicleIcons/ScoutTankWIcon.webp"
+			"icon": "../UI/VehicleIcons/ScoutTankWIcon.webp"
 		},
 		"scoutvehiclemobilityc": {
 			"name": "UV-05a “Argonaut”",
 			"description": "This stripped down Light Utility Vehicle provides extra seating for a small crew to engage in hit and run tactics.",
-			"icon": "game/Textures/UI/VehicleIcons/ScoutVehicleMobilityVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/ScoutVehicleMobilityVehicleIcon.webp"
 		},
 		"scoutvehicleoffensivec": {
 			"name": "UV-24 “Icarus”",
 			"description": "This RPG-mounted Light Utility Vehicle provides a heavy-duty weapons platform with superior speed. Perfectly suited for assaulting enemy structures and vehicles, or supporting an armoured assault.",
-			"icon": "game/Textures/UI/VehicleIcons/ScoutVehicleOffensiveVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/ScoutVehicleOffensiveVehicleIcon.webp"
 		},
 		"scoutvehicleoffensivew": {
 			"name": "Drummond Spitfire 100d",
 			"description": "This LMG-mounted Light Utility Vehicle provides a heavy-duty weapons platform with superior speed. Perfectly suited for supporting flanking infantry or an armoured assault.",
-			"icon": "game/Textures/UI/VehicleIcons/ScoutVehicleOffensiveWarVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/ScoutVehicleOffensiveWarVehicleIcon.webp"
 		},
 		"scoutvehicleutilityc": {
 			"name": "UV-5c “Odyssey”",
 			"description": "This simple, modified Utility Vehicle is fitted with a reinforced hatch to provide one crew member with increased visibility for intense recon operations.",
-			"icon": "game/Textures/UI/VehicleIcons/ScoutVehicleUtilityCVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/ScoutVehicleUtilityCVehicleIcon.webp"
 		},
 		"scoutvehicleutilityw": {
 			"name": "Drummond Loscann 55c",
 			"description": "This amphibious Light Utility Vehicle has been heavily modified to cross rivers and lakes with ease. Venturing out into the open sea is ill-advised, however.",
-			"icon": "game/Textures/UI/VehicleIcons/ScoutVehicleAmphibiousWarVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/ScoutVehicleAmphibiousWarVehicleIcon.webp"
 		},
 		"scoutvehiclew": {
 			"name": "Drummond 100a",
 			"description": "A multipurpose off-road Warden vehicle that can scout nearby targets.",
-			"icon": "game/Textures/UI/VehicleIcons/ScoutVehicleWarVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/ScoutVehicleWarVehicleIcon.webp"
 		},
 		"smalltraindump": {
 			"name": "BMS Railtruck",
 			"description": "A small gauge container car for transporting raw materials. ",
-			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeResourceCarVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/SmallGaugeResourceCarVehicleIcon.webp"
 		},
 		"smalltrainengine": {
 			"name": "BMS Mineseeker",
 			"description": "The Mineseeker is the Bassett Motor Society’s mechanized mule. This small 0-4-0 locomotive can haul tonnes of weight over short distances with little overhead. Ideal for a mining operation or short-range supply chains. ",
-			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeEngineVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/SmallGaugeEngineVehicleIcon.webp"
 		},
 		"smalltrainfuelcontainer": {
 			"name": "BMS Tinderbox",
 			"description": "The Tinderbox is a simple car used for transporting liquids between facilities.",
-			"icon": "game/Textures/UI/VehicleIcons/SmallTrainFuelContainerIcon.webp"
+			"icon": "../UI/VehicleIcons/SmallTrainFuelContainerIcon.webp"
 		},
 		"smalltrainresourceplatform": {
 			"name": "BMS Linerunner",
 			"description": "A low profile flatbed car for transporting large resources and munitions over short distances on small gauge tracks.",
-			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeFlatbedCarVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/SmallGaugeFlatbedCarVehicleIcon.webp"
 		},
 		"sulfur": {
 			"name": "Sulfur",
 			"description": "Sulfur that can be refined into Heavy Explosive Materials at a Refinery",
-			"icon": "game/Textures/UI/ItemIcons/SulfurIcon.webp"
+			"icon": "../UI/ItemIcons/SulfurIcon.webp"
 		},
 		"supertankc": {
 			"name": "O-75b \"Ares\"",
 			"description": "Armed with a dual 75mm turret, what the “Ares” lacks in speed and versatility, it more than makes up for with raw destructive power. Development of the “Ares” was fraught with strife, and its history is intertwined with a period of several riots erupting on the streets of Dimiourg. Rebels commandeered the first “Ares” Prototype, the O-75a, and turned it against Colonial forces in the region, ultimately leading to its destruction—albeit not without great effort. This event wove the great behemoth into the tapestry of Colonial legend.",
-			"icon": "game/Textures/UI/VehicleIcons/SuperTankCtemIcon.webp"
+			"icon": "../UI/VehicleIcons/SuperTankCtemIcon.webp"
 		},
 		"supertankw": {
 			"name": "Cullen Predator Mk. III",
 			"description": "This gargantuan beast is the brainchild of Gray Cullen. Once thought impossible, the Predator was Cullen’s idea of how a great ship might operate on land. It boasts two sets of quad-barrelled grenade launches and a heavy-duty 94.5mm forward facing cannon. While limitations of ground-based travel posed certain restrictions on the scope of the project, Cullen wasn’t deterred and made necessary adjustments to meet his vision of the ideal land ship.",
-			"icon": "game/Textures/UI/VehicleIcons/SuperTankWVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/SuperTankWVehicleIcon.webp"
 		},
 		"tankettec": {
 			"name": "T12 “Actaeon” Tankette",
 			"description": "This complete overhaul of the T3 Armoured Car is reinforced with tank armour. While these extra defenses lower the T12’s overall speed and handling, the addition of treads provide increased performance in less than ideal terrain.",
-			"icon": "game/Textures/UI/VehicleIcons/TanketteCVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/TanketteCVehicleIcon.webp"
 		},
 		"tanketteflamec": {
 			"name": "T14 “Vesta” Tankette",
 			"description": "The first T-class tankette to utilize this sturdier frame and versatile treads, the Vesta also represents the Velian’s first foray into fire weapons. The “Vesta” boasts a light flame turret and ample storage for the additional fuel supply required.",
-			"icon": "game/Textures/UI/VehicleIcons/TanketteFlameCIcon.webp"
+			"icon": "../UI/VehicleIcons/TanketteFlameCIcon.webp"
 		},
 		"tanketteoffensivec": {
 			"name": "T20 “Ixion” Tankette",
 			"description": "A bombastic variant of the T12 Tankette, the “Ixion” provides its crew with more support and a mounted Infantry Support Gun. Added weight from the armour results in reduced overall speed.",
-			"icon": "game/Textures/UI/VehicleIcons/TanketteOffensiveCVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/TanketteOffensiveCVehicleIcon.webp"
 		},
 		"traincaboose": {
 			"name": "BMS Roadhouse",
 			"description": "A simple caboose that allows rail crews to maintain tracks more efficiently.",
-			"icon": "game/Textures/UI/VehicleIcons/TrainCabooseItemIcon.webp"
+			"icon": "../UI/VehicleIcons/TrainCabooseItemIcon.webp"
 		},
 		"traincoal": {
 			"name": "BMS Rockhold",
 			"description": "A container car for transporting coal to refuel trains over long-distance trips. ",
-			"icon": "game/Textures/UI/VehicleIcons/TrainCoalCarVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/TrainCoalCarVehicleIcon.webp"
 		},
 		"traincombatcarc": {
 			"name": "Aegis Steelbreaker K5a",
 			"description": "Known across the colonies as King of the Rails, this heavily armoured train car is designed to protect and exert dominance over contested rail lines, especially when transporting supplies into contested territory as well as safely transporting infantry. This armoured beast boasts a forward facing cannon, as well as heavy lateral guns.",
-			"icon": "game/Textures/UI/VehicleIcons/CombatCarCVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/CombatCarCVehicleIcon.webp"
 		},
 		"traincombatcarw": {
 			"name": "O’Brien Warsmith v.215",
 			"description": "In his later years, O’Brien nearly died in an attack on a military passenger train while travelling to Whedon’s Row. In response, he put his team to work designing not only an infantry car that offered powerful protection to any locomotive, but one that just the sight of it would run off all but the most committed of attackers—Namely its thick armour plating and powerful twin turrets. ",
-			"icon": "game/Textures/UI/VehicleIcons/CombatCarWVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/CombatCarWVehicleIcon.webp"
 		},
 		"trainengine": {
 			"name": "BMS Black Bolt",
 			"description": "One of the most storied mass-market 0-6-2 locomotives engineered by the Bassett Motor Society, this coal-powered industrial train engine is reliable, tested, and incredibly durable. The Black Bolt’s legacy is unmatched having aided the Bassett Motor Society in supplying countries across the globe.",
-			"icon": "game/Textures/UI/VehicleIcons/TrainEngineVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/TrainEngineVehicleIcon.webp"
 		},
 		"trainflatbed": {
 			"name": "BMS Longrider",
 			"description": "A flatbed car for transporting large resources and munitions by train over long-distances. ",
-			"icon": "game/Textures/UI/VehicleIcons/TrainCarVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/TrainCarVehicleIcon.webp"
 		},
 		"traininfantry": {
 			"name": "BMS Holdout",
 			"description": "An armoured train car with a mounted machinegun position for transporting infantry safely over long distances.",
-			"icon": "game/Textures/UI/VehicleIcons/InfantryCarVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/InfantryCarVehicleIcon.webp"
 		},
 		"trainlrartillery": {
 			"name": "Tempest Cannon RA-2",
 			"description": "All the power of a stationary Storm Cannon, but easily relocated via rails. This devastating cannon is capable of leveling enemy fortifications at very large distances.",
-			"icon": "game/Textures/UI/VehicleIcons/TrainLRArtilleryVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/TrainLRArtilleryVehicleIcon.webp"
 		},
 		"tripod": {
 			"name": "Tripod",
 			"description": "A mount point for deployable infantry weapons and equipment.",
-			"icon": "game/Textures/UI/ItemIcons/DeployableTripodItemIcon.webp"
+			"icon": "../UI/ItemIcons/DeployableTripodItemIcon.webp"
 		},
 		"truckc": {
 			"name": "R-1 Hauler",
 			"description": "A heavy-duty Colonial truck used to mobilize troops and supplies.",
-			"icon": "game/Textures/UI/VehicleIcons/TruckVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/TruckVehicleIcon.webp"
 		},
 		"truckdefensivew": {
 			"name": "Dunne Leatherback 2a",
 			"description": "A heavy, reinforced Dunne transport. Fitted with a heavier frame, the Leatherback is capable of enduring more punishment at the cost of initial acceleration. ",
-			"icon": "game/Textures/UI/VehicleIcons/TruckDefensiveWIcon.webp"
+			"icon": "../UI/VehicleIcons/TruckDefensiveWIcon.webp"
 		},
 		"truckmobilityc": {
 			"name": "R-5b “Sisyphus” Hauler",
 			"description": "This variation of the standard R-5 Hauler is fitted with an improved suspension and axle system resulting in better overall handling. However, these improvements may not hold up under severe weather conditions.",
-			"icon": "game/Textures/UI/VehicleIcons/TruckMobilityCVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/TruckMobilityCVehicleIcon.webp"
 		},
 		"truckmobilityw": {
 			"name": "Dunne Landrunner 12c",
 			"description": "This standard Truck is fitted with rugged off-road treads, allowing for more efficient movement on rough terrain and conditions at the expense of maximum speed.",
-			"icon": "game/Textures/UI/VehicleIcons/TruckMobilityWarVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/TruckMobilityWarVehicleIcon.webp"
 		},
 		"truckmultic": {
 			"name": "R-17 “Retiarius” Skirmisher",
 			"description": "A truck fitted with an advanced rocket propulsion rack, the “Retiarius” webs the sky with deadly, screeching rockets shot at a high frequency over long distances. Holds sixteen rockets.",
-			"icon": "game/Textures/UI/VehicleIcons/TruckMultiCIcon.webp"
+			"icon": "../UI/VehicleIcons/TruckMultiCIcon.webp"
 		},
 		"truckoffensivec": {
 			"name": "R-9 “Speartip” Escort",
 			"description": "This standard Truck is fitted with Light Machinegun in place of the passenger seat. It’s well suited as an escort for convoys or lightly armoured operations.",
-			"icon": "game/Textures/UI/VehicleIcons/TruckOffensiveVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/TruckOffensiveVehicleIcon.webp"
 		},
 		"truckw": {
 			"name": "Dunne Transport",
 			"description": "A heavy-duty Warden truck used to mobilize troops and supplies.",
-			"icon": "game/Textures/UI/VehicleIcons/TruckWarVehicleIcon.webp"
+			"icon": "../UI/VehicleIcons/TruckWarVehicleIcon.webp"
 		},
 		"water": {
 			"name": "Water",
 			"description": "Water... in a can!",
-			"icon": "game/Textures/UI/ItemIcons/WaterIcon.webp",
+			"icon": "../UI/ItemIcons/WaterIcon.webp",
 			"isLiquid": true
 		},
 		"watercan": {
 			"name": "Water (Canned)",
 			"description": "Water... in a can!",
-			"icon": "game/Textures/UI/ItemIcons/WaterIcon.webp"
+			"icon": "../UI/ItemIcons/WaterIcon.webp"
 		},
 		"wood": {
 			"name": "Refined Materials",
 			"description": "Resource used for building advanced structures and producing special items.",
-			"icon": "game/Textures/UI/ItemIcons/RefinedMaterialsIcon.webp"
+			"icon": "../UI/ItemIcons/RefinedMaterialsIcon.webp"
 		}
 	},
 	"weapons": {
 		"hegrenade": {
 			"name": "Mammon 91-b",
 			"description": "Mammon 91-b",
-			"icon": "game/Textures/UI/ItemIcons/HEGrenadeItemIcon.webp",
+			"icon": "../UI/ItemIcons/HEGrenadeItemIcon.webp",
 			"codeName": "hegrenade",
 			"alias": "HE Grenade",
 			"damageType": {
@@ -1589,7 +1702,7 @@ const gameData = {
 		"helaunchedgrenade": {
 			"name": "Tremola Grenade GPb-1",
 			"description": "Tremola Grenade GPb-1",
-			"icon": "game/Textures/UI/ItemIcons/HELaunchedGrenadeItemIcon.webp",
+			"icon": "../UI/ItemIcons/HELaunchedGrenadeItemIcon.webp",
 			"codeName": "helaunchedgrenade",
 			"alias": "HE Launcher",
 			"damageType": {
@@ -1609,7 +1722,7 @@ const gameData = {
 		"minitankammo": {
 			"name": "30mm",
 			"description": "30mm",
-			"icon": "game/Textures/UI/ItemIcons/MiniTankAmmoItemIcon.webp",
+			"icon": "../UI/ItemIcons/MiniTankAmmoItemIcon.webp",
 			"codeName": "minitankammo",
 			"damageType": {
 				"name": "Explosive",
@@ -1628,7 +1741,7 @@ const gameData = {
 		"rpgammo": {
 			"name": "RPG",
 			"description": "RPG",
-			"icon": "game/Textures/UI/ItemIcons/RpgAmmoItemIcon.webp",
+			"icon": "../UI/ItemIcons/RpgAmmoItemIcon.webp",
 			"codeName": "rpgammo",
 			"damageType": {
 				"name": "Explosive",
@@ -1646,7 +1759,7 @@ const gameData = {
 		"lighttankammo": {
 			"name": "40mm",
 			"description": "40mm",
-			"icon": "game/Textures/UI/ItemIcons/LightTankAmmoItemIcon.webp",
+			"icon": "../UI/ItemIcons/LightTankAmmoItemIcon.webp",
 			"codeName": "lighttankammo",
 			"damage": 600,
 			"damageType": {
@@ -1661,7 +1774,7 @@ const gameData = {
 		"battletankammo": {
 			"name": "75mm",
 			"description": "75mm",
-			"icon": "game/Textures/UI/ItemIcons/BattleTankAmmoItemIcon.webp",
+			"icon": "../UI/ItemIcons/BattleTankAmmoItemIcon.webp",
 			"codeName": "battletankammo",
 			"damage": 1750,
 			"damageType": {
@@ -1676,7 +1789,7 @@ const gameData = {
 		"atammo": {
 			"name": "68mm",
 			"description": "68mm",
-			"icon": "game/Textures/UI/ItemIcons/ATAmmoIcon.webp",
+			"icon": "../UI/ItemIcons/ATAmmoIcon.webp",
 			"codeName": "atammo",
 			"damage": 600,
 			"damageType": {
@@ -1691,7 +1804,7 @@ const gameData = {
 		"atlargeammo": {
 			"name": "94.5mm",
 			"description": "94.5mm",
-			"icon": "game/Textures/UI/ATLargeAmmoIcon.webp",
+			"icon": "../UI/ATLargeAmmoIcon.webp",
 			"codeName": "atlargeammo",
 			"damage": 1750,
 			"damageType": {
@@ -1706,7 +1819,7 @@ const gameData = {
 		"mortarammo": {
 			"name": "Mortar Shell",
 			"description": "Mortar Shell",
-			"icon": "game/Textures/UI/ItemIcons/MortarAmmoIcon.webp",
+			"icon": "../UI/ItemIcons/MortarAmmoIcon.webp",
 			"codeName": "mortarammo",
 			"alias": "Mortar",
 			"damage": 300,
@@ -1722,7 +1835,7 @@ const gameData = {
 		"lightartilleryammo": {
 			"name": "120mm",
 			"description": "120mm",
-			"icon": "game/Textures/UI/ItemIcons/LightArtilleryAmmoItemIcon.webp",
+			"icon": "../UI/ItemIcons/LightArtilleryAmmoItemIcon.webp",
 			"codeName": "lightartilleryammo",
 			"damage": 400,
 			"damageType": {
@@ -1737,7 +1850,7 @@ const gameData = {
 		"heavyartilleryammo": {
 			"name": "150mm",
 			"description": "150mm",
-			"icon": "game/Textures/UI/ItemIcons/HeavyArtilleryAmmoItemIcon.webp",
+			"icon": "../UI/ItemIcons/HeavyArtilleryAmmoItemIcon.webp",
 			"codeName": "heavyartilleryammo",
 			"damage": 900,
 			"damageType": {
@@ -1752,7 +1865,7 @@ const gameData = {
 		"herocketammo": {
 			"name": "3C-High Explosive Rocket",
 			"description": "3C-High Explosive Rocket",
-			"icon": "game/Textures/UI/ItemIcons/HERocketAmmoIcon.webp",
+			"icon": "../UI/ItemIcons/HERocketAmmoIcon.webp",
 			"codeName": "herocketammo",
 			"alias": "Rocket",
 			"damage": 300,
@@ -1768,7 +1881,7 @@ const gameData = {
 		"firerocketammo": {
 			"name": "4C-Fire Rocket",
 			"description": "4C-Fire Rocket",
-			"icon": "game/Textures/UI/ItemIcons/FlameRocketAmmoIcon.webp",
+			"icon": "../UI/ItemIcons/FlameRocketAmmoIcon.webp",
 			"codeName": "firerocketammo",
 			"alias": "Fire Rocket",
 			"damage": 145,
@@ -1784,7 +1897,7 @@ const gameData = {
 		"explosivelightc": {
 			"name": "Hydra’s Whisper",
 			"description": "Hydra’s Whisper",
-			"icon": "game/Textures/UI/Menus/BangaloreItemIcon.webp",
+			"icon": "../UI/Menus/BangaloreItemIcon.webp",
 			"codeName": "explosivelightc",
 			"alias": "Hydras",
 			"damage": 350,
@@ -1800,7 +1913,7 @@ const gameData = {
 		"mortartankammo": {
 			"name": "250mm",
 			"description": "250mm",
-			"icon": "game/Textures/UI/ItemIcons/MortarTankIcon.webp",
+			"icon": "../UI/ItemIcons/MortarTankIcon.webp",
 			"codeName": "mortartankammo",
 			"damage": 1000,
 			"damageType": {
@@ -1815,7 +1928,7 @@ const gameData = {
 		"lrartilleryammo": {
 			"name": "300mm",
 			"description": "300mm",
-			"icon": "game/Textures/UI/ItemIcons/LRArtilleryAmmoItemIcon.webp",
+			"icon": "../UI/ItemIcons/LRArtilleryAmmoItemIcon.webp",
 			"codeName": "lrartilleryammo",
 			"damage": 1500,
 			"damageType": {
@@ -1830,7 +1943,7 @@ const gameData = {
 		"satchelchargew": {
 			"name": "Alligator Charge",
 			"description": "Alligator Charge",
-			"icon": "game/Textures/UI/StructureIcons/SatchelCharge.webp",
+			"icon": "../UI/StructureIcons/SatchelCharge.webp",
 			"codeName": "satchelchargew",
 			"alias": "Satchel",
 			"damage": 300,
@@ -1846,7 +1959,7 @@ const gameData = {
 		"satchelcharget": {
 			"name": "Havoc Charge Detonator",
 			"description": "Havoc Charge Detonator",
-			"icon": "game/Textures/UI/ItemIcons/SatchelChargeTIcon.webp",
+			"icon": "../UI/ItemIcons/SatchelChargeTIcon.webp",
 			"codeName": "satchelcharget",
 			"alias": "Havoc",
 			"damage": 1850,
@@ -1868,8 +1981,12 @@ const gameData = {
 			"category": "vehicles",
 			"categoryOrder": 5,
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/Ambulance.webp",
-			"texture": "game/Textures/Vehicles/ambulancec.webp",
+			"icon": "../UI/VehicleIcons/Ambulance.webp",
+			"texture": {
+				"src": "../Vehicles/ambulancec.webp",
+				"width": 317,
+				"height": 149
+			},
 			"techId": "unlockambulance"
 		},
 		"ambulanceflamec": {
@@ -1879,8 +1996,12 @@ const gameData = {
 			"category": "vehicles",
 			"categoryOrder": 5,
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/AmbulanceFlameC.webp",
-			"texture": "game/Textures/Vehicles/ambulanceflamec.webp",
+			"icon": "../UI/VehicleIcons/AmbulanceFlameC.webp",
+			"texture": {
+				"src": "../Vehicles/ambulanceflamec.webp",
+				"width": 334,
+				"height": 149
+			},
 			"techId": "unlockambulance"
 		},
 		"ambulanceflamew": {
@@ -1890,8 +2011,12 @@ const gameData = {
 			"category": "vehicles",
 			"categoryOrder": 5,
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/AmbulanceFlameW.webp",
-			"texture": "game/Textures/Vehicles/ambulanceflamew.webp",
+			"icon": "../UI/VehicleIcons/AmbulanceFlameW.webp",
+			"texture": {
+				"src": "../Vehicles/ambulanceflamew.webp",
+				"width": 369,
+				"height": 152
+			},
 			"techId": "unlockambulance"
 		},
 		"ambulancew": {
@@ -1901,8 +2026,12 @@ const gameData = {
 			"category": "vehicles",
 			"categoryOrder": 5,
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/AmbulanceWar.webp",
-			"texture": "game/Textures/Vehicles/ambulancew.webp",
+			"icon": "../UI/VehicleIcons/AmbulanceWar.webp",
+			"texture": {
+				"src": "../Vehicles/ambulancew.webp",
+				"width": 343,
+				"height": 146
+			},
 			"techId": "unlockambulance"
 		},
 		"ammunition_factory": {
@@ -1937,8 +2066,12 @@ const gameData = {
 					"shape": [ 80.3,143.33,105.15,-142.73,106.36,142.73 ]
 				}
 			],
-			"icon": "game/Textures/UI/ItemIcons/AmmoFactoryBaseIcon.webp",
-			"texture": "game/Textures/Structures/ammunition_factory.webp",
+			"icon": "../UI/ItemIcons/AmmoFactoryBaseIcon.webp",
+			"texture": {
+				"src": "../Structures/ammunition_factory.webp",
+				"width": 379,
+				"height": 655
+			},
 			"preventOnLandscape": true,
 			"power": -4,
 			"sockets": [
@@ -2018,8 +2151,12 @@ const gameData = {
 							"shape": [ 80.3,143.33,105.15,-142.73,106.36,142.73 ]
 						}
 					],
-					"icon": "game/Textures/UI/ItemIcons/FacilityFactoryAmmoTripod.webp",
-					"texture": "game/Textures/Structures/ammunition_factory_tripod_factory.webp",
+					"icon": "../UI/ItemIcons/FacilityFactoryAmmoTripod.webp",
+					"texture": {
+						"src": "../Structures/ammunition_factory_tripod_factory.webp",
+						"width": 379,
+						"height": 655
+					},
 					"techId": "unlockfacilitytier2",
 					"cost": {
 						"facilitymaterials1": 50
@@ -2145,8 +2282,12 @@ const gameData = {
 							"shape": [ 80.3,143.33,105.15,-142.73,106.36,142.73 ]
 						}
 					],
-					"icon": "game/Textures/UI/ItemIcons/AmmoFactoryRocketFacilityModIcon.webp",
-					"texture": "game/Textures/Structures/ammunition_factory_rocket_factory.webp",
+					"icon": "../UI/ItemIcons/AmmoFactoryRocketFacilityModIcon.webp",
+					"texture": {
+						"src": "../Structures/ammunition_factory_rocket_factory.webp",
+						"width": 379,
+						"height": 655
+					},
 					"techId": "unlockfacilitytier2",
 					"cost": {
 						"facilitymaterials2": 35
@@ -2209,8 +2350,12 @@ const gameData = {
 							"shape": [ 80.3,143.33,105.15,-142.73,106.36,142.73 ]
 						}
 					],
-					"icon": "game/Textures/UI/ItemIcons/AmmoFactoryLargeShellFactoryModIcon.webp",
-					"texture": "game/Textures/Structures/ammunition_factory_large_shell_factory.webp",
+					"icon": "../UI/ItemIcons/AmmoFactoryLargeShellFactoryModIcon.webp",
+					"texture": {
+						"src": "../Structures/ammunition_factory_large_shell_factory.webp",
+						"width": 379,
+						"height": 655
+					},
 					"techId": "unlockfacilitytier2",
 					"cost": {
 						"facilitymaterials2": 175
@@ -2283,8 +2428,12 @@ const gameData = {
 			"description": "A slight variation of the V.110, the Gravekeeper comes fitted with an embedded Bonesaw launcher, transforming the humble armoured car into an effective indirect anti-armour vehicle.",
 			"category": "armory",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarATWVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/armoredcaratw.webp",
+			"icon": "../UI/VehicleIcons/ArmoredCarATWVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/armoredcaratw.webp",
+				"width": 302,
+				"height": 153
+			},
 			"techId": "unlockfacilitytier2"
 		},
 		"armoredcarc": {
@@ -2293,8 +2442,12 @@ const gameData = {
 			"description": "Colonial Armoured Cars are quick, well-rounded urban assault platforms. These anti-infantry vehicles are equipped with twin-barrelled machineguns.",
 			"category": "armor",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/armoredcarc.webp"
+			"icon": "../UI/VehicleIcons/ArmoredCarVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/armoredcarc.webp",
+				"width": 291,
+				"height": 136
+			}
 		},
 		"armoredcarflamew": {
 			"name": "O’Brien V.130 Wild Jack",
@@ -2302,8 +2455,12 @@ const gameData = {
 			"description": "While the Noble Firebrand Mk. XVII is a deadly flamethrower tank, a more efficient means of employing flame weapons was needed. Enter the Wild Jack. Named for the fiery idols made by children for Dead Harvest, the Wild Jack is a variation of the Highlander.",
 			"category": "tank",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarFlameWarVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/armoredcarflamew.webp",
+			"icon": "../UI/VehicleIcons/ArmoredCarFlameWarVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/armoredcarflamew.webp",
+				"width": 327,
+				"height": 174
+			},
 			"techId": "unlockfacilitytier2"
 		},
 		"armoredcarmobilityw": {
@@ -2312,8 +2469,12 @@ const gameData = {
 			"description": "Fitted with all-terrain treads, the Highlander brings significant all-terrain mobility and performs especially well in snowy and mountainous environments. ",
 			"category": "tank",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarMobilityWarVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/armoredcarmobilityw.webp"
+			"icon": "../UI/VehicleIcons/ArmoredCarMobilityWarVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/armoredcarmobilityw.webp",
+				"width": 302,
+				"height": 174
+			}
 		},
 		"armoredcaroffensivec": {
 			"name": "T5 “Percutio”",
@@ -2321,8 +2482,12 @@ const gameData = {
 			"description": "This “Xiphos” variant is fitted with a high-powered anti-tank turret in place of the twin machine gun platform.",
 			"category": "armor",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarOffensiveCVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/armoredcaroffensivec.webp",
+			"icon": "../UI/VehicleIcons/ArmoredCarOffensiveCVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/armoredcaroffensivec.webp",
+				"width": 303,
+				"height": 140
+			},
 			"techId": "unlockfacilitytier2"
 		},
 		"armoredcaroffensivew": {
@@ -2331,8 +2496,12 @@ const gameData = {
 			"description": "This early O’Brien variant, the V.101 Freeman is fitted with a 360 degree ballistics cannon turret at the expense of top speed.",
 			"category": "armor",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarOffensiveWVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/armoredcaroffensivew.webp",
+			"icon": "../UI/VehicleIcons/ArmoredCarOffensiveWVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/armoredcaroffensivew.webp",
+				"width": 335,
+				"height": 145
+			},
 			"techId": "unlockarmoredcaroffensive"
 		},
 		"armoredcartwinc": {
@@ -2341,8 +2510,12 @@ const gameData = {
 			"description": "Fitted with twin RPG launchers, the T8 employs hit-and-run assaults against enemy structures and emplacements.",
 			"category": "armor",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarTwinCItemIcon.webp",
-			"texture": "game/Textures/Vehicles/armoredcartwinc.webp",
+			"icon": "../UI/VehicleIcons/ArmoredCarTwinCItemIcon.webp",
+			"texture": {
+				"src": "../Vehicles/armoredcartwinc.webp",
+				"width": 307,
+				"height": 139
+			},
 			"techId": "unlockarmoredcartwin"
 		},
 		"armoredcartwinw": {
@@ -2351,8 +2524,12 @@ const gameData = {
 			"description": "One of Conor O’Brien’s best traits was his ability to modernize and make use of older technology in his designs. The v.190 Knave is the perfect example of this philosophy. Fitted with a modified, outdated twin-grenade launcher turret, the Knave is a surprising combination of speed and subterfuge that quickly routs the enemy, leaving them befuddled.",
 			"category": "armor",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarTwinWIcon.webp",
-			"texture": "game/Textures/Vehicles/armoredcartwinw.webp",
+			"icon": "../UI/VehicleIcons/ArmoredCarTwinWIcon.webp",
+			"texture": {
+				"src": "../Vehicles/armoredcartwinw.webp",
+				"width": 335,
+				"height": 146
+			},
 			"techId": "unlockarmoredcartwin"
 		},
 		"armoredcarw": {
@@ -2361,8 +2538,12 @@ const gameData = {
 			"description": "Warden Armoured Cars are quick, well-rounded urban assault platforms. These anti-infantry vehicles are equipped with twin-barrelled machineguns.",
 			"category": "armor",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/ArmoredCarWarVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/armoredcarw.webp"
+			"icon": "../UI/VehicleIcons/ArmoredCarWarVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/armoredcarw.webp",
+				"width": 302,
+				"height": 153
+			}
 		},
 		"atpillbox": {
 			"name": "Anti-Tank Pillbox",
@@ -2381,8 +2562,12 @@ const gameData = {
 					"shape": [ -54.85,-85.45,49.39,-85.45,99.7,-3.03,51.82,85.45,-48.18,87.27,-102.73,3.64 ]
 				}
 			],
-			"icon": "game/Textures/UI/StructureIcons/ATPillboxIcon.webp",
-			"texture": "game/Textures/Structures/atpillbox.webp",
+			"icon": "../UI/StructureIcons/ATPillboxIcon.webp",
+			"texture": {
+				"src": "../Structures/atpillbox.webp",
+				"width": 341,
+				"height": 296
+			},
 			"techId": "unlockatpillbox",
 			"maxHealth": 950,
 			"cost": {
@@ -2401,10 +2586,14 @@ const gameData = {
 			"simpleBezier": true,
 			"minLength": 3,
 			"maxLength": 10,
-			"icon": "game/Textures/UI/StructureIcons/BarbedWireCornerStructureIcon.webp",
-			"texture": "game/Textures/Structures/barbedwirespline.webp",
-			"textureFrontCap": "game/Textures/Structures/barbedwirespline_front.webp",
-			"textureBackCap": "game/Textures/Structures/barbedwirespline_back.webp",
+			"icon": "../UI/StructureIcons/BarbedWireCornerStructureIcon.webp",
+			"texture": {
+				"src": "../Structures/barbedwirespline.webp",
+				"width": 53,
+				"height": 53
+			},
+			"textureFrontCap": "../Structures/barbedwirespline_front.webp",
+			"textureBackCap": "../Structures/barbedwirespline_back.webp",
 			"buildOnFoundation": true,
 			"canSnap": true,
 			"sockets": [
@@ -2458,9 +2647,13 @@ const gameData = {
 			"maxLength": 10,
 			"minExtLength": 1,
 			"maxExtLength": 4,
-			"icon": "game/Textures/UI/ItemIcons/BarbedWireFenceStructureIcon.webp",
-			"texture": "game/Textures/Structures/barbedwirewallspline.webp",
-			"texturePost": "game/Textures/Structures/barbedwirewallsplinepost.webp",
+			"icon": "../UI/ItemIcons/BarbedWireFenceStructureIcon.webp",
+			"texture": {
+				"src": "../Structures/barbedwirewallspline.webp",
+				"width": 64,
+				"height": 64
+			},
+			"texturePost": "../Structures/barbedwirewallsplinepost.webp",
 			"texturePostDist": 1.75,
 			"buildOnFoundation": true,
 			"canSnap": true,
@@ -2500,7 +2693,6 @@ const gameData = {
 			"description": "A large shipping vessel, the Aquatipper is used to transport vehicles, equipment, and personnel over large bodies of water.",
 			"category": "naval",
 			"categoryOrder": 20,
-			"sortLayer": "vehicle",
 			"hitArea": [
 				{
 					"shape": [ -181.21,98.18,-182.42,-97.58,186.06,-98.18,186.67,95.76 ]
@@ -2509,8 +2701,12 @@ const gameData = {
 					"shape": [ -182.42,-97.58,-182.42,-37.58,-191.52,-69.09 ]
 				}
 			],
-			"icon": "game/Textures/UI/VehicleIcons/BargeVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/barge.webp"
+			"icon": "../UI/VehicleIcons/BargeVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/barge.webp",
+				"width": 630,
+				"height": 378
+			}
 		},
 		"battletankatc": {
 			"name": "Lance-25 “Hasta”",
@@ -2518,8 +2714,12 @@ const gameData = {
 			"description": "A heavy Lance variation, the 25, or “Hasta”, was employed in the first siege on Brightwall, a city now colloquially referred to as, “The Blemish”. Bombarded by heavy, armoured resistance in northern Veli, Colonial tank regiments requested a heavy vehicle with more effective search and destroy capabilities. Fitted with a front-facing 94.5mm cannon, the “Hasta” is a more than capable tank destroyer.",
 			"category": "tank",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/BattleTankATCIcon.webp",
-			"texture": "game/Textures/Vehicles/battletankatc.webp",
+			"icon": "../UI/VehicleIcons/BattleTankATCIcon.webp",
+			"texture": {
+				"src": "../Vehicles/battletankatc.webp",
+				"width": 502,
+				"height": 242
+			},
 			"techId": "unlockbattletank"
 		},
 		"battletankc": {
@@ -2528,8 +2728,12 @@ const gameData = {
 			"description": "A heavy-duty Battle Tank with thick armour plating and destructive firepower. The Lance is fitted with a 75mm turret and a front-facing 12.7mm anti-infantry machine gun. The heavy armour limits top speed, but in exchange it can take a lot of punishment.",
 			"category": "tank",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/BattleTank.webp",
-			"texture": "game/Textures/Vehicles/battletankc.webp"
+			"icon": "../UI/VehicleIcons/BattleTank.webp",
+			"texture": {
+				"src": "../Vehicles/battletankc.webp",
+				"width": 435,
+				"height": 242
+			}
 		},
 		"battletankdefensivew": {
 			"name": "Flood Juggernaut Mk. VII",
@@ -2537,8 +2741,12 @@ const gameData = {
 			"description": "The Juggernaut is a heavily armoured Flood variant fitted with a heavy flamethrower turret that fires an advanced adhesive propellant. Its shovel-like treads may hinder top speeds, but this beast is quite capable in extreme weather conditions.",
 			"category": "tank",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/BattleTankWarDefensiveVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/battletankdefensivew.webp"
+			"icon": "../UI/VehicleIcons/BattleTankWarDefensiveVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/battletankdefensivew.webp",
+				"width": 441,
+				"height": 264
+			}
 		},
 		"battletankw": {
 			"name": "Flood Mk. I",
@@ -2546,16 +2754,24 @@ const gameData = {
 			"description": "A heavy-duty Battle Tank with thick armour plating and destructive firepower. The Flood is fitted with a 75mm turret and a front-facing 12.7mm anti-infantry machine gun. The heavy armour limits top speed, but in exchange it can take a lot of punishment.",
 			"category": "tank",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/BattleTankWar.webp",
-			"texture": "game/Textures/Vehicles/battletankw.webp"
+			"icon": "../UI/VehicleIcons/BattleTankWar.webp",
+			"texture": {
+				"src": "../Vehicles/battletankw.webp",
+				"width": 441,
+				"height": 260
+			}
 		},
 		"bicycle": {
 			"name": "Blumfield LK205",
 			"codeName": "Bicycle",
 			"description": "A simple, old-style Blumfield bicycle. This is a smaller recreation model, designed for short-distance sprints.",
 			"category": "vehicles",
-			"icon": "game/Textures/UI/VehicleIcons/RelicBicycleVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/bicycle.webp"
+			"icon": "../UI/VehicleIcons/RelicBicycleVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/bicycle.webp",
+				"width": 140,
+				"height": 34
+			}
 		},
 		"bms_foreman_stacker": {
 			"name": "BMS Foreman Stacker",
@@ -2572,11 +2788,15 @@ const gameData = {
 				"max": 22.5
 			},
 			"sortLayer": "crane",
-			"icon": "game/Textures/UI/FacilityCraneIcon.webp",
-			"texture": "game/Textures/Structures/bms_foreman_stacker.webp",
-			"textureOffset": {
-				"x": 428,
-				"y": 258
+			"icon": "../UI/FacilityCraneIcon.webp",
+			"texture": {
+				"src": "../Structures/bms_foreman_stacker.webp",
+				"width": 1495,
+				"height": 224,
+				"offset": {
+					"x": 428,
+					"y": 258
+				}
 			},
 			"buildOnFoundation": true,
 			"preventOnLandscape": true,
@@ -2617,11 +2837,15 @@ const gameData = {
 				"max": 33.75
 			},
 			"sortLayer": "crane",
-			"icon": "game/Textures/UI/LargeCraneItemIcon.webp",
-			"texture": "game/Textures/Structures/large_crane.webp",
-			"textureOffset": {
-				"x": 382,
-				"y": 578
+			"icon": "../UI/LargeCraneItemIcon.webp",
+			"texture": {
+				"src": "../Structures/large_crane.webp",
+				"width": 1804,
+				"height": 578,
+				"offset": {
+					"x": 382,
+					"y": 578
+				}
 			},
 			"garrisonSupplyMultiplier": 0,
 			"techId": "unlockfacilitytier3",
@@ -2631,6 +2855,30 @@ const gameData = {
 			},
 			"repairCost": 100
 		},
+		"borderbase": {
+			"name": "Border Base",
+			"codeName": "BorderBase",
+			"description": "A small base used as a jump-off point for invading enemy regions. Players can spawn and stockpile items here.",
+			"category": "world",
+			"categoryOrder": 16,
+			"baseGarrisonRadius": 40,
+			"baseGarrisonTypes": [
+				"provisional_garrison"
+			],
+			"width": 7,
+			"length": 7,
+			"icon": "../UI/CustomIcons/BorderBaseIcon.webp",
+			"texture": {
+				"src": "../Structures/borderbase.webp",
+				"width": 350,
+				"height": 419,
+				"offset": {
+					"x": 347,
+					"y": 351
+				}
+			},
+			"cost": false
+		},
 		"busc": {
 			"name": "R-15 - “Chariot”",
 			"codeName": "BusC",
@@ -2638,9 +2886,12 @@ const gameData = {
 			"category": "vehicles",
 			"categoryOrder": 10,
 			"faction": "c",
-			"sortLayer": "vehicle",
-			"icon": "game/Textures/UI/VehicleIcons/BusIcon.webp",
-			"texture": "game/Textures/Vehicles/busc.webp",
+			"icon": "../UI/VehicleIcons/BusIcon.webp",
+			"texture": {
+				"src": "../Vehicles/busc.webp",
+				"width": 534,
+				"height": 177
+			},
 			"techId": "unlockbus"
 		},
 		"busw": {
@@ -2650,9 +2901,12 @@ const gameData = {
 			"category": "vehicles",
 			"categoryOrder": 10,
 			"faction": "w",
-			"sortLayer": "vehicle",
-			"icon": "game/Textures/UI/VehicleIcons/BusWarIcon.webp",
-			"texture": "game/Textures/Vehicles/busw.webp"
+			"icon": "../UI/VehicleIcons/BusWarIcon.webp",
+			"texture": {
+				"src": "../Vehicles/busw.webp",
+				"width": 528,
+				"height": 160
+			}
 		},
 		"catwalk_bridge": {
 			"name": "Catwalk Bridge",
@@ -2665,8 +2919,12 @@ const gameData = {
 			"hasOutline": false,
 			"minLength": 8,
 			"maxLength": 20,
-			"icon": "game/Textures/UI/ItemIcons/facilitieCatwalkPlatfromIcon.webp",
-			"texture": "game/Textures/Structures/catwalk_bridge.webp",
+			"icon": "../UI/ItemIcons/facilitieCatwalkPlatfromIcon.webp",
+			"texture": {
+				"src": "../Structures/catwalk_bridge.webp",
+				"width": 136,
+				"height": 136
+			},
 			"buildOnFoundation": true,
 			"preventOnLandscape": true,
 			"canSnap": true,
@@ -2716,8 +2974,12 @@ const gameData = {
 			"category": "factories",
 			"categoryOrder": 90,
 			"sortLayer": "overhead",
-			"icon": "game/Textures/UI/ItemIcons/FacilityCatwalkRampConnectorIcon.webp",
-			"texture": "game/Textures/Structures/catwalk_platform.webp",
+			"icon": "../UI/ItemIcons/FacilityCatwalkRampConnectorIcon.webp",
+			"texture": {
+				"src": "../Structures/catwalk_platform.webp",
+				"width": 139,
+				"height": 139
+			},
 			"buildOnFoundation": true,
 			"preventOnLandscape": true,
 			"canSnap": true,
@@ -2786,8 +3048,12 @@ const gameData = {
 			"category": "factories",
 			"categoryOrder": 85,
 			"sortLayer": "overhead",
-			"icon": "game/Textures/UI/ItemIcons/FacilityCatwalkRampIcon.webp",
-			"texture": "game/Textures/Structures/catwalk_stairs.webp",
+			"icon": "../UI/ItemIcons/FacilityCatwalkRampIcon.webp",
+			"texture": {
+				"src": "../Structures/catwalk_stairs.webp",
+				"width": 620,
+				"height": 141
+			},
 			"buildOnFoundation": true,
 			"preventOnLandscape": true,
 			"canSnap": true,
@@ -2845,8 +3111,12 @@ const gameData = {
 					"shape": [ -7.58,105.15,-54.85,105.15,-54.85,40.3,-7.58,40.3 ]
 				}
 			],
-			"icon": "game/Textures/UI/ItemIcons/FacilitiesCoolRefineryBaseIcon.webp",
-			"texture": "game/Textures/Structures/coal_refinery.webp",
+			"icon": "../UI/ItemIcons/FacilitiesCoolRefineryBaseIcon.webp",
+			"texture": {
+				"src": "../Structures/coal_refinery.webp",
+				"width": 279,
+				"height": 611
+			},
 			"preventOnLandscape": true,
 			"power": -3,
 			"sockets": [
@@ -2907,8 +3177,12 @@ const gameData = {
 							"shape": [ -74.55,40.3,45.45,20.3,-48.48,40.3 ]
 						}
 					],
-					"icon": "game/Textures/UI/ItemIcons/FacilitiesCoolRefineryCokeFurnaceIcon.webp",
-					"texture": "game/Textures/Structures/coal_refinery_coke_furnace.webp",
+					"icon": "../UI/ItemIcons/FacilitiesCoolRefineryCokeFurnaceIcon.webp",
+					"texture": {
+						"src": "../Structures/coal_refinery_coke_furnace.webp",
+						"width": 258,
+						"height": 611
+					},
 					"positionOffset": {
 						"x": -21
 					},
@@ -2960,8 +3234,12 @@ const gameData = {
 							"shape": [ -23.33,41.52,-23.94,105.15,-70.61,105.15,-70.61,40.3 ]
 						}
 					],
-					"icon": "game/Textures/UI/StructureIcons/FacilityCoalLiquefierIcon.webp",
-					"texture": "game/Textures/Structures/coal_refinery_liquifier.webp",
+					"icon": "../UI/StructureIcons/FacilityCoalLiquefierIcon.webp",
+					"texture": {
+						"src": "../Structures/coal_refinery_liquifier.webp",
+						"width": 331,
+						"height": 611
+					},
 					"positionOffset": {
 						"x": 52
 					},
@@ -3065,8 +3343,12 @@ const gameData = {
 							"shape": [ -70.61,40.3,-23.33,93.64,-23.33,105.15,-70.61,105.15 ]
 						}
 					],
-					"icon": "game/Textures/UI/StructureIcons/FacilityAdvancedCoalLiquefierIcon.webp",
-					"texture": "game/Textures/Structures/coal_refinery_adv_liquifier.webp",
+					"icon": "../UI/StructureIcons/FacilityAdvancedCoalLiquefierIcon.webp",
+					"texture": {
+						"src": "../Structures/coal_refinery_adv_liquifier.webp",
+						"width": 331,
+						"height": 611
+					},
 					"positionOffset": {
 						"x": 52
 					},
@@ -3136,13 +3418,73 @@ const gameData = {
 				}
 			}
 		},
+		"coastalgun": {
+			"name": "Coastal Gun",
+			"codeName": "CoastalGun",
+			"description": "An old coastal defence gun that has been reused for the defence of key locations against naval bombardment.",
+			"category": "world",
+			"categoryOrder": 17,
+			"radius": 5.5,
+			"range": {
+				"max": 200
+			},
+			"hitArea": [
+				{
+					"shape": [ -158.79,106.36,-149.7,83.94,-123.64,125.76,-135.15,133.64,-154.55,125.76 ]
+				},
+				{
+					"shape": [ 123.64,126.36,146.06,88.18,158.18,105.15,158.18,117.88,140.61,131.82 ]
+				},
+				{
+					"shape": [ 6.67,-171.82,127.27,-113.03,162.42,59.09,146.06,88.18,-161.21,60.91,-172.12,-6.97,-107.88,-132.42,-59.39,-164.55 ]
+				},
+				{
+					"shape": [ -107.88,-132.42,-172.12,-6.97,-151.52,-85.76 ]
+				},
+				{
+					"shape": [ 162.42,59.09,127.27,-113.03,155.15,-77.27,173.94,2.73 ]
+				},
+				{
+					"shape": [ -123.64,125.76,-149.7,83.94,146.06,88.18,97.58,149.39,41.21,171.21,-9.09,175.45,-64.24,163.33,-100.61,148.18 ]
+				},
+				{
+					"shape": [ 127.27,-113.03,6.67,-171.82,49.09,-166.97,97.58,-143.94 ]
+				},
+				{
+					"shape": [ -64.24,163.33,-9.09,175.45,-58.18,171.82 ]
+				},
+				{
+					"shape": [ 97.58,149.39,146.06,88.18,123.64,126.36 ]
+				},
+				{
+					"shape": [ 146.06,88.18,-149.7,83.94,-161.21,60.91 ]
+				}
+			],
+			"icon": "../UI/CustomIcons/CoastalGunIcon.webp",
+			"texture": {
+				"src": "../Structures/coastalgun.webp",
+				"width": 571,
+				"height": 854,
+				"offset": {
+					"x": 568,
+					"y": 567
+				}
+			},
+			"maxHealth": 2000,
+			"cost": false,
+			"repairCost": 200
+		},
 		"componentmine": {
 			"name": "Component Mine",
 			"codeName": "ComponentMine",
 			"description": "An old mine that automatically gathers Components using Fuel.",
 			"category": "world",
-			"icon": "game/Textures/UI/StructureIcons/ComponentMineIcon.webp",
-			"texture": "game/Textures/Structures/componentmine.webp",
+			"icon": "../UI/StructureIcons/ComponentMineIcon.webp",
+			"texture": {
+				"src": "../Structures/componentmine.webp",
+				"width": 369,
+				"height": 250
+			},
 			"maxHealth": 1000,
 			"cost": false,
 			"repairCost": 200
@@ -3153,8 +3495,14 @@ const gameData = {
 			"description": "A portable device that mixes various materials to form Concrete, which are used to build heavily fortified structures.",
 			"category": "shippables",
 			"categoryOrder": 10,
-			"icon": "game/Textures/UI/StructureIcons/ConcreteMixerIcon.webp",
-			"texture": "game/Textures/Structures/concretemixer.webp",
+			"sortLayer": "container",
+			"icon": "../UI/StructureIcons/ConcreteMixerIcon.webp",
+			"texture": {
+				"src": "../Structures/concretemixer.webp",
+				"width": 262,
+				"height": 111
+			},
+			"buildOnFoundation": false,
 			"techId": "unlockconcretemixer",
 			"maxHealth": 1200,
 			"cost": {
@@ -3211,8 +3559,12 @@ const gameData = {
 					"shape": [ 42.12,-41.52,29.39,-18.48,-100.91,18.48,-101.52,-17.88 ]
 				}
 			],
-			"icon": "game/Textures/UI/VehicleIcons/ConstructionVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/construction_vehicle.webp",
+			"icon": "../UI/VehicleIcons/ConstructionVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/construction_vehicle.webp",
+				"width": 379,
+				"height": 153
+			},
 			"maxHealth": 20,
 			"cost": {
 				"cloth": 100
@@ -3228,6 +3580,7 @@ const gameData = {
 			"description": "An advanced variant of the Universal Assembly Rig, the BMS - Fabricator is fitted with a unique kit designed to handle advanced or specialized construction and excavation jobs.",
 			"category": "misc",
 			"categoryOrder": 3,
+			"sortLayer": "vehicle",
 			"hitArea": [
 				{
 					"shape": [ -103.94,18.48,-117.88,41.52,-117.88,19.09 ]
@@ -3254,8 +3607,12 @@ const gameData = {
 					"shape": [ 39.09,-41.52,26.36,-18.48,-103.94,18.48,-104.55,-17.88 ]
 				}
 			],
-			"icon": "game/Textures/UI/VehicleIcons/AdvancedConstructionVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/advanced_construction_vehicle.webp",
+			"icon": "../UI/VehicleIcons/AdvancedConstructionVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/advanced_construction_vehicle.webp",
+				"width": 389,
+				"height": 153
+			},
 			"techId": "unlockconstructionutility",
 			"cost": {
 				"construction": 1,
@@ -3275,7 +3632,7 @@ const gameData = {
 				"min": 6,
 				"max": 17.5
 			},
-			"sortLayer": "vehicle",
+			"sortLayer": "crane",
 			"hitArea": [
 				{
 					"shape": [ 105.45,73.64,72.12,42.12,105.45,42.73 ]
@@ -3302,11 +3659,15 @@ const gameData = {
 					"shape": [ 72.12,42.12,-90.91,-36.67,64.85,19.7 ]
 				}
 			],
-			"icon": "game/Textures/UI/VehicleIcons/CraneVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/crane.webp",
-			"textureOffset": {
-				"x": 350,
-				"y": 245
+			"icon": "../UI/VehicleIcons/CraneVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/crane.webp",
+				"width": 781,
+				"height": 245,
+				"offset": {
+					"x": 350,
+					"y": 245
+				}
 			},
 			"maxHealth": 20,
 			"cost": {
@@ -3320,8 +3681,12 @@ const gameData = {
 			"description": "In response to the Legion embarking on aggressive northern offensives, the Firebrand is designed to conflagrate and eradicate their garrisons with ease. Built using the aggressive frame of the Widow, the Firebrand is a pure force of nature when paired with a secondary armoured escort.",
 			"category": "tank",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/DestroyerTankFlameWIcon.webp",
-			"texture": "game/Textures/Vehicles/destroyertankflamew.webp",
+			"icon": "../UI/VehicleIcons/DestroyerTankFlameWIcon.webp",
+			"texture": {
+				"src": "../Vehicles/destroyertankflamew.webp",
+				"width": 398,
+				"height": 208
+			},
 			"techId": "unlockdestroyertankflame"
 		},
 		"destroyertankw": {
@@ -3330,8 +3695,12 @@ const gameData = {
 			"description": "This deadly tank turns predator into prey. A tank Destroyer, the Noble Widow specializes in ambush tactics, waiting for its quarry and striking with destructive high-velocity shells.",
 			"category": "tank",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/DestroyerTankWVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/destroyertankw.webp"
+			"icon": "../UI/VehicleIcons/DestroyerTankWVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/destroyertankw.webp",
+				"width": 491,
+				"height": 208
+			}
 		},
 		"diesel_power_plant": {
 			"name": "Diesel Power Plant",
@@ -3371,8 +3740,12 @@ const gameData = {
 					"shape": [ -78.79,-91.21,-86.06,-73.03,-85.45,-80.3 ]
 				}
 			],
-			"icon": "game/Textures/UI/ItemIcons/DiesePowerPlanetBaseIcon.webp",
-			"texture": "game/Textures/Structures/diesel_power_plant.webp",
+			"icon": "../UI/ItemIcons/DiesePowerPlanetBaseIcon.webp",
+			"texture": {
+				"src": "../Structures/diesel_power_plant.webp",
+				"width": 422,
+				"height": 405
+			},
 			"preventOnLandscape": true,
 			"power": 5,
 			"sockets": [
@@ -3466,8 +3839,12 @@ const gameData = {
 							"shape": [ -38.18,-80.3,78.18,112.42,78.18,120.91,18.18,111.82 ]
 						}
 					],
-					"icon": "game/Textures/UI/ItemIcons/DiesePowerPlanetPetrolIcon.webp",
-					"texture": "game/Textures/Structures/diesel_power_plant_petrol_power.webp",
+					"icon": "../UI/ItemIcons/DiesePowerPlanetPetrolIcon.webp",
+					"texture": {
+						"src": "../Structures/diesel_power_plant_petrol_power.webp",
+						"width": 430,
+						"height": 405
+					},
 					"positionOffset": {
 						"x": -8
 					},
@@ -3539,8 +3916,12 @@ const gameData = {
 							"shape": [ 127.27,93.64,112.73,93.64,112.73,16.67,127.27,16.67 ]
 						}
 					],
-					"icon": "game/Textures/UI/ItemIcons/FacilityPowerDieselCoalIcon.webp",
-					"texture": "game/Textures/Structures/diesel_power_plant_coal.webp",
+					"icon": "../UI/ItemIcons/FacilityPowerDieselCoalIcon.webp",
+					"texture": {
+						"src": "../Structures/diesel_power_plant_coal.webp",
+						"width": 422,
+						"height": 405
+					},
 					"cost": {
 						"facilitymaterials1": 100
 					},
@@ -3574,11 +3955,15 @@ const gameData = {
 				"min": 1.5,
 				"max": 45
 			},
-			"icon": "game/Textures/UI/StructureIcons/EmplacedATLargeWIcon.webp",
-			"texture": "game/Textures/Structures/emplacedatlargew.webp",
-			"textureOffset": {
-				"x": 203,
-				"y": 248
+			"icon": "../UI/StructureIcons/EmplacedATLargeWIcon.webp",
+			"texture": {
+				"src": "../Structures/emplacedatlargew.webp",
+				"width": 203,
+				"height": 471,
+				"offset": {
+					"x": 203,
+					"y": 248
+				}
 			},
 			"canSnap": true,
 			"canSnapRotate": true,
@@ -3618,11 +4003,15 @@ const gameData = {
 				"min": 1.5,
 				"max": 45
 			},
-			"icon": "game/Textures/UI/StructureIcons/EmplacedATIcon.webp",
-			"texture": "game/Textures/Structures/emplacedatw.webp",
-			"textureOffset": {
-				"x": 203,
-				"y": 203
+			"icon": "../UI/StructureIcons/EmplacedATIcon.webp",
+			"texture": {
+				"src": "../Structures/emplacedatw.webp",
+				"width": 203,
+				"height": 339,
+				"offset": {
+					"x": 203,
+					"y": 203
+				}
 			},
 			"canSnap": true,
 			"canSnapRotate": true,
@@ -3660,11 +4049,15 @@ const gameData = {
 				"min": 1.5,
 				"max": 45
 			},
-			"icon": "game/Textures/UI/StructureIcons/EmplacedCannonLargeC.webp",
-			"texture": "game/Textures/Structures/emplacedcannonlargec.webp",
-			"textureOffset": {
-				"x": 203,
-				"y": 252
+			"icon": "../UI/StructureIcons/EmplacedCannonLargeC.webp",
+			"texture": {
+				"src": "../Structures/emplacedcannonlargec.webp",
+				"width": 203,
+				"height": 468,
+				"offset": {
+					"x": 203,
+					"y": 252
+				}
 			},
 			"canSnap": true,
 			"canSnapRotate": true,
@@ -3703,11 +4096,15 @@ const gameData = {
 				"min": 200,
 				"max": 350
 			},
-			"icon": "game/Textures/UI/StructureIcons/HeavyArtilleryCIcon.webp",
-			"texture": "game/Textures/Structures/emplacedheavyartilleryc.webp",
-			"textureOffset": {
-				"x": 203,
-				"y": 303
+			"icon": "../UI/StructureIcons/HeavyArtilleryCIcon.webp",
+			"texture": {
+				"src": "../Structures/emplacedheavyartilleryc.webp",
+				"width": 203,
+				"height": 607,
+				"offset": {
+					"x": 203,
+					"y": 303
+				}
 			},
 			"canSnap": true,
 			"canSnapRotate": true,
@@ -3744,11 +4141,15 @@ const gameData = {
 				"min": 100,
 				"max": 300
 			},
-			"icon": "game/Textures/UI/StructureIcons/HeavyArtilleryW.webp",
-			"texture": "game/Textures/Structures/emplacedheavyartilleryw.webp",
-			"textureOffset": {
-				"x": 203,
-				"y": 220
+			"icon": "../UI/StructureIcons/HeavyArtilleryW.webp",
+			"texture": {
+				"src": "../Structures/emplacedheavyartilleryw.webp",
+				"width": 203,
+				"height": 453,
+				"offset": {
+					"x": 203,
+					"y": 220
+				}
 			},
 			"canSnap": true,
 			"canSnapRotate": true,
@@ -3782,15 +4183,18 @@ const gameData = {
 			"radius": 2,
 			"range": {
 				"type": "killboxRocket",
-				"lineOfSight": true,
 				"min": 3.5,
 				"max": 45
 			},
-			"icon": "game/Textures/UI/VehicleIcons/EmplacedIndirectCIcon.webp",
-			"texture": "game/Textures/Structures/emplacedindirectc.webp",
-			"textureOffset": {
-				"x": 203,
-				"y": 224
+			"icon": "../UI/VehicleIcons/EmplacedIndirectCIcon.webp",
+			"texture": {
+				"src": "../Structures/emplacedindirectc.webp",
+				"width": 203,
+				"height": 221,
+				"offset": {
+					"x": 203,
+					"y": 224
+				}
 			},
 			"canSnap": true,
 			"canSnapRotate": true,
@@ -3828,11 +4232,15 @@ const gameData = {
 				"min": 1.5,
 				"max": 35
 			},
-			"icon": "game/Textures/UI/VehicleIcons/EmplacedInfantryCIcon.webp",
-			"texture": "game/Textures/Structures/emplacedinfantryc.webp",
-			"textureOffset": {
-				"x": 203,
-				"y": 224
+			"icon": "../UI/VehicleIcons/EmplacedInfantryCIcon.webp",
+			"texture": {
+				"src": "../Structures/emplacedinfantryc.webp",
+				"width": 203,
+				"height": 252,
+				"offset": {
+					"x": 203,
+					"y": 224
+				}
 			},
 			"canSnap": true,
 			"canSnapRotate": true,
@@ -3870,11 +4278,15 @@ const gameData = {
 				"min": 1.5,
 				"max": 35
 			},
-			"icon": "game/Textures/UI/StructureIcons/EmplacedMGIcon.webp",
-			"texture": "game/Textures/Structures/emplacedinfantryw.webp",
-			"textureOffset": {
-				"x": 203,
-				"y": 203
+			"icon": "../UI/StructureIcons/EmplacedMGIcon.webp",
+			"texture": {
+				"src": "../Structures/emplacedinfantryw.webp",
+				"width": 203,
+				"height": 274,
+				"offset": {
+					"x": 203,
+					"y": 203
+				}
 			},
 			"canSnap": true,
 			"canSnapRotate": true,
@@ -3911,11 +4323,15 @@ const gameData = {
 				"min": 100,
 				"max": 300
 			},
-			"icon": "game/Textures/UI/StructureIcons/EmplacedHowitzerIcon.webp",
-			"texture": "game/Textures/Structures/emplacedlightartilleryw.webp",
-			"textureOffset": {
-				"x": 203,
-				"y": 203
+			"icon": "../UI/StructureIcons/EmplacedHowitzerIcon.webp",
+			"texture": {
+				"src": "../Structures/emplacedlightartilleryw.webp",
+				"width": 203,
+				"height": 352,
+				"offset": {
+					"x": 203,
+					"y": 203
+				}
 			},
 			"canSnap": true,
 			"canSnapRotate": true,
@@ -3952,11 +4368,15 @@ const gameData = {
 				"min": 175,
 				"max": 275
 			},
-			"icon": "game/Textures/UI/StructureIcons/EmplacedMultiCStructureIcon.webp",
-			"texture": "game/Textures/Structures/emplacedmultic.webp",
-			"textureOffset": {
-				"x": 203,
-				"y": 224
+			"icon": "../UI/StructureIcons/EmplacedMultiCStructureIcon.webp",
+			"texture": {
+				"src": "../Structures/emplacedmultic.webp",
+				"width": 203,
+				"height": 322,
+				"offset": {
+					"x": 203,
+					"y": 224
+				}
 			},
 			"canSnap": true,
 			"canSnapRotate": true,
@@ -3978,6 +4398,25 @@ const gameData = {
 			},
 			"repairCost": 100
 		},
+		"engineeringcenter": {
+			"name": "Engineering Center",
+			"codeName": "EngineeringCenter",
+			"description": "A research facility where players can contribute towards the research of their faction's Tech Tree.",
+			"category": "world",
+			"categoryOrder": 14,
+			"icon": "../UI/CustomIcons/EngineeringCenterIcon.webp",
+			"texture": {
+				"src": {
+					"c": "../Structures/engineeringcenterc.webp",
+					"w": "../Structures/engineeringcenterw.webp"
+				},
+				"width": 969,
+				"height": 440
+			},
+			"maxHealth": 2000,
+			"cost": false,
+			"repairCost": 400
+		},
 		"field_modification_center": {
 			"name": "Field Modification Center",
 			"codeName": "FacilityModificationCenter",
@@ -3996,8 +4435,12 @@ const gameData = {
 					"shape": [ -150.91,188.18,-150.91,-188.18,150.91,-188.18,150.91,188.18 ]
 				}
 			],
-			"icon": "game/Textures/UI/StructureIcons/FacilityModificationCenterIcon.webp",
-			"texture": "game/Textures/Structures/field_modification_center.webp",
+			"icon": "../UI/StructureIcons/FacilityModificationCenterIcon.webp",
+			"texture": {
+				"src": "../Structures/field_modification_center.webp",
+				"width": 500,
+				"height": 775
+			},
 			"preventOnLandscape": true,
 			"power": -8,
 			"sockets": [
@@ -4028,8 +4471,12 @@ const gameData = {
 			"description": "The \"Battering Ram\" is a mobile Anti-Tank field gun firing 68mm armour-piercing rounds.",
 			"category": "weaponry",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/FieldAntiTankColVehicleIcon.webp",
-			"texture": "game/Textures/Structures/fieldatc.webp",
+			"icon": "../UI/VehicleIcons/FieldAntiTankColVehicleIcon.webp",
+			"texture": {
+				"src": "../Structures/fieldatc.webp",
+				"width": 158,
+				"height": 358
+			},
 			"techId": "unlockfieldatgun",
 			"maxHealth": 2850,
 			"cost": {
@@ -4043,8 +4490,12 @@ const gameData = {
 			"description": "The Rampart is a powerful field cannon capable of dealing devastating damage to all but the heaviest of armoured vehicles while providing its crew with comprehensive ballistic shielding.",
 			"category": "weaponry",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/FieldCannonOffensiveWIcon.webp",
-			"texture": "game/Textures/Structures/fieldatdamagew.webp",
+			"icon": "../UI/VehicleIcons/FieldCannonOffensiveWIcon.webp",
+			"texture": {
+				"src": "../Structures/fieldatdamagew.webp",
+				"width": 158,
+				"height": 380
+			},
 			"techId": "unlockfieldatdamagegun",
 			"maxHealth": 4000,
 			"cost": {
@@ -4059,8 +4510,12 @@ const gameData = {
 			"description": "The “Stygian Bolt” Heavy Field Gun is fitted with a monstrous 94.5mm cannon paired with heavy angled blast shielding. Inspired by the rows of narrow canyons in their homeland of the Lacrista province, Mesean engineers designed this field weapon to keep its crew as safe from ancillary fire as possible while maintaining forward momentum.",
 			"category": "weaponry",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/FieldATHeavyCIcon.webp",
-			"texture": "game/Textures/Structures/fieldatlargec.webp",
+			"icon": "../UI/VehicleIcons/FieldATHeavyCIcon.webp",
+			"texture": {
+				"src": "../Structures/fieldatlargec.webp",
+				"width": 171,
+				"height": 378
+			},
 			"techId": "unlockfacilitytier3",
 			"maxHealth": 5000,
 			"cost": {
@@ -4076,8 +4531,12 @@ const gameData = {
 			"description": "The Collins Cannon is a mobile Anti-Tank field gun firing 68mm armour-piercing rounds.",
 			"category": "weaponry",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/FieldAntiTankWarVehicleIcon.webp",
-			"texture": "game/Textures/Structures/fieldatw.webp",
+			"icon": "../UI/VehicleIcons/FieldAntiTankWarVehicleIcon.webp",
+			"texture": {
+				"src": "../Structures/fieldatw.webp",
+				"width": 158,
+				"height": 359
+			},
 			"techId": "unlockfieldatgun",
 			"maxHealth": 2850,
 			"cost": {
@@ -4095,8 +4554,12 @@ const gameData = {
 			"hasOutline": false,
 			"minLength": 4,
 			"maxLength": 25,
-			"icon": "game/Textures/UI/StructureIcons/FieldBridgeItemIcon.webp",
-			"texture": "game/Textures/Structures/fieldbridge.webp",
+			"icon": "../UI/StructureIcons/FieldBridgeItemIcon.webp",
+			"texture": {
+				"src": "../Structures/fieldbridge.webp",
+				"width": 210,
+				"height": 229
+			},
 			"buildOnWater": true,
 			"canSnap": true,
 			"sockets": [
@@ -4112,8 +4575,8 @@ const gameData = {
 							"category": 8192
 						}
 					],
-					"texture": "game/Textures/Structures/fieldbridge_end.webp",
-					"textureAlt": "game/Textures/Structures/fieldbridge_connector.webp",
+					"texture": "../Structures/fieldbridge_end.webp",
+					"textureAlt": "../Structures/fieldbridge_connector.webp",
 					"cap": "front",
 					"rotation": 270
 				},
@@ -4129,8 +4592,8 @@ const gameData = {
 							"category": 8192
 						}
 					],
-					"texture": "game/Textures/Structures/fieldbridge_end.webp",
-					"textureAlt": "game/Textures/Structures/fieldbridge_connector.webp",
+					"texture": "../Structures/fieldbridge_end.webp",
+					"textureAlt": "../Structures/fieldbridge_connector.webp",
 					"cap": "back",
 					"rotation": 90
 				}
@@ -4148,8 +4611,12 @@ const gameData = {
 			"description": "Armed with explosive 40mm rounds, the Smelter is perfect for engaging enemy armour. The frontal blast shielding provides operators with ample cover during heated skirmishes.",
 			"category": "weaponry",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/FieldATOffensiveCIcon.webp",
-			"texture": "game/Textures/Structures/fieldcannondamagec.webp",
+			"icon": "../UI/VehicleIcons/FieldATOffensiveCIcon.webp",
+			"texture": {
+				"src": "../Structures/fieldcannondamagec.webp",
+				"width": 191,
+				"height": 324
+			},
 			"techId": "unlockfieldcannondamage",
 			"maxHealth": 4000,
 			"cost": {
@@ -4164,8 +4631,12 @@ const gameData = {
 			"description": "This robust field cannon not only allows infantry to fire heavy 75mm shells with ease, but it provides state-of-the-art curved blast shielding for maximum protection from crossfire.",
 			"category": "weaponry",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/FieldCannonHeavyWIcon.webp",
-			"texture": "game/Textures/Structures/fieldcannonlargew.webp",
+			"icon": "../UI/VehicleIcons/FieldCannonHeavyWIcon.webp",
+			"texture": {
+				"src": "../Structures/fieldcannonlargew.webp",
+				"width": 158,
+				"height": 331
+			},
 			"techId": "unlockfacilitytier3",
 			"maxHealth": 5000,
 			"cost": {
@@ -4181,8 +4652,12 @@ const gameData = {
 			"description": "This destructive short-ranged cannon is designed for direct engagement with enemy fortifications. The Wolfhound is fitted with reinforced shielding and a 40mm barrel. ",
 			"category": "weaponry",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/FieldCannonWVehicleIcon.webp",
-			"texture": "game/Textures/Structures/fieldcannonw.webp",
+			"icon": "../UI/VehicleIcons/FieldCannonWVehicleIcon.webp",
+			"texture": {
+				"src": "../Structures/fieldcannonw.webp",
+				"width": 158,
+				"height": 280
+			},
 			"techId": "unlockfieldcannon",
 			"maxHealth": 2850,
 			"cost": {
@@ -4210,8 +4685,12 @@ const gameData = {
 					"shape": [ -99.7,-134.85,-36.67,135.45,-99.7,134.85 ]
 				}
 			],
-			"icon": "game/Textures/UI/StructureIcons/FieldHospitalIcon.webp",
-			"texture": "game/Textures/Structures/fieldhospital.webp",
+			"icon": "../UI/StructureIcons/FieldHospitalIcon.webp",
+			"texture": {
+				"src": "../Structures/fieldhospital.webp",
+				"width": 583,
+				"height": 561
+			},
 			"maxHealth": 500,
 			"cost": {
 				"cloth": 200
@@ -4224,8 +4703,12 @@ const gameData = {
 			"description": "A long range Colonial mobile artillery used to lay siege to fortified positions.",
 			"category": "weaponry",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/FieldArtilleryColVehicleIcon.webp",
-			"texture": "game/Textures/Structures/fieldlightartilleryc.webp",
+			"icon": "../UI/VehicleIcons/FieldArtilleryColVehicleIcon.webp",
+			"texture": {
+				"src": "../Structures/fieldlightartilleryc.webp",
+				"width": 158,
+				"height": 277
+			},
 			"techId": "unlockfieldartillery",
 			"maxHealth": 1000,
 			"cost": {
@@ -4239,8 +4722,12 @@ const gameData = {
 			"description": "A dual barrelled, high calibre anti-infantry machine gun. The “Sagittarii” is fitted with forward-facing armour plating and is excellent for suppression. ",
 			"category": "weaponry",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/FieldMachineGun.webp",
-			"texture": "game/Textures/Structures/fieldmgc.webp",
+			"icon": "../UI/VehicleIcons/FieldMachineGun.webp",
+			"texture": {
+				"src": "../Structures/fieldmgc.webp",
+				"width": 164,
+				"height": 284
+			},
 			"maxHealth": 1850,
 			"cost": {
 				"wood": 20
@@ -4253,8 +4740,12 @@ const gameData = {
 			"description": "A dual barrelled, high calibre anti-infantry machine gun. The Swallowtail is fitted with forward-facing armour plating and is excellent for suppression. ",
 			"category": "weaponry",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/FieldMachineGunWar.webp",
-			"texture": "game/Textures/Structures/fieldmgw.webp",
+			"icon": "../UI/VehicleIcons/FieldMachineGunWar.webp",
+			"texture": {
+				"src": "../Structures/fieldmgw.webp",
+				"width": 162,
+				"height": 284
+			},
 			"maxHealth": 1850,
 			"cost": {
 				"wood": 20
@@ -4267,8 +4758,12 @@ const gameData = {
 			"description": "A heavy mobile mortar platform fitted with a thick frontal shield for assaulting fortified locations.",
 			"category": "weaponry",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/FieldMortarWIcon.webp",
-			"texture": "game/Textures/Structures/fieldmortarw.webp",
+			"icon": "../UI/VehicleIcons/FieldMortarWIcon.webp",
+			"texture": {
+				"src": "../Structures/fieldmortarw.webp",
+				"width": 158,
+				"height": 208
+			},
 			"techId": "unlockfieldmortar",
 			"maxHealth": 2850,
 			"cost": {
@@ -4282,8 +4777,12 @@ const gameData = {
 			"description": "Lyle Rycker first built a prototype of the Wasp Nest as a test for his rack mounted rocket batteries that would eventually find their way onto armoured vehicles. Capable of firing twelve compact rockets in quick succession, the Wasp Nest became a quick favourite of the Warden infantry testing it, so an official design was requisitioned.",
 			"category": "weaponry",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/FieldMultiWItemIcon.webp",
-			"texture": "game/Textures/Structures/fieldmultiw.webp",
+			"icon": "../UI/VehicleIcons/FieldMultiWItemIcon.webp",
+			"texture": {
+				"src": "../Structures/fieldmultiw.webp",
+				"width": 163,
+				"height": 220
+			},
 			"techId": "unlockfacilitytier2",
 			"maxHealth": 1000,
 			"cost": {
@@ -4299,8 +4798,12 @@ const gameData = {
 			"description": "A pit of fire used to keep soldiers warm during Snow Storms. Requires Diesel to fuel.",
 			"category": "misc",
 			"categoryOrder": 7,
-			"icon": "game/Textures/UI/StructureIcons/FirePitIcon.webp",
-			"texture": "game/Textures/Structures/firepit.webp",
+			"icon": "../UI/StructureIcons/FirePitIcon.webp",
+			"texture": {
+				"src": "../Structures/firepit.webp",
+				"width": 112,
+				"height": 108
+			},
 			"buildOnFoundation": true,
 			"maxHealth": 400,
 			"cost": {
@@ -4314,9 +4817,12 @@ const gameData = {
 			"description": "A heavy duty shipping transport truck designed by Bassett Motor Society. It’s built for hauling the heaviest of equipment over long distances with ease. ",
 			"category": "vehicles",
 			"categoryOrder": 15,
-			"sortLayer": "vehicle",
-			"icon": "game/Textures/UI/VehicleIcons/FlatbedTruckVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/flatbedtruck.webp"
+			"icon": "../UI/VehicleIcons/FlatbedTruckVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/flatbedtruck.webp",
+				"width": 582,
+				"height": 213
+			}
 		},
 		"fortbaset1": {
 			"name": "Bunker Base",
@@ -4337,13 +4843,18 @@ const gameData = {
 					"shape": [ -87.27,-83.64,-80.61,86.67,-85.45,86.67 ]
 				}
 			],
-			"icon": "game/Textures/UI/StructureIcons/FortT1BaseIcon.webp",
-			"texture": "game/Textures/Structures/fortt1_base.webp",
-			"textureOffset": {
-				"x": 306,
-				"y": 312
+			"icon": "../UI/StructureIcons/FortT1BaseIcon.webp",
+			"texture": {
+				"src": "../Structures/fortt1_base.webp",
+				"width": 305,
+				"height": 667,
+				"offset": {
+					"x": 306,
+					"y": 312
+				}
 			},
 			"canSnap": true,
+			"canBlueprint": true,
 			"snapNearest": true,
 			"sockets": [
 				{
@@ -4433,6 +4944,7 @@ const gameData = {
 				"cloth": 300
 			},
 			"repairCost": 300,
+			"tierUp": "fortbaset2",
 			"upgrades": {
 				"fortbaset1": {
 					"reference": "fortbaset1"
@@ -4462,11 +4974,15 @@ const gameData = {
 					"shape": [ -104.85,106.67,84.85,106.67,-89.09,107.27 ]
 				}
 			],
-			"icon": "game/Textures/UI/StructureIcons/FortT2BaseIcon.webp",
-			"texture": "game/Textures/Structures/fortt2_base.webp",
-			"textureOffset": {
-				"x": 384,
-				"y": 402
+			"icon": "../UI/StructureIcons/FortT2BaseIcon.webp",
+			"texture": {
+				"src": "../Structures/fortt2_base.webp",
+				"width": 383,
+				"height": 709,
+				"offset": {
+					"x": 384,
+					"y": 402
+				}
 			},
 			"sockets": [
 				{
@@ -4556,6 +5072,8 @@ const gameData = {
 				"cloth": 100
 			},
 			"repairCost": 100,
+			"tierUp": "fortbaset3",
+			"tierDown": "fortbaset1",
 			"upgrades": {
 				"fortbaset1": {
 					"reference": "fortbaset1"
@@ -4588,11 +5106,15 @@ const gameData = {
 					"shape": [ 105.45,-93.33,-93.33,-107.27,92.73,-107.27 ]
 				}
 			],
-			"icon": "game/Textures/UI/StructureIcons/FortT3BaseIcon.webp",
-			"texture": "game/Textures/Structures/fortt3_base.webp",
-			"textureOffset": {
-				"x": 382,
-				"y": 382
+			"icon": "../UI/StructureIcons/FortT3BaseIcon.webp",
+			"texture": {
+				"src": "../Structures/fortt3_base.webp",
+				"width": 380,
+				"height": 654,
+				"offset": {
+					"x": 382,
+					"y": 382
+				}
 			},
 			"sockets": [
 				{
@@ -4682,6 +5204,7 @@ const gameData = {
 				"concrete": 25
 			},
 			"repairCost": 200,
+			"tierDown": "fortbaset2",
 			"upgrades": {
 				"fortbaset1": {
 					"reference": "fortbaset1"
@@ -4691,6 +5214,192 @@ const gameData = {
 				},
 				"fortbaset3": {
 					"reference": "fortbaset3"
+				}
+			}
+		},
+		"fortbuildsite": {
+			"name": "Bunker Dig Site",
+			"codeName": "FortBuildSite",
+			"parentKey": "fortt1",
+			"description": "A build site that serves as the foundation for constructing a bunker piece. Connects to other Bunkers and Trenches.",
+			"sortLayer": "road",
+			"icon": "../UI/CustomIcons/FortBuildSiteIcon.webp",
+			"texture": {
+				"src": "../Structures/fortbuildsite.webp",
+				"width": 284,
+				"height": 286
+			},
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 2.5,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 1,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 5,
+					"y": 2.5,
+					"rotation": 90
+				},
+				{
+					"id": 2,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 2.5,
+					"y": 5,
+					"rotation": 180
+				},
+				{
+					"id": 3,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 0,
+					"y": 2.5,
+					"rotation": 270
+				}
+			],
+			"maxHealth": 400,
+			"tierUp": "fortt1",
+			"tierDown": false,
+			"upgrades": {
+				"fortbuildsite": {
+					"reference": "fortbuildsite"
+				},
+				"fortt1": {
+					"reference": "fortt1"
+				},
+				"fortbaset1": {
+					"reference": "fortbaset1"
+				},
+				"fortcornert2": {
+					"reference": "fortcornert2"
+				},
+				"mgait1": {
+					"reference": "fortt1_mgait1"
+				},
+				"fortrampt1": {
+					"reference": "fortt1_fortrampt1"
+				},
+				"rifleait1": {
+					"reference": "fortt1_rifleait1"
+				}
+			}
+		},
+		"fortcornerbuildsite": {
+			"name": "Bunker Corner Dig Site",
+			"codeName": "FortCornerBuildSite",
+			"parentKey": "fortcornert1",
+			"description": "A build site that serves as the foundation for constructing a bunker corner piece. Connects to other Bunkers and Trenches.",
+			"categoryOrder": 4,
+			"sortLayer": "road",
+			"icon": "../UI/CustomIcons/FortCornerBuildSiteIcon.webp",
+			"texture": {
+				"src": "../Structures/fortcornerbuildsite.webp",
+				"width": 285,
+				"height": 286
+			},
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 2.5,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 6,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 3.39,
+					"y": 3.39,
+					"rotation": 135
+				},
+				{
+					"id": 3,
+					"type": [
+						{
+							"mask": 2,
+							"category": 4
+						},
+						{
+							"mask": 4,
+							"category": 4
+						}
+					],
+					"x": 0,
+					"y": 2.5,
+					"rotation": 270
+				}
+			],
+			"maxHealth": 400,
+			"tierUp": "fortcornert1",
+			"tierDown": false,
+			"upgrades": {
+				"fortcornerbuildsite": {
+					"reference": "fortcornerbuildsite"
+				},
+				"fortcornert1": {
+					"reference": "fortcornert1"
+				},
+				"fortcornert2": {
+					"reference": "fortcornert2"
+				},
+				"fortcornert3": {
+					"reference": "fortcornert3"
 				}
 			}
 		},
@@ -4706,9 +5415,12 @@ const gameData = {
 					"shape": [ 84.85,-80.61,84.85,-28.48,-29.7,87.88,-79.39,88.48,-80.61,-80 ]
 				}
 			],
-			"icon": "game/Textures/UI/StructureIcons/FortT1CornerIcon.webp",
-			"texture": "game/Textures/Structures/fortt1_corner.webp",
-			"textureOffset": null,
+			"icon": "../UI/StructureIcons/FortT1CornerIcon.webp",
+			"texture": {
+				"src": "../Structures/fortt1_corner.webp",
+				"width": 310,
+				"height": 310
+			},
 			"sockets": [
 				{
 					"id": 0,
@@ -4722,7 +5434,7 @@ const gameData = {
 							"category": 4
 						}
 					],
-					"texture": "game/Textures/Structures/fortt1_border.webp",
+					"texture": "../Structures/fortt1_border.webp",
 					"below": true,
 					"x": 2.5,
 					"y": 0,
@@ -4740,7 +5452,7 @@ const gameData = {
 							"category": 4
 						}
 					],
-					"texture": "game/Textures/Structures/fortt1_border.webp",
+					"texture": "../Structures/fortt1_border.webp",
 					"x": 3.39,
 					"y": 3.39,
 					"rotation": 135
@@ -4757,7 +5469,7 @@ const gameData = {
 							"category": 4
 						}
 					],
-					"texture": "game/Textures/Structures/fortt1_border.webp",
+					"texture": "../Structures/fortt1_border.webp",
 					"below": true,
 					"x": 0,
 					"y": 2.5,
@@ -4767,8 +5479,12 @@ const gameData = {
 			"maxHealth": 1500,
 			"structuralIntegrity": 0.85,
 			"repairCost": 75,
-			"gearPowerCost" : 0,
+			"tierUp": "fortcornert2",
+			"tierDown": "fortcornerbuildsite",
 			"upgrades": {
+				"fortcornerbuildsite": {
+					"reference": "fortcornerbuildsite"
+				},
 				"fortcornert1": {
 					"reference": "fortcornert1"
 				},
@@ -4793,9 +5509,13 @@ const gameData = {
 					"shape": [ 83.03,-84.24,83.03,-23.03,-27.88,86.67,-81.82,86.67,-81.82,-84.85 ]
 				}
 			],
-			"icon": "game/Textures/UI/StructureIcons/FortT2CornerIcon.webp",
-			"texture": "game/Textures/Structures/fortt2_corner.webp",
-			"textureOffset": null,
+			"icon": "../UI/StructureIcons/FortT2CornerIcon.webp",
+			"texture": {
+				"src": "../Structures/fortt2_corner.webp",
+				"width": 300,
+				"height": 300
+			},
+			"canBlueprint": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -4809,7 +5529,7 @@ const gameData = {
 							"category": 4
 						}
 					],
-					"texture": "game/Textures/Structures/fortt2_border.webp",
+					"texture": "../Structures/fortt2_border.webp",
 					"below": true,
 					"x": 2.5,
 					"y": 0,
@@ -4827,7 +5547,7 @@ const gameData = {
 							"category": 4
 						}
 					],
-					"texture": "game/Textures/Structures/fortt2_border.webp",
+					"texture": "../Structures/fortt2_border.webp",
 					"x": 3.39,
 					"y": 3.39,
 					"rotation": 135
@@ -4844,7 +5564,7 @@ const gameData = {
 							"category": 4
 						}
 					],
-					"texture": "game/Textures/Structures/fortt2_border.webp",
+					"texture": "../Structures/fortt2_border.webp",
 					"below": true,
 					"x": 0,
 					"y": 2.5,
@@ -4857,8 +5577,12 @@ const gameData = {
 				"cloth": 75
 			},
 			"repairCost": 75,
-			"gearPowerCost" : 0,
+			"tierUp": "fortcornert3",
+			"tierDown": "fortcornert1",
 			"upgrades": {
+				"fortcornerbuildsite": {
+					"reference": "fortcornerbuildsite"
+				},
 				"fortcornert1": {
 					"reference": "fortcornert1"
 				},
@@ -4882,9 +5606,12 @@ const gameData = {
 					"shape": [ 97.58,-85.45,96.97,-31.52,-30.91,97.58,-86.06,97.58,-86.06,-85.45 ]
 				}
 			],
-			"icon": "game/Textures/UI/StructureIcons/FortT3CornerIcon.webp",
-			"texture": "game/Textures/Structures/fortt3_corner.webp",
-			"textureOffset": null,
+			"icon": "../UI/StructureIcons/FortT3CornerIcon.webp",
+			"texture": {
+				"src": "../Structures/fortt3_corner.webp",
+				"width": 350,
+				"height": 350
+			},
 			"sockets": [
 				{
 					"id": 0,
@@ -4898,7 +5625,7 @@ const gameData = {
 							"category": 4
 						}
 					],
-					"texture": "game/Textures/Structures/fortt3_border.webp",
+					"texture": "../Structures/fortt3_border.webp",
 					"below": true,
 					"x": 2.5,
 					"y": 0,
@@ -4916,7 +5643,7 @@ const gameData = {
 							"category": 4
 						}
 					],
-					"texture": "game/Textures/Structures/fortt3_border.webp",
+					"texture": "../Structures/fortt3_border.webp",
 					"x": 3.39,
 					"y": 3.39,
 					"rotation": 135
@@ -4933,7 +5660,7 @@ const gameData = {
 							"category": 4
 						}
 					],
-					"texture": "game/Textures/Structures/fortt3_border.webp",
+					"texture": "../Structures/fortt3_border.webp",
 					"below": true,
 					"x": 0,
 					"y": 2.5,
@@ -4946,8 +5673,11 @@ const gameData = {
 				"concrete": 15
 			},
 			"repairCost": 120,
-			"gearPowerCost" : 0,
+			"tierDown": "fortcornert2",
 			"upgrades": {
+				"fortcornerbuildsite": {
+					"reference": "fortcornerbuildsite"
+				},
 				"fortcornert1": {
 					"reference": "fortcornert1"
 				},
@@ -4968,10 +5698,15 @@ const gameData = {
 			"tier": 1,
 			"width": 5,
 			"length": 5,
-			"icon": "game/Textures/UI/StructureIcons/FortT1Icon.webp",
-			"texture": "game/Textures/Structures/fortt1.webp",
+			"icon": "../UI/StructureIcons/FortT1Icon.webp",
+			"texture": {
+				"src": "../Structures/fortt1.webp",
+				"width": 308,
+				"height": 308
+			},
 			"canSnap": true,
 			"canUnion": true,
+			"canGear": true,
 			"snapNearest": true,
 			"sockets": [
 				{
@@ -4986,7 +5721,7 @@ const gameData = {
 							"category": 4
 						}
 					],
-					"texture": "game/Textures/Structures/fortt1_border.webp",
+					"texture": "../Structures/fortt1_border.webp",
 					"below": true,
 					"x": 2.5,
 					"y": 0,
@@ -5004,7 +5739,7 @@ const gameData = {
 							"category": 4
 						}
 					],
-					"texture": "game/Textures/Structures/fortt1_border.webp",
+					"texture": "../Structures/fortt1_border.webp",
 					"below": true,
 					"x": 5,
 					"y": 2.5,
@@ -5022,7 +5757,7 @@ const gameData = {
 							"category": 4
 						}
 					],
-					"texture": "game/Textures/Structures/fortt1_border.webp",
+					"texture": "../Structures/fortt1_border.webp",
 					"below": true,
 					"x": 2.5,
 					"y": 5,
@@ -5040,7 +5775,7 @@ const gameData = {
 							"category": 4
 						}
 					],
-					"texture": "game/Textures/Structures/fortt1_border.webp",
+					"texture": "../Structures/fortt1_border.webp",
 					"below": true,
 					"x": 0,
 					"y": 2.5,
@@ -5050,8 +5785,12 @@ const gameData = {
 			"maxHealth": 1500,
 			"structuralIntegrity": 0.85,
 			"repairCost": 75,
-			"gearPowerCost" : 0,
+			"tierUp": "fortt2",
+			"tierDown": "fortbuildsite",
 			"upgrades": {
+				"fortbuildsite": {
+					"reference": "fortbuildsite"
+				},
 				"fortt2": {
 					"reference": "fortt2"
 				},
@@ -5072,30 +5811,41 @@ const gameData = {
 						"max": 33.5
 					},
 					"sortLayer": "upgrade",
-					"icon": "game/Textures/UI/StructureIcons/FortT1MGunAIIcon.webp",
-					"texture": "game/Textures/Structures/fortt1_mgai.webp",
-					"textureOffset": {
-						"x": 323,
-						"y": 312
+					"icon": "../UI/StructureIcons/FortT1MGunAIIcon.webp",
+					"texture": {
+						"src": "../Structures/fortt1_mgai.webp",
+						"width": 320,
+						"height": 317,
+						"offset": {
+							"x": 323,
+							"y": 312
+						}
 					},
+					"canBlueprint": true,
 					"maxHealth": 1650,
 					"structuralIntegrity": 0.65,
 					"cost": {
 						"cloth": 75
 					},
 					"repairCost": 75,
-					"gearPowerCost" : 600
+					"gearPower" : -600,
+					"tierUp": "fortt2_mgait2"
 				},
 				"fortrampt1": {
 					"name": "Bunker Ramp (Tier 1)",
 					"codeName": "FortRampT1",
 					"description": "A ramp that enables access to underground Bunkers.",
-					"icon": "game/Textures/UI/StructureIcons/FortT1RampIcon.webp",
-					"texture": "game/Textures/Structures/fortt1_ramp.webp",
-					"textureOffset": {
-						"x": 300,
-						"y": 324
+					"icon": "../UI/StructureIcons/FortT1RampIcon.webp",
+					"texture": {
+						"src": "../Structures/fortt1_ramp.webp",
+						"width": 299,
+						"height": 326,
+						"offset": {
+							"x": 300,
+							"y": 324
+						}
 					},
+					"canBlueprint": true,
 					"sockets": [
 						{
 							"id": 0,
@@ -5168,7 +5918,7 @@ const gameData = {
 						"cloth": 50
 					},
 					"repairCost": 75,
-					"gearPowerCost" : 600
+					"tierUp": "fortt2_fortrampt2"
 				},
 				"rifleait1": {
 					"name": "Rifle Garrison (Tier 1)",
@@ -5180,19 +5930,25 @@ const gameData = {
 						"max": 29
 					},
 					"sortLayer": "upgrade",
-					"icon": "game/Textures/UI/StructureIcons/FortT1GunAIIcon.webp",
-					"texture": "game/Textures/Structures/fortt1_rifleai.webp",
-					"textureOffset": {
-						"x": 342,
-						"y": 328
+					"icon": "../UI/StructureIcons/FortT1GunAIIcon.webp",
+					"texture": {
+						"src": "../Structures/fortt1_rifleai.webp",
+						"width": 335,
+						"height": 330,
+						"offset": {
+							"x": 342,
+							"y": 328
+						}
 					},
+					"canBlueprint": true,
 					"maxHealth": 1500,
 					"structuralIntegrity": 0.65,
 					"cost": {
 						"cloth": 50
 					},
 					"repairCost": 50,
-					"gearPowerCost" : 600
+					"gearPower" : -600,
+					"tierUp": "fortt2_rifleait2"
 				}
 			}
 		},
@@ -5202,8 +5958,13 @@ const gameData = {
 			"parentKey": "fortt1",
 			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
 			"tier": 2,
-			"icon": "game/Textures/UI/StructureIcons/FortT2Icon.webp",
-			"texture": "game/Textures/Structures/fortt2.webp",
+			"icon": "../UI/StructureIcons/FortT2Icon.webp",
+			"texture": {
+				"src": "../Structures/fortt2.webp",
+				"width": 308,
+				"height": 308
+			},
+			"canBlueprint": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -5217,7 +5978,7 @@ const gameData = {
 							"category": 4
 						}
 					],
-					"texture": "game/Textures/Structures/fortt2_border.webp",
+					"texture": "../Structures/fortt2_border.webp",
 					"below": true,
 					"x": 2.5,
 					"y": 0,
@@ -5235,7 +5996,7 @@ const gameData = {
 							"category": 4
 						}
 					],
-					"texture": "game/Textures/Structures/fortt2_border.webp",
+					"texture": "../Structures/fortt2_border.webp",
 					"below": true,
 					"x": 5,
 					"y": 2.5,
@@ -5253,7 +6014,7 @@ const gameData = {
 							"category": 4
 						}
 					],
-					"texture": "game/Textures/Structures/fortt2_border.webp",
+					"texture": "../Structures/fortt2_border.webp",
 					"below": true,
 					"x": 2.5,
 					"y": 5,
@@ -5271,7 +6032,7 @@ const gameData = {
 							"category": 4
 						}
 					],
-					"texture": "game/Textures/Structures/fortt2_border.webp",
+					"texture": "../Structures/fortt2_border.webp",
 					"below": true,
 					"x": 0,
 					"y": 2.5,
@@ -5284,10 +6045,14 @@ const gameData = {
 				"cloth": 75
 			},
 			"repairCost": 75,
-			"gearPowerCost" : 0,
+			"tierUp": "fortt3",
+			"tierDown": "fortt1",
 			"upgrades": {
 				"fortt3": {
 					"reference": "fortt3"
+				},
+				"fortbaset2": {
+					"reference": "fortbaset2"
 				},
 				"atgunait2": {
 					"name": "AT Gun Garrison (Tier 2)",
@@ -5305,15 +6070,20 @@ const gameData = {
 							"shape": [ 75.76,-74.55,75.76,33.94,32.12,67.27,-32.12,67.27,-75.15,34.55,-75.15,-74.55 ]
 						}
 					],
-					"icon": "game/Textures/UI/StructureIcons/FortT2ATGunAIIcon.webp",
-					"texture": "game/Textures/Structures/fortt2_atgunai.webp",
+					"icon": "../UI/StructureIcons/FortT2ATGunAIIcon.webp",
+					"texture": {
+						"src": "../Structures/fortt2_atgunai.webp",
+						"width": 320,
+						"height": 320
+					},
 					"maxHealth": 1650,
 					"structuralIntegrity": 0.82,
 					"cost": {
 						"cloth": 150
 					},
 					"repairCost": 150,
-					"gearPowerCost" : 0
+					"gearPower" : -600,
+					"tierUp": "fortt3_atgunait3"
 				},
 				"fortcornert3": {
 					"reference": "fortcornert3"
@@ -5322,15 +6092,20 @@ const gameData = {
 					"name": "Engine Room (Tier 2)",
 					"codeName": "EngineRoomT2",
 					"description": "A engineering facility that provides power to Bunker structures using pipe connections.",
-					"icon": "game/Textures/UI/StructureIcons/EngineRoomIcon.webp",
-					"texture": "game/Textures/Structures/fortt2_engineroom.webp",
+					"icon": "../UI/StructureIcons/EngineRoomIcon.webp",
+					"texture": {
+						"src": "../Structures/fortt2_engineroom.webp",
+						"width": 308,
+						"height": 308
+					},
 					"maxHealth": 1350,
 					"structuralIntegrity": 0.75,
 					"cost": {
 						"cloth": 150
 					},
 					"repairCost": 120,
-					"gearPowerCost" : -3000
+					"gearPower" : 3000,
+					"tierUp": "fortt3_engineroomt3"
 				},
 				"mgait2": {
 					"name": "Machine Gun Garrison (Tier 2)",
@@ -5343,15 +6118,21 @@ const gameData = {
 						"max": 33.5
 					},
 					"sortLayer": "upgrade",
-					"icon": "game/Textures/UI/StructureIcons/FortT2MGunAIIcon.webp",
-					"texture": "game/Textures/Structures/fortt2_mgai.webp",
+					"icon": "../UI/StructureIcons/FortT2MGunAIIcon.webp",
+					"texture": {
+						"src": "../Structures/fortt2_mgai.webp",
+						"width": 360,
+						"height": 360
+					},
 					"maxHealth": 2150,
 					"structuralIntegrity": 0.85,
 					"cost": {
 						"cloth": 100
 					},
 					"repairCost": 100,
-					"gearPowerCost" : 600
+					"gearPower" : -600,
+					"tierUp": "fortt3_mgait3",
+					"tierDown": "fortt1_mgait1"
 				},
 				"observationbunkert2": {
 					"name": "Observation Bunker (Tier 2)",
@@ -5367,25 +6148,34 @@ const gameData = {
 							"shape": [ -30.3,-70.3,32.12,-69.7,70.3,-31.52,70.3,31.52,32.12,69.7,-30.91,70.3,-69.09,31.52,-69.7,-30.91 ]
 						}
 					],
-					"icon": "game/Textures/UI/StructureIcons/ObservationBunkerT2ItemIcon.webp",
-					"texture": "game/Textures/Structures/fortt2_observationbunker.webp",
+					"icon": "../UI/StructureIcons/ObservationBunkerT2ItemIcon.webp",
+					"texture": {
+						"src": "../Structures/fortt2_observationbunker.webp",
+						"width": 300,
+						"height": 300
+					},
 					"maxHealth": 1650,
 					"structuralIntegrity": 0.82,
 					"cost": {
 						"cloth": 125
 					},
-					"repairCost": 150,
-					"gearPowerCost" : 1000
+					"repairCost" : 150,
+					"gearPower" : -1000,
+					"tierUp": "fortt3_observationbunkert3"
 				},
 				"fortrampt2": {
 					"name": "Bunker Ramp (Tier 2)",
 					"codeName": "FortRampT2",
 					"description": "A ramp that enables access to underground Bunkers.",
-					"icon": "game/Textures/UI/StructureIcons/FortT2RampIcon.webp",
-					"texture": "game/Textures/Structures/fortt2_ramp.webp",
-					"textureOffset": {
-						"x": 328,
-						"y": 318
+					"icon": "../UI/StructureIcons/FortT2RampIcon.webp",
+					"texture": {
+						"src": "../Structures/fortt2_ramp.webp",
+						"width": 322,
+						"height": 303,
+						"offset": {
+							"x": 328,
+							"y": 318
+						}
 					},
 					"sockets": [
 						{
@@ -5459,7 +6249,8 @@ const gameData = {
 						"cloth": 50
 					},
 					"repairCost": 75,
-					"gearPowerCost" : 0
+					"tierUp": "fortt3_fortrampt3",
+					"tierDown": "fortt1_fortrampt1"
 				},
 				"rifleait2": {
 					"name": "Rifle Garrison (Tier 2)",
@@ -5471,29 +6262,39 @@ const gameData = {
 						"max": 29
 					},
 					"sortLayer": "upgrade",
-					"icon": "game/Textures/UI/StructureIcons/FortT2GunAIIcon.webp",
-					"texture": "game/Textures/Structures/fortt2_rifleai.webp",
+					"icon": "../UI/StructureIcons/FortT2GunAIIcon.webp",
+					"texture": {
+						"src": "../Structures/fortt2_rifleai.webp",
+						"width": 362,
+						"height": 362
+					},
 					"maxHealth": 1850,
 					"structuralIntegrity": 0.85,
 					"cost": {
 						"cloth": 75
 					},
 					"repairCost": 75,
-					"gearPowerCost" : 600
+					"gearPower" : -600,
+					"tierUp": "fortt3_rifleait3",
+					"tierDown": "fortt1_rifleait1"
 				},
 				"ammoroomt2": {
 					"name": "Storage Room (Tier 2)",
 					"codeName": "AmmoRoomT2",
 					"description": "A facility that stores equipment and ammunition for artillery. Retrieval is very quick for this structure.",
-					"icon": "game/Textures/UI/StructureIcons/AmmoRoomIcon.webp",
-					"texture": "game/Textures/Structures/fortt2_ammoroom.webp",
+					"icon": "../UI/StructureIcons/AmmoRoomIcon.webp",
+					"texture": {
+						"src": "../Structures/fortt2_ammoroom.webp",
+						"width": 308,
+						"height": 308
+					},
 					"maxHealth": 1850,
 					"structuralIntegrity": 0.85,
 					"cost": {
 						"cloth": 35
 					},
 					"repairCost": 120,
-					"gearPowerCost" : 0
+					"tierUp": "fortt3_ammoroomt3"
 				}
 			}
 		},
@@ -5503,8 +6304,12 @@ const gameData = {
 			"parentKey": "fortt2",
 			"description": "An underground shelter that serves as a foundation for permanent fortifications. Connects to other Bunkers and Trenches.",
 			"tier": 3,
-			"icon": "game/Textures/UI/StructureIcons/FortT3Icon.webp",
-			"texture": "game/Textures/Structures/fortt3.webp",
+			"icon": "../UI/StructureIcons/FortT3Icon.webp",
+			"texture": {
+				"src": "../Structures/fortt3.webp",
+				"width": 300,
+				"height": 300
+			},
 			"sockets": [
 				{
 					"id": 0,
@@ -5518,7 +6323,7 @@ const gameData = {
 							"category": 4
 						}
 					],
-					"texture": "game/Textures/Structures/fortt3_border.webp",
+					"texture": "../Structures/fortt3_border.webp",
 					"below": true,
 					"x": 2.5,
 					"y": 0,
@@ -5536,7 +6341,7 @@ const gameData = {
 							"category": 4
 						}
 					],
-					"texture": "game/Textures/Structures/fortt3_border.webp",
+					"texture": "../Structures/fortt3_border.webp",
 					"below": true,
 					"x": 5,
 					"y": 2.5,
@@ -5554,7 +6359,7 @@ const gameData = {
 							"category": 4
 						}
 					],
-					"texture": "game/Textures/Structures/fortt3_border.webp",
+					"texture": "../Structures/fortt3_border.webp",
 					"below": true,
 					"x": 2.5,
 					"y": 5,
@@ -5572,7 +6377,7 @@ const gameData = {
 							"category": 4
 						}
 					],
-					"texture": "game/Textures/Structures/fortt3_border.webp",
+					"texture": "../Structures/fortt3_border.webp",
 					"below": true,
 					"x": 0,
 					"y": 2.5,
@@ -5585,34 +6390,44 @@ const gameData = {
 				"concrete": 15
 			},
 			"repairCost": 120,
-			"gearPowerCost" : 0,
+			"tierDown": "fortt2",
 			"upgrades": {
+				"fortbaset3": {
+					"reference": "fortbaset3"
+				},
 				"intelcenter": {
 					"name": "Intelligence Center",
 					"codeName": "IntelCenter",
 					"description": "A high-tech listening post designed to intercept and decode enemy transmissions. The Intelligence Center can target distant locations and will continue to decipher sensitive transmissions over a sustained period.",
 					"sortLayer": "upgrade",
-					"icon": "game/Textures/UI/StructureIcons/IntelligenceCenterIcon.webp",
-					"texture": "game/Textures/Structures/fortt3_intelcenter.webp",
-					"textureOffset": null,
+					"icon": "../UI/StructureIcons/IntelligenceCenterIcon.webp",
+					"texture": {
+						"src": "../Structures/fortt3_intelcenter.webp",
+						"width": 739,
+						"height": 481
+					},
 					"maxHealth": 2550,
 					"structuralIntegrity": 0.65,
 					"cost": {
 						"concrete": 125
 					},
 					"repairCost": 1200,
-					"gearPowerCost" : 35000
+					"gearPower" : -35000
 				},
 				"lrartillery": {
 					"name": "Storm Cannon",
 					"codeName": "LRArtillery",
 					"description": "A heavy fixed position artillery piece that can release devastating firepower on distant enemy targets.",
 					"sortLayer": "upgrade",
-					"icon": "game/Textures/UI/StructureIcons/LongRangedArtilleryIcon.webp",
-					"texture": "game/Textures/Structures/fortt3_lrartillery.webp",
-					"textureOffset": {
-						"x": 770,
-						"y": 792
+					"icon": "../UI/StructureIcons/LongRangedArtilleryIcon.webp",
+					"texture": {
+						"src": "../Structures/fortt3_lrartillery.webp",
+						"width": 769,
+						"height": 1017,
+						"offset": {
+							"x": 770,
+							"y": 792
+						}
 					},
 					"maxHealth": 2550,
 					"structuralIntegrity": 0.65,
@@ -5620,22 +6435,25 @@ const gameData = {
 						"concrete": 200
 					},
 					"repairCost": 500,
-					"gearPowerCost" : 35000
+					"gearPower" : -35000
 				},
 				"ammoroomt3": {
 					"name": "Storage Room (Tier 3)",
 					"codeName": "AmmoRoomT3",
-					"prevUpgradeKey": "fortt2_ammoroomt2",
 					"description": "A facility that stores equipment and ammunition for artillery. Retrieval is very quick for this structure.",
-					"icon": "game/Textures/UI/StructureIcons/AmmoRoomIcon.webp",
-					"texture": "game/Textures/Structures/fortt3_ammoroom.webp",
+					"icon": "../UI/StructureIcons/AmmoRoomIcon.webp",
+					"texture": {
+						"src": "../Structures/fortt3_ammoroom.webp",
+						"width": 266,
+						"height": 266
+					},
 					"maxHealth": 2000,
 					"structuralIntegrity": 0.95,
 					"cost": {
 						"concrete": 10
 					},
 					"repairCost": 160,
-					"gearPowerCost" : 0
+					"tierDown": "fortt2_ammoroomt2"
 				},
 				"artilleryait3": {
 					"name": "Howitzer Garrison",
@@ -5647,7 +6465,7 @@ const gameData = {
 						"max": 600,
 						"arc": 60
 					},
-					"sortLayer": "upgrade",
+					"sortLayer": "upgrade2",
 					"hitArea": [
 						{
 							"shape": [ -29.83,70.67,29.7,70.3,29.2,77.52,25.45,85.45,-23.64,85.45,-29.83,78.31 ]
@@ -5659,24 +6477,26 @@ const gameData = {
 							"shape": [ -80.16,-72.94,-29.83,70.67,-46.67,69.7,-80,44.85 ]
 						}
 					],
-					"icon": "game/Textures/UI/StructureIcons/FortT3HowitzerAIIcon.webp",
-					"texture": "game/Textures/Structures/fortt3_artilleryai.webp",
-					"textureOffset": {
-						"x": 288,
-						"y": 288
+					"icon": "../UI/StructureIcons/FortT3HowitzerAIIcon.webp",
+					"texture": {
+						"src": "../Structures/fortt3_artilleryai.webp",
+						"width": 288,
+						"height": 488,
+						"offset": {
+							"x": 288,
+							"y": 288
+						}
 					},
 					"maxHealth": 1750,
 					"structuralIntegrity": 0.93,
 					"cost": {
 						"concrete": 20
 					},
-					"repairCost": 160,
-					"gearPowerCost" : 0
+					"repairCost": 160
 				},
 				"atgunait3": {
 					"name": "AT Gun Garrison (Tier 3)",
 					"codeName": "ATGunAIT3",
-					"prevUpgradeKey": "fortt2_atgunait2",
 					"description": "An entrenched AT gun manned by stationed troops.",
 					"range": {
 						"type": "killboxAT",
@@ -5687,23 +6507,30 @@ const gameData = {
 					"sortLayer": "upgrade",
 					"hitArea": [
 						{
-							"shape": [ 87.27,-87.27,87.88,33.33,44.85,89.7,-22.42,98.79,-44.85,90.3,-63.64,76.97,-87.88,35.15,-87.27,-87.27 ]
+							"shape": [ 87.27,-87.27,69.09,-15.15,-87.27,-15.15,-87.27,-87.27 ]
 						},
 						{
-							"shape": [ 44.85,89.7,87.88,33.33,78.18,56.97,64.24,75.76 ]
+							"shape": [ 69.09,-15.15,87.27,-87.27,87.27,-15.15 ]
 						},
 						{
-							"shape": [ -87.88,35.15,-63.64,76.97,-78.79,58.18 ]
+							"shape": [ -65.97,26.58,-68.48,7.27,-69.09,-15.15,32.73,71.08,18.35,76.97,-33.25,70.91,-47.27,60.61,-59.39,44.85 ]
 						},
 						{
-							"shape": [ -22.42,98.79,44.85,89.7,24.24,98.79,0,102.42 ]
+							"shape": [ 47.27,60.61,32.73,71.08,-69.09,-15.15,69.09,-15.15,68.74,7.71,66.06,26.67,59.39,44.85 ]
+						},
+						{
+							"shape": [ -18.79,76.97,-33.25,70.91,18.35,76.97,0,79.39 ]
 						}
 					],
-					"icon": "game/Textures/UI/StructureIcons/FortT3ATGunAIIcon.webp",
-					"texture": "game/Textures/Structures/fortt3_atgunai.webp",
-					"textureOffset": {
-						"x": 288,
-						"y": 288
+					"icon": "../UI/StructureIcons/FortT3ATGunAIIcon.webp",
+					"texture": {
+						"src": "../Structures/fortt3_atgunai.webp",
+						"width": 288,
+						"height": 397,
+						"offset": {
+							"x": 288,
+							"y": 288
+						}
 					},
 					"maxHealth": 1750,
 					"structuralIntegrity": 0.93,
@@ -5711,27 +6538,30 @@ const gameData = {
 						"concrete": 20
 					},
 					"repairCost": 160,
-					"gearPowerCost" : 600
+					"tierDown": "fortt2_atgunait2"
 				},
 				"engineroomt3": {
 					"name": "Engine Room (Tier 3)",
 					"codeName": "EngineRoomT3",
-					"prevUpgradeKey": "fortt2_engineroomt2",
 					"description": "A engineering facility that provides power to Bunker structures using pipe connections.",
-					"icon": "game/Textures/UI/StructureIcons/EngineRoomIcon.webp",
-					"texture": "game/Textures/Structures/fortt3_engineroom.webp",
+					"icon": "../UI/StructureIcons/EngineRoomIcon.webp",
+					"texture": {
+						"src": "../Structures/fortt3_engineroom.webp",
+						"width": 266,
+						"height": 266
+					},
 					"maxHealth": 1500,
 					"structuralIntegrity": 0.85,
 					"cost": {
 						"concrete": 25
 					},
 					"repairCost": 120,
-					"gearPowerCost" : -3000
+					"gearPower" : 3000,
+					"tierDown": "fortt2_engineroomt2"
 				},
 				"mgait3": {
 					"name": "Machine Gun Garrison (Tier 3)",
 					"codeName": "MGAIT3",
-					"prevUpgradeKey": "fortt2_mgait2",
 					"description": "An entrenched machine gun manned by stationed troops.",
 					"range": {
 						"type": "killboxMG",
@@ -5740,21 +6570,24 @@ const gameData = {
 						"max": 33.5
 					},
 					"sortLayer": "upgrade",
-					"icon": "game/Textures/UI/StructureIcons/FortT3MGunAIIcon.webp",
-					"texture": "game/Textures/Structures/fortt3_mgai.webp",
-					"textureOffset": null,
+					"icon": "../UI/StructureIcons/FortT3MGunAIIcon.webp",
+					"texture": {
+						"src": "../Structures/fortt3_mgai.webp",
+						"width": 288,
+						"height": 288
+					},
 					"maxHealth": 3000,
 					"structuralIntegrity": 0.96,
 					"cost": {
 						"concrete": 15
 					},
 					"repairCost": 120,
-					"gearPowerCost" : 600
+					"gearPower" : -600,
+					"tierDown": "fortt2_mgait2"
 				},
 				"observationbunkert3": {
 					"name": "Observation Bunker (Tier 3)",
 					"codeName": "ObservationBunkerT3",
-					"prevUpgradeKey": "fortt2_observationbunkert2",
 					"description": "A radio bunker that provides intel to friendly units about the surrounding area. Built from solid concrete, this reliable structure can push its effective range beyond lesser fortified radio structures.",
 					"range": {
 						"type": "radio",
@@ -5769,26 +6602,34 @@ const gameData = {
 							"shape": [ 72.73,29.7,29.7,-72.12,72.41,-29.99 ]
 						}
 					],
-					"icon": "game/Textures/UI/StructureIcons/ObservationBunkerT3ItemIcon.webp",
-					"texture": "game/Textures/Structures/fortt3_observationbunker.webp",
+					"icon": "../UI/StructureIcons/ObservationBunkerT3ItemIcon.webp",
+					"texture": {
+						"src": "../Structures/fortt3_observationbunker.webp",
+						"width": 288,
+						"height": 288
+					},
 					"maxHealth": 1750,
 					"structuralIntegrity": 0.93,
 					"cost": {
 						"concrete": 10
 					},
 					"repairCost": 160,
-					"gearPowerCost" : 1000
+					"gearPower" : -1000,
+					"tierDown": "fortt2_observationbunkert2"
 				},
 				"fortrampt3": {
 					"name": "Bunker Ramp (Tier 3)",
 					"codeName": "FortRampT3",
-					"prevUpgradeKey": "fortt2_fortrampt2",
 					"description": "A ramp that enables access to underground Bunkers.",
-					"icon": "game/Textures/UI/StructureIcons/FortT3RampIcon.webp",
-					"texture": "game/Textures/Structures/fortt3_ramp.webp",
-					"textureOffset": {
-						"x": 315,
-						"y": 287
+					"icon": "../UI/StructureIcons/FortT3RampIcon.webp",
+					"texture": {
+						"src": "../Structures/fortt3_ramp.webp",
+						"width": 314,
+						"height": 293,
+						"offset": {
+							"x": 315,
+							"y": 287
+						}
 					},
 					"sockets": [
 						{
@@ -5862,12 +6703,11 @@ const gameData = {
 						"concrete": 10
 					},
 					"repairCost": 120,
-					"gearPowerCost" : 0
+					"tierDown": "fortt2_fortrampt2"
 				},
 				"rifleait3": {
 					"name": "Rifle Garrison (Tier 3)",
 					"codeName": "RifleAIT3",
-					"prevUpgradeKey": "fortt2_rifleait2",
 					"description": "An entrenched bunker manned by stationed troops armed with Rifles.",
 					"range": {
 						"type": "killbox",
@@ -5875,16 +6715,20 @@ const gameData = {
 						"max": 29
 					},
 					"sortLayer": "upgrade",
-					"icon": "game/Textures/UI/StructureIcons/FortT3GunAIIcon.webp",
-					"texture": "game/Textures/Structures/fortt3_rifleai.webp",
-					"textureOffset": null,
+					"icon": "../UI/StructureIcons/FortT3GunAIIcon.webp",
+					"texture": {
+						"src": "../Structures/fortt3_rifleai.webp",
+						"width": 288,
+						"height": 288
+					},
 					"maxHealth": 2250,
 					"structuralIntegrity": 0.96,
 					"cost": {
 						"concrete": 15
 					},
 					"repairCost": 120,
-					"gearPowerCost" : 600
+					"gearPower" : -600,
+					"tierDown": "fortt2_rifleait2"
 				}
 			}
 		},
@@ -5894,8 +6738,12 @@ const gameData = {
 			"description": "A temporary forward operating base. Players can spawn and stockpile items here.",
 			"category": "misc",
 			"baseGarrisonRadius": 80,
-			"icon": "game/Textures/UI/StructureIcons/EncampmentIcon.webp",
-			"texture": "game/Textures/Structures/forwardbase1.webp",
+			"icon": "../UI/StructureIcons/EncampmentIcon.webp",
+			"texture": {
+				"src": "../Structures/forwardbase1.webp",
+				"width": 623,
+				"height": 631
+			},
 			"maxHealth": 1725,
 			"cost": {
 				"cloth": 300
@@ -5909,9 +6757,13 @@ const gameData = {
 			"category": "foundations",
 			"categoryOrder": 2,
 			"sortLayer": "foundation",
-			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation01Icon.webp",
-			"texture": "game/Textures/Structures/foundation_1x1.webp",
-			"textureBorder": "game/Textures/Structures/foundation_border.webp",
+			"icon": "../UI/StructureIcons/ConcreteFoundation01Icon.webp",
+			"texture": {
+				"src": "../Structures/foundation_1x1.webp",
+				"width": 264,
+				"height": 264
+			},
+			"textureBorder": "../Structures/foundation_border.webp",
 			"buildOnWater": true,
 			"garrisonSupplyMultiplier": 2,
 			"canSnap": true,
@@ -5971,20 +6823,26 @@ const gameData = {
 				"groundmaterials": 75
 			},
 			"repairCost": 100,
+			"tierUp": "foundation_1x1_foundation01t3",
 			"upgrades": {
 				"foundation01t3": {
 					"name": "Concrete Foundation (1x1)",
 					"codeName": "Foundation01T3",
 					"description": "A foundation that provides a suitable surface for constructing Facilities.",
-					"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation01Icon.webp",
-					"texture": "game/Textures/Structures/concrete_foundation_1x1.webp",
-					"textureBorder": "game/Textures/Structures/concrete_foundation_border.webp",
+					"icon": "../UI/StructureIcons/ConcreteFoundation01Icon.webp",
+					"texture": {
+						"src": "../Structures/concrete_foundation_1x1.webp",
+						"width": 264,
+						"height": 264
+					},
+					"textureBorder": "../Structures/concrete_foundation_border.webp",
 					"garrisonSupplyMultiplier": 2,
 					"cost": {
 						"concrete": 5
 					},
 					"maxHealth": 3850,
-					"repairCost": 100
+					"repairCost": 100,
+					"tierDown": "foundation_1x1"
 				}
 			}
 		},
@@ -5995,9 +6853,13 @@ const gameData = {
 			"category": "foundations",
 			"categoryOrder": 1,
 			"sortLayer": "foundation",
-			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation03Icon.webp",
-			"texture": "game/Textures/Structures/foundation_1x2.webp",
-			"textureBorder": "game/Textures/Structures/foundation_border.webp",
+			"icon": "../UI/StructureIcons/ConcreteFoundation03Icon.webp",
+			"texture": {
+				"src": "../Structures/foundation_1x2.webp",
+				"width": 264,
+				"height": 528
+			},
+			"textureBorder": "../Structures/foundation_border.webp",
 			"buildOnWater": true,
 			"garrisonSupplyMultiplier": 2,
 			"canSnap": true,
@@ -6081,20 +6943,26 @@ const gameData = {
 				"groundmaterials": 115
 			},
 			"repairCost": 100,
+			"tierUp": "foundation_1x2_foundation011x2t3",
 			"upgrades": {
 				"foundation011x2t3": {
 					"name": "Concrete Foundation (1x2)",
 					"codeName": "Foundation011x2T3",
 					"description": "A foundation that provides a suitable surface for constructing Facilities.",
-					"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation03Icon.webp",
-					"texture": "game/Textures/Structures/concrete_foundation_1x2.webp",
-					"textureBorder": "game/Textures/Structures/concrete_foundation_border.webp",
+					"icon": "../UI/StructureIcons/ConcreteFoundation03Icon.webp",
+					"texture": {
+						"src": "../Structures/concrete_foundation_1x2.webp",
+						"width": 264,
+						"height": 528
+					},
+					"textureBorder": "../Structures/concrete_foundation_border.webp",
 					"garrisonSupplyMultiplier": 2,
 					"cost": {
 						"concrete": 10
 					},
 					"maxHealth": 3850,
-					"repairCost": 100
+					"repairCost": 100,
+					"tierDown": "foundation_1x2"
 				}
 			}
 		},
@@ -6104,9 +6972,13 @@ const gameData = {
 			"description": "A foundation that provides a suitable surface for constructing Facilities.",
 			"category": "foundations",
 			"sortLayer": "foundation",
-			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation04Icon.webp",
-			"texture": "game/Textures/Structures/foundation_2x2.webp",
-			"textureBorder": "game/Textures/Structures/foundation_border.webp",
+			"icon": "../UI/StructureIcons/ConcreteFoundation04Icon.webp",
+			"texture": {
+				"src": "../Structures/foundation_2x2.webp",
+				"width": 528,
+				"height": 528
+			},
+			"textureBorder": "../Structures/foundation_border.webp",
 			"buildOnWater": true,
 			"garrisonSupplyMultiplier": 2,
 			"canSnap": true,
@@ -6214,20 +7086,26 @@ const gameData = {
 				"groundmaterials": 150
 			},
 			"repairCost": 100,
+			"tierUp": "foundation_2x2_foundation012x2t3",
 			"upgrades": {
 				"foundation012x2t3": {
 					"name": "Concrete Foundation (2x2)",
 					"codeName": "Foundation012x2T3",
 					"description": "A foundation that provides a suitable surface for constructing Facilities.",
-					"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation04Icon.webp",
-					"texture": "game/Textures/Structures/concrete_foundation_2x2.webp",
-					"textureBorder": "game/Textures/Structures/concrete_foundation_border.webp",
+					"icon": "../UI/StructureIcons/ConcreteFoundation04Icon.webp",
+					"texture": {
+						"src": "../Structures/concrete_foundation_2x2.webp",
+						"width": 528,
+						"height": 528
+					},
+					"textureBorder": "../Structures/concrete_foundation_border.webp",
 					"garrisonSupplyMultiplier": 2,
 					"cost": {
 						"concrete": 15
 					},
 					"maxHealth": 3850,
-					"repairCost": 100
+					"repairCost": 100,
+					"tierDown": "foundation_2x2"
 				}
 			}
 		},
@@ -6245,13 +7123,17 @@ const gameData = {
 					"shape": [ -86.67,88.48,-87.27,36.97,36.97,-87.27,87.27,-87.27,87.88,87.88 ]
 				}
 			],
-			"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation02Icon.webp",
-			"texture": "game/Textures/Structures/foundation_corner.webp",
-			"textureBorder": "game/Textures/Structures/foundation_border.webp",
-			"textureOffset": {
-				"x": 288,
-				"y": 288
+			"icon": "../UI/StructureIcons/ConcreteFoundation02Icon.webp",
+			"texture": {
+				"src": "../Structures/foundation_corner.webp",
+				"width": 276,
+				"height": 276,
+				"offset": {
+					"x": 288,
+					"y": 288
+				}
 			},
+			"textureBorder": "../Structures/foundation_border.webp",
 			"buildOnWater": true,
 			"garrisonSupplyMultiplier": 2,
 			"canSnap": true,
@@ -6287,20 +7169,31 @@ const gameData = {
 				"groundmaterials": 75
 			},
 			"repairCost": 100,
+			"tierUp": "foundation_corner_foundation02t3",
 			"upgrades": {
 				"foundation02t3": {
 					"name": "Concrete Foundation Corner (1x1)",
 					"codeName": "Foundation02T3",
 					"description": "A foundation that provides a suitable surface for constructing Facilities.",
-					"icon": "game/Textures/UI/StructureIcons/ConcreteFoundation02Icon.webp",
-					"texture": "game/Textures/Structures/concrete_foundation_corner.webp",
-					"textureBorder": "game/Textures/Structures/concrete_foundation_border.webp",
+					"icon": "../UI/StructureIcons/ConcreteFoundation02Icon.webp",
+					"texture": {
+						"src": "../Structures/concrete_foundation_corner.webp",
+						"width": 276,
+						"height": 276
+					},
+					"textureBorder": "../Structures/concrete_foundation_border.webp",
 					"garrisonSupplyMultiplier": 2,
 					"cost": {
 						"concrete": 5
 					},
 					"maxHealth": 3850,
-					"repairCost": 100
+					"repairCost": 100,
+					"tierDown": "foundation_corner",
+					"hitArea": [
+						{
+							"shape": [ -83.03,83.64,-83.03,41.82,43.03,-83.64,83.64,-83.64,83.64,83.64 ]
+						}
+					]
 				}
 			}
 		},
@@ -6310,7 +7203,6 @@ const gameData = {
 			"description": "The Basset Motor Society’s Ironship-class shipping vessel is used to freight shippable goods and heavy vehicles.",
 			"category": "naval",
 			"categoryOrder": 21,
-			"sortLayer": "vehicle",
 			"hitArea": [
 				{
 					"shape": [ 302.42,46.67,277.58,69.09,282.42,-66.06,305.45,-42.42,337.58,0.61 ]
@@ -6325,8 +7217,12 @@ const gameData = {
 					"shape": [ 234.55,-98.18,282.42,-66.06,277.58,69.09,241.21,94.55,174.55,-120.61 ]
 				}
 			],
-			"icon": "game/Textures/UI/VehicleIcons/FreighterVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/freighter.webp"
+			"icon": "../UI/VehicleIcons/FreighterVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/freighter.webp",
+				"width": 1116,
+				"height": 400
+			}
 		},
 		"fuel_container": {
 			"name": "Liquid Container",
@@ -6335,8 +7231,12 @@ const gameData = {
 			"category": "shippables",
 			"categoryOrder": 5,
 			"sortLayer": "container",
-			"icon": "game/Textures/UI/StructureIcons/FuelTankIcon.webp",
-			"texture": "game/Textures/Structures/fuel_container.webp",
+			"icon": "../UI/StructureIcons/FuelTankIcon.webp",
+			"texture": {
+				"src": "../Structures/fuel_container.webp",
+				"width": 161,
+				"height": 267
+			},
 			"buildOnFoundation": true,
 			"maxHealth": 1000,
 			"cost": {
@@ -6352,8 +7252,12 @@ const gameData = {
 			"categoryOrder": 80,
 			"color": 1052688,
 			"radius": 1.25,
-			"icon": "game/Textures/UI/StructureIcons/OilSiloIcon.webp",
-			"texture": "game/Textures/Structures/fuel_silo.webp",
+			"icon": "../UI/StructureIcons/OilSiloIcon.webp",
+			"texture": {
+				"src": "../Structures/fuel_silo.webp",
+				"width": 96,
+				"height": 132
+			},
 			"canSnap": true,
 			"snapNearest": true,
 			"sockets": [
@@ -6401,8 +7305,13 @@ const gameData = {
 			"category": "defenses",
 			"categoryOrder": 4,
 			"sortLayer": "wall",
-			"icon": "game/Textures/UI/StructureIcons/Gate-T1Icon.webp",
-			"texture": "game/Textures/Structures/gatet1.webp",
+			"hitArea": false,
+			"icon": "../UI/StructureIcons/Gate-T1Icon.webp",
+			"texture": {
+				"src": "../Structures/gatet1.webp",
+				"width": 785,
+				"height": 40
+			},
 			"buildOnFoundation": true,
 			"canSnap": true,
 			"canSnapRotate": true,
@@ -6415,8 +7324,8 @@ const gameData = {
 							"category": 512
 						}
 					],
-					"texture": "game/Textures/Structures/wallsplinet1_post.webp",
-					"textureAlt": "game/Textures/Structures/wallsplinet1_post.webp",
+					"texture": "../Structures/wallsplinet1_post.webp",
+					"textureAlt": "../Structures/wallsplinet1_post.webp",
 					"x": 0.17,
 					"y": 0.38,
 					"rotation": 270
@@ -6429,8 +7338,8 @@ const gameData = {
 							"category": 512
 						}
 					],
-					"texture": "game/Textures/Structures/wallsplinet1_post.webp",
-					"textureAlt": "game/Textures/Structures/wallsplinet1_post.webp",
+					"texture": "../Structures/wallsplinet1_post.webp",
+					"textureAlt": "../Structures/wallsplinet1_post.webp",
 					"x": 14.7,
 					"y": 0.38,
 					"rotation": 90
@@ -6441,13 +7350,18 @@ const gameData = {
 				"cloth": 25
 			},
 			"repairCost": 25,
+			"tierUp": "gatet1_gatet2",
 			"upgrades": {
 				"gatet2": {
 					"name": "Gate (Tier 2)",
 					"codeName": "GateT2",
 					"description": "A gate that provides access to a walled off area.",
-					"icon": "game/Textures/UI/StructureIcons/Gate-T2Icon.webp",
-					"texture": "game/Textures/Structures/gatet2.webp",
+					"icon": "../UI/StructureIcons/Gate-T2Icon.webp",
+					"texture": {
+						"src": "../Structures/gatet2.webp",
+						"width": 792,
+						"height": 24
+					},
 					"techId": "unlockgatetier2",
 					"sockets": [
 						{
@@ -6458,8 +7372,8 @@ const gameData = {
 									"category": 512
 								}
 							],
-							"texture": "game/Textures/Structures/wallsplinet2_post.webp",
-							"textureAlt": "game/Textures/Structures/wallsplinet2_post.webp",
+							"texture": "../Structures/wallsplinet2_post.webp",
+							"textureAlt": "../Structures/wallsplinet2_post.webp",
 							"x": 0.17,
 							"y": 0.21,
 							"rotation": 270
@@ -6472,8 +7386,8 @@ const gameData = {
 									"category": 512
 								}
 							],
-							"texture": "game/Textures/Structures/wallsplinet2_post.webp",
-							"textureAlt": "game/Textures/Structures/wallsplinet2_post.webp",
+							"texture": "../Structures/wallsplinet2_post.webp",
+							"textureAlt": "../Structures/wallsplinet2_post.webp",
 							"x": 14.7,
 							"y": 0.21,
 							"rotation": 90
@@ -6483,14 +7397,20 @@ const gameData = {
 						"cloth": 50
 					},
 					"maxHealth": 1000,
-					"repairCost": 50
+					"repairCost": 50,
+					"tierDown": "gatet1",
+					"tierUp": "gatet1_gatet3"
 				},
 				"gatet3": {
 					"name": "Gate (Tier 3)",
 					"codeName": "GateT3",
 					"description": "A gate that provides access to a walled off area.",
-					"icon": "game/Textures/UI/StructureIcons/Gate-T3Icon.webp",
-					"texture": "game/Textures/Structures/gatet3.webp",
+					"icon": "../UI/StructureIcons/Gate-T3Icon.webp",
+					"texture": {
+						"src": "../Structures/gatet3.webp",
+						"width": 792,
+						"height": 38
+					},
 					"techId": "unlockgatetier3",
 					"sockets": [
 						{
@@ -6501,8 +7421,8 @@ const gameData = {
 									"category": 512
 								}
 							],
-							"texture": "game/Textures/Structures/wallsplinet3_post.webp",
-							"textureAlt": "game/Textures/Structures/wallsplinet3_post.webp",
+							"texture": "../Structures/wallsplinet3_post.webp",
+							"textureAlt": "../Structures/wallsplinet3_post.webp",
 							"x": 0.17,
 							"y": 0.36,
 							"rotation": 270
@@ -6515,8 +7435,8 @@ const gameData = {
 									"category": 512
 								}
 							],
-							"texture": "game/Textures/Structures/wallsplinet3_post.webp",
-							"textureAlt": "game/Textures/Structures/wallsplinet3_post.webp",
+							"texture": "../Structures/wallsplinet3_post.webp",
+							"textureAlt": "../Structures/wallsplinet3_post.webp",
 							"x": 14.7,
 							"y": 0.36,
 							"rotation": 90
@@ -6526,7 +7446,8 @@ const gameData = {
 						"concrete": 15
 					},
 					"maxHealth": 3000,
-					"repairCost": 75
+					"repairCost": 75,
+					"tierDown": "gatet1_gatet2"
 				}
 			}
 		},
@@ -6537,8 +7458,12 @@ const gameData = {
 			"category": "naval",
 			"categoryOrder": 75,
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/GunBoatVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/gunboatc.webp",
+			"icon": "../UI/VehicleIcons/GunBoatVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/gunboatc.webp",
+				"width": 859,
+				"height": 201
+			},
 			"techId": "unlockgunboat"
 		},
 		"gunboatoffensivew": {
@@ -6548,8 +7473,12 @@ const gameData = {
 			"category": "naval",
 			"categoryOrder": 75,
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/GunboatWarDoubleArtilleryVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/gunboatoffensivew.webp",
+			"icon": "../UI/VehicleIcons/GunboatWarDoubleArtilleryVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/gunboatoffensivew.webp",
+				"width": 837,
+				"height": 241
+			},
 			"techId": "unlockgunboatoffensive"
 		},
 		"gunboatw": {
@@ -6559,8 +7488,12 @@ const gameData = {
 			"category": "naval",
 			"categoryOrder": 75,
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/GunboatWarVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/gunboatw.webp"
+			"icon": "../UI/VehicleIcons/GunboatWarVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/gunboatw.webp",
+				"width": 837,
+				"height": 241
+			}
 		},
 		"halftrackartilleryc": {
 			"name": "HH-d “Peltast”",
@@ -6568,8 +7501,12 @@ const gameData = {
 			"description": "This “Javelin” variant is fitted with a 360 degree mortar platform, designed to support infantry in frontline operations.",
 			"category": "armor",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/HalfTrackArtilleryCIcon.webp",
-			"texture": "game/Textures/Vehicles/halftrackartilleryc.webp",
+			"icon": "../UI/VehicleIcons/HalfTrackArtilleryCIcon.webp",
+			"texture": {
+				"src": "../Vehicles/halftrackartilleryc.webp",
+				"width": 405,
+				"height": 160
+			},
 			"techId": "unlockhalftrackartillery"
 		},
 		"halftrackc": {
@@ -6578,8 +7515,12 @@ const gameData = {
 			"description": "Designed for escort missions and to support infantry operations, the HH-a class “Javelin” Half-Track is an armoured, versatile all-terrain vehicle that can be equipped with a variety of mounted weapons.",
 			"category": "armor",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/HalfTrackColVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/halftrackc.webp"
+			"icon": "../UI/VehicleIcons/HalfTrackColVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/halftrackc.webp",
+				"width": 415,
+				"height": 160
+			}
 		},
 		"halftrackdefensivec": {
 			"name": "HH-b “Hoplite”",
@@ -6587,8 +7528,12 @@ const gameData = {
 			"description": "With reinforced armour at the expense of speed, the \"Hoplite\" is a formidable force in the heat of combat.",
 			"category": "armor",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/HalfTrackColHeavyArmorVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/halftrackdefensivec.webp",
+			"icon": "../UI/VehicleIcons/HalfTrackColHeavyArmorVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/halftrackdefensivec.webp",
+				"width": 416,
+				"height": 160
+			},
 			"techId": "unlockfacilitytier2"
 		},
 		"halftrackmultiw": {
@@ -6597,8 +7542,12 @@ const gameData = {
 			"description": "A first of its kind, the Skycaller is a variation of the Niska Motor Carriage with a Rycker designed rocket battery fitted in the rear bed. This unique armoured vehicle quickly fires rockets over long distances with ease, and can be rearmed and relocated at the drop of a hat. The Skycaller is the deadly result of combined Nevish and Caoivish engineering.",
 			"category": "armor",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/HalftrackMultiWIcon.webp",
-			"texture": "game/Textures/Vehicles/halftrackmultiw.webp",
+			"icon": "../UI/VehicleIcons/HalftrackMultiWIcon.webp",
+			"texture": {
+				"src": "../Vehicles/halftrackmultiw.webp",
+				"width": 409,
+				"height": 173
+			},
 			"techId": "unlockhalftrackmulti"
 		},
 		"halftrackoffensivew": {
@@ -6607,8 +7556,12 @@ const gameData = {
 			"description": "Fitted with a heavy-duty anti-tank gun, the Blinder is capable of punching through all but the most tempered of alloys.",
 			"category": "armor",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/HalfTrackOffensiveWarVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/halftrackoffensivew.webp",
+			"icon": "../UI/VehicleIcons/HalfTrackOffensiveWarVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/halftrackoffensivew.webp",
+				"width": 429,
+				"height": 173
+			},
 			"techId": "unlockfacilitytier2"
 		},
 		"halftrackw": {
@@ -6617,8 +7570,12 @@ const gameData = {
 			"description": "Designed for escort missions and to support infantry operations, the Niska Gun Motor Carriage Half-Track is an armoured, versatile all-terrain vehicle that can be equipped with a variety of mounted weapons.",
 			"category": "armor",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/HalfTrackWarVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/halftrackw.webp"
+			"icon": "../UI/VehicleIcons/HalfTrackWarVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/halftrackw.webp",
+				"width": 429,
+				"height": 173
+			}
 		},
 		"harvester": {
 			"name": "BMS - Scrap Hauler",
@@ -6626,10 +7583,27 @@ const gameData = {
 			"description": "The Scrap Hauler, designed by the Bassett Motor Society is a heavy-duty piece of machinery designed to reduce scrap metal and other materials into usable, raw resources. Scrap Haulers are often used to extract battlefield resources following skirmishes.",
 			"category": "vehicles",
 			"categoryOrder": 15,
-			"sortLayer": "vehicle",
-			"icon": "game/Textures/UI/VehicleIcons/Harvester.webp",
-			"texture": "game/Textures/Vehicles/harvester.webp",
+			"icon": "../UI/VehicleIcons/Harvester.webp",
+			"texture": {
+				"src": "../Vehicles/harvester.webp",
+				"width": 444,
+				"height": 205
+			},
 			"techId": "unlockharvester"
+		},
+		"hospital": {
+			"name": "Hospital",
+			"codeName": "Hospital",
+			"description": "A large medical facility for treating critically wounded soldiers returning from the battlefield.",
+			"category": "world",
+			"categoryOrder": 11,
+			"icon": "../UI/StructureIcons/HospitalIcon.webp",
+			"texture": {
+				"src": "../Structures/hospital.webp",
+				"width": 543,
+				"height": 754
+			},
+			"cost": false
 		},
 		"landingcraftc": {
 			"name": "AB-8 “Acheron”",
@@ -6638,8 +7612,12 @@ const gameData = {
 			"category": "naval",
 			"categoryOrder": 50,
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/LandingCraftVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/landingcraftc.webp"
+			"icon": "../UI/VehicleIcons/LandingCraftVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/landingcraftc.webp",
+				"width": 351,
+				"height": 215
+			}
 		},
 		"landingcraftoffensivec": {
 			"name": "AB-11 “Doru”",
@@ -6648,8 +7626,12 @@ const gameData = {
 			"category": "naval",
 			"categoryOrder": 50,
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/LandingCraftOffensiveVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/landingcraftoffensivec.webp",
+			"icon": "../UI/VehicleIcons/LandingCraftOffensiveVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/landingcraftoffensivec.webp",
+				"width": 351,
+				"height": 215
+			},
 			"techId": "unlockfacilitytier2"
 		},
 		"landingcraftw": {
@@ -6659,8 +7641,12 @@ const gameData = {
 			"category": "naval",
 			"categoryOrder": 50,
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/LandingCraftWarVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/landingcraftw.webp"
+			"icon": "../UI/VehicleIcons/LandingCraftWarVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/landingcraftw.webp",
+				"width": 359,
+				"height": 188
+			}
 		},
 		"large_assembly_factory": {
 			"name": "Large Assembly Station",
@@ -6669,8 +7655,12 @@ const gameData = {
 			"category": "factories",
 			"categoryOrder": 20,
 			"color": 8184298,
-			"icon": "game/Textures/UI/ItemIcons/LargeAssemblyStationIcon.webp",
-			"texture": "game/Textures/Structures/large_assembly_factory.webp",
+			"icon": "../UI/ItemIcons/LargeAssemblyStationIcon.webp",
+			"texture": {
+				"src": "../Structures/large_assembly_factory.webp",
+				"width": 497,
+				"height": 1061
+			},
 			"preventOnLandscape": true,
 			"power": -8,
 			"sockets": [
@@ -6762,8 +7752,12 @@ const gameData = {
 					"name": "Train Assembly",
 					"codeName": "TrainAssembly",
 					"description": "An assembly station for producing train cars.",
-					"icon": "game/Textures/UI/ItemIcons/TrainAssemblyStation.webp",
-					"texture": "game/Textures/Structures/large_assembly_factory_train_assembly.webp",
+					"icon": "../UI/ItemIcons/TrainAssemblyStation.webp",
+					"texture": {
+						"src": "../Structures/large_assembly_factory_train_assembly.webp",
+						"width": 497,
+						"height": 1061
+					},
 					"techId": "unlockfacilitytier3",
 					"cost": {
 						"facilitymaterials3": 150
@@ -6815,8 +7809,12 @@ const gameData = {
 					"name": "Heavy Tank Assembly",
 					"codeName": "HeavyTankAssembly",
 					"description": "An assembly station for producing heavy tank class vehicles.",
-					"icon": "game/Textures/UI/ItemIcons/HeavyTankAssemblyStation.webp",
-					"texture": "game/Textures/Structures/large_assembly_factory_heavy_tank_assembly.webp",
+					"icon": "../UI/ItemIcons/HeavyTankAssemblyStation.webp",
+					"texture": {
+						"src": "../Structures/large_assembly_factory_heavy_tank_assembly.webp",
+						"width": 497,
+						"height": 1061
+					},
 					"techId": "unlockfacilitytier3",
 					"cost": {
 						"facilitymaterials3": 150
@@ -6918,8 +7916,12 @@ const gameData = {
 			"category": "factories",
 			"categoryOrder": 15,
 			"color": 8184298,
-			"icon": "game/Textures/UI/ItemIcons/AssemblyStationIcon.webp",
-			"texture": "game/Textures/Structures/light_vehicle_assembly_station.webp",
+			"icon": "../UI/ItemIcons/AssemblyStationIcon.webp",
+			"texture": {
+				"src": "../Structures/light_vehicle_assembly_station.webp",
+				"width": 438,
+				"height": 738
+			},
 			"preventOnLandscape": true,
 			"power": -2,
 			"sockets": [
@@ -7094,8 +8096,12 @@ const gameData = {
 					"name": "Motor Pool",
 					"codeName": "MotorPool",
 					"description": "An assembly station for producing light-duty logistics vehicles like trucks.",
-					"icon": "game/Textures/UI/ItemIcons/MotorPoolAssemblyIcon.webp",
-					"texture": "game/Textures/Structures/light_vehicle_assembly_station_motor_pool.webp",
+					"icon": "../UI/ItemIcons/MotorPoolAssemblyIcon.webp",
+					"texture": {
+						"src": "../Structures/light_vehicle_assembly_station_motor_pool.webp",
+						"width": 438,
+						"height": 738
+					},
 					"cost": {
 						"facilitymaterials1": 200
 					},
@@ -7262,8 +8268,12 @@ const gameData = {
 					"name": "Rocket Factory",
 					"codeName": "ArtilleryFactory",
 					"description": "An assembly station for producing half-tracks and rocket vehicles.",
-					"icon": "game/Textures/UI/ItemIcons/ArtilleryFactoryIcon.webp",
-					"texture": "game/Textures/Structures/light_vehicle_assembly_station_rocket_factory.webp",
+					"icon": "../UI/ItemIcons/ArtilleryFactoryIcon.webp",
+					"texture": {
+						"src": "../Structures/light_vehicle_assembly_station_rocket_factory.webp",
+						"width": 438,
+						"height": 738
+					},
 					"techId": "unlockfacilitytier2",
 					"cost": {
 						"facilitymaterials2": 65
@@ -7371,8 +8381,12 @@ const gameData = {
 					"name": "Field Station",
 					"codeName": "LightVehicleAssembly",
 					"description": "An assembly station for producing field weapons and utility vehicles such as Harvesters.",
-					"icon": "game/Textures/UI/ItemIcons/LightVehicleAssemblyIcon.webp",
-					"texture": "game/Textures/Structures/light_vehicle_assembly_station_field_station.webp",
+					"icon": "../UI/ItemIcons/LightVehicleAssemblyIcon.webp",
+					"texture": {
+						"src": "../Structures/light_vehicle_assembly_station_field_station.webp",
+						"width": 438,
+						"height": 738
+					},
 					"techId": "unlockfacilitytier2",
 					"cost": {
 						"facilitymaterials2": 25
@@ -7471,8 +8485,12 @@ const gameData = {
 					"name": "Tank Factory",
 					"codeName": "TankAssembly",
 					"description": "An assembly station for producing tank class vehicles.",
-					"icon": "game/Textures/UI/ItemIcons/TankAssemblyIcon.webp",
-					"texture": "game/Textures/Structures/light_vehicle_assembly_station_tank_factory.webp",
+					"icon": "../UI/ItemIcons/TankAssemblyIcon.webp",
+					"texture": {
+						"src": "../Structures/light_vehicle_assembly_station_tank_factory.webp",
+						"width": 438,
+						"height": 738
+					},
 					"techId": "unlockfacilitytier2",
 					"cost": {
 						"facilitymaterials2": 200
@@ -7651,8 +8669,12 @@ const gameData = {
 					"name": "Weapons Platform",
 					"codeName": "WeaponsPlatformAssembly",
 					"description": "An assembly station for producing emplaced weapon platforms and specialized tanks.",
-					"icon": "game/Textures/UI/ItemIcons/WeaponPlatfromAssemblyIcon.webp",
-					"texture": "game/Textures/Structures/light_vehicle_assembly_station_weapons_platform.webp",
+					"icon": "../UI/ItemIcons/WeaponPlatfromAssemblyIcon.webp",
+					"texture": {
+						"src": "../Structures/light_vehicle_assembly_station_weapons_platform.webp",
+						"width": 438,
+						"height": 738
+					},
 					"techId": "unlockfacilitytier3",
 					"cost": {
 						"facilitymaterials3": 20
@@ -7739,8 +8761,12 @@ const gameData = {
 			"description": "The “Scorpion” HC-class tank is a moderately armoured infantry support vehicle with twin, high-powered heavy machine guns and short-range radios for improved intelligence support. In addition, exterior seating is available for infantry. ",
 			"category": "tank",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/LightTank2InfantryCVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/lighttank2infantryc.webp",
+			"icon": "../UI/VehicleIcons/LightTank2InfantryCVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/lighttank2infantryc.webp",
+				"width": 373,
+				"height": 200
+			},
 			"techId": "unlockfacilitytier2"
 		},
 		"lighttankartilleryw": {
@@ -7749,8 +8775,12 @@ const gameData = {
 			"description": "A modified Devitt fitted with a specialized Caine mortar turret at the expense of top speed.",
 			"category": "tank",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/LightTankArtilleryWar.webp",
-			"texture": "game/Textures/Vehicles/lighttankartilleryw.webp",
+			"icon": "../UI/VehicleIcons/LightTankArtilleryWar.webp",
+			"texture": {
+				"src": "../Vehicles/lighttankartilleryw.webp",
+				"width": 332,
+				"height": 173
+			},
 			"techId": "unlockfacilitytier2"
 		},
 		"lighttankc": {
@@ -7759,8 +8789,12 @@ const gameData = {
 			"description": "A highly maneuverable lightweight tank. Designed for urban environments, the “Hatchet” is fitted with a 40mm cannon.",
 			"category": "tank",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/LightTankColVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/lighttankc.webp"
+			"icon": "../UI/VehicleIcons/LightTankColVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/lighttankc.webp",
+				"width": 325,
+				"height": 173
+			}
 		},
 		"lighttankdefensivew": {
 			"name": "Devitt Ironhide Mk. IV ",
@@ -7768,8 +8802,12 @@ const gameData = {
 			"description": "The Ironhide Light Tank is similar to the Mk. III but reinforced with plates of heavy steel at the expense of speed and maneuverability.",
 			"category": "tank",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/LightTankWarDefensiveVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/lighttankdefensivew.webp",
+			"icon": "../UI/VehicleIcons/LightTankWarDefensiveVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/lighttankdefensivew.webp",
+				"width": 358,
+				"height": 180
+			},
 			"techId": "unlockfacilitytier2"
 		},
 		"lighttankflamec": {
@@ -7778,8 +8816,12 @@ const gameData = {
 			"description": "This modified “Hatchet” features a reinforced fuel cell fixed to its rear alongside a flamethrower turret. This light tank can launch litres of burning fuel a fair distance, while its crew remains protected behind light armour plating.",
 			"category": "tank",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/LightTankFlameCIcon.webp",
-			"texture": "game/Textures/Vehicles/lighttankflamec.webp",
+			"icon": "../UI/VehicleIcons/LightTankFlameCIcon.webp",
+			"texture": {
+				"src": "../Vehicles/lighttankflamec.webp",
+				"width": 336,
+				"height": 173
+			},
 			"techId": "unlocklighttankflame"
 		},
 		"lighttankmobilityc": {
@@ -7788,8 +8830,12 @@ const gameData = {
 			"description": "The “Kranesca” Light Tank is fitted with an overpowered engine and a reinforced chassis, capable of boosting its top speed at the expense of overall acceleration and maneuverability.",
 			"category": "tank",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/LightTankColMobilityVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/lighttankmobilityc.webp",
+			"icon": "../UI/VehicleIcons/LightTankColMobilityVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/lighttankmobilityc.webp",
+				"width": 325,
+				"height": 173
+			},
 			"techId": "unlockfacilitytier2"
 		},
 		"lighttankoffensivec": {
@@ -7798,8 +8844,12 @@ const gameData = {
 			"description": "The “Pelekys” H-class light tank is heavily modified with an open top chassis and equipped with a devastating long-range anti-tank cannon.",
 			"category": "tank",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/LightTankOffensiveCVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/lighttankoffensivec.webp",
+			"icon": "../UI/VehicleIcons/LightTankOffensiveCVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/lighttankoffensivec.webp",
+				"width": 385,
+				"height": 173
+			},
 			"techId": "unlocklighttankoffensive"
 		},
 		"lighttankw": {
@@ -7808,8 +8858,12 @@ const gameData = {
 			"description": "A highly maneuverable lightweight tank. Designed for urban environments, the Devitt is fitted with a 40mm cannon.",
 			"category": "tank",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/LightTankWarVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/lighttankw.webp"
+			"icon": "../UI/VehicleIcons/LightTankWarVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/lighttankw.webp",
+				"width": 356,
+				"height": 175
+			}
 		},
 		"liquid_transfer_station": {
 			"name": "Liquid Transfer Station",
@@ -7818,8 +8872,12 @@ const gameData = {
 			"category": "factories",
 			"categoryOrder": 55,
 			"color": 8186514,
-			"icon": "game/Textures/UI/ItemIcons/MaterialTransferStationLiquidIcon.webp",
-			"texture": "game/Textures/Structures/liquid_transfer_station.webp",
+			"icon": "../UI/ItemIcons/MaterialTransferStationLiquidIcon.webp",
+			"texture": {
+				"src": "../Structures/liquid_transfer_station.webp",
+				"width": 345,
+				"height": 472
+			},
 			"preventOnLandscape": true,
 			"sockets": [
 				{
@@ -7866,8 +8924,12 @@ const gameData = {
 			"radius": 2,
 			"sortLayer": "resource",
 			"maxRange": 100,
-			"icon": "game/Textures/UI/StructureIcons/TunnelNetworkStructureIcon.webp",
-			"texture": "game/Textures/Structures/maintenance_tunnel.webp",
+			"icon": "../UI/StructureIcons/TunnelNetworkStructureIcon.webp",
+			"texture": {
+				"src": "../Structures/maintenance_tunnel.webp",
+				"width": 191,
+				"height": 191
+			},
 			"maxHealth": 3000,
 			"cost": {
 				"cloth": 50
@@ -7881,8 +8943,12 @@ const gameData = {
 			"category": "factories",
 			"categoryOrder": 50,
 			"color": 8186514,
-			"icon": "game/Textures/UI/ItemIcons/FacilityResourceTransfer3Icon.webp",
-			"texture": "game/Textures/Structures/material_transfer_station.webp",
+			"icon": "../UI/ItemIcons/FacilityResourceTransfer3Icon.webp",
+			"texture": {
+				"src": "../Structures/material_transfer_station.webp",
+				"width": 345,
+				"height": 654
+			},
 			"preventOnLandscape": true,
 			"maxHealth": 2200,
 			"cost": {
@@ -7896,8 +8962,13 @@ const gameData = {
 			"description": "A material pallet.",
 			"category": "shippables",
 			"categoryOrder": 1,
-			"icon": "game/Textures/UI/ItemIcons/MaterialPlatformItemIcon.webp",
-			"texture": "game/Textures/Structures/material_platform.webp",
+			"sortLayer": "container",
+			"icon": "../UI/ItemIcons/MaterialPlatformItemIcon.webp",
+			"texture": {
+				"src": "../Structures/material_platform.webp",
+				"width": 225,
+				"height": 147
+			},
 			"buildOnFoundation": true,
 			"maxHealth": 1000,
 			"cost": {
@@ -7924,8 +8995,12 @@ const gameData = {
 					"shape": [ -73.03,200.3,-73.64,182.12,21.52,-177.27,39.7,200.3 ]
 				}
 			],
-			"icon": "game/Textures/UI/StructureIcons/MetalworksFactoryBase.webp",
-			"texture": "game/Textures/Structures/materials_factory.webp",
+			"icon": "../UI/StructureIcons/MetalworksFactoryBase.webp",
+			"texture": {
+				"src": "../Structures/materials_factory.webp",
+				"width": 381,
+				"height": 675
+			},
 			"preventOnLandscape": true,
 			"power": -2,
 			"sockets": [
@@ -7997,8 +9072,12 @@ const gameData = {
 							"shape": [ -52.73,185.15,60,185.15,60,202.12,-52.12,203.33 ]
 						}
 					],
-					"icon": "game/Textures/UI/StructureIcons/FacilityForgeIcon.webp",
-					"texture": "game/Textures/Structures/materials_factory_forge.webp",
+					"icon": "../UI/StructureIcons/FacilityForgeIcon.webp",
+					"texture": {
+						"src": "../Structures/materials_factory_forge.webp",
+						"width": 400,
+						"height": 685
+					},
 					"positionOffset": {
 						"x": -69,
 						"y": -10
@@ -8100,8 +9179,12 @@ const gameData = {
 							"shape": [ -55.15,-185.45,39.39,-185.45,-58.79,-158.18 ]
 						}
 					],
-					"icon": "game/Textures/UI/StructureIcons/FacilityMetalPressIcon.webp",
-					"texture": "game/Textures/Structures/materials_factory_metal_press.webp",
+					"icon": "../UI/StructureIcons/FacilityMetalPressIcon.webp",
+					"texture": {
+						"src": "../Structures/materials_factory_metal_press.webp",
+						"width": 388,
+						"height": 620
+					},
 					"positionOffset": {
 						"x": -32,
 						"y": 55
@@ -8187,8 +9270,12 @@ const gameData = {
 							"shape": [ -61.52,176.06,-11.21,-155.45,0.91,-154.85 ]
 						}
 					],
-					"icon": "game/Textures/UI/StructureIcons/FacilityRecyclerIcon.webp",
-					"texture": "game/Textures/Structures/materials_factory_recycler.webp",
+					"icon": "../UI/StructureIcons/FacilityRecyclerIcon.webp",
+					"texture": {
+						"src": "../Structures/materials_factory_recycler.webp",
+						"width": 339,
+						"height": 655
+					},
 					"positionOffset": {
 						"x": -41,
 						"y": 21
@@ -8252,8 +9339,12 @@ const gameData = {
 							"shape": [ -61.52,176.06,51.21,176.06,51.21,193.64,-60.91,194.24 ]
 						}
 					],
-					"icon": "game/Textures/UI/StructureIcons/FacilitySmelterIcon.webp",
-					"texture": "game/Textures/Structures/materials_factory_smelter.webp",
+					"icon": "../UI/StructureIcons/FacilitySmelterIcon.webp",
+					"texture": {
+						"src": "../Structures/materials_factory_smelter.webp",
+						"width": 339,
+						"height": 655
+					},
 					"positionOffset": {
 						"x": -41,
 						"y": 21
@@ -8300,8 +9391,12 @@ const gameData = {
 			"description": "Unlike the 85-series, the \"Bardiche\" sports a heavier, more durable build and is fitted with a coaxial heavy machinegun along with a powerful, short-barrelled 68mm turret. Modern Kraunian engineering allows for a fast reload, making it an ideal tool to combat enemy armour.",
 			"category": "tank",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/MediumTank2CIcon.webp",
-			"texture": "game/Textures/Vehicles/mediumtank2c.webp",
+			"icon": "../UI/VehicleIcons/MediumTank2CIcon.webp",
+			"texture": {
+				"src": "../Vehicles/mediumtank2c.webp",
+				"width": 433,
+				"height": 235
+			},
 			"techId": "unlockmediumtank2"
 		},
 		"mediumtank2indirectw": {
@@ -8310,8 +9405,12 @@ const gameData = {
 			"description": "Armed with a rack of Bonesaw mortar launchers, the Thornfall is designed to launch an indirect mechanized assault on enemy armour. This unique vehicle supports an allied assault and cannot withstand large amounts of punishment.",
 			"category": "tank",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/MediumTank2IndirectWIcon.webp",
-			"texture": "game/Textures/Vehicles/mediumtank2indirectw.webp",
+			"icon": "../UI/VehicleIcons/MediumTank2IndirectWIcon.webp",
+			"texture": {
+				"src": "../Vehicles/mediumtank2indirectw.webp",
+				"width": 408,
+				"height": 214
+			},
 			"techId": "unlockfacilitytier3"
 		},
 		"mediumtank2multiw": {
@@ -8320,8 +9419,12 @@ const gameData = {
 			"description": "Colm Gallagher’s engineers designed a variation of the Outlaw that features an independently rotating MG turret sitting atop the main armament of twin anti-tank cannons. What it lacks in raw firepower compared to its older sibling, the Highwayman more than makes up for it with versatility.",
 			"category": "tank",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/MediumTank2MultiWIcon.webp",
-			"texture": "game/Textures/Vehicles/mediumtank2multiw.webp",
+			"icon": "../UI/VehicleIcons/MediumTank2MultiWIcon.webp",
+			"texture": {
+				"src": "../Vehicles/mediumtank2multiw.webp",
+				"width": 408,
+				"height": 214
+			},
 			"techId": "unlockfacilitytier2"
 		},
 		"mediumtank2rangew": {
@@ -8330,8 +9433,12 @@ const gameData = {
 			"description": "Originally designed in response to increasing swarms of Mesean armour, the Outlaw is an exceptionally capable medium tank armed with a long-range 40mm turret and includes a built-in storm rifle support position.",
 			"category": "tank",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/MediumTank2RangeWIcon.webp",
-			"texture": "game/Textures/Vehicles/mediumtank2rangew.webp",
+			"icon": "../UI/VehicleIcons/MediumTank2RangeWIcon.webp",
+			"texture": {
+				"src": "../Vehicles/mediumtank2rangew.webp",
+				"width": 435,
+				"height": 214
+			},
 			"techId": "unlockmediumtank2range"
 		},
 		"mediumtank2twinc": {
@@ -8340,8 +9447,12 @@ const gameData = {
 			"description": "This evolution of the “Bardiche” is fitted quad-mounted RPG launchers paired with a high-velocity 12.7mm cannon. The “Ranseur” indicates progress in Kraunian design as they continue to leverage outdated equipment to create deadly, modern armour.",
 			"category": "tank",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/MediumTank2TwinCVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/mediumtank2twinc.webp",
+			"icon": "../UI/VehicleIcons/MediumTank2TwinCVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/mediumtank2twinc.webp",
+				"width": 433,
+				"height": 235
+			},
 			"techId": "unlockfacilitytier2"
 		},
 		"mediumtankatw": {
@@ -8350,8 +9461,12 @@ const gameData = {
 			"description": "A cut down variation of the Silverhand Assault Tank that sacrifices armour and protection in favour of a high-powered 94.5mm cannon. This open-top weapon platform is uniquely designed to intercept enemy armour before they’re given time to retaliate. Its moniker is a tribute to the maiming of the great king the Silverhand is named for; while his title was stripped, and his pride damaged, his rage was never quelled.",
 			"category": "tank",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/MediumTankATWIcon.webp",
-			"texture": "game/Textures/Vehicles/mediumtankatw.webp",
+			"icon": "../UI/VehicleIcons/MediumTankATWIcon.webp",
+			"texture": {
+				"src": "../Vehicles/mediumtankatw.webp",
+				"width": 572,
+				"height": 216
+			},
 			"techId": "unlockfacilitytier3"
 		},
 		"mediumtankc": {
@@ -8360,8 +9475,12 @@ const gameData = {
 			"description": "Designed for mass-production in Kraunia, this assault tank features a modular turret system for maximum versatility. The “Falchion” class features a powerful if understated, 40mm cannon.",
 			"category": "tank",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/ColonialMediumTankIcon.webp",
-			"texture": "game/Textures/Vehicles/mediumtankc.webp"
+			"icon": "../UI/VehicleIcons/ColonialMediumTankIcon.webp",
+			"texture": {
+				"src": "../Vehicles/mediumtankc.webp",
+				"width": 413,
+				"height": 203
+			}
 		},
 		"mediumtanklargec": {
 			"name": "85V-g \"Talos\"",
@@ -8369,8 +9488,12 @@ const gameData = {
 			"description": "The \"Talos\" is a Velian modification to the 85-series, fitted with an oversized 75mm cannon. Knowing that such a heavy cannon would likely not be suitable, the engineers built it to disperse weight in such a manner that the 85-series chassis could bear it.",
 			"category": "tank",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/MediumTankLargeCIcon.webp",
-			"texture": "game/Textures/Vehicles/mediumtanklargec.webp",
+			"icon": "../UI/VehicleIcons/MediumTankLargeCIcon.webp",
+			"texture": {
+				"src": "../Vehicles/mediumtanklargec.webp",
+				"width": 434,
+				"height": 203
+			},
 			"techId": "unlockfacilitytier3"
 		},
 		"mediumtankoffensivec": {
@@ -8379,8 +9502,12 @@ const gameData = {
 			"description": "The “Spatha” assault tank features a unique and destructive 40mm turret that fires high-velocity shells. This specialized turret is not as well suited to mass-production as its more refined counterpart, the “Falchion.”",
 			"category": "tank",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/ColonialMediumTankOffensive.webp",
-			"texture": "game/Textures/Vehicles/mediumtankoffensivec.webp",
+			"icon": "../UI/VehicleIcons/ColonialMediumTankOffensive.webp",
+			"texture": {
+				"src": "../Vehicles/mediumtankoffensivec.webp",
+				"width": 459,
+				"height": 203
+			},
 			"techId": "unlockfacilitytier2"
 		},
 		"mediumtanksiegew": {
@@ -8389,8 +9516,12 @@ const gameData = {
 			"description": "The Chieftan assault tank is fitted with asymmetrical armaments, including a 250mm mortar cannon and a twin-barrelled 12.7mm turret.",
 			"category": "tank",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/MediumTankSiegeWVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/mediumtanksiegew.webp",
+			"icon": "../UI/VehicleIcons/MediumTankSiegeWVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/mediumtanksiegew.webp",
+				"width": 448,
+				"height": 216
+			},
 			"techId": "unlockfacilitytier2"
 		},
 		"mediumtankw": {
@@ -8399,8 +9530,12 @@ const gameData = {
 			"description": "The Silverhand assault tank is fitted with destructive dual-barrel armaments, and heavy frontal and rear armour. Its 68mm frontal cannon is paired with a lighter 40mm turret. ",
 			"category": "tank",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/WardenMediumTankIcon.webp",
-			"texture": "game/Textures/Vehicles/mediumtankw.webp",
+			"icon": "../UI/VehicleIcons/WardenMediumTankIcon.webp",
+			"texture": {
+				"src": "../Vehicles/mediumtankw.webp",
+				"width": 477,
+				"height": 216
+			},
 			"techId": "unlockmediumtank"
 		},
 		"metalworks_factory": {
@@ -8426,8 +9561,12 @@ const gameData = {
 					"shape": [ 5.15,96.06,-160.91,-12.42,-137.88,-14.85,51.21,-25.76,51.82,80.3,51.21,94.24 ]
 				}
 			],
-			"icon": "game/Textures/UI/StructureIcons/FacilityRefinery2Icon.webp",
-			"texture": "game/Textures/Structures/metalworks_factory.webp",
+			"icon": "../UI/StructureIcons/FacilityRefinery2Icon.webp",
+			"texture": {
+				"src": "../Structures/metalworks_factory.webp",
+				"width": 543,
+				"height": 639
+			},
 			"preventOnLandscape": true,
 			"power": -5,
 			"sockets": [
@@ -8503,8 +9642,12 @@ const gameData = {
 							"shape": [ 115.45,-54.85,114.24,-28.18,-133.64,7.58,54.85,-145.15,77.88,-139.7 ]
 						}
 					],
-					"icon": "game/Textures/UI/StructureIcons/FacilityRefinery2RecyclerIcon.webp",
-					"texture": "game/Textures/Structures/metalworks_factory_recycler.webp",
+					"icon": "../UI/StructureIcons/FacilityRefinery2RecyclerIcon.webp",
+					"texture": {
+						"src": "../Structures/metalworks_factory_recycler.webp",
+						"width": 531,
+						"height": 639
+					},
 					"positionOffset": {
 						"x": -13
 					},
@@ -8580,8 +9723,12 @@ const gameData = {
 							"shape": [ 80,-163.03,-122.42,3.64,30.91,-172.73,63.64,-171.52 ]
 						}
 					],
-					"icon": "game/Textures/UI/StructureIcons/FacilityBlastFurnaceIcon.webp",
-					"texture": "game/Textures/Structures/metalworks_factory_blast_furnace.webp",
+					"icon": "../UI/StructureIcons/FacilityBlastFurnaceIcon.webp",
+					"texture": {
+						"src": "../Structures/metalworks_factory_blast_furnace.webp",
+						"width": 542,
+						"height": 660
+					},
 					"positionOffset": {
 						"x": -42,
 						"y": -22
@@ -8687,8 +9834,12 @@ const gameData = {
 							"shape": [ 144.24,-105.45,-121.82,0,98.79,-139.39,116.97,-138.79 ]
 						}
 					],
-					"icon": "game/Textures/UI/StructureIcons/FacilityEngineeringStationIcon.webp",
-					"texture": "game/Textures/Structures/metalworks_factory_engineering_station.webp",
+					"icon": "../UI/StructureIcons/FacilityEngineeringStationIcon.webp",
+					"texture": {
+						"src": "../Structures/metalworks_factory_engineering_station.webp",
+						"width": 536,
+						"height": 668
+					},
 					"positionOffset": {
 						"x": -70,
 						"y": -29
@@ -8805,8 +9956,12 @@ const gameData = {
 					"shape": [ 86.06,1.21,46.67,72.73,-46.67,72.73,-88.48,1.82,-44.24,-75.76,44.24,-75.76 ]
 				}
 			],
-			"icon": "game/Textures/UI/StructureIcons/MGPillboxIcon.webp",
-			"texture": "game/Textures/Structures/mgpillbox.webp",
+			"icon": "../UI/StructureIcons/MGPillboxIcon.webp",
+			"texture": {
+				"src": "../Structures/mgpillbox.webp",
+				"width": 296,
+				"height": 262
+			},
 			"techId": "unlockmgpillbox",
 			"maxHealth": 650,
 			"cost": {
@@ -8820,8 +9975,12 @@ const gameData = {
 			"description": "The HC-Class “Ballista” is a heavy tank designed to obliterate opposition defenses with its 250mm Hades Mortar Cannon.",
 			"category": "tank",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/MortarTankVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/mortartankc.webp"
+			"icon": "../UI/VehicleIcons/MortarTankVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/mortartankc.webp",
+				"width": 373,
+				"height": 200
+			}
 		},
 		"motorboat": {
 			"name": "BMS - Grouper",
@@ -8829,8 +9988,13 @@ const gameData = {
 			"description": "Powered by the Basset Motor Society’s lightweight Grouper engine, this simple wooden boat is ideal for ferrying small groups of infantry across rivers and between islands.",
 			"category": "misc",
 			"categoryOrder": 5,
-			"icon": "game/Textures/UI/VehicleIcons/Motorboat.webp",
-			"texture": "game/Textures/Vehicles/motorboat.webp",
+			"sortLayer": "vehicle",
+			"icon": "../UI/VehicleIcons/Motorboat.webp",
+			"texture": {
+				"src": "../Vehicles/motorboat.webp",
+				"width": 265,
+				"height": 85
+			},
 			"maxHealth": 20,
 			"cost": {
 				"cloth": 60
@@ -8843,8 +10007,12 @@ const gameData = {
 			"description": "A motorcycle and sidecar used to patrol large areas. Speed can be boosted at the cost of additional fuel.",
 			"category": "vehicles",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/MotorcycleVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/motorcyclec.webp",
+			"icon": "../UI/VehicleIcons/MotorcycleVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/motorcyclec.webp",
+				"width": 188,
+				"height": 146
+			},
 			"techId": "unlockmotorcycle"
 		},
 		"motorcycleoffensivec": {
@@ -8853,8 +10021,12 @@ const gameData = {
 			"description": "The cab of this Motorcycle is fitted with an LMG for fast-response hit and run assaults.",
 			"category": "vehicles",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/MotorcycleOffensiveVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/motorcycleoffensivec.webp"
+			"icon": "../UI/VehicleIcons/MotorcycleOffensiveVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/motorcycleoffensivec.webp",
+				"width": 188,
+				"height": 146
+			}
 		},
 		"motorcyclew": {
 			"name": "Kivela Power Wheel 80-1",
@@ -8862,9 +10034,53 @@ const gameData = {
 			"description": "A Warden motorcycle used in patrols and fitted with a sidecar. The Kivela Power Wheel can also gain a momentary speed boost by burning additional fuel.",
 			"category": "vehicles",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/MotorcycleWIcon.webp",
-			"texture": "game/Textures/Vehicles/motorcyclew.webp",
+			"icon": "../UI/VehicleIcons/MotorcycleWIcon.webp",
+			"texture": {
+				"src": "../Vehicles/motorcyclew.webp",
+				"width": 171,
+				"height": 133
+			},
 			"techId": "unlockmotorcycle"
+		},
+		"observationtower": {
+			"name": "Observation Tower",
+			"codeName": "ObservationTower",
+			"description": "An Observation Tower that provides intel on friendly and enemy forces in an area.",
+			"category": "world",
+			"categoryOrder": 15,
+			"width": 6,
+			"length": 6,
+			"radius": 3,
+			"range": {
+				"type": "radio",
+				"max": 240
+			},
+			"hitArea": [
+				{
+					"shape": [ -1.82,79.39,-34.63,71.86,-57.32,55.06,-79.48,1.39,79.65,0.17,73.77,28.92,58.7,53.68,30.91,73.33 ]
+				},
+				{
+					"shape": [ 72.38,-32.21,79.65,0.17,-79.48,1.39,-73.94,-29.26,-57.84,-54.89,-2.42,-79.39,28.48,-74.55,54.55,-58.18 ]
+				},
+				{
+					"shape": [ -2.42,-79.39,-57.84,-54.89,-32.55,-72.73 ]
+				},
+				{
+					"shape": [ -79.48,1.39,-57.32,55.06,-73.94,29.09 ]
+				}
+			],
+			"icon": "../UI/CustomIcons/ObservationTowerIcon.webp",
+			"texture": {
+				"src": "../Structures/observationtower.webp",
+				"width": 293,
+				"height": 286,
+				"offset": {
+					"x": 308,
+					"y": 308
+				}
+			},
+			"maxHealth": 2000,
+			"cost": false
 		},
 		"oil_refinery": {
 			"name": "Oil Refinery",
@@ -8893,8 +10109,12 @@ const gameData = {
 					"shape": [ 55.15,97.88,66.06,73.03,60.61,97.88 ]
 				}
 			],
-			"icon": "game/Textures/UI/ItemIcons/OilRefineryBaseIcon.webp",
-			"texture": "game/Textures/Structures/oil_refinery.webp",
+			"icon": "../UI/ItemIcons/OilRefineryBaseIcon.webp",
+			"texture": {
+				"src": "../Structures/oil_refinery.webp",
+				"width": 220,
+				"height": 553
+			},
 			"preventOnLandscape": true,
 			"power": -1,
 			"sockets": [
@@ -8986,8 +10206,12 @@ const gameData = {
 							"shape": [ 24.85,-145.76,60,-145.15,64.24,96.06,-39.39,-109.39,-5.45,-145.15 ]
 						}
 					],
-					"icon": "game/Textures/UI/StructureIcons/OilRefineryMod3Icon.webp",
-					"texture": "game/Textures/Structures/oil_refinery_reformer.webp",
+					"icon": "../UI/StructureIcons/OilRefineryMod3Icon.webp",
+					"texture": {
+						"src": "../Structures/oil_refinery_reformer.webp",
+						"width": 220,
+						"height": 629
+					},
 					"positionOffset": {
 						"y": 75
 					},
@@ -9090,8 +10314,12 @@ const gameData = {
 							"shape": [ -44.24,-86.97,-66.06,164.55,-58.79,-98.48 ]
 						}
 					],
-					"icon": "game/Textures/UI/StructureIcons/OilRefineryMod2Icon.webp",
-					"texture": "game/Textures/Structures/oil_refinery_cracking_unit.webp",
+					"icon": "../UI/StructureIcons/OilRefineryMod2Icon.webp",
+					"texture": {
+						"src": "../Structures/oil_refinery_cracking_unit.webp",
+						"width": 220,
+						"height": 553
+					},
 					"positionOffset": {
 						"x": -1
 					},
@@ -9181,8 +10409,12 @@ const gameData = {
 							"shape": [ 27.14,147.55,-44.24,-86.97,-38.79,-86.97 ]
 						}
 					],
-					"icon": "game/Textures/UI/ItemIcons/OilRefineryPetrochemicalPlanetIcon.webp",
-					"texture": "game/Textures/Structures/oil_refinery_petro_plant.webp",
+					"icon": "../UI/ItemIcons/OilRefineryPetrochemicalPlanetIcon.webp",
+					"texture": {
+						"src": "../Structures/oil_refinery_petro_plant.webp",
+						"width": 220,
+						"height": 553
+					},
 					"positionOffset": {
 						"x": -1
 					},
@@ -9258,8 +10490,13 @@ const gameData = {
 			"category": "harvesters",
 			"categoryOrder": 1,
 			"color": 2368548,
-			"icon": "game/Textures/UI/StructureIcons/OilWellMineIcon.webp",
-			"texture": "game/Textures/Structures/oil_well.webp",
+			"icon": "../UI/StructureIcons/OilWellMineIcon.webp",
+			"texture": {
+				"src": "../Structures/oil_well.webp",
+				"width": 198,
+				"height": 321
+			},
+			"buildOnFoundation": false,
 			"maxHealth": 1850,
 			"cost": {
 				"facilitymaterials1": 35
@@ -9298,9 +10535,13 @@ const gameData = {
 							"shape": [ -73.94,-47.27,-62.42,-47.27,-44.85,57.58,-73.94,57.58 ]
 						}
 					],
-					"baseIcon": "game/Textures/UI/StructureIcons/FacilityElectricOilWellIcon.webp",
-					"icon": "game/Textures/UI/StructureIcons/FacilityElectricOilWellIcon.webp",
-					"texture": "game/Textures/Structures/oil_well_electric_oil.webp",
+					"baseIcon": "../UI/StructureIcons/FacilityElectricOilWellIcon.webp",
+					"icon": "../UI/StructureIcons/FacilityElectricOilWellIcon.webp",
+					"texture": {
+						"src": "../Structures/oil_well_electric_oil.webp",
+						"width": 248,
+						"height": 400
+					},
 					"positionOffset": {
 						"x": -50,
 						"y": -79
@@ -9391,9 +10632,13 @@ const gameData = {
 							"shape": [ -59.39,73.94,-70.91,47.88,-70.91,40,-13.94,-72.73 ]
 						}
 					],
-					"baseIcon": "game/Textures/UI/StructureIcons/FacilityFrackerIcon.webp",
-					"icon": "game/Textures/UI/StructureIcons/FacilityFrackerIcon.webp",
-					"texture": "game/Textures/Structures/oil_well_fracking_oil.webp",
+					"baseIcon": "../UI/StructureIcons/FacilityFrackerIcon.webp",
+					"icon": "../UI/StructureIcons/FacilityFrackerIcon.webp",
+					"texture": {
+						"src": "../Structures/oil_well_fracking_oil.webp",
+						"width": 282,
+						"height": 400
+					},
 					"positionOffset": {
 						"x": -2,
 						"y": -79
@@ -9481,8 +10726,12 @@ const gameData = {
 			"category": "world",
 			"categoryOrder": 21,
 			"radius": 6,
-			"icon": "game/Textures/UI/ItemIcons/Facilities/OilIcon.webp",
-			"texture": "game/Textures/Structures/oilfield.webp",
+			"icon": "../UI/ItemIcons/Facilities/OilIcon.webp",
+			"texture": {
+				"src": "../Structures/oilfield.webp",
+				"width": 550,
+				"height": 550
+			},
 			"maxHealth": 2147483647
 		},
 		"oiltankerc": {
@@ -9492,9 +10741,12 @@ const gameData = {
 			"category": "vehicles",
 			"categoryOrder": 3,
 			"faction": "c",
-			"sortLayer": "vehicle",
-			"icon": "game/Textures/UI/VehicleIcons/OilTankerIcon.webp",
-			"texture": "game/Textures/Vehicles/oiltankerc.webp"
+			"icon": "../UI/VehicleIcons/OilTankerIcon.webp",
+			"texture": {
+				"src": "../Vehicles/oiltankerc.webp",
+				"width": 457,
+				"height": 173
+			}
 		},
 		"oiltankerw": {
 			"name": "Dunne Fuelrunner 2d",
@@ -9503,9 +10755,12 @@ const gameData = {
 			"category": "vehicles",
 			"categoryOrder": 4,
 			"faction": "w",
-			"sortLayer": "vehicle",
-			"icon": "game/Textures/UI/VehicleIcons/OilTankerWarIcon.webp",
-			"texture": "game/Textures/Vehicles/oiltankerw.webp"
+			"icon": "../UI/VehicleIcons/OilTankerWarIcon.webp",
+			"texture": {
+				"src": "../Vehicles/oiltankerw.webp",
+				"width": 459,
+				"height": 160
+			}
 		},
 		"pipeline": {
 			"name": "Pipeline",
@@ -9520,10 +10775,14 @@ const gameData = {
 			"lineWidth": 10,
 			"minLength": 3,
 			"maxLength": 20,
-			"icon": "game/Textures/UI/StructureIcons/PipelineSegmentIcon.webp",
-			"texture": "game/Textures/Structures/pipeline.webp",
-			"textureFrontCap": "game/Textures/Structures/pipeline_front.webp",
-			"textureBackCap": "game/Textures/Structures/pipeline_back.webp",
+			"icon": "../UI/StructureIcons/PipelineSegmentIcon.webp",
+			"texture": {
+				"src": "../Structures/pipeline.webp",
+				"width": 43,
+				"height": 43
+			},
+			"textureFrontCap": "../Structures/pipeline_front.webp",
+			"textureBackCap": "../Structures/pipeline_back.webp",
 			"buildOnFoundation": true,
 			"canSnap": true,
 			"sockets": [
@@ -9588,8 +10847,12 @@ const gameData = {
 					"name": "Insulated Pipe",
 					"codeName": "Insulation",
 					"description": "An insulating material to keep the pipe from freezing during harsh weather conditions.",
-					"icon": "game/Textures/UI/StructureIcons/PipelineSegmentIcon.webp",
-					"texture": "game/Textures/Structures/pipeline_insulated.webp",
+					"icon": "../UI/StructureIcons/PipelineSegmentIcon.webp",
+					"texture": {
+						"src": "../Structures/pipeline_insulated.webp",
+						"width": 43,
+						"height": 43
+					},
 					"cost": {
 						"pipematerials": 1
 					}
@@ -9607,10 +10870,14 @@ const gameData = {
 			"lineWidth": 10,
 			"minLength": 8,
 			"maxLength": 20,
-			"icon": "game/Textures/UI/ItemIcons/OverheadPowelineIcon.webp",
-			"texture": "game/Textures/Structures/pipeline_overhead.webp",
-			"textureFrontCap": "game/Textures/Structures/pipeline_overhead_front.webp",
-			"textureBackCap": "game/Textures/Structures/pipeline_overhead_back.webp",
+			"icon": "../UI/ItemIcons/OverheadPowelineIcon.webp",
+			"texture": {
+				"src": "../Structures/pipeline_overhead.webp",
+				"width": 43,
+				"height": 43
+			},
+			"textureFrontCap": "../Structures/pipeline_overhead_front.webp",
+			"textureBackCap": "../Structures/pipeline_overhead_back.webp",
 			"buildOnFoundation": true,
 			"preventOnLandscape": true,
 			"canSnap": true,
@@ -9660,8 +10927,12 @@ const gameData = {
 					"name": "Insulated Pipe",
 					"codeName": "Insulation",
 					"description": "An insulating material to keep the pipe from freezing during harsh weather conditions.",
-					"icon": "game/Textures/UI/ItemIcons/OverheadPowelineIcon.webp",
-					"texture": "game/Textures/Structures/pipeline_overhead_insulated.webp",
+					"icon": "../UI/ItemIcons/OverheadPowelineIcon.webp",
+					"texture": {
+						"src": "../Structures/pipeline_overhead_insulated.webp",
+						"width": 43,
+						"height": 43
+					},
 					"cost": {
 						"pipematerials": 1
 					}
@@ -9680,10 +10951,10 @@ const gameData = {
 			"lineWidth": 10,
 			"minLength": 5,
 			"maxLength": 20,
-			"icon": "game/Textures/UI/StructureIcons/PipeIntersectionIcon.webp",
+			"icon": "../UI/StructureIcons/PipeIntersectionIcon.webp",
 			"texture": null,
-			"textureFrontCap": "game/Textures/Structures/pipeline_underground_front.webp",
-			"textureBackCap": "game/Textures/Structures/pipeline_underground_back.webp",
+			"textureFrontCap": "../Structures/pipeline_underground_front.webp",
+			"textureBackCap": "../Structures/pipeline_underground_back.webp",
 			"buildOnFoundation": true,
 			"garrisonSupplyMultiplier": 4,
 			"canSnap": true,
@@ -9725,10 +10996,10 @@ const gameData = {
 					"name": "Insulated Pipe",
 					"codeName": "Insulation",
 					"description": "An insulating material to keep the pipe from freezing during harsh weather conditions.",
-					"icon": "game/Textures/UI/StructureIcons/PipeIntersectionIcon.webp",
+					"icon": "../UI/StructureIcons/PipeIntersectionIcon.webp",
 					"texture": null,
-					"textureFrontCap": "game/Textures/Structures/pipeline_underground_front_insulated.webp",
-					"textureBackCap": "game/Textures/Structures/pipeline_underground_back_insulated.webp",
+					"textureFrontCap": "../Structures/pipeline_underground_front_insulated.webp",
+					"textureBackCap": "../Structures/pipeline_underground_back_insulated.webp",
 					"cost": {
 						"pipematerials": 1
 					}
@@ -9742,8 +11013,12 @@ const gameData = {
 			"category": "factories",
 			"categoryOrder": 75,
 			"sortLayer": "pipe",
-			"icon": "game/Textures/UI/ItemIcons/FacilityPipeValveIcon.webp",
-			"texture": "game/Textures/Structures/pipeline_valve.webp",
+			"icon": "../UI/ItemIcons/FacilityPipeValveIcon.webp",
+			"texture": {
+				"src": "../Structures/pipeline_valve.webp",
+				"width": 94,
+				"height": 51
+			},
 			"buildOnFoundation": true,
 			"canSnap": true,
 			"sockets": [
@@ -9788,8 +11063,12 @@ const gameData = {
 			"categoryOrder": 50,
 			"faction": "c",
 			"sortLayer": "player",
-			"icon": "game/Textures/UI/ItemIcons/Uniforms/SoldierUniformCIcon.webp",
-			"texture": "game/Textures/playerc.webp"
+			"icon": "../UI/ItemIcons/Uniforms/SoldierUniformCIcon.webp",
+			"texture": {
+				"src": "../playerc.webp",
+				"width": 75,
+				"height": 29
+			}
 		},
 		"playerw": {
 			"name": "Player (Warden)",
@@ -9798,8 +11077,12 @@ const gameData = {
 			"categoryOrder": 51,
 			"faction": "w",
 			"sortLayer": "player",
-			"icon": "game/Textures/UI/ItemIcons/Uniforms/SoldierUniformWIcon.webp",
-			"texture": "game/Textures/playerw.webp"
+			"icon": "../UI/ItemIcons/Uniforms/SoldierUniformWIcon.webp",
+			"texture": {
+				"src": "../playerw.webp",
+				"width": 75,
+				"height": 30
+			}
 		},
 		"power_box": {
 			"name": "Power Switch",
@@ -9808,8 +11091,12 @@ const gameData = {
 			"category": "power",
 			"categoryOrder": 1,
 			"sortLayer": "power_pole",
-			"icon": "game/Textures/UI/StructureIcons/FacilityPowerBoxIcon.webp",
-			"texture": "game/Textures/Structures/power_box.webp",
+			"icon": "../UI/StructureIcons/FacilityPowerBoxIcon.webp",
+			"texture": {
+				"src": "../Structures/power_box.webp",
+				"width": 119,
+				"height": 42
+			},
 			"preventOnLandscape": true,
 			"sockets": [
 				{
@@ -9846,8 +11133,12 @@ const gameData = {
 			"lineWidth": 5,
 			"minLength": 0.1,
 			"maxLength": 25,
-			"icon": "game/Textures/UI/StructureIcons/PowelineIcon.webp",
-			"texture": "game/Textures/Structures/power_line.webp",
+			"icon": "../UI/StructureIcons/PowelineIcon.webp",
+			"texture": {
+				"src": "../Structures/power_line.webp",
+				"width": 3,
+				"height": 3
+			},
 			"buildOnFoundation": true,
 			"garrisonSupplyMultiplier": 0,
 			"canSnap": true,
@@ -9892,8 +11183,12 @@ const gameData = {
 			"description": "Used to connect Power Lines. Up to 4 Power Lines can be attached to a single pole.",
 			"category": "power",
 			"sortLayer": "power_pole",
-			"icon": "game/Textures/UI/StructureIcons/PowerLineB.webp",
-			"texture": "game/Textures/Structures/power_pole.webp",
+			"icon": "../UI/StructureIcons/PowerLineB.webp",
+			"texture": {
+				"src": "../Structures/power_pole.webp",
+				"width": 40,
+				"height": 14
+			},
 			"sockets": [
 				{
 					"id": 0,
@@ -9920,8 +11215,12 @@ const gameData = {
 					"name": "Lamp",
 					"codeName": "Light",
 					"description": "A light that illuminates the surrounding area. Requires at least a minimum amount of power to function.",
-					"icon": "game/Textures/UI/StructureIcons/PowerPoleLightIcon.webp",
-					"texture": "game/Textures/Structures/power_pole_lamp.webp",
+					"icon": "../UI/StructureIcons/PowerPoleLightIcon.webp",
+					"texture": {
+						"src": "../Structures/power_pole_lamp.webp",
+						"width": 64,
+						"height": 22
+					},
 					"positionOffset": {
 						"x": 24
 					},
@@ -9976,8 +11275,12 @@ const gameData = {
 					"shape": [ 135.76,163.33,222.42,6.97,223.03,108.18,198.79,156.06 ]
 				}
 			],
-			"icon": "game/Textures/UI/StructureIcons/FacilityPowerOilIcon.webp",
-			"texture": "game/Textures/Structures/power_station.webp",
+			"icon": "../UI/StructureIcons/FacilityPowerOilIcon.webp",
+			"texture": {
+				"src": "../Structures/power_station.webp",
+				"width": 748,
+				"height": 719
+			},
 			"preventOnLandscape": true,
 			"power": 15,
 			"sockets": [
@@ -10070,8 +11373,12 @@ const gameData = {
 							"shape": [ -71.52,120,-84.24,107.27,76.97,146.06,9.7,146.06 ]
 						}
 					],
-					"icon": "game/Textures/UI/StructureIcons/FacilityPowerOilReactorIcon.webp",
-					"texture": "game/Textures/Structures/power_station_sulfuric_reactor.webp",
+					"icon": "../UI/StructureIcons/FacilityPowerOilReactorIcon.webp",
+					"texture": {
+						"src": "../Structures/power_station_sulfuric_reactor.webp",
+						"width": 728,
+						"height": 754
+					},
 					"positionOffset": {
 						"x": -20,
 						"y": 34
@@ -10149,8 +11456,12 @@ const gameData = {
 			"isBezier": true,
 			"minLength": 9.01,
 			"maxLength": 30,
-			"icon": "game/Textures/UI/ItemIcons/FacilityRoadItemIcon.webp",
-			"texture": "game/Textures/Structures/facilityroad.webp",
+			"icon": "../UI/ItemIcons/FacilityRoadItemIcon.webp",
+			"texture": {
+				"src": "../Structures/facilityroad.webp",
+				"width": 472,
+				"height": 472
+			},
 			"garrisonSupplyMultiplier": 3,
 			"canSnap": true,
 			"canSnapAlongBezier": true,
@@ -10202,8 +11513,12 @@ const gameData = {
 			"hasHandle": true,
 			"minLength": 5,
 			"maxLength": 30,
-			"icon": "game/Textures/UI/StructureIcons/CraneRailTrackIcon.webp",
-			"texture": "game/Textures/Structures/rail_large_crane.webp",
+			"icon": "../UI/StructureIcons/CraneRailTrackIcon.webp",
+			"texture": {
+				"src": "../Structures/rail_large_crane.webp",
+				"width": 528,
+				"height": 528
+			},
 			"buildOnFoundation": true,
 			"preventOnLandscape": true,
 			"canSnap": true,
@@ -10249,8 +11564,12 @@ const gameData = {
 			"isBezier": true,
 			"minLength": 5,
 			"maxLength": 30,
-			"icon": "game/Textures/UI/StructureIcons/BiarcRailTrackIcon.webp",
-			"texture": "game/Textures/Structures/rail_large_gauge.webp",
+			"icon": "../UI/StructureIcons/BiarcRailTrackIcon.webp",
+			"texture": {
+				"src": "../Structures/rail_large_gauge.webp",
+				"width": 211,
+				"height": 211
+			},
 			"buildOnFoundation": true,
 			"canSnap": true,
 			"canSnapAlongBezier": true,
@@ -10305,8 +11624,12 @@ const gameData = {
 			"isBezier": true,
 			"minLength": 5,
 			"maxLength": 30,
-			"icon": "game/Textures/UI/StructureIcons/BiarcSmallRailTrackIcon.webp",
-			"texture": "game/Textures/Structures/rail_small_gauge.webp",
+			"icon": "../UI/StructureIcons/BiarcSmallRailTrackIcon.webp",
+			"texture": {
+				"src": "../Structures/rail_small_gauge.webp",
+				"width": 106,
+				"height": 106
+			},
 			"buildOnFoundation": true,
 			"canSnap": true,
 			"canSnapAlongBezier": true,
@@ -10354,8 +11677,12 @@ const gameData = {
 			"description": "An armoured landship reinforced with an alloy now lost to time. This nearly indestructible beast carries up to 8 passengers. Whispers of its existence date back to the first breaching.",
 			"category": "vehicles",
 			"hideInList": true,
-			"icon": "game/Textures/UI/VehicleIcons/RelicApc.webp",
-			"texture": "game/Textures/Vehicles/relicapc.webp"
+			"icon": "../UI/VehicleIcons/RelicApc.webp",
+			"texture": {
+				"src": "../Vehicles/relicapc.webp",
+				"width": 578,
+				"height": 265
+			}
 		},
 		"relicarmouredcar": {
 			"name": "Armoured Fighting Tractor",
@@ -10363,8 +11690,12 @@ const gameData = {
 			"description": "A recovered Colonial prototype once found in early mechanized warfare. Built on the frame of a powerful tractor, this amoured vehicle was seen escorting soldiers or, later, in support of larger armoured forces.",
 			"category": "vehicles",
 			"hideInList": true,
-			"icon": "game/Textures/UI/VehicleIcons/RelicArmouredCarVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/relicarmouredcar.webp",
+			"icon": "../UI/VehicleIcons/RelicArmouredCarVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/relicarmouredcar.webp",
+				"width": 273,
+				"height": 152
+			},
 			"techId": "unlocklighttankammohe"
 		},
 		"relicbase1": {
@@ -10400,8 +11731,12 @@ const gameData = {
 					"shape": [ 138.79,203.64,138.79,-207.27,144.24,-204.85,144.24,203.64 ]
 				}
 			],
-			"icon": "game/Textures/UI/CustomIcons/RelicBase1Icon.webp",
-			"texture": "game/Textures/Structures/relicbase1.webp",
+			"icon": "../UI/CustomIcons/RelicBase1Icon.webp",
+			"texture": {
+				"src": "../Structures/relicbase1.webp",
+				"width": 476,
+				"height": 982
+			},
 			"cost": false
 		},
 		"reliclighttank": {
@@ -10410,8 +11745,12 @@ const gameData = {
 			"description": "A light armoured mechanized vehicle first seen in early border skirmishes between Caoiva and Veli. With its thin frame, it was deployed in wide formations, often overwhelming enemy forces.",
 			"category": "vehicles",
 			"hideInList": true,
-			"icon": "game/Textures/UI/VehicleIcons/RelicLightTankVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/reliclighttank.webp",
+			"icon": "../UI/VehicleIcons/RelicLightTankVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/reliclighttank.webp",
+				"width": 412,
+				"height": 195
+			},
 			"techId": "unlockreliclighttank"
 		},
 		"relicmediumtank": {
@@ -10420,8 +11759,12 @@ const gameData = {
 			"description": "Ancient by modern standards, this first iteration heavily armoured Colonial Assault tank is fitted with full coverage shielding and equipped with twin sponson cannons.",
 			"category": "vehicles",
 			"hideInList": true,
-			"icon": "game/Textures/UI/VehicleIcons/ColonialRelicMediumTankVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/relicmediumtank.webp",
+			"icon": "../UI/VehicleIcons/ColonialRelicMediumTankVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/relicmediumtank.webp",
+				"width": 435,
+				"height": 236
+			},
 			"techId": "unlockrelicmediumtank"
 		},
 		"relicscoutvehicle": {
@@ -10430,8 +11773,12 @@ const gameData = {
 			"description": "A vehicle once used by officers to survey the battlefield, or to deliver emergency supplies and orders.",
 			"category": "vehicles",
 			"hideInList": true,
-			"icon": "game/Textures/UI/VehicleIcons/RelicCarVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/relicscoutvehicle.webp",
+			"icon": "../UI/VehicleIcons/RelicCarVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/relicscoutvehicle.webp",
+				"width": 294,
+				"height": 124
+			},
 			"techId": "unlockrelicscoutvehicle"
 		},
 		"relictruck": {
@@ -10440,8 +11787,12 @@ const gameData = {
 			"description": "A sturdy old farmer's truck that's been reinforced for military use.",
 			"category": "vehicles",
 			"hideInList": true,
-			"icon": "game/Textures/UI/VehicleIcons/RelicTruckVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/relictruck.webp",
+			"icon": "../UI/VehicleIcons/RelicTruckVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/relictruck.webp",
+				"width": 465,
+				"height": 160
+			},
 			"techId": "unlockrelictruck"
 		},
 		"resource_transfer_station": {
@@ -10451,8 +11802,12 @@ const gameData = {
 			"category": "factories",
 			"categoryOrder": 45,
 			"color": 8186514,
-			"icon": "game/Textures/UI/ItemIcons/MaterialTransferStationIcon.webp",
-			"texture": "game/Textures/Structures/resource_transfer_station.webp",
+			"icon": "../UI/ItemIcons/MaterialTransferStationIcon.webp",
+			"texture": {
+				"src": "../Structures/resource_transfer_station.webp",
+				"width": 345,
+				"height": 513
+			},
 			"preventOnLandscape": true,
 			"maxHealth": 2200,
 			"cost": {
@@ -10467,8 +11822,12 @@ const gameData = {
 			"category": "shippables",
 			"categoryOrder": 2,
 			"sortLayer": "container",
-			"icon": "game/Textures/UI/StructureIcons/ResourceContainerIcon.webp",
-			"texture": "game/Textures/Structures/resourcecontainer.webp",
+			"icon": "../UI/StructureIcons/ResourceContainerIcon.webp",
+			"texture": {
+				"src": "../Structures/resourcecontainer.webp",
+				"width": 317,
+				"height": 165
+			},
 			"maxHealth": 600,
 			"cost": {
 				"cloth": 50
@@ -10488,8 +11847,12 @@ const gameData = {
 				"min": 15,
 				"max": 27
 			},
-			"icon": "game/Textures/UI/ItemIcons/SalvageIcon.webp",
-			"texture": "game/Textures/Structures/scrap_field.webp",
+			"icon": "../UI/ItemIcons/SalvageIcon.webp",
+			"texture": {
+				"src": "../Structures/scrap_field.webp",
+				"width": 1600,
+				"height": 1600
+			},
 			"maxHealth": 2147483647,
 			"upgrades": {
 				"resourcefield": {
@@ -10498,21 +11861,33 @@ const gameData = {
 				},
 				"component": {
 					"name": "Component Field",
-					"baseIcon": "game/Textures/UI/ItemIcons/ComponentsIcon.webp",
-					"icon": "game/Textures/UI/ItemIcons/ComponentsIcon.webp",
-					"texture": "game/Textures/Structures/component_field.webp"
+					"baseIcon": "../UI/ItemIcons/ComponentsIcon.webp",
+					"icon": "../UI/ItemIcons/ComponentsIcon.webp",
+					"texture": {
+						"src": "../Structures/component_field.webp",
+						"width": 1600,
+						"height": 1600
+					}
 				},
 				"coal": {
 					"name": "Coal Field",
-					"baseIcon": "game/Textures/UI/ItemIcons/CoalIcon.webp",
-					"icon": "game/Textures/UI/ItemIcons/CoalIcon.webp",
-					"texture": "game/Textures/Structures/coal_field.webp"
+					"baseIcon": "../UI/ItemIcons/CoalIcon.webp",
+					"icon": "../UI/ItemIcons/CoalIcon.webp",
+					"texture": {
+						"src": "../Structures/coal_field.webp",
+						"width": 1600,
+						"height": 1600
+					}
 				},
 				"sulfur": {
 					"name": "Sulfur Field",
-					"baseIcon": "game/Textures/UI/ItemIcons/SulfurIcon.webp",
-					"icon": "game/Textures/UI/ItemIcons/SulfurIcon.webp",
-					"texture": "game/Textures/Structures/sulfur_field.webp"
+					"baseIcon": "../UI/ItemIcons/SulfurIcon.webp",
+					"icon": "../UI/ItemIcons/SulfurIcon.webp",
+					"texture": {
+						"src": "../Structures/sulfur_field.webp",
+						"width": 1600,
+						"height": 1600
+					}
 				}
 			}
 		},
@@ -10533,8 +11908,12 @@ const gameData = {
 					"shape": [ 43.03,-75.45,88.48,-5.15,41.82,74.85,-43.03,76.06,-89.09,5.76,-46.67,-73.64 ]
 				}
 			],
-			"icon": "game/Textures/UI/StructureIcons/RiflePillboxIcon.webp",
-			"texture": "game/Textures/Structures/riflepillbox.webp",
+			"icon": "../UI/StructureIcons/RiflePillboxIcon.webp",
+			"texture": {
+				"src": "../Structures/riflepillbox.webp",
+				"width": 296,
+				"height": 257
+			},
 			"maxHealth": 400,
 			"cost": {
 				"cloth": 60
@@ -10551,8 +11930,12 @@ const gameData = {
 			"simpleBezier": true,
 			"minLength": 4.2,
 			"maxLength": 10,
-			"icon": "game/Textures/UI/StructureIcons/SandbagsStructureIcon.webp",
-			"texture": "game/Textures/Structures/sandbaghalfspline.webp",
+			"icon": "../UI/StructureIcons/SandbagsStructureIcon.webp",
+			"texture": {
+				"src": "../Structures/sandbaghalfspline.webp",
+				"width": 58,
+				"height": 58
+			},
 			"buildOnFoundation": true,
 			"canSnap": true,
 			"sockets": [
@@ -10584,6 +11967,7 @@ const gameData = {
 				"sandbagmaterials": 3
 			},
 			"repairCost": 10,
+			"tierUp": "sandbaghalfspline_sandbagfullspline",
 			"upgrades": {
 				"sandbagfullspline": {
 					"name": "Sandbag Wall",
@@ -10591,12 +11975,17 @@ const gameData = {
 					"description": "A defensive wall that hinders enemy movement and provides cover during combat.",
 					"minLength": 4.2,
 					"maxLength": 10,
-					"texture": "game/Textures/Structures/sandbagfullspline.webp",
+					"texture": {
+						"src": "../Structures/sandbagfullspline.webp",
+						"width": 60,
+						"height": 60
+					},
 					"cost": {
 						"sandbagmaterials": 3
 					},
 					"maxHealth": 1600,
-					"repairCost": 30
+					"repairCost": 30,
+					"tierDown": "sandbaghalfspline"
 				}
 			}
 		},
@@ -10606,8 +11995,12 @@ const gameData = {
 			"description": "A heavily armoured variant of the King Spire, the Gallant Mk. II boasts a weighty 30mm cannon at the cost of top speed.",
 			"category": "tank",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/ScoutTankOffensiveWIcon.webp",
-			"texture": "game/Textures/Vehicles/scouttankoffensivew.webp",
+			"icon": "../UI/VehicleIcons/ScoutTankOffensiveWIcon.webp",
+			"texture": {
+				"src": "../Vehicles/scouttankoffensivew.webp",
+				"width": 313,
+				"height": 168
+			},
 			"techId": "unlockfacilitytier2"
 		},
 		"scouttankw": {
@@ -10616,8 +12009,12 @@ const gameData = {
 			"description": "This small tank has been recently recommissioned to the Warden arsenal. It boasts high maneuverability and an antenna that allows for long-range communications during high-stakes recon operations.",
 			"category": "tank",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/ScoutTankWIcon.webp",
-			"texture": "game/Textures/Vehicles/scouttankw.webp",
+			"icon": "../UI/VehicleIcons/ScoutTankWIcon.webp",
+			"texture": {
+				"src": "../Vehicles/scouttankw.webp",
+				"width": 309,
+				"height": 165
+			},
 			"techId": "unlockscouttank"
 		},
 		"scoutvehiclemobilityc": {
@@ -10626,8 +12023,12 @@ const gameData = {
 			"description": "This stripped down Light Utility Vehicle provides extra seating for a small crew to engage in hit and run tactics.",
 			"category": "vehicles",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/ScoutVehicleMobilityVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/scoutvehiclemobilityc.webp",
+			"icon": "../UI/VehicleIcons/ScoutVehicleMobilityVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/scoutvehiclemobilityc.webp",
+				"width": 255,
+				"height": 146
+			},
 			"techId": "unlockscoutvehiclemobility"
 		},
 		"scoutvehicleoffensivec": {
@@ -10636,8 +12037,12 @@ const gameData = {
 			"description": "This RPG-mounted Light Utility Vehicle provides a heavy-duty weapons platform with superior speed. Perfectly suited for assaulting enemy structures and vehicles, or supporting an armoured assault.",
 			"category": "vehicles",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/ScoutVehicleOffensiveVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/scoutvehicleoffensivec.webp",
+			"icon": "../UI/VehicleIcons/ScoutVehicleOffensiveVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/scoutvehicleoffensivec.webp",
+				"width": 264,
+				"height": 146
+			},
 			"techId": "unlockscoutvehicleoffensive"
 		},
 		"scoutvehicleoffensivew": {
@@ -10646,8 +12051,12 @@ const gameData = {
 			"description": "This LMG-mounted Light Utility Vehicle provides a heavy-duty weapons platform with superior speed. Perfectly suited for supporting flanking infantry or an armoured assault.",
 			"category": "armor",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/ScoutVehicleOffensiveWarVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/scoutvehicleoffensivew.webp",
+			"icon": "../UI/VehicleIcons/ScoutVehicleOffensiveWarVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/scoutvehicleoffensivew.webp",
+				"width": 265,
+				"height": 144
+			},
 			"techId": "unlockscoutvehicleoffensive"
 		},
 		"scoutvehicleutilityc": {
@@ -10656,8 +12065,12 @@ const gameData = {
 			"description": "This simple, modified Utility Vehicle is fitted with a reinforced hatch to provide one crew member with increased visibility for intense recon operations.",
 			"category": "armor",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/ScoutVehicleUtilityCVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/scoutvehicleutilityc.webp"
+			"icon": "../UI/VehicleIcons/ScoutVehicleUtilityCVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/scoutvehicleutilityc.webp",
+				"width": 257,
+				"height": 148
+			}
 		},
 		"scoutvehicleutilityw": {
 			"name": "Drummond Loscann 55c",
@@ -10666,8 +12079,12 @@ const gameData = {
 			"category": "naval",
 			"categoryOrder": 45,
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/ScoutVehicleAmphibiousWarVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/scoutvehicleutilityw.webp"
+			"icon": "../UI/VehicleIcons/ScoutVehicleAmphibiousWarVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/scoutvehicleutilityw.webp",
+				"width": 293,
+				"height": 143
+			}
 		},
 		"scoutvehiclew": {
 			"name": "Drummond 100a",
@@ -10675,8 +12092,12 @@ const gameData = {
 			"description": "A multipurpose off-road Warden vehicle that can scout nearby targets.",
 			"category": "armor",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/ScoutVehicleWarVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/scoutvehiclew.webp",
+			"icon": "../UI/VehicleIcons/ScoutVehicleWarVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/scoutvehiclew.webp",
+				"width": 265,
+				"height": 145
+			},
 			"techId": "unlockscoutvehicle"
 		},
 		"scrapmine": {
@@ -10684,8 +12105,12 @@ const gameData = {
 			"codeName": "ScrapMine",
 			"description": "An old mine that automatically gathers Salvage using Fuel.",
 			"category": "world",
-			"icon": "game/Textures/UI/StructureIcons/ScrapMineIcon.webp",
-			"texture": "game/Textures/Structures/scrapmine.webp",
+			"icon": "../UI/StructureIcons/ScrapMineIcon.webp",
+			"texture": {
+				"src": "../Structures/scrapmine.webp",
+				"width": 331,
+				"height": 207
+			},
 			"maxHealth": 1000,
 			"cost": false,
 			"repairCost": 200
@@ -10697,8 +12122,12 @@ const gameData = {
 			"category": "shippables",
 			"categoryOrder": 3,
 			"sortLayer": "container",
-			"icon": "game/Textures/UI/StructureIcons/ShippingContainerStructureIcon.webp",
-			"texture": "game/Textures/Structures/shippingcontainer.webp",
+			"icon": "../UI/StructureIcons/ShippingContainerStructureIcon.webp",
+			"texture": {
+				"src": "../Structures/shippingcontainer.webp",
+				"width": 322,
+				"height": 163
+			},
 			"maxHealth": 1000,
 			"cost": {
 				"cloth": 100
@@ -10710,11 +12139,50 @@ const gameData = {
 			"description": "A crate of packed items.",
 			"category": "shippables",
 			"categoryOrder": 4,
-			"icon": "game/Textures/UI/StructureIcons/ProductionPartsStructureIcon.webp",
-			"texture": "game/Textures/Structures/shippingcrate.webp",
+			"sortLayer": "container",
+			"icon": "../UI/StructureIcons/ProductionPartsStructureIcon.webp",
+			"texture": {
+				"src": "../Structures/shippingcrate.webp",
+				"width": 239,
+				"height": 119
+			},
 			"maxHealth": 800,
 			"cost": false,
 			"repairCost": 50
+		},
+		"shipyard": {
+			"name": "Shipyard",
+			"codeName": "Shipyard",
+			"description": "A small-scale boat production center.",
+			"category": "world",
+			"categoryOrder": 11,
+			"hitArea": [
+				{
+					"shape": [ -213.03,-22.42,-6.36,-35.76,80.91,139.39,80.3,285.45,-217.27,283.64 ]
+				},
+				{
+					"shape": [ -598.48,-286.06,-576.06,-270.3,-598.48,-270.3 ]
+				},
+				{
+					"shape": [ -574.24,-38.18,-213.03,-22.42,-596.67,-23.03,-596.67,-38.18 ]
+				},
+				{
+					"shape": [ -6.36,-35.76,-213.03,-22.42,-598.48,-286.06,-20.3,-284.85 ]
+				},
+				{
+					"shape": [ 80.91,139.39,-6.36,-35.76,620.3,-35.76,621.52,140.61 ]
+				},
+				{
+					"shape": [ -576.06,-270.3,-213.03,-22.42,-574.24,-38.18 ]
+				}
+			],
+			"icon": "../UI/CustomIcons/ShipyardIcon.webp",
+			"texture": {
+				"src": "../Structures/shipyard.webp",
+				"width": 2053,
+				"height": 944
+			},
+			"cost": false
 		},
 		"smalltraindump": {
 			"name": "BMS Railtruck",
@@ -10722,9 +12190,12 @@ const gameData = {
 			"description": "A small gauge container car for transporting raw materials. ",
 			"category": "trains",
 			"categoryOrder": 3,
-			"sortLayer": "vehicle",
-			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeResourceCarVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/smalltraindump.webp",
+			"icon": "../UI/VehicleIcons/SmallGaugeResourceCarVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/smalltraindump.webp",
+				"width": 223,
+				"height": 114
+			},
 			"sockets": [
 				{
 					"id": 0,
@@ -10753,9 +12224,12 @@ const gameData = {
 			"description": "The Mineseeker is the Bassett Motor Society’s mechanized mule. This small 0-4-0 locomotive can haul tonnes of weight over short distances with little overhead. Ideal for a mining operation or short-range supply chains. ",
 			"category": "trains",
 			"categoryOrder": 1,
-			"sortLayer": "vehicle",
-			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeEngineVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/smalltrainengine.webp",
+			"icon": "../UI/VehicleIcons/SmallGaugeEngineVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/smalltrainengine.webp",
+				"width": 223,
+				"height": 90
+			},
 			"sockets": [
 				{
 					"id": 0,
@@ -10786,9 +12260,12 @@ const gameData = {
 			"description": "The Tinderbox is a simple car used for transporting liquids between facilities.",
 			"category": "trains",
 			"categoryOrder": 4,
-			"sortLayer": "vehicle",
-			"icon": "game/Textures/UI/VehicleIcons/SmallTrainFuelContainerIcon.webp",
-			"texture": "game/Textures/Vehicles/smalltrainfuelcontainer.webp",
+			"icon": "../UI/VehicleIcons/SmallTrainFuelContainerIcon.webp",
+			"texture": {
+				"src": "../Vehicles/smalltrainfuelcontainer.webp",
+				"width": 234,
+				"height": 113
+			},
 			"sockets": [
 				{
 					"id": 0,
@@ -10817,9 +12294,12 @@ const gameData = {
 			"description": "A low profile flatbed car for transporting large resources and munitions over short distances on small gauge tracks.",
 			"category": "trains",
 			"categoryOrder": 2,
-			"sortLayer": "vehicle",
-			"icon": "game/Textures/UI/VehicleIcons/SmallGaugeFlatbedCarVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/smalltrainresourceplatform.webp",
+			"icon": "../UI/VehicleIcons/SmallGaugeFlatbedCarVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/smalltrainresourceplatform.webp",
+				"width": 215,
+				"height": 115
+			},
 			"sockets": [
 				{
 					"id": 0,
@@ -10849,11 +12329,10 @@ const gameData = {
 			"width": 2,
 			"length": 2,
 			"texture": {
-				"sheet": "sus.png",
+				"src": "../Structures/sus.png",
 				"speed": 0.132,
 				"width": 220,
-				"height": 184,
-				"border": false
+				"height": 184
 			}
 		},
 		"stationary_harvester_coal": {
@@ -10888,8 +12367,13 @@ const gameData = {
 					"shape": [ 17.58,104.24,44.85,-88.48,44.85,14.55 ]
 				}
 			],
-			"icon": "game/Textures/UI/StructureIcons/FacilityMineResource4Icon.webp",
-			"texture": "game/Textures/Structures/stationary_harvester.webp",
+			"icon": "../UI/StructureIcons/FacilityMineResource4Icon.webp",
+			"texture": {
+				"src": "../Structures/stationary_harvester.webp",
+				"width": 254,
+				"height": 414
+			},
+			"buildOnFoundation": false,
 			"sockets": [
 				{
 					"id": 0,
@@ -10958,8 +12442,13 @@ const gameData = {
 					"shape": [ 17.58,104.24,44.85,-88.48,44.85,14.55 ]
 				}
 			],
-			"icon": "game/Textures/UI/StructureIcons/FacilityMineResource2Icon.webp",
-			"texture": "game/Textures/Structures/stationary_harvester.webp",
+			"icon": "../UI/StructureIcons/FacilityMineResource2Icon.webp",
+			"texture": {
+				"src": "../Structures/stationary_harvester.webp",
+				"width": 254,
+				"height": 414
+			},
+			"buildOnFoundation": false,
 			"sockets": [
 				{
 					"id": 0,
@@ -11025,9 +12514,13 @@ const gameData = {
 							"shape": [ 47.88,14.55,18.79,-93.33,47.88,-88.48 ]
 						}
 					],
-					"baseIcon": "game/Textures/UI/CustomIcons/FacilityMineResource2ExcavatorIcon.webp",
-					"icon": "game/Textures/UI/StructureIcons/FacilityExcavatorIcon.webp",
-					"texture": "game/Textures/Structures/stationary_harvester_components_excavator.webp",
+					"baseIcon": "../UI/CustomIcons/FacilityMineResource2ExcavatorIcon.webp",
+					"icon": "../UI/StructureIcons/FacilityExcavatorIcon.webp",
+					"texture": {
+						"src": "../Structures/stationary_harvester_components_excavator.webp",
+						"width": 264,
+						"height": 414
+					},
 					"positionOffset": {
 						"x": -10
 					},
@@ -11099,8 +12592,13 @@ const gameData = {
 					"shape": [ 17.58,104.24,44.85,-88.48,44.85,14.55 ]
 				}
 			],
-			"icon": "game/Textures/UI/StructureIcons/FacilityMineResource1Icon.webp",
-			"texture": "game/Textures/Structures/stationary_harvester.webp",
+			"icon": "../UI/StructureIcons/FacilityMineResource1Icon.webp",
+			"texture": {
+				"src": "../Structures/stationary_harvester.webp",
+				"width": 254,
+				"height": 414
+			},
+			"buildOnFoundation": false,
 			"sockets": [
 				{
 					"id": 0,
@@ -11168,8 +12666,13 @@ const gameData = {
 					"shape": [ 17.58,104.24,44.85,-88.48,44.85,14.55 ]
 				}
 			],
-			"icon": "game/Textures/UI/StructureIcons/FacilityMineResource3Icon.webp",
-			"texture": "game/Textures/Structures/stationary_harvester.webp",
+			"icon": "../UI/StructureIcons/FacilityMineResource3Icon.webp",
+			"texture": {
+				"src": "../Structures/stationary_harvester.webp",
+				"width": 254,
+				"height": 414
+			},
+			"buildOnFoundation": false,
 			"sockets": [
 				{
 					"id": 0,
@@ -11212,8 +12715,12 @@ const gameData = {
 			"description": "A shared storage container that can be used to stash item.",
 			"category": "misc",
 			"categoryOrder": 2,
-			"icon": "game/Textures/UI/StructureIcons/StorageItemIcon.webp",
-			"texture": "game/Textures/Structures/storagebox.webp",
+			"icon": "../UI/StructureIcons/StorageItemIcon.webp",
+			"texture": {
+				"src": "../Structures/storagebox.webp",
+				"width": 113,
+				"height": 63
+			},
 			"buildOnFoundation": true,
 			"maxHealth": 400,
 			"cost": {
@@ -11226,8 +12733,12 @@ const gameData = {
 			"codeName": "SulfurMine",
 			"description": "An old mine that automatically gathers Sulfur using Fuel.",
 			"category": "world",
-			"icon": "game/Textures/UI/StructureIcons/SulfurMineStructureIcon.webp",
-			"texture": "game/Textures/Structures/sulfurmine.webp",
+			"icon": "../UI/StructureIcons/SulfurMineStructureIcon.webp",
+			"texture": {
+				"src": "../Structures/sulfurmine.webp",
+				"width": 255,
+				"height": 290
+			},
 			"maxHealth": 1000,
 			"cost": false,
 			"repairCost": 200
@@ -11238,8 +12749,12 @@ const gameData = {
 			"description": "Armed with a dual 75mm turret, what the “Ares” lacks in speed and versatility, it more than makes up for with raw destructive power. Development of the “Ares” was fraught with strife, and its history is intertwined with a period of several riots erupting on the streets of Dimiourg. Rebels commandeered the first “Ares” Prototype, the O-75a, and turned it against Colonial forces in the region, ultimately leading to its destruction—albeit not without great effort. This event wove the great behemoth into the tapestry of Colonial legend.",
 			"category": "tank",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/SuperTankCtemIcon.webp",
-			"texture": "game/Textures/Vehicles/supertankc.webp",
+			"icon": "../UI/VehicleIcons/SuperTankCtemIcon.webp",
+			"texture": {
+				"src": "../Vehicles/supertankc.webp",
+				"width": 580,
+				"height": 282
+			},
 			"techId": "unlocksupertank"
 		},
 		"supertankw": {
@@ -11248,8 +12763,12 @@ const gameData = {
 			"description": "This gargantuan beast is the brainchild of Gray Cullen. Once thought impossible, the Predator was Cullen’s idea of how a great ship might operate on land. It boasts two sets of quad-barrelled grenade launches and a heavy-duty 94.5mm forward facing cannon. While limitations of ground-based travel posed certain restrictions on the scope of the project, Cullen wasn’t deterred and made necessary adjustments to meet his vision of the ideal land ship.",
 			"category": "tank",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/SuperTankWVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/supertankw.webp",
+			"icon": "../UI/VehicleIcons/SuperTankWVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/supertankw.webp",
+				"width": 829,
+				"height": 294
+			},
 			"techId": "unlocksupertank"
 		},
 		"tankettec": {
@@ -11258,8 +12777,12 @@ const gameData = {
 			"description": "This complete overhaul of the T3 Armoured Car is reinforced with tank armour. While these extra defenses lower the T12’s overall speed and handling, the addition of treads provide increased performance in less than ideal terrain.",
 			"category": "tank",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/TanketteCVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/tankettec.webp",
+			"icon": "../UI/VehicleIcons/TanketteCVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/tankettec.webp",
+				"width": 268,
+				"height": 150
+			},
 			"techId": "unlocktankette"
 		},
 		"tanketteflamec": {
@@ -11268,8 +12791,12 @@ const gameData = {
 			"description": "The first T-class tankette to utilize this sturdier frame and versatile treads, the Vesta also represents the Velian’s first foray into fire weapons. The “Vesta” boasts a light flame turret and ample storage for the additional fuel supply required.",
 			"category": "tank",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/TanketteFlameCIcon.webp",
-			"texture": "game/Textures/Vehicles/tanketteflamec.webp",
+			"icon": "../UI/VehicleIcons/TanketteFlameCIcon.webp",
+			"texture": {
+				"src": "../Vehicles/tanketteflamec.webp",
+				"width": 288,
+				"height": 150
+			},
 			"techId": "unlockfacilitytier2"
 		},
 		"tanketteoffensivec": {
@@ -11278,9 +12805,28 @@ const gameData = {
 			"description": "A bombastic variant of the T12 Tankette, the “Ixion” provides its crew with more support and a mounted Infantry Support Gun. Added weight from the armour results in reduced overall speed.",
 			"category": "tank",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/TanketteOffensiveCVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/tanketteoffensivec.webp",
+			"icon": "../UI/VehicleIcons/TanketteOffensiveCVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/tanketteoffensivec.webp",
+				"width": 268,
+				"height": 150
+			},
 			"techId": "unlocktanketteoffensive"
+		},
+		"tankmine": {
+			"name": "Abisme AT-99",
+			"codeName": "TankMine",
+			"description": "A simple mine that is placed under terrain and fitted with a pressure-sensitive plate to detonate under the weight of heavy vehicles. Mines are visible to friendlies and enemies on foot and deactivate after 48 in-game days.",
+			"category": "defenses",
+			"categoryOrder": 10,
+			"radius": 0.5,
+			"sortLayer": "trench",
+			"icon": "../UI/ItemIcons/AntiTankMineItemIcon.webp",
+			"texture": {
+				"src": "../Structures/tankmine.webp",
+				"width": 58,
+				"height": 52
+			}
 		},
 		"tankstop": {
 			"name": "Tank Trap",
@@ -11312,8 +12858,12 @@ const gameData = {
 					"shape": [ 19.7,42.42,-0.76,7.09,13.64,10.3,28.18,37.58 ]
 				}
 			],
-			"icon": "game/Textures/UI/StructureIcons/TankStopIcon.webp",
-			"texture": "game/Textures/Structures/tankstop.webp",
+			"icon": "../UI/StructureIcons/TankStopIcon.webp",
+			"texture": {
+				"src": "../Structures/tankstop.webp",
+				"width": 133,
+				"height": 140
+			},
 			"buildOnFoundation": true,
 			"techId": "unlocktankstop",
 			"maxHealth": 2000,
@@ -11327,13 +12877,16 @@ const gameData = {
 			"codeName": "TankStopSplineT3",
 			"description": "An anti-tank obstacle that prevents vehicle access to an area, and is resistant to most types of damage.",
 			"category": "defenses",
-			"experimental": true,
 			"hasHandle": true,
 			"isBezier": true,
 			"minLength": 3.75,
 			"maxLength": 15.05,
-			"icon": "game/Textures/UI/StructureIcons/TankStopT3Icon.webp",
-			"texture": "game/Textures/Structures/tankstopsplinet3.webp",
+			"icon": "../UI/StructureIcons/TankStopT3Icon.webp",
+			"texture": {
+				"src": "../Structures/tankstopsplinet3.webp",
+				"width": 137,
+				"height": 137
+			},
 			"techId": "unlocktankstopsplinetier3",
 			"maxHealth": 3000,
 			"cost": {
@@ -11404,8 +12957,12 @@ const gameData = {
 					"shape": [ 286.67,-106.06,-36.36,-192.12,35.15,-192.12 ]
 				}
 			],
-			"icon": "game/Textures/UI/CustomIcons/TownBase3Icon.webp",
-			"texture": "game/Textures/Structures/townbase3.webp",
+			"icon": "../UI/CustomIcons/TownBase3Icon.webp",
+			"texture": {
+				"src": "../Structures/townbase3.webp",
+				"width": 992,
+				"height": 812
+			},
 			"cost": false
 		},
 		"townclargegarrisongs1": {
@@ -11435,8 +12992,12 @@ const gameData = {
 					"shape": [ 79.7,109.09,-33.03,-253.94,-17.27,-266.06,79.7,-203.64,156.67,109.09 ]
 				}
 			],
-			"icon": "game/Textures/UI/CustomIcons/SafeHouseIcon.webp",
-			"texture": "game/Textures/Structures/townclargegarrisongs1.webp",
+			"icon": "../UI/CustomIcons/SafeHouseIcon.webp",
+			"texture": {
+				"src": "../Structures/townclargegarrisongs1.webp",
+				"width": 823,
+				"height": 880
+			},
 			"cost": false
 		},
 		"traincaboose": {
@@ -11445,9 +13006,12 @@ const gameData = {
 			"description": "A simple caboose that allows rail crews to maintain tracks more efficiently.",
 			"category": "trains",
 			"categoryOrder": 11,
-			"sortLayer": "vehicle",
-			"icon": "game/Textures/UI/VehicleIcons/TrainCabooseItemIcon.webp",
-			"texture": "game/Textures/Vehicles/traincaboose.webp",
+			"icon": "../UI/VehicleIcons/TrainCabooseItemIcon.webp",
+			"texture": {
+				"src": "../Vehicles/traincaboose.webp",
+				"width": 504,
+				"height": 186
+			},
 			"sockets": [
 				{
 					"id": 0,
@@ -11477,9 +13041,12 @@ const gameData = {
 			"description": "A container car for transporting coal to refuel trains over long-distance trips. ",
 			"category": "trains",
 			"categoryOrder": 5,
-			"sortLayer": "vehicle",
-			"icon": "game/Textures/UI/VehicleIcons/TrainCoalCarVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/traincoal.webp",
+			"icon": "../UI/VehicleIcons/TrainCoalCarVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/traincoal.webp",
+				"width": 304,
+				"height": 197
+			},
 			"sockets": [
 				{
 					"id": 0,
@@ -11510,14 +13077,17 @@ const gameData = {
 			"category": "trains",
 			"categoryOrder": 8,
 			"faction": "c",
-			"sortLayer": "vehicle",
 			"hitArea": [
 				{
 					"shape": [ 140.61,33.03,109.7,63.33,-107.88,63.33,-140,33.64,-140.61,-33.03,-108.48,-62.73,107.88,-62.73,140.61,-33.64 ]
 				}
 			],
-			"icon": "game/Textures/UI/VehicleIcons/CombatCarCVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/traincombatcarc.webp",
+			"icon": "../UI/VehicleIcons/CombatCarCVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/traincombatcarc.webp",
+				"width": 510,
+				"height": 299
+			},
 			"sockets": [
 				{
 					"id": 0,
@@ -11548,9 +13118,12 @@ const gameData = {
 			"category": "trains",
 			"categoryOrder": 9,
 			"faction": "w",
-			"sortLayer": "vehicle",
-			"icon": "game/Textures/UI/VehicleIcons/CombatCarWVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/traincombatcarw.webp",
+			"icon": "../UI/VehicleIcons/CombatCarWVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/traincombatcarw.webp",
+				"width": 656,
+				"height": 208
+			},
 			"sockets": [
 				{
 					"id": 0,
@@ -11580,9 +13153,12 @@ const gameData = {
 			"description": "One of the most storied mass-market 0-6-2 locomotives engineered by the Bassett Motor Society, this coal-powered industrial train engine is reliable, tested, and incredibly durable. The Black Bolt’s legacy is unmatched having aided the Bassett Motor Society in supplying countries across the globe.",
 			"category": "trains",
 			"categoryOrder": 4,
-			"sortLayer": "vehicle",
-			"icon": "game/Textures/UI/VehicleIcons/TrainEngineVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/trainengine.webp",
+			"icon": "../UI/VehicleIcons/TrainEngineVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/trainengine.webp",
+				"width": 622,
+				"height": 190
+			},
 			"sockets": [
 				{
 					"id": 0,
@@ -11614,9 +13190,12 @@ const gameData = {
 			"description": "A flatbed car for transporting large resources and munitions by train over long-distances. ",
 			"category": "trains",
 			"categoryOrder": 6,
-			"sortLayer": "vehicle",
-			"icon": "game/Textures/UI/VehicleIcons/TrainCarVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/trainflatbed.webp",
+			"icon": "../UI/VehicleIcons/TrainCarVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/trainflatbed.webp",
+				"width": 450,
+				"height": 193
+			},
 			"sockets": [
 				{
 					"id": 0,
@@ -11646,9 +13225,12 @@ const gameData = {
 			"description": "An armoured train car with a mounted machinegun position for transporting infantry safely over long distances.",
 			"category": "trains",
 			"categoryOrder": 7,
-			"sortLayer": "vehicle",
-			"icon": "game/Textures/UI/VehicleIcons/InfantryCarVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/traininfantry.webp",
+			"icon": "../UI/VehicleIcons/InfantryCarVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/traininfantry.webp",
+				"width": 450,
+				"height": 193
+			},
 			"sockets": [
 				{
 					"id": 0,
@@ -11680,7 +13262,6 @@ const gameData = {
 			"category": "trains",
 			"categoryOrder": 10,
 			"length": 3.5,
-			"sortLayer": "vehicle",
 			"hitArea": [
 				{
 					"shape": [ 270,25.15,269.39,-25.15,278.48,14.24,279.09,25.15 ]
@@ -11713,11 +13294,15 @@ const gameData = {
 					"shape": [ 45.15,-43.33,-71.29,-47.73,44.55,-48.18 ]
 				}
 			],
-			"icon": "game/Textures/UI/VehicleIcons/TrainLRArtilleryVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/trainlrartillery.webp",
-			"textureOffset": {
-				"x": 1197,
-				"y": 187
+			"icon": "../UI/VehicleIcons/TrainLRArtilleryVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/trainlrartillery.webp",
+				"width": 1197,
+				"height": 203,
+				"offset": {
+					"x": 1197,
+					"y": 187
+				}
 			},
 			"canSnap": true,
 			"canSnapAlongBezier": "rail_large_gauge",
@@ -11726,9 +13311,12 @@ const gameData = {
 		"trainlrartillery_undercarriage": {
 			"className": "locomotive_undercarriage",
 			"category": "trains",
-			"sortLayer": "vehicle",
 			"hideInList": true,
-			"texture": "game/Textures/Vehicles/trainlrartillery_undercarriage.webp",
+			"texture": {
+				"src": "../Vehicles/trainlrartillery_undercarriage.webp",
+				"width": 310,
+				"height": 187
+			},
 			"sockets": [
 				{
 					"id": 0,
@@ -11755,11 +13343,137 @@ const gameData = {
 			"name": "Tree",
 			"description": "A tree featured throughout the world of Foxhole.",
 			"category": "world",
-			"categoryOrder": 10,
+			"categoryOrder": 18,
 			"sortLayer": "overhead",
 			"radius": 2,
-			"icon": "game/Textures/UI/CustomIcons/TreeIcon.webp",
-			"texture": "game/Textures/Structures/tree.webp"
+			"icon": "../UI/CustomIcons/TreeIcon.webp",
+			"texture": {
+				"src": "../Structures/tree.webp",
+				"width": 193,
+				"height": 193
+			}
+		},
+		"trenchbuildsite": {
+			"name": "Trench Dig Site",
+			"codeName": "BPTrenchBuildSite",
+			"parentKey": "trencht1",
+			"description": "A build site that serves as the foundation for constructing a trench. Connects to other Bunkers and Trenches.",
+			"categoryOrder": 0,
+			"sortLayer": "road",
+			"icon": "../UI/CustomIcons/TrenchBuildSiteIcon.webp",
+			"texture": {
+				"src": "../Structures/trenchbuildsite.webp",
+				"width": 539,
+				"height": 175
+			},
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 70,
+							"category": 2
+						}
+					],
+					"x": 0,
+					"y": 1.47,
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": [
+						{
+							"mask": 2,
+							"category": 64
+						}
+					],
+					"x": 5,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 2,
+					"type": [
+						{
+							"mask": 70,
+							"category": 2
+						}
+					],
+					"x": 10,
+					"y": 1.47,
+					"rotation": 90
+				},
+				{
+					"id": 3,
+					"type": [
+						{
+							"mask": 2,
+							"category": 64
+						}
+					],
+					"x": 5,
+					"y": 2.94,
+					"rotation": 180
+				}
+			],
+			"maxHealth": 400,
+			"tierUp": "trencht1",
+			"tierDown": false,
+			"upgrades": {
+				"trenchbuildsite": {
+					"reference": "trenchbuildsite"
+				},
+				"trencht1": {
+					"reference": "trencht1"
+				},
+				"trencht2": {
+					"reference": "trencht2"
+				},
+				"trencht3": {
+					"reference": "trencht3"
+				}
+			}
+		},
+		"trenchconnectorbuildsite": {
+			"name": "Trench Connector Dig Site",
+			"codeName": "TrenchConnectorBuildSite",
+			"parentKey": "trenchconnectort1",
+			"description": "A build site that serves as the foundation for constructing a trench connector. Connects to other Bunkers and Trenches.",
+			"sortLayer": "road",
+			"icon": "../UI/CustomIcons/TrenchConnectorBuildSiteIcon.webp",
+			"texture": null,
+			"textureBorder": "../Structures/trench_connector_buildsite_side.webp",
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 1094,
+							"category": 1026
+						}
+					],
+					"texture": "../Structures/trench_connector_buildsite_end.webp",
+					"textureAlt": "../Structures/trench_connector_buildsite_end.webp",
+					"cap": "front",
+					"rotation": 270
+				},
+				{
+					"id": 1,
+					"type": [
+						{
+							"mask": 1094,
+							"category": 1026
+						}
+					],
+					"texture": "../Structures/trench_connector_buildsite_end.webp",
+					"textureAlt": "../Structures/trench_connector_buildsite_end.webp",
+					"cap": "back",
+					"rotation": 90
+				}
+			],
+			"maxHealth": 1500,
+			"tierUp": "trenchconnectort1",
+			"tierDown": false
 		},
 		"trenchconnectort1": {
 			"name": "Trench Connector (Tier 1)",
@@ -11774,9 +13488,13 @@ const gameData = {
 			"trenchConnector": true,
 			"minLength": 2.5,
 			"maxLength": 8,
-			"icon": "game/Textures/UI/StructureIcons/TrenchT1ConnectorIcon.webp",
-			"texture": "game/Textures/Structures/trencht1_connector.webp",
-			"textureBorder": "game/Textures/Structures/trencht1_connector_side.webp",
+			"icon": "../UI/StructureIcons/TrenchT1ConnectorIcon.webp",
+			"texture": {
+				"src": "../Structures/trencht1_connector.webp",
+				"width": 321,
+				"height": 97
+			},
+			"textureBorder": "../Structures/trencht1_connector_side.webp",
 			"canSnap": true,
 			"sockets": [
 				{
@@ -11787,7 +13505,7 @@ const gameData = {
 							"category": 1026
 						}
 					],
-					"texture": "game/Textures/Structures/trencht1_end.webp",
+					"texture": "../Structures/trencht1_end.webp",
 					"cap": "front",
 					"rotation": 270
 				},
@@ -11799,15 +13517,19 @@ const gameData = {
 							"category": 1026
 						}
 					],
-					"texture": "game/Textures/Structures/trencht1_end.webp",
+					"texture": "../Structures/trencht1_end.webp",
 					"cap": "back",
 					"rotation": 90
 				}
 			],
 			"maxHealth": 1500,
 			"repairCost": 90,
-			"gearPowerCost" : 0,
+			"tierUp": "trenchconnectort2",
+			"tierDown": "trenchconnectorbuildsite",
 			"upgrades": {
+				"trenchconnectorbuildsite": {
+					"reference": "trenchconnectorbuildsite"
+				},
 				"trenchconnectort1": {
 					"reference": "trenchconnectort1"
 				},
@@ -11825,9 +13547,14 @@ const gameData = {
 			"parentKey": "trenchconnectort1",
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers. This is a special Trench variant that can resize dynamically and can be built underneath roads.",
 			"tier": 2,
-			"icon": "game/Textures/UI/StructureIcons/TrenchT2ConnectorIcon.webp",
-			"texture": "game/Textures/Structures/trencht2_connector.webp",
-			"textureBorder": "game/Textures/Structures/trencht2_connector_side.webp",
+			"icon": "../UI/StructureIcons/TrenchT2ConnectorIcon.webp",
+			"texture": {
+				"src": "../Structures/trencht2_connector.webp",
+				"width": 321,
+				"height": 97
+			},
+			"textureBorder": "../Structures/trencht2_connector_side.webp",
+			"canBlueprint": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -11837,7 +13564,7 @@ const gameData = {
 							"category": 1026
 						}
 					],
-					"texture": "game/Textures/Structures/trencht2_end.webp",
+					"texture": "../Structures/trencht2_end.webp",
 					"cap": "front",
 					"rotation": 270
 				},
@@ -11849,7 +13576,7 @@ const gameData = {
 							"category": 1026
 						}
 					],
-					"texture": "game/Textures/Structures/trencht2_end.webp",
+					"texture": "../Structures/trencht2_end.webp",
 					"cap": "back",
 					"rotation": 90
 				}
@@ -11859,7 +13586,8 @@ const gameData = {
 				"cloth": 60
 			},
 			"repairCost": 60,
-			"gearPowerCost" : 0
+			"tierUp": "trenchconnectort3",
+			"tierDown": "trenchconnectort1"
 		},
 		"trenchconnectort3": {
 			"name": "Trench Connector (Tier 3)",
@@ -11867,9 +13595,13 @@ const gameData = {
 			"parentKey": "trenchconnectort2",
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers. This is a special Trench variant that can resize dynamically and can be built underneath roads.",
 			"tier": 3,
-			"icon": "game/Textures/UI/StructureIcons/TrenchT3ConnectorIcon.webp",
-			"texture": "game/Textures/Structures/trencht3_connector.webp",
-			"textureBorder": "game/Textures/Structures/trencht3_connector_side.webp",
+			"icon": "../UI/StructureIcons/TrenchT3ConnectorIcon.webp",
+			"texture": {
+				"src": "../Structures/trencht3_connector.webp",
+				"width": 321,
+				"height": 97
+			},
+			"textureBorder": "../Structures/trencht3_connector_side.webp",
 			"sockets": [
 				{
 					"id": 0,
@@ -11879,7 +13611,7 @@ const gameData = {
 							"category": 1026
 						}
 					],
-					"texture": "game/Textures/Structures/trencht3_end.webp",
+					"texture": "../Structures/trencht3_end.webp",
 					"cap": "front",
 					"rotation": 270
 				},
@@ -11891,7 +13623,7 @@ const gameData = {
 							"category": 1026
 						}
 					],
-					"texture": "game/Textures/Structures/trencht3_end.webp",
+					"texture": "../Structures/trencht3_end.webp",
 					"cap": "back",
 					"rotation": 90
 				}
@@ -11901,7 +13633,121 @@ const gameData = {
 				"concrete": 15
 			},
 			"repairCost": 120,
-			"gearPowerCost" : 0
+			"tierDown": "trenchconnectort2"
+		},
+		"trenchempbuildsite": {
+			"name": "Trench Emplacement Dig Site",
+			"codeName": "BPTrenchEmpBuildSite",
+			"parentKey": "trenchempt1",
+			"description": "A build site that serves as the foundation for constructing a trench emplacement. Connects to other Bunkers and Trenches.",
+			"sortLayer": "road",
+			"icon": "../UI/CustomIcons/TrenchEmpBuildSiteIcon.webp",
+			"texture": {
+				"src": "../Structures/trenchempbuildsite.webp",
+				"width": 508,
+				"height": 508
+			},
+			"sockets": [
+				{
+					"id": 0,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"x": 5,
+					"y": 0,
+					"rotation": 0
+				},
+				{
+					"id": 1,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"x": 8.53,
+					"y": 1.47,
+					"rotation": 45
+				},
+				{
+					"id": 2,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"x": 10,
+					"y": 5,
+					"rotation": 90
+				},
+				{
+					"id": 3,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"x": 8.53,
+					"y": 8.53,
+					"rotation": 135
+				},
+				{
+					"id": 4,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"x": 5,
+					"y": 10,
+					"rotation": 180
+				},
+				{
+					"id": 5,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"x": 1.47,
+					"y": 8.53,
+					"rotation": 225
+				},
+				{
+					"id": 6,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"x": 0,
+					"y": 5,
+					"rotation": 270
+				},
+				{
+					"id": 7,
+					"type": [
+						{
+							"mask": 2,
+							"category": 2
+						}
+					],
+					"x": 1.47,
+					"y": 1.47,
+					"rotation": 315
+				}
+			],
+			"maxHealth": 400,
+			"tierUp": "trenchempt1",
+			"tierDown": false
 		},
 		"trenchempt1": {
 			"name": "Trench Emplacement (Tier 1)",
@@ -11918,8 +13764,12 @@ const gameData = {
 					"shape": [ -54.55,-133.94,55.15,-133.94,133.94,-54.55,133.94,55.15,55.15,133.94,-54.55,133.94,-133.33,54.55,-133.33,-55.76 ]
 				}
 			],
-			"icon": "game/Textures/UI/StructureIcons/TrenchT1EmplacementIcon.webp",
-			"texture": "game/Textures/Structures/trenchempt1.webp",
+			"icon": "../UI/StructureIcons/TrenchT1EmplacementIcon.webp",
+			"texture": {
+				"src": "../Structures/trenchempt1.webp",
+				"width": 442,
+				"height": 442
+			},
 			"canSnap": true,
 			"snapNearest": true,
 			"sockets": [
@@ -11931,8 +13781,8 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trenchempt1_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trenchempt1_side_open.webp",
+					"texture": "../Structures/trenchempt1_side_closed.webp",
+					"textureAlt": "../Structures/trenchempt1_side_open.webp",
 					"x": 5,
 					"y": 0,
 					"rotation": 0
@@ -11945,8 +13795,8 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trenchempt1_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trenchempt1_side_open.webp",
+					"texture": "../Structures/trenchempt1_side_closed.webp",
+					"textureAlt": "../Structures/trenchempt1_side_open.webp",
 					"x": 8.53,
 					"y": 1.47,
 					"rotation": 45
@@ -11959,8 +13809,8 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trenchempt1_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trenchempt1_side_open.webp",
+					"texture": "../Structures/trenchempt1_side_closed.webp",
+					"textureAlt": "../Structures/trenchempt1_side_open.webp",
 					"x": 10,
 					"y": 5,
 					"rotation": 90
@@ -11973,8 +13823,8 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trenchempt1_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trenchempt1_side_open.webp",
+					"texture": "../Structures/trenchempt1_side_closed.webp",
+					"textureAlt": "../Structures/trenchempt1_side_open.webp",
 					"x": 8.53,
 					"y": 8.53,
 					"rotation": 135
@@ -11987,8 +13837,8 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trenchempt1_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trenchempt1_side_open.webp",
+					"texture": "../Structures/trenchempt1_side_closed.webp",
+					"textureAlt": "../Structures/trenchempt1_side_open.webp",
 					"x": 5,
 					"y": 10,
 					"rotation": 180
@@ -12001,8 +13851,8 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trenchempt1_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trenchempt1_side_open.webp",
+					"texture": "../Structures/trenchempt1_side_closed.webp",
+					"textureAlt": "../Structures/trenchempt1_side_open.webp",
 					"x": 1.47,
 					"y": 8.53,
 					"rotation": 225
@@ -12015,8 +13865,8 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trenchempt1_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trenchempt1_side_open.webp",
+					"texture": "../Structures/trenchempt1_side_closed.webp",
+					"textureAlt": "../Structures/trenchempt1_side_open.webp",
 					"x": 0,
 					"y": 5,
 					"rotation": 270
@@ -12029,8 +13879,8 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trenchempt1_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trenchempt1_side_open.webp",
+					"texture": "../Structures/trenchempt1_side_closed.webp",
+					"textureAlt": "../Structures/trenchempt1_side_open.webp",
 					"x": 1.47,
 					"y": 1.47,
 					"rotation": 315
@@ -12046,8 +13896,12 @@ const gameData = {
 			],
 			"maxHealth": 1500,
 			"repairCost": 75,
-			"gearPowerCost" : 0,
+			"tierUp": "trenchempt2",
+			"tierDown": "trenchempbuildsite",
 			"upgrades": {
+				"trenchempbuildsite": {
+					"reference": "trenchempbuildsite"
+				},
 				"trenchempt1": {
 					"reference": "trenchempt1"
 				},
@@ -12065,8 +13919,13 @@ const gameData = {
 			"parentKey": "trenchempt1",
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches. This variant can also serve as an emplacement for mannable defenses.",
 			"tier": 2,
-			"icon": "game/Textures/UI/StructureIcons/TrenchT2EmplacementIcon.webp",
-			"texture": "game/Textures/Structures/trenchempt2.webp",
+			"icon": "../UI/StructureIcons/TrenchT2EmplacementIcon.webp",
+			"texture": {
+				"src": "../Structures/trenchempt2.webp",
+				"width": 442,
+				"height": 442
+			},
+			"canBlueprint": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -12076,8 +13935,8 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trenchempt2_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trenchempt2_side_open.webp",
+					"texture": "../Structures/trenchempt2_side_closed.webp",
+					"textureAlt": "../Structures/trenchempt2_side_open.webp",
 					"x": 5,
 					"y": 0,
 					"rotation": 0
@@ -12090,8 +13949,8 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trenchempt2_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trenchempt2_side_open.webp",
+					"texture": "../Structures/trenchempt2_side_closed.webp",
+					"textureAlt": "../Structures/trenchempt2_side_open.webp",
 					"x": 8.53,
 					"y": 1.47,
 					"rotation": 45
@@ -12104,8 +13963,8 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trenchempt2_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trenchempt2_side_open.webp",
+					"texture": "../Structures/trenchempt2_side_closed.webp",
+					"textureAlt": "../Structures/trenchempt2_side_open.webp",
 					"x": 10,
 					"y": 5,
 					"rotation": 90
@@ -12118,8 +13977,8 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trenchempt2_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trenchempt2_side_open.webp",
+					"texture": "../Structures/trenchempt2_side_closed.webp",
+					"textureAlt": "../Structures/trenchempt2_side_open.webp",
 					"x": 8.53,
 					"y": 8.53,
 					"rotation": 135
@@ -12132,8 +13991,8 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trenchempt2_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trenchempt2_side_open.webp",
+					"texture": "../Structures/trenchempt2_side_closed.webp",
+					"textureAlt": "../Structures/trenchempt2_side_open.webp",
 					"x": 5,
 					"y": 10,
 					"rotation": 180
@@ -12146,8 +14005,8 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trenchempt2_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trenchempt2_side_open.webp",
+					"texture": "../Structures/trenchempt2_side_closed.webp",
+					"textureAlt": "../Structures/trenchempt2_side_open.webp",
 					"x": 1.47,
 					"y": 8.53,
 					"rotation": 225
@@ -12160,8 +14019,8 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trenchempt2_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trenchempt2_side_open.webp",
+					"texture": "../Structures/trenchempt2_side_closed.webp",
+					"textureAlt": "../Structures/trenchempt2_side_open.webp",
 					"x": 0,
 					"y": 5,
 					"rotation": 270
@@ -12174,8 +14033,8 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trenchempt2_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trenchempt2_side_open.webp",
+					"texture": "../Structures/trenchempt2_side_closed.webp",
+					"textureAlt": "../Structures/trenchempt2_side_open.webp",
 					"x": 1.47,
 					"y": 1.47,
 					"rotation": 315
@@ -12194,7 +14053,8 @@ const gameData = {
 				"cloth": 50
 			},
 			"repairCost": 50,
-			"gearPowerCost" : 0
+			"tierUp": "trenchempt3",
+			"tierDown": "trenchempt1"
 		},
 		"trenchempt3": {
 			"name": "Trench Emplacement (Tier 3)",
@@ -12202,8 +14062,12 @@ const gameData = {
 			"parentKey": "trenchempt2",
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches. This variant can also serve as an emplacement for mannable defenses.",
 			"tier": 3,
-			"icon": "game/Textures/UI/StructureIcons/TrenchT3EmplacementIcon.webp",
-			"texture": "game/Textures/Structures/trenchempt3.webp",
+			"icon": "../UI/StructureIcons/TrenchT3EmplacementIcon.webp",
+			"texture": {
+				"src": "../Structures/trenchempt3.webp",
+				"width": 560,
+				"height": 560
+			},
 			"sockets": [
 				{
 					"id": 0,
@@ -12213,8 +14077,8 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trenchempt3_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trenchempt3_side_open.webp",
+					"texture": "../Structures/trenchempt3_side_closed.webp",
+					"textureAlt": "../Structures/trenchempt3_side_open.webp",
 					"x": 5,
 					"y": 0,
 					"rotation": 0
@@ -12227,8 +14091,8 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trenchempt3_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trenchempt3_side_open.webp",
+					"texture": "../Structures/trenchempt3_side_closed.webp",
+					"textureAlt": "../Structures/trenchempt3_side_open.webp",
 					"x": 8.53,
 					"y": 1.47,
 					"rotation": 45
@@ -12241,8 +14105,8 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trenchempt3_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trenchempt3_side_open.webp",
+					"texture": "../Structures/trenchempt3_side_closed.webp",
+					"textureAlt": "../Structures/trenchempt3_side_open.webp",
 					"x": 10,
 					"y": 5,
 					"rotation": 90
@@ -12255,8 +14119,8 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trenchempt3_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trenchempt3_side_open.webp",
+					"texture": "../Structures/trenchempt3_side_closed.webp",
+					"textureAlt": "../Structures/trenchempt3_side_open.webp",
 					"x": 8.53,
 					"y": 8.53,
 					"rotation": 135
@@ -12269,8 +14133,8 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trenchempt3_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trenchempt3_side_open.webp",
+					"texture": "../Structures/trenchempt3_side_closed.webp",
+					"textureAlt": "../Structures/trenchempt3_side_open.webp",
 					"x": 5,
 					"y": 10,
 					"rotation": 180
@@ -12283,8 +14147,8 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trenchempt3_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trenchempt3_side_open.webp",
+					"texture": "../Structures/trenchempt3_side_closed.webp",
+					"textureAlt": "../Structures/trenchempt3_side_open.webp",
 					"x": 1.47,
 					"y": 8.53,
 					"rotation": 225
@@ -12297,8 +14161,8 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trenchempt3_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trenchempt3_side_open.webp",
+					"texture": "../Structures/trenchempt3_side_closed.webp",
+					"textureAlt": "../Structures/trenchempt3_side_open.webp",
 					"x": 0,
 					"y": 5,
 					"rotation": 270
@@ -12311,8 +14175,8 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trenchempt3_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trenchempt3_side_open.webp",
+					"texture": "../Structures/trenchempt3_side_closed.webp",
+					"textureAlt": "../Structures/trenchempt3_side_open.webp",
 					"x": 1.47,
 					"y": 1.47,
 					"rotation": 315
@@ -12331,7 +14195,7 @@ const gameData = {
 				"concrete": 10
 			},
 			"repairCost": 80,
-			"gearPowerCost" : 0
+			"tierDown": "trenchempt2"
 		},
 		"trencht1": {
 			"name": "Trench (Tier 1)",
@@ -12343,8 +14207,12 @@ const gameData = {
 			"width": 10,
 			"length": 3,
 			"sortLayer": "trench",
-			"icon": "game/Textures/UI/StructureIcons/TrenchT1Icon.webp",
-			"texture": "game/Textures/Structures/trencht1.webp",
+			"icon": "../UI/StructureIcons/TrenchT1Icon.webp",
+			"texture": {
+				"src": "../Structures/trencht1.webp",
+				"width": 530,
+				"height": 157
+			},
 			"canSnap": true,
 			"snapNearest": true,
 			"sockets": [
@@ -12356,7 +14224,7 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trencht1_end.webp",
+					"texture": "../Structures/trencht1_end.webp",
 					"x": 0,
 					"y": 1.47,
 					"rotation": 270
@@ -12369,8 +14237,8 @@ const gameData = {
 							"category": 64
 						}
 					],
-					"texture": "game/Textures/Structures/trencht1_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trencht1_side_open.webp",
+					"texture": "../Structures/trencht1_side_closed.webp",
+					"textureAlt": "../Structures/trencht1_side_open.webp",
 					"x": 5,
 					"y": 0,
 					"rotation": 0
@@ -12383,7 +14251,7 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trencht1_end.webp",
+					"texture": "../Structures/trencht1_end.webp",
 					"x": 10,
 					"y": 1.47,
 					"rotation": 90
@@ -12396,8 +14264,8 @@ const gameData = {
 							"category": 64
 						}
 					],
-					"texture": "game/Textures/Structures/trencht1_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trencht1_side_open.webp",
+					"texture": "../Structures/trencht1_side_closed.webp",
+					"textureAlt": "../Structures/trencht1_side_open.webp",
 					"x": 5,
 					"y": 2.94,
 					"rotation": 180
@@ -12405,8 +14273,12 @@ const gameData = {
 			],
 			"maxHealth": 1500,
 			"repairCost": 75,
-			"gearPowerCost" : 0,
+			"tierUp": "trencht2",
+			"tierDown": "trenchbuildsite",
 			"upgrades": {
+				"trenchbuildsite": {
+					"reference": "trenchbuildsite"
+				},
 				"trencht1": {
 					"reference": "trencht1"
 				},
@@ -12424,8 +14296,13 @@ const gameData = {
 			"parentKey": "trencht1",
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers.",
 			"tier": 2,
-			"icon": "game/Textures/UI/StructureIcons/TrenchT2Icon.webp",
-			"texture": "game/Textures/Structures/trencht2.webp",
+			"icon": "../UI/StructureIcons/TrenchT2Icon.webp",
+			"texture": {
+				"src": "../Structures/trencht2.webp",
+				"width": 530,
+				"height": 157
+			},
+			"canBlueprint": true,
 			"sockets": [
 				{
 					"id": 0,
@@ -12435,7 +14312,7 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trencht2_end.webp",
+					"texture": "../Structures/trencht2_end.webp",
 					"x": 0,
 					"y": 1.47,
 					"rotation": 270
@@ -12448,8 +14325,8 @@ const gameData = {
 							"category": 64
 						}
 					],
-					"texture": "game/Textures/Structures/trencht2_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trencht2_side_open.webp",
+					"texture": "../Structures/trencht2_side_closed.webp",
+					"textureAlt": "../Structures/trencht2_side_open.webp",
 					"x": 5,
 					"y": 0,
 					"rotation": 0
@@ -12462,7 +14339,7 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trencht2_end.webp",
+					"texture": "../Structures/trencht2_end.webp",
 					"x": 10,
 					"y": 1.47,
 					"rotation": 90
@@ -12475,8 +14352,8 @@ const gameData = {
 							"category": 64
 						}
 					],
-					"texture": "game/Textures/Structures/trencht2_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trencht2_side_open.webp",
+					"texture": "../Structures/trencht2_side_closed.webp",
+					"textureAlt": "../Structures/trencht2_side_open.webp",
 					"x": 5,
 					"y": 2.94,
 					"rotation": 180
@@ -12487,18 +14364,8 @@ const gameData = {
 				"cloth": 50
 			},
 			"repairCost": 50,
-			"gearPowerCost" : 0,
-			"upgrades": {
-				"trencht1": {
-					"reference": "trencht1"
-				},
-				"trencht2": {
-					"reference": "trencht2"
-				},
-				"trencht3": {
-					"reference": "trencht3"
-				}
-			}
+			"tierUp": "trencht3",
+			"tierDown": "trencht1"
 		},
 		"trencht3": {
 			"name": "Trench (Tier 3)",
@@ -12506,8 +14373,12 @@ const gameData = {
 			"parentKey": "trencht2",
 			"description": "A dugout that's used for cover and as passageways between Bunkers. Connects to other Trenches and Bunkers.",
 			"tier": 3,
-			"icon": "game/Textures/UI/StructureIcons/TrenchT3Icon.webp",
-			"texture": "game/Textures/Structures/trencht3.webp",
+			"icon": "../UI/StructureIcons/TrenchT3Icon.webp",
+			"texture": {
+				"src": "../Structures/trencht3.webp",
+				"width": 530,
+				"height": 157
+			},
 			"sockets": [
 				{
 					"id": 0,
@@ -12517,7 +14388,7 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trencht3_end.webp",
+					"texture": "../Structures/trencht3_end.webp",
 					"x": 0,
 					"y": 1.47,
 					"rotation": 270
@@ -12530,8 +14401,8 @@ const gameData = {
 							"category": 64
 						}
 					],
-					"texture": "game/Textures/Structures/trencht3_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trencht3_side_open.webp",
+					"texture": "../Structures/trencht3_side_closed.webp",
+					"textureAlt": "../Structures/trencht3_side_open.webp",
 					"x": 5,
 					"y": 0,
 					"rotation": 0
@@ -12544,7 +14415,7 @@ const gameData = {
 							"category": 2
 						}
 					],
-					"texture": "game/Textures/Structures/trencht3_end.webp",
+					"texture": "../Structures/trencht3_end.webp",
 					"x": 10,
 					"y": 1.47,
 					"rotation": 90
@@ -12557,8 +14428,8 @@ const gameData = {
 							"category": 64
 						}
 					],
-					"texture": "game/Textures/Structures/trencht3_side_closed.webp",
-					"textureAlt": "game/Textures/Structures/trencht3_side_open.webp",
+					"texture": "../Structures/trencht3_side_closed.webp",
+					"textureAlt": "../Structures/trencht3_side_open.webp",
 					"x": 5,
 					"y": 2.94,
 					"rotation": 180
@@ -12569,18 +14440,7 @@ const gameData = {
 				"concrete": 10
 			},
 			"repairCost": 80,
-			"gearPowerCost" : 0,
-			"upgrades": {
-				"trencht1": {
-					"reference": "trencht1"
-				},
-				"trencht2": {
-					"reference": "trencht2"
-				},
-				"trencht3": {
-					"reference": "trencht3"
-				}
-			}
+			"tierDown": "trencht2"
 		},
 		"troopship": {
 			"name": "BMS - White Whale",
@@ -12588,7 +14448,6 @@ const gameData = {
 			"description": "A heavily armoured vessel, the Basset Motor Society’s White Whale-class troop transports can deploy on faraway beaches to function as a permanent forward operating base.",
 			"category": "naval",
 			"categoryOrder": 22,
-			"sortLayer": "vehicle",
 			"hitArea": [
 				{
 					"shape": [ 310,-58.48,325.76,-30,325.76,29.39,16.06,87.58,-242.12,-85.15,260.91,-88.18,288.79,-78.48 ]
@@ -12612,8 +14471,12 @@ const gameData = {
 					"shape": [ -242.73,85.15,8.79,111.82,-228.79,111.82 ]
 				}
 			],
-			"icon": "game/Textures/UI/VehicleIcons/TroopShipVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/troopship.webp",
+			"icon": "../UI/VehicleIcons/TroopShipVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/troopship.webp",
+				"width": 1105,
+				"height": 401
+			},
 			"techId": "unlocktroopship"
 		},
 		"truckc": {
@@ -12623,9 +14486,12 @@ const gameData = {
 			"category": "vehicles",
 			"categoryOrder": 1,
 			"faction": "c",
-			"sortLayer": "vehicle",
-			"icon": "game/Textures/UI/VehicleIcons/TruckVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/truckc.webp"
+			"icon": "../UI/VehicleIcons/TruckVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/truckc.webp",
+				"width": 444,
+				"height": 173
+			}
 		},
 		"truckdefensivew": {
 			"name": "Dunne Leatherback 2a",
@@ -12633,8 +14499,12 @@ const gameData = {
 			"description": "A heavy, reinforced Dunne transport. Fitted with a heavier frame, the Leatherback is capable of enduring more punishment at the cost of initial acceleration. ",
 			"category": "vehicles",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/TruckDefensiveWIcon.webp",
-			"texture": "game/Textures/Vehicles/truckdefensivew.webp"
+			"icon": "../UI/VehicleIcons/TruckDefensiveWIcon.webp",
+			"texture": {
+				"src": "../Vehicles/truckdefensivew.webp",
+				"width": 448,
+				"height": 160
+			}
 		},
 		"truckdumpc": {
 			"name": "R-5 “Atlas” Hauler",
@@ -12642,8 +14512,12 @@ const gameData = {
 			"description": "This standard Truck is fitted with a resource hopper in place of the standard cargo hold. This allows for a much greater capacity for resources at the expense of space for cargo.",
 			"category": "vehicles",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/TruckUtilityVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/truckdumpc.webp"
+			"icon": "../UI/VehicleIcons/TruckUtilityVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/truckdumpc.webp",
+				"width": 444,
+				"height": 172
+			}
 		},
 		"truckdumpw": {
 			"name": "Dunne Loadlugger 3c",
@@ -12651,8 +14525,12 @@ const gameData = {
 			"description": "This standard Truck is fitted with a resource hopper in place of the standard cargo hold. This allows for a much greater capacity for resources at the expense of space for cargo. ",
 			"category": "vehicles",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/TruckUtilityWarVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/truckdumpw.webp"
+			"icon": "../UI/VehicleIcons/TruckUtilityWarVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/truckdumpw.webp",
+				"width": 455,
+				"height": 164
+			}
 		},
 		"truckmobilityc": {
 			"name": "R-5b “Sisyphus” Hauler",
@@ -12660,8 +14538,12 @@ const gameData = {
 			"description": "This variation of the standard R-5 Hauler is fitted with an improved suspension and axle system resulting in better overall handling. However, these improvements may not hold up under severe weather conditions.",
 			"category": "vehicles",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/TruckMobilityCVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/truckmobilityc.webp"
+			"icon": "../UI/VehicleIcons/TruckMobilityCVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/truckmobilityc.webp",
+				"width": 444,
+				"height": 172
+			}
 		},
 		"truckmobilityw": {
 			"name": "Dunne Landrunner 12c",
@@ -12669,8 +14551,12 @@ const gameData = {
 			"description": "This standard Truck is fitted with rugged off-road treads, allowing for more efficient movement on rough terrain and conditions at the expense of maximum speed.",
 			"category": "vehicles",
 			"faction": "w",
-			"icon": "game/Textures/UI/VehicleIcons/TruckMobilityWarVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/truckmobilityw.webp"
+			"icon": "../UI/VehicleIcons/TruckMobilityWarVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/truckmobilityw.webp",
+				"width": 448,
+				"height": 164
+			}
 		},
 		"truckmultic": {
 			"name": "R-17 “Retiarius” Skirmisher",
@@ -12684,8 +14570,12 @@ const gameData = {
 				"min": 200,
 				"max": 275
 			},
-			"icon": "game/Textures/UI/VehicleIcons/TruckMultiCIcon.webp",
-			"texture": "game/Textures/Vehicles/truckmultic.webp",
+			"icon": "../UI/VehicleIcons/TruckMultiCIcon.webp",
+			"texture": {
+				"src": "../Vehicles/truckmultic.webp",
+				"width": 454,
+				"height": 190
+			},
 			"techId": "unlocktruckmulti"
 		},
 		"truckoffensivec": {
@@ -12694,8 +14584,12 @@ const gameData = {
 			"description": "This standard Truck is fitted with Light Machinegun in place of the passenger seat. It’s well suited as an escort for convoys or lightly armoured operations.",
 			"category": "vehicles",
 			"faction": "c",
-			"icon": "game/Textures/UI/VehicleIcons/TruckOffensiveVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/truckoffensivec.webp"
+			"icon": "../UI/VehicleIcons/TruckOffensiveVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/truckoffensivec.webp",
+				"width": 444,
+				"height": 172
+			}
 		},
 		"truckw": {
 			"name": "Dunne Transport",
@@ -12704,9 +14598,12 @@ const gameData = {
 			"category": "vehicles",
 			"categoryOrder": 2,
 			"faction": "w",
-			"sortLayer": "vehicle",
-			"icon": "game/Textures/UI/VehicleIcons/TruckWarVehicleIcon.webp",
-			"texture": "game/Textures/Vehicles/truckw.webp"
+			"icon": "../UI/VehicleIcons/TruckWarVehicleIcon.webp",
+			"texture": {
+				"src": "../Vehicles/truckw.webp",
+				"width": 448,
+				"height": 160
+			}
 		},
 		"wallsplinet1": {
 			"name": "Wall (Tier 1)",
@@ -12718,8 +14615,12 @@ const gameData = {
 			"hasHandle": true,
 			"minLength": 3,
 			"maxLength": 10,
-			"icon": "game/Textures/UI/ItemIcons/Wall-T1Icon.webp",
-			"texture": "game/Textures/Structures/wallsplinet1.webp",
+			"icon": "../UI/ItemIcons/Wall-T1Icon.webp",
+			"texture": {
+				"src": "../Structures/wallsplinet1.webp",
+				"width": 106,
+				"height": 106
+			},
 			"buildOnFoundation": true,
 			"canSnap": true,
 			"canSnapRotate": true,
@@ -12732,8 +14633,8 @@ const gameData = {
 							"category": 512
 						}
 					],
-					"texture": "game/Textures/Structures/wallsplinet1_post.webp",
-					"textureAlt": "game/Textures/Structures/wallsplinet1_post.webp",
+					"texture": "../Structures/wallsplinet1_post.webp",
+					"textureAlt": "../Structures/wallsplinet1_post.webp",
 					"cap": "front",
 					"rotation": 270
 				},
@@ -12745,8 +14646,8 @@ const gameData = {
 							"category": 512
 						}
 					],
-					"texture": "game/Textures/Structures/wallsplinet1_post.webp",
-					"textureAlt": "game/Textures/Structures/wallsplinet1_post.webp",
+					"texture": "../Structures/wallsplinet1_post.webp",
+					"textureAlt": "../Structures/wallsplinet1_post.webp",
 					"cap": "back",
 					"rotation": 90
 				}
@@ -12756,6 +14657,7 @@ const gameData = {
 				"cloth": 15
 			},
 			"repairCost": 15,
+			"tierUp": "wallsplinet1_wallsplinet2",
 			"upgrades": {
 				"wallsplinet2": {
 					"name": "Wall (Tier 2)",
@@ -12763,8 +14665,12 @@ const gameData = {
 					"description": "A barrier that is used to prevent passage through an area.",
 					"minLength": 3,
 					"maxLength": 10,
-					"icon": "game/Textures/UI/ItemIcons/Wall-T2Icon.webp",
-					"texture": "game/Textures/Structures/wallsplinet2.webp",
+					"icon": "../UI/ItemIcons/Wall-T2Icon.webp",
+					"texture": {
+						"src": "../Structures/wallsplinet2.webp",
+						"width": 108,
+						"height": 108
+					},
 					"techId": "unlockwalltier2",
 					"sockets": [
 						{
@@ -12775,8 +14681,8 @@ const gameData = {
 									"category": 512
 								}
 							],
-							"texture": "game/Textures/Structures/wallsplinet2_post.webp",
-							"textureAlt": "game/Textures/Structures/wallsplinet2_post.webp",
+							"texture": "../Structures/wallsplinet2_post.webp",
+							"textureAlt": "../Structures/wallsplinet2_post.webp",
 							"cap": "front",
 							"rotation": 270
 						},
@@ -12788,8 +14694,8 @@ const gameData = {
 									"category": 512
 								}
 							],
-							"texture": "game/Textures/Structures/wallsplinet2_post.webp",
-							"textureAlt": "game/Textures/Structures/wallsplinet2_post.webp",
+							"texture": "../Structures/wallsplinet2_post.webp",
+							"textureAlt": "../Structures/wallsplinet2_post.webp",
 							"cap": "back",
 							"rotation": 90
 						}
@@ -12798,7 +14704,9 @@ const gameData = {
 						"cloth": 30
 					},
 					"maxHealth": 1000,
-					"repairCost": 30
+					"repairCost": 30,
+					"tierDown": "wallsplinet1",
+					"tierUp": "wallsplinet1_wallsplinet3"
 				},
 				"wallsplinet3": {
 					"name": "Wall (Tier 3)",
@@ -12806,8 +14714,12 @@ const gameData = {
 					"description": "A barrier that is used to prevent passage through an area.",
 					"minLength": 3,
 					"maxLength": 10,
-					"icon": "game/Textures/UI/ItemIcons/Wall-T3Icon.webp",
-					"texture": "game/Textures/Structures/wallsplinet3.webp",
+					"icon": "../UI/ItemIcons/Wall-T3Icon.webp",
+					"texture": {
+						"src": "../Structures/wallsplinet3.webp",
+						"width": 105,
+						"height": 105
+					},
 					"techId": "unlockwalltier3",
 					"sockets": [
 						{
@@ -12818,8 +14730,8 @@ const gameData = {
 									"category": 512
 								}
 							],
-							"texture": "game/Textures/Structures/wallsplinet3_post.webp",
-							"textureAlt": "game/Textures/Structures/wallsplinet3_post.webp",
+							"texture": "../Structures/wallsplinet3_post.webp",
+							"textureAlt": "../Structures/wallsplinet3_post.webp",
 							"cap": "front",
 							"rotation": 270
 						},
@@ -12831,8 +14743,8 @@ const gameData = {
 									"category": 512
 								}
 							],
-							"texture": "game/Textures/Structures/wallsplinet3_post.webp",
-							"textureAlt": "game/Textures/Structures/wallsplinet3_post.webp",
+							"texture": "../Structures/wallsplinet3_post.webp",
+							"textureAlt": "../Structures/wallsplinet3_post.webp",
 							"cap": "back",
 							"rotation": 90
 						}
@@ -12841,7 +14753,8 @@ const gameData = {
 						"concrete": 15
 					},
 					"maxHealth": 3000,
-					"repairCost": 75
+					"repairCost": 75,
+					"tierDown": "wallsplinet1_wallsplinet2"
 				}
 			}
 		},
@@ -12855,8 +14768,12 @@ const gameData = {
 				"type": "radio",
 				"max": 80
 			},
-			"icon": "game/Textures/UI/StructureIcons/WatchTowerStructureIcon.webp",
-			"texture": "game/Textures/Structures/watchtower.webp",
+			"icon": "../UI/StructureIcons/WatchTowerStructureIcon.webp",
+			"texture": {
+				"src": "../Structures/watchtower.webp",
+				"width": 205,
+				"height": 204
+			},
 			"buildOnFoundation": true,
 			"maxHealth": 350,
 			"cost": {
@@ -12887,8 +14804,13 @@ const gameData = {
 					"shape": [ 27.32,-50.26,21.52,-31.21,-8.18,-30,-13.03,-50.61,-8.79,-65.76,0.82,-73.12,15.45,-72.42,25.15,-64.55 ]
 				}
 			],
-			"icon": "game/Textures/UI/StructureIcons/FacilityMineWaterIcon.webp",
-			"texture": "game/Textures/Structures/water_pump.webp",
+			"icon": "../UI/StructureIcons/FacilityMineWaterIcon.webp",
+			"texture": {
+				"src": "../Structures/water_pump.webp",
+				"width": 223,
+				"height": 245
+			},
+			"buildOnFoundation": false,
 			"buildOnWater": true,
 			"preventOnLandscape": true,
 			"maxHealth": 850,
@@ -12947,9 +14869,13 @@ const gameData = {
 							"shape": [ -73.03,55.45,29.91,58.14,-56.67,57.88 ]
 						}
 					],
-					"baseIcon": "game/Textures/UI/StructureIcons/FacilityElectricWaterPumpIcon.webp",
-					"icon": "game/Textures/UI/StructureIcons/FacilityElectricWaterPumpIcon.webp",
-					"texture": "game/Textures/Structures/water_pump_electric_water.webp",
+					"baseIcon": "../UI/StructureIcons/FacilityElectricWaterPumpIcon.webp",
+					"icon": "../UI/StructureIcons/FacilityElectricWaterPumpIcon.webp",
+					"texture": {
+						"src": "../Structures/water_pump_electric_water.webp",
+						"width": 291,
+						"height": 273
+					},
 					"positionOffset": {
 						"x": 68,
 						"y": 28
@@ -13011,14 +14937,18 @@ const gameData = {
 			"name": "Public Road",
 			"description": "A public road featured throughout the world of Foxhole.",
 			"category": "world",
-			"categoryOrder": 11,
+			"categoryOrder": 19,
 			"sortLayer": "road",
 			"hasHandle": true,
 			"isBezier": true,
 			"minLength": 12,
 			"maxLength": 48,
-			"icon": "game/Textures/UI/ItemIcons/FacilityRoadItemIcon.webp",
-			"texture": "game/Textures/Structures/road_dirt.webp",
+			"icon": "../UI/ItemIcons/FacilityRoadItemIcon.webp",
+			"texture": {
+				"src": "../Structures/road_dirt.webp",
+				"width": 526,
+				"height": 526
+			},
 			"canSnap": true,
 			"canSnapAlongBezier": true,
 			"sockets": [
@@ -13038,18 +14968,30 @@ const gameData = {
 			"upgrades": {
 				"packed_dirt": {
 					"name": "Packed Dirt",
-					"icon": "game/Textures/UI/ItemIcons/FacilityRoadItemIcon.webp",
-					"texture": "game/Textures/Structures/road_packed_dirt.webp"
+					"icon": "../UI/ItemIcons/FacilityRoadItemIcon.webp",
+					"texture": {
+						"src": "../Structures/road_packed_dirt.webp",
+						"width": 526,
+						"height": 526
+					}
 				},
 				"gravel": {
 					"name": "Gravel",
-					"icon": "game/Textures/UI/ItemIcons/FacilityRoadItemIcon.webp",
-					"texture": "game/Textures/Structures/road_gravel.webp"
+					"icon": "../UI/ItemIcons/FacilityRoadItemIcon.webp",
+					"texture": {
+						"src": "../Structures/road_gravel.webp",
+						"width": 526,
+						"height": 526
+					}
 				},
 				"great_march": {
 					"name": "Great March",
-					"icon": "game/Textures/UI/ItemIcons/FacilityRoadItemIcon.webp",
-					"texture": "game/Textures/Structures/road_great_march.webp"
+					"icon": "../UI/ItemIcons/FacilityRoadItemIcon.webp",
+					"texture": {
+						"src": "../Structures/road_great_march.webp",
+						"width": 842,
+						"height": 842
+					}
 				}
 			}
 		}
