@@ -433,11 +433,15 @@ Vue.component('app-menu-building-selected', {
         },
         
         updateGearPower: function(){
+            this.bmc();
+
             //We need to check all entities, so we defer it to a function in game.js
             game.updateAllGearPower();
         },
 
         displayLocalGearPower: function(){
+            this.bmc();
+
             //Due to my limited knowledge, I use messageboxes to display the current gearPower
             const selectedEntity = game.getSelectedEntity();
             if(selectedEntity.building.canGear){
@@ -458,20 +462,6 @@ Vue.component('app-menu-building-selected', {
             }            
         },
 
-        editModifications: function() {
-            this.bmc();
-            //We get the current building and change the modifications it contains
-            let toModify = game.getSelectedEntity();
-            //TODO: Write a correct version, this will just add and remove pipes
-            let modList = toModify.mods;
-            if(modList.length == 0){
-                modList.push("pipes");
-                this.pipeBtnImg = '/games/foxhole/assets/game/Textures/UI/ItemIcons/RunestoneAIcon.webp';
-            } else {
-                modList.pop();
-                this.pipeBtnImg = '/games/foxhole/assets/game/Textures/UI/ItemIcons/RunestoneWIcon.webp';
-            }
-        },
         toggleBlueprint: function() {
             const selectedEntity = game.getSelectedEntity();
             if (selectedEntity && selectedEntity.type === 'building') {
@@ -751,169 +741,6 @@ Vue.component('app-menu-building-selected', {
                 <div class="text-button-wrapper">
                     <button class="text-button" type="button" v-on:click="game.downloadSave(true)" @mouseenter="bme()">
                         <i class="fa fa-save"></i> Export Selection
-                    </button>
-                </div>
-            </div>
-            <template v-if="game.getSelectedEntities().length === 1">
-                <div v-if="entity.building && entity.building.upgrades" class="settings-option-wrapper upgrade-list">
-                    <div class="settings-title">
-                        <button v-if="entity.building?.tierDown ?? entity.building?.parentKey" type="button" class="title-button return-button" @click="changeUpgrade(entity.building.tierDown ?? entity.building.parent)" title="Go to Previous Tier" @mouseenter="bme()" style="padding: 1px 2px;">
-                            <div class="btn-small m-1"><i class="fa fa-angle-double-down" aria-hidden="true"></i></div>
-                        </button>
-                        {{hoverUpgradeName ?? (entity.building.upgradeName ?? (entity.building.upgrades[entity.building.key]?.name ?? 'No Upgrade Selected'))}}
-                        <button v-if="entity.building?.tierUp" type="button" class="title-button return-button attach-right" @click="changeUpgrade(entity.building.tierUp)" title="Go to Next Tier" @mouseenter="bme()" style="padding: 1px 2px;">
-                            <div class="btn-small m-1"><i class="fa fa-angle-double-up" aria-hidden="true"></i></div>
-                        </button>
-                    </div>
-                    <button class="upgrade-button" v-for="upgrade in entity.building.upgrades" :class="{'selected-upgrade': (entity.building.parent && entity.building.key === entity.building.parent.key + '_' + upgrade.key) || entity.building.key === upgrade.key}"
-                        @mouseenter="showUpgradeHover(upgrade); bme()" @mouseleave="showUpgradeHover()" @click="changeUpgrade(upgrade)">
-                        <div class="resource-icon" :title="upgrade.upgradeName ?? upgrade.name" :style="{backgroundImage:'url(' + (upgrade.icon ?? entity.building.icon) + ')'}"></div>
-                    </button>
-                </div>
-
-                <!-- This has to be overhauled in favor of something somewhat decent xD -->
-                <div class="settings-option-wrapper upgrade-list">
-                    <div class="settings-title">
-                        Modifications
-                    </div>
-                    <button class="upgrade-button" @mouseleave="showUpgradeHover()" @click="editModifications()">
-                        <div class="resource-icon" title ="Pipes" ref="pipeButton">
-                            <img v-bind:src="pipeBtnImg">    
-                        </div>
-                    </button>
-                </div>
-
-                <div v-if="entity.baseUpgrades && entity.building?.baseGarrisonRadius" class="settings-option-wrapper upgrade-list">
-                    <div class="settings-title">Base Upgrades</div>
-                    <button class="upgrade-button" v-for="(upgrade, key) in entity.building.baseUpgrades.base" :class="{'selected-upgrade': entity.baseUpgrades.base === key}"
-                        @mouseenter="showUpgradeHover(upgrade, false); bme()" @mouseleave="showUpgradeHover()" @click="changeBaseUpgrade('base', key)">
-                        <div class="resource-icon" :title="upgrade.name" :style="{backgroundImage:'url(' + (upgrade.icon ?? entity.building.icon) + ')'}"></div>
-                    </button>
-                </div>
-                <template v-if="entity.maintenanceFilters">
-                    <div class="settings-option-wrapper">
-                        <div class="settings-title">Maintained Structures</div>
-                        <div class="upgrade-buttons-small d-flex justify-content-center">
-                            <template v-for="(category, key) in gameData.categories">
-                                <button v-if="category.buildCategory" class="upgrade-button" :class="{'btn-inactive': entity.maintenanceFilters.exclusions.includes(key)}" @click="toggleMaintenanceExclusion(key)">
-                                    <div class="resource-icon" :title="category.name" :style="{backgroundImage:'url(' + (category.icon) + ')'}"></div>
-                                </button>
-                            </template>
-                        </div>
-                    </div>
-                    <div class="settings-option-wrapper upgrade-list">
-                        <div class="settings-title">Maintenance Range</div>
-                        <div class="text-center">{{entity.maintenanceFilters.range}}m</div>
-                        <div class="d-flex">
-                            <div class="col-2 p-0">0m</div>
-                            <div class="col-8 p-0">
-                                <input type="range" class="slider w-100" style="height: 32px;" v-model.number="entity.maintenanceFilters.range" min="0" :max="entity.building.maxRange" step="1" @input="updateEntity()">
-                            </div>
-                            <div class="col-2 p-0">{{entity.building.maxRange}}m</div>
-                        </div>
-                        <span v-if="entity.maintainedStructures" style="font-size: 15px;">These settings apply to {{entity.maintainedStructures.toLocaleString()}}&nbsp;nearby&nbsp;structures.</span>
-                    </div>
-                    <div v-if="entity.maintainedConsumptionRate" class="settings-option-wrapper text-center">
-                        <div class="settings-title">Maintenance Supply Upkeep<span style="color: #b5b5b5;">/hr</span></div>
-                        <div class="construction-options row d-flex justify-content-center">
-                            <div class="btn-small no-button col" style="color: #00ca00;">
-                                <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate * 0.25}}</span>
-                                <span class="label">very good</span>
-                            </div>
-                            <div class="btn-small no-button col" style="color: #74d004;">
-                                <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate * 0.5}}</span>
-                                <span class="label">good</span>
-                            </div>
-                            <div class="btn-small no-button col" style="color: #ffa500;">
-                                <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate}}</span>
-                                <span class="label">poor</span>
-                            </div>
-                            <div class="btn-small no-button col" style="color: #ff0d0d;">
-                                <span style="font-size: 18px;"><small>x</small>{{entity.maintainedConsumptionRate * 2}}</span>
-                                <span class="label">very poor</span>
-                            </div>
-                        </div>
-                        <small style="color: #d9d9d9;">Note: These values do not account for overlapping MTs.</small>
-                    </div>
-                </template>
-                <div v-if="productionData" class="settings-option-wrapper">
-                    <div class="settings-title">
-                        <button type="button" class="title-button return-button" v-on:click="changeProduction(null)" title="Back" @mouseenter="bme()" style="padding: 1px 2px;">
-                            <div class="btn-small m-1"><i class="fa fa-arrow-left"></i></div>
-                        </button>
-                        Production Stats
-                    </div>
-                    <div class="production-stats">
-                        <div class="select-production m-2" v-if="!productionData.faction || !game.settings.selectedFaction || productionData.faction == game.settings.selectedFaction">
-                            <app-game-recipe :building="entity.building" :recipe="productionData"></app-game-recipe>
-                            <h6 class="production-requirements">
-                                <template v-if="productionData.power || entity.building.power">
-                                    <span title="Power"><i class="fa fa-bolt"></i> {{productionData.power || entity.building.power}} MW</span>
-                                    &nbsp;&nbsp;&nbsp;
-                                </template>
-                                <span title="Time"><i class="fa fa-clock-o"></i> {{productionData.time}}s</span>
-                            </h6>
-                        </div>
-                        <template v-if="productionData">
-                            <template v-if="entity.building.productionScaling !== false && productionData.max > 0">
-                                <div class="text-center p-2 mb-1">
-                                    <i class="fa fa-arrow-circle-down" aria-hidden="true"></i> Limiter: 
-                                    <span v-if="productionData.time <= 3600">x{{entity.productionScale}} cycles/hr</span>
-                                    <span v-else>x{{entity.productionScale}} cycles/day</span>
-                                    <input type="range" class="slider w-100" v-model.number="entity.productionScale" min="0" :max="productionData.max" step="1" @input="updateProduction()">
-                                </div>
-                            </template>
-                            <template v-if="entity.productionScale > 0">
-                                <div class="production-stats-resources">
-                                    <div v-if="productionData.input && Object.keys(productionData.input).length" class="mb-3">
-                                        <h5><i class="fa fa-sign-in"></i> Building Input<span v-if="productionData.time <= 3600">/hr</span><span v-else>/day</span></h5>
-                                        <div class="statistics-panel-fac-input">
-                                            <app-game-resource-icon v-for="(value, key) in productionData.input" :resource="key" :amount="entity.productionScale * value"/>
-                                        </div>
-                                    </div>
-                                    <div v-if="productionData.output && Object.keys(productionData.output).length">
-                                        <h5><i class="fa fa-sign-out"></i> Building Output<span v-if="productionData.time <= 3600">/hr</span><span v-else>/day</span></h5>
-                                        <div class="statistics-panel-fac-output">
-                                            <app-game-resource-icon v-for="(value, key) in productionData.output" :resource="key" :amount="entity.productionScale * value"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </template>
-                        </template>
-                    </div>
-                </div>
-                <template v-else-if="entity.building && entity.building.production && entity.building.production.length">
-                    <div v-if="game.settings.showParentProductionList && entity.building?.parent?.production" class="settings-option-wrapper">
-                        <div class="settings-title">
-                            {{entity.building.parent?.name ?? entity.building.name}} Production
-                        </div>
-                        <div class="production-list">
-                            <app-menu-production-list-row v-for="production in entity.building.parent.production" :production="production" :isParent="true"></app-menu-production-list-row>
-                        </div>
-                    </div>
-                    <div class="settings-option-wrapper">
-                        <div class="settings-title">
-                            {{entity.building.upgradeName ?? entity.building.name}} Production
-                        </div>
-                        <div class="production-list">
-                            <app-menu-production-list-row v-for="production in entity.building.production" :production="production"></app-menu-production-list-row>
-                        </div>
-                    </div>
-                </template>
-                <div v-if="game.settings.enableExperimental && entity.building?.category === 'entrenchments' && entity.building?.sockets" class="settings-option-wrapper">
-                    <div class="settings-title">Socket Options</div>
-                    <div class="text-button-wrapper">
-                        <button class="text-button" type="button" @click="recoverConnections()" @mouseenter="bme()">
-                            <i class="fa fa-wrench" aria-hidden="true"></i> Repair Connections
-                        </button>
-                    </div>
-                </div>
-            </template>
-            <div v-if="game.settings.enableExperimental && entity.building?.category === 'entrenchments' && entity.building?.sockets" class="settings-option-wrapper">
-                <div class="settings-title">Socket Options</div>
-                <div class="text-button-wrapper">
-                    <button class="text-button" type="button" @click="recoverConnections()" @mouseenter="bme()">
-                        <i class="fa fa-wrench" aria-hidden="true"></i> Repair Connections
                     </button>
                 </div>
             </div>
