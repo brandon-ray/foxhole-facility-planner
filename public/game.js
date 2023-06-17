@@ -2590,7 +2590,22 @@ try {
     let lastCameraZoom;
     let g_TICK = 10;
     let g_Time = 0;
+<<<<<<< Updated upstream
     let selectionRotation = null;
+=======
+    let snappedMX;
+    let snappedMY;
+
+    game.updateAllGearPower = function() {
+        //We scroll through the entities list and we update the gearPower
+        for(i = 0; i<entities.length; i++){
+            if(entities[i].type === "building"){
+                entities[i].updateGearPower();
+            }
+        }
+    }
+
+>>>>>>> Stashed changes
     function update() {
         requestAnimationFrame(update);
 
@@ -3163,6 +3178,7 @@ try {
             game.updateSave();
         }
     }
+
 
     setInterval(function() {
         if (window.ga) {
