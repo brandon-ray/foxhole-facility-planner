@@ -434,21 +434,19 @@ Vue.component('app-menu-building-selected', {
         
         updateGearPower: function(){
             this.bmc();
-
             //We need to check all entities, so we defer it to a function in game.js
             game.updateAllGearPower();
         },
 
         displayLocalGearPower: function(){
             this.bmc();
-
             //Due to my limited knowledge, I use messageboxes to display the current gearPower
             const selectedEntity = game.getSelectedEntity();
-            if(selectedEntity.building.canGear){
+            if(selectedEntity.building.category === 'entrenchments'){
                 if(selectedEntity.hasGear){
-                    if (selectedEntity.initalGearPower < 0) {
+                    if (selectedEntity.initialGearPower < 0) {
                         //If the bunker has a cost, I want to be able to see it 
-                        alert(selectedEntity.getGearPower()+"/"+ -(selectedEntity.initalGearPower));
+                        alert(selectedEntity.getGearPower()+"/"+ -(selectedEntity.initialGearPower));
                     } else {
                         //Else, displaying the power is sufficient
                         alert(selectedEntity.getGearPower());
@@ -762,23 +760,25 @@ Vue.component('app-menu-building-selected', {
                 </div>
 
                 <!-- This has to be overhauled in favor of something somewhat decent xD -->
-                <div class="settings-option-wrapper upgrade-list">
+                <div v-if="entity.building && entity.building.category === 'entrenchments'" class="settings-option-wrapper upgrade-list">
                     <div class="settings-title">
-                        Modifications
-                        <button class="upgrade-button" @click="togglePipes()">
-                            <div class="resource-icon" title ="Pipes">
-                                <img src='/games/foxhole/assets/game/Textures/UI/ItemIcons/RunestoneWIcon.webp'>    
-                            </div>
-                        <button class="upgrade-button" @click="updateGearPower()">
-                            <div class="resource-icon" title ="CrunchEGR">
-                                <img src='/games/foxhole/assets/game/Textures/UI/ItemIcons/RunestoneAIcon.webp'>    
-                            </div>
-                        <button class="upgrade-button" @click="displayLocalGearPower()">
-                            <div class="resource-icon" title ="DisplayPipes">
-                                <img src='/games/foxhole/assets/game/Textures/UI/ItemIcons/RunestoneGIcon.webp'>    
-                            </div>
-                        </button>
+                        Pipes and buttons
                     </div>
+                    <button class="upgrade-button" @click="togglePipes()">
+                        <div class="resource-icon" title ="Pipes">
+                            <img width="40" height="40" src='/games/foxhole/assets/game/Textures/UI/ItemIcons/RunestoneWIcon.webp' >    
+                        </div>
+                    </button>
+                    <button class="upgrade-button" @click="updateGearPower()">
+                        <div class="resource-icon" title ="CrunchEGR">
+                            <img width="40" height="40" src='/games/foxhole/assets/game/Textures/UI/ItemIcons/RunestoneAIcon.webp'>    
+                        </div>
+                    </button>
+                    <button class="upgrade-button" @click="displayLocalGearPower()">
+                        <div class="resource-icon" title ="DisplayPipes">
+                            <img width="40" height="40" src='/games/foxhole/assets/game/Textures/UI/ItemIcons/RunestoneGIcon.webp'>    
+                        </div>
+                    </button>
                 </div>
 
                 <div v-if="entity.baseUpgrades && entity.building?.baseGarrisonRadius" class="settings-option-wrapper upgrade-list">

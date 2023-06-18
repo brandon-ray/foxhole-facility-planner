@@ -5706,7 +5706,6 @@ const gameData = {
 			},
 			"canSnap": true,
 			"canUnion": true,
-			"canGear": true,
 			"snapNearest": true,
 			"sockets": [
 				{

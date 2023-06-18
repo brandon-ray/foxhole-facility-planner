@@ -3580,7 +3580,9 @@ try {
                 entities[i].updateGearPower();
             }
         }
+        game.saveStateChanged = true;
     }
+
     function update() {
         if (game.project.settings.regionKey && !game.project.settings.regionCrop && game.settings.lockCameraToHex) {
             const zoomRatio = 1 / camera.zoom;

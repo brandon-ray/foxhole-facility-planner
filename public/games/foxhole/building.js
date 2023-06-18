@@ -386,23 +386,17 @@ class FoxholeStructure extends DraggableContainer {
             this.union = this;
             this.unionRank = 0;
         }
-        if (this.building.canGear) {
+        if (this.building.category === 'entrenchments') {
             //If a room can have gearPower, it needs to know all the engine rooms(EGR) in range and the power it brings (to avoid having multiple time the same EGR)
             //We also need to know it's power cost (see data.js) to know if it is an EGR itself or a bunker that consumes power
             this.hasGear = false;
             this.initialGearPower = ( this.building.gearPower ? this.building.gearPower : 0 );
-
             this.EGRinRange = [];
-            this.EGRdist = [];
 
             //An EGR's power is divided by the number of bunker that uses its power in its range
-            if(this.initialGearPower > 0)
+            if (this.initialGearPower > 0)
                 this.drains = 0;
             
-        }
-
-        if (this.building.baseUpgrades) {
-            this.baseUpgrades = {};
         }
 
         /*
@@ -607,16 +601,6 @@ class FoxholeStructure extends DraggableContainer {
         }
 
 
-        //Checks the mods list. If it contain pipes, we give the building the ability to have GearPower
-        if(this.building.canGear){
-            if(this.hasGear == false && this.mods.indexOf("pipes")>-1){
-                this.hasGear = true;
-            }
-            if(this.hasGear == true && this.mods.indexOf("pipes") == -1){
-                this.hasGear = false;
-            }
-}
-
         if (this.sockets) {
             for (let i = 0; i < this.sockets.length; i++) {
                 let socket = this.sockets[i];
@@ -626,8 +610,6 @@ class FoxholeStructure extends DraggableContainer {
                         const connectedEntity = game.getEntityById(connectedEntityId);
                         if (connectedEntity?.selected) {
                             socketConnections[connectedEntityId] = connectedSocketId;
-                            if(this.hasGear)
-                                updateGearPower(connectedEntity, this); //We update the neighboring bunkers' gearPower
                         }
                     }
                 }
@@ -700,16 +682,6 @@ class FoxholeStructure extends DraggableContainer {
             this.trackDirection = objData.trackDirection;
         }
 
-        if(this.hasGear == true) {
-            for (let i = 0; i < this.sockets.length; i++) {
-                let socket = this.sockets[i];
-                for (const [connectedEntityId, connectedSocketId] of Object.entries(socket.connections)) {
-                    const connectedEntity = game.getEntityById(connectedEntityId);
-                    if(toUpdate?.canGear == true)
-                        updateGearPower(this, connectedEntity); //We update this bunker's gearPower depending on the neighbors'
-                }
-            }
-        }
         game.refreshStats();
         
     }
@@ -782,7 +754,7 @@ class FoxholeStructure extends DraggableContainer {
             if (!isNaN(rangeData.arc)) {
                 this.rangeSprite.beginFill(rangeColor);
                 this.rangeSprite.lineStyle(1, rangeColor);
-                if(!isNaN(rangeData.min)) {
+                if (!isNaN(rangeData.min)) {
                     const rangeArc = Math.deg2rad(rangeData.arc);
                     this.rangeSprite.arc(0, 0, rangeData.min * METER_BOARD_PIXEL_SIZE, Math.PI/2 + rangeArc, Math.PI/2 - rangeArc, true);
                 } else {
@@ -790,7 +762,7 @@ class FoxholeStructure extends DraggableContainer {
                 }
                 const rangeArc = Math.deg2rad(rangeData.arc);
                 this.rangeSprite.arc(0, 0, rangeData.max * METER_BOARD_PIXEL_SIZE, Math.PI/2 - rangeArc, Math.PI/2 + rangeArc);
-                if(isNaN(rangeData.min)) this.rangeSprite.lineTo(0, 0);
+                if (isNaN(rangeData.min)) this.rangeSprite.lineTo(0, 0);
                 this.rangeSprite.endFill();
             } else if (!isNaN(rangeData.min)) {
                 this.rangeSprite.lineStyle((rangeData.max - rangeData.min) * METER_BOARD_PIXEL_SIZE, rangeColor, 1);
@@ -1258,15 +1230,19 @@ class FoxholeStructure extends DraggableContainer {
     }
 
     getGearPower(){
-        //First, if there is no power, this should not be applicable
-        if(!this.EGRinRange){
+        //First, if there is no pipes, this should not be applicable
+        if (!this.EGRinRange){
             return -1;
         }
         //To know a bunkers' gearPower, you have to sum the power brought by each EGR
         var gearPower = 0;
         for (var i = 0; i < this.EGRinRange.length; i++) {
             //Each EGR shares it's power equally to all it's drains
-            gearPower += 3000/this.EGRinRange[i].drains;
+            if (this.EGRinRange[i].drains > 0)
+                //We avoid dividing by 0
+                gearPower += 3000/(this.EGRinRange[i].drains);
+            else
+                gearPower += 3000;
         }
         return gearPower;
 
@@ -1274,25 +1250,96 @@ class FoxholeStructure extends DraggableContainer {
 
     toggleGear() {
         //The only way to toggle gearPower on and off is through this function accessible through a buildMenu.js method
-        if(this.building.canGear){
-            this.hasGear = !this.hasGear;
-            alert("Pipes toggled");
+        if (this.building.category === 'entrenchments'){
+            if (this.hasGear == false){
+                this.hasGear = true;
+                if (this.initialGearPower > 0) {
+                    //If this is an EGR, we add it to the list
+                    this.EGRinRange.push(this);
+                }
+            } else {
+                //If we are removing the pipe, we remove the memory of engine rooms to avoid phantom EGRs
+                this.hasGear = false;
+                this.EGRinRange = [];
+                this.EGRdist = [];
+            }
         }
     }
 
     updateGearPower(){
-        //This function serves to update all gearPower
-        if(this.hasGear == true) {
-            for (let i = 0; i < this.sockets.length; i++) {
-                let socket = this.sockets[i];
-                for (const [connectedEntityId, connectedSocketId] of Object.entries(socket.connections)) {
-                    const connectedEntity = game.getEntityById(connectedEntityId);
-                    if(connectedEntity?.canGear == true){
-                        this.updateLocalGearPower(this, connectedEntity); //We update this bunker's gearPower depending on the neighbors'
+        //This function serves to update the networks' list of engine rooms in range
+        if (!this?.hasGear == true || this.initialGearPower <= 0) {
+            return;
+        }
+
+        //We will use a Breadth-first search algorithm. As we want the smallest distance from the EGR for the power
+        //to always reach 20 Units, it is the most efficient. Distances will be stored here
+        //We only update from engine rooms to limit computation
+        var checkList = [];
+        var distances = [];
+
+        var k = 0;
+        for (let i = 0; i < this.sockets.length; i++) {
+            let socket = this.sockets[i];
+            //We check all the sockets
+            for (const [connectedEntityId, connectedSocketId] of Object.entries(socket.connections)) {
+                const connectedEntity = game.getEntityById(connectedEntityId);
+                if (connectedEntity?.hasGear == true){
+                    //If the neighbor has pipes, it is part of the network and needs to be checked
+                    checkList.push(connectedEntity);
+                    distances.push(1);
+                    k++; 
+                }
+            }
+            alert("Starting with "+ k +" bunkers");
+        }
+
+        while(checkList.length>0){
+            //While we still have unchecked bunkers, we remove it from the list and check it
+            var currentDistance = distances.shift();
+            var toAdd = this.updateLocalGearPower(checkList.shift(), this, currentDistance);
+            //We verify if the bunkers are in the list. If they are, it is a shorter or equidistant path
+            var c = 0;
+            for (var i = 0; i < toAdd.length; i++) {
+                if (checkList.indexOf(toAdd[i]) == -1){
+                    //If not, we add them to the checklist
+                    checkList.push(toAdd[i]);
+                    distances.push(currentDistance+1);
+                    c++;
+                }
+            }
+            alert("Recursion added "+c+" bunkers");
+        }
+
+    }
+
+    updateLocalGearPower(toUpdate, engineRoom, distance){
+        //If this bunker uses power, we add it as a drain to the EGR
+        if (toUpdate.initialGearPower < 0){
+            engineRoom.drains++;
+        }
+        //We prepare the list of neighboring sockets to check
+        var toCheck = [];
+        //We recusively add this EGR to the neighboring's bunker
+        for (let i = 0; i < this.sockets.length; i++) {
+            let socket = this.sockets[i];
+            for (const [connectedEntityId, connectedSocketId] of Object.entries(socket.connections)) {
+                const connectedEntity = game.getEntityById(connectedEntityId);
+                if (connectedEntity?.hasGear == true){
+                    //We look for neighboring bunkers with pipes
+                    var check = toUpdate.EGRinRange.indexOf(engineRoom);
+                    if (check == -1){
+                    //If the engine room is not in the new building's list we add it to the list
+                        toUpdate.EGRinRange.push(engineRoom);
+                        if (distance < 20){
+                            //If we are not at maximal distance, we add them to the list of bunkers to check
+                            toCheck.push(connectedEntity);
+                        }
                     }
                 }
             }
         }
+        return toCheck;
     }
 
     setBlueprint(blueprint) {
@@ -1694,35 +1741,6 @@ class FoxholeStructure extends DraggableContainer {
         }
     }
 
-    //We update the building toUpdate with the new data from the changed building
-    updateLocalGearPower(toUpdate, changed){
-        //If the neighbor is an EGR, we add it to the list in first position
-        if(changed.gearPower > 0){
-            toUpdate.EGRinRange.unshift(changed);
-            toUpdate.dist.unshift(1);
-        }
-
-        for(let i = 0; i < this.changed.EGRinRange; i++){
-            currEGR = changed.EGRinRange[i];
-
-            check = toUpdate.EGRinRange.indexOf(currEGR);
-            if(check == -1){
-            //If the engine room is not in the new building's list and is not at max range, we add it and it's details
-                if(changed.EGRdist < 20)
-                    toUpdate.EGRinRange.push(currEGR);
-                    //If the bunker we are updating from uses power, we add a drain to this EGR's network
-                        toUpdate.EGRdist.push(changed.EGRdist[i] + 1);
-
-                    if(changed.gearPower < 0){
-                        currEGR.drains++;
-                    }
-
-            } else if(changed.EGRdist[i].dist + 1 < toUpdate.EGRdist[i]){
-                //If there is a shorter path to the EGR, we replace the current path by the shorter one
-                toUpdate.EGRdist.push(changed.EGRdist[i] + 1);
-            }
-        }
-    }
 }
 
 class FoxholeLocomotive extends FoxholeStructure {
