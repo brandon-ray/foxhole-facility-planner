@@ -1248,6 +1248,9 @@ class FoxholeStructure extends DraggableContainer {
             else
                 gearPower += 3000;
         }
+        if (gearPower == 1000 && EGRinRange.length > 1 && ( this.building.codename = 'ObservationBunkerT2' || this.building.codename = 'ObservationBunkerT3' ) ){
+            return 999;
+        }
         return gearPower;
 
     }
