@@ -3574,13 +3574,22 @@ try {
     let snappedMY;
 
     game.updateAllGearPower = function() {
-        //We scroll through the entities list and we update the gearPower
+
         for(i = 0; i<entities.length; i++){
-            if(entities[i].type === "building"){
+            if(entities[i]?.building.category === 'entrenchments' && entities[i]?.hasGear == true){
+                //We empty the network to "clean" it and reset links
+                entities[i].EGRinRange = [];
+            }
+        }
+        for(i = 0; i<entities.length; i++){
+            if(entities[i]?.building.category === 'entrenchments' && entities[i]?.hasGear == true){
+                //We check that the building have the right subtype and gears
                 entities[i].updateGearPower();
             }
         }
+        game.saveStateChanged = true;
     }
+
     function update() {
         if (game.project.settings.regionKey && !game.project.settings.regionCrop && game.settings.lockCameraToHex) {
             const zoomRatio = 1 / camera.zoom;
