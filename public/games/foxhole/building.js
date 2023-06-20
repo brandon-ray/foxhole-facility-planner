@@ -1248,7 +1248,7 @@ class FoxholeStructure extends DraggableContainer {
             else
                 gearPower += 3000;
         }
-        if (gearPower == 1000 && EGRinRange.length > 1 && ( this.building.codename = 'ObservationBunkerT2' || this.building.codename = 'ObservationBunkerT3' ) ){
+        if (gearPower == 1000 && this.EGRinRange.length > 1 && ( this.building.codeName === 'ObservationBunkerT2' || this.building.codeName === 'ObservationBunkerT3' ) ){
             return 999;
         }
         return gearPower;
@@ -1279,9 +1279,9 @@ class FoxholeStructure extends DraggableContainer {
         }
         
         var allEntities = game.getEntities();
-        for(i = 0; i<allEntities.length; i++){
+        for (i = 0; i<allEntities.length; i++){
             //We scroll through the entities list and we ready all the entrenchment with gears to be updated
-            if(allEntities[i]?.building.category === 'entrenchments' && allEntities[i]?.hasGear == true){
+            if (allEntities[i]?.building.category === 'entrenchments' && allEntities[i]?.hasGear == true){
                 //We check that the building have the right subtype and gears
                 allEntities[i].inCheckList = false;
             }
@@ -1319,7 +1319,7 @@ class FoxholeStructure extends DraggableContainer {
         }
 
     }
-
+ 
     updateLocalGearPower(toUpdate, engineRoom, distance){
         if (toUpdate.initialGearPower < 0 && toUpdate.EGRinRange.indexOf(engineRoom) == -1){
             //If this bunker uses power, we add it as a drain to the EGR
