@@ -295,7 +295,7 @@ game.showGrowl = (message, data) => {
 function getQuery() {
     let vars = {}, hash;
     let hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-    for(let i = 0; i < hashes.length; i++) {
+    for (let i = 0; i < hashes.length; i++) {
         hash = hashes[i].split('=');
         vars[hash[0]] = hash[1];
     }
@@ -3575,14 +3575,14 @@ try {
 
     game.updateAllGearPower = function() {
 
-        for(i = 0; i<entities.length; i++){
-            if(entities[i]?.building.category === 'entrenchments' && entities[i]?.hasGear == true){
+        for (i = 0; i<entities.length; i++){
+            if (entities[i]?.building.category === 'entrenchments' && entities[i]?.hasGear == true){
                 //We empty the network to "clean" it and reset links
                 entities[i].EGRinRange = [];
             }
         }
-        for(i = 0; i<entities.length; i++){
-            if(entities[i]?.building.category === 'entrenchments' && entities[i]?.hasGear == true){
+        for (i = 0; i<entities.length; i++){
+            if (entities[i]?.building.category === 'entrenchments' && entities[i]?.hasGear == true){
                 //We check that the building have the right subtype and gears
                 entities[i].updateGearPower();
             }
