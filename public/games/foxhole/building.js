@@ -372,6 +372,7 @@ class FoxholeStructure extends DraggableContainer {
             //If the building is not a vehicle, then it is a building and may have modifications
             this.mods = [];
         }
+
         if (this.building.key === 'maintenance_tunnel') {
             this.setMaintenanceFilters();
         }
@@ -386,16 +387,19 @@ class FoxholeStructure extends DraggableContainer {
             this.union = this;
             this.unionRank = 0;
         }
+
         if (this.building.category === 'entrenchments') {
             //If a room can have gearPower, it needs to know all the engine rooms(EGR) in range and the power it brings (to avoid having multiple time the same EGR)
             //We also need to know it's power cost (see data.js) to know if it is an EGR itself or a bunker that consumes power
             this.hasGear = false;
             this.initialGearPower = ( this.building.gearPower ? this.building.gearPower : 0 );
             this.EGRinRange = [];
-
+            this.inCheckList = false;
             //An EGR's power is divided by the number of bunker that uses its power in its range
-            if (this.initialGearPower > 0)
+            if (this.initialGearPower > 0){
                 this.drains = 0;
+            }            
+            this.toggleGear();
             
         }
 
@@ -1261,24 +1265,32 @@ class FoxholeStructure extends DraggableContainer {
                 //If we are removing the pipe, we remove the memory of engine rooms to avoid phantom EGRs
                 this.hasGear = false;
                 this.EGRinRange = [];
-                this.EGRdist = [];
             }
         }
     }
 
     updateGearPower(){
         //This function serves to update the networks' list of engine rooms in range
-        if (!this?.hasGear == true || this.initialGearPower <= 0) {
+        if (this.initialGearPower <= 0) {
             return;
         }
-
+        
+        var allEntities = game.getEntities();
+        for(i = 0; i<allEntities.length; i++){
+            //We scroll through the entities list and we ready all the entrenchment with gears to be updated
+            if(allEntities[i]?.building.category === 'entrenchments' && allEntities[i]?.hasGear == true){
+                //We check that the building have the right subtype and gears
+                allEntities[i].inCheckList = false;
+            }
+        }
         //We will use a Breadth-first search algorithm. As we want the smallest distance from the EGR for the power
         //to always reach 20 Units, it is the most efficient. Distances will be stored here
         //We only update from engine rooms to limit computation
         var checkList = [];
         var distances = [];
+        //We reset the drains to avoid adding them twice
+        this.drains = 0;
 
-        var k = 0;
         for (let i = 0; i < this.sockets.length; i++) {
             let socket = this.sockets[i];
             //We check all the sockets
@@ -1288,53 +1300,45 @@ class FoxholeStructure extends DraggableContainer {
                     //If the neighbor has pipes, it is part of the network and needs to be checked
                     checkList.push(connectedEntity);
                     distances.push(1);
-                    k++; 
                 }
             }
-            alert("Starting with "+ k +" bunkers");
         }
 
-        while(checkList.length>0){
+        while (checkList.length>0){
             //While we still have unchecked bunkers, we remove it from the list and check it
             var currentDistance = distances.shift();
             var toAdd = this.updateLocalGearPower(checkList.shift(), this, currentDistance);
             //We verify if the bunkers are in the list. If they are, it is a shorter or equidistant path
-            var c = 0;
             for (var i = 0; i < toAdd.length; i++) {
-                if (checkList.indexOf(toAdd[i]) == -1){
-                    //If not, we add them to the checklist
-                    checkList.push(toAdd[i]);
-                    distances.push(currentDistance+1);
-                    c++;
-                }
+                checkList.push(toAdd[i]);
+                distances.push(currentDistance+1);
             }
-            alert("Recursion added "+c+" bunkers");
         }
 
     }
 
     updateLocalGearPower(toUpdate, engineRoom, distance){
-        //If this bunker uses power, we add it as a drain to the EGR
-        if (toUpdate.initialGearPower < 0){
+        if (toUpdate.initialGearPower < 0 && toUpdate.EGRinRange.indexOf(engineRoom) == -1){
+            //If this bunker uses power, we add it as a drain to the EGR
             engineRoom.drains++;
+        }
+        if (toUpdate.EGRinRange.indexOf(engineRoom) == -1){
+            //If the engine room is not in the new building's list we add it to the list
+            toUpdate.EGRinRange.push(engineRoom);
         }
         //We prepare the list of neighboring sockets to check
         var toCheck = [];
         //We recusively add this EGR to the neighboring's bunker
-        for (let i = 0; i < this.sockets.length; i++) {
-            let socket = this.sockets[i];
+        for (let i = 0; i < toUpdate.sockets.length; i++) {
+            let socket = toUpdate.sockets[i];
             for (const [connectedEntityId, connectedSocketId] of Object.entries(socket.connections)) {
                 const connectedEntity = game.getEntityById(connectedEntityId);
                 if (connectedEntity?.hasGear == true){
                     //We look for neighboring bunkers with pipes
-                    var check = toUpdate.EGRinRange.indexOf(engineRoom);
-                    if (check == -1){
-                    //If the engine room is not in the new building's list we add it to the list
-                        toUpdate.EGRinRange.push(engineRoom);
-                        if (distance < 20){
-                            //If we are not at maximal distance, we add them to the list of bunkers to check
-                            toCheck.push(connectedEntity);
-                        }
+                    if (distance < 20 && connectedEntity.inCheckList == false){
+                        //If we are not at maximal distance and already in it, we add them to the list of bunkers to check
+                        toCheck.push(connectedEntity);
+                        connectedEntity.inCheckList = true;
                     }
                 }
             }
