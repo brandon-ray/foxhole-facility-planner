@@ -3569,20 +3569,18 @@ try {
     let lastCameraZoom;
     let g_TICK = 10;
     let g_Time = 0;
-    let selectionRotation = null;
     let snappedMX;
     let snappedMY;
 
     game.updateAllGearPower = function() {
-
-        for (i = 0; i<entities.length; i++){
-            if (entities[i]?.building.category === 'entrenchments' && entities[i]?.hasGear == true){
+        for (i = 0; i<entities.length; i++) {
+            if (entities[i]?.building.category === 'entrenchments' && entities[i]?.hasGear == true) {
                 //We empty the network to "clean" it and reset links
                 entities[i].EGRinRange = [];
             }
         }
-        for (i = 0; i<entities.length; i++){
-            if (entities[i]?.building.category === 'entrenchments' && entities[i]?.hasGear == true){
+        for (i = 0; i<entities.length; i++) {
+            if (entities[i]?.building.category === 'entrenchments' && entities[i]?.hasGear == true) {
                 //We check that the building have the right subtype and gears
                 entities[i].updateGearPower();
             }
@@ -4173,7 +4171,6 @@ try {
             game.updateSave();
         }
     }
-
 
     setInterval(function() {
         if (window.ga) {

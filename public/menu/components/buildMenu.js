@@ -144,7 +144,6 @@ Vue.component('app-menu-building-selected', {
                 rotation: 0,
                 rotationDegrees: 0,
                 blueprint: false,
-                pipes: false,
                 faction: null,
                 baseProduction: false,
                 selectedProduction: null,
@@ -414,15 +413,6 @@ Vue.component('app-menu-building-selected', {
             this.bmc();
             game.exchangeSelected(upgrade);
         },
-        
-        toggleBlueprint: function() {
-            const selectedEntity = game.getSelectedEntity();
-            if (selectedEntity && selectedEntity.type === 'building') {
-                selectedEntity.setBlueprint(!selectedEntity.blueprint);
-                game.saveStateChanged = true;
-            }
-        },
-
         togglePipes: function() {
             //We call game.js' function on the selected building to toggle the pipes on and off
             const selectedEntity = game.getSelectedEntity();
@@ -431,19 +421,17 @@ Vue.component('app-menu-building-selected', {
                 game.saveStateChanged = true;
             }
         },
-        
-        updateGearPower: function(){
+        updateGearPower: function() {
             this.bmc();
             //We need to check all entities, so we defer it to a function in game.js
             game.updateAllGearPower();
         },
-
-        displayLocalGearPower: function(){
+        displayLocalGearPower: function() {
             this.bmc();
             //Due to my limited knowledge, I use messageboxes to display the current gearPower
             const selectedEntity = game.getSelectedEntity();
-            if(selectedEntity.building.category === 'entrenchments'){
-                if(selectedEntity.hasGear){
+            if (selectedEntity.building.category === 'entrenchments') {
+                if (selectedEntity.hasGear) {
                     if (selectedEntity.initialGearPower < 0) {
                         //If the bunker has a cost, I want to be able to see it 
                         alert(selectedEntity.getGearPower()+"/"+ -(selectedEntity.initialGearPower));
@@ -459,7 +447,6 @@ Vue.component('app-menu-building-selected', {
                 alert("Display Error");
             }            
         },
-
         toggleBlueprint: function() {
             const selectedEntity = game.getSelectedEntity();
             if (selectedEntity && selectedEntity.type === 'building') {
