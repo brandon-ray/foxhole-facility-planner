@@ -30,15 +30,16 @@ class FoxholeStructureSocket extends PIXI.Container {
                 this.pointer.rotation = -(parent.rotation + this.rotation);
                 parent.handleTick = true;
             } else if (parent.building?.textureBorder && !parent.building.trenchConnector) {
-                let textureBorder = game.resources[parent.building.textureBorder].texture;
-                this.pointer = new PIXI.Sprite(textureBorder);
-                this.pointer.width = textureBorder.width / METER_TEXTURE_PIXEL_SCALE;
-                this.pointer.height = textureBorder.height / METER_TEXTURE_PIXEL_SCALE;
+                this.pointer = game.createSprite(parent.building.textureBorder, (sprite, texture) => {
+                    sprite.width = texture.width / METER_TEXTURE_PIXEL_SCALE;
+                    sprite.height = texture.height / METER_TEXTURE_PIXEL_SCALE;
+                });
                 this.pointer.anchor.set(0.5, 1.0);
             } else if (this.socketData.texture) {
-                this.pointer = new PIXI.Sprite(game.resources[this.socketData.texture].texture);
-                this.pointer.width = this.pointer.width / METER_TEXTURE_PIXEL_SCALE;
-                this.pointer.height = this.pointer.height / METER_TEXTURE_PIXEL_SCALE;
+                this.pointer = game.createSprite(this.socketData.texture, (sprite, texture) => {
+                    sprite.width = texture.width / METER_TEXTURE_PIXEL_SCALE;
+                    sprite.height = texture.height / METER_TEXTURE_PIXEL_SCALE;
+                });
                 this.pointer.anchor.set(0.5, 0.5);
             }
             if (this.pointer) {
@@ -183,7 +184,7 @@ class FoxholeStructureSocket extends PIXI.Container {
         }
     }
     
-    removeConnections(entityId, ignoreSelected) {
+    removeConnections(entityId, ignoreSelected, ignoreChecks) {
         if (Object.keys(this.connections).length) {
             let connectionEstablished = false;
             for (const [connectedEntityId, connectedSocketId] of Object.entries(this.connections)) {
@@ -203,13 +204,16 @@ class FoxholeStructureSocket extends PIXI.Container {
                             if (connectedSocket.socketData.id === connectedSocketId) {
                                 delete connectedSocket.connections[this.structure.id];
                                 if (Object.keys(connectedSocket.connections).length === 0) {
-                                    if (connectedEntity.building?.requireConnection) {
-                                        connectedEntity.remove();
-                                    } else if (connectedSocket.socketData.temp) {
-                                        connectedSocket.remove();
-                                    } else {
-                                        connectedSocket.setVisible(true);
+                                    if (!ignoreChecks) {
+                                        if (connectedEntity.building?.requireConnection) {
+                                            connectedEntity.remove();
+                                            break;
+                                        } else if (connectedSocket.socketData.temp) {
+                                            connectedSocket.remove();
+                                            break;
+                                        }
                                     }
+                                    connectedSocket.setVisible(true);
                                 }
                                 break;
                             }
@@ -239,10 +243,10 @@ class FoxholeStructureSocket extends PIXI.Container {
             const connectedEntityIds = Object.keys(this.connections);
             visible = visible ?? connectedEntityIds.length === 0;
             if (this.socketData.textureAlt) {
-                let texture = game.resources[visible ? this.socketData.texture : this.socketData.textureAlt].texture;
-                this.pointer.texture = texture;
-                this.pointer.width = texture.width / METER_TEXTURE_PIXEL_SCALE;
-                this.pointer.height = texture.height / METER_TEXTURE_PIXEL_SCALE;
+                game.fetchTexture(this.pointer, visible ? this.socketData.texture : this.socketData.textureAlt, (sprite, texture) => {
+                    sprite.width = texture.width / METER_TEXTURE_PIXEL_SCALE;
+                    sprite.height = texture.height / METER_TEXTURE_PIXEL_SCALE;
+                });
                 visible = true;
             } else if (this.socketData.texture && !visible) {
                 if (connectedEntityIds.length === 1) {
@@ -280,28 +284,37 @@ class FoxholeStructure extends DraggableContainer {
 
         if (this.building.texture && !this.hasHandle) {
             let sprite;
-            if (typeof this.building.texture === 'object' && !Array.isArray(this.building.texture)) {
-                this.sheet = game.loadSpritesheet(game.resources[this.building.texture.sheet].texture, this.building.texture.width, this.building.texture.height);
-                sprite = new PIXI.Sprite(this.sheet[0][0]);
+            if (this.building.texture.speed) {
+                sprite = game.createSprite(this.building.texture.src, (sprite, texture) => {
+                    this.sheet = game.loadSpritesheet(texture, this.building.texture.width, this.building.texture.height);
+                    sprite.texture = this.sheet[0][0];
+                    sprite.frameWidth = Math.floor(texture.width / this.building.texture.width);
+                    sprite.frameHeight = Math.floor(texture.height / this.building.texture.height);
+                });
                 sprite.frameX = 0;
                 sprite.frameY = 0;
-                sprite.frameWidth = Math.floor(game.resources[this.building.texture.sheet].texture.width/this.building.texture.width);
-                sprite.frameHeight = Math.floor(game.resources[this.building.texture.sheet].texture.height/this.building.texture.height);
                 sprite.width = this.building.width * METER_BOARD_PIXEL_SIZE;
                 sprite.height = this.building.length * METER_BOARD_PIXEL_SIZE;
-            } else if (game.resources[this.building.texture]) {
-                sprite = new PIXI.Sprite(game.resources[this.building.texture].texture);
-                sprite.frameWidth = game.resources[this.building.texture].texture.width;
-                sprite.frameHeight = game.resources[this.building.texture].texture.height;
+            } else {
+                let src = this.building.texture.src;
+                if (typeof src === 'object') {
+                    if (!this.faction) {
+                        this.faction = game.settings.selectedFaction ?? 'c';
+                    }
+                    src = src[(this.faction === 'w' && 'w') || 'c'];
+                }
+                sprite = game.createSprite(src);
+                sprite.frameWidth = this.building.texture.width;
+                sprite.frameHeight = this.building.texture.height;
                 sprite.width = sprite.frameWidth / METER_TEXTURE_PIXEL_SCALE;
                 sprite.height = sprite.frameHeight / METER_TEXTURE_PIXEL_SCALE;
             }
-            if (!this.building.textureOffset) {
+            if (!this.building.texture.offset) {
                 sprite.anchor.set(0.5);
             } else {
                 // TODO: Add support for percentages. <= 1 could set anchor so we don't need exact pixels.
-                sprite.x = (-this.building.textureOffset.x * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
-                sprite.y = (-this.building.textureOffset.y * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
+                sprite.x = (-this.building.texture.offset.x * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
+                sprite.y = (-this.building.texture.offset.y * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
             }
             this.sprite = sprite;
         }
@@ -319,13 +332,13 @@ class FoxholeStructure extends DraggableContainer {
         this.addChild(this.sprite);
 
         if (this.building.textureFrontCap) {
-            this.frontCap = new PIXI.Sprite(game.resources[this.building.textureFrontCap].texture);
+            this.frontCap = game.createSprite(this.building.textureFrontCap);
             this.frontCap.anchor.set(0, 0.5);
             this.addChild(this.frontCap);
         }
 
         if (this.building.textureBackCap) {
-            this.backCap = new PIXI.Sprite(game.resources[this.building.textureBackCap].texture);
+            this.backCap = game.createSprite(this.building.textureBackCap);
             this.backCap.anchor.set(1, 0.5);
             this.addChild(this.backCap);
         }
@@ -428,7 +441,7 @@ class FoxholeStructure extends DraggableContainer {
     tick(delta) {
         super.tick(delta);
 
-        if (this.sheet && this.visible) {
+        if (this.sheet && this.visible && this.sprite.frameWidth && this.sprite.frameHeight) {
             this.sprite.frameX += this.building.texture.speed ? this.building.texture.speed : 0.1;
             if (this.sprite.frameX >= this.sprite.frameWidth) {
                 this.sprite.frameX -= this.sprite.frameWidth;
@@ -559,13 +572,21 @@ class FoxholeStructure extends DraggableContainer {
                 objData.baseProduction = this.baseProduction;
             }
             objData.selectedProduction = this.selectedProduction;
-            if (this.baseUpgrades) {
+            if (this.baseUpgrades && Object.keys(this.baseUpgrades).length) {
                 objData.baseUpgrades = Object.assign({}, this.baseUpgrades);
             }
         }
 
+        objData.blueprint = (this.blueprint === true && this.blueprint) || undefined;
+        objData.faction = this.faction;
+        objData.disableProduction = (this.disableProduction === true && this.disableProduction) || undefined;
+
         if (this.maintenanceFilters) {
             objData.maintenanceFilters = Object.assign({}, this.maintenanceFilters);
+        }
+
+        if (this.postExtension) {
+            objData.postExtension = this.postExtension;
         }
 
         if (this.sockets) {
@@ -626,8 +647,23 @@ class FoxholeStructure extends DraggableContainer {
             }
         }
 
+        if (objData.blueprint) {
+            this.setBlueprint(objData.blueprint);
+        }
+
+        if (objData.faction) {
+            this.setFaction(objData.faction);
+        }
+
+        this.disableProduction = objData.disableProduction;
+
         if (objData.maintenanceFilters) {
             this.setMaintenanceFilters(objData.maintenanceFilters);
+        }
+
+        if (objData.postExtension) {
+            this.postExtension = objData.postExtension;
+            this.regenerate();
         }
 
         if (this.isTrain && typeof objData.trackDirection === 'number') {
@@ -698,7 +734,7 @@ class FoxholeStructure extends DraggableContainer {
     assignRange(rangeData) {
         this.removeChild(this.rangeSprite);
         if (rangeData) {
-            const rangeColor = COLOR_RANGES[rangeData.type] ?? COLOR_RANGES.default;
+            const rangeColor = PROJECT_LAYERS.ranges[rangeData.type]?.color ?? COLOR_LIMEGREEN;
             this.rangeSprite = new PIXI.Graphics();
             this.rangeSprite.alpha = 0.15;
             this.updateOverlays();
@@ -732,50 +768,14 @@ class FoxholeStructure extends DraggableContainer {
     }
     
     updateRangeMask() {
-        if (game.settings.enableExperimental && this.building.range?.lineOfSight && this.rangeSprite?.visible) {
-            const rayCast = (polygons, rayStart, rayEnd) => {
-                let closestIntersection = null;
-
-                for (let polygon of polygons) {
-                    for (let i = 0; i < polygon.length; i++) {
-                        let p1 = polygon[i];
-                        let p2 = polygon[(i + 1) % polygon.length];
-
-                        let intersection = getLineIntersection(p1, p2, rayStart, rayEnd);
-                        if (!intersection) continue;
-
-                        if (!closestIntersection || Math.distanceBetween(rayStart, intersection) < Math.distanceBetween(rayStart, closestIntersection)) {
-                            closestIntersection = intersection;
-                        }
-                    }
-                }
-
-                return closestIntersection;
-            }
-
-            const getLineIntersection = (p1, p2, p3, p4) => {
-                let denominator = (p4.y - p3.y) * (p2.x - p1.x) - (p4.x - p3.x) * (p2.y - p1.y);
-                if (denominator == 0) return null;
-
-                let ua = ((p4.x - p3.x) * (p1.y - p3.y) - (p4.y - p3.y) * (p1.x - p3.x)) / denominator;
-                let ub = ((p2.x - p1.x) * (p1.y - p3.y) - (p2.y - p1.y) * (p1.x - p3.x)) / denominator;
-
-                if (ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1) {
-                    return {
-                        x: p1.x + ua * (p2.x - p1.x),
-                        y: p1.y + ua * (p2.y - p1.y)
-                    };
-                }
-
-                return null;
-            }
-            
+        if (game.settings.enableExperimental && game.settings.showLineOfSightRanges && this.building.range?.lineOfSight && this.rangeSprite?.visible) {
             const polygons = [], entitySortLayer = game.constructionLayers[this.sortLayer];
             for (const e2 of game.getEntities()) {
-                if (!e2.valid || e2 === this || !e2.building || e2.bezier) {
+                if (!e2.valid || e2 === this || !e2.building || e2.bezier || game.constructionLayers[e2.sortLayer] < entitySortLayer) {
                     continue;
                 }
-                if (game.constructionLayers[e2.sortLayer] >= entitySortLayer && Math.distanceBetween(this, e2) < 1200) {
+                const entityHalfSize = Math.max(e2.width, e2.height) / 2;
+                if (Math.distanceBetween(this, e2) < ((this.building.range.max * METER_BOARD_PIXEL_SIZE) + entityHalfSize)) {
                     if (e2.building?.hitArea) {
                         for (const poly of e2.building.hitArea) {
                             if (poly.shape) {
@@ -789,7 +789,7 @@ class FoxholeStructure extends DraggableContainer {
                                 polygons.push(shapePoints);
                             }
                         }
-                    } else {
+                    } else if (e2.building?.hitArea !== false) {
                         const w = ((e2.building?.width * METER_BOARD_PIXEL_SIZE) || e2.sprite.width) / 2;
                         const h = ((e2.building?.length * METER_BOARD_PIXEL_SIZE) || e2.sprite.height) / 2;
                         polygons.push([
@@ -804,14 +804,14 @@ class FoxholeStructure extends DraggableContainer {
             
             const maxDist = (this.building.range.max * 2) * METER_BOARD_PIXEL_SIZE, hitPoints = [];
 
-            hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, { x: -maxDist, y: -maxDist }) || { x: -maxDist, y: -maxDist });
-            hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, { x: maxDist, y: -maxDist }) || { x: maxDist, y: -maxDist });
-            hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, { x: maxDist, y: maxDist }) || { x: maxDist, y: maxDist });
-            hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, { x: -maxDist, y: maxDist }) || { x: -maxDist, y: maxDist });
+            hitPoints.push(Math.rayCast(polygons, { x: 0, y: 0 }, { x: -maxDist, y: -maxDist }) || { x: -maxDist, y: -maxDist });
+            hitPoints.push(Math.rayCast(polygons, { x: 0, y: 0 }, { x: maxDist, y: -maxDist }) || { x: maxDist, y: -maxDist });
+            hitPoints.push(Math.rayCast(polygons, { x: 0, y: 0 }, { x: maxDist, y: maxDist }) || { x: maxDist, y: maxDist });
+            hitPoints.push(Math.rayCast(polygons, { x: 0, y: 0 }, { x: -maxDist, y: maxDist }) || { x: -maxDist, y: maxDist });
 
             for (const poly of polygons) {
                 for (const p of poly) {
-                    hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, p));
+                    hitPoints.push(Math.rayCast(polygons, { x: 0, y: 0 }, p));
                 }
             }
 
@@ -820,8 +820,8 @@ class FoxholeStructure extends DraggableContainer {
                     let angle = Math.angleBetween({ x: 0, y: 0 }, p);
                     let p1 = Math.extendPoint({ x: 0, y: 0 }, maxDist, angle - 0.001);
                     let p2 = Math.extendPoint({ x: 0, y: 0 }, maxDist, angle + 0.001);
-                    hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, p1) || p1);
-                    hitPoints.push(rayCast(polygons, { x: 0, y: 0 }, p2) || p2);
+                    hitPoints.push(Math.rayCast(polygons, { x: 0, y: 0 }, p1) || p1);
+                    hitPoints.push(Math.rayCast(polygons, { x: 0, y: 0 }, p2) || p2);
                 }
             }
 
@@ -829,8 +829,8 @@ class FoxholeStructure extends DraggableContainer {
                 return Math.angleBetween({ x: 0, y: 0}, p1) - Math.angleBetween({ x: 0, y: 0}, p2);
             });
 
-            this.removeChild(this.lineOfSightRange);
             if (game.settings.enableDebug) {
+                this.removeChild(this.lineOfSightRange);
                 this.lineOfSightRange = new PIXI.Container();
                 for (const p of hitPoints) {
                     let line = new PIXI.Graphics();
@@ -1037,9 +1037,9 @@ class FoxholeStructure extends DraggableContainer {
     
     hasConnectionToEntity = (connectingEntity, ignoredSocket) => this.hasConnectionToEntityId(connectingEntity.id, ignoredSocket);
     
-    attemptReconnections(removeConnections = true, ignoreSelected = true) {
+    attemptReconnections(removeConnections = true, ignoreSelected = true, ignoreChecks = false) {
         if (removeConnections) {
-            this.removeConnections(undefined, ignoreSelected);
+            this.removeConnections(undefined, ignoreSelected, undefined, undefined, ignoreChecks);
         }
         for (const e2 of game.getEntities()) {
             if (e2 === this || !e2.sockets || (ignoreSelected && e2.selected) || Math.distanceBetween(this.mid ?? this, e2.mid ?? e2) > 1000) {
@@ -1052,8 +1052,7 @@ class FoxholeStructure extends DraggableContainer {
                     if (eSocket.canConnect(e2Socket) && (!e2Socket.socketData.connectionLimit || Object.keys(e2Socket.connections).length < e2Socket.socketData.connectionLimit) && (Math.distanceBetween(eSocketPosition, e2SocketPosition) < 3)) {
                         let eSocketRotation = Math.angleNormalized((this.rotation + eSocket.rotation) - Math.PI);
                         let e2SocketRotation = Math.angleNormalized(e2.rotation + e2Socket.rotation);
-                        let angleDiff = Math.angleDifference(eSocketRotation, e2SocketRotation);
-                        if (angleDiff < 0.001 && angleDiff > -0.001) {
+                        if (this.building?.canSnapRotate || Math.abs(Math.angleNormalized(Math.angleDifference(eSocketRotation, e2SocketRotation))) < 0.0025) {
                             eSocket.setConnection(e2.id, e2Socket);
                         }
                     }
@@ -1062,6 +1061,30 @@ class FoxholeStructure extends DraggableContainer {
         }
     }
     
+    forceReposition() {
+        for (const eSocket of this.sockets) {
+            for (const [connectedEntityId, connectedSocketId] of Object.entries(eSocket.connections)) {
+                const connectedEntity = game.getEntityById(connectedEntityId);
+                if (connectedEntity && connectedEntity.sockets) {
+                    const e2Socket = connectedEntity.getSocketById(connectedSocketId);
+                    if (e2Socket) {
+                        const e2SocketPosition = game.app.cstage.toLocal(e2Socket, connectedEntity);
+                        if (eSocket.socketData.id === 0) {
+                            this.position.set(e2SocketPosition.x, e2SocketPosition.y);
+                        } else if (eSocket.socketData.id === 1) {
+                            const dist = Math.distanceBetween(this, e2SocketPosition);
+                            const handle = this.getHandlePoint();
+                            handle.x = dist;
+                            this.rotation = Math.angleBetween(this, e2SocketPosition);
+                            this.updateHandlePos();
+                        }
+                    }
+                }
+            }
+        }
+        this.regenerate();
+    }
+
     recoverConnections(recoveredEntities = [this]) {
         for (const eSocket of this.sockets) {
             for (const [connectedEntityId, connectedSocketId] of Object.entries(eSocket.connections)) {
@@ -1089,13 +1112,13 @@ class FoxholeStructure extends DraggableContainer {
         }
     }
     
-    removeConnections(socketId, ignoreSelected, ignoreSocket, entityId) {
+    removeConnections(socketId, ignoreSelected, ignoreSocket, entityId, ignoreChecks) {
         if (this.sockets) {
             // Iterate sockets to make sure we either remove the connections and update the socket or remove the entity altogether.
             for (let i = 0; i < this.sockets.length; i++) {
                 const entitySocket = this.sockets[i];
                 if (typeof socketId !== 'number' || (ignoreSocket ? entitySocket.socketData.id !== socketId : entitySocket.socketData.id === socketId)) {
-                    entitySocket.removeConnections(entityId, ignoreSelected);
+                    entitySocket.removeConnections(entityId, ignoreSelected, ignoreChecks);
                 }
             }
         }
@@ -1113,7 +1136,7 @@ class FoxholeStructure extends DraggableContainer {
             productionIcon.drawRect(-47, -47, 94, 94);
             productionIcon.endFill();
 
-            productionIcon.icon = new PIXI.Sprite(icon);
+            productionIcon.icon = game.createSprite(icon);
             productionIcon.icon.anchor.set(0.5);
             productionIcon.icon.width = 84;
             productionIcon.icon.height = 84;
@@ -1131,7 +1154,7 @@ class FoxholeStructure extends DraggableContainer {
             this.removeChild(this.productionIcons);
             if (typeof id === 'number') {
                 this.productionIcons = new PIXI.Container();
-                this.productionIcons.visible = game.projectSettings.showProductionIcons;
+                this.productionIcons.visible = game.project.settings.showProductionIcons;
                 this.productionIcons.rotation = -this.rotation;
                 const productionList = (this.baseProduction ? this.building.parent : this.building).production;
                 for (let i = 0; i < productionList.length; i++) {
@@ -1139,11 +1162,11 @@ class FoxholeStructure extends DraggableContainer {
                     if (production.id === id) {
                         if (production.output) {
                             for (const resource of Object.keys(production.output)) {
-                                createProductionIcon(game.resources[window.objectData.resources[resource].icon].texture);
+                                createProductionIcon(window.objectData.resources[resource].icon);
                             }
                         }
                         if (this.building.power > 0 || production.power > 0) {
-                            createProductionIcon(game.resources.power_x128.texture);
+                            createProductionIcon('power_x128');
                         }
                         const productionIcons = this.productionIcons.children;
                         if (productionIcons.length) {
@@ -1191,6 +1214,34 @@ class FoxholeStructure extends DraggableContainer {
             type: 'preventDecay',
             max: this.maintenanceFilters.range
         });
+    }
+
+    setBlueprint(blueprint) {
+        if (this.building.canBlueprint && this.blueprint !== blueprint) {
+            this.blueprint = blueprint;
+            const tint = this.blueprint ? COLOR_BLUEPRINT : COLOR_WHITE;
+            const filters = this.blueprint ? [FILTER_BRIGHT] : [];
+            const setTint = (sprite) => {
+                sprite.tint = tint;
+                sprite.filters = filters;
+            }
+            setTint(this.sprite);
+            if (this.sockets) {
+                for (const socket of this.sockets) {
+                    if (socket.pointer) {
+                        setTint(socket.pointer);
+                    }
+                }
+            }
+            this.regenerate();
+        }
+    }
+
+    setFaction(faction) {
+        if (typeof this.building.texture.src === 'object' && this.faction !== faction) {
+            this.faction = faction;
+            game.fetchTexture(this.sprite, this.building.texture.src[(this.faction === 'w' && 'w') || 'c']);
+        }
     }
 
     getUnion() {
@@ -1250,7 +1301,7 @@ class FoxholeStructure extends DraggableContainer {
                 if (this.building.trenchConnector) {
                     this.sprite.removeChild(this.sprite.trapezoid);
 
-                    const floorHalfHeight = 57, floorTexturePadding = 100;
+                    const floorHalfHeight = this.building.texture ? 51.65 : 62, floorTexturePadding = 100;
                     const frontPoint = this.points[0], endPoint = this.points[this.points.length - 1];
                     const frontPoint1 = { x: 0, y: -floorHalfHeight };
                     const frontPoint2 = { x: 0, y: floorHalfHeight };
@@ -1267,29 +1318,37 @@ class FoxholeStructure extends DraggableContainer {
                         endPoint2.x, endPoint2.y
                     ]);
 
-                    const floorMask = new PIXI.Graphics();
-                    floorMask.beginFill(0xFF3300);
-                    floorMask.drawPolygon(trapezoid);
-                    floorMask.endFill();
-                    this.sprite.trapezoid.addChild(floorMask);
-
                     this.sprite.hitArea = trapezoid;
 
-                    this.sprite.trapezoid.floor = new PIXI.TilingSprite(game.resources[this.building.texture].texture, Math.distanceBetween(frontPoint, endPoint) + floorTexturePadding);
-                    this.sprite.trapezoid.floor.anchor.set((floorTexturePadding / this.sprite.trapezoid.floor.width) / 2, 0.5);
-                    this.sprite.trapezoid.floor.mask = floorMask;
-                    this.sprite.trapezoid.floor.rotation = angle;
-                    this.sprite.trapezoid.addChild(this.sprite.trapezoid.floor);
+                    if (this.building.texture) {
+                        const floorMask = new PIXI.Graphics();
+                        floorMask.beginFill(0xFF3300);
+                        floorMask.drawPolygon(trapezoid);
+                        floorMask.endFill();
+                        this.sprite.trapezoid.addChild(floorMask);
 
-                    const textureBorderHeight = game.resources[this.building.textureBorder].texture.height;
+                        this.sprite.trapezoid.floor = new PIXI.TilingSprite(undefined, Math.distanceBetween(frontPoint, endPoint) + floorTexturePadding);
+                        game.fetchTexture(this.sprite.trapezoid.floor, this.building.texture.src, (sprite, texture) => {
+                            sprite.anchor.set((floorTexturePadding / texture.width) / 2, 0.5);
+                        });
+                        this.sprite.trapezoid.floor.mask = floorMask;
+                        this.sprite.trapezoid.floor.rotation = angle;
+                        this.sprite.trapezoid.addChild(this.sprite.trapezoid.floor);
+                    }
 
-                    const connectorTopBorder = new PIXI.TilingSprite(game.resources[this.building.textureBorder].texture, Math.distanceBetween(frontPoint1, endPoint2), textureBorderHeight);
+                    const connectorTopBorder = new PIXI.TilingSprite(undefined, Math.distanceBetween(frontPoint1, endPoint2));
+                    game.fetchTexture(connectorTopBorder, this.building.textureBorder, (sprite, texture) => {
+                        sprite.height = texture.height;
+                    });
                     connectorTopBorder.y = -floorHalfHeight;
                     connectorTopBorder.anchor.set(0, 0.5);
                     connectorTopBorder.rotation = Math.angleBetween(frontPoint1, endPoint2);
                     this.sprite.trapezoid.addChild(connectorTopBorder);
 
-                    const connectorBottomBorder = new PIXI.TilingSprite(game.resources[this.building.textureBorder].texture, Math.distanceBetween(frontPoint2, endPoint1), textureBorderHeight);
+                    const connectorBottomBorder = new PIXI.TilingSprite(undefined, Math.distanceBetween(frontPoint2, endPoint1));
+                    game.fetchTexture(connectorBottomBorder, this.building.textureBorder, (sprite, texture) => {
+                        sprite.height = texture.height;
+                    });
                     connectorBottomBorder.y = floorHalfHeight;
                     connectorBottomBorder.scale.y = -1;
                     connectorBottomBorder.anchor.set(0, 0.5);
@@ -1302,9 +1361,17 @@ class FoxholeStructure extends DraggableContainer {
                     const maxAngle = Math.deg2rad((15 * 3) + 1), angleBetweenPoints = Math.angleBetween(frontPoint, endPoint);
                     const limitReached = (this.building?.minLength && (Math.distanceBetween(frontPoint, endPoint) < (this.building.minLength * METER_BOARD_PIXEL_SIZE))) || ((Math.abs(angleBetweenPoints) > maxAngle) || (Math.abs(Math.angleNormalized(-angleBetweenPoints + endPoint.rotation + Math.PI)) > maxAngle));
                     if (limitReached) {
-                        this.sprite.trapezoid.floor.tint = COLOR_RED;
+                        if (this.sprite.trapezoid.floor) {
+                            this.sprite.trapezoid.floor.tint = COLOR_RED;
+                        }
                         connectorTopBorder.tint = COLOR_RED;
                         connectorBottomBorder.tint = COLOR_RED;
+                    } else if (this.blueprint) {
+                        if (this.sprite.trapezoid.floor) {
+                            this.sprite.trapezoid.floor.tint = COLOR_BLUEPRINT;
+                        }
+                        connectorTopBorder.tint = COLOR_BLUEPRINT;
+                        connectorBottomBorder.tint = COLOR_BLUEPRINT;
                     }
 
                     if (this.sockets) {
@@ -1314,7 +1381,92 @@ class FoxholeStructure extends DraggableContainer {
                                 socket.position.set(endPoint.x, endPoint.y);
                                 socket.rotation = endPoint.rotation - Math.PI/2;
                             }
-                            socket.pointer.tint = limitReached ? COLOR_RED : COLOR_WHITE;
+                            socket.pointer.tint = limitReached ? COLOR_RED : (this.blueprint ? COLOR_BLUEPRINT : COLOR_WHITE);
+                        }
+                    }
+                } else if (this.building.key === 'barbedwirewallspline') {
+                    const postExtension = (this.postExtension ?? 1) * METER_BOARD_PIXEL_SIZE;
+                    const frontExtPoint = { x: postExtension, y: 0, rotation: 0 };
+                    const backExtPoint = Math.extendPoint(backPoint, postExtension, backPoint.rotation);
+                    backExtPoint.rotation = backPoint.rotation;
+
+                    const midPoints = [];
+                    const dist = Math.distanceBetween(frontExtPoint, backExtPoint);
+                    const childSpacing = this.building.texturePostDist * METER_BOARD_PIXEL_SIZE;
+                    if (dist > childSpacing) {
+                        const numChildren = Math.floor(dist / childSpacing) - 1;
+                        const dx = (backExtPoint.x - frontExtPoint.x) / (numChildren + 1);
+                        const dy = (backExtPoint.y - frontExtPoint.y) / (numChildren + 1);
+
+                        for (let i = 0; i < numChildren; i++) {
+                            const childPoint = {
+                                x: frontExtPoint.x + dx * (i + 1),
+                                y: frontExtPoint.y + dy * (i + 1),
+                                rotation: Math.angleBetween(frontExtPoint, backExtPoint)
+                            };
+                            midPoints.push(childPoint);
+                        }
+                    }
+
+                    if (!this.posts) {
+                        this.posts = new PIXI.Container;
+                        this.sprite.addChild(this.posts);
+                    }
+
+                    this.posts.removeChildren();
+
+                    const postRotation = Math.angleBetween(frontExtPoint, backExtPoint);
+                    const createPost = (point, rotation = postRotation) => {
+                        const post = game.createSprite(this.building.texturePost);
+                        post.anchor.set(0.5);
+                        this.posts.addChild(post);
+                        if (point.rotation === undefined) {
+                            point.rotation = rotation;
+                        }
+                        updateTextureCap(post, point, Math.PI);
+                        return post;
+                    }
+
+                    const endPoints = [frontPoint, frontExtPoint, backExtPoint, backPoint];
+                    for (const point of endPoints.concat(midPoints)) {
+                        createPost(point);
+                    }
+
+                    const generatePoints = (points = [], startPoint, endPoint, numPoints, rotation = 0) => {
+                        points.push(startPoint);
+                        const xStep = (endPoint.x - startPoint.x) / (numPoints - 1);
+                        const yStep = (endPoint.y - startPoint.y) / (numPoints - 1);
+                        for (let i = 0; i < numPoints; i++) {
+                            const point = {
+                                x: startPoint.x + (xStep * i),
+                                y: startPoint.y + (yStep * i)
+                            }
+                            if (i === (Math.ceil(numPoints / 2) - 1)) {
+                                const dist = Math.distanceBetween(startPoint, endPoint);
+                                if (dist > childSpacing) {
+                                    createPost(point, rotation);
+                                }
+                            }
+                            points.push(point);
+                        }
+                        points.push(endPoint);
+                        return points;
+                    }
+
+                    const ropePoints = [];
+                    generatePoints(ropePoints, frontPoint, frontExtPoint, 3);
+                    generatePoints(ropePoints, backExtPoint, backPoint, 3, backPoint.rotation);
+                    this.sprite.rope = new PIXI.SimpleRope(game.resources.white.texture, ropePoints, METER_INVERSE_PIXEL_SCALE);
+                    game.fetchTexture(this.sprite.rope, this.building.texture.src);
+                    this.sprite.addChild(this.sprite.rope);
+
+                    if (this.sockets) {
+                        for (const socket of this.sockets) {
+                            if (socket.socketData.cap === 'back') {
+                                socket.position.set(backPoint.x, backPoint.y);
+                                socket.rotation = backPoint.rotation - Math.PI / 2;
+                                break;
+                            }
                         }
                     }
                 } else {
@@ -1415,8 +1567,10 @@ class FoxholeStructure extends DraggableContainer {
                     this.bezier = new Bezier(bezierPoints);
                     const lut = this.bezier.getLUT(Math.round(this.bezier.length()/16));
                     if (this.building.texture) {
-                        game.resources[this.building.texture].texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
-                        this.sprite.rope = new PIXI.SimpleRope(game.resources[this.building.texture].texture, lut, 1);
+                        this.sprite.rope = new PIXI.SimpleRope(game.resources.white.texture, lut, METER_INVERSE_PIXEL_SCALE);
+                        game.fetchTexture(this.sprite.rope, this.building.texture.src, (sprite, texture) => {
+                            texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
+                        });
                         if (typeof this.building.color === 'number') {
                             this.sprite.rope.tint = this.building.color;
                         }
@@ -1545,14 +1699,7 @@ class FoxholeLocomotive extends FoxholeStructure {
             this.front_undercarriage.trackVelocity = 0;
             this.back_undercarriage.trackVelocity = 0;
         } else {
-            const getMidPoint = (p1, p2) => {
-                return {
-                    x: (p1.x + p2.x) / 2,
-                    y: (p1.y + p2.y) / 2
-                };
-            }
-
-            let midPoint = getMidPoint(this.front_undercarriage, this.back_undercarriage);
+            let midPoint = Math.pointBetween(this.front_undercarriage, this.back_undercarriage);
             this.position.set(midPoint.x, midPoint.y);
             this.rotation = Math.angleNormalized(Math.angleBetween(midPoint, this.front_undercarriage));
         }

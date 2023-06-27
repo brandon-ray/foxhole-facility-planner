@@ -15,35 +15,38 @@ let structureList = foxholeData.buildings;
 let upgradeList = {};
 let techList = {};
 let itemList = {
+    "diesel": {
+        "icon": "../UI/CustomIcons/ResourceFuelIcon.webp"
+    },
     "facilitymaterials4": {
-        "icon": "game/Textures/UI/ItemIcons/AssemblyMaterials1Icon.webp"
+        "icon": "../UI/ItemIcons/AssemblyMaterials1Icon.webp"
     },
     "facilitymaterials5": {
-        "icon": "game/Textures/UI/ItemIcons/AssemblyMaterials2Icon.webp"
+        "icon": "../UI/ItemIcons/AssemblyMaterials2Icon.webp"
     },
     "facilitymaterials6": {
-        "icon": "game/Textures/UI/ItemIcons/AssemblyMaterials3Icon.webp"
+        "icon": "../UI/ItemIcons/AssemblyMaterials3Icon.webp"
     },
     "facilitymaterials7": {
-        "icon": "game/Textures/UI/ItemIcons/AssemblyMaterials4Icon.webp"
+        "icon": "../UI/ItemIcons/AssemblyMaterials4Icon.webp"
     },
     "facilitymaterials8": {
-        "icon": "game/Textures/UI/ItemIcons/AssemblyMaterials5Icon.webp"
+        "icon": "../UI/ItemIcons/AssemblyMaterials5Icon.webp"
     },
     "oilcan": {
         "name": "Oil (Canned)",
         "description": "A raw viscous liquid that must be refined into fuel at Facilities.",
-        "icon": "game/Textures/UI/ItemIcons/Facilities/OilIcon.webp"
+        "icon": "../UI/ItemIcons/Facilities/OilIcon.webp"
     },
     "watercan": {
         "name": "Water (Canned)",
         "description": "Water... in a can!",
-        "icon": "game/Textures/UI/ItemIcons/WaterIcon.webp"
+        "icon": "../UI/ItemIcons/WaterIcon.webp"
     },
     "wood": {
         "name": "Refined Materials",
         "description": "Resource used for building advanced structures and producing special items.",
-        "icon": "game/Textures/UI/ItemIcons/RefinedMaterialsIcon.webp"
+        "icon": "../UI/ItemIcons/RefinedMaterialsIcon.webp"
     }
 };
 
@@ -120,7 +123,7 @@ const conversionEntriesMap = {
 function getLocalIcon(component) {
     let iconPath = component?.Icon?.ObjectPath ?? component?.Icon?.ResourceObject?.ObjectPath ?? component?.BrushOverride?.ResourceObject?.ObjectPath;
     if (iconPath) {
-        return `game/${iconPath.slice(12, -1)}webp`;
+        return `../${iconPath.slice(21, -1)}webp`;
     }
 }
 
@@ -163,8 +166,133 @@ function initializeStructureItems(component) {
     }
 }
 
-function iterateBaseStructures(uProperty, baseData) {
-    let basePath = `${foxholeDataDirectory}${uProperty.SuperStruct.ObjectPath.slice(0, -1)}json`;
+const requiredMeshes = {};
+const ignoredMeshes = ['Plane', 'Sphere', 'Critical', 'Destroyed'];
+function getValidMesh(meshes = {}, property) {
+    if (property?.Properties) {
+        const meshObj = property.Properties.StaticMesh ?? property.Properties.SkeletalMesh;
+        if (meshObj?.ObjectPath && meshObj.ObjectPath.startsWith('War/Content/Meshes/')) {
+            for (const ignoredMesh of ignoredMeshes) {
+                if (path.parse(meshObj.ObjectPath).name.includes(ignoredMesh)) {
+                    return meshes;
+                }
+            }
+            const mesh = {
+                mesh: meshObj.ObjectPath.slice(19, -2)
+            };
+            if (mesh.mesh) {
+                const meshPath = `${foxholeDataDirectory}${meshObj.ObjectPath.split('.')[0]}.json`;
+                const meshData = JSON.parse(fs.readFileSync(meshPath));
+                if (meshData) {
+                    for (const meshObject of meshData) {
+                        if (meshObject.Type === 'SkeletalMesh') {
+                            if (meshObject.Materials) {
+                                const materials = {};
+                                for (const material of meshObject.Materials) {
+                                    const materialPath = `${foxholeDataDirectory}${material.ObjectPath.split('.')[0]}.json`;
+                                    if (material.ObjectPath.startsWith('War/')) {
+                                        const materialData = JSON.parse(fs.readFileSync(materialPath));
+                                        if (materialData) {
+                                            for (const mat of materialData) {
+                                                if (mat.Properties?.TextureParameterValues) {
+                                                    const materialTextures = {};
+                                                    for (const materialParameter of mat.Properties.TextureParameterValues) {
+                                                        if (materialParameter.ParameterValue?.ObjectPath) {
+                                                            if (materialParameter.ParameterInfo?.Name === 'Albedo' || materialParameter.ParameterInfo?.Name === 'Diffuse 1') {
+                                                                materialTextures.a = `${materialParameter.ParameterValue.ObjectPath.split('.')[0].substring(21)}.png`;
+                                                            } else if (materialParameter.ParameterInfo?.Name === 'RoughnessUVTexture' || materialParameter.ParameterInfo?.Name === 'Roughness 1') {
+                                                                materialTextures.m = `${materialParameter.ParameterValue.ObjectPath.split('.')[0].substring(21)}.png`;
+                                                            } else if (materialParameter.ParameterInfo?.Name === 'Normal' || materialParameter.ParameterInfo?.Name === 'Normals 1') {
+                                                                materialTextures.n = `${materialParameter.ParameterValue.ObjectPath.split('.')[0].substring(21)}.png`;
+                                                            } else if (materialParameter.ParameterInfo?.Name === 'DetailNormal') {
+                                                                // TODO: Add detail normal support.
+                                                            }
+                                                        }
+                                                    }
+                                                    if (Object.keys(materialTextures).length && mat?.Name) {
+                                                        materials[mat?.Name] = materialTextures;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if (Object.keys(materials).length) {
+                                    mesh.materials = materials;
+                                }
+                            }
+                        } else if (meshObject.Type === 'StaticMesh') {
+                            if (meshObject.Properties?.StaticMaterials) {
+                                const materials = {};
+                                for (const material of meshObject.Properties.StaticMaterials) {
+                                    if (material.MaterialInterface?.ObjectPath) {
+                                        const materialPath = `${foxholeDataDirectory}${material.MaterialInterface.ObjectPath.split('.')[0]}.json`;
+                                        if (material.MaterialInterface.ObjectPath.startsWith('War/')) {
+                                            const materialData = JSON.parse(fs.readFileSync(materialPath));
+                                            if (materialData) {
+                                                for (const mat of materialData) {
+                                                    if (mat.Properties?.TextureParameterValues) {
+                                                        if (material.MaterialInterface.ObjectName.split(' ')[1] === 'Concrete03') {
+                                                            console.log(materialPath);
+                                                        }
+                                                        const materialTextures = {};
+                                                        for (const materialParameter of mat.Properties.TextureParameterValues) {
+                                                            if (materialParameter.ParameterValue?.ObjectPath) {
+                                                                if (materialParameter.ParameterInfo?.Name === 'Albedo' || materialParameter.ParameterInfo?.Name === 'Diffuse 1') {
+                                                                    materialTextures.a = `${materialParameter.ParameterValue.ObjectPath.split('.')[0].substring(21)}.png`;
+                                                                } else if (materialParameter.ParameterInfo?.Name === 'RoughnessUVTexture' || materialParameter.ParameterInfo?.Name === 'Roughness 1') {
+                                                                    materialTextures.m = `${materialParameter.ParameterValue.ObjectPath.split('.')[0].substring(21)}.png`;
+                                                                } else if (materialParameter.ParameterInfo?.Name === 'Normal' || materialParameter.ParameterInfo?.Name === 'Normals 1') {
+                                                                    materialTextures.n = `${materialParameter.ParameterValue.ObjectPath.split('.')[0].substring(21)}.png`;
+                                                                } else if (materialParameter.ParameterInfo?.Name === 'DetailNormal') {
+                                                                    // TODO: Add detail normal support.
+                                                                }
+                                                            }
+                                                        }
+                                                        if (Object.keys(materialTextures).length && material.MaterialInterface?.ObjectName) {
+                                                            materials[material.MaterialInterface.ObjectName.split(' ')[1]] = materialTextures;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if (Object.keys(materials).length) {
+                                    mesh.materials = materials;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (property.Properties.RelativeLocation) {
+                mesh.position = [(property.Properties.RelativeLocation.X ?? 0) / 100, (-property.Properties.RelativeLocation.Y ?? 0) / 100, (property.Properties.RelativeLocation.Z ?? 0) / 100];
+            }
+            if (property.Properties.RelativeRotation) {
+                mesh.rotation = [property.Properties.RelativeRotation.Pitch ?? 0, property.Properties.RelativeRotation.Roll ?? 0, property.Properties.RelativeRotation.Yaw ?? 0];
+            }
+            if (property.Properties.RelativeScale3D) {
+                mesh.scale = [property.Properties.RelativeScale3D.X ?? 1, property.Properties.RelativeScale3D.Y ?? 1, property.Properties.RelativeScale3D.Z ?? 1];
+            }
+            meshes[property.Name] = mesh;
+        }
+    }
+    return meshes;
+}
+
+function fetchTextureMeshes(objData, codeName, meshProperty, meshes) {
+    if (objData && objData.texture && codeName && (meshProperty || meshes)) {
+        try {
+            fs.accessSync(((typeof objData.texture === 'string' && objData.texture) || objData.texture?.src)?.replace('../', './public/games/foxhole/assets/game/Textures/'), fs.constants.F_OK);
+        } catch (err) {
+            requiredMeshes[codeName] = meshes ?? getValidMesh(requiredMeshes[codeName], meshProperty);
+        }
+    }
+}
+
+function iterateBaseStructures(component, baseData) {
+    let basePath = `${foxholeDataDirectory}${component.ObjectPath.slice(0, -1)}json`;
     let baseAsset = fs.readFileSync(basePath);
     baseAsset = JSON.parse(baseAsset);
     let className = null;
@@ -174,7 +302,7 @@ function iterateBaseStructures(uProperty, baseData) {
             case 'BlueprintGeneratedClass':
                 className = uProperty.Name ?? className;
                 if (uProperty.Super) {
-                    iterateBaseStructures(uProperty, baseData);
+                    iterateBaseStructures(uProperty.SuperStruct, baseData);
                 }
                 break;
             case className:
@@ -184,11 +312,29 @@ function iterateBaseStructures(uProperty, baseData) {
                     baseData.description = structure.Description?.SourceString ?? baseData.description;
                     baseData.BuildCategory = structure.BuildCategory ?? baseData.BuildCategory;
                     baseData.BuildOrder = structure.BuildOrder ?? baseData.BuildOrder;
+                    baseData.FactionVariant = structure.FactionVariant ?? baseData.FactionVariant;
+                    baseData.bIsBuiltOnFoundation = structure.bIsBuiltOnFoundation ?? baseData.bIsBuiltOnFoundation,
+                    baseData.bIsBuiltOnLandscape = structure.bIsBuiltOnLandscape ?? baseData.bIsBuiltOnLandscape,
+                    baseData.bBuildOnWater = structure.bBuildOnWater ?? baseData.bBuildOnWater,
                     baseData.minLength = structure.ConnectorMinLength ? structure.ConnectorMinLength / METER_UNREAL_UNITS : undefined ?? baseData.minLength;
                     baseData.maxLength = structure.ConnectorMaxLength ? structure.ConnectorMaxLength / METER_UNREAL_UNITS : undefined ?? baseData.maxLength;
                     baseData.icon = getLocalIcon(structure) ?? baseData.icon;
                     baseData.garrisonSupplyMultiplier = structure.DecaySupplyDrain ?? baseData.garrisonSupplyMultiplier;
                     baseData.power = structure.PowerGridInfo?.PowerDelta ?? baseData.power;
+                }
+                break;
+            case 'SkeletalMeshComponent':
+                baseData.meshes = getValidMesh(baseData.meshes, uProperty);
+                break;
+            case 'StaticMeshComponent':
+                baseData.meshes = getValidMesh(baseData.meshes, uProperty);
+                break;
+            case 'VehicleSeatComponent':
+                if (uProperty.Properties?.MountCodeName && uProperty.Properties.MountCodeName !== 'None') {
+                    if (!baseData.mounts) {
+                        baseData.mounts = [];
+                    }
+                    baseData.mounts.push(uProperty.Properties.MountCodeName.toLowerCase());
                 }
                 break;
         }
@@ -212,7 +358,7 @@ function iterateUpgradeCodeNames(dirPath) {
                     case 'BlueprintGeneratedClass':
                         className = uProperty.Name ?? className;
                         if (uProperty.Super) {
-                            iterateBaseStructures(uProperty, baseData);
+                            iterateBaseStructures(uProperty.SuperStruct, baseData);
                         }
                         break;
                     case className:
@@ -249,6 +395,56 @@ function iterateUpgradeCodeNames(dirPath) {
                                 }
                             }
                             */
+                            if (uProperty.Properties.UpgradeStructureCodeName && uProperty.Properties.UpgradeStructureCodeName !== 'None') {
+                                const downgradeCodeName = uProperty.Properties.CodeName.toLowerCase();
+                                const upgradeCodeName = uProperty.Properties.UpgradeStructureCodeName.toLowerCase();
+                                let downgradeId, upgradeId;
+                                if (!downgradeCodeName.includes('destroyed')) {
+                                    for (const [codeName, structureData] of Object.entries(structureList)) {
+                                        if (codeName === downgradeCodeName) {
+                                            downgradeId = structureData.id;
+                                        }
+                                        if (codeName === upgradeCodeName) {
+                                            upgradeId = structureData.id;
+                                        }
+                                        if (structureData.upgrades) {
+                                            for (const [codeName, upgradeData] of Object.entries(structureData.upgrades)) {
+                                                if (!upgradeData.reference) {
+                                                    if (codeName === downgradeCodeName) {
+                                                        downgradeId = `${structureData.id}_${upgradeData.id}`;
+                                                    }
+                                                    if (codeName === upgradeCodeName) {
+                                                        upgradeId = `${structureData.id}_${upgradeData.id}`;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        if (downgradeId && upgradeId) {
+                                            break;
+                                        }
+                                    }
+                                    for (const [codeName, structureData] of Object.entries(structureList)) {
+                                        if (codeName === downgradeCodeName) {
+                                            structureData.tierUp = upgradeId;
+                                        }
+                                        if (codeName === upgradeCodeName) {
+                                            structureData.tierDown = downgradeId;
+                                        }
+                                        if (structureData.upgrades) {
+                                            for (const [codeName, upgradeData] of Object.entries(structureData.upgrades)) {
+                                                if (!upgradeData.reference) {
+                                                    if (upgradeId && codeName === downgradeCodeName) {
+                                                        structureData.upgrades[downgradeCodeName].tierUp = upgradeId;
+                                                    }
+                                                    if (downgradeId && codeName === upgradeCodeName) {
+                                                        structureData.upgrades[upgradeCodeName].tierDown = downgradeId;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                         break;
                 }
@@ -309,7 +505,7 @@ async function iterateStructures(dirPath) {
                     case 'BlueprintGeneratedClass':
                         className = uProperty.Name ?? className;
                         if (uProperty.Super) {
-                            iterateBaseStructures(uProperty, baseData);
+                            iterateBaseStructures(uProperty.SuperStruct, baseData);
                         }
                         break;
                     case className:
@@ -333,6 +529,25 @@ async function iterateStructures(dirPath) {
                                     break;
                                 }
                             }
+                            /*
+                            if (!structureData && dirPath.startsWith('dev\\tools\\Output\\Exports\\War\\Content\\Blueprints\\Vehicles')) {
+                                let containsIgnoredStr = false;
+                                const ignoredStrings = [
+                                    'buildsite',
+                                    'destroyed',
+                                    'fill'
+                                ];
+                                for (const ignoredStr of ignoredStrings) {
+                                    if (structureCodeName.includes(ignoredStr)) {
+                                        containsIgnoredStr = true;
+                                        break;
+                                    }
+                                }
+                                if (!containsIgnoredStr) {
+                                    console.info(`"${structureCodeName}": {},`);
+                                }
+                            }
+                            */
                             if (structureData && !structureData.reference) {
                                 structureData = {
                                     'id': structureData.id,
@@ -341,16 +556,16 @@ async function iterateStructures(dirPath) {
                                     'className': structureData.className,
                                     'codeName': structure.CodeName,
                                     'parentKey': structureData.parentKey,
-                                    'prevUpgradeKey': structureData.prevUpgradeKey,
                                     'description': structure.Description?.SourceString ?? baseData.description ?? structureData.description,
                                     //'category': buildCategoryMap[(structure.BuildCategory ?? baseData.BuildCategory)?.substring(16)] ?? structureData.category ?? 'misc',
                                     'category': structureData.category,
                                     'categoryOrder': structureData.categoryOrder ?? structure.BuildOrder ?? baseData.BuildOrder,
-                                    'faction': structure.FactionVariant === 'EFactionId::Colonials' ? 'c' : (structure.FactionVariant === 'EFactionId::Wardens' ? 'w' : structureData.faction),
+                                    'faction': (structure.FactionVariant ?? baseData.FactionVariant) === 'EFactionId::Colonials' ? 'c' : ((structure.FactionVariant ?? baseData.FactionVariant) === 'EFactionId::Wardens' ? 'w' : structureData.faction),
                                     'color': structureData.color,
                                     'experimental': structureData.experimental,
                                     'hideInList': structureData.hideInList,
                                     'baseGarrisonRadius': structureData.baseGarrisonRadius,
+                                    'baseGarrisonTypes': structureData.baseGarrisonTypes,
                                     'tier': structureData.tier,
                                     'width': structureData.width,
                                     'length': structureData.length,
@@ -358,7 +573,7 @@ async function iterateStructures(dirPath) {
                                     'range': structureData.range,
                                     'sortLayer': structureData.sortLayer,
                                     'sortOffset': structureData.sortOffset,
-                                    'hitArea': undefined,
+                                    'hitArea': structureData.hitArea,
                                     'hasHandle': structureData.hasHandle,
                                     'hasOutline': structureData.hasOutline,
                                     'isBezier': structureData.isBezier,
@@ -367,19 +582,26 @@ async function iterateStructures(dirPath) {
                                     'lineWidth': structureData.lineWidth,
                                     'minLength': structure.ConnectorMinLength ? structure.ConnectorMinLength / METER_UNREAL_UNITS : structureData.minLength ?? baseData.minLength,
                                     'maxLength': structure.ConnectorMaxLength ? structure.ConnectorMaxLength / METER_UNREAL_UNITS : structureData.maxLength ?? baseData.maxLength,
+                                    'minExtLength': structureData.minExtLength,
+                                    'maxExtLength': structureData.maxExtLength,
                                     'maxRange': structure.MaxRange ? structure.MaxRange / METER_UNREAL_UNITS : undefined,
                                     'icon': structureData.icon ?? getLocalIcon(structure) ?? baseData.icon,
-                                    'texture': (typeof structureData.texture === 'string' || structureData.texture === null) ? structureData.texture : `game/Textures/Structures/${structureData.id}.webp`,
+                                    'texture': (typeof structureData.texture === 'string' || typeof structureData.texture === 'object' || structureData.texture === null) ? structureData.texture : `../Structures/${structureData.id}.webp`,
                                     'textureBorder': structureData.textureBorder,
                                     'textureFrontCap': structureData.textureFrontCap,
                                     'textureBackCap': structureData.textureBackCap,
-                                    'textureOffset': structureData.textureOffset,
+                                    'texturePost': structureData.texturePost,
+                                    'texturePostDist': structureData.texturePostDist,
+                                    'buildOnFoundation': structure.bIsBuiltOnFoundation ?? baseData.bIsBuiltOnFoundation,
+                                    'buildOnWater': structure.bBuildOnWater ?? baseData.bBuildOnWater,
+                                    'preventOnLandscape': (structure.bIsBuiltOnLandscape ?? baseData.bIsBuiltOnLandscape) === false || undefined,
                                     'garrisonSupplyMultiplier': structure.DecaySupplyDrain ?? baseData.garrisonSupplyMultiplier ?? structureData.garrisonSupplyMultiplier,
                                     'power': (structure.PowerGridInfo?.PowerDelta ?? baseData.power) / 1000 || undefined,
                                     'canSnap': structureData.canSnap,
 			                        'canSnapRotate': structureData.canSnapRotate,
                                     'canSnapStructureType': structureData.canSnapStructureType,
                                     'canSnapAlongBezier': structureData.canSnapAlongBezier,
+                                    'canBlueprint': structureData.canBlueprint,
                                     'canUnion': structureData.canUnion,
                                     'ignoreSnapSettings': structureData.ignoreSnapSettings,
                                     'snapGrab': structureData.snapGrab,
@@ -397,15 +619,17 @@ async function iterateStructures(dirPath) {
                                     '_productionLength': structureData._productionLength,
                                     'production': structureData.production,
                                     'productionScaling': structureData.productionScaling,
+                                    'tierUp': structureData.tierUp,
+                                    'tierDown': structureData.tierDown,
                                     'AssemblyItems': structure.AssemblyItems,
                                     'ConversionEntries': structure.ConversionEntries,
                                     'upgrades': structureData.upgrades
                                 }
                                 if (structure.MaximumRange) {
+                                    if (!structureData.range) {
+                                        structureData.range = {};
+                                    }
                                     structureData.range.max = structure.MaximumRange / METER_UNREAL_UNITS;
-                                }
-                                if (structureData.texture) {
-                                    structureData.hitArea = await getStructureHitArea(structureData);
                                 }
                                 initializeStructureItems(structure);
                                 if (structureData.techId) {
@@ -416,6 +640,10 @@ async function iterateStructures(dirPath) {
                                         modificationsData[id] = modification;
                                         initializeStructureItems(modification);
                                     }
+                                }
+                                fetchTextureMeshes(structureData, structureCodeName, undefined, baseData.meshes);
+                                if (baseData.mounts) {
+                                    structureData.mounts = [...baseData.mounts];
                                 }
                                 if (parentCodeName) {
                                     structureList[parentCodeName].upgrades[structureCodeName] = structureData;
@@ -440,16 +668,17 @@ async function iterateStructures(dirPath) {
                                             'id': storedModData?.id,
                                             'name': modification.DisplayName?.SourceString ?? getTableString(modification.DisplayName) ?? displayName,
                                             'codeName': displayName,
-                                            'prevUpgradeKey': storedModData?.prevUpgradeKey,
                                             'description': modification.Description?.SourceString ?? getTableString(modification.Description) ?? 'No Description Provided.',
                                             'range': storedModData?.range,
                                             'hitArea': undefined,
                                             'baseIcon': storedModData?.baseIcon,
                                             'icon': getLocalIcon(modification),
-                                            'texture': typeof storedModData?.texture === 'string' || storedModData?.texture === null ? storedModData.texture : `game/Textures/Structures/${structureData.id}_${storedModData?.id}.webp`,
+                                            'texture': (typeof storedModData?.texture === 'string' || typeof storedModData?.texture === 'object' || storedModData?.texture === null) ? storedModData.texture : `../Structures/${structureData.id}_${storedModData?.id}.webp`,
                                             'textureBorder': storedModData?.textureBorder,
                                             'textureFrontCap': storedModData?.textureFrontCap,
                                             'textureBackCap': storedModData?.textureBackCap,
+                                            'texturePost': structureData.texturePost,
+                                            'texturePostDist': structureData.texturePostDist,
                                             'positionOffset': storedModData?.positionOffset,
                                             'sockets': storedModData?.sockets,
                                             'techId': modification.TechID && (modification.TechID !== 'ETechID::None') ? modification.TechID.substring(9).toLowerCase() : undefined,
@@ -463,9 +692,6 @@ async function iterateStructures(dirPath) {
                                             'AssemblyItems': modificationData?.AssemblyItems,
                                             'ConversionEntries': modificationData?.ConversionEntries
                                             // There is a FuelCost variable which is never used here.
-                                        }
-                                        if (modificationData.texture) {
-                                            modificationData.hitArea = await getStructureHitArea(modificationData);
                                         }
                                         if (modificationData.techId) {
                                             techList[modificationData.techId] = {};
@@ -489,9 +715,44 @@ async function iterateStructures(dirPath) {
                         if (structure && structureData && uProperty.Properties?.Config) {
                             structureList[structureCodeName]['range'] = {
                                 "type": "crane",
-                                "min": uProperty.Properties.Config.MinHorizontalDistanceToTarget / METER_UNREAL_UNITS,
-                                "max": uProperty.Properties.Config.MaxHorizontalDistanceToTarget / METER_UNREAL_UNITS
+                                "min": (uProperty.Properties.Config.MinHorizontalDistanceToTarget ?? 600) / METER_UNREAL_UNITS,
+                                "max": (uProperty.Properties.Config.MaxHorizontalDistanceToTarget ?? 1750) / METER_UNREAL_UNITS
                             };
+                        }
+                        break;
+                    case 'SkeletalMeshComponent':
+                        fetchTextureMeshes(structureData, structureCodeName, uProperty);
+                        break;
+                    case 'StaticMeshComponent':
+                        fetchTextureMeshes(structureData, structureCodeName, uProperty);
+                        break;
+                    case 'VehicleSeatComponent':
+                        if (structureData) {
+                            if (uProperty.Properties?.MountCodeName && uProperty.Properties.MountCodeName !== 'None') {
+                                if (!structureData.mounts) {
+                                    structureData.mounts = [];
+                                }
+                                structureData.mounts.push(uProperty.Properties.MountCodeName.toLowerCase());
+                            } else if (uProperty.Properties?.ModularMounts) {
+                                // TO-DO
+                            }
+                        }
+                        break;
+                    case 'InheritableComponentHandler':
+                        if (structureData && uProperty.Properties?.Records) {
+                            for (const component of uProperty.Properties.Records) {
+                                if (component.ComponentClass?.ObjectName?.endsWith('VehicleSeatComponent')) {
+                                    if (component.ComponentKey?.OwnerClass) {
+                                        iterateBaseStructures(component.ComponentKey.OwnerClass, baseData);
+                                        if (baseData.mounts) {
+                                            if (!structureData.mounts) {
+                                                structureData.mounts = [];
+                                            }
+                                            structureData.mounts = structureData.mounts.concat(baseData.mounts);
+                                        }
+                                    }
+                                }
+                            }
                         }
                         break;
                 }
@@ -575,17 +836,23 @@ function iterateData(filePath, list, type) {
                         }
                         weaponList[codeName] = weapon;
                     }
-                } else if (type === 'gunner' && codeName.endsWith('gunner') && list[codeName.slice(0, -6)]) {
-                    listItem = list[codeName.slice(0, -6)];
-                    if (!listItem.range) {
-                        listItem.range = {
-                            type: '',
-                            min: 0,
-                            max: 0
-                        };
+                } else if (type === 'gunner') {
+                    for (const v of Object.values(list)) {
+                        if (v.mounts && v.mounts.includes(codeName)) {
+                            if (data.MinDistance > 0 || data.MaxDistance > 0) {
+                                /*
+                                TODO: Need to get the position of where the gun is mounted for each range to be accurate.
+                                if (!v.ranges) {
+                                    v.ranges = {};
+                                }
+                                v.ranges[codeName] = {
+                                    min: data.MinDistance / 100, // ArtilleryAccuracyMinDist
+                                    max: data.MaxDistance / 100 // ArtilleryAccuracyMaxDist / MaxReachability
+                                };
+                                */
+                            }
+                        }
                     }
-                    listItem.range.min = data.MinDistance / 100; // ArtilleryAccuracyMinDist
-                    listItem.range.max = data.MaxDistance / 100; // ArtilleryAccuracyMaxDist / MaxReachability
                 } else if (type === 'damageType') {
                     for (const [key, weapon] of Object.entries(weaponList)) {
                         if (weapon.damageType?.type === codeName) {
@@ -643,8 +910,9 @@ function iterateData(filePath, list, type) {
                         list[codeName] = {
                             name: data.DisplayName?.SourceString,
                             regionId: listItem.regionId,
-                            icon: `game/${data.Image.ObjectPath.replace('/Processed/', '/Icons/').slice(12, -1)}webp`,
-                            texture: `game/${data.Image.ObjectPath.slice(12, -1)}png`,
+                            icon: `../${data.Image.ObjectPath.replace('/Processed/', '/Icons/').slice(21, -1)}webp`,
+                            // texture: `../${data.Image.ObjectPath.slice(21, -1)}png`,
+                            textureKey: path.basename(data.Image.ObjectPath, '.0'),
                             gridCoord: {
                                 x: data.GridCoord.X > 10 ? data.GridCoord.X - 4294967296 : data.GridCoord.X,
                                 y: data.GridCoord.Y > 10 ? data.GridCoord.Y - 4294967296 : data.GridCoord.Y
@@ -860,25 +1128,39 @@ function findFile(directory, fileName) {
 }
 
 const METER_PIXEL_SCALE = 52.8 / 32; // Meter in pixels of a texture divided by the width of a meter on the grid / board.
-async function getStructureHitArea(structureData) {
-    const shapes = structurePolygons[path.basename(structureData.texture, '.webp')];
-    if (shapes) {
-        const texture = await sharp('./public/games/foxhole/assets/' + structureData.texture).metadata();
-        if (texture) {
-            let hitAreaPolygons = [];
-            for (let i = 0; i < shapes.length; i++) {
-                const shape = shapes[i].shape;
-                let adjustedShape = [];
-                for (let i = 0; i < shape.length; i += 2) {
-                    adjustedShape.push(((shape[i] - ((structureData.textureOffset?.x ?? texture.width) / 2)) / METER_PIXEL_SCALE).round(2));
-                    adjustedShape.push(((shape[i + 1] - ((structureData.textureOffset?.y ?? texture.height) / 2)) / METER_PIXEL_SCALE).round(2));
-                }
-                hitAreaPolygons.push({ 'shape': `[ ${adjustedShape.join()} ]` });
+async function fetchTextureData(structureData) {
+    const texturePath = (typeof structureData.texture === 'string' && structureData.texture) || structureData.texture?.src;
+    if (typeof texturePath === 'string') {
+        const filePath = texturePath?.replace('../', './public/games/foxhole/assets/game/Textures/');
+        if (texturePath && fs.existsSync(filePath) && !structureData.texture?.speed) {
+            const texture = await sharp(filePath).metadata();
+            structureData.texture = {
+                src: texturePath,
+                width: texture.width,
+                height: texture.height,
+                offset: structureData.texture.offset || (structureData.textureOffset && {
+                    x: structureData.textureOffset?.x,
+                    y: structureData.textureOffset?.y
+                })
             }
-            return hitAreaPolygons;
+            const shapes = structurePolygons[path.basename(texturePath, '.webp')];
+            if (shapes) {
+                if (texture) {
+                    let hitAreaPolygons = [];
+                    for (let i = 0; i < shapes.length; i++) {
+                        const shape = shapes[i].shape;
+                        let adjustedShape = [];
+                        for (let i = 0; i < shape.length; i += 2) {
+                            adjustedShape.push(((shape[i] - ((structureData.texture.offset?.x ?? texture.width) / 2)) / METER_PIXEL_SCALE).round(2));
+                            adjustedShape.push(((shape[i + 1] - ((structureData.texture.offset?.y ?? texture.height) / 2)) / METER_PIXEL_SCALE).round(2));
+                        }
+                        hitAreaPolygons.push({ 'shape': `[ ${adjustedShape.join()} ]` });
+                    }
+                    structureData.hitArea = hitAreaPolygons;
+                }
+            }
         }
     }
-    return undefined;
 }
 
 Number.prototype.round = function(n) {
@@ -959,7 +1241,7 @@ async function updateData() {
             sharp(fullresPath).metadata().then(metadata => {
                 const resizeWidth = Math.max(metadata.width + (padding * 2), metadata.height + (padding * 2));
                 sharp(fullresPath)
-                .extend({ top: resizeWidth - metadata.width / 2, bottom: resizeWidth - metadata.width / 2, left: resizeWidth - metadata.height / 2, right: resizeWidth - metadata.height / 2, background: { r: 0, g: 0, b: 0, alpha: 0 } })
+                .extend({ top: resizeWidth - Math.round(metadata.width / 2), bottom: resizeWidth - Math.round(metadata.width / 2), left: resizeWidth - Math.round(metadata.height / 2), right: resizeWidth - Math.round(metadata.height / 2), background: { r: 0, g: 0, b: 0, alpha: 0 } })
                 .toBuffer((err, resizedImage, resizeInfo) => {
                     if (err) {
                         console.error(err);
@@ -999,6 +1281,30 @@ async function updateData() {
                 });
             });
         }
+
+        /*
+        const presetPath = path.join(directoryPath, 'preset.json');
+        fs.readFile(presetPath, 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading file:', presetPath, err);
+                return;
+            }
+            try {
+                const saveObject = JSON.parse(data);
+                
+                // Run save version updates.
+                
+                fs.writeFile(presetPath, JSON.stringify(saveObject), 'utf8', (err) => {
+                    if (err) {
+                        console.error('Error writing file:', presetPath, err);
+                        return;
+                    }
+                });
+            } catch (e) {
+                console.error('Error processing file:', presetPath, e);
+            }
+        });
+        */
     });
 
     const importDirectory = './public/games/foxhole/assets/game/Textures/Import';
@@ -1016,6 +1322,7 @@ async function updateData() {
                         throw err;
                     }
 
+                    /* Uncomment for structures that have predefined width/length/radius like bunkers, trenches, etc.
                     const origin = {
                         x: Math.round(metadata.width / 2) + info.trimOffsetLeft,
                         y: Math.round(metadata.height / 2) + info.trimOffsetTop
@@ -1025,6 +1332,7 @@ async function updateData() {
                         x: Math.round(info.width / 2),
                         y: Math.round(info.height / 2)
                     }
+                    */
 
                     const structureName = file.split('.')[0].toLowerCase();
                     if (structureList[structureName]) {
@@ -1033,10 +1341,12 @@ async function updateData() {
                                 throw err;
                             }
                         });
-                        structureList[structureName].textureOffset = {
+                        /* Uncomment for structures that have predefined width/length/radius like bunkers, trenches, etc.
+                        structureList[structureName].texture.offset = {
                             x: trimOrigin.x - (trimOrigin.x - origin.x),
                             y: trimOrigin.y - (trimOrigin.y - origin.y)
                         };
+                        */
                     } else {
                         console.info('Could not find structure for imported image in list: ', structureName);
                     }
@@ -1062,7 +1372,7 @@ async function updateData() {
     }, {});
 
     /*
-    foxholeData.maps = {};
+    const mapData = {};
     await fetch('https://war-service-live.foxholeservices.com/api/worldconquest/maps')
     .then(response => response.json())
     .then(async data => {
@@ -1070,22 +1380,43 @@ async function updateData() {
             await fetch('https://war-service-live.foxholeservices.com/api/worldconquest/maps/' + map + '/static')
             .then(response => response.json())
             .then(data => {
-                foxholeData.maps[map.toLowerCase()] = data;
+                const mapKey = map.toLowerCase();
+                const textureKey = `Map${map}`;
+                const prevData = foxholeData.maps[mapKey];
+                mapData[mapKey] = {
+                    name: prevData?.name ?? map,
+                    regionId: data.regionId,
+                    icon: `../UI/HexMaps/Icons/${textureKey}.webp`,
+                    textureKey: textureKey,
+                    gridCoord: prevData?.gridCoord
+                };
             }).catch(error => console.error(error));
         }
     })
     .catch(error => console.error(error));
+    foxholeData.maps = mapData;
     */
 
     iterateUpgradeCodeNames(`${foxholeDataDirectory}War/Content/Blueprints/`);
 
     await iterateStructures(`${foxholeDataDirectory}War/Content/Blueprints/`);
 
+    for (const [codeName, meshes] of Object.entries(requiredMeshes)) {
+        requiredMeshes[codeName] = Object.values(meshes);
+    }
+    
+    fs.writeFile('dev/meshes.json', JSON.stringify(requiredMeshes, null, '\t'), err => {
+        if (err) {
+            throw err;
+        }
+    });
+
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPVehicleDynamicData.json`, itemList, 'item');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, itemList, 'item'); // Check for items in the structure data... Yes, Material Pallet is stored here.
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPAmmoDynamicData.json`, weaponList, 'weapon');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/DTDamageProfiles.json`, weaponList, 'damageType');
-    iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPMapList.json`, foxholeData.maps, 'map');
+    // iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPMapList.json`, foxholeData.maps, 'map');
+    //iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPVehicleDynamicData.json`, structureList, 'item');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPMountDynamicData.json`, structureList, 'gunner');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, structureList);
 
@@ -1117,6 +1448,15 @@ async function updateData() {
         }
     }
 
+    for (const structure of Object.values(structureList)) {
+        await fetchTextureData(structure);
+        if (structure.upgrades) {
+            for (const upgrade of Object.values(structure.upgrades)) {
+                await fetchTextureData(upgrade);
+            }
+        }
+    }
+
     structureList = Object.keys(structureList).reduce((structures, codeName) => {
         let structure = structureList[codeName];
         iterateSocketData(structure);
@@ -1131,7 +1471,15 @@ async function updateData() {
         }
         structures[structure.id ?? codeName] = structureList[codeName];
         delete structure.id;
+        delete structure.mounts;
         return structures;
+    }, {});
+
+    const presets = Object.entries(foxholeData.presets).map(([name, value]) => ({ name, value }));
+    presets.sort((a, b) => (a.name > b.name) ? 1 : -1);
+    foxholeData.presets = presets.reduce((acc, { name, value }) => {
+        acc[name] = value;
+        return acc;
     }, {});
 
     let foxholeDataStr = JSON.stringify({

@@ -1,4 +1,4 @@
-const SAVE_VERSION = '1.0.1';
+const SAVE_VERSION = '1.0.2';
 
 const COLOR_WHITE = 0xFFFFFF; // Also resets tint.
 const COLOR_DARKGREY = 0x505050;
@@ -7,25 +7,133 @@ const COLOR_BLACK = 0x000000;
 const COLOR_ORANGE = 0xFF8F00;
 const COLOR_RED = 0xFF0000;
 const COLOR_GREEN = 0x00FF00;
+const COLOR_LIMEGREEN = 0x72FF5A;
 const COLOR_BLUE = 0x0000FF;
+const COLOR_BLUEPRINT = 0x335cff;
 const COLOR_LIGHTBLUE = 0x00E1FF;
 const COLOR_YELLOW = 0xFFFF00;
 const COLOR_PURPLE = 0x9900FF;
 
 const COLOR_SELECTION = 0xE16931; // Orange
 const COLOR_SELECTION_BORDER = 0xFF8248; // Lighter Orange
-
-const COLOR_RANGES = {
-    default: 0x72FF5A, // Green
-    killbox: COLOR_ORANGE,
-    killboxMG: COLOR_BLUE,
-    killboxAT: COLOR_RED,
-    killboxRocket: COLOR_ORANGE,
-    killboxArty: COLOR_YELLOW,
-    radio: COLOR_PURPLE,
-    crane: COLOR_LIGHTBLUE
-};
 const COLOR_RANGE_BORDER = 0xED2323; // Red
+
+const FILTER_BRIGHT = new PIXI.filters.ColorMatrixFilter();
+FILTER_BRIGHT.brightness(2.75);
+
+const PROJECT_LAYERS = {
+    ranges: {
+        preventDecay: {
+            name: 'Maintenance',
+            alias: 'SUPPLY'
+        },
+        resourceField: {
+            name: 'Resource Field',
+            alias: 'HARVEST'
+        },
+        garrison: {
+            name: 'Garrison',
+            alias: 'BASE'
+        },
+        crane: {
+            name: 'Crane',
+            alias: 'CRANE',
+            color: COLOR_LIGHTBLUE
+        },
+        killbox: {
+            name: 'Rifle',
+            alias: 'RIFLE',
+            color: COLOR_ORANGE
+        },
+        killboxMG: {
+            name: 'Machine Gun',
+            alias: 'MG',
+            color: COLOR_BLUE
+        },
+        killboxAT: {
+            name: 'Anti-Tank',
+            alias: 'AT',
+            color: COLOR_RED
+        },
+        killboxRocket: {
+            name: 'Rocket',
+            alias: 'RPG',
+            color: COLOR_ORANGE
+        },
+        killboxArty: {
+            name: 'Artillery',
+            alias: 'ARTY',
+            color: COLOR_YELLOW
+        },
+        radio: {
+            name: 'Radio',
+            alias: 'RADIO',
+            color: COLOR_PURPLE
+        }
+    },
+    region: {
+        base: {
+            name: 'Foxhole Map',
+            description: 'The default map for Foxhole.',
+            alias: 'FOXHOLE',
+            disable: 'colors',
+            bmm: false
+        },
+        colors: {
+            name: 'Better Map Mod',
+            description: 'A variant of the default map for Foxhole with more contrast colors and better detail.',
+            alias: 'BMM',
+            disable: 'base'
+        },
+        grid: {
+            name: 'Grid',
+            description: 'A grid overlay for the map.',
+            preventLoad: true
+        },
+        subRegions: {
+            name: 'Labels',
+            description: 'A sub-region overlay for the map.',
+            preventLoad: true
+        },
+        icons: {
+            name: 'Icons',
+            description: 'An icon overlay for the map.',
+            preventLoad: true
+        },
+        shadows: {
+            name: 'Shadows',
+            description: 'A shadow overlay for the map.',
+            alias: 'SHADE'
+        },
+        topography_values: {
+            name: 'Topography',
+            description: 'A topography overlay for the map.',
+            alias: 'TOPO'
+        },
+        roads: {
+            name: 'Roads',
+            description: 'A roads overlay for the map.',
+            alias: 'ROAD',
+            disable: 'roads_tiers'
+        },
+        roads_tiers: {
+            name: 'Road Tiers',
+            description: 'A roads overlay for the map with colored tiers.',
+            alias: 'ROAD+',
+            disable: 'roads'
+        },
+        tracks: {
+            name: 'Tracks',
+            description: 'A tracks overlay for the map.',
+            alias: 'RAIL'
+        },
+        rdz: {
+            name: 'Rapid Decay Zone',
+            description: 'A rapid decay zone overlay for the map.',
+            alias: 'RDZ'
+        }
+    },
+}
 
 const DEFAULT_TEXT_STYLE = {
     fontFamily: 'Jost',
@@ -50,15 +158,20 @@ const TEXTURE_SCALE = 0.5; // Scale for textures to adjust values after the text
 const METER_BOARD_PIXEL_SIZE = 32; // Size of a grid square in pixels.
 const METER_TEXTURE_PIXEL_SIZE = 52.8; // Size of a meter in pixels from a texture generated with Blender that's resized by 0.5.
 const METER_TEXTURE_PIXEL_SCALE = METER_TEXTURE_PIXEL_SIZE / METER_BOARD_PIXEL_SIZE;
+const METER_INVERSE_PIXEL_SCALE = METER_BOARD_PIXEL_SIZE / METER_TEXTURE_PIXEL_SIZE; // Scale used for bezier objects.
+
+const REGION_WIDTH = 2177 * METER_BOARD_PIXEL_SIZE;
+const REGION_HEIGHT = 1888 * METER_BOARD_PIXEL_SIZE; // 125m x 15.104u
 
 const game = {
     services: {},
     settings: {
         quality: 'auto',
+        lazyLoadTextures: true,
         disableSound: false,
         disableHUD: false,
         enableAdvanced: false,
-        enableDarkMode: false,
+        enableDarkMode: true,
         enableDebug: false,
         enableExperimental: false,
         enableHistory: true,
@@ -66,27 +179,41 @@ const game = {
         enableAutoLoading: true,
         enableGrid: true,
         enableStats: true,
+        enableLayers: false,
         enableSelectionStats: true,
+        enableRealTimeMap: true,
+        statsRequireMultiSelection: false,
+        showBuildingDestructionStats: false,
         enableBunkerDryingStats: false,
         gridSize: 16,
         enableSnapRotation: true,
         snapRotationDegrees: 15,
         keySnapRotationDegrees: 45,
         zoomSpeed: 3,
+        lockCameraToHex: true,
         selectedFaction: null,
         selectedTier: 3,
         showSelectedTierOnly: true,
         disableLockedMouseEvents: false,
         bringSelectedToFront: true,
+        showLineOfSightRanges: true,
         displayFactionTheme: true,
         defaultBuildingCategory: 'all',
         showParentProductionList: true,
         showCollapsibleBuildingList: true,
         showUpgradesAsBuildings: false,
+        buildingListFilters: {
+            bunkers: true,
+            facilities: true,
+            vehicles: true
+        },
         showFacilityName: true,
         showToolbelt: true,
+        showExpandedHubSidebar: true,
+        showFooterInfo: false,
         selectedToolbelt: 0,
         toolbelts: {},
+        toolbeltMode: 0,
         toolbeltFilters: {
             showUpgradesAsBuildings: false,
             selectedTier: 3,
@@ -109,16 +236,55 @@ const game = {
             line: Object.assign({}, DEFAULT_SHAPE_STYLE, {
                 lineWidth: 14,
                 frontArrow: true,
-                backArrow: true
+                backArrow: true,
+                showDist: false
             })
         },
         volume: 0.2
     },
-    isPlayScreen: false
+    project: {
+        name: 'Unnamed Project',
+        description: '',
+        authors: '',
+        settings: {
+            showWorldRegion: true,
+            showProductionIcons: true,
+            showRangeWhenSelected: true,
+            regionKey: '',
+            regionCrop: undefined,
+            region: {
+                base: false,
+                colors: true,
+                grid: true,
+                subRegions: true,
+                icons: true,
+                shadows: false,
+                topography_values: true,
+                roads: true,
+                roads_tiers: false,
+                tracks: true,
+                rdz: true
+            },
+            ranges: {
+                crane: false,
+                radio: false,
+                resourceField: false,
+                preventDecay: false,
+                killbox: false,
+                killboxMG: false,
+                killboxAT: false,
+                killboxRocket: false,
+                killboxArty: false,
+                garrison: false
+            }
+        }
+    },
+    isPlayScreen: false,
+    playMode: false
 };
 
 game.defaultSettings = JSON.parse(JSON.stringify(game.settings));
-game.playMode = false;
+game.defaultProject = JSON.parse(JSON.stringify(game.project));
 
 function escapeHtml(str) {
     if (str && str.replace) {
@@ -235,34 +401,13 @@ try {
     let selectedEntities = [];
     let followEntity = null;
     let pickupSelectedEntities = false;
+    let rotateSelectedEntities = false;
     let pickupTime = null;
     let pickupPosition = null;
     let ignoreMousePickup = true;
     let effects = [];
 
     game.selectedHandlePoint = null;
-
-    game.projectName = 'Unnamed Project';
-    game.projectDescription = '';
-    game.projectAuthors = '';
-    game.projectSettings = {
-        showWorldRegion: true,
-        showProductionIcons: true,
-        showRangeWhenSelected: true,
-        regionKey: '',
-        ranges: {
-            crane: false,
-            radio: false,
-            resourceField: false,
-            preventDecay: false,
-            killbox: false,
-            killboxMG: false,
-            killboxAT: false,
-            killboxRocket: false,
-            killboxArty: false
-        }
-    };
-
     game.selectedBuildingCategory = game.settings.defaultBuildingCategory;
 
     game.constructionModes = [
@@ -296,6 +441,12 @@ try {
             text: '/',
             eType: 'shape',
             eSubType: 'line'
+        },
+        {
+            key: 'crop-region',
+            title: 'Region Crop Tool',
+            cursor: 'crosshair',
+            menuButton: false
         },
         {
             key: 'select',
@@ -382,24 +533,27 @@ try {
     game.setPlaying = function(playing) {
         if (game.playMode !== playing) {
             game.playMode = playing;
-            game.appComponent.$forceUpdate();
+            game.appComponent?.refresh();
         }
     }
 
     game.setDarkMode = function(darkMode) {
-        if (game.settings.enableDarkMode !== darkMode) {
-            game.settings.enableDarkMode = darkMode;
-            background.texture = game.resources[game.settings.enableDarkMode ? 'background_dark' : 'background'].texture;
-            game.updateSettings();
-        }
+        game.settings.enableDarkMode = darkMode;
+        background.texture = game.resources[game.settings.enableDarkMode ? 'background_dark' : 'background'].texture;
+        game.updateSettings();
     }
 
     game.setConstructionMode = function(mode) {
+        if (typeof mode === 'string') {
+            mode = game.constructionModes.find(m => m.key === mode);
+        }
         mode = mode ?? game.constructionModes[game.constructionModes.length - 1];
         if (game.constructionMode !== mode) {
             game.constructionMode = mode;
             app.view.style.cursor = mode.cursor ? `url(/assets/${mode.cursor}.webp) 16 16, auto` : 'unset';
             game.constructionMenuComponent?.refresh();
+            game.boardUIComponent?.refresh();
+            game.appComponent?.refresh();
             return true;
         }
         return false;
@@ -457,6 +611,149 @@ try {
         power: 'power.webp',
         power_x128: 'power_x128.webp',
         smoke_particles: 'smoke_particles.png'
+    };
+
+    const MAP_ICONS = {
+        8: {
+            name: 'Forward Base',
+            icon: 'MapIconForwardBase1'
+        },
+        11: {
+            name: 'Hospital',
+            icon: 'MapIconHospital'
+        },
+        12: {
+            name: 'Vehicle Factory',
+            icon: 'MapIconVehicle'
+        },
+        17: {
+            name: 'Refinery',
+            icon: 'MapIconManufacturing'
+        },
+        18: {
+            name: 'Shipyard',
+            icon: 'Shipyard'
+        },
+        19: {
+            name: 'Tech Center',
+            icon: 'MapIconTechCenter'
+        },
+        20: {
+            name: 'Salvage Field',
+            icon: 'SalvageMapIcon'
+        },
+        21: {
+            name: 'Component Field',
+            icon: 'MapIconComponents'
+        },
+        22: {
+            name: 'Fuel Field',
+            icon: 'MapIconFuel'
+        },
+        23: {
+            name: 'Sulfur Field',
+            icon: 'MapIconSulfur'
+        },
+        27: {
+            name: 'Keep',
+            icon: 'MapIconsKeep'
+        },
+        28: {
+            name: 'Observation Tower',
+            icon: 'MapIconObservationTower'
+        },
+        29: {
+            name: 'Fort',
+            icon: 'MapIconFort'
+        },
+        30: {
+            name: 'Troop Ship',
+            icon: 'MapIconTroopShip'
+        },
+        32: {
+            name: 'Sulfur Mine',
+            icon: 'MapIconSulfurMine'
+        },
+        33: {
+            name: 'Storage Facility',
+            icon: 'MapIconStorageFacility'
+        },
+        34: {
+            name: 'Factory',
+            icon: 'MapIconFactory'
+        },
+        35: {
+            name: 'Safe House',
+            icon: 'MapIconSafehouse'
+        },
+        37: {
+            name: 'Rocket Site',
+            icon: 'MapIconRocketFacility'
+        },
+        38: {
+            name: 'Salvage Mine',
+            icon: 'MapIconScrapMine'
+        },
+        39: {
+            name: 'Construction Yard',
+            icon: 'MapIconConstructionYard'
+        },
+        40: {
+            name: 'Component Mine',
+            icon: 'MapIconComponentMine'
+        },
+        45: {
+            name: 'Relic Base',
+            icon: 'MapIconRelicBase'
+        },
+        46: {
+            name: 'Relic Base',
+            icon: 'MapIconRelicBase'
+        },
+        47: {
+            name: 'Relic Base',
+            icon: 'MapIconRelicBase'
+        },
+        51: {
+            name: 'Mass Production Factory',
+            icon: 'MapIconMassProductionFactory'
+        },
+        52: {
+            name: 'Seaport',
+            icon: 'MapIconSeaport'
+        },
+        53: {
+            name: 'Coastal Gun',
+            icon: 'MapIconCoastalGun'
+        },
+        56: {
+            name: 'Town Base',
+            icon: 'MapIconTownBaseTier1'
+        },
+        57: {
+            name: 'Town Base',
+            icon: 'MapIconTownBaseTier1'
+        },
+        58: {
+            name: 'Town Base',
+            icon: 'MapIconTownBaseTier1'
+        },
+        59: {
+            name: 'Storm Cannon',
+            icon: 'MapIconStormcannon'
+        },
+        60: {
+            name: 'Intel Center',
+            icon: 'MapIconIntelcenter'
+        },
+        61: {
+            name: 'Coal Field',
+            icon: 'MapIconCoal'
+        },
+        62: {
+            name: 'Oil Field',
+            icon: 'MapIconFuel'
+        }
     };
 
     let soundsLoaded = false;
@@ -533,41 +830,432 @@ try {
             }
         }
         for (const unionEntity of unionEntities) {
-            for (const entitySocket of unionEntity.sockets) {
-                for (const entityId of Object.keys(entitySocket.connections)) {
-                    const connectedEntity = game.getEntityById(entityId);
-                    if (connectedEntity?.building?.canUnion) {
-                        unionEntity.setUnion(connectedEntity);
+            if (unionEntity.sockets) {
+                for (const entitySocket of unionEntity.sockets) {
+                    for (const entityId of Object.keys(entitySocket.connections)) {
+                        const connectedEntity = game.getEntityById(entityId);
+                        if (connectedEntity?.building?.canUnion) {
+                            unionEntity.setUnion(connectedEntity);
+                        }
                     }
                 }
             }
         }
     };
 
-    game.updateEntityOverlays = function() {
-        const mapTexture = game.projectSettings.regionKey ? gameData.maps[game.projectSettings.regionKey].texture : null;
-        if (mapTexture && (!mapRegion.texture || !mapRegion.texture.textureCacheIds?.length || mapRegion.texture.textureCacheIds[0] !== mapTexture)) {
-            if (game.resources[mapTexture]) {
-                mapRegion.texture = game.resources[mapTexture].texture;
-            } else {
-                const loader = new PIXI.Loader();
-                loader.add(mapTexture);
-                loader.load((loader, res) => {
-                    game.resources[mapTexture] = res[mapTexture];
-                    mapRegion.texture = game.resources[mapTexture].texture;
-                });
-                loader.onError.add((error, resource) => {
-                    console.error('Failed to load region image:', error.message);
-                });
+    let apiSocket;
+    const cachedMaps = {}; // { mapKey: { mapData } }
+
+    // TODO: When switching maps, clear all icons.
+
+    game.getMapData = function(key) {
+        key = key.toLowerCase();
+        const mapData = cachedMaps[key];
+        if (mapData) {
+            return mapData;
+        }
+        try {
+            if (window.localStorage) {
+                const cachedMap = JSON.parse(window.localStorage.getItem(`map`));
+                if (cachedMap && cachedMap.key === key) {
+                    return cachedMap;
+                }
+            }
+        } catch (e) {
+            console.error('Failed to get map data.');
+        }
+        return mapData;
+    }
+
+    game.updateMapData = function(key = game.project.settings.regionKey, mapData) {
+        key = key.toLowerCase();
+        if (!mapData) {
+            mapData = game.getMapData(key);
+        } else {
+            if (!cachedMaps[key]) {
+                cachedMaps[key] = {};
+            }
+            mapData.key = key;
+            Object.assign(cachedMaps[key], mapData);
+            try {
+                if (window.localStorage) {
+                    window.localStorage.setItem(`map`, JSON.stringify(cachedMaps[key]));
+                }
+            } catch (e) {
+                console.error('Failed to update map data.');
             }
         }
-        mapRegion.visible = mapTexture && game.projectSettings.showWorldRegion;
+        if (mapData) {
+            // TODO: Instead of removing all children, see which ones have updated and only update those.
+            if (mapData.icons) {
+                mapLayer.icons.removeChildren();
+                if (game.project.settings.region.icons && mapData.icons && mapData.icons.items) {
+                    for (const obj of mapData.icons.items) {
+                        if (MAP_ICONS[obj.iconType]) {
+                            const sprite = new PIXI.Sprite(game.resources[MAP_ICONS[obj.iconType].icon].texture);
+                            sprite.position.set(obj.x * REGION_WIDTH, obj.y * REGION_HEIGHT);
+                            sprite.anchor.set(0.5);
+                            const realtime = game.settings.enableRealTimeMap;
+                            if (realtime && obj.teamId === "COLONIALS") {
+                                sprite.tint = 0x516C4B;
+                            } else if (realtime && obj.teamId === "WARDENS") {
+                                sprite.tint = 0x245682;
+                            } else if (MAP_ICONS[obj.iconType].color) {
+                                sprite.tint = MAP_ICONS[obj.iconType].color;
+                            }
+                            // sprite.interactive = true;
+                            // sprite.on('mouseover', () => {
+                            //     mapLayer.hoverLabel.text = MAP_ICONS[obj.iconType].name;
+                            //     mapLayer.hoverLabel.visible = true;
+                            // });
+                            // sprite.on('mouseout', () => {
+                            //     mapLayer.hoverLabel.visible = false;
+                            // });
+                            mapLayer.icons.addChild(sprite);
+                        } else {
+                            console.error(`Unknown map icon type ${obj.iconType}`);
+                        }
+                    }
+                    mapLayer.icons.sortChildren();
+                }
+            }
+
+            if (mapData.labels) {
+                const majorRegions = [];
+
+                mapLayer.subRegionNames.removeChildren();
+                mapLayer.subRegions.removeChildren();
+                if (game.project.settings.region.subRegions && mapData.labels && mapData.labels.items) {
+                    for (const mapLabel of mapData.labels.items) {
+                        const regionPos = { x: mapLabel.x * REGION_WIDTH, y: mapLabel.y * REGION_HEIGHT };
+                        const label = new PIXI.Text(mapLabel.text, Object.assign({}, game.defaultSettings.styles.label, {
+                            fontFamily: 'Jost',
+                            fontSize: mapLabel.mapMarkerType === 'Major' ? 36 : 26,
+                            stroke: 0x505050,
+                            strokeThickness: 4
+                        }));
+                        label.anchor.set(0.5);
+                        label.position.set(regionPos.x, regionPos.y);
+                        label.labelType = mapLabel.mapMarkerType;
+                        mapLayer.subRegionNames.addChild(label);
+                        if (mapLabel.mapMarkerType === 'Major') {
+                            majorRegions.push(regionPos);
+                        }
+                    }
+
+                    if (majorRegions.length) {
+                        const voronoi = new Voronoi();
+                        const diagram = voronoi.compute(majorRegions, { xl: 0, xr: REGION_WIDTH, yt: 0, yb: REGION_HEIGHT });
+                        const graphics = new PIXI.Graphics();
+                        graphics.lineStyle(100, 0x000000);
+                        for (let edge of diagram.edges) {
+                            if (edge.va && edge.vb) {
+                                graphics.moveTo(edge.va.x, edge.va.y);
+                                graphics.lineTo(edge.vb.x, edge.vb.y);
+                            }
+                        }
+                        mapLayer.subRegions.addChild(graphics);
+                    }
+    
+                    const polyhex = [
+                        0, REGION_HEIGHT / 2,
+                        REGION_WIDTH / 4, 0,
+                        REGION_WIDTH * 3 / 4, 0,
+                        REGION_WIDTH, REGION_HEIGHT / 2,
+                        REGION_WIDTH * 3 / 4, REGION_HEIGHT,
+                        REGION_WIDTH / 4, REGION_HEIGHT
+                    ];
+    
+                    const hexlines = new PIXI.Graphics();
+                    hexlines.lineStyle(200, 0x000000);
+                    hexlines.drawPolygon(polyhex);
+                    mapLayer.subRegions.addChild(hexlines);
+    
+                    const hexfill = new PIXI.Graphics();
+                    hexfill.beginFill(0x000000);
+                    hexfill.drawPolygon(polyhex);
+                    hexfill.endFill();
+                    mapLayer.subRegions.addChild(hexfill);
+                    mapLayer.subRegions.mask = hexfill;
+                }
+            }
+
+            game.uiScale = null;
+        }
+    };
+
+    game.openFileBrowser = function(callback, extension = '.json') {
+        if (typeof callback !== 'function') {
+            console.error('Callback is not a function.');
+            return;
+        }
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = extension;
+        input.onchange = function() {
+            const file = input.files[0];
+            const reader = new FileReader();
+            reader.onload = function() {
+                try {
+                    callback(reader.result);
+                } catch (e) {
+                    console.error('Failed to load file:', e);
+                    game.showGrowl('Failed to load file.');
+                }
+            };
+            if (extension === '.json') {
+                reader.readAsText(file);
+            } else {
+                reader.readAsDataURL(file);
+            }
+            input.remove();
+        };
+        input.click();
+    };
+
+    game.updateIconScale = function() {
+        const scale = Math.min(1 / camera.zoom, 35);
+        if (game.uiScale !== scale) {
+            game.uiScale = scale;
+            if (selectedEntities.length) {
+                const handleScale = scale * 16;
+                for (const entity of selectedEntities) {
+                    if (entity.type === 'shape' && entity.points) {
+                        for (const point of entity.points) {
+                            if (point.handle) {
+                                point.handle.scale.set(handleScale);
+                            }
+                        }
+                    }
+                }
+            }
+            if (game.project.settings.regionKey && game.project.settings.showWorldRegion) {
+                // if (mapLayer.icons.visible && mapLayer.hoverLabel?.visible) {
+                //     mapLayer.hoverLabel.scale.set(game.uiScale);
+                //     mapLayer.hoverLabel.position.set(gmx - (GRID_WIDTH / 2), gmy - (GRID_HEIGHT / 2));
+                // }
+                if (mapLayer.grid) {
+                    mapLayer.grid.children.forEach((child) => {
+                        if (child instanceof PIXI.Text) {
+                            child.scale.set(game.uiScale);
+                        }
+                    });
+                }
+                if (mapLayer.icons.visible) {
+                    const iconScale = game.uiScale * 0.8;
+                    mapLayer.icons.children.forEach((icon) => {
+                        icon.scale.set(iconScale);
+                    });
+                }
+                if (mapLayer.subRegionNames.visible) {
+                    mapLayer.subRegionNames.children.forEach((label) => {
+                        if (label.labelType === 'Minor') {
+                            label.alpha = scale < 20 ? 1 : 1 - (scale - 20) / 15;
+                        }
+                        label.scale.set(game.uiScale);
+                    });
+                }
+            }
+        }
+    };
+
+    function updateMapLayer(key, file) {
+        if (file) {
+            if (mapLayer[key]) {
+                mapLayer[key].texture = game.resources[file].texture;
+            } else if (game.resources[file]) {
+                const mapSpriteLayer = new PIXI.Sprite(game.resources[file].texture);
+                mapSpriteLayer.visible = game.project.settings.region[key];
+                mapSpriteLayer.anchor.set(0.5);
+                mapSpriteLayer.width = REGION_WIDTH;
+                mapSpriteLayer.height = REGION_HEIGHT;
+                mapSpriteLayer.zIndex = Object.keys(PROJECT_LAYERS.region).indexOf(key);
+                mapLayer.addChild(mapSpriteLayer);
+                mapLayer.sortChildren();
+                mapLayer[key] = mapSpriteLayer;
+            }
+        }
+        if (mapLayer[key]) {
+            mapLayer[key].visible = game.project.settings.region[key];
+            if (key === 'subRegions') {
+                mapLayer.subRegionNames.visible = mapLayer[key].visible;
+            }
+        }
+    }
+
+    // Client should only send a request if subregions and subregion names are enabled or disabled. Not if either is enabled or disabled.
+    let lastRegionKey;
+    let lastRegionSettings = {};
+    function updateOrRequestMapData(regionKey, regionSettings, reconnection = false) {
+        if (apiSocket && (reconnection || (lastRegionKey !== regionKey || lastRegionSettings.subRegions !== regionSettings.subRegions || lastRegionSettings.icons !== regionSettings.icons))) {
+            lastRegionKey = regionKey;
+            Object.assign(lastRegionSettings, regionSettings);
+            const mapKey = gameData.maps[lastRegionKey].textureKey.substring(3);
+            const mapData = game.getMapData(mapKey);
+            const activeLayers = {};
+            if (regionSettings.icons) {
+                activeLayers.icons = mapData?.icons?.version ?? true;
+            }
+            if (regionSettings.subRegions) {
+                activeLayers.labels = mapData?.labels?.version ?? true;
+            }
+            apiSocket.emit('request-map', mapKey, mapData?.warId, activeLayers, game.settings.enableRealTimeMap);
+        }
+        game.updateMapData(regionKey);
+    }
+
+    game.updateEntityOverlays = function() {
+        const regionKey = game.project.settings.regionKey;
+        const regionSettings = game.project.settings.region;
+        mapLayer.visible = regionKey && gameData.maps[regionKey] && game.project.settings.showWorldRegion;
+        if (mapLayer.visible) {
+            if (regionSettings.subRegions || regionSettings.icons) {
+                if (!apiSocket) {
+                    apiSocket = io('https://api.foxholeplanner.com', {
+                        reconnectionAttempts: 20,
+                        reconnectionDelayMax: 60000,
+                        randomizationFactor: 0.5,
+                        backoffStrategy: function(attempt) {
+                            return Math.pow(2, attempt) * 1000;
+                        }
+                    });
+                    apiSocket.on('update-map', (data) => game.updateMapData(regionKey, data));
+                    apiSocket.on('connect', () => {
+                        console.log('Connected to API server.');
+                        updateOrRequestMapData(regionKey, regionSettings, true);
+                    });
+                }
+                if (lastRegionKey) {
+                    updateOrRequestMapData(regionKey, regionSettings);
+                }
+            }
+            game.updateRegionCrop();
+
+            // This handles all map image layers.
+            const regionLayers = {};
+            const loader = new PIXI.Loader();
+            const textureKey = gameData.maps[regionKey].textureKey;
+            for (const [key, info] of Object.entries(PROJECT_LAYERS.region)) {
+                if (!info.preventLoad && regionSettings[key]) {
+                    let layerPath = game_asset_dir + 'game/Textures/UI/';
+                    if (info.bmm === false) {
+                        layerPath += `HexMaps/Processed/${textureKey}.png`;
+                    } else {
+                        layerPath += `BMM/${textureKey}_${key}.png`;
+                    }
+                    if (!(game.resources[layerPath]?.texture ?? PIXI.utils.TextureCache[layerPath])) {
+                        regionLayers[key] = layerPath;
+                        loader.add(layerPath);
+                    } else {
+                        updateMapLayer(key, layerPath);
+                    }
+                } else {
+                    updateMapLayer(key);
+                }
+            }
+            loader.load((loader, res) => {
+                for (const [key, file] of Object.entries(regionLayers)) {
+                    if (res[file]) {
+                        game.resources[file] = res[file];
+                        res[file].texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+                        updateMapLayer(key, file);
+                    }
+                }
+            });
+            loader.onError.add((error, resource) => {
+                console.error('Failed to load region image:', error.message);
+            });
+            mapLayer.gridbg.visible = regionSettings.grid;
+        } else if (apiSocket) {
+            apiSocket.close();
+            apiSocket = null;
+        }
         for (const entity of entities) {
             entity.updateOverlays();
         }
     };
 
-    game.updateSettings = function() {
+    game.updateSelected = function(rotation, attemptReconnections, removeConnections = true) {
+        if (selectedEntities.length && (rotation || typeof game.selectionData.rotationDegrees === 'number')) {
+            game.selectionData.rotation = Math.angleNormalized(rotation !== undefined ? rotation : (Math.deg2rad(game.selectionData.rotationDegrees) - game.selectionData.origin.rotationOffset));
+            if (rotation) {
+                game.resetSelectionData(true);
+            }
+            const rotationAngle = Math.angleNormalized(game.selectionData.rotation - game.selectionData.origin.rotation);
+            for (const entity of selectedEntities) {
+                if (entity.selectionData) {
+                    const rotatedPosition = Math.rotateAround(game.selectionData, {
+                        x: game.selectionData.x + entity.selectionData.x,
+                        y: game.selectionData.y + entity.selectionData.y
+                    }, rotationAngle);
+                    entity.x = rotatedPosition.x;
+                    entity.y = rotatedPosition.y;
+                    entity.rotation = Math.angleNormalized(entity.selectionData.rotation + rotationAngle);
+                    if (removeConnections && entity.sockets && (!rotation || !entity.building?.emplaced)) {
+                        entity.removeConnections(undefined, true);
+                    }
+                    if (pickupSelectedEntities) {
+                        entity.pickupOffset = {
+                            x: snappedMX - entity.x,
+                            y: snappedMY - entity.y
+                        };
+                        delete entity.prevPosition;
+                        delete entity.prevRotation;
+                    }
+                }
+            }
+            if (attemptReconnections) {
+                for (const entity of selectedEntities) {
+                    if (entity.sockets) {
+                        entity.attemptReconnections(removeConnections);
+                    }
+                }
+            }
+            game.saveStateChanged = true;
+        }
+    };
+
+    game.resetSelectionData = function(keepPreviousData = false, preserveRotation = false) {
+        if (selectedEntities.length) {
+            const centerPos = game.getSelectedEntitiesCenter();
+            const selectionData = Object.assign({}, keepPreviousData ? game.selectionData : undefined, {
+                x: centerPos.x.round(3),
+                y: centerPos.y.round(3)
+            });
+            let rotation = null;
+            if (!keepPreviousData) {
+                for (const selectedEntity of selectedEntities) {
+                    if (rotation !== false) {
+                        if (rotation === null) {
+                            rotation = selectedEntity.rotation;
+                        } else if (rotation !== selectedEntity.rotation) {
+                            rotation = false;
+                        }
+                    }
+                    selectedEntity.selectionData = {
+                        x: selectedEntity.x - centerPos.x,
+                        y: selectedEntity.y - centerPos.y,
+                        rotation: selectedEntity.rotation
+                    };
+                }
+                selectionData.rotation = rotation || 0;
+                selectionData.origin = Object.assign({}, selectionData);
+                selectionData.origin.rotationOffset = (rotation === false && preserveRotation) ? ((game.selectionData?.origin?.rotationOffset ?? 0) + (game.selectionData?.rotation ?? 0)) : 0;
+            }
+            selectionData.rotationDegrees = Math.rad2deg(Math.angleNormalized(rotation || (selectionData.rotation + selectionData.origin.rotationOffset))).round(3);
+            game.selectionData = selectionData;
+        }
+        game.updateSelectedBuildingMenu();
+    };
+
+    game.downloadSettings = function() {
+        const settingsString = JSON.stringify({
+            settings: game.settings,
+        });
+        download(settingsString, 'foxhole_planner_settings', 'application/json');
+    };
+
+    game.updateSettings = function(refreshAll = false) {
         try {
             if (window.localStorage) {
                 let settingsString = JSON.stringify(game.settings);
@@ -578,9 +1266,15 @@ try {
         }
 
         game.reloadSettings();
-
-        if (game.appComponent) {
-            game.appComponent.$forceUpdate();
+        game.appComponent?.refresh();
+        if (refreshAll) {
+            game.buildingSelectedMenuComponent?.refresh();
+            game.boardUIComponent?.refresh();
+            game.constructionMenuComponent?.refresh();
+            game.sidebarMenuComponent?.$forceUpdate();
+            game.toolbeltComponent?.refresh();
+            game.toolbeltComponent?.showList(false);
+            game.loadSaveMenuComponent?.refresh();
         }
     };
 
@@ -596,6 +1290,15 @@ try {
         game.updateLightingQuality();
 
         updateBuildingDB();
+    };
+
+    game.confirmResetSettings = function() {
+        game.confirmationPopup.showPopup('reset-settings', confirmed => {
+            if (confirmed) {
+                Object.assign(game.settings, JSON.parse(JSON.stringify(game.defaultSettings)));
+                game.updateSettings(true);
+            }
+        });
     };
 
     let lastSoundPlay = Date.now() + 500;
@@ -644,10 +1347,14 @@ try {
     app.view.tabIndex = 0;
 
     let keys = {};
-    document.addEventListener('keydown', function (event) {
+    document.addEventListener('keydown', function(event) {
         event = event || window.event;
         let key = event.keyCode;
         let inputSelected = document.activeElement && (document.activeElement.type === 'text' || document.activeElement.type === 'number' || document.activeElement.type === 'textarea');
+        if (game.shiftKeyModifier !== event.shiftKey) {
+            game.shiftKeyModifier = event.shiftKey;
+            game.appComponent?.refresh();
+        }
         if (game.toolbeltComponent && (!event.shiftKey || !inputSelected)) {
             game.toolbeltComponent.setToolbeltSwapping(event.shiftKey);
         }
@@ -691,7 +1398,7 @@ try {
                     setTimeout(() => {
                         let x = 0, y = 0;
                         for (const [key, category] of Object.entries(window.objectData.categories)) {
-                            if (game.settings.enableExperimental || !category.experimental) {
+                            if (game.canShowListCategory(category, true)) {
                                 for (let i = 0; i < category.buildings.length; i++) {
                                     const building = category.buildings[i];
                                     if (!building.preset && (game.settings.enableDebug || (!building.hideInList && (!building.parent || !building.parent.hideInList)))) {
@@ -728,7 +1435,7 @@ try {
                         entities.forEach(entity => {
                             game.addSelectedEntity(entity, false);
                         });
-                        game.updateSelectedBuildingMenu();
+                        game.resetSelectionData();
                         break;
                     case 67: // C
                         game.cloneSelected();
@@ -799,28 +1506,37 @@ try {
                     case 65: // A
                         game.moveSelected(event.shiftKey ? -16 : -32, 0);
                         break;
+                    case 66: // B
+                        game.blueprintSelected();
+                        break;
                     case 68: // D
                         game.moveSelected(event.shiftKey ? 16 : 32, 0);
                         break;
                     case 69: // E
                         snapRotationDegrees = game.settings.keySnapRotationDegrees * (event.shiftKey ? 2 : 1);
-                        if (game.settings.enableSnapRotation) {
+                        if (game.shiftKeyModifier ? !game.settings.enableSnapRotation : game.settings.enableSnapRotation) {
                             angle = (snapRotationDegrees * Math.PI) / 180;
                         } else {
                             angle = Math.PI / (event.shiftKey ? 2 : 4);
                         }
                         game.rotateSelected(angle);
                         break;
+                    case 70: // F
+                        game.mirrorSelected(event.shiftKey);
+                        break;
                     case 76: // L
                         game.lockSelected();
                         break;
+                    case 77: // M
+                        game.hubPopup?.toggleTab('map');
+                        break;
                     case 80: // P
-                        game.projectSettings.showProductionIcons = !game.projectSettings.showProductionIcons;
+                        game.project.settings.showProductionIcons = !game.project.settings.showProductionIcons;
                         game.updateEntityOverlays();
                         break;
                     case 81: // Q
                         snapRotationDegrees = game.settings.keySnapRotationDegrees * (event.shiftKey ? 2 : 1);
-                        if (game.settings.enableSnapRotation) {
+                        if (game.shiftKeyModifier ? !game.settings.enableSnapRotation : game.settings.enableSnapRotation) {
                             angle = -(snapRotationDegrees * Math.PI) / 180;
                         } else {
                             angle = -Math.PI / (event.shiftKey ? 2 : 4);
@@ -841,6 +1557,13 @@ try {
         }
     });
 
+    window.addEventListener('blur', function(event) {
+        keys = {};
+        game.shiftKeyModifier = false;
+        game.appComponent?.refresh();
+        game.toolbeltComponent?.setToolbeltSwapping(false);
+    });
+
     game.isKeyDown = function(key) {
         return keys[key];
     }
@@ -854,7 +1577,7 @@ try {
     }
 
     game.isMovingSelected = function() {
-        return (pickupSelectedEntities && !ignoreMousePickup) || selectionRotation;
+        return (pickupSelectedEntities && !ignoreMousePickup) || rotateSelectedEntities;
     }
 
     game.activateToolbeltSlot = function(index, swapBelt = false) {
@@ -866,6 +1589,11 @@ try {
     document.addEventListener('keyup', function (event) {
         event = event || window.event;
         let key = event.keyCode;
+
+        if (game.shiftKeyModifier !== event.shiftKey) {
+            game.shiftKeyModifier = event.shiftKey;
+            game.appComponent?.refresh();
+        }
 
         if (game.toolbeltComponent) {
             game.toolbeltComponent.setToolbeltSwapping(event.shiftKey);
@@ -883,8 +1611,21 @@ try {
             PIXI.Loader.shared.add(key, 'assets/' + asset_list[key]);
         }
 
-        for (let key in game_asset_list) {
-            PIXI.Loader.shared.add(key, game_asset_list[key]);
+        for (const icon of Object.values(MAP_ICONS)) {
+            icon.icon = assetDir(`../UI/MapIcons/${icon.icon}.webp`);
+            if (!PIXI.Loader.shared.resources[icon.icon]) {
+                PIXI.Loader.shared.add(icon.icon, icon.icon);
+            }
+        }
+
+        for (let key in game_asset_required) {
+            PIXI.Loader.shared.add(key, game_asset_required[key]);
+        }
+
+        if (!game.settings.lazyLoadTextures) {
+            for (let key in game_asset_list) {
+                PIXI.Loader.shared.add(key, game_asset_list[key]);
+            }
         }
 
         loadSounds();
@@ -893,7 +1634,7 @@ try {
     }
 
     let background = null;
-    let mapRegion = null;
+    let mapLayer = null;
     let selectionArea = null;
 
     function onWindowResize() {
@@ -930,6 +1671,8 @@ try {
         if (debugText) {
             debugText.x = WIDTH*0.22;
         }
+        
+        game?.boardUIComponent?.refresh();
     }
     window.addEventListener('resize', onWindowResize);
 
@@ -948,18 +1691,93 @@ try {
         app.stage.addChild(app.cstage);
         app.stage.filterArea = app.renderer.screen;
 
-        mapRegion = new PIXI.Sprite();
-        // mapRegion.width = 1024; // 2162m x 32?
-        // mapRegion.height = 888; // 1875m x 32?
-        mapRegion.width = 2162 * METER_BOARD_PIXEL_SIZE;
-        mapRegion.height = 1875 * METER_BOARD_PIXEL_SIZE; // 125m x 15u
-        mapRegion.x = GRID_WIDTH/2;
-        mapRegion.y = GRID_HEIGHT/2;
-        mapRegion.anchor.set(0.5);
-        mapRegion.getZIndex = () => {
+        mapLayer = new PIXI.Container();
+        mapLayer.visible = false;
+        mapLayer.width = REGION_WIDTH;
+        mapLayer.height = REGION_HEIGHT;
+        mapLayer.x = GRID_WIDTH/2;
+        mapLayer.y = GRID_HEIGHT/2;
+        mapLayer.getZIndex = () => {
             return 1;
         };
-        app.cstage.addChild(mapRegion);
+        app.cstage.addChild(mapLayer);
+
+        mapLayer.icons = new PIXI.Container();
+        mapLayer.icons.x = -REGION_WIDTH / 2;
+        mapLayer.icons.y = -REGION_HEIGHT / 2;
+        mapLayer.icons.zIndex = 110;
+        mapLayer.addChild(mapLayer.icons);
+
+        // TODO: Cropping apparently breaks this. Removed for now.
+        // mapLayer.hoverLabel = new PIXI.Text('', Object.assign({}, game.defaultSettings.styles.label, DEFAULT_TEXT_STYLE, { fontSize: 30 }));
+        // mapLayer.hoverLabel.visible = false;
+        // mapLayer.hoverLabel.zIndex = 1000;
+        // mapLayer.addChild(mapLayer.hoverLabel);
+
+        const cellSize = 124.55 * METER_BOARD_PIXEL_SIZE;
+        mapLayer.grid = new PIXI.Container();
+        mapLayer.grid.x = -REGION_WIDTH / 2;
+        mapLayer.grid.y = -REGION_HEIGHT / 2;
+        mapLayer.grid.zIndex = 100;
+        for (let i = 0; i <= 17; i++) {
+            const line = new PIXI.Graphics();
+            line.alpha = 0.1;
+            line.lineStyle(64, 0x000000);
+            line.moveTo(i * cellSize, 0).lineTo(i * cellSize, REGION_HEIGHT);
+            mapLayer.grid.addChild(line);
+            if (i > 0) {
+                const letterLabel = new PIXI.Text(String.fromCharCode(64 + i), {
+                    fill: 0xFFFFFF,
+                    fontSize: 28,
+                    fontFamily: 'Jost'
+                });
+                letterLabel.anchor.set(0.5, 1);
+                letterLabel.position.set(i * cellSize - cellSize / 2, -500);
+                mapLayer.grid.addChild(letterLabel);
+            }
+        }
+        for (let i = 0; i <= 15; i++) {
+            const line = new PIXI.Graphics();
+            line.alpha = 0.1;
+            line.lineStyle(64, 0x000000);
+            line.moveTo(0, i * cellSize).lineTo(REGION_WIDTH, i * cellSize);
+            mapLayer.grid.addChild(line);
+            if (i < 15) {
+                const numberLabel = new PIXI.Text(i + 1, {
+                    fill: 0xFFFFFF,
+                    fontSize: 28,
+                    fontFamily: 'Jost'
+                });
+                numberLabel.anchor.set(1, 0.5);
+                numberLabel.position.set(-700, i * cellSize + cellSize / 2);
+                mapLayer.grid.addChild(numberLabel);
+            }
+        }
+        mapLayer.addChild(mapLayer.grid);
+
+        mapLayer.subRegions = new PIXI.Container();
+        mapLayer.subRegions.alpha = 0.15;
+        mapLayer.subRegions.x = -REGION_WIDTH / 2;
+        mapLayer.subRegions.y = -REGION_HEIGHT / 2;
+        mapLayer.subRegions.zIndex = 80;
+        mapLayer.addChild(mapLayer.subRegions);
+
+        mapLayer.subRegionNames = new PIXI.Container();
+        mapLayer.subRegionNames.x = -REGION_WIDTH / 2;
+        mapLayer.subRegionNames.y = -REGION_HEIGHT / 2;
+        mapLayer.subRegionNames.zIndex = 120;
+        mapLayer.addChild(mapLayer.subRegionNames);
+
+        mapLayer.gridbg = new PIXI.Graphics();
+        mapLayer.gridbg.alpha = 0.075;
+        mapLayer.gridbg.beginFill(0xFFFFFF);
+        mapLayer.gridbg.drawRect(-REGION_WIDTH / 2, -REGION_HEIGHT / 2, REGION_WIDTH, REGION_HEIGHT);
+        mapLayer.gridbg.endFill();
+        mapLayer.gridbg.zIndex = -1;
+        mapLayer.addChild(mapLayer.gridbg);
+
+        mapLayer.cropMask = new PIXI.Graphics();
+        mapLayer.addChild(mapLayer.cropMask);
 
         diffuseGroupLayer = new PIXI.display.Layer(PIXI.lights.diffuseGroup);
         PIXI.lights.diffuseGroup.zIndex = 1;
@@ -1023,7 +1841,12 @@ try {
         onWindowResize();
         updateBuildingDB();
         
-        if (game.settings.enableDebug) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const presetParam = urlParams.get('preset');
+        if (presetParam && gameData.presets[presetParam]) {
+            game.ignoreSaving = true;
+            game.createObject(gameData.presets[presetParam], 0, 0, 0, 0, undefined, false, false);
+        } else if (game.settings.enableDebug) {
             fetch(`/games/foxhole/assets/presets/debug.json`).then(response => {
                 return response.json();
             }).then(saveObject => {
@@ -1163,11 +1986,11 @@ try {
     game.getSaveData = function(isSelection) {
         let saveObject = {
             version: SAVE_VERSION,
-            name: (game.projectName !== 'Unnamed Project' && game.projectName) || undefined,
-            description: game.projectDescription || undefined,
-            authors: game.projectAuthors || undefined,
+            name: (game.project.name !== 'Unnamed Project' && game.project.name) || undefined,
+            description: game.project.description || undefined,
+            authors: game.project.authors || undefined,
             faction: game.settings.selectedFaction || undefined,
-            projectSettings: game.projectSettings,
+            projectSettings: game.project.settings,
             entities: []
         };
         let saveEntities = isSelection ? selectedEntities : entities;
@@ -1202,7 +2025,7 @@ try {
             }
             return value;
         });
-        let fileName = game.projectName.toLowerCase().trim()
+        let fileName = game.project.name.toLowerCase().trim()
             .replace(/[^\w\s-]/g, '')
             .replace(/[\s_-]+/g, '_')
             .replace(/^-+|-+$/g, '');
@@ -1253,6 +2076,17 @@ try {
             }
             saveObject.version = '1.0.1';
         }
+        if (saveObject.version === '1.0.1') {
+            console.info('Upgrading save from v1.0.1 => v1.0.2');
+            for (const entity of saveObject.entities) {
+                if (entity.type === 'building' && entity.subtype === 'crane') {
+                    const position = Math.extendPoint(entity, 215 / METER_TEXTURE_PIXEL_SCALE, Math.angleNormalized(entity.rotation + Math.PI));
+                    entity.x = position.x;
+                    entity.y = position.y;
+                }
+            }
+            saveObject.version = '1.0.2';
+        }
         if (isSelection) {
             game.deselectEntities(false, true);
         } else {
@@ -1266,12 +2100,12 @@ try {
             } else {
                 game.removeEntities(true);
             }
-            game.projectName = saveObject.name || 'Unnamed Project';
-            game.projectDescription = saveObject.description || '';
-            game.projectAuthors = saveObject.authors || '';
+            game.project.name = saveObject.name || 'Unnamed Project';
+            game.project.description = saveObject.description || '';
+            game.project.authors = saveObject.authors || '';
             game.setFaction(saveObject.faction, true);
             if (saveObject.projectSettings) {
-                Object.assign(game.projectSettings, saveObject.projectSettings);
+                Object.assign(game.project.settings, saveObject.projectSettings);
             }
         }
         setTimeout(() => {
@@ -1308,13 +2142,13 @@ try {
 
             if (isSelection) {
                 let centerPos = game.getEntitiesCenter(selectedEntities, isSelection);
-                if (game.settings.enableGrid) {
+                if (game.shiftKeyModifier ? !game.settings.enableGrid : game.settings.enableGrid) {
                     let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
                     centerPos.x = Math.round(centerPos.x / gridSize) * gridSize;
                     centerPos.y = Math.round(centerPos.y / gridSize) * gridSize;
                 }
                 game.setPickupEntities(true, false, centerPos, true);
-                game.updateSelectedBuildingMenu();
+                game.resetSelectionData();
                 game.refreshStats();
             } else if (!ignoreConfirmation) {
                 game.zoomToEntitiesCenter();
@@ -1333,13 +2167,39 @@ try {
     };
 
     game.setMapRegion = function(regionKey) {
-        if (game.projectSettings.regionKey === regionKey) {
+        if (game.project.settings.regionKey === regionKey) {
             regionKey = null;
         }
-        game.projectSettings.regionKey = regionKey;
+        game.project.settings.regionKey = regionKey;
+        if (game.project.settings.regionKey && !entities.length) {
+            camera.zoom = 0.018;
+            camera.x = (GRID_WIDTH/2 * camera.zoom) - WIDTH/2;
+            camera.y = (GRID_HEIGHT/2 * camera.zoom) - HEIGHT/2;
+        }
         game.updateEntityOverlays();
         game.updateSave();
-        game.appComponent?.$forceUpdate();
+        game.appComponent?.refresh();
+    };
+
+    game.updateRegionCrop = function() {
+        const regionCrop = game.project.settings.regionCrop;
+        if (regionCrop) {
+            mapLayer.cropMask.clear();
+            mapLayer.cropMask.drawRect(regionCrop.x - (GRID_WIDTH / 2), regionCrop.y - (GRID_HEIGHT / 2), regionCrop.width, regionCrop.height);
+            mapLayer.mask = mapLayer.cropMask;
+        } else {
+            mapLayer.mask = null;
+        }
+        game.updateSave();
+        game.appComponent?.refresh();
+    };
+
+    game.resetRegionCrop = function(switchMode = true) {
+        game.project.settings.regionCrop = undefined;
+        if (switchMode) {
+            game.setConstructionMode('crop-region');
+        }
+        game.updateRegionCrop();
     };
 
     game.getEntitiesCenter = function(ents, isSelection) {
@@ -1363,6 +2223,11 @@ try {
             };
         }
         return ents.mid;
+    };
+
+    // TODO: Save result so we're not recalculating for selectionData.
+    game.getSelectedEntitiesCenter = function(isSelection) {
+        return game.getEntitiesCenter(selectedEntities, isSelection);
     };
 
     game.zoomToEntitiesCenter = function() {
@@ -1398,9 +2263,13 @@ try {
             camera.x = (centerPos.x * camera.zoom) - (app.view.width / 2);
             camera.y = (centerPos.y * camera.zoom) - (app.view.height / 2);
         } else {
-            game.resetZoom();
-            camera.x = (GRID_WIDTH/2) - WIDTH/2;
-            camera.y = (GRID_HEIGHT/2) - HEIGHT/2;
+            if (game.project.settings.regionKey) {
+                camera.zoom = 0.018;
+            } else {
+                game.resetZoom();
+            }
+            camera.x = (GRID_WIDTH/2 * camera.zoom) - WIDTH/2;
+            camera.y = (GRID_HEIGHT/2 * camera.zoom) - HEIGHT/2;
         }
     }
     game.zoomToEntitiesCenter();
@@ -1431,7 +2300,7 @@ try {
             selectedEntities.push(entity);
             entity.onSelect();
             if (!noMenuUpdate) {
-                game.updateSelectedBuildingMenu();
+                game.resetSelectionData();
                 game.refreshStats();
             }
             return true;
@@ -1453,7 +2322,7 @@ try {
                 game.setPickupEntities(false);
             } 
             if (!noMenuUpdate) {
-                game.updateSelectedBuildingMenu();
+                game.resetSelectionData();
                 game.refreshStats();
             }
             return true;
@@ -1488,7 +2357,7 @@ try {
             }
             selectedEntities = [];
             if (!noMenuUpdate) {
-                game.updateSelectedBuildingMenu();
+                game.resetSelectionData();
                 game.refreshStats();
             }
             return true;
@@ -1496,7 +2365,7 @@ try {
         return false;
     }
 
-    game.updateSelectedBuildingMenu = function() {
+    game.updateSelectedBuildingMenu = function(noForce) {
         let buildingMenuSelected = game.sidebarMenuComponent?.currentMenu?.key === 'building-selected';
         if (selectedEntities.length) {
             if (!buildingMenuSelected) {
@@ -1506,7 +2375,7 @@ try {
                     icon: 'fa-wrench'
                 });
             } else {
-                game.buildingSelectedMenuComponent?.refresh();
+                game.buildingSelectedMenuComponent?.refresh(noForce);
             }
         } else if (buildingMenuSelected) {
             game.sidebarMenuComponent.changeMenu(null);
@@ -1527,6 +2396,8 @@ try {
     let mouseDown = {};
     let forceMouseDown = {};
     mouseEventListenerObject.addEventListener('wheel', (e) => {
+        e.preventDefault();
+
         if (!e.ctrlKey) {
             let lastZoom = camera.zoom;
             camera.zoom *= (1 - e.deltaY * (game.settings.zoomSpeed * 0.000225));
@@ -1551,6 +2422,13 @@ try {
             let angle = Math.angleBetween(pos2, {x: gmx, y: gmy});
             camera.x += Math.cos(angle) * dist;
             camera.y += Math.sin(angle) * dist;
+        } else {
+            for (const selectedEntity of selectedEntities) {
+                if (selectedEntity.building?.maxExtLength) {
+                    selectedEntity.postExtension = Math.max(Math.min((selectedEntity.postExtension ?? 1) - (e.deltaY / 200), selectedEntity.building.maxExtLength), selectedEntity.building.minExtLength);
+                    selectedEntity.regenerate();
+                }
+            }
         }
     });
     mouseEventListenerObject.addEventListener('contextmenu', (e) => {
@@ -1583,10 +2461,10 @@ try {
                     if (selectedEntity?.hasHandle && selectedEntity.shouldSelectLastHandlePoint) {
                         selectedEntity.grabHandlePoint();
                     }
-                } else if (game.constructionMode.key !== 'select') {
+                } else if (game.constructionMode.eType) {
                     let gmxGrid = gmx;
                     let gmyGrid = gmy;
-                    if (game.settings.enableGrid || keys[16]) {
+                    if (game.shiftKeyModifier ? !game.settings.enableGrid : game.settings.enableGrid) {
                         let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
                         gmxGrid = Math.round(gmxGrid / gridSize) * gridSize;
                         gmyGrid = Math.round(gmyGrid / gridSize) * gridSize;
@@ -1599,41 +2477,43 @@ try {
                         entity.grabHandlePoint();
                     }
                 } else {
-                    entities.sort(function (a, b) {
-                        return a.getZIndex() - b.getZIndex();
-                    });
-                    for (let i=0; i<entities.length; i++) {
-                        let entity = entities[i];
-                        if (entity.valid && entity.visible && entity.selectable) {
-                            if (entity.selected && entity.hasHandle && entity.grabHandlePoint()) {
-                                return;
-                            }
-                            if (entity.canGrab()) {
-                                if (keys[46]) {
-                                    entity.remove();
-                                } else {
-                                    if (!entity.selected) {
-                                        if (e.ctrlKey || e.shiftKey) {
-                                            game.addSelectedEntity(entity);
-                                        } else {
-                                            game.selectEntity(entity);
-                                        }
-                                    } else if (e.ctrlKey || e.shiftKey) {
-                                        game.removeSelectedEntity(entity);
-                                    }
-                                    /* Not sure how I feel about this yet. Might be worth keeping, unsure.
-                                    if (entity.selected && followNext) {
-                                        game.followEntity(entity);
-                                    }
-                                    */
-                                    game.setPickupEntities(true);
+                    if (game.constructionMode.key === 'select') {
+                        entities.sort(function (a, b) {
+                            return a.getZIndex() - b.getZIndex();
+                        });
+                        for (let i=0; i<entities.length; i++) {
+                            let entity = entities[i];
+                            if (entity.valid && entity.visible && entity.selectable) {
+                                if (entity.selected && entity.hasHandle && entity.grabHandlePoint()) {
+                                    return;
                                 }
-                                return;
+                                if (entity.canGrab()) {
+                                    if (keys[46]) {
+                                        entity.remove();
+                                    } else {
+                                        if (!entity.selected) {
+                                            if (e.ctrlKey || e.shiftKey) {
+                                                game.addSelectedEntity(entity);
+                                            } else {
+                                                game.selectEntity(entity);
+                                            }
+                                        } else if (e.ctrlKey || e.shiftKey) {
+                                            game.removeSelectedEntity(entity);
+                                        }
+                                        /* Not sure how I feel about this yet. Might be worth keeping, unsure.
+                                        if (entity.selected && followNext) {
+                                            game.followEntity(entity);
+                                        }
+                                        */
+                                        game.setPickupEntities(true);
+                                    }
+                                    return;
+                                }
                             }
                         }
-                    }
-                    if (!(e.ctrlKey || e.shiftKey)) {
-                        game.deselectEntities();
+                        if (!(e.ctrlKey || e.shiftKey)) {
+                            game.deselectEntities();
+                        }
                     }
                     if (selectionArea) {
                         selectionArea.origin = { x: gmx, y: gmy };
@@ -1647,35 +2527,44 @@ try {
     mouseEventListenerObject.addEventListener('dragover', (e) => {
         e.preventDefault();
     });
-    function importImageData(data, x, y) {
-        if (game.settings.enableExperimental) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                if (reader.result) {
-                    let pos = (isNaN(x) && isNaN(y)) ? game.getMousePosition() : {
-                        x: (camera.x + x) / camera.zoom,
-                        y: (camera.y + y) / camera.zoom
-                    };
-                    let objData = {
-                        type: 'shape',
-                        subtype: 'image',
-                        textureData: reader.result,
-                        imported: true
-                    }
-                    let entity = game.createObject(objData, pos.x, pos.y, 0, 0, undefined, false);
-                    if (entity) {
-                        entity.onLoad(objData);
-                        game.selectEntity(entity);
-                    }
-                }
-            };
-            reader.readAsDataURL(data);
+    
+    game.importImage = function(data, x, y) {
+        if (!data) {
+            console.error('No image data provided.');
+            return;
         }
+        let pos = (isNaN(x) && isNaN(y)) ? game.getMousePosition() : {
+            x: (camera.x + x) / camera.zoom,
+            y: (camera.y + y) / camera.zoom
+        };
+        let objData = {
+            type: 'shape',
+            subtype: 'image',
+            textureData: data,
+            imported: true
+        }
+        let entity = game.createObject(objData, pos.x, pos.y, 0, 0, undefined, false);
+        if (entity) {
+            entity.onLoad(objData);
+            game.selectEntity(entity);
+        }
+    };
+
+    function importImageData(data, x, y) {
+        const reader = new FileReader();
+        reader.onload = () => {
+            if (reader.result) {
+                game.importImage(reader.result, x, y);
+            }
+        };
+        reader.readAsDataURL(data);
     }
+
     mouseEventListenerObject.addEventListener('drop', (e) => {
         e.preventDefault();
         importImageData(e.dataTransfer.files[0], e.offsetX, e.offsetY);
     });
+
     document.addEventListener('paste', (e) => {
         if (!(document.activeElement && (document.activeElement.type === 'text' || document.activeElement.type === 'number' || document.activeElement.type === 'textarea'))) {
             e.preventDefault();
@@ -1713,7 +2602,10 @@ try {
             selectionArea.y = selectionArea.origin.y > gmy ? gmy : selectionArea.origin.y;
             selectionArea.beginFill(COLOR_SELECTION);
             selectionArea.lineStyle(4, COLOR_SELECTION_BORDER);
-            selectionArea.drawRect(0, 0, Math.abs(gmx - selectionArea.origin.x), Math.abs(gmy - selectionArea.origin.y));
+
+            const selection_width = Math.abs(gmx - selectionArea.origin.x);
+            const selection_height = Math.abs(gmy - selectionArea.origin.y);
+            selectionArea.drawRect(0, 0, selection_width, selection_height);
             selectionArea.endFill();
 
             if (!selectionArea.visible) {
@@ -1726,25 +2618,27 @@ try {
                 }
             }
 
-            let selectedChange = false;
-            entities.forEach(entity => {
-                if (entity.canGrab(true)) {
-                    if (entity.mid.x > selectionArea.x && entity.mid.x < selectionArea.x + selectionArea.width) {
-                        if (entity.mid.y > selectionArea.y && entity.mid.y < selectionArea.y + selectionArea.height) {
-                            if (game.addSelectedEntity(entity, true)) {
-                                selectedChange = true;
+            if (game.constructionMode.key === 'select') {
+                let selectedChange = false;
+                entities.forEach(entity => {
+                    if (entity.canGrab(true)) {
+                        if (entity.mid.x > selectionArea.x && entity.mid.x < selectionArea.x + selectionArea.width) {
+                            if (entity.mid.y > selectionArea.y && entity.mid.y < selectionArea.y + selectionArea.height) {
+                                if (game.addSelectedEntity(entity, true)) {
+                                    selectedChange = true;
+                                }
+                                return;
                             }
-                            return;
                         }
                     }
+                    if (!e.ctrlKey && game.removeSelectedEntity(entity, true)) {
+                        selectedChange = true;
+                    }
+                });
+                if (selectedChange) {
+                    game.resetSelectionData();
+                    game.refreshStats();
                 }
-                if (!e.ctrlKey && game.removeSelectedEntity(entity, true)) {
-                    selectedChange = true;
-                }
-            });
-            if (selectedChange) {
-                game.updateSelectedBuildingMenu();
-                game.refreshStats();
             }
         }
     });
@@ -1760,6 +2654,16 @@ try {
         }
         if (mouseButton === 0) {
             if (selectionArea) {
+                if (selectionArea.visible && game.constructionMode.key === 'crop-region') {
+                    game.project.settings.regionCrop = {
+                        x: selectionArea.x,
+                        y: selectionArea.y,
+                        width: selectionArea.width,
+                        height: selectionArea.height
+                    }
+                    game.updateRegionCrop();
+                    game.resetConstructionMode();
+                }
                 selectionArea.origin = null;
                 selectionArea.visible = false;
                 if (game.toolbeltComponent) {
@@ -1807,7 +2711,7 @@ try {
 
         setTimeout(() => {
             var renderTexture = PIXI.RenderTexture.create(app.renderer.width, app.renderer.height);
-            app.renderer.render(background, mapRegion, renderTexture);
+            app.renderer.render(background, mapLayer, renderTexture);
 
             const addObjectToRender = (obj) => {
                 app.renderer.render(obj, {
@@ -1817,8 +2721,8 @@ try {
                 });
             }
 
-            if (mapRegion.visible) {
-                addObjectToRender(mapRegion);
+            if (mapLayer.visible) {
+                addObjectToRender(mapLayer);
             }
 
             const renderEntities = [...entities];
@@ -2144,6 +3048,29 @@ try {
         }
     };
 
+    game.fetchTexture = function(sprite, src, callback) {
+        const texture = game.resources[src]?.texture ?? PIXI.utils.TextureCache[src] ?? PIXI.Texture.from(src);
+        const onTextureLoad = () => {
+            sprite.texture = texture;
+            if (callback) {
+                callback(sprite, texture);
+            }
+        };
+        if (!texture.valid) {
+            texture.baseTexture.on('loaded', () => {
+                onTextureLoad();
+            });
+            return;
+        }
+        onTextureLoad();
+    };
+
+    game.createSprite = function(src, callback) {
+        const sprite = new PIXI.Sprite();
+        game.fetchTexture(sprite, src, callback);
+        return sprite;
+    };
+
     game.setPickupEntities = function(pickup, ignoreOffset, position, ignoreLock) {
         if (pickupSelectedEntities !== pickup) {
             if (!pickup) {
@@ -2244,62 +3171,64 @@ try {
 
     game.cloneSelected = function() {
         game.loadSave(game.getSaveData(true), true);
-    }
+    };
 
-    game.upgradeSelected = function(upgrade) {
-        let entity = game.getSelectedEntity();
-        let bData = entity?.building;
-        if (bData) {
-            let upgradeKey = upgrade?.key;
-            if (upgradeKey && bData.parent?.key && upgradeKey === entity.building.key) {
-                upgradeKey = bData.parent.key;
-            }
-            let clone = game.createObject(upgradeKey ?? entity.building.key, entity.x, entity.y, entity.z, entity.rotation, entity.id, false);
-            if (upgradeKey) {
-                let position = { x: clone.x, y: clone.y };
-                if (entity.building?.positionOffset) {
-                    position.x -= ((entity.building.positionOffset.x ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
-                    position.y -= ((entity.building.positionOffset.y ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
+    game.exchangeSelected = function(dataKey) {
+        for (const selectedEntity of selectedEntities) {
+            let bData = selectedEntity?.building;
+            if (bData) {
+                let upgradeKey = dataKey?.key;
+                if (upgradeKey && bData.parent?.key && upgradeKey === selectedEntity.building.key) {
+                    upgradeKey = bData.parent.key;
                 }
-                if (clone.building?.positionOffset) {
-                    position.x += ((clone.building.positionOffset.x ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
-                    position.y += ((clone.building.positionOffset.y ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
+                let clone = game.createObject(upgradeKey ?? dataKey ?? selectedEntity.building.key, selectedEntity.x, selectedEntity.y, selectedEntity.z, selectedEntity.rotation, selectedEntity.id, false);
+                if (upgradeKey) {
+                    let position = { x: clone.x, y: clone.y };
+                    if (selectedEntity.building?.positionOffset) {
+                        position.x -= ((selectedEntity.building.positionOffset.x ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
+                        position.y -= ((selectedEntity.building.positionOffset.y ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
+                    }
+                    if (clone.building?.positionOffset) {
+                        position.x += ((clone.building.positionOffset.x ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
+                        position.y += ((clone.building.positionOffset.y ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
+                    }
+                    position = Math.rotateAround(clone, position);
+                    clone.position.set(position.x, position.y);
                 }
-                position = Math.rotateAround(clone, position);
-                clone.position.set(position.x, position.y);
-            }
-            clone.locked = entity.locked;
-            clone.selectionArea.tint = clone.locked ? COLOR_RED : COLOR_WHITE;
-            let objData = {
-                upgrading: true
-            };
-            entity.onSave(objData);
-            clone.onLoad(objData);
-            clone.afterLoad(objData);
-            game.selectEntity(clone);
-            if (entity.sockets) {
-                for (const entitySocket of entity.sockets) {
-                    if (clone.sockets) {
-                        let foundSocket = false;
-                        for (const cloneSocket of clone.sockets) {
-                            if (entitySocket.socketData.id === cloneSocket.socketData.id) {
-                                foundSocket = true;
-                                break;
+                clone.locked = selectedEntity.locked;
+                clone.selectionArea.tint = clone.locked ? COLOR_RED : COLOR_WHITE;
+                let objData = {
+                    upgrading: true
+                };
+                selectedEntity.onSave(objData);
+                clone.onLoad(objData);
+                clone.afterLoad(objData);
+                game.selectEntity(clone);
+                if (upgradeKey && selectedEntity.sockets) {
+                    for (const entitySocket of selectedEntity.sockets) {
+                        if (clone.sockets) {
+                            let foundSocket = false;
+                            for (const cloneSocket of clone.sockets) {
+                                if (entitySocket.socketData.id === cloneSocket.socketData.id) {
+                                    foundSocket = true;
+                                    break;
+                                }
+                            }
+                            if (foundSocket) {
+                                continue;
                             }
                         }
-                        if (foundSocket) {
-                            continue;
-                        }
+                        entitySocket.removeConnections();
                     }
-                    entitySocket.removeConnections();
+                    selectedEntity.sockets = null;
+                }
+                selectedEntity.remove();
+                if (typeof dataKey === 'string') {
+                    clone.attemptReconnections(true, false);
                 }
             }
-            entity.sockets = null;
-            entity.remove();
-            return clone;
         }
-        return null;
-    }
+    };
 
     // Returns null = No buildings locked, 0 = Some buildings locked, 1 = All buildings locked.
     game.getSelectedLockState = function() {
@@ -2315,7 +3244,7 @@ try {
             return locked !== 0;
         });
         return locked;
-    }
+    };
 
     game.lockSelected = function() {
         let locked = game.getSelectedLockState();
@@ -2333,7 +3262,35 @@ try {
             game.setPickupEntities(false);
         }
         game.buildingSelectedMenuComponent?.refresh(true);
-    }
+    };
+
+    // Returns null = No buildings blueprinted, 0 = Some buildings blueprinted, 1 = All buildings blueprinted.
+    game.getSelectedBlueprintState = function() {
+        let blueprinted = null; // Assume no buildings are blueprinted.
+        selectedEntities.every((selectedEntity, i) => {
+            if (selectedEntity.building?.canBlueprint) {
+                if (selectedEntity.blueprint) {
+                    if (blueprinted === null) {
+                        blueprinted = 1;
+                    }
+                } else if (blueprinted) {
+                    blueprinted = 0; // Some selected aren't blueprinted.
+                }
+            }
+            return blueprinted !== 0;
+        });
+        return blueprinted;
+    };
+
+    game.blueprintSelected = function() {
+        const blueprinted = !game.getSelectedBlueprintState() ? true : false;
+        for (const selectedEntity of selectedEntities) {
+            if (selectedEntity.building) {
+                selectedEntity.setBlueprint(blueprinted);
+            }
+        }
+        game.buildingSelectedMenuComponent?.refresh();
+    };
 
     game.moveSelected = function(x, y, snapped) {
         if (selectedEntities.length && game.getSelectedLockState() === null) {
@@ -2367,45 +3324,15 @@ try {
             game.saveStateChanged = true;
             game.buildingSelectedMenuComponent?.refresh(true);
         }
-    }
+    };
 
-    // TODO: Add support for flipping trains.
-    game.rotateSelected = function (angle) {
-        if (selectedEntities.length && game.getSelectedLockState() === null) {
-            const selectionCenter = game.getEntitiesCenter(selectedEntities);
-            for (let i = 0; i < selectedEntities.length; i++) {
-                let selectedEntity = selectedEntities[i];
-        
-                let rotatedPosition = Math.rotateAround(
-                    selectionCenter,
-                    { x: selectedEntity.x, y: selectedEntity.y },
-                    angle
-                );
-        
-                selectedEntity.x = rotatedPosition.x;
-                selectedEntity.y = rotatedPosition.y;
-                selectedEntity.rotation = Math.angleNormalized(
-                    selectedEntity.rotation + angle
-                );
-        
-                if (selectedEntity.sockets) {
-                    selectedEntity.attemptReconnections();
-                }
-
-                if (pickupSelectedEntities) {
-                    selectedEntities.forEach(entity => {
-                        entity.pickupOffset = {
-                            x: gmx - entity.x,
-                            y: gmy - entity.y
-                        };
-                    });
-                }
-            }
-            game.saveStateChanged = true;
+    game.rotateSelected = function(rotationOffset) {
+        if (game.selectionData && game.getSelectedLockState() === null) {
+            game.resetSelectionData(false, true);
+            game.updateSelected(game.selectionData.rotation + rotationOffset, true);
         }
     };
 
-    // TODO: Add support for flipping a group of objects along their center?
     game.flipSelected = function(vertical = false) {
         for (const selectedEntity of selectedEntities) {
             if (selectedEntity.type === 'shape' && selectedEntity.subtype === 'image') {
@@ -2413,6 +3340,63 @@ try {
             }
         }
         game.saveStateChanged = true;
+    };
+
+    game.mirrorSelected = function(vertical = false) {
+        if (game.settings.enableExperimental && selectedEntities.length) {
+            const selectionCenter = game.getEntitiesCenter(selectedEntities);
+            for (const selectedEntity of selectedEntities) {
+                if (!vertical) {
+                    selectedEntity.x = selectionCenter.x - (selectedEntity.x - selectionCenter.x);
+                    selectedEntity.rotation = (2 * Math.PI - Math.angleNormalized(selectedEntity.rotation)) % (2 * Math.PI);
+                } else {
+                    selectedEntity.y = selectionCenter.y - (selectedEntity.y - selectionCenter.y);
+                    selectedEntity.rotation = (Math.PI - Math.angleNormalized(selectedEntity.rotation) + 2 * Math.PI) % (2 * Math.PI);
+                }
+                if (selectedEntity.subtype?.includes('corner')) {
+                    selectedEntity.rotation = Math.angleNormalized(selectedEntity.rotation + Math.PI / 2);
+                } else if (selectedEntity.building?.hasHandle) {
+                    selectedEntity.rotation = Math.angleNormalized(selectedEntity.rotation + Math.PI);
+
+                    const handlePoint = selectedEntity.getHandlePoint();
+                    const globalHandlePos = app.cstage.toLocal(handlePoint, selectedEntity, undefined, true);
+                    if (!vertical) {
+                        globalHandlePos.x = selectionCenter.x - (globalHandlePos.x - selectionCenter.x);
+                        globalHandlePos.rotation = (2 * Math.PI - Math.angleNormalized(handlePoint.rotation)) % (2 * Math.PI);
+                    } else {
+                        globalHandlePos.y = selectionCenter.y - (globalHandlePos.y - selectionCenter.y);
+                        globalHandlePos.rotation = (Math.PI - Math.angleNormalized(handlePoint.rotation) + 2 * Math.PI) % (2 * Math.PI);
+                    }
+
+                    const newHandlePos = selectedEntity.toLocal(globalHandlePos, app.cstage);
+                    handlePoint.x = newHandlePos.x;
+                    handlePoint.y = newHandlePos.y;
+                    handlePoint.rotation = Math.angleNormalized(globalHandlePos.rotation + (vertical ? Math.PI : 0));
+
+                    selectedEntity.updateHandlePos();
+                    if (selectedEntity.subtype !== 'power_line') {
+                        selectedEntity.regenerate();
+                    }
+                }
+            }
+            for (const selectedEntity of selectedEntities) {
+                if (selectedEntity.subtype === 'power_line') {
+                    selectedEntity.forceReposition();
+                }
+            }
+            for (const selectedEntity of selectedEntities) {
+                if (selectedEntity.sockets) {
+                    selectedEntity.attemptReconnections(true, false, true);
+                }
+                if (pickupSelectedEntities) {
+                    selectedEntity.pickupOffset = {
+                        x: gmx - selectedEntity.x,
+                        y: gmy - selectedEntity.y
+                    };
+                }
+            }
+            game.saveStateChanged = true;
+        }
     };
 
     game.removeEntities = function(isLoading) {
@@ -2444,6 +3428,23 @@ try {
         });
     };
 
+    game.confirmNewProject = function(callback) {
+        game.confirmationPopup.showPopup('new-project', confirmed => {
+            if (confirmed) {
+                game.removeEntities();
+                game.project = JSON.parse(JSON.stringify(game.defaultProject));
+                game.updateEntityOverlays();
+                game.saveStateChanged = true;
+                game.appComponent?.refresh();
+                game.loadSaveMenuComponent?.refresh();
+                game.resetZoom();
+            }
+            if (typeof callback === 'function') {
+                callback(confirmed);
+            }
+        });
+    };
+
     function shuffle(array) {
         let currentIndex = array.length, temporaryValue, randomIndex;
         while (0 !== currentIndex) {
@@ -2457,13 +3458,15 @@ try {
     }
 
     game.updateSave = function(saveString = JSON.stringify(game.getSaveData())) {
-        try {
-            if (window.localStorage && saveString) {
-                window.localStorage.setItem('save', saveString);
+        if (!game.ignoreSaving) {
+            try {
+                if (window.localStorage && saveString) {
+                    window.localStorage.setItem('save', saveString);
+                }
+                game.updateHistory(saveString);
+            } catch (e) {
+                console.error('Failed to update save:', e);
             }
-            game.updateHistory(saveString);
-        } catch (e) {
-            console.error('Failed to update save:', e);
         }
     };
 
@@ -2510,7 +3513,7 @@ try {
     function updateBuildingDB() {
         if (window.objectData?.categories) {
             let searchBuildings = Object.values(window.objectData.categories).reduce((acc, category) => {
-                if (game.settings.enableExperimental || !category.experimental) {
+                if (game.canShowListCategory(category, true)) {
                     acc.push(...category.buildings);
                 }
                 return acc;
@@ -2523,10 +3526,11 @@ try {
                     { name: 'key', weight: 0.4 },
                     { name: 'category', weight: 0.3 },
                     { name: 'description', weight: 0.2 },
-                    { name: 'author', weight: 0.2 }
+                    { name: 'author', weight: 0.2 },
+                    { name: 'codeName', weight: 0.1 }
                 ],
                 includeMatches: true,
-                threshold: 0.4,
+                threshold: 0.225,
                 distance: 100
             });
         }
@@ -2540,6 +3544,7 @@ try {
         if (building && (!building.hideInList || game.settings.enableDebug) &&
             (!building.experimental || game.settings.enableExperimental) &&
             (search || ((!building.parent || building.parentKey || filters.showUpgradesAsBuildings) &&
+            (!building.filters || building.filters.some(filter => { return game.settings.buildingListFilters[filter]; })) &&
             ((!building.tier || (!filters.showSelectedTierOnly && (building.tier <= filters.selectedTier))) || building.tier === filters.selectedTier) &&
             ((!building.techId || !window.objectData.tech[building.techId]) || ((building.techId === 'unlockfacilitytier2' && filters.selectedTier >= 2) || (building.techId === 'unlockfacilitytier3' && filters.selectedTier >= 3))) &&
             (!game.settings.selectedFaction || (!building.faction || building.faction === game.settings.selectedFaction))))) {
@@ -2548,14 +3553,42 @@ try {
         return false;
     }
 
+    game.canShowListCategory = function(category, ignoreFilters = false) {
+        return !category.hideInList && (game.settings.enableExperimental || !category.experimental) &&
+        ignoreFilters || (!category.filters || category.filters.some(filter => {
+            return game.settings.buildingListFilters[filter];
+        }));
+    };
+
+    game.cameraTo = function(entity) {
+        if (entity) {
+            camera.x = ((entity.mid?.x ?? entity.x) * camera.zoom) - WIDTH/2;
+            camera.y = ((entity.mid?.y ?? entity.y) * camera.zoom) - HEIGHT/2;
+        }
+    };
+
     const FPSMIN = 30;
     let fpsCheck = null;
     let menuInit = false;
     let lastTick = Date.now();
+    let lastCameraZoom;
     let g_TICK = 10;
     let g_Time = 0;
-    let selectionRotation = null;
+    let snappedMX;
+    let snappedMY;
     function update() {
+        if (game.project.settings.regionKey && !game.project.settings.regionCrop && game.settings.lockCameraToHex) {
+            const zoomRatio = 1 / camera.zoom;
+            const centerPos = {
+                x: (camera.x + app.view.width / 2) * zoomRatio,
+                y: (camera.y + app.view.height / 2) * zoomRatio
+            };
+            centerPos.x = Math.max(Math.min(centerPos.x, 39832), -29832);
+            centerPos.y = Math.max(Math.min(centerPos.y, 35208), -25208);
+            camera.x = (centerPos.x * camera.zoom) - app.view.width / 2;
+            camera.y = (centerPos.y * camera.zoom) - app.view.height / 2;
+        }
+
         requestAnimationFrame(update);
 
         let timeDiff = 1;
@@ -2568,6 +3601,11 @@ try {
 
         let delta = Date.now() - lastTick;
         lastTick = Date.now();
+
+        if (lastCameraZoom !== game.camera.zoom) {
+            lastCameraZoom = game.camera.zoom;
+            game.boardUIComponent?.refresh();
+        }
 
         game.tryGameFocus();
 
@@ -2767,48 +3805,41 @@ try {
             }
         }
 
-        if (mouseDown[2] && !game.selectedHandlePoint) {
-            if (!selectionRotation && game.getSelectedLockState() === null) {
-                let rotationOffset = null;
+        let mouseRotationOffset;
+        if (!selectionArea.visible && mouseDown[2] && !game.selectedHandlePoint && selectedEntities.length) {
+            const mouseAngle = Math.angleBetween(game.selectionData, { x: gmx, y: gmy });
+            if (!rotateSelectedEntities && game.getSelectedLockState() === null) {
                 selectedEntities.forEach(selectedEntity => {
-                    if (rotationOffset !== false) {
-                        if (rotationOffset === null) {
-                            rotationOffset = selectedEntity.rotation;
-                        } else if (rotationOffset !== selectedEntity.rotation) {
-                            rotationOffset = false;
-                        }
-                    }
                     if (selectedEntity.sockets && !selectedEntity.building?.emplaced) {
                         selectedEntity.removeConnections(undefined, true);
                     }
-                    selectedEntity.rotationData = {
-                        x: selectedEntity.x,
-                        y: selectedEntity.y,
-                        rotation: selectedEntity.rotation
-                    }
                 });
-                selectionRotation = game.getEntitiesCenter(selectedEntities); // Get center of selection.
-                selectionRotation.angle = Math.angleBetween({ x: selectionRotation.x, y: selectionRotation.y }, { x: gmx, y: gmy }); // Angle of mouse from the center of selection.
-                selectionRotation.offset = rotationOffset;
+                game.resetSelectionData(false, true);
+                rotateSelectedEntities = true;
+                game.selectionData.prevRotation = game.selectionData.rotation;
+                game.selectionData.mouseAngle = mouseAngle; // Angle of mouse from the center of selection.
             }
-        } else if (selectionRotation) {
-            selectionRotation = null;
-        }
-        let rotationAngle;
-        if (selectionRotation) {
-            rotationAngle = Math.angleBetween(selectionRotation, { x: gmx, y: gmy }) - selectionRotation.angle; // Get the angle of the mouse from the center and subtract the angle of the selection from it.
-            if (game.settings.enableSnapRotation) {
-                let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ?? 15);
-                rotationAngle = Math.round(rotationAngle / snapRotationDegrees) * snapRotationDegrees; // Snap the angle of the selection.
-                if (typeof selectionRotation.offset === 'number') {
-                    rotationAngle += (Math.round(selectionRotation.offset / snapRotationDegrees) * snapRotationDegrees) - selectionRotation.offset; // Subtract the difference to snap entities with the same rotation to grid.
+            if (rotateSelectedEntities) {
+                mouseRotationOffset = mouseAngle - game.selectionData.mouseAngle; // Get the angle of the mouse from the center and subtract the angle of the selection from it.
+                if (game.shiftKeyModifier ? !game.settings.enableSnapRotation : game.settings.enableSnapRotation) {
+                    let snapRotationDegrees = Math.deg2rad(game.settings.snapRotationDegrees ?? 15);
+                    mouseRotationOffset = Math.round(mouseRotationOffset / snapRotationDegrees) * snapRotationDegrees; // Snap the angle of the selection.
+                    if (typeof game.selectionData.prevRotation === 'number') {
+                        mouseRotationOffset += (Math.round(game.selectionData.prevRotation / snapRotationDegrees) * snapRotationDegrees) - game.selectionData.prevRotation; // Subtract the difference to snap entities with the same rotation to grid.
+                    }
                 }
             }
-            rotationAngle = Math.angleNormalized(rotationAngle);
+        } else if (rotateSelectedEntities) {
+            rotateSelectedEntities = false;
+            selectedEntities.forEach(selectedEntity => {
+                if (selectedEntity.sockets) {
+                    selectedEntity.attemptReconnections();
+                }
+            });
         }
 
         // TODO: Check for mouse pickup but for right click instead.
-        if (selectionRotation || pickupSelectedEntities) {
+        if (pickupSelectedEntities || rotateSelectedEntities) {
             game.buildingSelectedMenuComponent?.refresh(true);
             if (!game.selectedHandlePoint && (!ignoreMousePickup || (Date.now()-pickupTime > 250 || Math.distanceBetween(pickupPosition, {x: gmx, y: gmy}) > 20))) {
                 if (ignoreMousePickup) {
@@ -2829,8 +3860,9 @@ try {
                     }
                 }
                 ignoreMousePickup = false;
-                let snappedMX = gmx, snappedMY = gmy;
-                if (game.settings.enableGrid || keys[16]) {
+                snappedMX = gmx;
+                snappedMY = gmy;
+                if (game.shiftKeyModifier ? !game.settings.enableGrid : game.settings.enableGrid) {
                     let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
                     if (!pickupPosition) {
                         pickupPosition = {
@@ -2844,185 +3876,189 @@ try {
                     snappedMY = pickupPosition.y - (Math.round(mYDiff / gridSize) * gridSize);
                 }
 
-                let pickupEntity = game.getSelectedEntity();
-                if (pickupEntity?.isTrain) {
-                    pickupEntity.currentTrack = null;
-                    pickupEntity.currentTrackT = null;
-                    pickupEntity.trackVelocity = 0;
-                }
-
-                let connectionEstablished = false;
-                if (!selectionRotation && selectedEntities.length) {
-                    for (let i = 0; i < selectedEntities.length; i++) {
-                        let selectedEntity = selectedEntities[i];
-                        if (connectionEstablished && connectionEstablished !== true && selectedEntity !== connectionEstablished) {
-                            if (!selectedEntity.prevPosition) {
-                                selectedEntity.prevPosition = {
-                                    x: selectedEntity.x,
-                                    y: selectedEntity.y
+                if (rotateSelectedEntities) {
+                    game.updateSelected(game.selectionData.prevRotation + mouseRotationOffset);
+                } else {
+                    let pickupEntity = game.getSelectedEntity();
+                    if (pickupEntity?.isTrain) {
+                        pickupEntity.currentTrack = null;
+                        pickupEntity.currentTrackT = null;
+                        pickupEntity.trackVelocity = 0;
+                    }
+                    
+                    let connectionEstablished = false;
+                    if (selectedEntities.length) {
+                        for (let i = 0; i < selectedEntities.length; i++) {
+                            let selectedEntity = selectedEntities[i];
+                            if (connectionEstablished && connectionEstablished !== true && selectedEntity !== connectionEstablished) {
+                                if (!selectedEntity.prevPosition) {
+                                    selectedEntity.prevPosition = {
+                                        x: selectedEntity.x,
+                                        y: selectedEntity.y
+                                    }
                                 }
-                            }
-                            if (isNaN(selectedEntity.prevRotation)) {
-                                selectedEntity.prevRotation = selectedEntity.rotation;
-                            }
-                            const offsetX = connectionEstablished.prevPosition.x - connectionEstablished.x;
-                            const offsetY = connectionEstablished.prevPosition.y - connectionEstablished.y;
-                            const offsetRotation = Math.angleDifference(connectionEstablished.prevRotation, connectionEstablished.rotation);
-                            const rotatedPosition = Math.rotateAround(connectionEstablished.prevPosition, selectedEntity.prevPosition, offsetRotation);
-                            selectedEntity.position.set(rotatedPosition.x - offsetX, rotatedPosition.y - offsetY);
-                            selectedEntity.rotation = selectedEntity.prevRotation + offsetRotation;
-                        }
-                        if (selectedEntity.building?.canSnap || selectedEntity.isTrain) {
-                            for (let j = 0; j < entities.length; j++) {
-                                let entity = entities[j];
-                                if (!entity.valid || !entity.visible || entity === selectedEntity || entity.type !== 'building' || entity.selected || !((selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain || pickupEntity?.building?.canSnapAlongBezier) || (selectedEntity.building?.emplaced && entity.building?.emplaced) || Math.distanceBetween(selectedEntity, entity.mid) > 1000) {
-                                    continue;
+                                if (isNaN(selectedEntity.prevRotation)) {
+                                    selectedEntity.prevRotation = selectedEntity.rotation;
                                 }
-                                if (selectedEntity.subtype === entity.subtype || (selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain || (pickupEntity && entity.subtype && pickupEntity.building?.canSnapAlongBezier === entity.subtype)) {
-                                    const mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
-                                    if ((selectedEntity.building?.canSnap || selectedEntity.isTrain) && (selectedEntity.building?.canSnapStructureType !== false || selectedEntity.subtype !== entity.subtype)) {
-                                        if (selectedEntity.sockets && entity.sockets) {
-                                            let frontSocket = null, nearestSocket = null, nearestSocketDist = null;
-                                            const connectEntitiesBySockets = function(fromSocket, toSocket) {
-                                                fromSocket.setConnection(entity.id, toSocket);
-                                                if (!connectionEstablished) {
-                                                    if (selectedEntity.building?.snapNearest) {
-                                                        selectedEntity.removeConnections(fromSocket.socketData.id, true, true);
-                                                    }
-    
-                                                    if (!selectedEntity.prevPosition) {
-                                                        selectedEntity.prevPosition = {
-                                                            x: selectedEntity.x,
-                                                            y: selectedEntity.y
+                                const offsetX = connectionEstablished.prevPosition.x - connectionEstablished.x;
+                                const offsetY = connectionEstablished.prevPosition.y - connectionEstablished.y;
+                                const offsetRotation = Math.angleDifference(connectionEstablished.prevRotation, connectionEstablished.rotation);
+                                const rotatedPosition = Math.rotateAround(connectionEstablished.prevPosition, selectedEntity.prevPosition, offsetRotation);
+                                selectedEntity.position.set(rotatedPosition.x - offsetX, rotatedPosition.y - offsetY);
+                                selectedEntity.rotation = selectedEntity.prevRotation + offsetRotation;
+                            }
+                            if (selectedEntity.building?.canSnap || selectedEntity.isTrain) {
+                                for (let j = 0; j < entities.length; j++) {
+                                    let entity = entities[j];
+                                    if (!entity.valid || !entity.visible || entity === selectedEntity || entity.type !== 'building' || entity.selected || !((selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain || pickupEntity?.building?.canSnapAlongBezier) || (selectedEntity.building?.emplaced && entity.building?.emplaced) || Math.distanceBetween(selectedEntity, entity.mid) > 1000) {
+                                        continue;
+                                    }
+                                    if (selectedEntity.subtype === entity.subtype || (selectedEntity.sockets && entity.sockets) || selectedEntity.isTrain || (pickupEntity && entity.subtype && pickupEntity.building?.canSnapAlongBezier === entity.subtype)) {
+                                        const mousePos = entity.toLocal({x: gmx, y: gmy}, app.cstage, undefined, true);
+                                        if ((selectedEntity.building?.canSnap || selectedEntity.isTrain) && (selectedEntity.building?.canSnapStructureType !== false || selectedEntity.subtype !== entity.subtype)) {
+                                            if (selectedEntity.sockets && entity.sockets) {
+                                                let frontSocket = null, nearestSocket = null, nearestSocketDist = null;
+                                                const connectEntitiesBySockets = function(fromSocket, toSocket) {
+                                                    fromSocket.setConnection(entity.id, toSocket);
+                                                    if (!connectionEstablished) {
+                                                        if (selectedEntity.building?.snapNearest) {
+                                                            selectedEntity.removeConnections(fromSocket.socketData.id, true, true);
                                                         }
-                                                    }
-    
-                                                    if (isNaN(selectedEntity.prevRotation)) {
-                                                        selectedEntity.prevRotation = selectedEntity.rotation;
-                                                    }
-            
-                                                    let selectedEntityPosition = app.cstage.toLocal({x: toSocket.x, y: toSocket.y}, entity, undefined, true);
-                                                    const selectedEntityRotation = Math.angleNormalized(-Math.angleDifference(entity.rotation + toSocket.rotation + Math.PI, fromSocket.rotation));
-                                                    if (fromSocket.x !== 0 || fromSocket.y !== 0) {
-                                                        const fromSocketDist = Math.distanceBetween({ x: 0, y: 0 }, fromSocket);
-                                                        const socketAngleDiff = Math.angleBetween({ x: 0, y: 0 }, fromSocket) + Math.PI;
-                                                        selectedEntityPosition = Math.extendPoint(selectedEntityPosition, fromSocketDist, selectedEntityRotation + socketAngleDiff);
-                                                    }
-    
-                                                    selectedEntity.position.set(selectedEntityPosition.x, selectedEntityPosition.y);
-                                                    if (!selectedEntity.building?.emplaced) {
-                                                        selectedEntity.rotation = selectedEntityRotation;
-                                                    }
-    
-                                                    connectionEstablished = selectedEntity;
-                                                    return true;
-                                                }
-                                            }
-                                            for (let k = 0; k < entity.sockets.length; k++) {
-                                                let entitySocket = entity.sockets[k];
-                                                if (!entitySocket.socketData.temp) {
-                                                    let socketDistance = Math.distanceBetween(mousePos, entitySocket);
-                                                    // Checks socket distance is close, closer than previous socket distance, or hovering a building with a power socket.
-                                                    if (selectedEntity.building?.snapNearest || ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || selectedEntity.building?.snapGrab && entity.canGrab())) {
-                                                        for (let l = 0; l < selectedEntity.sockets.length; l++) {
-                                                            let selectedSocket = selectedEntity.sockets[l];
-                                                            if (selectedSocket.socketData.ignoreSnap || (selectedEntities.length === 1 && selectedEntity.building?.hasHandle && selectedSocket.socketData.id !== 0)) {
-                                                                continue;
+        
+                                                        if (!selectedEntity.prevPosition) {
+                                                            selectedEntity.prevPosition = {
+                                                                x: selectedEntity.x,
+                                                                y: selectedEntity.y
                                                             }
-                                                            if (entitySocket.canConnect(selectedSocket)) {
-                                                                const sSocketConnections = Object.keys(selectedSocket.connections).length;
-                                                                const eSocketConnections = Object.keys(entitySocket.connections).length;
-                                                                const connectedSocket = sSocketConnections ? entity.getSocketById(selectedSocket.connections[entity.id]) : null;
-                                                                if (!sSocketConnections || selectedSocket.connections[entity.id] === entitySocket.socketData.id || connectedSocket?.socketData.temp) {
-                                                                    if (!eSocketConnections || (eSocketConnections < (entitySocket.socketData.connectionLimit ?? 1)) || entitySocket.connections[selectedEntity.id] === selectedSocket.socketData.id) {
-                                                                        if (selectedEntity.building?.snapNearest || selectedEntities.length > 1) {
-                                                                            let selectedSocketPos;
-                                                                            if (connectionEstablished) {
-                                                                                selectedSocketPos = app.cstage.toLocal({x: selectedSocket.x, y: selectedSocket.y}, selectedEntity, undefined, true);
-                                                                            } else {
-                                                                                selectedSocketPos = Math.rotateAround({x: 0, y: 0}, selectedSocket, (selectedEntity.prevRotation ?? selectedEntity.rotation));
-                                                                                selectedSocketPos.x += gmx - selectedEntity.pickupOffset.x;
-                                                                                selectedSocketPos.y += gmy - selectedEntity.pickupOffset.y;
+                                                        }
+        
+                                                        if (isNaN(selectedEntity.prevRotation)) {
+                                                            selectedEntity.prevRotation = selectedEntity.rotation;
+                                                        }
+                
+                                                        let selectedEntityPosition = app.cstage.toLocal({x: toSocket.x, y: toSocket.y}, entity, undefined, true);
+                                                        const selectedEntityRotation = Math.angleNormalized(-Math.angleDifference(entity.rotation + toSocket.rotation + Math.PI, fromSocket.rotation));
+                                                        if (fromSocket.x !== 0 || fromSocket.y !== 0) {
+                                                            const fromSocketDist = Math.distanceBetween({ x: 0, y: 0 }, fromSocket);
+                                                            const socketAngleDiff = Math.angleBetween({ x: 0, y: 0 }, fromSocket) + Math.PI;
+                                                            selectedEntityPosition = Math.extendPoint(selectedEntityPosition, fromSocketDist, selectedEntityRotation + socketAngleDiff);
+                                                        }
+        
+                                                        selectedEntity.position.set(selectedEntityPosition.x, selectedEntityPosition.y);
+                                                        if (!selectedEntity.building?.emplaced) {
+                                                            selectedEntity.rotation = selectedEntityRotation;
+                                                        }
+        
+                                                        connectionEstablished = selectedEntity;
+                                                        return true;
+                                                    }
+                                                }
+                                                for (let k = 0; k < entity.sockets.length; k++) {
+                                                    let entitySocket = entity.sockets[k];
+                                                    if (!entitySocket.socketData.temp) {
+                                                        let socketDistance = Math.distanceBetween(mousePos, entitySocket);
+                                                        // Checks socket distance is close, closer than previous socket distance, or hovering a building with a power socket.
+                                                        if (selectedEntity.building?.snapNearest || ((socketDistance < 35 && (nearestSocketDist === null || socketDistance < nearestSocketDist)) || selectedEntity.building?.snapGrab && entity.canGrab())) {
+                                                            for (let l = 0; l < selectedEntity.sockets.length; l++) {
+                                                                let selectedSocket = selectedEntity.sockets[l];
+                                                                if (selectedSocket.socketData.ignoreSnap || (selectedEntities.length === 1 && selectedEntity.building?.hasHandle && selectedSocket.socketData.id !== 0)) {
+                                                                    continue;
+                                                                }
+                                                                if (entitySocket.canConnect(selectedSocket)) {
+                                                                    const sSocketConnections = Object.keys(selectedSocket.connections).length;
+                                                                    const eSocketConnections = Object.keys(entitySocket.connections).length;
+                                                                    const connectedSocket = sSocketConnections ? entity.getSocketById(selectedSocket.connections[entity.id]) : null;
+                                                                    if (!sSocketConnections || selectedSocket.connections[entity.id] === entitySocket.socketData.id || connectedSocket?.socketData.temp) {
+                                                                        if (!eSocketConnections || (eSocketConnections < (entitySocket.socketData.connectionLimit ?? 1)) || entitySocket.connections[selectedEntity.id] === selectedSocket.socketData.id) {
+                                                                            if (selectedEntity.building?.snapNearest || selectedEntities.length > 1) {
+                                                                                let selectedSocketPos;
+                                                                                if (connectionEstablished) {
+                                                                                    selectedSocketPos = app.cstage.toLocal({x: selectedSocket.x, y: selectedSocket.y}, selectedEntity, undefined, true);
+                                                                                } else {
+                                                                                    selectedSocketPos = Math.rotateAround({x: 0, y: 0}, selectedSocket, (selectedEntity.prevRotation ?? selectedEntity.rotation));
+                                                                                    selectedSocketPos.x += gmx - selectedEntity.pickupOffset.x;
+                                                                                    selectedSocketPos.y += gmy - selectedEntity.pickupOffset.y;
+                                                                                }
+                                                                                let entitySocketPos = app.cstage.toLocal({x: entitySocket.x, y: entitySocket.y}, entity, undefined, true);
+                                                                                if (Math.floor(Math.distanceBetween(selectedSocketPos, entitySocketPos)) >= (!connectionEstablished ? 35 : 3)) {
+                                                                                    continue;
+                                                                                }
+                                                                                let selectedSocketRot = Math.angleNormalized((selectedEntity.rotation + selectedSocket.rotation) - Math.PI);
+                                                                                let entitySocketRot = Math.angleNormalized(entity.rotation + entitySocket.rotation);
+                                                                                if (!Math.anglesWithinRange(entitySocketRot, selectedSocketRot, Math.PI / 8)) {
+                                                                                    continue;
+                                                                                }
+        
+                                                                                if (connectEntitiesBySockets(selectedSocket, entitySocket)) {
+                                                                                    i = -1;
+                                                                                }
+                                                                                break;
                                                                             }
-                                                                            let entitySocketPos = app.cstage.toLocal({x: entitySocket.x, y: entitySocket.y}, entity, undefined, true);
-                                                                            if (Math.floor(Math.distanceBetween(selectedSocketPos, entitySocketPos)) >= (!connectionEstablished ? 35 : 3)) {
-                                                                                continue;
-                                                                            }
-                                                                            let selectedSocketRot = Math.angleNormalized((selectedEntity.rotation + selectedSocket.rotation) - Math.PI);
-                                                                            let entitySocketRot = Math.angleNormalized(entity.rotation + entitySocket.rotation);
-                                                                            if (!Math.anglesWithinRange(entitySocketRot, selectedSocketRot, Math.PI / 8)) {
-                                                                                continue;
-                                                                            }
-    
-                                                                            if (connectEntitiesBySockets(selectedSocket, entitySocket)) {
-                                                                                i = -1;
-                                                                            }
+                                                                            
+                                                                            frontSocket = selectedSocket;
+                                                                            nearestSocket = entitySocket;
+                                                                            nearestSocketDist = socketDistance;
+                                                                            
                                                                             break;
                                                                         }
-                                                                        
-                                                                        frontSocket = selectedSocket;
-                                                                        nearestSocket = entitySocket;
-                                                                        nearestSocketDist = socketDistance;
-                                                                        
-                                                                        break;
                                                                     }
                                                                 }
                                                             }
                                                         }
                                                     }
                                                 }
+                                                if (nearestSocket && connectEntitiesBySockets(frontSocket, nearestSocket)) {
+                                                    i = -1;
+                                                }
                                             }
-                                            if (nearestSocket && connectEntitiesBySockets(frontSocket, nearestSocket)) {
-                                                i = -1;
-                                            }
-                                        }
-                                        if (!connectionEstablished && pickupEntity && entity.building?.isBezier && ((pickupEntity.building?.isBezier && pickupEntity.building?.canSnapAlongBezier && entity.subtype === pickupEntity.subtype) || pickupEntity.isTrain || pickupEntity.building?.canSnapAlongBezier === entity.subtype)) {
-                                            const projection = entity.bezier?.project(mousePos);
-                                            if (projection.d <= Math.max(entity.building?.lineWidth ?? 0, 25)) {
-                                                if (pickupEntity && projection && ((!connectionEstablished && entity.bezier && entity.building.isBezier && entity.building.canSnapAlongBezier && selectedEntity.subtype === entity.subtype) ||
-                                                (selectedEntity.isTrain && entity.subtype === selectedEntity.building.vehicle.track) ||
-                                                (!pickupEntity.building?.isBezier && pickupEntity.building?.canSnapAlongBezier))) {
-                                                    let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity, undefined, true);
-                                                    let normal = entity.bezier.normal(projection.t);
-                                                    let angle = Math.angleBetween({x: 0, y: 0}, normal);
-                                                    selectedEntity.x = global.x;
-                                                    selectedEntity.y = global.y;
-                    
-                                                    let angleRight = entity.rotation + (angle - Math.PI/2) - Math.PI/2;
-                                                    let angleLeft = entity.rotation + (angle + Math.PI/2) - Math.PI/2;
-                                                    let rightDiff = Math.angleNormalized(angleRight - selectedEntity.rotation);
-                                                    let leftDiff = Math.angleNormalized(angleLeft - selectedEntity.rotation);
-                    
-                                                    if (isNaN(selectedEntity.prevRotation)) {
-                                                        selectedEntity.prevRotation = selectedEntity.rotation;
-                                                    }
-                    
-                                                    if (selectedEntity.isTrain) {
-                                                        selectedEntity.currentTrack = entity;
-                                                        selectedEntity.currentTrackT = projection.t;
-                                                    }
-                    
-                                                    if (rightDiff < leftDiff) {
-                                                        selectedEntity.rotation = angleRight + Math.PI/2;
-                                                    } else {
-                                                        selectedEntity.rotation = angleLeft + Math.PI/2;
-                                                    }
-                    
-                                                    if (!connectionEstablished && selectedEntity.sockets && (selectedEntity.subtype === 'rail_large_gauge' || selectedEntity.subtype === 'rail_small_gauge')) {
-                                                        for (let k = 0; k < selectedEntity.sockets.length; k++) {
-                                                            let selectedSocket = selectedEntity.sockets[k];
-                                                            if (selectedSocket.socketData.cap === 'front') {
-                                                                // TODO: Store this somewhere so we don't have to loop each time for sockets. There will only ever be one front and back socket for rails.
-                                                                selectedSocket.createConnection(entity, projection.x, projection.y, angle);
-                                                                break;
-                                                            }
+                                            if (!connectionEstablished && pickupEntity && entity.building?.isBezier && entity.bezier && ((pickupEntity.building?.isBezier && pickupEntity.building?.canSnapAlongBezier && entity.subtype === pickupEntity.subtype) || pickupEntity.isTrain || pickupEntity.building?.canSnapAlongBezier === entity.subtype)) {
+                                                const projection = entity.bezier?.project(mousePos);
+                                                if (projection.d <= Math.max(entity.building?.lineWidth ?? 0, 25)) {
+                                                    if (pickupEntity && projection && ((!connectionEstablished && entity.bezier && entity.building.isBezier && entity.building.canSnapAlongBezier && selectedEntity.subtype === entity.subtype) ||
+                                                    (selectedEntity.isTrain && entity.subtype === selectedEntity.building.vehicle.track) ||
+                                                    (!pickupEntity.building?.isBezier && pickupEntity.building?.canSnapAlongBezier))) {
+                                                        let global = app.cstage.toLocal({x: projection.x, y: projection.y}, entity, undefined, true);
+                                                        let normal = entity.bezier.normal(projection.t);
+                                                        let angle = Math.angleBetween({x: 0, y: 0}, normal);
+                                                        selectedEntity.x = global.x;
+                                                        selectedEntity.y = global.y;
+                        
+                                                        let angleRight = entity.rotation + (angle - Math.PI/2) - Math.PI/2;
+                                                        let angleLeft = entity.rotation + (angle + Math.PI/2) - Math.PI/2;
+                                                        let rightDiff = Math.angleNormalized(angleRight - selectedEntity.rotation);
+                                                        let leftDiff = Math.angleNormalized(angleLeft - selectedEntity.rotation);
+                        
+                                                        if (isNaN(selectedEntity.prevRotation)) {
+                                                            selectedEntity.prevRotation = selectedEntity.rotation;
                                                         }
-                                                    } else {
-                                                        selectedEntity.removeConnections();
+                        
+                                                        if (selectedEntity.isTrain) {
+                                                            selectedEntity.currentTrack = entity;
+                                                            selectedEntity.currentTrackT = projection.t;
+                                                        }
+                        
+                                                        if (rightDiff < leftDiff) {
+                                                            selectedEntity.rotation = angleRight + Math.PI/2;
+                                                        } else {
+                                                            selectedEntity.rotation = angleLeft + Math.PI/2;
+                                                        }
+                        
+                                                        if (!connectionEstablished && selectedEntity.sockets && (selectedEntity.subtype === 'rail_large_gauge' || selectedEntity.subtype === 'rail_small_gauge')) {
+                                                            for (let k = 0; k < selectedEntity.sockets.length; k++) {
+                                                                let selectedSocket = selectedEntity.sockets[k];
+                                                                if (selectedSocket.socketData.cap === 'front') {
+                                                                    // TODO: Store this somewhere so we don't have to loop each time for sockets. There will only ever be one front and back socket for rails.
+                                                                    selectedSocket.createConnection(entity, projection.x, projection.y, angle);
+                                                                    break;
+                                                                }
+                                                            }
+                                                        } else {
+                                                            selectedEntity.removeConnections();
+                                                        }
+                        
+                                                        connectionEstablished = true;
+                                                        break;
                                                     }
-                    
-                                                    connectionEstablished = true;
-                                                    break;
                                                 }
                                             }
                                         }
@@ -3031,47 +4067,33 @@ try {
                             }
                         }
                     }
-                }
-                if (!connectionEstablished) {
-                    for (let i = 0; i < selectedEntities.length; i++) {
-                        let selectedEntity = selectedEntities[i];
-                        if (!isNaN(selectedEntity.prevRotation)) {
-                            if (selectedEntity.sockets) {
-                                selectedEntity.removeConnections(undefined, true);
-                            }
-                            if (selectedEntity.prevPosition) {
-                                selectedEntity.x = selectedEntity.prevPosition.x;
-                                selectedEntity.y = selectedEntity.prevPosition.y;
-                                delete selectedEntity.prevPosition;
-                            }
-                            selectedEntity.rotation = selectedEntity.prevRotation;
-                            delete selectedEntity.prevRotation;
-                            if (selectedEntities.length === 1 && selectedEntity.building?.isBezier) {
-                                selectedEntity.pickupOffset = {
-                                    x: 0,
-                                    y: 0
-                                };
-                            }
-                        }
-                        if (selectedEntity.building && !selectedEntity.hasHandle && selectedEntity.selectionArea.visible) {
-                            selectedEntity.selectionArea.visible = false;
-                        }
-                        if (selectionRotation) {
-                            let rotatedPosition = Math.rotateAround(selectionRotation, selectedEntity.rotationData, rotationAngle);
-                            selectedEntity.x = rotatedPosition.x;
-                            selectedEntity.y = rotatedPosition.y;
-                            selectedEntity.pickupOffset = {
-                                x: snappedMX - selectedEntity.x,
-                                y: snappedMY - selectedEntity.y
-                            };
-                            selectedEntity.rotation = Math.angleNormalized(selectedEntity.rotationData.rotation + rotationAngle);
+                    if (!connectionEstablished) {
+                        for (let i = 0; i < selectedEntities.length; i++) {
+                            let selectedEntity = selectedEntities[i];
                             if (!isNaN(selectedEntity.prevRotation)) {
-                                selectedEntity.prevRotation = selectedEntity.rotation;
+                                if (selectedEntity.sockets) {
+                                    selectedEntity.removeConnections(undefined, true);
+                                }
+                                if (selectedEntity.prevPosition) {
+                                    selectedEntity.x = selectedEntity.prevPosition.x;
+                                    selectedEntity.y = selectedEntity.prevPosition.y;
+                                    delete selectedEntity.prevPosition;
+                                }
+                                selectedEntity.rotation = selectedEntity.prevRotation;
+                                delete selectedEntity.prevRotation;
+                                if (selectedEntities.length === 1 && selectedEntity.building?.isBezier) {
+                                    selectedEntity.pickupOffset = {
+                                        x: 0,
+                                        y: 0
+                                    };
+                                }
                             }
-                        } else {
+                            if (selectedEntity.building && !selectedEntity.hasHandle && selectedEntity.selectionArea.visible) {
+                                selectedEntity.selectionArea.visible = false;
+                            }
                             selectedEntity.x = snappedMX - selectedEntity.pickupOffset.x;
                             selectedEntity.y = snappedMY - selectedEntity.pickupOffset.y;
-                            if (selectedEntities.length === 1 && !selectedEntity.building?.ignoreSnapSettings && (game.settings.enableGrid || keys[16])) {
+                            if (selectedEntities.length === 1 && !selectedEntity.building?.ignoreSnapSettings && (game.shiftKeyModifier ? !game.settings.enableGrid : game.settings.enableGrid)) {
                                 let gridSize = game.settings.gridSize ? game.settings.gridSize : 16;
                                 selectedEntity.x = (Math.round(selectedEntity.x / gridSize) * gridSize);
                                 selectedEntity.y = (Math.round(selectedEntity.y / gridSize) * gridSize);
@@ -3084,8 +4106,7 @@ try {
             if (followEntity.selectionArea.visible) {
                 followEntity.selectionArea.visible = false;
             }
-            camera.x = (followEntity.x * camera.zoom) - WIDTH/2;
-            camera.y = (followEntity.y * camera.zoom) - HEIGHT/2;
+            game.cameraTo(followEntity);
         }
 
         if (ENABLE_DEBUG) {
@@ -3102,6 +4123,8 @@ try {
         app.cstage.scale.y = camera.zoom;
         app.cstage.updateLayersOrder();
 
+        game.updateIconScale();
+
         let mousePos = game.getMousePosition();
         if (mousePos && (mousePos.x || mousePos.y)) {
             gmx = mousePos.x;
@@ -3117,15 +4140,21 @@ try {
             }
         }
 
-        if (game.settings.enableExperimental && (game.saveStateChanged || pickupSelectedEntities)) {
+        if (game.saveStateChanged || pickupSelectedEntities || rotateSelectedEntities) {
             for (const entity of entities) {
-                if (entity.valid && entity.rangeSprite) {
-                    entity.updateRangeMask();
+                if (entity.valid) {
+                    if (game.settings.enableExperimental && game.settings.showLineOfSightRanges && entity.rangeSprite) {
+                        entity.updateRangeMask();
+                    }
+                    if (entity.type === 'shape' && entity.subtype === 'line' && entity.shapeStyle?.showDist) {
+                        entity.regenerate();
+                    }
                 }
             }
+            game.resetSelectionData(true);
         }
 
-        if (game.saveStateChanged && game.settings.enableHistory && !pickupSelectedEntities && !game.selectedHandlePoint && !selectionRotation) {
+        if (game.saveStateChanged && game.settings.enableHistory && !pickupSelectedEntities && !game.selectedHandlePoint && !rotateSelectedEntities) {
             game.saveStateChanged = false;
             game.updateSave();
         }
@@ -3138,6 +4167,12 @@ try {
     }, 60000);
 
     Math.PI2 = Math.PI * 2;
+    Math.pointBetween = function (p1, p2) {
+        return {
+            x: (p1.x + p2.x) / 2,
+            y: (p1.y + p2.y) / 2
+        };
+    };
     Math.angleBetween = function (p1, p2) {
         return Math.atan2(p2.y - p1.y, p2.x - p1.x);
     };
@@ -3248,8 +4283,41 @@ try {
 
         return false;
     };
+    Math.distanceToLine = function(point, lineStart, lineEnd) {
+        const { x: x1, y: y1 } = lineStart;
+        const { x: x2, y: y2 } = lineEnd;
+        return Math.abs((y2 - y1) * point.x - (x2 - x1) * point.y + x2 * y1 - y2 * x1) / Math.sqrt(Math.pow(y2 - y1, 2) + Math.pow(x2 - x1, 2));
+    };
+    Math.getLineIntersection = function(p1, p2, p3, p4) {
+        let denominator = (p4.y - p3.y) * (p2.x - p1.x) - (p4.x - p3.x) * (p2.y - p1.y);
+        if (denominator == 0) return null;
+        let ua = ((p4.x - p3.x) * (p1.y - p3.y) - (p4.y - p3.y) * (p1.x - p3.x)) / denominator;
+        let ub = ((p2.x - p1.x) * (p1.y - p3.y) - (p2.y - p1.y) * (p1.x - p3.x)) / denominator;
+        if (ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1) {
+            return {
+                x: p1.x + ua * (p2.x - p1.x),
+                y: p1.y + ua * (p2.y - p1.y)
+            };
+        }
+        return null;
+    };
+    Math.rayCast = function(polygons, rayStart, rayEnd) {
+        let closestIntersection = null;
+        for (let polygon of polygons) {
+            for (let i = 0; i < polygon.length; i++) {
+                let p1 = polygon[i];
+                let p2 = polygon[(i + 1) % polygon.length];
+                let intersection = Math.getLineIntersection(p1, p2, rayStart, rayEnd);
+                if (!intersection) continue;
+                if (!closestIntersection || Math.distanceBetween(rayStart, intersection) < Math.distanceBetween(rayStart, closestIntersection)) {
+                    closestIntersection = intersection;
+                }
+            }
+        }
+        return closestIntersection;
+    };
     Number.prototype.round = function(n) {
         const d = Math.pow(10, n);
         return Math.round((this + Number.EPSILON) * d) / d;
-    }
+    };
 })();

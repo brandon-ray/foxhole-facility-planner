@@ -8,7 +8,7 @@
     <meta property="og:url" content="https://foxholeplanner.com/"/>
     <meta property="og:type" content="product"/>
     <meta property="og:description" content="Create blueprints for a bunker, facility, and more using this fan-made tool for the video game Foxhole. Formerly known as Foxhole Facility Planner, this tool now features facilities, bunkers, trenches, and more!"/>
-    <meta property="og:image" content="https://foxholeplanner.com/assets/screenshot5.jpg"/>
+    <meta property="og:image" content="https://foxholeplanner.com/assets/screenshot6.jpg"/>
 
     <meta charset="utf-8">
     <base href="/">
@@ -51,6 +51,7 @@
     </script>
 
     <script>
+        let WINDOW_SCALE = 1;
         window.addEventListener('resize', onResize);
         function onResize() {
             var container = document.getElementById('ui');
@@ -62,11 +63,13 @@
                 var widthScale = width / maxWidth;
                 var heightScale = height / maxHeight;
                 if (heightScale < widthScale) {
-                    container.style.transform = 'scale(' + heightScale.toFixed(3) + ')';
+                    WINDOW_SCALE = heightScale.toFixed(3);
+                    container.style.transform = 'scale(' + WINDOW_SCALE + ')';
                     container.style.width = ((width / heightScale) + 2).toFixed(3) + 'px';
                     container.style.height = (maxHeight + 2) + 'px';
                 } else {
-                    container.style.transform = 'scale(' + widthScale.toFixed(3) + ')';
+                    WINDOW_SCALE = widthScale.toFixed(3);
+                    container.style.transform = 'scale(' + WINDOW_SCALE + ')';
                     container.style.width = (maxWidth + 2) + 'px';
                     container.style.height = ((height / widthScale) + 2).toFixed(3) + 'px';
                 }
@@ -139,6 +142,7 @@
 <script src="vendor/1pixi.min.js"></script>
 <script src="vendor/howler.min.js"></script>
 <script src="vendor/pixi-filters.js"></script>
+<script src="vendor/socket.io.min.js"></script>
 <script src="vendor/axios.min.js"></script>
 <script src="vendor/pixi-multistyle-text.min.js"></script>
 <script src="vendor/vue-dragscroll.min.js"></script>
@@ -148,6 +152,7 @@
 <script src="vendor/SAT.js"></script>
 <script src="vendor/hitarea-shapes.min.js"></script>
 <script src="vendor/fuse.min.js"></script>
+<script src="vendor/rhill-voronoi-core.min.js"></script>
 
 <script src="filters.js"></script>
 <script src="games/foxhole/data.js"></script>
@@ -158,9 +163,7 @@
 <script src="games/foxhole/building.js"></script>
 <script src="menu/services/api.js"></script>
 <script src="menu/components/mixins.js"></script>
-<script src="menu/components/gameMenu.js"></script>
 <script src="menu/components/buildMenu.js"></script>
-<script src="menu/states/play.js"></script>
 <script src="menu/app.js"></script>
 <!-- endinject -->
 </body>

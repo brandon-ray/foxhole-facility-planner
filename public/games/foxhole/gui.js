@@ -88,14 +88,20 @@ Vue.component('app-menu-statistics', {
             displayTime: false,
             time: 3600,
             bunker: null,
-            gearPowerTotal: 0,
-            gearPowerProduced: 0,
-            gearPowerConsumed: 0,
             powerTotal: 0,
             powerProduced: 0,
             powerConsumed: 0,
             selection: false,
-            maintenanceSupplies: 0
+            maintenanceSupplies: 0,
+            ignoredCategories: [
+                'vehicles',
+                'trains',
+                'world',
+                'naval',
+                'tank',
+                'armor',
+                'weaponry'
+            ]
         };
     },
     mounted() {
@@ -125,14 +131,6 @@ Vue.component('app-menu-statistics', {
                 damageProfiles: {}
             };
             let displayTime = false;
-            let hasObs = false;
-            let hasEng = false;
-            let hasMultEng = false;
-            let gearPower = 0;
-            let gearPowerTotal = 0;
-            let gearPowerProduced = 0;
-            let gearPowerConsumed = 0;
-            let debug = 0;
             let powerTotal = 0;
             let powerProduced = 0;
             let powerConsumed = 0;
@@ -141,7 +139,8 @@ Vue.component('app-menu-statistics', {
             let maintenanceTunnels = [];
             //let garrisonConsumptionReducers = [];
 
-            this.selection = game.settings.enableSelectionStats && game.getSelectedEntities().length;
+            const selected = game.getSelectedEntities().length;
+            this.selection = game.settings.enableSelectionStats && selected && (selected > 1 || !game.settings.statsRequireMultiSelection);
 
             const entities = game.getEntities();
             let selectedBunker = null;
@@ -158,7 +157,7 @@ Vue.component('app-menu-statistics', {
                         garrisonConsumptionReducers.push(entity);
                     }
                     */
-                    if (this.selection && selectedBunker !== false && entity.building.canUnion && entity.selected) {
+                    if (selectedBunker !== false && entity.building.canUnion && entity.selected) {
                         if (selectedBunker === null) {
                             selectedBunker = entity;
                         }
@@ -172,7 +171,6 @@ Vue.component('app-menu-statistics', {
             for (let i = 0; i < entities.length; i++) {
                 let entity = entities[i];
                 if (entity.type === 'building') {
-
                     let buildingData = window.objectData.buildings[entity.subtype];
                     if (!buildingData) {
                         continue;
@@ -188,7 +186,7 @@ Vue.component('app-menu-statistics', {
                     let consumptionRate = 2 * (buildingData.garrisonSupplyMultiplier ?? 1);
                     let totalConsumptionRate = consumptionRate * maintenanceConsumptionRate;
                     for (const maintenanceTunnel of maintenanceTunnels) {
-                        if (totalConsumptionRate > 0 && (buildingData.category !== 'vehicles' && buildingData.category !== 'trains' && buildingData.category !== 'world') &&
+                        if (totalConsumptionRate > 0 && !this.ignoredCategories.includes(buildingData.category) &&
                             (maintenanceTunnel === entity || (Math.distanceBetween(entity, maintenanceTunnel) < (maintenanceTunnel.maintenanceFilters.range * METER_BOARD_PIXEL_SIZE))) &&
                             !maintenanceTunnel.maintenanceFilters.exclusions.includes(buildingData.category)) {
                             maintenanceTunnel.maintainedConsumptionRate += consumptionRate;
@@ -198,7 +196,7 @@ Vue.component('app-menu-statistics', {
 
                     if (entity.selected || !this.selection) {
                         // TODO: Need to actually get whether a structure decays or not from foxhole data.
-                        if (buildingData.category !== 'vehicles' && buildingData.category !== 'trains' && buildingData.category !== 'world') {
+                        if (!this.ignoredCategories.includes(buildingData.category)) {
                             displayTime = true;
                             /*
                             for (let j = 0; j < garrisonConsumptionReducers.length; j++) {
@@ -218,8 +216,7 @@ Vue.component('app-menu-statistics', {
                             productionSelected = true;
                         }
 
-                        let power = productionSelected && buildingData.power ? buildingData.power : 0;
-
+                        let power = !entity.disableProduction && productionSelected && buildingData.power ? buildingData.power : 0;
                         if (buildingData.cost) {
                             let costKeys = Object.keys(buildingData.cost);
                             for (let j = 0; j < costKeys.length; j++) {
@@ -232,7 +229,7 @@ Vue.component('app-menu-statistics', {
                             }
                         }
 
-                        if (productionSelected && buildingData.production && buildingData.production.length) {
+                        if (!entity.disableProduction && productionSelected && buildingData.production && buildingData.production.length) {
                             let selectedProduction;
                             for (const production of ((entity.baseProduction && buildingData.parent) || buildingData).production) {
                                 if (production.id === entity.selectedProduction) {
@@ -304,31 +301,6 @@ Vue.component('app-menu-statistics', {
                         } else {
                             powerConsumed += power;
                         }
-
-                    }
-
-                    if (buildingData.category==='gearPower') {
-                        gearPower = buildingData.gearPower;
-                    }
-                    
-                    gearPowerTotal += gearPower;
-                    
-                    if (gearPower > 0) {
-                        gearPowerProduced += gearPower;
-                    } else {
-                        gearPowerConsumed += gearPower;
-                    }
-
-                    gearPower = 0;
-                    
-                    if(buildingData.codeName === 'ObservationBunkerT2' || buildingData.codeName === 'ObservationBunkerT3')
-                        hasObs=true;
-                    
-                    if(buildingData.codeName === 'EngineRoomT2' || buildingData.codeName === 'EngineRoomT3'){
-                        if(hasEng)
-                            hasMultEng = true:
-                        else
-                            hasEng = true;
                     }
                 }
             }
@@ -362,14 +334,6 @@ Vue.component('app-menu-statistics', {
             this.powerTotal = powerTotal;
             this.powerProduced = powerProduced;
             this.powerConsumed = powerConsumed;
-
-            if(hasObs && hasMultEng && gearPowerTotal == 1000)
-                this.gearPowerTotal = 999;
-            else
-                this.gearPowerTotal = gearPowerTotal;
-
-            this.gearPowerProduced = gearPowerProduced;
-            this.gearPowerConsumed = gearPowerConsumed;
             this.maintenanceSupplies = maintenanceSupplies;
 
             const selectedEntity = game.getSelectedEntity();
@@ -389,14 +353,14 @@ Vue.component('app-menu-statistics', {
             <button class="btn-small m-0 mr-2 float-right" :class="{'btn-active': game.settings.enableSelectionStats}" title="Toggle Selection Stats" @click="game.settings.enableSelectionStats = !game.settings.enableSelectionStats; game.updateSettings(); game.refreshStats()"><i class="fa fa-mouse-pointer"></i></button>
         </div>
         <div class="board-panel-body">
-            <div v-if="!(cost || bunker?.total || displayTime || gearPowerProduced || gearPowerConsumed || gearPowerTotal || powerProduced || powerConsumed || powerTotal || maintenanceSupplies || input || output)" class="text-center" style="color: #f0f0f0">{{game.settings.enableSelectionStats ? 'Select' : 'Place'}} buildings to see their stats here.</div>
+            <div v-if="!(cost || bunker?.total || displayTime || powerProduced || powerConsumed || powerTotal || maintenanceSupplies || input || output)" class="text-center" style="color: #f0f0f0">{{game.settings.enableSelectionStats ? 'Select' : 'Place'}} buildings to see their stats here.</div>
             <div v-if="cost" class="construction-options-wrapper">
                 <h5 class="construction-options-header"><i class="fa fa-wrench"></i> {{selection && 'Selection ' || ''}}Construction Cost</h5>
                 <div>
                     <app-game-resource-icon v-for="(value, key) in cost" :resource="key" :amount="value"/>
                 </div>
             </div>
-            <div v-if="selection && bunker?.total" class="construction-options-wrapper">
+            <div v-if="bunker?.total" class="construction-options-wrapper">
                 <h5 class="construction-options-header"><i class="fa fa-shield" aria-hidden="true"></i> Selected Bunker Stats</h5>
                 <div class="construction-options row d-flex justify-content-center">
                     <div class="btn-small col" style="color: #00ca00;">
@@ -411,23 +375,6 @@ Vue.component('app-menu-statistics', {
                         <span style="font-size: 18px;">{{Math.floor(bunker.structuralIntegrity * 100)}} <small>%</small></span>
                         <!--<span class="label">{{bunker.structuralIntegrity.toFixed(4)}}</span>-->
                         <span class="label">{{bunker.class}}</span>
-                    </div>
-                </div>
-            </div>
-            <div v-if="gearPowerProduced || gearPowerConsumed || gearPowerTotal class="construction-options-wrapper">
-                <h5 class="construction-options-header"><i class="fa fa-bolt"></i> {{selection ? 'Selection' : 'Bunker'}} Gear Power</h5>
-                <div class="construction-options row d-flex justify-content-center">
-                    <div class="btn-small col" style="color: #00ca00;">
-                        <span style="font-size: 18px;">{{gearPowerProduced}} <small>Unit</small></span>
-                        <span class="label">produced</span>
-                    </div>
-                    <div class="btn-small col" style="color: #ff0d0d;">
-                        <span style="font-size: 18px;">{{gearPowerConsumed}} <small>Unit</small></span>
-                        <span class="label">consumed</span>
-                    </div>
-                    <div class="btn-small col" style="color: #d0d004;">
-                        <span style="font-size: 18px;">{{gearPowerTotal}} <small>Unit</small></span>
-                        <span class="label">total</span>
                     </div>
                 </div>
             </div>
@@ -463,7 +410,7 @@ Vue.component('app-menu-statistics', {
                     </select>
                 </div>
             </div>
-            <div v-if="game.settings.enableExperimental && maintenanceSupplies" class="construction-options-wrapper" title="Maintenance Supplies are required to prevent structures from decaying. The following information indicates how much structures will cost based on the performance of the sub-region's consumption modifier.">
+            <div v-if="maintenanceSupplies" class="construction-options-wrapper" title="Maintenance Supplies are required to prevent structures from decaying. The following information indicates how much structures will cost based on the performance of the sub-region's consumption modifier.">
                 <h5 class="construction-options-header">
                     <i class="inline-resource-icon" style="width: 18px;" :style="{backgroundImage: 'url(games/foxhole/assets/game/Textures/UI/ItemIcons/MaintenanceSuppliesIcon.webp)'}"></i> {{selection ? 'Selection Maintenance' : 'Maintenance Supplies'}}
                 </h5>
@@ -486,7 +433,7 @@ Vue.component('app-menu-statistics', {
                     </div>
                 </div>
             </div>
-            <div v-if="game.settings.enableExperimental && selection && bunker?.total" class="construction-options-wrapper">
+            <div v-if="game.settings.showBuildingDestructionStats && selection && bunker?.total" class="construction-options-wrapper">
                 <h5 class="construction-options-header">
                     <i class="fa fa-shield"></i> Bunker Destruction Stats
                     <button class="btn-small m-0 float-right header-icon" :class="{'btn-active': game.settings.enableBunkerDryingStats}" title="Toggle Wet Concrete Drying Time" @click="game.settings.enableBunkerDryingStats = !game.settings.enableBunkerDryingStats; game.updateSettings(); game.refreshStats()"><i class="fa fa-tint"></i></button>

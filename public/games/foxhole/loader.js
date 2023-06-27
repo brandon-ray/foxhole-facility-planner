@@ -1,12 +1,20 @@
-function assetDir(str) {
-    return !str.startsWith('/games/foxhole/assets/') ? '/games/foxhole/assets/' + str : str;
+const game_asset_dir = '/games/foxhole/assets/';
+let texture_asset_path = game_asset_dir + 'game/Textures/';
+let preset_asset_path = game_asset_dir + 'presets/';
+function assetDir(str, dir = texture_asset_path) {
+    const index = str.indexOf('../');
+    if (index === -1) {
+        return str;
+    }
+    return str.substring(0, index) + dir + str.substring(index + 3);
 }
 
-const game_asset_keys = ['baseIcon', 'icon', 'texture', 'textureBorder', 'textureFrontCap', 'textureBackCap'];
-const game_asset_list = {
-    trackswitch_active: assetDir('game/Textures/Structures/trackswitch_active.webp'),
-    trackswitch_inactive: assetDir('game/Textures/Structures/trackswitch_inactive.webp')
+const game_asset_keys = ['baseIcon', 'icon', 'texture', 'textureBorder', 'textureFrontCap', 'textureBackCap', 'texturePost'];
+const game_asset_required = {
+    trackswitch_active: assetDir('../Structures/trackswitch_active.webp'),
+    trackswitch_inactive: assetDir('../Structures/trackswitch_inactive.webp')
 };
+const game_asset_list = {};
 
 (function() {
     window.objectData = {
@@ -41,7 +49,10 @@ const game_asset_list = {
                 building.cost = buildingCost;
             }
 
-            parentData.push(Object.assign({}, building));
+            parentData.push(Object.assign({
+                tierUp: undefined,
+                tierDown: undefined
+            }, building));
             Object.assign(building, ...parentData);
             building.parent = window.objectData.buildings[building.parentKey];
         }
@@ -52,7 +63,7 @@ const game_asset_list = {
                         'provisional_garrison': {
                             name: 'Provisional Garrison',
                             description: 'A Provisional Garrison connects this base to nearby defensive structures. Defensive structures will deactivate if player activity is too low. This also allows Towns to be claimed towards the victory condition.',
-                            icon: assetDir('game/Textures/UI/Menus/IconFacilitiesProvisionalGarrison.webp'),
+                            icon: assetDir('../UI/Menus/IconFacilitiesProvisionalGarrison.webp'),
                             range: {
                                 type: 'garrison',
                                 max: building.baseGarrisonRadius
@@ -61,7 +72,7 @@ const game_asset_list = {
                         'small_garrison': {
                             name: 'Small Garrison',
                             description: 'A Small Garrison permanently connects this base to nearby defensive structures. A Small Garrison is required for upgrading the base to Tier 2.',
-                            icon: assetDir('game/Textures/UI/Menus/IconFacilitiesSmallGarrison.webp'),
+                            icon: assetDir('../UI/Menus/IconFacilitiesSmallGarrison.webp'),
                             range: {
                                 type: 'garrison',
                                 max: building.baseGarrisonRadius
@@ -70,7 +81,7 @@ const game_asset_list = {
                         'large_garrison': {
                             name: 'Large Garrison',
                             description: 'A Large Garrison permanently connects this base to nearby defensive structures. A Large Garrison required for upgrading the base to Tier 3.',
-                            icon: assetDir('game/Textures/UI/Menus/IconFacilitiesLargeGarrison.webp'),
+                            icon: assetDir('../UI/Menus/IconFacilitiesLargeGarrison.webp'),
                             range: {
                                 type: 'garrison',
                                 max: building.baseGarrisonRadius
@@ -79,7 +90,17 @@ const game_asset_list = {
                     }
                 }
             };
+            if (building.baseGarrisonTypes) {
+                for (const [key, value] of Object.entries(garrisonData.baseUpgrades.base)) {
+                    if (!building.baseGarrisonTypes.includes(key)) {
+                        delete garrisonData.baseUpgrades.base[key];
+                    }
+                }
+            }
             Object.assign(building, garrisonData);
+        }
+        if (building.preventOnLandscape && building.buildOnFoundation !== false) {
+            building.requireFoundation = true;
         }
     }
 
@@ -100,8 +121,16 @@ const game_asset_list = {
             let asset = data[key];
             if (asset) {
                 if (typeof asset === 'object' && !Array.isArray(asset)) {
-                    asset = assetDir(asset.sheet);
-                    data[key].sheet = asset;
+                    if (typeof asset.src === 'object') {
+                        for (const [srcKey, srcValue] of Object.entries(asset.src)) {
+                            asset.src[srcKey] = assetDir(srcValue);
+                            game_asset_list[asset.src[srcKey]] = asset.src[srcKey];
+                        }
+                        return;
+                    } else {
+                        asset.src = assetDir(asset.src);
+                        game_asset_list[asset.src] = asset.src;
+                    }
                 } else {
                     asset = assetDir(asset);
                     data[key] = asset;
@@ -151,14 +180,18 @@ const game_asset_list = {
                 if (!upgrade.reference) {
                     appendGameAssets(upgrade);
 
-                    let upgradeBuilding = Object.assign({}, building, upgrade, {
+                    let upgradeBuilding = Object.assign({}, building, {
+                        hitArea: undefined,
+                        tierUp: undefined,
+                        tierDown: undefined
+                    }, upgrade, {
                         parentKey: undefined
                     });
                     upgradeBuilding.parent = building;
                     upgradeBuilding.upgradeName = upgrade.name;
                     upgradeBuilding.name = building.name + ' (' + upgrade.name + ')';
 
-                    let parentCost = upgradeBuilding.prevUpgradeKey ? window.objectData.buildings[upgradeBuilding.prevUpgradeKey]?.cost : building.cost;
+                    let parentCost = upgradeBuilding.tierDown ? window.objectData.buildings[upgradeBuilding.tierDown]?.cost : building.cost;
                     let upgradeBuildingCost = Object.assign({}, parentCost);
                     if (upgradeBuilding.cost) {
                         for (const [resource, amount] of Object.entries(upgradeBuilding.cost)) {
@@ -193,16 +226,23 @@ const game_asset_list = {
         }
     }
 
-    for (const category of Object.values(window.objectData.categories)) {
+    const vehicleCategories = ['shippables', 'weaponry', 'vehicles', 'armor', 'tank', 'trains', 'naval'];
+    for (const [key, category] of Object.entries(window.objectData.categories)) {
         if (category.icon) {
             category.icon = assetDir(category.icon);
             game_asset_list[category.icon] = category.icon;
+        }
+        if (category.buildings && vehicleCategories.includes(key)) {
+            for (const building of category.buildings) {
+                if (!building.sortLayer) {
+                    building.sortLayer = 'vehicle';
+                }
+            }
         }
     }
 
     for (const map of Object.values(gameData.maps)) {
         map.icon = assetDir(map.icon);
-        map.texture = assetDir(map.texture);
     }
 
     for (const resource of Object.values(window.objectData.resources)) {
@@ -224,9 +264,9 @@ const game_asset_list = {
     for (const [key, data] of Object.entries(gameData.presets)) {
         data.preset = true;
         data.category = (data.module && 'presets') || 'showcase';
-        data.dataFile = assetDir(`presets/${key}/preset.json`);
-        data.icon = assetDir(`presets/${key}/icon.webp`);
-        data.texture = assetDir(`presets/${key}/preview.webp`);
+        data.dataFile = assetDir(`../${key}/preset.json`, preset_asset_path);
+        data.icon = assetDir(`../${key}/icon.webp`, preset_asset_path);
+        data.texture = assetDir(`../${key}/preview.webp`, preset_asset_path);
         window.objectData.categories[data.category].buildings.push(data);
     }
 
