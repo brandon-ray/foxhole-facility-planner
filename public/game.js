@@ -31,6 +31,10 @@ const PROJECT_LAYERS = {
             name: 'Resource Field',
             alias: 'HARVEST'
         },
+        garrison: {
+            name: 'Garrison',
+            alias: 'BASE'
+        },
         crane: {
             name: 'Crane',
             alias: 'CRANE',
@@ -270,7 +274,8 @@ const game = {
                 killboxMG: false,
                 killboxAT: false,
                 killboxRocket: false,
-                killboxArty: false
+                killboxArty: false,
+                garrison: false
             }
         }
     },
@@ -1102,9 +1107,9 @@ try {
     game.updateEntityOverlays = function() {
         const regionKey = game.project.settings.regionKey;
         const regionSettings = game.project.settings.region;
-        mapLayer.visible = regionKey && game.project.settings.showWorldRegion;
+        mapLayer.visible = regionKey && gameData.maps[regionKey] && game.project.settings.showWorldRegion;
         if (mapLayer.visible) {
-            if (gameData.maps[regionKey] && (regionSettings.subRegions || regionSettings.icons)) {
+            if (regionSettings.subRegions || regionSettings.icons) {
                 if (!apiSocket) {
                     apiSocket = io('https://api.foxholeplanner.com', {
                         reconnectionAttempts: 20,

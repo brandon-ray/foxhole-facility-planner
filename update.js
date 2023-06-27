@@ -167,18 +167,115 @@ function initializeStructureItems(component) {
 }
 
 const requiredMeshes = {};
-const ignoredMeshes = ['Headlight', 'Sphere', 'Destroyed'];
+const ignoredMeshes = ['Plane', 'Sphere', 'Critical', 'Destroyed'];
 function getValidMesh(meshes = {}, property) {
     if (property?.Properties) {
         const meshObj = property.Properties.StaticMesh ?? property.Properties.SkeletalMesh;
-        if (meshObj?.ObjectPath) {
-            const baseName = path.parse(meshObj.ObjectPath).name;
+        if (meshObj?.ObjectPath && meshObj.ObjectPath.startsWith('War/Content/Meshes/')) {
             for (const ignoredMesh of ignoredMeshes) {
-                if (baseName.includes(ignoredMesh)) {
+                if (path.parse(meshObj.ObjectPath).name.includes(ignoredMesh)) {
                     return meshes;
                 }
             }
-            meshes[property.Name] = baseName;
+            const mesh = {
+                mesh: meshObj.ObjectPath.slice(19, -2)
+            };
+            if (mesh.mesh) {
+                const meshPath = `${foxholeDataDirectory}${meshObj.ObjectPath.split('.')[0]}.json`;
+                const meshData = JSON.parse(fs.readFileSync(meshPath));
+                if (meshData) {
+                    for (const meshObject of meshData) {
+                        if (meshObject.Type === 'SkeletalMesh') {
+                            if (meshObject.Materials) {
+                                const materials = {};
+                                for (const material of meshObject.Materials) {
+                                    const materialPath = `${foxholeDataDirectory}${material.ObjectPath.split('.')[0]}.json`;
+                                    if (material.ObjectPath.startsWith('War/')) {
+                                        const materialData = JSON.parse(fs.readFileSync(materialPath));
+                                        if (materialData) {
+                                            for (const mat of materialData) {
+                                                if (mat.Properties?.TextureParameterValues) {
+                                                    const materialTextures = {};
+                                                    for (const materialParameter of mat.Properties.TextureParameterValues) {
+                                                        if (materialParameter.ParameterValue?.ObjectPath) {
+                                                            if (materialParameter.ParameterInfo?.Name === 'Albedo' || materialParameter.ParameterInfo?.Name === 'Diffuse 1') {
+                                                                materialTextures.a = `${materialParameter.ParameterValue.ObjectPath.split('.')[0].substring(21)}.png`;
+                                                            } else if (materialParameter.ParameterInfo?.Name === 'RoughnessUVTexture' || materialParameter.ParameterInfo?.Name === 'Roughness 1') {
+                                                                materialTextures.m = `${materialParameter.ParameterValue.ObjectPath.split('.')[0].substring(21)}.png`;
+                                                            } else if (materialParameter.ParameterInfo?.Name === 'Normal' || materialParameter.ParameterInfo?.Name === 'Normals 1') {
+                                                                materialTextures.n = `${materialParameter.ParameterValue.ObjectPath.split('.')[0].substring(21)}.png`;
+                                                            } else if (materialParameter.ParameterInfo?.Name === 'DetailNormal') {
+                                                                // TODO: Add detail normal support.
+                                                            }
+                                                        }
+                                                    }
+                                                    if (Object.keys(materialTextures).length && mat?.Name) {
+                                                        materials[mat?.Name] = materialTextures;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if (Object.keys(materials).length) {
+                                    mesh.materials = materials;
+                                }
+                            }
+                        } else if (meshObject.Type === 'StaticMesh') {
+                            if (meshObject.Properties?.StaticMaterials) {
+                                const materials = {};
+                                for (const material of meshObject.Properties.StaticMaterials) {
+                                    if (material.MaterialInterface?.ObjectPath) {
+                                        const materialPath = `${foxholeDataDirectory}${material.MaterialInterface.ObjectPath.split('.')[0]}.json`;
+                                        if (material.MaterialInterface.ObjectPath.startsWith('War/')) {
+                                            const materialData = JSON.parse(fs.readFileSync(materialPath));
+                                            if (materialData) {
+                                                for (const mat of materialData) {
+                                                    if (mat.Properties?.TextureParameterValues) {
+                                                        if (material.MaterialInterface.ObjectName.split(' ')[1] === 'Concrete03') {
+                                                            console.log(materialPath);
+                                                        }
+                                                        const materialTextures = {};
+                                                        for (const materialParameter of mat.Properties.TextureParameterValues) {
+                                                            if (materialParameter.ParameterValue?.ObjectPath) {
+                                                                if (materialParameter.ParameterInfo?.Name === 'Albedo' || materialParameter.ParameterInfo?.Name === 'Diffuse 1') {
+                                                                    materialTextures.a = `${materialParameter.ParameterValue.ObjectPath.split('.')[0].substring(21)}.png`;
+                                                                } else if (materialParameter.ParameterInfo?.Name === 'RoughnessUVTexture' || materialParameter.ParameterInfo?.Name === 'Roughness 1') {
+                                                                    materialTextures.m = `${materialParameter.ParameterValue.ObjectPath.split('.')[0].substring(21)}.png`;
+                                                                } else if (materialParameter.ParameterInfo?.Name === 'Normal' || materialParameter.ParameterInfo?.Name === 'Normals 1') {
+                                                                    materialTextures.n = `${materialParameter.ParameterValue.ObjectPath.split('.')[0].substring(21)}.png`;
+                                                                } else if (materialParameter.ParameterInfo?.Name === 'DetailNormal') {
+                                                                    // TODO: Add detail normal support.
+                                                                }
+                                                            }
+                                                        }
+                                                        if (Object.keys(materialTextures).length && material.MaterialInterface?.ObjectName) {
+                                                            materials[material.MaterialInterface.ObjectName.split(' ')[1]] = materialTextures;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if (Object.keys(materials).length) {
+                                    mesh.materials = materials;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (property.Properties.RelativeLocation) {
+                mesh.position = [(property.Properties.RelativeLocation.X ?? 0) / 100, (-property.Properties.RelativeLocation.Y ?? 0) / 100, (property.Properties.RelativeLocation.Z ?? 0) / 100];
+            }
+            if (property.Properties.RelativeRotation) {
+                mesh.rotation = [property.Properties.RelativeRotation.Pitch ?? 0, property.Properties.RelativeRotation.Roll ?? 0, property.Properties.RelativeRotation.Yaw ?? 0];
+            }
+            if (property.Properties.RelativeScale3D) {
+                mesh.scale = [property.Properties.RelativeScale3D.X ?? 1, property.Properties.RelativeScale3D.Y ?? 1, property.Properties.RelativeScale3D.Z ?? 1];
+            }
+            meshes[property.Name] = mesh;
         }
     }
     return meshes;
@@ -468,6 +565,7 @@ async function iterateStructures(dirPath) {
                                     'experimental': structureData.experimental,
                                     'hideInList': structureData.hideInList,
                                     'baseGarrisonRadius': structureData.baseGarrisonRadius,
+                                    'baseGarrisonTypes': structureData.baseGarrisonTypes,
                                     'tier': structureData.tier,
                                     'width': structureData.width,
                                     'length': structureData.length,
@@ -743,6 +841,7 @@ function iterateData(filePath, list, type) {
                         if (v.mounts && v.mounts.includes(codeName)) {
                             if (data.MinDistance > 0 || data.MaxDistance > 0) {
                                 /*
+                                TODO: Need to get the position of where the gun is mounted for each range to be accurate.
                                 if (!v.ranges) {
                                     v.ranges = {};
                                 }
@@ -1031,32 +1130,34 @@ function findFile(directory, fileName) {
 const METER_PIXEL_SCALE = 52.8 / 32; // Meter in pixels of a texture divided by the width of a meter on the grid / board.
 async function fetchTextureData(structureData) {
     const texturePath = (typeof structureData.texture === 'string' && structureData.texture) || structureData.texture?.src;
-    const filePath = texturePath?.replace('../', './public/games/foxhole/assets/game/Textures/');
-    if (texturePath && fs.existsSync(filePath) && !structureData.texture?.speed) {
-        const texture = await sharp(filePath).metadata();
-        structureData.texture = {
-            src: texturePath,
-            width: texture.width,
-            height: texture.height,
-            offset: structureData.texture.offset || (structureData.textureOffset && {
-                x: structureData.textureOffset?.x,
-                y: structureData.textureOffset?.y
-            })
-        }
-        const shapes = structurePolygons[path.basename(texturePath, '.webp')];
-        if (shapes) {
-            if (texture) {
-                let hitAreaPolygons = [];
-                for (let i = 0; i < shapes.length; i++) {
-                    const shape = shapes[i].shape;
-                    let adjustedShape = [];
-                    for (let i = 0; i < shape.length; i += 2) {
-                        adjustedShape.push(((shape[i] - ((structureData.texture.offset?.x ?? texture.width) / 2)) / METER_PIXEL_SCALE).round(2));
-                        adjustedShape.push(((shape[i + 1] - ((structureData.texture.offset?.y ?? texture.height) / 2)) / METER_PIXEL_SCALE).round(2));
+    if (typeof texturePath === 'string') {
+        const filePath = texturePath?.replace('../', './public/games/foxhole/assets/game/Textures/');
+        if (texturePath && fs.existsSync(filePath) && !structureData.texture?.speed) {
+            const texture = await sharp(filePath).metadata();
+            structureData.texture = {
+                src: texturePath,
+                width: texture.width,
+                height: texture.height,
+                offset: structureData.texture.offset || (structureData.textureOffset && {
+                    x: structureData.textureOffset?.x,
+                    y: structureData.textureOffset?.y
+                })
+            }
+            const shapes = structurePolygons[path.basename(texturePath, '.webp')];
+            if (shapes) {
+                if (texture) {
+                    let hitAreaPolygons = [];
+                    for (let i = 0; i < shapes.length; i++) {
+                        const shape = shapes[i].shape;
+                        let adjustedShape = [];
+                        for (let i = 0; i < shape.length; i += 2) {
+                            adjustedShape.push(((shape[i] - ((structureData.texture.offset?.x ?? texture.width) / 2)) / METER_PIXEL_SCALE).round(2));
+                            adjustedShape.push(((shape[i + 1] - ((structureData.texture.offset?.y ?? texture.height) / 2)) / METER_PIXEL_SCALE).round(2));
+                        }
+                        hitAreaPolygons.push({ 'shape': `[ ${adjustedShape.join()} ]` });
                     }
-                    hitAreaPolygons.push({ 'shape': `[ ${adjustedShape.join()} ]` });
+                    structureData.hitArea = hitAreaPolygons;
                 }
-                structureData.hitArea = hitAreaPolygons;
             }
         }
     }
@@ -1271,7 +1372,7 @@ async function updateData() {
     }, {});
 
     /*
-    foxholeData.maps = {};
+    const mapData = {};
     await fetch('https://war-service-live.foxholeservices.com/api/worldconquest/maps')
     .then(response => response.json())
     .then(async data => {
@@ -1279,11 +1380,21 @@ async function updateData() {
             await fetch('https://war-service-live.foxholeservices.com/api/worldconquest/maps/' + map + '/static')
             .then(response => response.json())
             .then(data => {
-                foxholeData.maps[map.toLowerCase()] = data;
+                const mapKey = map.toLowerCase();
+                const textureKey = `Map${map}`;
+                const prevData = foxholeData.maps[mapKey];
+                mapData[mapKey] = {
+                    name: prevData?.name ?? map,
+                    regionId: data.regionId,
+                    icon: `../UI/HexMaps/Icons/${textureKey}.webp`,
+                    textureKey: textureKey,
+                    gridCoord: prevData?.gridCoord
+                };
             }).catch(error => console.error(error));
         }
     })
     .catch(error => console.error(error));
+    foxholeData.maps = mapData;
     */
 
     iterateUpgradeCodeNames(`${foxholeDataDirectory}War/Content/Blueprints/`);
@@ -1291,14 +1402,20 @@ async function updateData() {
     await iterateStructures(`${foxholeDataDirectory}War/Content/Blueprints/`);
 
     for (const [codeName, meshes] of Object.entries(requiredMeshes)) {
-        console.info(`"${codeName}":`, Object.values(meshes), ",");
+        requiredMeshes[codeName] = Object.values(meshes);
     }
+    
+    fs.writeFile('dev/meshes.json', JSON.stringify(requiredMeshes, null, '\t'), err => {
+        if (err) {
+            throw err;
+        }
+    });
 
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPVehicleDynamicData.json`, itemList, 'item');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, itemList, 'item'); // Check for items in the structure data... Yes, Material Pallet is stored here.
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPAmmoDynamicData.json`, weaponList, 'weapon');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/DTDamageProfiles.json`, weaponList, 'damageType');
-    iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPMapList.json`, foxholeData.maps, 'map');
+    // iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPMapList.json`, foxholeData.maps, 'map');
     //iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPVehicleDynamicData.json`, structureList, 'item');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPMountDynamicData.json`, structureList, 'gunner');
     iterateData(`${foxholeDataDirectory}War/Content/Blueprints/Data/BPStructureDynamicData.json`, structureList);
