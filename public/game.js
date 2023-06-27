@@ -1549,6 +1549,19 @@ try {
                     case 87: // W
                         game.moveSelected(0, event.shiftKey ? -16 : -32);
                         break;
+
+                    case 107://Numpad +
+                        //I do not put a break so both do the exact same
+                    case 187://+
+                        game.upgradeSelected();
+                        break;
+
+                    case 109://Numpad -
+                        //I do not put a break here either so both do the exact same
+                    case 189://-
+                        game.downgradeSelected();
+                        break;
+
                 }
             }
         }
@@ -3291,6 +3304,29 @@ try {
         }
         game.buildingSelectedMenuComponent?.refresh();
     };
+
+    game.upgradeSelected = function() {
+        //Copy-Paste'd code from above and buildMenu.js
+        for (const selectedEntity of selectedEntities) {
+            if (selectedEntity.building?.tierUp) {
+                game.exchangeSelected(selectedEntity.building.tierUp);
+            }
+        }
+        game.saveStateChanged = true;
+        game.buildingSelectedMenuComponent?.refresh();
+    }
+
+    game.downgradeSelected = function() {
+        //Just likeupgrade Selected
+        for (const selectedEntity of selectedEntities) {
+            if (selectedEntity.building?.tierDown ?? selectedEntity.building?.parentKey) {
+                game.exchangeSelected(selectedEntity.building.tierDown ?? selectedEntity.building.parent);
+            }
+        }
+        game.saveStateChanged = true;
+        game.buildingSelectedMenuComponent?.refresh();
+    }
+
 
     game.moveSelected = function(x, y, snapped) {
         if (selectedEntities.length && game.getSelectedLockState() === null) {
