@@ -365,7 +365,7 @@ class DraggableContainer extends PIXI.Container {
         return this.z === game.camera.z && game.isOnScreen(this);
     }
     
-    onSelect() {
+    onSelect(allowUnionSelection = true) {
         this.selected = true;
         this.selectionArea.tint = this.locked ? COLOR_RED : COLOR_WHITE;
         this.selectionArea.visible = true;
@@ -380,14 +380,14 @@ class DraggableContainer extends PIXI.Container {
             this.updateHandles();
         }
 
-        if (game.isKeyDown(16) && this.union) {
+        if (allowUnionSelection && game.isKeyDown(16) && this.union) {
             for (const unionEntity of this.getUnionEntities()) {
                 game.addSelectedEntity(unionEntity);
             }
         }
     }
 
-    onDeselect() {
+    onDeselect(allowUnionSelection = true) {
         this.selected = false;
         this.selectionArea.visible = false;
         delete this.prevPosition;
@@ -418,7 +418,7 @@ class DraggableContainer extends PIXI.Container {
             this.remove();
         }
 
-        if (game.isKeyDown(16) && this.union) {
+        if (allowUnionSelection && game.isKeyDown(16) && this.union) {
             for (const unionEntity of this.getUnionEntities()) {
                 game.removeSelectedEntity(unionEntity);
             }
@@ -586,7 +586,7 @@ class DraggableContainer extends PIXI.Container {
 
     onRemove() {
         if (this.selected) {
-            game.removeSelectedEntity(this);
+            game.removeSelectedEntity(this, undefined, false);
         }
         if (this.following) {
             game.followEntity(null);
