@@ -1040,6 +1040,8 @@ Vue.component('app-hub-controls', {
                         <div class="keyboard-key">Q, E</div> Rotate selection by degrees. ({{game.settings.keySnapRotationDegrees}}°)<br>
                         <i class="fa fa-reply fa-rotate-180" aria-hidden="true"></i> <div class="keyboard-key">shift</div> Double selection rotation. ({{game.settings.keySnapRotationDegrees * 2}}°)
                         <hr>
+                        <div class="keyboard-key">[</div> <div class="keyboard-key">]</div> Tier selection up / down.
+                        <hr>
                         <div class="keyboard-key">space</div> Pause / Resume physics.<br>
                         <div class="keyboard-key">B</div> Toggle blueprint for selection.<br>
                         <div class="keyboard-key">L</div> Toggle lock for selected structures.<br>

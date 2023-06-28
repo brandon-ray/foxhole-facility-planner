@@ -1358,6 +1358,9 @@ try {
         if (game.toolbeltComponent && (!event.shiftKey || !inputSelected)) {
             game.toolbeltComponent.setToolbeltSwapping(event.shiftKey);
         }
+        if (!keys[key]) {
+            keys[key] = true;
+        }
         switch (key) {
             case 27: // Escape
                 if (game.toolbeltComponent) {
@@ -1549,24 +1552,14 @@ try {
                     case 87: // W
                         game.moveSelected(0, event.shiftKey ? -16 : -32);
                         break;
-                        
-                    case 107://Numpad +
-                        //I do not put a break so both do the exact same
-                    case 187://+
-                        game.upgradeSelected();
-                        break;
-
-                    case 109://Numpad -
-                        //I do not put a break here either so both do the exact same
-                    case 189://-
+                    case 219: // [
                         game.downgradeSelected();
                         break;
-
+                    case 221: // ]
+                        game.upgradeSelected();
+                        break;
                 }
             }
-        }
-        if (!keys[key]) {
-            keys[key] = true;
         }
     });
 
@@ -2307,11 +2300,11 @@ try {
         return selectedEntities.length === 1 ? selectedEntities[0] : null;
     }
 
-    game.addSelectedEntity = function(entity, noMenuUpdate) {
+    game.addSelectedEntity = function(entity, noMenuUpdate, allowUnionSelection = true) {
         game.setPickupEntities(false);
         if (entity.selectable && entity?.selected === false) {
             selectedEntities.push(entity);
-            entity.onSelect();
+            entity.onSelect(allowUnionSelection);
             if (!noMenuUpdate) {
                 game.resetSelectionData();
                 game.refreshStats();
@@ -2321,13 +2314,13 @@ try {
         return false;
     }
 
-    game.removeSelectedEntity = function(entity, noMenuUpdate) {
+    game.removeSelectedEntity = function(entity, noMenuUpdate, allowUnionSelection = true) {
         if (entity?.selected) {
             for (let i = 0; i < selectedEntities.length; i++) {
                 let selectedEntity = selectedEntities[i];
                 if (selectedEntity === entity) {
                     selectedEntities.splice(i, 1);
-                    entity.onDeselect();
+                    entity.onDeselect(allowUnionSelection);
                     break;
                 }
             }
@@ -2363,7 +2356,7 @@ try {
                     selectedEntity.remove();
                     continue;
                 }
-                selectedEntity.onDeselect();
+                selectedEntity.onDeselect(false);
             }
             if (remove) {
                 game.saveStateChanged = true;
@@ -3188,57 +3181,8 @@ try {
 
     game.exchangeSelected = function(dataKey) {
         for (const selectedEntity of selectedEntities) {
-            let bData = selectedEntity?.building;
-            if (bData) {
-                let upgradeKey = dataKey?.key;
-                if (upgradeKey && bData.parent?.key && upgradeKey === selectedEntity.building.key) {
-                    upgradeKey = bData.parent.key;
-                }
-                let clone = game.createObject(upgradeKey ?? dataKey ?? selectedEntity.building.key, selectedEntity.x, selectedEntity.y, selectedEntity.z, selectedEntity.rotation, selectedEntity.id, false);
-                if (upgradeKey) {
-                    let position = { x: clone.x, y: clone.y };
-                    if (selectedEntity.building?.positionOffset) {
-                        position.x -= ((selectedEntity.building.positionOffset.x ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
-                        position.y -= ((selectedEntity.building.positionOffset.y ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
-                    }
-                    if (clone.building?.positionOffset) {
-                        position.x += ((clone.building.positionOffset.x ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
-                        position.y += ((clone.building.positionOffset.y ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
-                    }
-                    position = Math.rotateAround(clone, position);
-                    clone.position.set(position.x, position.y);
-                }
-                clone.locked = selectedEntity.locked;
-                clone.selectionArea.tint = clone.locked ? COLOR_RED : COLOR_WHITE;
-                let objData = {
-                    upgrading: true
-                };
-                selectedEntity.onSave(objData);
-                clone.onLoad(objData);
-                clone.afterLoad(objData);
-                game.selectEntity(clone);
-                if (upgradeKey && selectedEntity.sockets) {
-                    for (const entitySocket of selectedEntity.sockets) {
-                        if (clone.sockets) {
-                            let foundSocket = false;
-                            for (const cloneSocket of clone.sockets) {
-                                if (entitySocket.socketData.id === cloneSocket.socketData.id) {
-                                    foundSocket = true;
-                                    break;
-                                }
-                            }
-                            if (foundSocket) {
-                                continue;
-                            }
-                        }
-                        entitySocket.removeConnections();
-                    }
-                    selectedEntity.sockets = null;
-                }
-                selectedEntity.remove();
-                if (typeof dataKey === 'string') {
-                    clone.attemptReconnections(true, false);
-                }
+            if (selectedEntity.type === 'building') {
+                selectedEntity.setKey(dataKey);
             }
         }
     };
@@ -3304,86 +3248,37 @@ try {
         }
         game.buildingSelectedMenuComponent?.refresh();
     };
- 
-    game.exchangeSingleSelected = function(buildingID, dataKey) {
-
-        let selectedEntity = game.getEntityById(buildingID);
-        let bData = selectedEntity?.building;
-        if (bData) {
-            let upgradeKey = dataKey?.key;
-            if (upgradeKey && bData.parent?.key && upgradeKey === selectedEntity.building.key) {
-                upgradeKey = bData.parent.key;
-            }
-            let clone = game.createObject(upgradeKey ?? dataKey ?? selectedEntity.building.key, selectedEntity.x, selectedEntity.y, selectedEntity.z, selectedEntity.rotation, selectedEntity.id, false);
-            if (upgradeKey) {
-                let position = { x: clone.x, y: clone.y };
-                if (selectedEntity.building?.positionOffset) {
-                    position.x -= ((selectedEntity.building.positionOffset.x ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
-                    position.y -= ((selectedEntity.building.positionOffset.y ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
-                }
-                if (clone.building?.positionOffset) {
-                    position.x += ((clone.building.positionOffset.x ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
-                    position.y += ((clone.building.positionOffset.y ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
-                }
-                position = Math.rotateAround(clone, position);
-                clone.position.set(position.x, position.y);
-            }
-            clone.locked = selectedEntity.locked;
-            clone.selectionArea.tint = clone.locked ? COLOR_RED : COLOR_WHITE;
-            let objData = {
-                upgrading: true
-            };
-            selectedEntity.onSave(objData);
-            clone.onLoad(objData);
-            clone.afterLoad(objData);
-            game.selectEntity(clone);
-            if (upgradeKey && selectedEntity.sockets) {
-                for (const entitySocket of selectedEntity.sockets) {
-                    if (clone.sockets) {
-                        let foundSocket = false;
-                        for (const cloneSocket of clone.sockets) {
-                            if (entitySocket.socketData.id === cloneSocket.socketData.id) {
-                                foundSocket = true;
-                                break;
-                            }
-                        }
-                        if (foundSocket) {
-                            continue;
-                        }
+    
+    game.upgradeSelected = function(isDowngrade = false) {
+        const upgradedEntities = [];
+        for (let i = selectedEntities.length - 1; i >= 0; i--) {
+            const selectedEntity = selectedEntities[i];
+            if (selectedEntity && selectedEntity.type === 'building') {
+                let upgradeKey = selectedEntity.building.tierUp;
+                if (!isDowngrade && !upgradeKey && !selectedEntity.building.upgradeName && selectedEntity.building.upgrades) {
+                    const upgradeKeys = Object.keys(selectedEntity.building.upgrades);
+                    if (upgradeKeys.length === 1) {
+                        upgradeKey = selectedEntity.building.upgrades[upgradeKeys[0]];
                     }
-                    entitySocket.removeConnections();
                 }
-                selectedEntity.sockets = null;
-            }
-            selectedEntity.remove();
-            if (typeof dataKey === 'string') {
-                    clone.attemptReconnections(true, false);
+                const upgrade = !isDowngrade ? upgradeKey : (selectedEntity.building.tierDown ?? selectedEntity.building.parentKey ?? selectedEntity.building.parent);
+                if (upgrade) {
+                    const upgradedEntity = selectedEntity.setKey(upgrade, true);
+                    if (upgradedEntity) {
+                        upgradedEntities.push(upgradedEntity);
+                    }
+                }
             }
         }
-    }
-
-
-    game.upgradeSelected = function() {
-        //Copy-Paste'd code from above and buildMenu.js
-        for (const selectedEntity of selectedEntities) {
-            if (selectedEntity.building?.tierUp) {
-                game.exchangeSingleSelected(selectedEntity.id, selectedEntity.building.tierUp);
-            }
+        for (const entity of upgradedEntities) {
+            game.addSelectedEntity(entity, true, false);
         }
         game.saveStateChanged = true;
-        game.buildingSelectedMenuComponent?.refresh();
-    }
+        game.resetSelectionData();
+        game.refreshStats();
+    };
 
-    game.downgradeSelected = function() {
-        //Just likeupgrade Selected
-        for (const selectedEntity of selectedEntities) {
-            if (selectedEntity.building?.tierDown ?? selectedEntity.building?.parentKey) {
-                game.exchangeSingleSelected(selectedEntity.id, selectedEntity.building.tierDown ?? selectedEntity.building.parent);
-            }
-        }
-        game.saveStateChanged = true;
-        game.buildingSelectedMenuComponent?.refresh();
-    }
+    game.downgradeSelected = () => game.upgradeSelected(true);
     
     game.moveSelected = function(x, y, snapped) {
         if (selectedEntities.length && game.getSelectedLockState() === null) {

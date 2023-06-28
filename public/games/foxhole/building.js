@@ -853,6 +853,61 @@ class FoxholeStructure extends DraggableContainer {
         }
     }
 
+    setKey(dataKey, isSelection = false) {
+        let upgradeKey = dataKey?.key;
+        if (upgradeKey && this.building.parent?.key && upgradeKey === this.building.key) {
+            upgradeKey = this.building.parent.key;
+        }
+        let clone = game.createObject(upgradeKey ?? dataKey ?? this.building.key, this.x, this.y, this.z, this.rotation, this.id, false);
+        if (upgradeKey) {
+            let position = { x: clone.x, y: clone.y };
+            if (this.building?.positionOffset) {
+                position.x -= ((this.building.positionOffset.x ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
+                position.y -= ((this.building.positionOffset.y ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
+            }
+            if (clone.building?.positionOffset) {
+                position.x += ((clone.building.positionOffset.x ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
+                position.y += ((clone.building.positionOffset.y ?? 0) * TEXTURE_SCALE) / METER_TEXTURE_PIXEL_SCALE;
+            }
+            position = Math.rotateAround(clone, position);
+            clone.position.set(position.x, position.y);
+        }
+        clone.locked = this.locked;
+        clone.selectionArea.tint = clone.locked ? COLOR_RED : COLOR_WHITE;
+        let objData = {
+            upgrading: true
+        };
+        this.onSave(objData);
+        clone.onLoad(objData);
+        clone.afterLoad(objData);
+        if (!isSelection) {
+            game.selectEntity(clone);
+        }
+        if (upgradeKey && this.sockets) {
+            for (const entitySocket of this.sockets) {
+                if (clone.sockets) {
+                    let foundSocket = false;
+                    for (const cloneSocket of clone.sockets) {
+                        if (entitySocket.socketData.id === cloneSocket.socketData.id) {
+                            foundSocket = true;
+                            break;
+                        }
+                    }
+                    if (foundSocket) {
+                        continue;
+                    }
+                }
+                entitySocket.removeConnections();
+            }
+            this.sockets = null;
+        }
+        this.remove();
+        if (typeof dataKey === 'string') {
+            clone.attemptReconnections(true, false);
+        }
+        return clone;
+    }
+
     moveAlongBezier(amount) {
         let previousTrackT = this.currentTrackT;
         this.currentTrackT += amount;
@@ -1038,6 +1093,9 @@ class FoxholeStructure extends DraggableContainer {
     hasConnectionToEntity = (connectingEntity, ignoredSocket) => this.hasConnectionToEntityId(connectingEntity.id, ignoredSocket);
     
     attemptReconnections(removeConnections = true, ignoreSelected = true, ignoreChecks = false) {
+        if (!this.sockets) {
+            return;
+        }
         if (removeConnections) {
             this.removeConnections(undefined, ignoreSelected, undefined, undefined, ignoreChecks);
         }
