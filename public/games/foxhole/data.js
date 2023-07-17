@@ -170,14 +170,6 @@ const gameData = {
 			],
 			"module": true
 		},
-		"5mw_80h_drip_power": {
-			"name": "5mw 80h Drip Power",
-			"description": "Very useful to ease maintenance. This Design will be producing power ≃50% of the time, maintenance tunnels on its grid will be generating ≃80 Gsups/h and fuel will last twice as much (80h)",
-			"author": "[5th] Menxs",
-			"filters": [
-				"facilities"
-			]
-		},
 		"antoines_front_ammunition_fac": {
 			"name": "Antoine's Front Ammunition Fac.",
 			"description": "This is an easy Facility you can do near the front to provide public",
@@ -232,14 +224,41 @@ const gameData = {
 		"bbfac_cometa_defense_micro_sustainment_v12": {
 			"name": "[BB+FAC] Cometa Defense & Micro-Sustainment (v1.2)",
 			"description": "Cometa @ Ashfields is a pivot from Origin that must be defended with RG/MG/AT, an OB, and ARTY due to partisan paths. An efficient, versatile sustainment facility (REF: Micro-Sustainment v1.0) for small-scale bunker bases is included with this design. The accompanying design maximizes throughput and retains mobility. Production at this facility outputs Construction Materials / Maintenance Supplies (Materials Factory) and Oil / Concrete Materials (Coal Refinery + Liquifier) from Salvage and Coal.",
-			"author": "[69th] hydranine & [69th] Starler99",
+			"author": [
+				"[69th] hydranine",
+				"[69th] Starler99"
+			],
 			"filters": [
 				"facilities"
 			]
 		},
+		"bowtie_core": {
+			"name": "\"Bowtie\" Core",
+			"description": "Compact core design for tight spaces. Howitzers can be substituted with Rifle or AT Garrisons in the case of immediate frontline use.",
+			"author": [
+				"Liquid Popsicle",
+				"cdrgauge"
+			],
+			"filters": [
+				"bunkers"
+			],
+			"module": true
+		},
 		"bunker_w_module": {
 			"name": "\"W\" Bunker",
 			"description": "A meta bunker design that has lots of health with great structural integrity and defenses.",
+			"filters": [
+				"bunkers"
+			],
+			"module": true
+		},
+		"butterfly_core": {
+			"name": "\"Butterfly\" Core",
+			"description": "Core design for chokepoints. Howitzers have a very small blind spot at ~130 degrees, but increased forward facing firepower.",
+			"author": [
+				"Liquid Popsicle",
+				"cdrgauge"
+			],
 			"filters": [
 				"bunkers"
 			],
@@ -270,6 +289,15 @@ const gameData = {
 			"filters": [
 				"facilities"
 			]
+		},
+		"compact_3x3_facility_core_module": {
+			"name": "Compact 3x3 Facility Core Module",
+			"description": "Compact facility core module intended to give small/medium groups or dedicated\nsolo players access to most facility content. Capable of producing PC Mats\nand Assembly Materials 1-4, making production of harvesters/ACVs, all non-steel\nvehicle variants, trains, etc all possible. Easy to expand/add submodules with three-\nway small-gauge rail junction in the center.",
+			"author": "Gman",
+			"filters": [
+				"facilities"
+			],
+			"module": true
 		},
 		"compact_artillery": {
 			"name": "Compact Artillery Factory",
@@ -402,6 +430,14 @@ const gameData = {
 				"facilities"
 			]
 		},
+		"pallet_per_hour_conc_facility": {
+			"name": "pallet per hour conc facility",
+			"description": "fully contained (besides power) conc facility for a pallet a conc per hour",
+			"author": "maverick0537",
+			"filters": [
+				"facilities"
+			]
+		},
 		"panzer_snares": {
 			"name": "Panzer Snares",
 			"author": "KitsunePanzer",
@@ -524,6 +560,24 @@ const gameData = {
 			"filters": [
 				"bunkers"
 			]
+		},
+		"t2_public_petrol_piping_no_water_update_53": {
+			"name": "T2 Public Petrol Piping (no water) Update 53",
+			"description": "This Module is meant to supply petrol to the public through extensive piping. The 3 Petrol Outputs downstream of the Petrol LTS can be configured depending on need.\n\nSummary: Dont make fuel logimen's lives harder. Pipe the petrol to where its needed. (Resource Fields/Mines/ Recycling Plants, Local Facilities/ etc)",
+			"author": "[OSHA] Tearloch",
+			"filters": [
+				"facilities"
+			],
+			"module": true
+		},
+		"t2_public_resource_mine_refueling": {
+			"name": "T2 Public Resource Mine Refueling",
+			"description": "Streamlined way to help the public keep resource mines running on petrol.\n\nCan refuel containers directly from Tinderbox Mineseekers\n\nGame Update 53",
+			"author": "[OSHA] Tearloch",
+			"filters": [
+				"facilities"
+			],
+			"module": true
 		},
 		"t3_core": {
 			"name": "\"X\" Core",
