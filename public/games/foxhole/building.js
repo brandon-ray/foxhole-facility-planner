@@ -29,18 +29,18 @@ class FoxholeStructureSocket extends PIXI.Container {
                 this.pointer.anchor.set(0.5, 1.5);
                 this.pointer.rotation = -(parent.rotation + this.rotation);
                 parent.handleTick = true;
+            } else if (this.socketData.texture) {
+                this.pointer = game.createSprite(this.socketData.texture, (sprite, texture) => {
+                    sprite.width = texture.width / METER_TEXTURE_PIXEL_SCALE;
+                    sprite.height = texture.height / METER_TEXTURE_PIXEL_SCALE;
+                });
+                this.pointer.anchor.set(0.5, parent.building?.textureBorder && !parent.building.trenchConnector ? 1.0 : 0.5);
             } else if (parent.building?.textureBorder && !parent.building.trenchConnector) {
                 this.pointer = game.createSprite(parent.building.textureBorder, (sprite, texture) => {
                     sprite.width = texture.width / METER_TEXTURE_PIXEL_SCALE;
                     sprite.height = texture.height / METER_TEXTURE_PIXEL_SCALE;
                 });
                 this.pointer.anchor.set(0.5, 1.0);
-            } else if (this.socketData.texture) {
-                this.pointer = game.createSprite(this.socketData.texture, (sprite, texture) => {
-                    sprite.width = texture.width / METER_TEXTURE_PIXEL_SCALE;
-                    sprite.height = texture.height / METER_TEXTURE_PIXEL_SCALE;
-                });
-                this.pointer.anchor.set(0.5, 0.5);
             }
             if (this.pointer) {
                 this.addChild(this.pointer);

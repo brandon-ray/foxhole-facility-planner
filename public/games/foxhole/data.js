@@ -7217,6 +7217,19 @@ const gameData = {
 					"x": 2.5,
 					"y": 5,
 					"rotation": 180
+				},
+				{
+					"id": 2,
+					"type": [
+						{
+							"mask": 65536,
+							"category": 65536
+						}
+					],
+					"texture": "../Structures/foundation_border_ext.webp",
+					"x": 1.89,
+					"y": 1.89,
+					"rotation": 315
 				}
 			],
 			"maxHealth": 2000,
@@ -7234,7 +7247,11 @@ const gameData = {
 					"texture": {
 						"src": "../Structures/concrete_foundation_corner.webp",
 						"width": 276,
-						"height": 276
+						"height": 276,
+						"offset": {
+							"x": 288,
+							"y": 288
+						}
 					},
 					"textureBorder": "../Structures/concrete_foundation_border.webp",
 					"garrisonSupplyMultiplier": 2,
@@ -7247,6 +7264,45 @@ const gameData = {
 					"hitArea": [
 						{
 							"shape": [ -83.03,83.64,-83.03,41.82,43.03,-83.64,83.64,-83.64,83.64,83.64 ]
+						}
+					],
+					"sockets": [
+						{
+							"id": 0,
+							"type": [
+								{
+									"mask": 65536,
+									"category": 65536
+								}
+							],
+							"x": 5,
+							"y": 2.5,
+							"rotation": 90
+						},
+						{
+							"id": 1,
+							"type": [
+								{
+									"mask": 65536,
+									"category": 65536
+								}
+							],
+							"x": 2.5,
+							"y": 5,
+							"rotation": 180
+						},
+						{
+							"id": 2,
+							"type": [
+								{
+									"mask": 65536,
+									"category": 65536
+								}
+							],
+							"texture": "../Structures/concrete_foundation_border_ext.webp",
+							"x": 1.89,
+							"y": 1.89,
+							"rotation": 315
 						}
 					]
 				}
