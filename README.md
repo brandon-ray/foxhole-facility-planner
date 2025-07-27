@@ -75,6 +75,5 @@ Go to http://localhost:3000/ in your browser
 
 If you need help or have any feedback, join our [Discord](https://discord.gg/2hgaMQN26s) or e-mail us.
 - **Brandon (Rayboy)**: brandon@bombsightgames.com
-- **James (Jimbo)**: james@tegature.com
 
 Made with ❤️ using [Vue.js](https://vuejs.org/) and [PixiJS](https://pixijs.com/)
